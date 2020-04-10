@@ -1,0 +1,14 @@
+{
+     "Comment": "Creating Alias resource record sets in Route 53",
+     "Changes": [{
+                "Action": "CREATE",
+                "ResourceRecordSet": {
+                            "Name": "web-app-fargate-alb.ruiliang-bjs.com",
+                            "Type": "A",
+                            "AliasTarget":{
+                                    "HostedZoneId": "ZM7IZAIOVVDZF",
+                                    "DNSName": "web-app-fargate-alb-1541631729.cn-northwest-1.elb.amazonaws.com.cn",
+                                    "EvaluateTargetHealth": false
+                              }}
+                          }]
+}

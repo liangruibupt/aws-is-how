@@ -1,0 +1,14 @@
+{
+     "Comment": "Creating Alias resource record sets in Route 53",
+     "Changes": [{
+                "Action": "CREATE",
+                "ResourceRecordSet": {
+                            "Name": "nlb-apigw-vpclink-private.ruiliang-bjs.com",
+                            "Type": "A",
+                            "AliasTarget":{
+                                    "HostedZoneId": "Z3QFB96KMJ7ED6",
+                                    "DNSName": "nlb-apigw-vpclink-private-9db5c7204a3a93fa.elb.cn-north-1.amazonaws.com.cn",
+                                    "EvaluateTargetHealth": false
+                              }}
+                          }]
+}
