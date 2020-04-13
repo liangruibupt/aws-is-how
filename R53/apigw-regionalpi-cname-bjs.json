@@ -1,0 +1,18 @@
+{
+  "Comment": "Testing private hosted zone in BJS",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "api.ray-alb-webapp.top",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [
+          {
+            "Value": "d-kjec3qhpcf.execute-api.cn-north-1.amazonaws.com.cn"
+          }
+        ]
+      }
+    }
+  ]
+}

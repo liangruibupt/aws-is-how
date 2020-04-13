@@ -1,0 +1,14 @@
+{
+     "Comment": "Creating Alias resource record sets in Route 53",
+     "Changes": [{
+                "Action": "CREATE",
+                "ResourceRecordSet": {
+                            "Name": "vpce-apigw.ruiliang-bjs.com",
+                            "Type": "A",
+                            "AliasTarget":{
+                                    "HostedZoneId": "Z2K9DR5TNGZP8",
+                                    "DNSName": "vpce-08ee8528e4116e344-b58o7qsi.execute-api.cn-north-1.vpce.amazonaws.com.cn",
+                                    "EvaluateTargetHealth": false
+                              }}
+                          }]
+}
