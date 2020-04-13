@@ -11,6 +11,6 @@ LambdaScheduleEvent:
         Targets:
           - Arn: !GetAtt HelloworldLambdaFunction.Arn
             Id: ScheduleEvent1Target
-      Input : String,
-            InputPath" : String
+            Input : String
+            InputPath : String
 ```
