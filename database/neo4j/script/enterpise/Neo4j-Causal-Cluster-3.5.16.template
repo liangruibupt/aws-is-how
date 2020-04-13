@@ -1,0 +1,4615 @@
+{
+  "Description": "Neo4j on AWS - creates a variable number of EC2 Ubuntu machines, a VPC, elastic IP addresses, and deploys the Neo4j Graph Database cluster on it.  **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Mappings": {
+    "AWSRegionArch2AMI": {
+      "ap-northeast-1": {
+        "64": "ami-02db9dcb012d22e55"
+      },
+      "ap-northeast-2": {
+        "64": "ami-0752dd3ceecd71e2a"
+      },
+      "ap-south-1": {
+        "64": "ami-0ecf73892199b1b9f"
+      },
+      "ap-southeast-1": {
+        "64": "ami-04a3e72e80e1c28a0"
+      },
+      "ap-southeast-2": {
+        "64": "ami-035c93f46f3787a6f"
+      },
+      "ca-central-1": {
+        "64": "ami-042e2ad547e52df16"
+      },
+      "eu-central-1": {
+        "64": "ami-0e45fdb6b0c16a6e9"
+      },
+      "eu-north-1": {
+        "64": "ami-0991586787a2c3425"
+      },
+      "eu-west-1": {
+        "64": "ami-0ff14a963c8494e5b"
+      },
+      "eu-west-2": {
+        "64": "ami-02e3b45e39f22c589"
+      },
+      "eu-west-3": {
+        "64": "ami-083c0143b23658308"
+      },
+      "sa-east-1": {
+        "64": "ami-08ec58756332a2724"
+      },
+      "ap-east-1": {
+        "64": "ami-08898f5103be97604"
+      },
+      "us-gov-west-1": {
+        "64": "ami-84b59fe5"
+      },
+      "us-gov-east-1": {
+        "64": "ami-8a49a4fb"
+      },
+      "us-east-1": {
+        "64": "ami-0fb460e9abf533d37"
+      },
+      "us-east-2": {
+        "64": "ami-0f56656954c0dd1ed"
+      },
+      "us-west-1": {
+        "64": "ami-06ed45f7701932333"
+      },
+      "us-west-2": {
+        "64": "ami-0aa2fa51237fec3bc"
+      }
+    }
+  },
+  "Parameters": {
+    "InstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "Default": "r4.large",
+      "AllowedValues": [
+        "m4.large",
+        "m4.xlarge",
+        "m4.2xlarge",
+        "m4.4xlarge",
+        "m4.10xlarge",
+        "m4.16xlarge",
+        "m5.large",
+        "m5.xlarge",
+        "m5.2xlarge",
+        "m5.4xlarge",
+        "m5.12xlarge",
+        "m5.24xlarge",
+        "t2.medium",
+        "t2.large",
+        "t2.xlarge",
+        "t2.2xlarge",
+        "x1e.16xlarge",
+        "x1e.8xlarge",
+        "x1e.4xlarge",
+        "x1e.2xlarge",
+        "x1e.xlarge",
+        "x1.16xlarge",
+        "r4.large",
+        "r4.xlarge",
+        "r4.2xlarge",
+        "r4.4xlarge",
+        "r4.8xlarge",
+        "r4.16xlarge"
+      ],
+      "ConstraintDescription": "Must be a valid EC2 instance type."
+    },
+    "ClusterNodes": {
+      "Description": "Number of core cluster node VMs",
+      "Type": "Number",
+      "Default": 3,
+      "MinValue": 3,
+      "MaxValue": 7
+    },
+    "ReadReplicas": {
+      "Description": "Number of read replicas in the cluster",
+      "Type": "Number",
+      "Default": 0,
+      "MinValue": 0,
+      "MaxValue": 5
+    },
+    "SSHKeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "AllowedPattern": ".+"
+    },
+    "NetworkWhitelist": {
+      "Description": " The IP address range that can be used to connect to Neo4j",
+      "Type": "String",
+      "MinLength": "0",
+      "MaxLength": "18",
+      "Default": "",
+      "AllowedPattern": "[\\d\\./]*",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.  For example, 0.0.0.0/0 for open internet access."
+    },
+    "Password": {
+      "NoEcho": true,
+      "Description": "initial neo4j password (uppercase, lowercase, and numbers only)",
+      "Type": "String",
+      "MinLength": 8,
+      "MaxLength": 40,
+      "AllowedPattern": "^[a-zA-Z0-9\\.-]+$"
+    },
+    "VolumeType": {
+      "Description": "What kind of storage to attach",
+      "Type": "String",
+      "Default": "gp2",
+      "AllowedValues": [
+        "gp2",
+        "st1"
+      ]
+    },
+    "EncryptDataVolume": {
+      "Description": "Should EBS storage be encrypted?  Default is yes.",
+      "Type": "String",
+      "Default": "true",
+      "AllowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "VolumeSizeGB": {
+      "Description": "How much EBS storage is allocated to each cluster node, in GiB",
+      "Type": "Number",
+      "Default": "100",
+      "MinValue": "10",
+      "MaxValue": "1000",
+      "ConstraintDescription": "Must be a valid EBS disk size in GiB."
+    }
+  },
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Cluster Configuration"
+          },
+          "Parameters": [
+            "ClusterNodes",
+            "ReadReplicas"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Amazon EC2 Configuration"
+          },
+          "Parameters": [
+            "InstanceType",
+            "VolumeType",
+            "VolumeSizeGB",
+            "EncryptDataVolume"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Access Control"
+          },
+          "Parameters": [
+            "SSHKeyName",
+            "NetworkWhitelist",
+            "Password"
+          ]
+        }
+      ]
+    }
+  },
+  "Conditions": {
+    "CreateNode0": {
+      "Fn::Equals": [
+        true,
+        true
+      ]
+    },
+    "CreateNode1": {
+      "Fn::Equals": [
+        true,
+        true
+      ]
+    },
+    "CreateNode2": {
+      "Fn::Equals": [
+        true,
+        true
+      ]
+    },
+    "CreateNode3": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            4
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            5
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            6
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            7
+          ]
+        }
+      ]
+    },
+    "CreateNode4": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            5
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            6
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            7
+          ]
+        }
+      ]
+    },
+    "CreateNode5": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            6
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            7
+          ]
+        }
+      ]
+    },
+    "CreateNode6": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            0,
+            1
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ClusterNodes"
+            },
+            7
+          ]
+        }
+      ]
+    },
+    "CreateReplica0": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            1
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            2
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            3
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            4
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            5
+          ]
+        }
+      ]
+    },
+    "CreateReplica1": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            2
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            3
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            4
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            5
+          ]
+        }
+      ]
+    },
+    "CreateReplica2": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            3
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            4
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            5
+          ]
+        }
+      ]
+    },
+    "CreateReplica3": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            4
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            5
+          ]
+        }
+      ]
+    },
+    "CreateReplica4": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            0,
+            1
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ReadReplicas"
+            },
+            5
+          ]
+        }
+      ]
+    }
+  },
+  "Resources": {
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "InstanceTenancy": "default",
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jVPC",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "DNSZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "DependsOn": "VPC",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone to define private DNS for neo4j nodes"
+        },
+        "Name": "neo4j",
+        "VPCs": [
+          {
+            "VPCId": {
+              "Ref": "VPC"
+            },
+            "VPCRegion": {
+              "Ref": "AWS::Region"
+            }
+          }
+        ],
+        "HostedZoneTags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jPrivateZone",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Subnet0": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jSubnet0",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ],
+        "MapPublicIpOnLaunch": "true"
+      }
+    },
+    "SubnetRouteTableAssociation0": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "Subnet0"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "SubnetNetworkAclAssociation0": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "Subnet0"
+        },
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        }
+      }
+    },
+    "Subnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jSubnet1",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ],
+        "MapPublicIpOnLaunch": "true"
+      }
+    },
+    "SubnetRouteTableAssociation1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "Subnet1"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "SubnetNetworkAclAssociation1": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "Subnet1"
+        },
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        }
+      }
+    },
+    "Subnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "10.0.2.0/24",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jSubnet2",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ],
+        "MapPublicIpOnLaunch": "true"
+      }
+    },
+    "SubnetRouteTableAssociation2": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "Subnet2"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "SubnetNetworkAclAssociation2": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "Subnet2"
+        },
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        }
+      }
+    },
+    "InternetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jGateway",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "AttachGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "RouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "Neo4jRouteTable",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "Route": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "AttachGateway",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        },
+        "DestinationCidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "NetworkAcl": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          }
+        ]
+      }
+    },
+    "SSHIngressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "101",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "22",
+          "To": "22"
+        }
+      }
+    },
+    "SSHEgressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "102",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "22",
+          "To": "22"
+        }
+      }
+    },
+    "BoltIngressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "102",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "7689",
+          "To": "7689"
+        }
+      }
+    },
+    "BoltEgressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "104",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "7689",
+          "To": "7689"
+        }
+      }
+    },
+    "Neo4jHTTPSIngressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "103",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "7473",
+          "To": "7473"
+        }
+      }
+    },
+    "Neo4jHTTPSEgressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "106",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "7473",
+          "To": "7473"
+        }
+      }
+    },
+    "HTTPSIngressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "104",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "443",
+          "To": "443"
+        }
+      }
+    },
+    "HTTPSEgressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "108",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "443",
+          "To": "443"
+        }
+      }
+    },
+    "HTTPIngressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "105",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "80",
+          "To": "80"
+        }
+      }
+    },
+    "HTTPEgressNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "110",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "80",
+          "To": "80"
+        }
+      }
+    },
+    "Int1NetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "201",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "10.0.0.0/16",
+        "PortRange": {
+          "From": "5000",
+          "To": "5000"
+        }
+      }
+    },
+    "Int2NetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "202",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "10.0.0.0/16",
+        "PortRange": {
+          "From": "6000",
+          "To": "6000"
+        }
+      }
+    },
+    "Int3NetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "203",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "10.0.0.0/16",
+        "PortRange": {
+          "From": "7000",
+          "To": "7000"
+        }
+      }
+    },
+    "InboundResponsePortsNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "300",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "1024",
+          "To": "65535"
+        }
+      }
+    },
+    "OutBoundResponsePortsNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "301",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": {
+          "Ref": "NetworkWhitelist"
+        },
+        "PortRange": {
+          "From": "1024",
+          "To": "65535"
+        }
+      }
+    },
+    "ReadOwnTags": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "work-with-tags",
+              {
+                "Ref": "AWS::StackName"
+              }
+            ]
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "root",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "ec2:CreateTags",
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": "ec2:Describe*",
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": "elasticloadbalancing:Describe*",
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cloudwatch:ListMetrics",
+                    "cloudwatch:GetMetricStatistics",
+                    "cloudwatch:Describe*"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": "autoscaling:Describe*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "instProfNeo4jEnterprise": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "ReadOwnTags"
+          }
+        ],
+        "InstanceProfileName": {
+          "Fn::Join": [
+            "-",
+            [
+              "read-own-tags-ip",
+              {
+                "Ref": "AWS::StackName"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "sgNeo4jEnterprise": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "GroupDescription": "Neo4j Ports",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "5000",
+            "ToPort": "5000",
+            "CidrIp": "10.0.0.0/16"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "6000",
+            "ToPort": "6000",
+            "CidrIp": "10.0.0.0/16"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "7000",
+            "ToPort": "7000",
+            "CidrIp": "10.0.0.0/16"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": {
+              "Ref": "NetworkWhitelist"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "7687",
+            "ToPort": "7687",
+            "CidrIp": {
+              "Ref": "NetworkWhitelist"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "7473",
+            "ToPort": "7473",
+            "CidrIp": {
+              "Ref": "NetworkWhitelist"
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer0DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode0",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 0.",
+        "Name": "node0.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer0",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer0": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode0",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet0"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-0",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "0"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer1DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode1",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 1.",
+        "Name": "node1.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer1",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer1": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode1",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet1"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-1",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "1"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer2DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode2",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 2.",
+        "Name": "node2.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer2",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer2": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode2",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet2"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-2",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "2"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer3DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode3",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 3.",
+        "Name": "node3.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer3",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer3": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode3",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet0"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-3",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "3"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer4DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode4",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 4.",
+        "Name": "node4.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer4",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer4": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode4",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet1"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-4",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "4"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer5DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode5",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 5.",
+        "Name": "node5.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer5",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer5": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode5",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet2"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-5",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "5"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jServer6DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateNode6",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j node 6.",
+        "Name": "node6.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer6",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jServer6": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateNode6",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet0"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-CORE-vm-6",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "CORE"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "6"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jReplica0DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateReplica0",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j replica 0.",
+        "Name": "replica0.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer0",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jReplica0": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateReplica0",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet0"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-READ_REPLICA-vm-0",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "READ_REPLICA"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "0"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jReplica1DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateReplica1",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j replica 1.",
+        "Name": "replica1.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer1",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jReplica1": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateReplica1",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet1"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-READ_REPLICA-vm-1",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "READ_REPLICA"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "1"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jReplica2DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateReplica2",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j replica 2.",
+        "Name": "replica2.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer2",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jReplica2": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateReplica2",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet2"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-READ_REPLICA-vm-2",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "READ_REPLICA"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "2"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jReplica3DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateReplica3",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j replica 3.",
+        "Name": "replica3.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer3",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jReplica3": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateReplica3",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet0"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-READ_REPLICA-vm-3",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "READ_REPLICA"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "3"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Neo4jReplica4DNS": {
+      "Type": "AWS::Route53::RecordSet",
+      "Condition": "CreateReplica4",
+      "DependsOn": "DNSZone",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "DNSZone"
+        },
+        "Comment": "DNS names for neo4j replica 4.",
+        "Name": "replica4.neo4j.",
+        "Type": "A",
+        "TTL": "900",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "Neo4jServer4",
+              "PrivateIp"
+            ]
+          }
+        ]
+      }
+    },
+    "Neo4jReplica4": {
+      "Type": "AWS::EC2::Instance",
+      "Condition": "CreateReplica4",
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "instProfNeo4jEnterprise"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "DisableApiTermination": "FALSE",
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            "64"
+          ]
+        },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "sgNeo4jEnterprise"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "Subnet1"
+            }
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "SSHKeyName"
+        },
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "neo4j-READ_REPLICA-vm-4",
+                  {
+                    "Ref": "AWS::StackName"
+                  }
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            }
+          },
+          {
+            "Key": "neo4j_mode",
+            "Value": "cluster"
+          },
+          {
+            "Key": "dbms_mode",
+            "Value": "READ_REPLICA"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_minimum_core_cluster_size_at_formation",
+            "Value": "3"
+          },
+          {
+            "Key": "causal_clustering_initial_discovery_members",
+            "Value": {
+              "Fn::Join": [
+                ",",
+                [
+                  "node0.neo4j:5000",
+                  "node1.neo4j:5000",
+                  "node2.neo4j:5000"
+                ]
+              ]
+            }
+          },
+          {
+            "Key": "initial_password",
+            "Value": {
+              "Ref": "Password"
+            }
+          },
+          {
+            "Key": "InstanceID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "4"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "#\n",
+                "# This script starts at the launch of a VM, and handles final cluster coordination.\n",
+                "sudo /bin/rm -f /etc/neo4j/password-reset.log\n",
+                "LOGFILE=/home/ubuntu/setup.log\n",
+                "echo `date` 'Preparing Causal Cluster' | tee -a $LOGFILE\n",
+                "\n",
+                "/bin/systemctl stop neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "export API=http://169.254.169.254/latest/\n",
+                "export EC2_AVAIL_ZONE=$(curl --silent $API/meta-data/placement/availability-zone)\n",
+                "export EC2_INSTANCE_ID=$(curl -s $API/meta-data/instance-id)\n",
+                "export EC2_REGION=$(curl -s $API/dynamic/instance-identity/document | jq -r .region)\n",
+                "export ROOT_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sda1 --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "export DATA_DISK_ID=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=${EC2_INSTANCE_ID} Name=attachment.device,Values=/dev/sdb --query 'Volumes[*].[VolumeId]' --region=${EC2_REGION} --out text | cut -f 1)\n",
+                "env | tee -a $LOGFILE\n",
+                "# Tag volumes, which CloudFormation does not allow\n",
+                "# Root volume: /dev/sda, data volume /dev/sdb\n",
+                "aws ec2 create-tags --resources $ROOT_DISK_ID --tags Key=Name,Value=\"Root Neo4j Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "aws ec2 create-tags --resources $DATA_DISK_ID --tags Key=Name,Value=\"Neo4j Data Vol for $EC2_INSTANCE_ID\" --region ${EC2_REGION} 2>&1 | tee -a $LOGFILE\n",
+                "# Format EBS storage, and mount it in Neo4j directory\n",
+                "echo `date` 'Preparing neo4j volume...' | tee -a $LOGFILE\n",
+                "mkfs -t ext4 /dev/xvdb 2>&1 | tee -a $LOGFILE\n",
+                "mkdir /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "cp --preserve=all -r /var/lib/neo4j/* /tmpmount/ 2>&1 | tee -a $LOGFILE\n",
+                "umount /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "rm -rf /tmpmount 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Remounting new volume in place...' | tee -a $LOGFILE\n",
+                "mount /dev/xvdb /var/lib/neo4j 2>&1 | tee -a $LOGFILE\n",
+                "FSTAB_ENTRY='/dev/xvdb /var/lib/neo4j ext4 defaults,discard 0 2'\n",
+                "echo $FSTAB_ENTRY >> /etc/fstab\n",
+                "mount -a 2>&1 | tee -a $LOGFILE\n",
+                "echo `date` 'Preparing neo4j service...' | tee -a $LOGFILE\n",
+                "/bin/rm -rf /var/lib/neo4j/data/databases/graph.db/ 2>&1 | tee -a $LOGFILE\n",
+                "/bin/systemctl start neo4j.service 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "sudo apt-get update\n",
+                "mkdir aws-cfn-bootstrap-latest\n",
+                "curl https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar xz -C aws-cfn-bootstrap-latest --strip-components 1\n",
+                "easy_install aws-cfn-bootstrap-latest\n",
+                "\n",
+                "echo Stack ID '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | tee -a $LOGFILE\n",
+                "export STACK_TOKEN=$(echo '",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "' | base64 | tail -c 12)\n",
+                "# Loop waiting for neo4j service to start.\n",
+                "while true; do\n",
+                "    if curl -s -I http://localhost:7474 | grep '200 OK'; then\n",
+                "        echo `date` 'Neo4j is up; changing default password' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        curl -v -H 'Content-Type: application/json' \\n",
+                "                -XPOST -d '{\"password\":\"",
+                {
+                  "Ref": "Password"
+                },
+                "\"}' \\\n",
+                "                -u neo4j:neo4j \\\n",
+                "                http://localhost:7474/user/neo4j/password \\\n",
+                "                2>&1 | tee -a $LOGFILE\n",
+                "        echo `date` 'Password reset; a graph user is you!' 2>&1 | tee -a $LOGFILE\n",
+                "\n",
+                "        echo `date` 'Startup complete ' | tee -a $LOGFILE\n",
+                "        break\n",
+                "    fi\n",
+                "\n",
+                "    echo `date` 'Waiting for neo4j to come up' 2>&1 | tee -a $LOGFILE\n",
+                "    sleep 1\n",
+                "done\n",
+                "\n",
+                "echo Signaling stack success | tee -a $LOGFILE\n",
+                "/usr/local/bin/cfn-signal --stack ",
+                {
+                  "Ref": "AWS::StackName"
+                },
+                " \\\n",
+                "       --id $EC2_INSTANCE_ID \\\n",
+                "       --region ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " \\\n",
+                "       --success true -d \"$STACK_TOKEN\" '",
+                {
+                  "Ref": "StackTokenWaitHandle"
+                },
+                "' 2>&1 | tee -a $LOGFILE \n"
+              ]
+            ]
+          }
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": "10",
+              "DeleteOnTermination": "true"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+              "VolumeType": {
+                "Ref": "VolumeType"
+              },
+              "VolumeSize": {
+                "Ref": "VolumeSizeGB"
+              },
+              "Encrypted": {
+                "Ref": "EncryptDataVolume"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "StackTokenWaitHandle": {
+      "Type": "AWS::CloudFormation::WaitConditionHandle"
+    },
+    "WaitOnPasswordReset": {
+      "Type": "AWS::CloudFormation::WaitCondition",
+      "DependsOn": "Neo4jServer0",
+      "Properties": {
+        "Handle": {
+          "Ref": "StackTokenWaitHandle"
+        },
+        "Timeout": "2000",
+        "Count": "1"
+      }
+    }
+  },
+  "Outputs": {
+    "Note": {
+      "Value": {
+        "Fn::Join": [
+          "\n",
+          [
+            "Your cluster is deployed, and currently forming.",
+            "Now is a good time to get a cup of coffee, the ",
+            "URL below should be available within a few minutes"
+          ]
+        ]
+      }
+    },
+    "IMPORTANT": {
+      "Value": {
+        "Fn::Join": [
+          "\n",
+          [
+            "PLEASE TAKE NOTE!  Your instance begins with an unsigned ",
+            "SSL certificate.  This means that in order to access your ",
+            "new system, you should configure your browser to trust this ",
+            "IP address on **both** port 7473 **and** port 7687, otherwise ",
+            "you may have issues connecting. ",
+            "For more information see https://community.neo4j.com/t/troubleshooting-connection-issues-to-neo4j/129"
+          ]
+        ]
+      }
+    },
+    "Neo4jWebadmin": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "Neo4jServer1",
+                "PublicIp"
+              ]
+            },
+            ":7473/"
+          ]
+        ]
+      },
+      "Description": "This is the address of your Neo4j server web administration console."
+    },
+    "Username": {
+      "Value": "neo4j"
+    },
+    "Password": {
+      "Value": {
+        "Ref": "Password"
+      }
+    },
+    "SSH": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "ssh -i ${HOME}/.ssh/",
+            {
+              "Ref": "SSHKeyName"
+            },
+            ".pem -l ubuntu@",
+            {
+              "Fn::GetAtt": [
+                "Neo4jServer1",
+                "PublicIp"
+              ]
+            }
+          ]
+        ]
+      },
+      "Description": "This is how you gain remote access to the machine."
+    },
+    "Node0Ip": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Neo4jServer0",
+          "PublicIp"
+        ]
+      }
+    },
+    "Node1Ip": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Neo4jServer1",
+          "PublicIp"
+        ]
+      }
+    },
+    "Node2Ip": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Neo4jServer2",
+          "PublicIp"
+        ]
+      }
+    }
+  }
+}
