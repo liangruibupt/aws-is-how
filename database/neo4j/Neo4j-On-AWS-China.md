@@ -18,62 +18,87 @@ docker-compose down
 
 ```
 
-## Install Standalone from Cloudfromation
+## Install Community Standalone directly
+
+## Install global AMI on China region
+1. The original root volume for Marketplace AMI are 100GiB
+2. Create new 200GiB EBS volume in the same AZ and attached to instance
+3. Login to instance and process dd to store the root volume to /mnt/root.img
 ```bash
-VERSION=3.5.3
-export COMMUNITY_TEMPLATE=http://neo4j-cloudformation.s3.amazonaws.com/neo4j-community-standalone-stack-$VERSION.jsonexport STACKNAME=neo4j-comm-$(echo $VERSION | sed s/[^A-Za-z0-9]/-/g)export INSTANCE=r4.large
-export REGION=us-east-1
-export SSHKEY=my-ssh-keyname
-aws cloudformation create-stack \
-   --stack-name $STACKNAME \
-   --region $REGION \
-   --template-url $COMMUNITY_TEMPLATE \
-   --parameters ParameterKey=InstanceType,ParameterValue=$INSTANCE \
-     ParameterKey=NetworkWhitelist,ParameterValue=0.0.0.0/0 \
-     ParameterKey=Password,ParameterValue=s00pers3cret \
-     ParameterKey=SSHKeyName,ParameterValue=$SSHKEY \
-     ParameterKey=VolumeSizeGB,ParameterValue=37 \
-     ParameterKey=VolumeType,ParameterValue=gp2 \
-     --capabilities CAPABILITY_NAMED_IAM
+sudo fdisk -l
 
-aws cloudformation wait stack-create-complete --region $REGION --stack-name "$STACKNAME"
+Disk /dev/nvme0n1: 100 GiB, 107374182400 bytes, 209715200 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xdef2e9be
 
-aws cloudformation describe-stacks --region $REGION --stack-name "$STACKNAME" | jq -r '.Stacks[0].Outputs[]'
+Device         Boot Start       End   Sectors  Size Id Type
+/dev/nvme0n1p1 *     2048 209715166 209713119  100G 83 Linux
 
-https://instance-ip-address:7473/
 
-echo "Deleting stack $1"
-aws cloudformation delete-stack --stack-name "$1" --region us-east-1
+Disk /dev/nvme1n1: 200 GiB, 214748364800 bytes, 419430400 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+df -Th
+
+sudo mkfs.ext4 /dev/nvme1n1
+sudo mount /dev/nvme1n1 /mnt
+df -Th
+
+sudo dd if=/dev/nvme0n1 of=/mnt/root.img bs=1M
+102400+0 records in
+102400+0 records out
+107374182400 bytes (107 GB, 100 GiB) copied, 936.357 s, 115 MB/s
+
 ```
 
-The username will be neo4j, and the password will be the instance ID.
-
-## Install causal cluster (Enterprise Edition)
-- In AWS global region, Enterprise Causal Cluster 3.5.16 by [cloudformation](database/neo4j/script/enterpise/Neo4j-Causal-Cluster-3.5.16.template)
-
-- Enterprise Causal Cluster 4.0-enterprise via docker-compose
-  1. Creates a five instance cluster with four core containers and one read replica container.
-  2. Neo4j Browser to access the core1 instance on port 7474 or setup the load balancer for master route to 7474 backend port.
-  3. Open ports 7474, 6477, 7687; 7475, 6478, 7688; 7476, 6479, 7689; 7477, 6480, 7690; 7978, 6481, 7691 and 5000
-
-- Enterprise Causal Cluster 4.0-enterprise via distribute EC2 instance
-Each EC2 instance Open ports 7474, 7687, 5000, 6000, 7000
-Public-address is the public ip-address of the EC2 instance. If you use the private subnet, you can use the private ip-address of the EC2 instance.
+4. Copy the root.img to China region
 ```bash
-docker run --name=neo4j-core --detach \
-         --network=host \
-         --publish=7474:7474 --publish=7687:7687 \
-         --publish=5000:5000 --publish=6000:6000 --publish=7000:7000 \
-         --hostname=public-address \
-         --env NEO4J_dbms_mode=CORE \
-         --env NEO4J_causal__clustering_expected__core__cluster__size=3 \
-         --env NEO4J_causal__clustering_initial__discovery__members=core1-public-address:5000,core2-public-address:5000,core3-public-address:5000 \
-         --env NEO4J_causal__clustering_discovery__advertised__address=public-address:5000 \
-         --env NEO4J_causal__clustering_transaction__advertised__address=public-address:6000 \
-         --env NEO4J_causal__clustering_raft__advertised__address=public-address:7000 \
-         --env NEO4J_dbms_connectors_default__advertised__address=public-address \
-         --env NEO4J_ACCEPT_LICENSE_AGREEMENT=yes \
-         --env NEO4J_dbms_connector_bolt_advertised__address=public-address:7687 \
-         --env NEO4J_dbms_connector_http_advertised__address=public-address:7474 \
-         neo4j:4.0-enterprise
+#us-east-1 upload
+
+aws configure set s3.max_concurrent_requests 100 --profile cn
+aws configure set s3.max_queue_size 10000 --profile cn
+aws configure set s3.multipart_threshold 10MB --profile cn
+aws configure set s3.multipart_chunksize 5MB --profile cn
+
+aws s3 cp /mnt/root.img s3://ray-tools-sharing/ami/neo-root.img --profile cn --region cn-northwest-1
+```
+
+5. download from China region and dd to EBS volume
+```bash
+# cn-north-1 Ubuntu instance download
+pip3 install --upgrade --user awscli
+export PATH=$HOME/.local/bin:$PATH
+
+aws configure set default.s3.max_concurrent_requests 100
+aws configure set default.s3.max_queue_size 10000
+aws configure set default.s3.multipart_threshold 10MB
+aws configure set default.s3.multipart_chunksize 5MB
+
+aws s3 cp s3://ray-tools-sharing/ami/neo-root.img /tmp/root.img --region cn-northwest-1
+
+sudo fdisk -l
+# use ‘dd’ to write the root.img to the EBS volume
+sudo dd if=/tmp/root.img of=/dev/xvdf bs=1M oflag=direct
+sudo fdisk -l
+cat /proc/partitions
+sudo partprobe
+sudo fdisk -l
+
+mkdir -p /tmp/neo4j
+sudo mount /dev/xvdf1 /tmp/neo4j
+sudo rm /tmp/centos/root/.ssh/authorized_keys
+sudo umount /tmp/centos
+```
+
+6. Create the instance
+- detach the EBS volumn and create a EBS snaptshot
+- create image neo4j-4.0.2 from EBS snaptshot
+- Launch an instance use neo4j-4.0.2 AMI, ssh to the instance and make sure everything starts correctly 
+```bash
+sudo fdisk -l
 ```

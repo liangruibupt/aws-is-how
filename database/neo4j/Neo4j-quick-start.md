@@ -3,7 +3,7 @@
 ## Prepare to remote access the browser
 ```bash
 ssh -i ~/.ssh/${KEY_NAME}.pem ubuntu@${PublicDnsName}
-# To have Bolt accept non-local connections, uncomment this line for $NEO4J_HOME/conf/neo4j.conf or /etc/neo4j/neo4j.conf
+# To have Bolt accept non-local connections, uncomment this line for /etc/neo4j/neo4j.conf
 dbms.connector.bolt.address=0.0.0.0:7687
 dbms.connector.bolt.tls_level=OPTIONAL
 
@@ -36,8 +36,8 @@ https://neo4j.com/developer/manage-multiple-databases/
 ```bash
 # first login
 cypher-shell -a ${neo4j_ip} -u neo4j -p neo4j
-Change your password to i-08f959180e79799ed
-cypher-shell -a ${neo4j_ip} -u neo4j -p i-08f959180e79799ed
+Change your password to ${instance-id}
+cypher-shell -a ${neo4j_ip} -u neo4j -p ${instance-id}
 
 :use system
 neo4j@system> SHOW DATABASES;
@@ -60,9 +60,12 @@ You can switch between databases by editing neo4j.conf file and restarting Neo4j
 ## Importing the Data using Cypher
 ```bash
 # Put the import dataset and scripts under directory /var/lib/neo4j/import
-cypher-shell -a ${neo4j_ip} -u neo4j -p i-08f959180e79799ed < import_csv.cypher
+sudo -i -u neo4j
+mv *.csv /var/lib/neo4j/import
+exit
+cypher-shell -a ${neo4j_ip} -u neo4j -p ${instance-id} < import_csv.cypher
 
-cypher-shell -a ${neo4j_ip} -u neo4j -p i-08f959180e79799ed
+cypher-shell -a ${neo4j_ip} -u neo4j -p ${instance-id}
 
 neo4j@neo4j> MATCH (p:Product {productName:"Chocolade"}) return p;
 

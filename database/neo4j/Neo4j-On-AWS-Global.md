@@ -26,7 +26,7 @@ aws ec2 describe-images --region ${AWS_REGION} \
   --filters "Name=owner-alias,Values=aws-marketplace" "Name=name,Values=neo4j-community-1-4.0.2*" \
   --query "Images[*].{ImageId:ImageId,Name:Name}"
 
-export NEO4J_AMI=ami-064b5023b1b903df2
+export NEO4J_AMI=
 export YOUR_Subnet_ID=
 
 aws ec2 run-instances --image-id ${NEO4J_AMI} \
@@ -36,7 +36,7 @@ aws ec2 run-instances --image-id ${NEO4J_AMI} \
   --query "Instances[*].InstanceId" \
   --region ${AWS_REGION}
 
-export InstanceId=i-08f959180e79799ed
+export InstanceId=
 
 aws ec2 create-tags --resources ${InstanceId} --tags Key=Name,Value=neo4j-demo --region ${AWS_REGION}
 
@@ -62,8 +62,61 @@ https://community.neo4j.com/t/troubleshooting-connection-issues-to-neo4j/129
 https://medium.com/neo4j/getting-certificates-for-neo4j-with-letsencrypt-a8d05c415bbd
 
 
-## Install Install Community Standalone directly
+## Install  Community Standalone directly
+[Neo4j File locations ](https://neo4j.com/docs/operations-manual/current/configuration/file-locations/)
 
+```bash
+# install java-1.11.0-openjdk-amd64
+sudo apt-get update
+sudo apt install java-common
+sudo apt install default-jdk
+
+update-java-alternatives --list
+
+sudo update-alternatives --config java
+
+# Add the repository 
+wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
+echo 'deb https://debian.neo4j.com stable 4.0' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
+sudo apt-get update
+
+apt list -a neo4j
+Listing... Done
+neo4j/stable 1:4.0.3 all
+neo4j/stable 1:4.0.2 all
+neo4j/stable 1:4.0.1 all
+neo4j/stable 1:4.0.0 all
+
+# Install Neo4j 
+sudo apt-get install neo4j=1:4.0.2
+
+# Congifure Neo4j
+sudo -i -u  neo4j
+
+# Edit /etc/neo4j/neo4j.conf
+
+dbms.connectors.default_listen_address=0.0.0.0
+dbms.connectors.default_advertised_address=0.0.0.0
+
+dbms.connector.bolt.enabled=true
+dbms.connector.bolt.listen_address=0.0.0.0:7687
+
+dbms.connector.http.enabled=true
+dbms.connector.http.listen_address=0.0.0.0:7474
+
+sudo systemctl restart neo4j
+sudo systemctl stop neo4j
+sudo systemctl start neo4j
+sudo systemctl status neo4j
+
+# Access browser
+http://[PublicDnsName]:7474/browser/
+http://ec2-3-228-1-54.compute-1.amazonaws.com:7474/browser/
+```
+
+## Install via docker
+```bash
+```
 
 ## Install Community Standalone from Cloudfromation
 ```bash
