@@ -3,6 +3,7 @@
 ## Prepare to remote access the browser
 ```bash
 ssh -i ~/.ssh/${KEY_NAME}.pem ubuntu@${PublicDnsName}
+sudo -i -u  neo4j
 # To have Bolt accept non-local connections, uncomment this line for /etc/neo4j/neo4j.conf
 dbms.connector.bolt.address=0.0.0.0:7687
 dbms.connector.bolt.tls_level=OPTIONAL
@@ -68,6 +69,14 @@ cypher-shell -a ${neo4j_ip} -u neo4j -p ${instance-id} < import_csv.cypher
 cypher-shell -a ${neo4j_ip} -u neo4j -p ${instance-id}
 
 neo4j@neo4j> MATCH (p:Product {productName:"Chocolade"}) return p;
+
+neo4j@neo4j> MATCH (p:Product),(c:Category)
+        WHERE p.categoryID = c.categoryID
+        CREATE (p)-[:PART_OF]->(c)
+
+neo4j@neo4j> MATCH (p:Product),(s:Supplier)
+        WHERE p.supplierID = s.supplierID
+        CREATE (s)-[:SUPPLIES]->(p)
 
 neo4j@neo4j> MATCH (choc:Product {productName:'Chocolade'})<-[:PRODUCT]-(:Order)<-[:SOLD]-(employee),
                     (employee)-[:SOLD]->(o2)-[:PRODUCT]->(other:Product)

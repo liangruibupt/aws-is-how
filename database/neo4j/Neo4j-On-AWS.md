@@ -3,6 +3,7 @@
 ## Deployment
 [Neo4j-On-AWS-Global](database/neo4j/Neo4j-On-AWS-Global.md)
 [Neo4j-On-AWS-China](database/neo4j/Neo4j-On-AWS-China.md)
+[Neo4j-quick-start](database/neo4j/Neo4j-quick-start.md)
 
 
 ## Deployment consideration

@@ -1,5 +1,12 @@
 # Neo4j-On-AWS-Global
 
+Below show 3 approaches to install Neo4j Community Edition
+- Community Standalone directly
+- Install global AMI on China region
+- Start from docker
+
+The demo in here use the m5.large EC2 instance
+
 ## Deploy via EC2 Neo4j Marketplace AMI
 [neo4j-cloud-aws-ec2-ami guide](https://neo4j.com/developer/neo4j-cloud-aws-ec2-ami/)
 
@@ -40,14 +47,49 @@ export InstanceId=
 
 aws ec2 create-tags --resources ${InstanceId} --tags Key=Name,Value=neo4j-demo --region ${AWS_REGION}
 
+## SSH
+chmod 600 ~/.ssh/${KEY_NAME}.pem
+ssh -i ~/.ssh/${KEY_NAME}.pem ubuntu@${PublicDnsName}
+
+sudo -i -u  neo4j
+#vi /etc/neo4j/neo4j.template
+dbms.default_advertised_address=$dbms_default_advertised_address
+dbms.default_listen_address=$dbms_default_listen_address
+
+#vi /etc/neo4j/pre-neo4j.sh
+echo "dbms_default_listen_address" "${dbms_default_listen_address:=0.0.0.0}"
+echo "dbms_default_advertised_address" "${dbms_default_advertised_address:=$EXTERNAL_IP_ADDR}"
+
+# HTTPS
+echo "dbms_connector_https_enabled" "${dbms_connector_https_enabled:=true}"
+echo "dbms_connector_https_advertised_address" "${dbms_connector_https_advertised_address:=$EXTERNAL_IP_ADDR:7473}"
+echo "dbms_connector_https_listen_address" "${dbms_connector_https_listen_address:=0.0.0.0:7473}"
+echo "dbms_ssl_policy_https_enabled" "${dbms_ssl_policy_https_enabled:=true}"
+echo "dbms_ssl_policy_https_base_directory" "${dbms_ssl_policy_https_base_directory:=/var/lib/neo4j/certificates/https}"
+
+# HTTP
+echo "dbms_connector_http_enabled" "${dbms_connector_http_enabled:=true}"
+echo "dbms_connector_http_advertised_address" "${dbms_connector_http_advertised_address:=$EXTERNAL_IP_ADDR:7474}"
+echo "dbms_connector_http_listen_address" "${dbms_connector_http_listen_address:=0.0.0.0:7474}"
+
+# BOLT
+echo "dbms_connector_bolt_enabled" "${dbms_connector_bolt_enabled:=true}"
+echo "dbms_connector_bolt_advertised_address" "${dbms_connector_bolt_advertised_address:=$EXTERNAL_IP_ADDR:7687}"
+echo "dbms_connector_bolt_tls_level" "${dbms_connector_bolt_tls_level:=OPTIONAL}"
+echo "dbms_default_advertised_address" "${dbms_default_advertised_address:=$EXTERNAL_IP_ADDR}"
+echo "dbms_ssl_policy_bolt_enabled" "${dbms_ssl_policy_bolt_enabled:=true}"
+
+# exit from neo4j user
+sudo systemctl restart neo4j
+sudo systemctl stop neo4j
+sudo systemctl start neo4j
+sudo systemctl status neo4j
+
 # Access
 PublicDnsName=$(aws ec2 describe-instances --instance-ids ${InstanceId} --query "Reservations[*].Instances[*].PublicDnsName" --region ${AWS_REGION} --output text)
 ## Web
 https://[PublicDnsName]:7473/browser/
 login with the user name neo4j and password instance-ID
-## SSH
-chmod 600 ~/.ssh/${KEY_NAME}.pem
-ssh -i ~/.ssh/${KEY_NAME}.pem ubuntu@${PublicDnsName}
 
 # Terminating the instance
 aws ec2 terminate-instances \
@@ -61,8 +103,8 @@ https://community.neo4j.com/t/troubleshooting-connection-issues-to-neo4j/129
 ## Fix Browser Certificates error for Neo4j
 https://medium.com/neo4j/getting-certificates-for-neo4j-with-letsencrypt-a8d05c415bbd
 
-
 ## Install  Community Standalone directly
+[Linux installation](https://neo4j.com/docs/operations-manual/current/installation/linux/)
 [Neo4j File locations ](https://neo4j.com/docs/operations-manual/current/configuration/file-locations/)
 
 ```bash
@@ -92,17 +134,15 @@ sudo apt-get install neo4j=1:4.0.2
 
 # Congifure Neo4j
 sudo -i -u  neo4j
-
 # Edit /etc/neo4j/neo4j.conf
-
 dbms.connectors.default_listen_address=0.0.0.0
-dbms.connectors.default_advertised_address=0.0.0.0
+dbms.connectors.default_advertised_address=${YOUR_INSTANCE_IP}
 
 dbms.connector.bolt.enabled=true
-dbms.connector.bolt.listen_address=0.0.0.0:7687
+#dbms.connector.bolt.listen_address=0.0.0.0:7687
 
 dbms.connector.http.enabled=true
-dbms.connector.http.listen_address=0.0.0.0:7474
+#dbms.connector.http.listen_address=0.0.0.0:7474
 
 sudo systemctl restart neo4j
 sudo systemctl stop neo4j
@@ -111,11 +151,66 @@ sudo systemctl status neo4j
 
 # Access browser
 http://[PublicDnsName]:7474/browser/
-http://ec2-3-228-1-54.compute-1.amazonaws.com:7474/browser/
+
+# Check the log
+tail -f /var/log/neo4j/debug.log
 ```
 
-## Install via docker
+## Start from docker
+[docker-run-neo4j](https://neo4j.com/developer/docker-run-neo4j/)
+
 ```bash
+# SET UP docker
+sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates \
+    curl gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) stable"
+sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker run hello-world
+
+# Start docker
+docker run --rm --name neo4jtrail neo4j:4.0.2
+
+docker run --name neo4jdemo -d \
+    --publish=7474:7474 --publish=7687:7687 \
+    -v $HOME/neo4j/data:/data \
+    -v $HOME/neo4j/logs:/logs \
+    -v $HOME/neo4j/import:/var/lib/neo4j/import \
+    -v $HOME/neo4j/plugins:/plugins \
+    -v $HOME/neo4j/conf:/var/lib/neo4j/conf \
+    --env NEO4J_AUTH=neo4j/test \
+    neo4j:4.0.2
+
+
+# Edit /conf/neo4j.conf
+dbms.connectors.default_listen_address=0.0.0.0
+dbms.connectors.default_advertised_address=${YOUR_INSTANCE_IP}
+
+dbms.connector.https.advertised_address=${YOUR_INSTANCE_IP}:7473
+
+dbms.connector.bolt.enabled=true
+#dbms.connector.bolt.listen_address=0.0.0.0:7687
+dbms.connector.bolt.advertised_address=${YOUR_INSTANCE_IP}:7687
+dbms.connector.bolt.tls_level:=OPTIONAL
+
+dbms.connector.http.enabled=true
+#dbms.connector.http.listen_address=0.0.0.0:7474
+dbms.connector.http.advertised_address=${YOUR_INSTANCE_IP}:7474
+
+# Using Cypher Shell 
+docker exec -it neo4jdemo bash
+cypher-shell -u neo4j -p test
+cat <local-file> | docker exec -i neo4jdemo bin/cypher-shell -u neo4j -p test
+
+# Use the script/enterpise/docker-compose.yml for Enterpise Edition
+docker-compose up
+docker-compose down
 ```
 
 ## Install Community Standalone from Cloudfromation
