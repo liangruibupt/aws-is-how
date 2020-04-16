@@ -20,6 +20,8 @@
 
 [The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/SSM-VPC-Endpoint-In-China-Region.md)
 
+[How I can setup transparent proxy - squid](network/squid/Squid-proxy.md)
+
 ## DNS
 [R53 CLI in China region](R53/route53-cn-customer.md)
 
@@ -30,7 +32,15 @@
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
 
 ## Storage
+[How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
+
+[S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
+
 [s3-benchmark-testing](https://github.com/liangruibupt/s3-benchmark-testing)
+
+[How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
+
+[EBS benchmark testing](https://github.com/liangruibupt/ebs-benchmark-testing)
 
 ## Database
 [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
