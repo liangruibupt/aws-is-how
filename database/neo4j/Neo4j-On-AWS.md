@@ -1,19 +1,26 @@
 # Neo4j on AWS
 
-## Deployment
+## Deployment quick start guide:
 [Neo4j-On-AWS-Global](database/neo4j/Neo4j-On-AWS-Global.md)
+
 [Neo4j-On-AWS-China](database/neo4j/Neo4j-On-AWS-China.md)
+
 [Neo4j-quick-start](database/neo4j/Neo4j-quick-start.md)
 
 
 ## Deployment consideration
+
+[Running Neo4j Graph Databases on AWS whitepaper](https://d0.awsstatic.com/whitepapers/Database/neo4j-graph-databases-aws.pdf)
+
 ### Networking
 
 1. Deploying your Neo4j cluster into a VPC with a private subnet and configuring your security group to permit ingress port
+
 | Port | Process |
 | :--- | :---    |
-|7474  | The Neo4j REST API and web frontend are available at this port.|
-|7687   | The binary protocol endpoint. Used by application drivers to query and transact with the database.|
+|7474  | The Neo4j HTTP REST API and web frontend are available at this port. |
+|7473  | The Neo4j HTTPS REST API and web frontend are available at this port. |
+|7687  | The binary protocol endpoint. Used by application drivers to query and transact with the database. |
 
 2. To optimize network performance, we suggest using EC2 instances that support enhanced networking.
 
@@ -21,7 +28,7 @@
 
 ![Noe4j-HA-Cluster](media/Noe4j-HA-Cluster.png)
 
-4. Two load balancers for Master and Slave Rest endpoints
+4. Advanced: Two load balancers for Master and Slave Rest endpoints
 Neo4j advertises separate REST endpoints for both the master node and the slave nodes so that the load balancers can determine what role each instance in a cluster plays. By creating two load balancers and adding all of the Neo4j instances to both load balancers, it can ensure that during an election the master node load balancer will properly redirect requests to the proper nodes.
 
 ![Neo4j cluster REST endpoints for the master node and the slave nodes](media/Neo4jCluster-RestEndpoint-4-Master-Slave.png)
