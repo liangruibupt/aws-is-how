@@ -1,5 +1,9 @@
 # How to verify EC2 access S3 via VPC S3 Endpoint?
 
+[How to configure VPC endpoint for S3 - quick start](https://aws.amazon.com/blogs/aws/new-vpc-endpoint-for-amazon-s3/)
+
+[How to configure VPC endpoint for S3 - full guide](https://docs.aws.amazon.com/vpc/latest/userguide/vpce-gateway.html)
+
 ## Subnet Routing Table with NAT and VPC S3 Endpoint
 ![Private Subnet with NAT Gateway and VPC S3 Endpoint](vpc/VPC-Endpoint-RT.png)
 
