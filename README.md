@@ -6,6 +6,8 @@
 ## Analytics
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
 
+[How-to-do-Virtulization-DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
+
 ## Security
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
 
@@ -44,3 +46,9 @@
 
 ## Database
 [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
+
+## Container
+[eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
+
+[EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
+
