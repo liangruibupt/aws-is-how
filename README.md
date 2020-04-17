@@ -24,6 +24,10 @@
 
 [How I can setup transparent proxy - squid](network/squid/Squid-proxy.md)
 
+[SFTP on AWS](network/SFTPOnAWS.md)
+
+[NLB-TLS-Termination + Access log](network/nlb/NLB-TLS-Termination.md)
+
 ## DNS
 [R53 CLI in China region](R53/route53-cn-customer.md)
 
@@ -51,4 +55,6 @@
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
 
 [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
+
+[ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
 
