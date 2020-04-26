@@ -1,6 +1,8 @@
 # Getting Started with AWS CodeCommit 
 
 ## Step 1: Create a CodeCommit Repository
+Before you start, please complete [codecommit-setup](codecommit-setup.md)
+
 On the Create repository page, create a MyDemoRepo repository. 
 
 ![codecommit-createrepo](media/codecommit-createrepo.png)
