@@ -1,5 +1,9 @@
 # aws-is-how
 
+## AI/ML
+
+[Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
+
 ## Computing
 
 [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
@@ -71,3 +75,9 @@
 [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
 
 [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
+
+## DevOps
+
+[CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
+
+[Codebuild Get Start](devops/codebuild/codebuild-get-start.md)

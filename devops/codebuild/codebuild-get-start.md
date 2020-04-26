@@ -168,6 +168,45 @@ create-project.json
 ![codebuild-artifact](media/codebuild-artifact.png)
 
 
+You can also create the source code location on S3 bucket
+
+```bash
+MessageUtil.zip
+    |-- pom.xml
+    |-- buildspec.yml
+    `-- src
+         |-- main
+         |     `-- java
+         |           `-- MessageUtil.java
+         `-- test
+               `-- java
+                     `-- TestMessageUtil.java
+
+aws s3 cp MessageUtil.zip s3://codebuild-regionID-accountID-input-bucket/codebuild-demo-project/MessageUtil.zip --region cn-northwest-1
+
+aws codebuild create-project --cli-input-json file://create-project-s3.json --region cn-northwest-1
+
+create-project-s3.json
+{
+  "name": "codebuild-demo-project",
+  "source": {
+    "type": "S3",
+    "location": "codebuild-regionID-accountID-input-bucket/MessageUtil.zip"
+  },
+  "artifacts": {
+    "type": "S3",
+    "location": "codebuild-regionID-accountID-output-bucket"
+  },
+  "environment": {
+    "type": "LINUX_CONTAINER",
+    "image": "aws/codebuild/amazonlinux2-x86_64-standard:2.0",
+    "computeType": "BUILD_GENERAL1_SMALL"
+  },
+  "serviceRole": "arn:aws-cn:iam::account-ID:role/codebuild-project-service-role",
+  "encryptionKey": "arn:aws-cn:kms:region-ID:account-ID:key/key-ID"
+}
+```
+
 6. Run the build
 In the list of build projects, choose `codebuild-demo-project`, and then choose `Start build`.
 ```bash
