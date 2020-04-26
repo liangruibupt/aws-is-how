@@ -78,6 +78,10 @@
 
 [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
 
+[How can I create an Application Load Balancer and then register Amazon ECS tasks automatically](container/ECS-Dynamic-Port-Mapping.md)
+
+[How can I a ECS service serve traffic from multiple port?](container/ECS-Dynamic-Port-Mapping.md)
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
