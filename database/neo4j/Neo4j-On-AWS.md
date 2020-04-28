@@ -1,11 +1,11 @@
 # Neo4j on AWS
 
 ## Deployment quick start guide:
-[Neo4j-On-AWS-Global](database/neo4j/Neo4j-On-AWS-Global.md)
+[Neo4j-On-AWS-Global](Neo4j-On-AWS-Global.md)
 
-[Neo4j-On-AWS-China](database/neo4j/Neo4j-On-AWS-China.md)
+[Neo4j-On-AWS-China](Neo4j-On-AWS-China.md)
 
-[Neo4j-quick-start](database/neo4j/Neo4j-quick-start.md)
+[Neo4j-quick-start](Neo4j-quick-start.md)
 
 
 ## Deployment consideration

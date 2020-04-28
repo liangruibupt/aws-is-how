@@ -46,6 +46,8 @@
 
 [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
 
+[hello-cdk](https://github.com/liangruibupt/hello-cdk)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
