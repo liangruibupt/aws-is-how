@@ -89,3 +89,7 @@
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
 
 [Codebuild Get Start](devops/codebuild/codebuild-get-start.md)
+
+## Infra as Code
+
+[How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
