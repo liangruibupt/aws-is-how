@@ -93,3 +93,7 @@
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
+
+## Integration
+
+[如何构建Amazon SNS HTTP Subscription?](integration/SNS-HTTP-Subscription.md)
