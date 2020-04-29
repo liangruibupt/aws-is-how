@@ -5,7 +5,7 @@
 [How to configure VPC endpoint for S3 - full guide](https://docs.aws.amazon.com/vpc/latest/userguide/vpce-gateway.html)
 
 ## Subnet Routing Table with NAT and VPC S3 Endpoint
-![Private Subnet with NAT Gateway and VPC S3 Endpoint](vpc/VPC-Endpoint-RT.png)
+![Private Subnet with NAT Gateway and VPC S3 Endpoint](media/VPC-Endpoint-RT.png)
 
 1. EC2 in private Subnet access S3 via VPC S3 Endpoint
 ```bash
@@ -33,10 +33,10 @@ traceroute to s3.cn-north-1.amazonaws.com.cn (54.222.49.98), 30 hops max, 60 byt
 
 ## Subnet Routing Table with NAT and VPC S3 Endpoint
 
-![Private Subnet with NAT Gateway and No VPC S3 Endpoint](vpc/VPC-Endpoint-NAT-RT.png)
+![Private Subnet with NAT Gateway and No VPC S3 Endpoint](media/VPC-Endpoint-NAT-RT.png)
 
 NAT Gateway IP
-![NAT Gateway IP](vpc/VPC-Endpoint-NAT-IP.png)
+![NAT Gateway IP](media/VPC-Endpoint-NAT-IP.png)
 
 1. EC2 in private subnet without S3 VPC endpoint
 
