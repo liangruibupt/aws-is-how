@@ -66,6 +66,8 @@
 
 [storage-gateway-demo and performance testing](https://github.com/liangruibupt/storage-gateway-demo)
 
+[EFS Workshop for GCR](https://github.com/liangruibupt/amazon-efs-workshop)
+
 ## Database
 
 [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)

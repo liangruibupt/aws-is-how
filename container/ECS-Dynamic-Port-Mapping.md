@@ -4,6 +4,8 @@ https://aws.amazon.com/premiumsupport/knowledge-center/create-alb-auto-register/
 
 ![alb-dynamic-port-mapping](media/alb-dynamic-port-mapping.png)
 
+![alb-dynamic-mapping-tg](media/alb-dynamic-mapping-tg.png)
+
 
 # How can I a ECS service serve traffic from multiple port?
 
@@ -48,7 +50,7 @@ A service uses two separate load balancers, one for internal traffic and a secon
 ]
 ```
 
-
+![ECSMultiTGBlogPostSol](media/ECSMultiTGBlogPostSol.jpg)
 
 ## Example 3: Exposing ports from multiple containers
 A service uses one load balancer and two target groups to expose ports from separate containers.
