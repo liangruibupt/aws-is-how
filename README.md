@@ -78,7 +78,7 @@
 
 [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
 
-[ecs-workshop-greater-china](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
+[ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
 
 [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
 
