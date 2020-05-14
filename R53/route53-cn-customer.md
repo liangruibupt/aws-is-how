@@ -1,3 +1,20 @@
+## Feature Availability and Implementation Differences
+https://docs.amazonaws.cn/en_us/aws/latest/userguide/route53.html
+
+You can't use Route 53 to register domains. However, you can create a hosted zone in one of the China Regions for DNS service
+
+You can't create alias records that route traffic to AWS resources outside the China Regions.
+
+You can't create records that use the geoproximity routing policy. 
+
+You can't use Route 53 Resolver to forward DNS queries from your VPCs to your on-promise network or from your on-promise network to your VPCs. But you can setup DNS forward on EC2 to complete the similar function
+
+When creating alias records for Amazon CloudFront distribution, use the following hosted zone ID: Z3RFFRIM2A3IF5.
+
+## [Offical guide](https://docs.amazonaws.cn/Route53/latest/DeveloperGuide/index.html)
+
+## [Offical API guide](https://docs.amazonaws.cn/Route53/latest/APIReference/Welcome.html)
+
 ## Public Zone
 ```bash
 aws route53 create-hosted-zone --name 91aws.club --endpoint-url https://route53.amazonaws.com.cn --caller-reference "20191113" --region cn-northwest-1 --profile cn-north-1
