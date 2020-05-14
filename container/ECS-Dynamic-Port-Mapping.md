@@ -11,6 +11,7 @@ https://aws.amazon.com/premiumsupport/knowledge-center/create-alb-auto-register/
 
 Solutions: [Registering Multiple Target Groups with a Service](https://aws.amazon.com/cn/about-aws/whats-new/2019/07/amazon-ecs-services-now-support-multiple-load-balancer-target-groups/)
 
+[multiple ELB target group for internal and external service](https://aws.amazon.com/blogs/containers/how-to-use-multiple-load-balancer-target-group-support-for-amazon-ecs-to-access-internal-and-external-service-endpoint-using-the-same-dns-name/)
 
 ## Example 1: Exposing multiple ports from the same container
 A service uses one load balancer but exposes multiple ports from the same container. For example, a Jenkins container might expose port 8080 for the Jenkins web interface and port 50000 for the API.
