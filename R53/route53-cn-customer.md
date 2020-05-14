@@ -109,3 +109,8 @@ aws cloudwatch get-metric-data --metric-data-queries file://private-zone-metric.
 ```bash
 aws logs describe-log-groups --log-group-name-prefix /aws/route53/china-preview --region cn-northwest-1 --profile cn-north-1
 ```
+
+# Migrating a hosted zone to a different AWS account
+[migration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-migrating.html#hosted-zones-migrating-install-cli)
+
+[3rd party tool](https://github.com/barnybug/cli53)

@@ -48,6 +48,8 @@
 
 [hello-cdk](https://github.com/liangruibupt/hello-cdk)
 
+[Build and deploy a serverless application with the SAM CLI in China reigon](https://github.com/liangruibupt/hell-world-sam)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
@@ -91,6 +93,8 @@
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
 
 [Codebuild Get Start](devops/codebuild/codebuild-get-start.md)
+
+[X-Ray in AWS China region](https://github.com/liangruibupt/aws-xray-workshop-gcr)
 
 ## Infra as Code
 
