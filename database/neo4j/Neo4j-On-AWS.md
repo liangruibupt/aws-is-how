@@ -1,5 +1,7 @@
 # Neo4j on AWS
 
+![neo4j_logo.png](media/neo4j_logo.png)
+
 ## Deployment quick start guide:
 [Neo4j-On-AWS-Global](Neo4j-On-AWS-Global.md)
 

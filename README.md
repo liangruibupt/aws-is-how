@@ -50,6 +50,8 @@
 
 [Build and deploy a serverless application with the SAM CLI in China reigon](https://github.com/liangruibupt/hell-world-sam)
 
+[SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)

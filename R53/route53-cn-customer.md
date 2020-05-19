@@ -99,6 +99,9 @@ aws route53 list-resource-record-sets --hosted-zone-id Z0807456FWSN21W2TRAZ --en
 aws route53 list-traffic-policies --endpoint-url https://route53.amazonaws.com.cn --region cn-northwest-1 --profile cn-north-1
 
 # Monitoring
+
+You need first enable the Health Check on Route53
+
 ```bash
 aws cloudwatch list-metrics --namespace "AWS/Route53" --region cn-northwest-1 --profile cn-north-1
 aws cloudwatch get-metric-data --metric-data-queries file://private-zone-metric.json --start-time 2019-11-20T04:01:00Z --end-time 2019-11-26T14:07:00Z \
