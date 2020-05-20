@@ -171,3 +171,7 @@ More details please check
 [How to Set Up DNS Resolution Between On-Premises Networks and AWS Using AWS Directory Service and Microsoft Active Directory](https://aws.amazon.com/blogs/security/how-to-set-up-dns-resolution-between-on-premises-networks-and-aws-using-aws-directory-service-and-microsoft-active-directory/)
 
 In global region, you can leverage the [Route53 resolver](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html)
+
+2. How to use the Route53 API in my code
+
+Please check the sample code writtern by go-sdk [route53-demo.go](R53/route53-demo.go)
