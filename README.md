@@ -52,6 +52,8 @@
 
 [SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
 
+[Using AWS Lambda with Amazon Kinesis](lambda/lambda-kinesis.md)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
