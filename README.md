@@ -24,6 +24,8 @@
 
 [How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
 
+[Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -75,6 +77,8 @@
 [EFS Workshop for GCR](https://github.com/liangruibupt/amazon-efs-workshop)
 
 ## Database
+
+[Serverless connection pooling adapter with proxysql for RDS for MySQL or Aurora databases](database/rds/serverless-proxysql.md)
 
 [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
