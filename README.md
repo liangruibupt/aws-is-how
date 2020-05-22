@@ -40,7 +40,7 @@
 
 ## DNS
 
-[R53 CLI in China region](R53/route53-cn-customer.md)
+[R53 in China region](R53/Route53-Quick-Start.md)
 
 ## Serverless
 
