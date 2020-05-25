@@ -80,3 +80,24 @@ Please check the sample code writtern by go-sdk [route53-demo.go](R53/route53-de
 3. VPC1 and VPC2 has peering， Test 2 can nslookup the aaa.example.local 
 4. VPC1 and VPC3 without peering Test 3 can nslookup the aaa.example.local 
 
+## 如何将 Route 53 Private Hosted Zone 与不同 AWS 账户上的 VPC 相关联？
+
+[How do I associate a Route 53 private hosted zone with a VPC on a different AWS account?](https://aws.amazon.com/premiumsupport/knowledge-center/private-hosted-zone-different-account/)
+
+The key points:
+
+```bash
+# authorize the association between the private hosted zone in Account A (hosted-zone-id) and the VPC in Account B (vpc-id).  Running on Account A
+
+aws route53 create-vpc-association-authorization --hosted-zone-id <hosted-zone-id> --vpc VPCRegion=<region>,VPCId=<vpc-id>
+
+# create the association between the private hosted zone in Account A (hosted-zone-id) and the VPC in Account B (vpc-id). Running on Account B
+
+aws route53 associate-vpc-with-hosted-zone --hosted-zone-id <hosted-zone-id> --vpc VPCRegion=<region>,VPCId=<vpc-id>
+
+# delete the association authorization after the association is created. Running on Account A
+
+aws route53 delete-vpc-association-authorization --hosted-zone-id <hosted-zone-id>  --vpc VPCRegion=<region>,VPCId=<vpc-id>
+
+# EC2 instances in the VPC from Account B can now resolve records in the private hosted zone in Account A.
+```
