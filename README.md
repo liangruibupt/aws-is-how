@@ -28,6 +28,8 @@
 
 [Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
 
+[How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
