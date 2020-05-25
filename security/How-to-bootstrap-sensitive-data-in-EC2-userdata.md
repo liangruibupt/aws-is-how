@@ -1,16 +1,16 @@
 # How to bootstrap sensitive data in EC2 User Data
 
-Question:
+## Question:
 
-A company uses user data scripts that contain sensitive information to bootstrap Amazon EC2 instances. A Security Engineer discovers that this sensitive information is viewable by people who should not have access to it.
+A company uses user data scripts that contain sensitive information to bootstrap Amazon EC2 instances. A Security Engineer discovers that this sensitive information is viewable by people who should not have access to it.
 
 What is the MOST secure way to protect the sensitive information used to bootstrap the instances?
 
-Solution:
+## Solution:
 
 Store the sensitive data in AWS Systems Manager Parameter Store using the encrypted string parameter and assign the Systems Manager GetParameters and KMS Decryption permission to the EC2 instance role.
 
-Demo EC2 user data:
+## Demo EC2 user data:
 
 ```bash
 #!/bin/bash
