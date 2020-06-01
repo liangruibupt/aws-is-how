@@ -16,6 +16,8 @@
 
 [How-to-do-Virtulization-DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
 
+[Glue-streaming-etl-demo for kinesis and Kafka](https://github.com/liangruibupt/glue-streaming-etl-demo)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
