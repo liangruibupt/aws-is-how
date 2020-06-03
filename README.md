@@ -84,7 +84,7 @@
 
 ## Database
 
-[Serverless connection pooling adapter with proxysql for RDS for MySQL or Aurora databases](database/rds/serverless-proxysql.md)
+[Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
 
 [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
