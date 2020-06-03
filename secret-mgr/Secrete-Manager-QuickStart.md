@@ -7,7 +7,7 @@
 
 Navigate to AWS Secrets Manager->Secrets
 
-[customType](media/customType.png)
+![customType](media/customType.png)
 
 Then Run the [secret-mgr-demo](secret-mgr-demo.py) on EC2 or Lambda
 
@@ -24,11 +24,11 @@ Then Run the [rds-secret-mgr-demo](rds-secret-mgr-demo.py) on EC2 or Lambda
 
 Select the RDS connection
 
-[rds1](media/rds1.png)
+![rds1](media/rds1.png)
 
 Select the RDS instance
 
-[rds2](media/rds2.png)
+![rds2](media/rds2.png)
 
 Then Run the [rds-secret-mgr-demo.py](rds-secret-mgr-demo.py) on EC2 or Lambda
 
