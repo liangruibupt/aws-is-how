@@ -4,6 +4,7 @@ Leverage the reference archiecture project https://github.com/aws-samples/server
 
 ![proxysql-architect](media/proxysql-architect.png)
 
+
 ## Deploy by CDK
 1. Clone and install dependency 
 ```bash
@@ -339,3 +340,6 @@ aws rds wait db-instance-deleted --db-instance-identifier MySQLForLambdaTest
 # proxysql
 npx cdk destroy
 ```
+
+# Other reference doc
+[如何结合使用 ProxySQL 和开源平台来拆分 Amazon Aurora 集群上的 SQL 读写操作](https://aws.amazon.com/cn/blogs/china/how-to-use-proxysql-with-open-source-platforms-to-split-sql-reads-and-writes-on-amazon-aurora-clusters/)
