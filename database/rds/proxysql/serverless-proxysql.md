@@ -1,4 +1,8 @@
-# Serverless connection pooling adapter with proxysql on AWS Fargate and help AWS Lambda better connects to RDS for MySQL or Aurora databases
+# Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split
+
+Serverless connection pooling adapter with proxysql on AWS Fargate and help application better connects to RDS for MySQL or Aurora databases for 
+- Connection Pooling
+- Read/Write Split and Load Balancing
 
 Leverage the reference archiecture project https://github.com/aws-samples/serverless-refarch-for-proxysql.git
 
