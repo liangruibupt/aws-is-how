@@ -18,6 +18,8 @@
 
 [Glue-streaming-etl-demo for kinesis and Kafka](https://github.com/liangruibupt/glue-streaming-etl-demo)
 
+[automate-athena-query by lambda and step function](analytics/automate-athena-query.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
