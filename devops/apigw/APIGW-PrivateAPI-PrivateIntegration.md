@@ -149,20 +149,123 @@
     
     ```bash
     # HTTP Integration with Proxy Mode
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage -H'x-apigw-api-id:3i95y1yx06'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage -H'x-apigw-api-id:3i95y1yx06'
     
     # Private Integration VPCLink with Proxy Mode
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc -H'x-apigw-api-id:3i95y1yx06'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc -H'x-apigw-api-id:3i95y1yx06'
 
     # HTTP Integration without Proxy Mode
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-non-proxy -H'x-apigw-api-id:3i95y1yx06'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-non-proxy -H'x-apigw-api-id:3i95y1yx06'
 
     # Private Integration VPCLink without Proxy Mode
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
-    curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H'x-apigw-api-id:3i95y1yx06'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-10-0-2-83 workspace]$ curl -v https://vpce-0d4d61b31cecd49fc-rsnonbkv.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H'x-apigw-api-id:3i95y1yx06'
+    ```
+
+4. Invoke a Private REST API from other account VPC
+
+
+    ![APIGW-PrivateAPI-PrivateIntegration-CrossAccount](media/APIGW-PrivateAPI-PrivateIntegration-CrossAccount.png)
+
+- Create an interface VPC endpoint for API Gateway execute-api in 2nd account VPC
+
+    ![VPCEndpoint-APIGW-CrossAccount](media/VPCEndpoint-APIGW-CrossAccount.png)
+
+    - For Enable Private DNS Name, leave the check box selected. Private DNS is enabled by default. 
+    - The security group you choose must be set to allow TCP Port 443 inbound HTTPS traffic from either an IP range in your VPC or another security group in your VPC. 
+    - VPCE Policy in here is Full Access - Allow access by any user or service within the VPC using credentials from any AWS accounts.
+    ```json
+    {
+    "Statement": [
+            {
+                "Action": "*",
+                "Effect": "Allow",
+                "Resource": "*",
+                "Principal": "*"
+            }
+        ]
+    }
+    ```
+
+- Add new VPC endpoint to the private API
+
+    ![APIGW-PrivateAPI-CrossAccount-VPCE](media/APIGW-PrivateAPI-CrossAccount-VPCE.png)
+
+    ```bash
+    aws apigateway update-rest-api --rest-api-id 3i95y1yx06 \
+    --patch-operations "op='add',path='/endpointConfiguration/vpcEndpointIds',value='vpce-08cbeb493b8abab4f'"
+    --region cn-northwest-1
+    ```
+
+- Set up a resource policy for a private API only allow specified VPC to acess this private API
+    ```json
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "arn:aws-cn:execute-api:cn-northwest-1:{account_id}:{apigw_id}/*/*/*"
+        },
+        {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "arn:aws-cn:execute-api:cn-northwest-1:{account_id}:{apigw_id}/*/*/*",
+            "Condition" : {
+                "StringNotEquals": {
+                   "aws:SourceVpc": ["{vpc_id}","{vpc_id_crossaccount}"]
+                }
+            }
+        }
+    ]
+    }
+    ```
+
+- Re-Deploy a private API using the API Gateway console as stage set to `dev`
+
+    ![APIGW-Private-API-PrivateIntegration-Deploy](media/APIGW-Private-API-PrivateIntegration-Deploy.png)
+
+- Invoking your private API using private DNS names
+
+    ```bash
+    # HTTP Integration with Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl https://3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage
+    
+    # Private Integration VPCLink with Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl https://3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc
+
+    # HTTP Integration without Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl https://3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-non-proxy
+
+    # Private Integration VPCLink without Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl https://3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc-non-proxy
+    ```
+
+- Invoking your private API using endpoint-specific public DNS hostnames
+    
+    Replace the endpoint-specific public DNS hostnames to the cross account VPC endpoint DNS name:
+
+    ```bash
+    # HTTP Integration with Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage -H'x-apigw-api-id:3i95y1yx06'
+    
+    # Private Integration VPCLink with Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc -H'x-apigw-api-id:3i95y1yx06'
+
+    # HTTP Integration without Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-non-proxy -H'x-apigw-api-id:3i95y1yx06'
+
+    # Private Integration VPCLink without Proxy Mode
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+    [ec2-user@ip-172-31-42-173 ~]$ curl -v https://vpce-08cbeb493b8abab4f-xctesn7p.execute-api.cn-northwest-1.vpce.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H'x-apigw-api-id:3i95y1yx06'
     ```
 
 # Trouble shooting:
