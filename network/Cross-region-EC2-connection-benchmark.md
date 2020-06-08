@@ -1,3 +1,12 @@
+# Cross region EC2 to EC2 transfering speed testing
+
+# The latency testing:
+1. Use the tool to check China region and Global region latency
+https://cn-north-1.sp.awsguru.cn/smokeping/?target=AWS_Regions
+
+# China region EC2 (Ningxia region) to global region S3 (Hongkong region and Tokyo region)
+https://github.com/liangruibupt/s3-benchmark-testing/blob/master/AWS-S3-CLI.md
+
 # Use the iperf3 to testing the EC2 to EC2 Internet transfer speed benchmark
 
 1. Amazon Linux 2, m5.xlarge 4vCPU, 16GiB RAM, 500GiB gp2 SSD, Up to 10Gbps network bandwidth for both Regions
