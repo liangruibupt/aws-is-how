@@ -1,6 +1,6 @@
 import logging
 import json
-from athena_query_helper import run_sql, craeteDB, craeteTable, run_query, get_ddl
+from athena_query_helper import run_sql, craeteDB, craeteTable, run_query, get_ddl, CustomError
 import os
 
 # athena constant
@@ -18,7 +18,8 @@ logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
-
+    logger.info(event)
+    logger.info(context)
     # get keyword
     database = event.get('Athena_Database', DATABASE)
     table = event.get('Athena_Table', TABLE)
@@ -36,7 +37,7 @@ def lambda_handler(event, context):
     # Create the table
     createtable_sql = get_ddl(createtable_ddl_bucket, createtable_ddl_file)
     if createtable_sql == None:
-        raise Exception("Get createtable_ddl failed")
+        raise CustomError("Get createtable_ddl failed")
     
     result = craeteTable(database, table, createtable_sql, output_bucket, output_prefix)
     event = {
@@ -44,7 +45,8 @@ def lambda_handler(event, context):
         "MyQueryExecutionStatus": result['query_execution_status'],
         "WaitTask": {
             "QueryExecutionId": result['query_execution_id'],
-            "ResultPrefix": "CreateTable"
+            "ResultPrefix": "CreateTable",
+            "QueryState": result['query_execution_status']
         }
     }
 

@@ -19,7 +19,7 @@ pip install boto3 -t ./
 chmod -R 755 .
 zip -r9 ../function.zip .
 
-cd .. && zip -g function.zip basic-athena-query-lambda.py
+cd .. && zip -g function.zip basic-athena-query-lambda.py athena_query_helper.py
 ```
 
 2. Create lambda function
@@ -112,9 +112,45 @@ Seems Step function can orchestrate workflow, let's try it.
 
 Let's make the scenaio more complex
 
+## Prepare Lambda function
+- Create the lambda function: athena_createdb_createtable
+```bash
+zip -g function.zip athena_createdb_createtable.py athena_query_helper.py
+
+aws lambda create-function --function-name  athena_createdb_createtable --runtime python3.7 \
+--zip-file fileb://function.zip --handler athena_createdb_createtable.lambda_handler \
+--role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--timeout 300 --memory-size 256
+```
+
+- Create the lambda functions: athena_automate_handler
+```bash
+zip -g function.zip athena_automate_handler.py athena_query_helper.py
+
+aws lambda create-function --function-name  athena_short_running_query --runtime python3.7 \
+--zip-file fileb://function.zip --handler athena_automate_handler.athena_short_running_query \
+--role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--timeout 300 --memory-size 256
+
+aws lambda create-function --function-name  athena_start_long_running_query --runtime python3.7 \
+--zip-file fileb://function.zip --handler athena_automate_handler.athena_start_long_running_query \
+--role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--timeout 300 --memory-size 256
+
+aws lambda create-function --function-name  athena_get_long_running_status --runtime python3.7 \
+--zip-file fileb://function.zip --handler athena_automate_handler.athena_get_long_running_status \
+--role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--timeout 300 --memory-size 256
+
+aws lambda create-function --function-name  athena_get_long_running_result --runtime python3.7 \
+--zip-file fileb://function.zip --handler athena_automate_handler.athena_get_long_running_result \
+--role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--timeout 300 --memory-size 256
+```
+
 1. Step 1: Create a Table Based on the Original Dataset with CSV format
 
-- Define the lambda trigger event
+- Define the state machine trigger event
 
 ```json
 {
@@ -127,15 +163,9 @@ Let's make the scenaio more complex
 }
 ```
 
-- Create the lambda function: athena_createdb_createtable
-
-The script under scripts/athena_createdb_createtable.py
-
-- Invoke lambda function by Step Function
-
 2. Step 2: Use CTAS (Create Table As Select) to create a table with partitions for the years 2015 to 2019. 
 
-- Define the lambda trigger event
+- Define the lambda task trigger event
 
 ```json
 {
@@ -148,9 +178,9 @@ The script under scripts/athena_createdb_createtable.py
 }
 ```
 
-- Invoke lambda function athena_createdb_createtable by Step Function
+- Step function task will create new table `new_parquet`
 
-Create new table `new_parquet`: Partition the data by year, Convert the data to Parquet, and Compress the Data with Snappy
+Partition the data by year, Convert the data to Parquet, and Compress the Data with Snappy
 
 - Check the partitions and parquet files created by the CTAS statement
 ```bash
@@ -185,11 +215,7 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 }
 ```
 
-- Invoke lambda function athena_long_running_query by Step Function
-
-The script under scripts/athena_long_running_query.py
-
-Use INSERT INTO to Add Data from years 2010 to 2014 to `new_parquet`.
+- Step function task will INSERT INTO to Add Data from years 2010 to 2014 to `new_parquet`.
 
 - Check the partitions and parquet files created by the CTAS statement
 ```bash
@@ -219,7 +245,7 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 
 4. Step 4: Query the data and measure performance
 
-- Define lambda environment variable or include the lambda trigger event
+- Define lambda trigger event
 
 ```json
 {
@@ -232,7 +258,7 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 }
 ```
 
-- Invoke lambda function athena_long_running_query by Step Function
+- Step function task will invoke the query
 
 - Define the lambda trigger event
 
@@ -247,10 +273,15 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 }
 ```
 
-- Invoke lambda function athena_long_running_query by Step Function
+- Step function task will invoke the query
 
 # Cleanup
 ```bash
+aws lambda delete-function --function-name athena_createdb_createtable
+aws lambda delete-function --function-name athena_short_running_query
+aws lambda delete-function --function-name athena_start_long_running_query
+aws lambda delete-function --function-name athena_get_long_running_status
+aws lambda delete-function --function-name athena_get_long_running_result
 DROP TABLE IF EXISTS new_parquet
 DROP TABLE IF EXISTS original_csv
 DROP DATABASE blogdb
@@ -266,4 +297,7 @@ clean up the data under s3://ray-datalake-lab/sample/athena-ctas-insert-into-opt
 3. [Creating a Table from Query Results](https://docs.aws.amazon.com/athena/latest/ug/ctas.html)
 4. [Orchestrate multiple ETL jobs using AWS Step Functions and AWS Lambda](https://aws.amazon.com/blogs/big-data/orchestrate-multiple-etl-jobs-using-aws-step-functions-and-aws-lambda/)
 ![ETLStepLambda2](media/ETLStepLambda2.png)
+
+![ETLStepLambda4](media/ETLStepLambda4.png)
+
 5. [Replace Data pipeline to export an Amazon DynamoDB table to Amazon S3 using AWS Step Functions and AWS Glue](https://aws.amazon.com/blogs/big-data/how-to-export-an-amazon-dynamodb-table-to-amazon-s3-using-aws-step-functions-and-aws-glue/)

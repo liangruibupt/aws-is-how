@@ -15,6 +15,9 @@ athena_client = boto3.client('athena')
 s3_client = boto3.client('s3')
 
 
+class CustomError(Exception):
+    pass
+
 # Wait 2^x * 300 milliseconds between each retry, up to 60 seconds
 @retry(stop_max_attempt_number=10,
        wait_exponential_multiplier=300,
@@ -132,7 +135,7 @@ def craeteDB(database, output_bucket, output_prefix):
         response = run_sql(getdatabse, database, output_bucket, output_prefix)
     except ClientError as e:
         logging.error(e.response['Error'])
-        raise e
+        raise CustomError(e.response['Error'])
     if len(response['ResultSet']['Rows']) == 0:
         sqlString = 'create database %s' % (database)
         result = run_sql(sqlString, database, output_bucket, output_prefix)
@@ -147,7 +150,7 @@ def craeteTable(database, table, createtable_sql, output_bucket, output_prefix):
         response = run_sql(gettable, database, output_bucket, output_prefix)
     except ClientError as e:
         logging.error(e.response['Error'])
-        raise e
+        raise CustomError(e.response['Error'])
 
     # create table sql
     if len(response['ResultSet']['Rows']) == 0:
@@ -168,8 +171,9 @@ def get_query_output(query_execution_id, output_bucket, output_prefix):
     except ClientError as e:
         if e.response['Error']['Code'] == "404":
             logging.error("The object does not exist.")
+            raise CustomError("The object does not exist.")
         else:
-            raise e
+            raise CustomError(e.response['Error'])
      # read file to array and preview 20 lines
     rows = []
     with open(local_filename) as csvfile:
@@ -215,7 +219,7 @@ def get_ddl(ddl_bucket, ddl_file):
         response = s3_client.download_file(
             ddl_bucket, ddl_file, local_filename)
     except ClientError as e:
-        raise e
+        raise CustomError(e.response['Error'])
 
     with open(local_filename) as ddl:
         sql = ddl.read()
