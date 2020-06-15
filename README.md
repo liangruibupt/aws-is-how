@@ -16,9 +16,9 @@
 
 [How-to-do-Virtulization-DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
 
-[Glue-streaming-etl-demo for kinesis and Kafka](https://github.com/liangruibupt/glue-streaming-etl-demo)
+[Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
 
-[automate-athena-query by lambda and step function](analytics/automate-athena-query.md)
+[Automate athena query by lambda and step function](analytics/automate-athena-query.md)
 
 ## Security
 
