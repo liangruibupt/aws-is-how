@@ -313,6 +313,17 @@ aws lambda invoke \
 # END RequestId: 0356a11a-27c9-495b-b867-4f57c4d045cb
 # REPORT RequestId: 0356a11a-27c9-495b-b867-4f57c4d045cb	Duration: 1.61 ms	Billed Duration: 100 ms	Memory Size: 128 MB	Max Memory Used: 50 MB
 ```
+
+## Cleanup
+```bash
+aws lambda delete-function --function-name php-example-goodbye
+aws lambda delete-function --function-name php-example-hello
+aws lambda delete-layer-version --layer-name php-example-runtime --version-number 1
+aws lambda delete-layer-version --layer-name php-example-vendor --version-number 1
+
+Terminate the EC2 instance
+```
+
 ## Reference
 [Scripting Languages for AWS Lambda: Running PHP](https://aws.amazon.com/cn/blogs/compute/scripting-languages-for-aws-lambda-running-php-ruby-and-go/)
 
