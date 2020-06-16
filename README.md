@@ -68,6 +68,8 @@
 
 [Using AWS Lambda with Amazon Kinesis](lambda/lambda-kinesis.md)
 
+[AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
