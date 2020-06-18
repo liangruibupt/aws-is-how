@@ -88,7 +88,7 @@ echo ${NLB_TCP_TG_ARN}
 # Create TLS licenser
 aws elbv2 create-listener \
     --load-balancer-arn ${NLB_ARN} \
-    --protocol TLS --port 443 --certificates CertificateArn=arn:aws-cn:acm:cn-northwest-1:876820548815:certificate/019bcf38-e2a4-468a-894a-3dfa4982abb1 \
+    --protocol TLS --port 443 --certificates CertificateArn=arn:aws-cn:acm:cn-northwest-1:$account_id:certificate/019bcf38-e2a4-468a-894a-3dfa4982abb1 \
     --ssl-policy ELBSecurityPolicy-2016-08 \
     --default-actions Type=forward,TargetGroupArn=${NLB_TCP_TG_ARN} --region ${AWS_REGION}
 ```
@@ -270,7 +270,7 @@ echo ${NLB_TLS_TG_ARN}
 # Create TLS licenser
 aws elbv2 create-listener \
     --load-balancer-arn ${NLB_ARN} \
-    --protocol TLS --port 9443 --certificates CertificateArn=arn:aws-cn:acm:cn-northwest-1:876820548815:certificate/019bcf38-e2a4-468a-894a-3dfa4982abb1 \
+    --protocol TLS --port 9443 --certificates CertificateArn=arn:aws-cn:acm:cn-northwest-1:$account_id:certificate/019bcf38-e2a4-468a-894a-3dfa4982abb1 \
     --ssl-policy ELBSecurityPolicy-2016-08 \
     --default-actions Type=forward,TargetGroupArn=${NLB_TLS_TG_ARN} --region ${AWS_REGION}
 ```

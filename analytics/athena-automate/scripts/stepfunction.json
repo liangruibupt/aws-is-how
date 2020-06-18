@@ -15,7 +15,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_createdb_createtable",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_createdb_createtable",
             "Catch": [
                 {
                     "ErrorEquals": [
@@ -45,7 +45,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_createdb_createtable",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_createdb_createtable",
             "Catch": [
                 {
                     "ErrorEquals": [
@@ -75,7 +75,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_start_long_running_query",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_start_long_running_query",
             "Catch": [
                 {
                     "ErrorEquals": [
@@ -105,7 +105,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_start_long_running_query",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_start_long_running_query",
             "Catch": [
                 {
                     "ErrorEquals": [
@@ -135,7 +135,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_start_long_running_query",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_start_long_running_query",
             "Catch": [
                 {
                     "ErrorEquals": [
@@ -162,7 +162,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "QueryExecutionId.$": "$.taskresult.WaitTask.QueryExecutionId"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_get_long_running_result",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_get_long_running_result",
             "Catch": [
                 {
                     "ErrorEquals": [
@@ -193,7 +193,7 @@
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "QueryExecutionId.$": "$.taskresult.WaitTask.QueryExecutionId"
             },
-            "Resource": "arn:aws-cn:lambda:cn-northwest-1:876820548815:function:athena_get_long_running_status",
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_get_long_running_status",
             "Catch": [
                 {
                     "ErrorEquals": [

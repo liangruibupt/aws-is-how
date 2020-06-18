@@ -173,6 +173,10 @@ aws lambda create-function --function-name  athena_get_long_running_result --run
 
 ## Build the Step function orchestration workflow
 
+![stepfunctions_graph](media/stepfunctions_graph.png)
+
+The definition of Step function can be found in [scripts/stepfunction.json](scripts/stepfunction.json), replace the lambda arn with your environment value
+
 1. Step 1: Create a Table Based on the Original Dataset with CSV format
 
 - Define the state machine trigger event
@@ -191,7 +195,7 @@ aws lambda create-function --function-name  athena_get_long_running_result --run
 
 - Define the step function parameter
 ```json
-"ResultPath": "$.taskresult",
+            "ResultPath": "$.taskresult",
             "Parameters":{
                 "TaskName": "Create_database_and_table",
                 "Athena_DDL_File": "scripts/blogdb/create_blogdb_original_csv.ddl",
@@ -207,12 +211,12 @@ aws lambda create-function --function-name  athena_get_long_running_result --run
 
 - Define the step function parameter
 ```json
-"ResultPath": "$.taskresult",
+            "ResultPath": "$.taskresult",
             "Parameters": {
                 "TaskName": "Convert_Parquet_table_as_select",
                 "Athena_DDL_File": "scripts/blogdb/create_blogdb_new_parquet.ddl",
                 "Athena_Database.$": "$.InputData.Athena_Database",
-                "Athena_Table.$": "$.InputData.Athena_Table",
+                "Athena_Table": "new_parquet",
                 "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
@@ -246,9 +250,15 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 - Define the step function parameter
 
 ```json
-"Parameters": {
+            "ResultPath": "$.taskresult",
+            "Parameters": {
                 "TaskName": "Insert_Data",
-                "Athena_DDL_Bucket": "scripts/blogdb/insert_blogdb_new_parquet.ddl"
+                "Athena_DDL_File": "scripts/blogdb/insert_blogdb_new_parquet.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
             }
 ```
 
@@ -282,35 +292,51 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 
 4. Step 4: Query the data and measure performance
 
-- Define lambda trigger event
+- Define the step function parameter
 
 ```json
-{
-    "Athena_Database" : "blogdb",
-    "Athena_Table" : "new_parquet",
-    "Output_Data_Bucket" : "ray-datalake-lab",
-    "Output_Prefix" : "results/blogdb",
-    "Athena_DDL_Bucket" : "ray-datalake-lab",
-    "Athena_DDL_File" : "scripts/blogdb/query_orders_group_by_yeaer.ddl"
-}
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Query_data_measure_performance1",
+                "Athena_DDL_File": "scripts/blogdb/query_orders_group_by_year.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            }
 ```
 
 - Step function task will invoke the query
 
-- Define the lambda trigger event
+- The output result
+```json
+{"query_execution_result":[{"year":"2014","_col1":"41278"},{"year":"2013","_col1":"41955"},{"year":"2012","_col1":"42088"},{"year":"2011","_col1":"41076"},{"year":"2010","_col1":"40289"}]}
+```
+
+
+- Define the step function parameter for second query
 
 ```json
-{
-    "Athena_Database" : "blogdb",
-    "Athena_Table" : "new_parquet",
-    "Output_Data_Bucket" : "ray-datalake-lab",
-    "Output_Prefix" : "results/blogdb",
-    "Athena_DDL_Bucket" : "ray-datalake-lab",
-    "Athena_DDL_File" : "scripts/blogdb/analysis_orders_in_2018.ddl"
-}
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Query_data_measure_performance2",
+                "Athena_DDL_File": "scripts/blogdb/analysis_orders_in_2018.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            },
 ```
 
 - Step function task will invoke the query
+
+## The step function execution status and result
+
+![stepfunction-running](media/stepfunction-running.png)
+
+![stepfunction-running2](media/stepfunction-running2.png)
 
 # Cleanup
 ```bash
