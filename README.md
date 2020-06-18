@@ -16,9 +16,9 @@
 
 [How-to-do-Virtulization-DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
 
-[Glue-streaming-etl-demo for kinesis and Kafka](https://github.com/liangruibupt/glue-streaming-etl-demo)
+[Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
 
-[automate-athena-query by lambda and step function](analytics/automate-athena-query.md)
+[Automate athena query by lambda and step function](analytics/automate-athena-query.md)
 
 ## Security
 
@@ -67,6 +67,8 @@
 [SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
 
 [Using AWS Lambda with Amazon Kinesis](lambda/lambda-kinesis.md)
+
+[AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
 
 ## Migration
 
