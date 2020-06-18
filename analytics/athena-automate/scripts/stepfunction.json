@@ -98,7 +98,7 @@
             "ResultPath": "$.taskresult",
             "Parameters": {
                 "TaskName": "Query_data_measure_performance1",
-                "Athena_DDL_File": "scripts/blogdb/query_orders_group_by_yeaer.ddl",
+                "Athena_DDL_File": "scripts/blogdb/query_orders_group_by_year.ddl",
                 "Athena_Database.$": "$.InputData.Athena_Database",
                 "Athena_Table": "new_parquet",
                 "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
@@ -157,7 +157,7 @@
             "TimeoutSeconds": 300,
             "ResultPath": "$.taskresult",
             "Parameters": {
-                "TaskName": "Get_long_running_result",
+                "TaskName.$": "$.taskresult.TaskName",
                 "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "QueryExecutionId.$": "$.taskresult.WaitTask.QueryExecutionId"
@@ -188,7 +188,7 @@
             "Type": "Task",
             "ResultPath": "$.taskresult",
             "Parameters": {
-                "TaskName": "Get_long_running_result",
+                "TaskName.$": "$.taskresult.TaskName",
                 "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
                 "Output_Prefix.$": "$.InputData.Output_Prefix",
                 "QueryExecutionId.$": "$.taskresult.WaitTask.QueryExecutionId"
@@ -316,7 +316,7 @@
                         },
                         {
                             "Variable": "$.taskresult.WaitTask.ResultPrefix",
-                            "StringEquals": "Query1"
+                            "StringEquals": "LongRunning"
                         },
                         {
                             "Variable": "$.taskresult.WaitTask.QueryState",
@@ -333,7 +333,7 @@
                         },
                         {
                             "Variable": "$.taskresult.WaitTask.ResultPrefix",
-                            "StringEquals": "Query2"
+                            "StringEquals": "LongRunning"
                         },
                         {
                             "Variable": "$.taskresult.WaitTask.QueryState",
