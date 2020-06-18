@@ -26,19 +26,20 @@ def poll_status(_id):
     if _id is None:
         logger.info("The query has not been executed!")
         return None
-
+    logging.info("poll_status entry: %s" % (_id))
+    
     result = athena_client.get_query_execution(QueryExecutionId=_id)
     state = result['QueryExecution']['Status']['State']
-    logger.info("STATUS:" + state)
+    logger.info("poll_status STATUS:" + state)
 
     if state == 'SUCCEEDED':
         logger.debug(result)
         return result
     elif state == 'FAILED':
-        logger.debug(result)
+        logger.info(result)
         return result
     else:
-        logger.debug(result)
+        logger.info(result)
         raise Exception
 
 
@@ -46,7 +47,8 @@ def get_execution_status(_id):
     if _id is None:
         logger.info("The query has not been executed!")
         return None
-
+    logging.info("get_execution_status entry: %s" % (_id))
+    
     result = athena_client.get_query_execution(QueryExecutionId=_id)
     logger.debug(result)
     
@@ -58,7 +60,7 @@ def get_execution_status(_id):
     if "StateChangeReason" in result['QueryExecution']['Status']:
         _state_change_reason = result['QueryExecution']['Status']["StateChangeReason"]
     else:
-        # No state change?!?
+        _state_change_reason = None
         pass
 
     if "TotalExecutionTimeInMillis" in result['QueryExecution']["Statistics"]:
@@ -82,6 +84,8 @@ def get_execution_status(_id):
 
 def execute_ddl(query, database, output_bucket, output_prefix):
     s3_output = "s3://%s/%s" % (output_bucket, output_prefix)
+    
+    logging.info("execute_ddl entry: %s" % (s3_output))
 
     response = athena_client.start_query_execution(
         QueryString=query,
@@ -101,18 +105,22 @@ def get_query_results(query_execution_id):
     if query_execution_id is None:
         logger.info("The query has not been executed!")
         return None
+    logging.info("get_query_results entry: %s" % (query_execution_id))
+    
     # get query results
     result = athena_client.get_query_results(
         QueryExecutionId=query_execution_id)
     return_result = {
         "query_execution_id": query_execution_id,
         "query_execution_status": "SUCCEEDED",
-        "query_results": result
+        "query_execution_result": result
     }
     logging.info("get_query_results: " + json.dumps(return_result))
     return return_result
 
 def run_sql(sqlString, database, output_bucket, output_prefix):
+    logging.info("run_sql entry: %s %s %s" % (sqlString, output_bucket, output_prefix))
+    
     QueryExecutionId = execute_ddl(
         sqlString, database, output_bucket, output_prefix)
     result = poll_status(QueryExecutionId)
@@ -121,30 +129,45 @@ def run_sql(sqlString, database, output_bucket, output_prefix):
 
         # get query results
         result = get_query_results(QueryExecutionId)
-        return result
     else:
-        return {
+        result = {
             "query_execution_id": QueryExecutionId,
-            "query_execution_status": result['QueryExecution']['Status']['State']
+            "query_execution_status": result['QueryExecution']['Status']['State'],
+            "query_execution_result": "Execution is not SUCCEEDED"
         }
+    
+    logging.info("run_sql get_query_results: " + json.dumps(result))
+    return result
 
 
 def craeteDB(database, output_bucket, output_prefix):
+    logging.info("craeteDB entry: %s %s %s" % (database, output_bucket, output_prefix))
+    
     try:
         getdatabse = "SHOW DATABASES LIKE '%s'" % (database)
         response = run_sql(getdatabse, database, output_bucket, output_prefix)
     except ClientError as e:
         logging.error(e.response['Error'])
         raise CustomError(e.response['Error'])
-    if len(response['ResultSet']['Rows']) == 0:
-        sqlString = 'create database %s' % (database)
-        result = run_sql(sqlString, database, output_bucket, output_prefix)
-        return result
-    else: 
-        return "DB %s existed, skip creation" % (database)
+    if response['query_execution_status'] == 'SUCCEEDED':
+        if len(response['query_execution_result']['ResultSet']['Rows']) == 0:
+            sqlString = 'create database %s' % (database)
+            result = run_sql(sqlString, database, output_bucket, output_prefix)
+        else:
+            result = {
+                "query_execution_id": response['query_execution_id'],
+                "query_execution_status": response['query_execution_status'],
+                "query_execution_result": "DB %s existed, skip creation" % (database)
+            }
+    else:
+        result = response
+    logging.info(result)
+    return result   
 
 
 def craeteTable(database, table, createtable_sql, output_bucket, output_prefix):
+    logging.info("craeteTable entry: %s %s %s %s %s" % (database, table, createtable_sql, output_bucket, output_prefix))
+    
     try:
         gettable = "SHOW TABLES IN %s '%s'" % (database, table)
         response = run_sql(gettable, database, output_bucket, output_prefix)
@@ -153,16 +176,28 @@ def craeteTable(database, table, createtable_sql, output_bucket, output_prefix):
         raise CustomError(e.response['Error'])
 
     # create table sql
-    if len(response['ResultSet']['Rows']) == 0:
-        result = run_sql(createtable_sql, database, output_bucket, output_prefix)
-        return result
+    if response['query_execution_status'] == 'SUCCEEDED':
+        if len(response['query_execution_result']['ResultSet']['Rows']) == 0:
+            result = run_sql(createtable_sql, database, output_bucket, output_prefix)
+            return result
+        else:
+            result = {
+                "query_execution_id": response['query_execution_id'],
+                "query_execution_status": response['query_execution_status'],
+                "query_execution_result": "Table %s existed, skip creation" % (table)
+            }
     else:
-        return "Table %s existed, skip creation" % (table)
+        result = response
+        
+    logging.info(result)
+    return result  
 
 
 def get_query_output(query_execution_id, output_bucket, output_prefix):
     s3_key = output_prefix + "/" + query_execution_id + '.csv'
     local_filename = '/tmp/{}'.format(query_execution_id + '.csv')
+    
+    logging.info("get_query_output entry: %s %s %s %s %s" % (query_execution_id, output_bucket, output_prefix, s3_key, local_filename))
 
     # download result file
     try:
@@ -170,8 +205,14 @@ def get_query_output(query_execution_id, output_bucket, output_prefix):
             output_bucket, s3_key, local_filename)
     except ClientError as e:
         if e.response['Error']['Code'] == "404":
-            logging.error("The object does not exist.")
-            raise CustomError("The object does not exist.")
+            rows = "The result object does not exist."
+            logging.error(rows)
+            return_result = {
+                "query_execution_id": query_execution_id,
+                "query_execution_status": "SUCCEEDED",
+                "query_execution_result": rows
+            }
+            return return_result
         else:
             raise CustomError(e.response['Error'])
      # read file to array and preview 20 lines
@@ -191,11 +232,13 @@ def get_query_output(query_execution_id, output_bucket, output_prefix):
     return_result = {
         "query_execution_id": query_execution_id,
         "query_execution_status": "SUCCEEDED",
-        "query_results": rows
+        "query_execution_result": rows
     }
     return return_result
 
 def run_query(query, database, output_bucket, output_prefix):
+    logging.info("run_query entry: %s %s %s %s" % (query, database, output_bucket, output_prefix))
+    
     QueryExecutionId = execute_ddl(
         query, database, output_bucket, output_prefix)
 
@@ -209,13 +252,16 @@ def run_query(query, database, output_bucket, output_prefix):
     else:
         return {
             "query_execution_id": QueryExecutionId,
-            "query_execution_status": result['QueryExecution']['Status']['State']
+            "query_execution_status": result['QueryExecution']['Status']['State'],
+            "query_execution_result": "Execution is not SUCCEEDED"
         }
 
 def get_ddl(ddl_bucket, ddl_file):
     sql = None
     try:
-        local_filename = '/tmp/{}'.format(ddl_file)
+        ddl_file_name = os.path.basename(ddl_file)
+        local_filename = '/tmp/{}'.format(ddl_file_name)
+        logging.info("get_ddl: ddl_bucket %s, ddl_file %s, ddl_file_name %s, local_filename %s" % (ddl_bucket, ddl_file, ddl_file_name, local_filename))
         response = s3_client.download_file(
             ddl_bucket, ddl_file, local_filename)
     except ClientError as e:
@@ -223,5 +269,5 @@ def get_ddl(ddl_bucket, ddl_file):
 
     with open(local_filename) as ddl:
         sql = ddl.read()
-
+    logging.info("sql %s " % sql)
     return sql

@@ -3,16 +3,6 @@ import json
 from athena_query_helper import get_ddl, execute_ddl, run_sql, run_query, get_execution_status, get_query_output, CustomError
 import os
 
-# athena constant
-DATABASE = os.environ["Athena_Database"]
-TABLE = os.environ["Athena_Table"]
-
-# S3 constant
-Bucket_Name = os.environ["Output_Data_Bucket"]
-Output_prefix = os.environ["Output_Prefix"]
-Athena_DDL_Bucket = os.environ["Athena_DDL_Bucket"]
-Athena_DDL_File = os.environ["Athena_DDL_File"]
-
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -21,16 +11,14 @@ def athena_start_long_running_query(event, context):
     logger.info(event)
     logger.info(context)        
     # get keyword
-    database = event.get('Athena_Database', DATABASE)
-    table = event.get('Athena_Table', TABLE)
-    output_bucket = event.get('Output_Data_Bucket', Bucket_Name)
-    output_prefix = event.get("Output_Prefix", Output_prefix)
-    S3_Output = "s3://%s/%s" % (output_bucket, output_prefix)
+    database = event.get('Athena_Database')
+    table = event.get('Athena_Table')
+    output_bucket = event.get('Output_Data_Bucket')
+    output_prefix = event.get("Output_Prefix")
 
-    athena_ddl_bucket = event.get(
-        'Athena_DDL_Bucket', Athena_DDL_Bucket)
-    athena_ddl_file = event.get(
-        'Athena_DDL_File', Athena_DDL_File)
+    athena_ddl_bucket = event.get('Athena_DDL_Bucket')
+    athena_ddl_file = event.get('Athena_DDL_File')
+    taskName = event.get('TaskName')
 
     # Get the ddl
     athena_sql = get_ddl(athena_ddl_bucket, athena_ddl_file)
@@ -39,13 +27,14 @@ def athena_start_long_running_query(event, context):
 
     # get query results
     query_execution_id = execute_ddl(
-        athena_sql, database, S3_Output, Output_prefix)
+        athena_sql, database, output_bucket, output_prefix)
     logging.info('The query_execution_id %s ' % (query_execution_id))
 
     # This will be processed by our waiting-step
     event = {
         "MyQueryExecutionId": query_execution_id,
         "MyQueryExecutionStatus": 'Running',
+        "TaskName": taskName,
         "WaitTask": {
             "QueryExecutionId": query_execution_id,
             "ResultPrefix": "LongRunning"
@@ -57,48 +46,61 @@ def athena_short_running_query(event, context):
     logger.info(event)
     logger.info(context)
     # get keyword
-    database = event.get('Athena_Database', DATABASE)
-    table = event.get('Athena_Table', TABLE)
-    output_bucket = event.get('Output_Data_Bucket', Bucket_Name)
-    output_prefix = event.get("Output_Prefix", Output_prefix)
-    S3_Output = "s3://%s/%s" % (output_bucket, output_prefix)
+    database = event.get('Athena_Database')
+    table = event.get('Athena_Table')
+    output_bucket = event.get('Output_Data_Bucket')
+    output_prefix = event.get("Output_Prefix")
 
-    athena_ddl_bucket = event.get(
-        'Athena_DDL_Bucket', Athena_DDL_Bucket)
-    athena_ddl_file = event.get(
-        'Athena_DDL_File', Athena_DDL_File)
-
+    athena_ddl_bucket = event.get('Athena_DDL_Bucket')
+    athena_ddl_file = event.get('Athena_DDL_File')
+    taskName = event.get('TaskName')
+    
     # Get the ddl
     athena_sql = get_ddl(athena_ddl_bucket, athena_ddl_file)
     if athena_sql == None:
         raise CustomError("Get athena_sql failed")
 
     # get query results
-    result = run_query(athena_sql, database, S3_Output, Output_prefix)
+    result = run_query(athena_sql, database, output_bucket, output_prefix)
     logging.info('The query result: ')
     logging.info(result)
-
-    # get data
-    if len(result) == 0:
-        return "Finish Lambda exeuction with non value"
-    else:
-        return result
+    
+    event = {
+        "MyQueryExecutionId": result['query_execution_id'],
+        "MyQueryExecutionStatus": result['query_execution_status'],
+        "TaskName": taskName,
+        "WaitTask": {
+            "QueryExecutionId": result['query_execution_id'],
+            "ResultPrefix": "ShortRunning",
+            "QueryState": result['query_execution_status'],
+            "QueryResult": result['query_execution_result']
+        }
+    }
+    
+    return event
     
 
 def athena_get_long_running_status(event, context):
     logger.info(event)
     logger.info(context)
-    query_execution_id = event["WaitTask"]["QueryExecutionId"]
+    taskName = event.get('TaskName')
+    query_execution_id = event.get('QueryExecutionId')
 
     # Get the status
     status_information = get_execution_status(query_execution_id)
-
-    event["WaitTask"]["QueryState"] = status_information['QueryState'],
-
-    status_key = "{}StatusInformation".format(
-        event["WaitTask"]["ResultPrefix"])
-    event[status_key] = status_information
-
+    
+    event = {
+        "MyQueryExecutionId": query_execution_id,
+        "MyQueryExecutionStatus": status_information['QueryState'],
+        "TaskName": taskName,
+        "WaitTask": {
+            "QueryExecutionId": query_execution_id,
+            "ResultPrefix": "LongRunning",
+            "QueryState": status_information['QueryState'],
+            "QueryResult": status_information
+        }
+    }
+    
     return event
 
 
@@ -106,18 +108,25 @@ def athena_get_long_running_result(event, context):
     logger.info(event)
     logger.info(context)
     # get keyword
-    output_bucket = event.get('Output_Data_Bucket', Bucket_Name)
-    output_prefix = event.get("Output_Prefix", Output_prefix)
-    query_execution_id = event["MyQueryExecutionId"]
+    output_bucket = event.get('Output_Data_Bucket')
+    output_prefix = event.get("Output_Prefix")
+    query_execution_id = event.get('QueryExecutionId')
+    taskName = event.get('TaskName')
 
     # Get the query output
     output_information = get_query_output(
         query_execution_id, output_bucket, output_prefix)
 
-    event["GotResult"] = True
-
-    output_key = "{}OutputInformation".format(
-        event["WaitTask"]["ResultPrefix"])
-    event[output_key] = output_information
-
+    event = {
+        "MyQueryExecutionId": query_execution_id,
+        "MyQueryExecutionStatus": output_information['query_execution_status'],
+        "TaskName": taskName,
+        "WaitTask": {
+            "QueryExecutionId": query_execution_id,
+            "ResultPrefix": "LongRunning",
+            "QueryState": output_information['query_execution_status'],
+            "QueryResult": output_information
+        }
+    }
+    
     return event
