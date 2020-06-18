@@ -5,12 +5,17 @@ Every 2 hour, I need execute the
 2. Run the query to get the result
 
 - Use single lambda file
+
 ![SingleLambda](media/SingleLambda.png)
 
 - Step function orchestration
+
 ![StepFunctionAthena](media/StepFunctionAthena.png)
 
 ## Use single lambda file
+
+### Build the lambda function
+
 1. Build the lambda function deployment package
 ```bash
 mkdir package && cd package
@@ -40,8 +45,10 @@ zip -g function.zip basic-athena-query-lambda.py
 aws lambda update-function-code --function-name BasicAthenaQuery \
 --zip-file fileb://function.zip
 ```
-3. Then you can create the cloud
-3. cleanup
+
+3. Check the Lambda execution result and verify the Athena query executed successfully
+
+4. cleanup
 ```bash
 # lambda
 aws lambda delete-function --function-name BasicAthenaQuery
@@ -49,9 +56,9 @@ drop table user_email
 drop database sampledb
 ```
 
-4. code ananlysis
+### Lambda code ananlysis
 
-Below is main logic to run query against Athena by SDK. 
+  Below is main logic to run query against Athena by SDK. 
 
 ```python
 import boto3
@@ -78,7 +85,9 @@ if result['QueryExecution']['Status']['State'] == 'SUCCEEDED':
             QueryExecutionId=query_execution_id)
 ```
 
-But if the query take long time, I use the python retry annotation to polling the execution status. Seems OK, but it is not Loose couple appoarch, if my query take longer time, I have to modify my code. 
+But if the query take long time, I use the python retry annotation to polling the execution status. 
+
+Seems OK, but it is not Loose couple appoarch, if my query take longer time, I have to modify my code. 
 
 ```python
 @retry(stop_max_attempt_number=10,
@@ -100,7 +109,7 @@ def poll_status(_id):
         raise Exception
 ```
 
-I need a way to resolve below 2 requirements
+**I need a way to resolve below 2 requirements:**
 
 - Need a Lambda trigger, when the query terminates
 - Need a integration like SNS or SQS for queries that finish and make the other Athena process moving forward.
@@ -110,16 +119,30 @@ Seems Step function can orchestrate workflow, let's try it.
 
 # Step function orchestration
 
-Let's make the scenaio more complex
+## Overview
 
-## Prepare Lambda function
+Let's make the scenaio more complex:
+
+1. Create Orignal Table from CSV files stored in S3 bucket as raw data
+2. Query the Orignal Table to get business payload
+3. Create Target table as JSON format based on business payload query result
+4. Insert additional data to Target table to enrich the table content
+5. Query the Target table to generate the report
+
+Let make the workflow automated
+
+1. Prepare Lambda functions
+2. Build the Step function orchestration workflow
+3. Testing
+
+## Prepare Lambda functions
 - Create the lambda function: athena_createdb_createtable
 ```bash
 zip -g function.zip athena_createdb_createtable.py athena_query_helper.py
 
 aws lambda create-function --function-name  athena_createdb_createtable --runtime python3.7 \
 --zip-file fileb://function.zip --handler athena_createdb_createtable.lambda_handler \
---role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--role arn:aws-cn:iam::$account_id:role/lambda_basic_execution \
 --timeout 300 --memory-size 256
 ```
 
@@ -129,24 +152,26 @@ zip -g function.zip athena_automate_handler.py athena_query_helper.py
 
 aws lambda create-function --function-name  athena_short_running_query --runtime python3.7 \
 --zip-file fileb://function.zip --handler athena_automate_handler.athena_short_running_query \
---role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--role arn:aws-cn:iam::$account_id:role/lambda_basic_execution \
 --timeout 300 --memory-size 256
 
 aws lambda create-function --function-name  athena_start_long_running_query --runtime python3.7 \
 --zip-file fileb://function.zip --handler athena_automate_handler.athena_start_long_running_query \
---role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--role arn:aws-cn:iam::$account_id:role/lambda_basic_execution \
 --timeout 300 --memory-size 256
 
 aws lambda create-function --function-name  athena_get_long_running_status --runtime python3.7 \
 --zip-file fileb://function.zip --handler athena_automate_handler.athena_get_long_running_status \
---role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--role arn:aws-cn:iam::$account_id:role/lambda_basic_execution \
 --timeout 300 --memory-size 256
 
 aws lambda create-function --function-name  athena_get_long_running_result --runtime python3.7 \
 --zip-file fileb://function.zip --handler athena_automate_handler.athena_get_long_running_result \
---role arn:aws-cn:iam::876820548815:role/lambda_basic_execution \
+--role arn:aws-cn:iam::$account_id:role/lambda_basic_execution \
 --timeout 300 --memory-size 256
 ```
+
+## Build the Step function orchestration workflow
 
 1. Step 1: Create a Table Based on the Original Dataset with CSV format
 
@@ -154,28 +179,44 @@ aws lambda create-function --function-name  athena_get_long_running_result --run
 
 ```json
 {
-    "Athena_Database" : "blogdb",
-    "Athena_Table" : "original_csv",
-    "Output_Data_Bucket" : "ray-datalake-lab",
-    "Output_Prefix" : "results/blogdb",
-    "CreateTable_DDL_Bucket" : "ray-datalake-lab",
-    "CreateTable_DDL_File" : "scripts/blogdb/create_blogdb_original_csv.ddl"
+  "InputData": {
+    "Athena_Database": "blogdb",
+    "Athena_Table": "original_csv",
+    "Output_Data_Bucket": "ray-datalake-lab",
+    "Output_Prefix": "results/blogdb",
+    "Athena_DDL_Bucket": "ray-datalake-lab"
+  }
 }
+```
+
+- Define the step function parameter
+```json
+"ResultPath": "$.taskresult",
+            "Parameters":{
+                "TaskName": "Create_database_and_table",
+                "Athena_DDL_File": "scripts/blogdb/create_blogdb_original_csv.ddl",
+                "Athena_Database.$":"$.InputData.Athena_Database",
+                "Athena_Table.$": "$.InputData.Athena_Table",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            }
 ```
 
 2. Step 2: Use CTAS (Create Table As Select) to create a table with partitions for the years 2015 to 2019. 
 
-- Define the lambda task trigger event
-
+- Define the step function parameter
 ```json
-{
-    "Athena_Database" : "blogdb",
-    "Athena_Table" : "new_parquet",
-    "Output_Data_Bucket" : "ray-datalake-lab",
-    "Output_Prefix" : "results/blogdb",
-    "CreateTable_DDL_Bucket" : "ray-datalake-lab",
-    "CreateTable_DDL_File" : "scripts/blogdb/create_blogdb_new_parquet.ddl"
-}
+"ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Convert_Parquet_table_as_select",
+                "Athena_DDL_File": "scripts/blogdb/create_blogdb_new_parquet.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table.$": "$.InputData.Athena_Table",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            }
 ```
 
 - Step function task will create new table `new_parquet`
@@ -202,17 +243,13 @@ aws s3 ls s3://ray-datalake-lab/sample/athena-ctas-insert-into-optimized/ --recu
 
 3. Step 3: Use INSERT INTO to Add Data from years 2010 to 2014.
 
-- Define the lambda trigger event
+- Define the step function parameter
 
 ```json
-{
-    "Athena_Database" : "blogdb",
-    "Athena_Table" : "new_parquet",
-    "Output_Data_Bucket" : "ray-datalake-lab",
-    "Output_Prefix" : "results/blogdb",
-    "CreateTable_DDL_Bucket" : "ray-datalake-lab",
-    "CreateTable_DDL_File" : "scripts/blogdb/insert_blogdb_new_parquet.ddl"
-}
+"Parameters": {
+                "TaskName": "Insert_Data",
+                "Athena_DDL_Bucket": "scripts/blogdb/insert_blogdb_new_parquet.ddl"
+            }
 ```
 
 - Step function task will INSERT INTO to Add Data from years 2010 to 2014 to `new_parquet`.
@@ -296,6 +333,7 @@ clean up the data under s3://ray-datalake-lab/sample/athena-ctas-insert-into-opt
 2. https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html
 3. [Creating a Table from Query Results](https://docs.aws.amazon.com/athena/latest/ug/ctas.html)
 4. [Orchestrate multiple ETL jobs using AWS Step Functions and AWS Lambda](https://aws.amazon.com/blogs/big-data/orchestrate-multiple-etl-jobs-using-aws-step-functions-and-aws-lambda/)
+
 ![ETLStepLambda2](media/ETLStepLambda2.png)
 
 ![ETLStepLambda4](media/ETLStepLambda4.png)
