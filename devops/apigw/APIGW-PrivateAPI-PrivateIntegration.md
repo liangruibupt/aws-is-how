@@ -279,14 +279,9 @@
 
 1. In above section, we created the private API Fargate-webpage-private (3i95y1yx06) with private integration with Fargate resource
 
-504 onprem -> transit NLB (e2e-vpce-apigw-nlb-53f78e224410fd52.elb.cn-north-1.amazonaws.com.cn) -> Interface VPCe to APIGW -> Private API (csc6awkvpc)   -> (via VPC link) NLB (web-app-fargate-nlb-internal2) -> Interface VPCe to APIGW (vpce-0d4d61b31cecd49fc) -> private API Fargate-webpage-private (3i95y1yx06) -> (via VPC link) ECS NLB (web-app-fargate-nlb-internal) -> Ecs Fargete
+504 onprem -> Consumer VPC NLB (e2e-vpce-apigw-nlb-53f78e224410fd52.elb.cn-north-1.amazonaws.com.cn) -> Interface VPCe to APIGW (vpce-080de204ca78d2883) for Consumer VPC -> Private API Fargate-private-to-first-api (v944po9kjb) -> (via VPC link) NLB (web-app-fargate-nlb-internal2) in Provider VPC -> Interface VPCe to APIGW (vpce-0d4d61b31cecd49fc) for Provider VPC -> private API Fargate-webpage-private (3i95y1yx06) -> (via VPC link) ECS NLB (web-app-fargate-nlb-internal) in Provider VPC -> Ecs Fargete in Provider VPC
 
-first transit NLB resource (e2e-vpce-apigw-nlb-53f78e224410fd52.elb.cn-north-1.amazonaws.com.cn) under accout 425235918890
-API with ID "csc6awkvpc" under account 071021552778
-the 2nd NLB (e2e-vpce-apigw-nlb-2469148cdc43e428.elb.cn-north-1.amazonaws.com.cn)  under account 071021552778
-the 3rd NLB (e2e-los-nlb-544e13bdc6e065e2.elb.cn-north-1.amazonaws.com.cn)  under account 071021552778
-
-1. Create the 
+2. Get the Interface VPC endpoint of private API Fargate-webpage-private and make sure 443 point is available
 ```bash
 nslookup 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
 Server:         10.0.0.2
@@ -307,6 +302,68 @@ Connected to 10.0.11.153.
 Escape character is '^]'.
 ^]
 ```
+
+3. Create the NLB web-app-fargate-nlb-internal2 route traffic to VPC endpoint of private API Fargate-webpage-private
+
+![web-app-nlb-internal2](media/web-app-nlb-internal2.png)
+
+![web-app-nlb-internal-tg2](media/web-app-nlb-internal-tg2.png)
+
+Verify from web-app-fargate-nlb-internal2 can access the private API Fargate-webpage-private
+
+```bash
+curl -k -v https://web-app-fargate-nlb-internal2-fdeb5f1534e02ddb.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+
+curl -k -v https://web-app-fargate-nlb-internal2-fdeb5f1534e02ddb.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H'x-apigw-api-id:3i95y1yx06'
+
+curl -k -v https://web-app-fargate-nlb-internal2-fdeb5f1534e02ddb.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+
+curl -k -v https://web-app-fargate-nlb-internal2-fdeb5f1534e02ddb.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc-non-proxy -H 'Host: 3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn'
+```
+
+4. Create the private API use VPC link to integrated with web-app-fargate-nlb-internal2
+
+To make the verification simple, I change the first private API Fargate-webpage-private (3i95y1yx06) resource policy to allow any
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "arn:aws-cn:execute-api:cn-northwest-1:account-id:3i95y1yx06/*/*/*"
+        }
+    ]
+}
+```
+
+And set the second Private API Fargate-private-to-first-api (v944po9kjb) resource policy to allow any
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "arn:aws-cn:execute-api:cn-northwest-1:account-id:v944po9kjb/*/*/*"
+        }
+    ]
+}
+```
+
+![Fargate-private-to-first-api1](media/Fargate-private-to-first-api1.png)
+
+![Fargate-private-to-first-api1](media/Fargate-private-to-first-api2.png)
+
+5. Testing
+
+[Testing result](2PrivateAPI-Testing.md)
+
+
 # Trouble shooting:
 1. [How do I troubleshoot issues connecting to an API Gateway private API endpoint?](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-private-endpoint-connection/)
 
@@ -315,3 +372,5 @@ Escape character is '^]'.
 How you access your private API will depend upon whether or not you have enabled private DNS on the VPC endpoint.
 
 For example, while accessing private API from on-premises network via AWS Direct Connect, you will have private DNS enabled on the VPC endpoint. In such a case, follow the steps outlined in [Invoking Your Private API Using Endpoint-Specific Public DNS Hostnames](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-api-test-invoke-url.html#apigateway-private-api-public-dns). You cannot use private DNS names to access your private API from an on-premises network. 
+
+3. [How do I troubleshoot HTTP 403 Forbidden errors from API Gateway?](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-troubleshoot-403-forbidden/)
