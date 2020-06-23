@@ -9,9 +9,11 @@
 6. In account 1: VPC link web-app-fargate-vpclink-2ndnlb (lsm4cw) point to NLB web-app-fargate-nlb-internal2
 7. In account 1: Private API Fargate-private-to-first-api (v944po9kjb) /webpage-vpc path GET method point to VPC link integration web-app-fargate-vpclink-2ndnlb (lsm4cw) 
 8. In account 1: VPC endpoint vpce-080de204ca78d2883 in account 1 consumer VPC for private API Fargate-private-to-first-api (v944po9kjb)
-9. In account 2: VPC endpoint vpce-08cbeb493b8abab4f used for private API Fargate-private-to-first-api (v944po9kjb) 
+9. In account 2: VPC endpoint vpce-08cbeb493b8abab4f in account 2 consumer VPC for private API Fargate-private-to-first-api (v944po9kjb) 
 
 ![2PrivateAPI](media/2PrivateAPI.png)
+
+![Fargate-private-to-first-api-vpce](media/Fargate-private-to-first-api-vpce.png)
 
 ## On Provider VPC of account1 or Consumer VPC of account1 NLB web-app-fargate-nlb-internal2 with -H 'x-apigw-api-id:3i95y1yx06' - Result: Success
 

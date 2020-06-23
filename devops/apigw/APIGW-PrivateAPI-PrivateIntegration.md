@@ -364,6 +364,8 @@ And set the second Private API Fargate-private-to-first-api (v944po9kjb) resourc
 
 ![Fargate-private-to-first-api1](media/Fargate-private-to-first-api2.png)
 
+![Fargate-private-to-first-api-vpce](media/Fargate-private-to-first-api-vpce.png)
+
 5. Testing
 
 [Testing result](2PrivateAPI-Testing.md)
