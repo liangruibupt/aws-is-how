@@ -261,8 +261,13 @@ The uri parameter is not used for routing requests to your endpoint, but is used
 
 So the correct value should be the first private API Fargate-webpage-private (3i95y1yx06): https://3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
 
+![Fargate-private-to-first-api1](media/Fargate-private-to-first-api1.png)
+
+![Fargate-private-to-first-api2](media/Fargate-private-to-first-api2.png)
+
 ## Define propagate customer header
-method.request.header.key1
+
+Customer header mapping: method.request.header.key1
 
 ![Fargate-private-to-first-api-customerheader1](media/Fargate-private-to-first-api-customerheader1.png)
 
@@ -702,7 +707,7 @@ curl -k -v https://v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/we
 11. In account 2: Add Transit NLB web-app-fargate-nlb-transit and invoke request from Transit NLB to Private API Fargate-private-to-first-api 
 
 
-![TransitNLBRequest](dmedia/TransitNLBRequest.png)
+![TransitNLBRequest](media/TransitNLBRequest.png)
 
 **add header 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' to my request**
 
