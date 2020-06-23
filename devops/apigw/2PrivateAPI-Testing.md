@@ -506,3 +506,434 @@ curl -k -v https://v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/we
 {"message":"Forbidden"}
 * Connection #0 to host v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn left intact
 ```
+
+## How to fix the 504 Gateway Timeout
+
+Let's focus on 504 Gateway Timeout when Use Proxy Integration model in Private API Fargate-private-to-first-api (v944po9kjb)
+
+`curl -k -v https://v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'key1:3i95y1yx06'` report 504 Gateway Timeout with `Network error communicating with endpoint` error. Due to NLB web-app-fargate-nlb-internal2 can route traffic to private API Fargate-webpage-private (3i95y1yx06), so the Network error happened on Private API Fargate-private-to-first-api (v944po9kjb) to NLB web-app-fargate-nlb-internal2.
+
+So I enable execution log of private API Fargate-webpage-private (3i95y1yx06)
+
+![API-Gateway-Execution-Logs_v944po9kjb](dmedia/API-Gateway-Execution-Logs_v944po9kjb.png)
+
+**Now I add header 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' to my request**
+
+1. Test on Provider VPC of account1 or Consumer VPC of account1 invoke the Private API Fargate-private-to-first-api
+
+Result: Success get resposne from Fargate
+
+```bash
+# Provider VPC of account1
+curl -k -v https://v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' -H 'key1:3i95y1yx06' 
+
+*   Trying 10.0.0.75...
+* TCP_NODELAY set
+* Connected to v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn (10.0.0.75) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=*.execute-api.cn-northwest-1.amazonaws.com.cn
+*  start date: Apr 24 00:00:00 2020 GMT
+*  expire date: Apr 14 12:00:00 2021 GMT
+*  issuer: C=US; O=Amazon; OU=Server CA 1B; CN=Amazon
+*  SSL certificate verify ok.
+> GET /dev/webpage-vpc HTTP/1.1
+> Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
+> User-Agent: curl/7.61.1
+> Accept: */*
+> key1:3i95y1yx06
+> 
+< HTTP/1.1 200 OK
+< Server: Server
+< Date: Tue, 23 Jun 2020 09:47:56 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 51
+< Connection: keep-alive
+< x-amzn-RequestId: c8c53db5-6473-45b5-9684-3868d64b7f87
+< x-amzn-Remapped-Content-Length: 51
+< x-amz-apigw-id: Ok1n7GsO5PgFt_Q=
+< x-amzn-Remapped-Server: Werkzeug/0.16.0 Python/2.7.5
+< x-amzn-Remapped-Date: Tue, 23 Jun 2020 09:47:56 GMT
+< 
+* Connection #0 to host v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn left intact
+<html><h1>Hello World From Ray Webpage!</h1></html>
+
+
+# Consumer VPC of account1
+curl -k -v https://v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' -H 'key1:3i95y1yx06'
+*   Trying 172.16.33.221...
+* TCP_NODELAY set
+* Connected to v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn (172.16.33.221) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=*.execute-api.cn-northwest-1.amazonaws.com.cn
+*  start date: Apr 24 00:00:00 2020 GMT
+*  expire date: Apr 14 12:00:00 2021 GMT
+*  issuer: C=US; O=Amazon; OU=Server CA 1B; CN=Amazon
+*  SSL certificate verify ok.
+> GET /dev/webpage-vpc HTTP/1.1
+> Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
+> User-Agent: curl/7.61.1
+> Accept: */*
+> key1:3i95y1yx06
+>
+< HTTP/1.1 200 OK
+< Server: Server
+< Date: Tue, 23 Jun 2020 09:57:50 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 51
+< Connection: keep-alive
+< x-amzn-RequestId: 12b592ad-e125-4398-b077-d45aa6b93e06
+< x-amzn-Remapped-Content-Length: 51
+< x-amz-apigw-id: Ok3EuFyOZPgFZDw=
+< x-amzn-Remapped-Server: Werkzeug/0.16.0 Python/2.7.5
+< x-amzn-Remapped-Date: Tue, 23 Jun 2020 09:57:50 GMT
+<
+* Connection #0 to host v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn left intact
+<html><h1>Hello World From Ray Webpage!</h1></html>
+```
+
+2. Test on Consumer VPC of account2 invoke the Private API Fargate-private-to-first-api
+
+Result: Success get resposne from Fargate
+
+```bash
+# Consumer VPC of account2
+curl -k -v https://v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' -H 'key1:3i95y1yx06'
+*   Trying 172.31.22.155...
+* TCP_NODELAY set
+* Connected to v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn (172.31.22.155) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=*.execute-api.cn-northwest-1.amazonaws.com.cn
+*  start date: Apr 24 00:00:00 2020 GMT
+*  expire date: Apr 14 12:00:00 2021 GMT
+*  issuer: C=US; O=Amazon; OU=Server CA 1B; CN=Amazon
+*  SSL certificate verify ok.
+> GET /dev/webpage-vpc HTTP/1.1
+> Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
+> User-Agent: curl/7.61.1
+> Accept: */*
+> key1:3i95y1yx06
+>
+< HTTP/1.1 200 OK
+< Server: Server
+< Date: Tue, 23 Jun 2020 09:38:03 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 51
+< Connection: keep-alive
+< x-amzn-RequestId: 7f1ac2df-57b3-4b1b-8657-fbf0d2f67aa8
+< x-amzn-Remapped-Content-Length: 51
+< x-amz-apigw-id: Ok0LUHydZPgFbXg=
+< x-amzn-Remapped-Server: Werkzeug/0.16.0 Python/2.7.5
+< x-amzn-Remapped-Date: Tue, 23 Jun 2020 09:38:03 GMT
+<
+* Connection #0 to host v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn left intact
+<html><h1>Hello World From Ray Webpage!</h1></html>
+```
+
+
+## Invoke from Transit NLB from Consumer VPC of account1 and Consumer VPC of account2
+
+1. In account 1: Fargate cluster expose web-app service by target group web-app-fargate-nlb-tg. The web-app-fargate-nlb-tg attached to NLB web-app-fargate-nlb-internal
+2. In account 1: VPC link web-app-fargate-vpclink (t0f7wl) point to NLB web-app-fargate-nlb-internal
+3. In account 1: Private API Fargate-webpage-private (3i95y1yx06) /webpage-vpc (8hwj4v) path GET method point to VPC link integration web-app-fargate-vpclink (t0f7wl) 
+4. In account 1: VPC endpoint vpce-0d4d61b31cecd49fc used for private API Fargate-webpage-private (3i95y1yx06) 
+5. In account 1: NLB web-app-fargate-nlb-internal2 route traffic to private API Fargate-webpage-private (3i95y1yx06) 
+6. In account 1: VPC link web-app-fargate-vpclink-2ndnlb (lsm4cw) point to NLB web-app-fargate-nlb-internal2
+7. In account 1: Private API Fargate-private-to-first-api /webpage-vpc (8hwj4v) path GET method point to VPC link integration web-app-fargate-vpclink-2ndnlb (lsm4cw) 
+8. In account 1: VPC endpoint vpce-080de204ca78d2883 in account 1 consumer VPC for private API Fargate-private-to-first-api (v944po9kjb)
+9. In account 2: VPC endpoint vpce-08cbeb493b8abab4f used for private API Fargate-private-to-first-api (v944po9kjb)
+10. In account 1: Add Transit NLB web-app-fargate-nlb-transit and invoke request from Transit NLB to Private API Fargate-private-to-first-api 
+11. In account 2: Add Transit NLB web-app-fargate-nlb-transit and invoke request from Transit NLB to Private API Fargate-private-to-first-api 
+
+
+![TransitNLBRequest](dmedia/TransitNLBRequest.png)
+
+**add header 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' to my request**
+
+1. Test on Provider VPC of account1 or Consumer VPC of account1 invoke the Private API Fargate-private-to-first-api
+
+Result: Success get resposne from Fargate
+
+- Get the VPCe IP which used for Transit NLB target group
+```bash
+# Consumer VPC of account1
+nslookup v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn
+Server:         172.16.0.2
+Address:        172.16.0.2#53
+
+Non-authoritative answer:
+v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn  canonical name = execute-api.cn-northwest-1.amazonaws.com.cn.
+Name:   execute-api.cn-northwest-1.amazonaws.com.cn
+Address: 172.16.80.49
+Name:   execute-api.cn-northwest-1.amazonaws.com.cn
+Address: 172.16.33.221
+Name:   execute-api.cn-northwest-1.amazonaws.com.cn
+Address: 172.16.116.127
+
+telnet 172.16.80.49 443
+Trying 172.16.80.49...
+Connected to 172.16.80.49.
+Escape character is '^]'.
+^]
+telnet> quit
+```
+
+- Create Transit NLB web-app-fargate-nlb-transit in Consumer VPC of account1 and target group point to above IP with port 443
+
+Make sure the backend targets are healthy
+
+![TransitNLB-TG2](media/TransitNLB-TG2.png)
+
+- Testing
+
+```bash
+# Consumer VPC of account1
+
+curl -k -v https://web-app-fargate-nlb-transit-df5272d1cbace6be.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' -H 'key1:3i95y1yx06'
+*   Trying 172.16.97.170...
+* TCP_NODELAY set
+* Connected to web-app-fargate-nlb-transit-df5272d1cbace6be.elb.cn-northwest-1.amazonaws.com.cn (172.16.97.170) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=*.execute-api.cn-northwest-1.amazonaws.com.cn
+*  start date: Apr 24 00:00:00 2020 GMT
+*  expire date: Apr 14 12:00:00 2021 GMT
+*  issuer: C=US; O=Amazon; OU=Server CA 1B; CN=Amazon
+*  SSL certificate verify ok.
+> GET /dev/webpage-vpc HTTP/1.1
+> Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
+> User-Agent: curl/7.61.1
+> Accept: */*
+> key1:3i95y1yx06
+>
+< HTTP/1.1 200 OK
+< Server: Server
+< Date: Tue, 23 Jun 2020 10:18:34 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 51
+< Connection: keep-alive
+< x-amzn-RequestId: 45ad08fd-7747-4ed5-b1b5-b002e8782c4c
+< x-amzn-Remapped-Content-Length: 51
+< x-amz-apigw-id: Ok6HFEbg5PgFctQ=
+< x-amzn-Remapped-Server: Werkzeug/0.16.0 Python/2.7.5
+< x-amzn-Remapped-Date: Tue, 23 Jun 2020 10:18:34 GMT
+<
+* Connection #0 to host web-app-fargate-nlb-transit-df5272d1cbace6be.elb.cn-northwest-1.amazonaws.com.cn left intact
+<html><h1>Hello World From Ray Webpage!</h1></html>
+
+
+# Provider VPC of account1
+
+curl -k -v https://web-app-fargate-nlb-transit-df5272d1cbace6be.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' -H 'key1:3i95y1yx06'
+*   Trying 172.16.97.170...
+* TCP_NODELAY set
+* Connected to web-app-fargate-nlb-transit-df5272d1cbace6be.elb.cn-northwest-1.amazonaws.com.cn (172.16.97.170) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=*.execute-api.cn-northwest-1.amazonaws.com.cn
+*  start date: Apr 24 00:00:00 2020 GMT
+*  expire date: Apr 14 12:00:00 2021 GMT
+*  issuer: C=US; O=Amazon; OU=Server CA 1B; CN=Amazon
+*  SSL certificate verify ok.
+> GET /dev/webpage-vpc HTTP/1.1
+> Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
+> User-Agent: curl/7.61.1
+> Accept: */*
+> key1:3i95y1yx06
+> 
+< HTTP/1.1 200 OK
+< Server: Server
+< Date: Tue, 23 Jun 2020 10:18:17 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 51
+< Connection: keep-alive
+< x-amzn-RequestId: 23f4ca50-21da-45aa-baaf-aaf2067897a2
+< x-amzn-Remapped-Content-Length: 51
+< x-amz-apigw-id: Ok6EiGyqZPgFquA=
+< x-amzn-Remapped-Server: Werkzeug/0.16.0 Python/2.7.5
+< x-amzn-Remapped-Date: Tue, 23 Jun 2020 10:18:17 GMT
+< 
+* Connection #0 to host web-app-fargate-nlb-transit-df5272d1cbace6be.elb.cn-northwest-1.amazonaws.com.cn left intact
+<html><h1>Hello World From Ray Webpage!</h1></html>
+
+```
+
+2. Test on Consumer VPC of account2 invoke the Private API Fargate-private-to-first-api
+
+Result: Success get resposne from Fargate
+
+- Get the VPCe IP which used for Transit NLB target group
+
+```bash
+# Consumer VPC of account2
+nslookup v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn
+Server:         172.31.0.2
+Address:        172.31.0.2#53
+
+Non-authoritative answer:
+v944po9kjb.execute-api.cn-northwest-1.amazonaws.com.cn  canonical name = execute-api.cn-northwest-1.amazonaws.com.cn.
+Name:   execute-api.cn-northwest-1.amazonaws.com.cn
+Address: 172.31.38.48
+Name:   execute-api.cn-northwest-1.amazonaws.com.cn
+Address: 172.31.7.77
+Name:   execute-api.cn-northwest-1.amazonaws.com.cn
+Address: 172.31.22.155
+
+telnet 172.31.38.48 443
+Trying 172.31.38.48...
+Connected to 172.31.38.48.
+Escape character is '^]'.
+^]
+telnet> quit
+```
+- Create Transit NLB web-app-fargate-nlb-transit in Consumer VPC of account1 and target group point to above IP with port 443
+
+Make sure the backend targets are healthy
+
+![TransitNLB-TG](media/TransitNLB-TG.png)
+
+- Testing
+```bash
+curl -k -v https://web-app-fargate-nlb-transit-179f98e4771e25b2.elb.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc -H 'Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn' -H 'key1:3i95y1yx06'
+*   Trying 172.31.18.243...
+* TCP_NODELAY set
+* Connected to web-app-fargate-nlb-transit-179f98e4771e25b2.elb.cn-northwest-1.amazonaws.com.cn (172.31.18.243) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=*.execute-api.cn-northwest-1.amazonaws.com.cn
+*  start date: Apr 24 00:00:00 2020 GMT
+*  expire date: Apr 14 12:00:00 2021 GMT
+*  issuer: C=US; O=Amazon; OU=Server CA 1B; CN=Amazon
+*  SSL certificate verify ok.
+> GET /dev/webpage-vpc HTTP/1.1
+> Host:3i95y1yx06.execute-api.cn-northwest-1.amazonaws.com.cn
+> User-Agent: curl/7.61.1
+> Accept: */*
+> key1:3i95y1yx06
+>
+< HTTP/1.1 200 OK
+< Server: Server
+< Date: Tue, 23 Jun 2020 10:36:54 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 51
+< Connection: keep-alive
+< x-amzn-RequestId: 2f7dd330-ba0a-442b-b28c-a678e75c8abd
+< x-amzn-Remapped-Content-Length: 51
+< x-amz-apigw-id: Ok8zFHD2ZPgF4UA=
+< x-amzn-Remapped-Server: Werkzeug/0.16.0 Python/2.7.5
+< x-amzn-Remapped-Date: Tue, 23 Jun 2020 10:36:54 GMT
+<
+* Connection #0 to host web-app-fargate-nlb-transit-179f98e4771e25b2.elb.cn-northwest-1.amazonaws.com.cn left intact
+<html><h1>Hello World From Ray Webpage!</h1></html>
+
+```
