@@ -279,7 +279,12 @@
 
 1. In above section, we created the private API Fargate-webpage-private (3i95y1yx06) with private integration with Fargate resource
 
-504 onprem -> Consumer VPC NLB (e2e-vpce-apigw-nlb-53f78e224410fd52.elb.cn-north-1.amazonaws.com.cn) -> Interface VPCe to APIGW (vpce-080de204ca78d2883) for Consumer VPC -> Private API Fargate-private-to-first-api (v944po9kjb) -> (via VPC link) NLB (web-app-fargate-nlb-internal2) in Provider VPC -> Interface VPCe to APIGW (vpce-0d4d61b31cecd49fc) for Provider VPC -> private API Fargate-webpage-private (3i95y1yx06) -> (via VPC link) ECS NLB (web-app-fargate-nlb-internal) in Provider VPC -> Ecs Fargete in Provider VPC
+Now we add complex
+```bash
+Client -> Consumer VPC NLB (web-app-fargate-nlb-consumer) -> Interface VPCe to APIGW (vpce-080de204ca78d2883) for Consumer VPC -> Private API Fargate-private-to-first-api (v944po9kjb) -> (via VPC link) NLB (web-app-fargate-nlb-internal2) in Provider VPC -> Interface VPCe to APIGW (vpce-0d4d61b31cecd49fc) for Provider VPC -> private API Fargate-webpage-private (3i95y1yx06) -> (via VPC link) ECS NLB (web-app-fargate-nlb-internal) in Provider VPC -> Ecs Fargete in Provider VPC
+```
+
+![2PrivateAPI](media/2PrivateAPI.png)
 
 2. Get the Interface VPC endpoint of private API Fargate-webpage-private and make sure 443 point is available
 ```bash
