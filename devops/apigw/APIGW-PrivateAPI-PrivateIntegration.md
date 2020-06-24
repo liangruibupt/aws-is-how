@@ -281,7 +281,7 @@
 
 Now we add complex
 ```bash
-Client -> Consumer VPC NLB (web-app-fargate-nlb-consumer) -> Interface VPCe to APIGW (vpce-080de204ca78d2883) for Consumer VPC 
+Client -> Consumer VPC NLB (web-app-fargate-nlb-transit) -> Interface VPCe to APIGW (vpce-080de204ca78d2883 and vpce-08cbeb493b8abab4f) for Consumer VPC 
 -> Private API Fargate-private-to-first-api (v944po9kjb) -> (via VPC link) NLB (web-app-fargate-nlb-internal2) in Provider VPC 
 -> Interface VPCe to APIGW (vpce-0d4d61b31cecd49fc) for Provider VPC -> private API Fargate-webpage-private (3i95y1yx06) 
 -> (via VPC link) ECS NLB (web-app-fargate-nlb-internal) in Provider VPC -> Ecs Fargete in Provider VPC

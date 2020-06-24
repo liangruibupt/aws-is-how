@@ -101,3 +101,72 @@ aws route53 delete-vpc-association-authorization --hosted-zone-id <hosted-zone-i
 
 # EC2 instances in the VPC from Account B can now resolve records in the private hosted zone in Account A.
 ```
+
+## 如果EC2所在私有子网没有NAT也没有代理，能否正确进行域名解析？
+
+Please make sure your VPC DNS setting and DHCP setting
+
+![VPC_DNS_Setting](media/VPC_DNS_Setting.png)
+
+![VPC_DHCP_Setting](media/VPC_DHCP_Setting.png)
+
+```bash
+[ec2-user@ip-10-0-7-116 ~]$ nslookup www.amazon.com
+Server:		10.0.0.2
+Address:	10.0.0.2#53
+
+Non-authoritative answer:
+www.amazon.com	canonical name = tp.47cf2c8c9-frontier.amazon.com.
+tp.47cf2c8c9-frontier.amazon.com	canonical name = d3ag4hukkh62yn.cloudfront.net.
+Name:	d3ag4hukkh62yn.cloudfront.net
+Address: 13.225.132.237
+
+
+[ec2-user@ip-10-0-7-116 ~]$ nslookup www.baidu.com
+Server:  10.0.0.2
+Address: 10.0.0.2#53
+
+Non-authoritative answer:
+www.baidu.com canonical name = www.a.shifen.com.
+Name: www.a.shifen.com
+Address: 220.181.38.149
+Name: www.a.shifen.com
+Address: 220.181.38.150
+Name: www.a.shifen.com
+Address: 240e:83:205:59:0:ff:b09b:159e
+Name: www.a.shifen.com
+Address: 240e:83:205:58:0:ff:b09f:36bf
+
+```
+
+Then I add the API Gateway VPC endpoint and query the API Gateway url domain name
+
+- Private API
+
+```bash
+[ec2-user@ip-10-0-7-116 ~]$ nslookup gret8sxv4j.execute-api.cn-north-1.amazonaws.com.cn
+Server:  10.0.0.2
+Address: 10.0.0.2#53
+
+Non-authoritative answer:
+gret8sxv4j.execute-api.cn-north-1.amazonaws.com.cn canonical name = execute-api.cn-north-1.amazonaws.com.cn.
+Name: execute-api.cn-north-1.amazonaws.com.cn
+Address: 10.0.4.49
+Name: execute-api.cn-north-1.amazonaws.com.cn
+Address: 10.0.1.52
+```
+
+- Regional API
+
+```bash
+[ec2-user@ip-10-0-7-116 ~]$ nslookup 6foorhitui.execute-api.cn-north-1.amazonaws.com.cn
+Server:  10.0.0.2
+Address: 10.0.0.2#53
+
+Non-authoritative answer:
+6foorhitui.execute-api.cn-north-1.amazonaws.com.cn canonical name = execute-api.cn-north-1.amazonaws.com.cn.
+Name: execute-api.cn-north-1.amazonaws.com.cn
+Address: 10.0.1.52
+Name: execute-api.cn-north-1.amazonaws.com.cn
+Address: 10.0.4.49
+```
