@@ -6,6 +6,9 @@
 
 [Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
 
+## Cost
+[AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
+
 ## Computing
 
 [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
@@ -119,6 +122,8 @@
 [X-Ray in AWS China region](https://github.com/liangruibupt/aws-xray-workshop-gcr)
 
 [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
+
+[How to send CloudWatch logs to S3](devops/cloudwatch/How-to-send-logs-to-S3.md)
 
 ## Infra as Code
 
