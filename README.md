@@ -6,6 +6,8 @@
 
 [Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
 
+[NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -72,6 +74,8 @@
 [Using AWS Lambda with Amazon Kinesis](lambda/lambda-kinesis.md)
 
 [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+
+[How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
 
 ## Migration
 

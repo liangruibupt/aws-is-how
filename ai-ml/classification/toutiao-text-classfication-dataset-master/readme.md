@@ -52,7 +52,7 @@
 
 实验结果：
 
-以0.7 0.15 0.15做分割。欢迎提交你使用本数据集的实验结果~
+以0.7 0.15 0.15做分割。欢
 
 ```
 Test Loss:   0.57, Test Acc:  83.81%
@@ -115,9 +115,6 @@ news_entertainment       0.86      0.86      0.86      8078
 
 ```
 
-
-### NLP chat group
-
-Welcome
-
-![](http://fate2.oss-cn-shanghai.aliyuncs.com/meta/qq-qun-nlp.jpeg)
+两个notebook
+1. 不进行无关词过滤：toutiao-text-classification.ipynb
+2. 进行无关词过滤：ai-ml/classification/toutiao-text-classfication-dataset-master/toutiao-text-classification-stopwords.ipynb
