@@ -1,0 +1,83 @@
+{
+  "type" : "record",
+  "name" : "sales_order_detail_hudi_mor_record",
+  "namespace" : "hoodie.sales_order_detail_hudi_mor",
+  "fields" : [ {
+    "name" : "line_id",
+    "type" : [ "int", "null" ]
+  }, {
+    "name" : "line_number",
+    "type" : [ "int", "null" ]
+  }, {
+    "name" : "order_id",
+    "type" : [ "int", "null" ]
+  }, {
+    "name" : "product_id",
+    "type" : [ "int", "null" ]
+  }, {
+    "name" : "quantity",
+    "type" : [ "int", "null" ]
+  }, {
+    "name" : "unit_price",
+    "type" : [ {
+      "type" : "fixed",
+      "name" : "fixed",
+      "namespace" : "hoodie.sales_order_detail_hudi_mor.sales_order_detail_hudi_mor_record.unit_price",
+      "size" : 16,
+      "logicalType" : "decimal",
+      "precision" : 38,
+      "scale" : 10
+    }, "null" ]
+  }, {
+    "name" : "discount",
+    "type" : [ {
+      "type" : "fixed",
+      "name" : "fixed",
+      "namespace" : "hoodie.sales_order_detail_hudi_mor.sales_order_detail_hudi_mor_record.discount",
+      "size" : 16,
+      "logicalType" : "decimal",
+      "precision" : 38,
+      "scale" : 10
+    }, "null" ]
+  }, {
+    "name" : "supply_cost",
+    "type" : [ {
+      "type" : "fixed",
+      "name" : "fixed",
+      "namespace" : "hoodie.sales_order_detail_hudi_mor.sales_order_detail_hudi_mor_record.supply_cost",
+      "size" : 16,
+      "logicalType" : "decimal",
+      "precision" : 38,
+      "scale" : 10
+    }, "null" ]
+  }, {
+    "name" : "tax",
+    "type" : [ {
+      "type" : "fixed",
+      "name" : "fixed",
+      "namespace" : "hoodie.sales_order_detail_hudi_mor.sales_order_detail_hudi_mor_record.tax",
+      "size" : 16,
+      "logicalType" : "decimal",
+      "precision" : 38,
+      "scale" : 10
+    }, "null" ]
+  }, {
+    "name" : "order_date",
+    "type" : [ {
+      "type" : "int",
+      "logicalType" : "date"
+    }, "null" ]
+  }, {
+    "name" : "record_key",
+    "type" : [ "string", "null" ]
+  }, {
+    "name" : "year",
+    "type" : [ "string", "null" ]
+  }, {
+    "name" : "month",
+    "type" : [ "string", "null" ]
+  }, {
+    "name" : "partition_key",
+    "type" : [ "string", "null" ]
+  } ]
+}

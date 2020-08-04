@@ -103,6 +103,8 @@
 
 [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
+[Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)

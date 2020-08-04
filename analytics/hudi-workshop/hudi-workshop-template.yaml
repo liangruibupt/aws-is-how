@@ -1,0 +1,989 @@
+
+Description: >
+  This Cloudformation template creates resources for the Apache Hudi Workshop. It creates an Amazon EMR Cluster, Amazon Managed Streaming for Kafka Cluster, an Amazon Aurora cluster
+
+Parameters:
+
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    Default: 'Hudi'
+
+  EEKeyPair:
+    Description: SSH key (for access to EMR instances)
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: ee-default-keypair
+
+  DatabaseName:
+    Default: 'HudiDB'
+    Description: The database name
+    Type: String
+
+  DatabaseInstanceType:
+    Default: db.r5.large
+    AllowedValues:
+      - db.t2.small
+      - db.t2.medium
+      - db.r5.large
+      - db.r5.xlarge
+      - db.r5.2xlarge
+      - db.r5.4xlarge
+      - db.r5.8xlarge
+      - db.r5.16xlarge
+    Description: 'Instance type for the database'
+    Type: String
+
+  DatabasePassword:
+    AllowedPattern: '[a-zA-Z0-9]+'
+    ConstraintDescription: must contain only alphanumeric characters. Must have length 8-41.
+    Description: Database admin account password.
+    MaxLength: '41'
+    MinLength: '8'
+    Default: 'S3cretPwd99'
+    Type: String
+
+  DatabaseUsername:
+    Default: 'master'
+    AllowedPattern: "[a-zA-Z0-9]+"
+    ConstraintDescription: must contain only alphanumeric characters. Must have length 1-16
+    Description: The database admin account user name.
+    MaxLength: '16'
+    MinLength: '1'
+    Type: String
+
+  S3HudiArtifacts:
+    Type: String
+    Description: S3 Location for Hudi artifacts
+    Default: 'emr-workshops-cn-northwest-1'
+
+  S3BucketName:
+    Type: String
+    Description: S3 Location to store workshop resources
+    Default: 'hudi-workshop'
+
+  ReplicationInstance:
+    Description: The instance type to use for the replication instance.
+    Type: String
+    Default: dms.t2.large
+    AllowedValues:
+      - dms.t2.micro
+      - dms.t2.small
+      - dms.t2.medium
+      - dms.t2.large
+      - dms.c5.large
+      - dms.c5.xlarge
+
+  NotebookInstanceType:
+    Description: Notebook instance type
+    Type: String
+    Default: ml.t3.medium
+
+Mappings:
+  # Hard values for the subnet masks. These masks define
+  # the range of internal IP addresses that can be assigned.
+  # The VPC can have all IP's from 10.0.0.0 to 10.0.255.255
+  # There are two subnets which cover the ranges:
+  #
+  # 10.0.0.0 - 10.0.0.255
+  # 10.0.1.0 - 10.0.1.255
+  SubnetConfig:
+    VPC:
+      CIDR: '10.192.0.0/16'
+    PublicSubnet1:
+      CIDR: '10.192.10.0/24'
+    PublicSubnet2:
+      CIDR: '10.192.11.0/24'
+    PublicSubnet3:
+      CIDR: '10.192.12.0/24'
+
+  RegionAMI:
+    us-east-1:
+      HVM64: ami-00068cd7555f543d5
+      HVMG2: ami-0a584ac55a7631c0c
+    us-east-2:
+      HVM64: ami-0dacb0c129b49f529
+    us-west-1:
+      HVM64: ami-0bdb828fd58c52235
+      HVMG2: ami-066ee5fd4a9ef77f1
+    eu-west-1:
+      HVM64: ami-01f14919ba412de34
+      HVMG2: ami-0a7c483d527806435
+    ap-northeast-1:
+      HVM64: ami-06cd52961ce9f0d85
+      HVMG2: ami-053cdd503598e4a9d
+    ap-southeast-1:
+      HVM64: ami-08569b978cc4dfa10
+      HVMG2: ami-0be9df32ae9f92309
+    cn-northwest-1:
+      HVM64: ami-0f62e91915e16cfc2
+    cn-north-1:
+      HVM64: ami-0e855a53ec7c8057e
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Database Configuration
+        Parameters:
+          - DatabaseInstanceType
+          - DatabaseName
+          - DatabaseUsername
+          - DatabasePassword
+    ParameterLabels:
+      DatabaseName:
+        default: Database name
+      DatabaseInstanceType:
+        default: Database Instance Type
+      DatabasePassword:
+        default: Database Password
+      DatabaseUsername:
+        default: Database Username
+
+Resources:
+
+  LambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      RoleName: 'LambdaExecutionRole'
+      ManagedPolicyArns:
+        - arn:aws-cn:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws-cn:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws-cn:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws-cn:iam::aws:policy/AmazonMSKFullAccess
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: 'Name'
+          Value: 'WorkshopVPC'
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: 'Name'
+          Value: !Ref EnvironmentName
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !FindInMap ['SubnetConfig', 'PublicSubnet1', 'CIDR']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: 'Name'
+          Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !FindInMap ['SubnetConfig', 'PublicSubnet2', 'CIDR']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: 'Name'
+          Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+
+  Subnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  Subnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref PublicSubnet2
+
+  EC2Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com.cn
+            Action: 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws-cn:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonMSKFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonRDSFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonElasticMapReduceFullAccess
+        - arn:aws-cn:iam::aws:policy/AWSCloudFormationReadOnlyAccess
+        - arn:aws-cn:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles: [ !Ref EC2Role ]
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: BucketOwnerFullControl
+      BucketName: !Join [ '-', [!Ref S3BucketName, !Ref 'AWS::AccountId'] ]
+
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: CloudFormation managed DB subnet group.
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  AuroraDBParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: Hudi Worshop DB parameter group
+      Family: aurora-mysql5.7
+      Parameters:
+        max_connections: 300
+
+  AuroraDBClusterParameterGroup:
+    Type: AWS::RDS::DBClusterParameterGroup
+    Properties:
+      Description: 'CloudFormation Sample Aurora Cluster Parameter Group'
+      Family: aurora-mysql5.7
+      Parameters:
+        time_zone: US/Eastern
+        binlog_format: ROW
+        binlog_checksum: NONE
+
+  AuroraCluster:
+    Type: AWS::RDS::DBCluster
+    DependsOn:
+      - VPC
+      - DatabaseSubnetGroup
+    Properties:
+      Engine: aurora-mysql
+      MasterUsername: !Ref DatabaseUsername
+      MasterUserPassword: !Ref DatabasePassword
+      DatabaseName: !Ref DatabaseName
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      DBClusterParameterGroupName: !Ref AuroraDBClusterParameterGroup
+      VpcSecurityGroupIds:
+        - Ref: WorkshopSecurityGroup
+
+  AuroraDB:
+    Type: AWS::RDS::DBInstance
+    DependsOn: AuroraCluster
+    Properties:
+      Engine: aurora-mysql
+      DBClusterIdentifier: !Ref AuroraCluster
+      DBInstanceClass: !Ref DatabaseInstanceType
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      DBParameterGroupName: !Ref AuroraDBParameterGroup
+      PubliclyAccessible: 'true'
+      DBInstanceIdentifier: !Ref DatabaseName
+      Tags:
+        - Key: 'Name'
+          Value: !Ref AWS::StackName
+
+  DMSCloudwatchRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: dms-cloudwatch-logs-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - dms.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws-cn:iam::aws:policy/service-role/AmazonDMSCloudWatchLogsRole'
+      Path: /
+
+  DMSS3TargetRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: 'dms-s3-target-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - dms.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws-cn:iam::aws:policy/service-role/AmazonDMSVPCManagementRole'
+      Path: /
+      Policies:
+        - PolicyName: DMSS3Policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:PutObjectTagging
+                  - s3:DeleteObject
+                Resource: !Join [ '', [ 'arn:aws-cn:s3:::', !Ref S3Bucket, '/*' ] ]
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !Join [ '', [ 'arn:aws-cn:s3:::', !Ref S3Bucket ] ]
+
+  DMSVpcRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: dms-vpc-role
+      AssumeRolePolicyDocument:
+        Version : '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - dms.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws-cn:iam::aws:policy/service-role/AmazonDMSVPCManagementRole'
+      Path: /
+
+  DMSReplicationSubnetGroup:
+    Type: AWS::DMS::ReplicationSubnetGroup
+    Properties:
+      ReplicationSubnetGroupDescription: 'AWS Glue Workshop DMSReplicationSubnetGroup'
+      ReplicationSubnetGroupIdentifier: !Join [ '-', [!Ref EnvironmentName, 'DMSReplicationSubnetGroup'] ]
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  DMSReplicationInstance:
+    Type: "AWS::DMS::ReplicationInstance"
+    DependsOn: AuroraCluster
+    Properties:
+      AllocatedStorage: 100
+      MultiAZ: false
+      PubliclyAccessible: true
+      ReplicationInstanceClass: !Ref ReplicationInstance
+      ReplicationSubnetGroupIdentifier : !Ref DMSReplicationSubnetGroup
+      Tags:
+        - Key: Name
+          Value: DMS-Replication-Instance
+      VpcSecurityGroupIds:
+        - Ref: WorkshopSecurityGroup
+
+  AuroraDMSSourceEndpoint:
+    Type: 'AWS::DMS::Endpoint'
+    DependsOn:
+      - DMSReplicationInstance
+      - AuroraCluster
+      - AuroraDB
+    Properties:
+      EndpointType: source
+      EngineName: AURORA
+      Username: master
+      Password: !Ref DatabasePassword
+      Port: 3306
+      ServerName: !GetAtt
+        - AuroraCluster
+        - Endpoint.Address
+      Tags:
+        - Key: Name
+          Value: 'Aurora-Source-Endpoint'
+
+  S3DMSTargetEndpoint:
+    Type: 'AWS::DMS::Endpoint'
+    DependsOn:
+      - DMSReplicationInstance
+      - S3Bucket
+    Properties:
+      EndpointType: target
+      EngineName: S3
+      ExtraConnectionAttributes: DataFormat=parquet;parquetTimestampInMillisecond=true;
+      S3Settings:
+        BucketName: !Ref S3Bucket
+        BucketFolder: "dms-full-load-path/"
+        CompressionType: NONE
+        CsvDelimiter: ','
+        CsvRowDelimiter: '\n'
+        ServiceAccessRoleArn: !GetAtt DMSS3TargetRole.Arn
+      Tags:
+        - Key: Name
+          Value: 'S3-Target-Endpoint'
+
+  DMSReplicationTask:
+    Type: 'AWS::DMS::ReplicationTask'
+    DependsOn:
+      - AuroraDMSSourceEndpoint
+      - S3DMSTargetEndpoint
+      - DMSReplicationInstance
+    Properties:
+      MigrationType: full-load-and-cdc
+      ReplicationInstanceArn: !Ref DMSReplicationInstance
+      ReplicationTaskSettings: >-
+        { "Logging" : { "EnableLogging" : true, "LogComponents": [ { "Id" :
+        "SOURCE_UNLOAD", "Severity" : "LOGGER_SEVERITY_DEFAULT" }, { "Id" :
+        "SOURCE_CAPTURE", "Severity" : "LOGGER_SEVERITY_DEFAULT" }, { "Id" :
+        "TARGET_LOAD", "Severity" : "LOGGER_SEVERITY_DEFAULT" }, { "Id" :
+        "TARGET_APPLY", "Severity" : "LOGGER_SEVERITY_DEFAULT" } ] } }
+      SourceEndpointArn: !Ref AuroraDMSSourceEndpoint
+      TargetEndpointArn: !Ref S3DMSTargetEndpoint
+      TableMappings: "{\"rules\": [{\"rule-type\": \"selection\", \"rule-id\": \"1\", \"rule-action\": \"include\", \"object-locator\": {\"schema-name\": \"salesdb\", \"table-name\": \"%\"}, \"rule-name\": \"1\"}]}"
+      Tags:
+        - Key: "Name"
+          Value: 'AuroraMySQl-2-S3'
+
+  WorkshopSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: WorkshopSecurityGroup
+      GroupDescription: Enable SSH access via port 22
+      Tags:
+        - Key: Name
+          Value: Workshop Security Group
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: "0.0.0.0/0"
+          FromPort: 22
+          ToPort: 22
+
+  SecurityGroupIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !GetAtt WorkshopSecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      SourceSecurityGroupId: !Ref WorkshopSecurityGroup
+
+  SecurityGroupIngress1:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !GetAtt WorkshopSecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 3306
+      SourceSecurityGroupId: !Ref WorkshopSecurityGroup
+
+  # TinyEC2Instance:
+  #   Type: 'AWS::EC2::Instance'
+  #   DependsOn:
+  #     - VPC
+  #   Properties:
+  #     InstanceType: t2.small
+  #     KeyName: !Ref EEKeyPair
+  #     IamInstanceProfile: !Ref EC2InstanceProfile
+  #     AvailabilityZone: !Select
+  #       - 0
+  #       - !GetAZs
+  #         Ref: 'AWS::Region'
+  #     SubnetId: !Ref PublicSubnet1
+  #     SecurityGroupIds:
+  #       - !GetAtt
+  #         - WorkshopSecurityGroup
+  #         - GroupId
+  #     ImageId: !FindInMap
+  #       - RegionAMI
+  #       - !Ref 'AWS::Region'
+  #       - HVM64
+  #     Tags:
+  #       - Key: Name
+  #         Value: TinyInstance
+  #     UserData:
+  #       Fn::Base64: !Sub |
+  #         #!/bin/bash -xe
+
+  #         set -x
+  #         # Install the basics
+  #         yum update -y
+  #         yum install python3.7 -y
+  #         yum erase awscli -y
+
+  #         # Install awscli and boto3
+  #         pip3 install awscli --upgrade --user
+  #         pip3 install boto3 --user
+
+  #         echo "export PATH=~/.local/bin:$PATH" >> .bash_profile
+
+  #         export REGION=${AWS::Region}
+
+  #         # Download python script to extract stack (MSK, Aurora) info
+  #         ~/.local/bin/aws emr put-block-public-access-configuration --block-public-access-configuration BlockPublicSecurityGroupRules=false --region=$REGION
+  #         sleep 5
+
+  MSKCluster:
+    Type: 'AWS::MSK::Cluster'
+    Properties:
+      BrokerNodeGroupInfo:
+        ClientSubnets:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
+        InstanceType: kafka.m5.large
+        SecurityGroups:
+          - !GetAtt
+            - WorkshopSecurityGroup
+            - GroupId
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: 500
+      ClusterName: 'Hudi-Workshop-KafkaCluster'
+      EncryptionInfo:
+        EncryptionInTransit:
+          ClientBroker: 'TLS_PLAINTEXT'
+          InCluster: false
+      EnhancedMonitoring: PER_TOPIC_PER_BROKER
+      KafkaVersion: 2.2.1
+      NumberOfBrokerNodes: 2
+
+  EMRPrestoHudiCluster:
+    Type: AWS::EMR::Cluster
+    DependsOn:
+      - VPC
+    #  - TinyEC2Instance
+      - EMRSparkHudiCluster
+      - SagemakerNotebookInstance
+    Properties:
+      Name: !Sub ${EnvironmentName} Presto EMR Cluster
+      JobFlowRole: !Ref EMRInstanceProfile
+      ReleaseLabel: emr-5.28.0
+      ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
+      LogUri: !Join [ '', [ 's3://aws-logs-', !Ref 'AWS::AccountId', '-', !Ref 'AWS::Region', '/elasticmapreduce/' ]]
+      ServiceRole: !Ref EMRServiceRole
+      Tags:
+        - Key: 'Name'
+          Value: !Sub ${EnvironmentName} Presto EMR Cluster
+      VisibleToAllUsers: true
+      Applications:
+        #- Name: Spark
+        - Name: Hive
+        #- Name: Ganglia
+        - Name: Presto
+        #- Name: Livy
+        #AutoScalingRole: 'EMR_AutoScaling_DefaultRole'
+        #Configurations:
+        #- Classification: spark
+        #  ConfigurationProperties:
+        #    "maximizeResourceAllocation": "true"
+        #- Classification: spark-defaults
+        #  ConfigurationProperties:
+        #    "spark.driver.extraClassPath": "/home/hadoop/javalib/*:/usr/lib/hadoop-lzo/lib/*:/usr/lib/hadoop/hadoop-aws.jar:/usr/share/aws/aws-java-sdk/*:/usr/share/aws/emr/emrfs/conf:/usr/share/aws/emr/emrfs/lib/*:/usr/share/aws/emr/emrfs/auxlib/*:/usr/share/aws/emr/security/conf:/usr/share/aws/emr/security/lib/*:/usr/share/aws/hmclient/lib/aws-glue-datacatalog-spark-client.jar:/usr/share/java/Hive-JSON-Serde/hive-openx-serde.jar:/usr/share/aws/sagemaker-spark-sdk/lib/sagemaker-spark-sdk.jar"
+        #- Classification: hive-site
+        #  ConfigurationProperties:
+        #    "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+        #- Classification: presto-connector-hive
+        #  ConfigurationProperties:
+        #    "hive.metastore.glue.datacatalog.enabled": "true"
+        #- Classification: spark-hive-site
+        #  ConfigurationProperties:
+        #    "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+      EbsRootVolumeSize: 32
+      Instances:
+        AdditionalMasterSecurityGroups: [ !Ref WorkshopSecurityGroup ]
+        AdditionalSlaveSecurityGroups: [ !Ref WorkshopSecurityGroup ]
+        Ec2KeyName: !Ref EEKeyPair
+        Ec2SubnetId: !Ref PublicSubnet1
+        MasterInstanceGroup:
+          EbsConfiguration:
+            EbsBlockDeviceConfigs:
+              - VolumeSpecification:
+                  SizeInGB: 100
+                  VolumeType: gp2
+          InstanceCount: 1
+          InstanceType: r5.2xlarge
+          Market: ON_DEMAND
+          Name: 'Master instance group'
+        #CoreInstanceGroup:
+        #  EbsConfiguration:
+        #    EbsBlockDeviceConfigs:
+        #      - VolumeSpecification:
+        #          SizeInGB: 100
+        #          VolumeType: gp2
+        #  InstanceCount: 3
+        #  InstanceType: r5.4xlarge
+        #  Market: ON_DEMAND
+        #  Name: 'Core instance group'
+
+  InstallPrestoHudiRPM:
+    Type: AWS::EMR::Step
+    Properties:
+      ActionOnFailure: CONTINUE
+      HadoopJarStep:
+        Args:
+          - !Sub s3://${S3HudiArtifacts}/hudi/scripts/InstallHudiPrestoRPMs.sh
+        Jar: !Sub s3://${AWS::Region}.elasticmapreduce/libs/script-runner/script-runner.jar
+        MainClass: ''
+      JobFlowId: !Ref EMRPrestoHudiCluster
+      Name: 'Update Presto Hudi packages'
+
+  EMRSparkHudiCluster:
+    Type: AWS::EMR::Cluster
+    DependsOn:
+      - VPC
+      #- TinyEC2Instance
+      - MSKCluster
+    Properties:
+      Name: !Sub ${EnvironmentName} Spark EMR Cluster
+      JobFlowRole: !Ref EMRInstanceProfile
+      ReleaseLabel: emr-5.28.0
+      ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
+      LogUri: !Join [ '', [ 's3://aws-logs-', !Ref 'AWS::AccountId', '-', !Ref 'AWS::Region', '/elasticmapreduce/' ]]
+      ServiceRole: !Ref EMRServiceRole
+      Tags:
+        - Key: 'Name'
+          Value: !Sub ${EnvironmentName} Spark EMR Cluster
+      VisibleToAllUsers: true
+      Applications:
+        - Name: Spark
+        - Name: Hive
+        #- Name: Ganglia
+        #- Name: Presto
+        - Name: Livy
+        #AutoScalingRole: 'EMR_AutoScaling_DefaultRole'
+        #Configurations:
+        #- Classification: spark
+        #  ConfigurationProperties:
+        #    "maximizeResourceAllocation": "true"
+        #- Classification: spark-defaults
+        #  ConfigurationProperties:
+        #    "spark.driver.extraClassPath": "/home/hadoop/javalib/*:/usr/lib/hadoop-lzo/lib/*:/usr/lib/hadoop/hadoop-aws.jar:/usr/share/aws/aws-java-sdk/*:/usr/share/aws/emr/emrfs/conf:/usr/share/aws/emr/emrfs/lib/*:/usr/share/aws/emr/emrfs/auxlib/*:/usr/share/aws/emr/security/conf:/usr/share/aws/emr/security/lib/*:/usr/share/aws/hmclient/lib/aws-glue-datacatalog-spark-client.jar:/usr/share/java/Hive-JSON-Serde/hive-openx-serde.jar:/usr/share/aws/sagemaker-spark-sdk/lib/sagemaker-spark-sdk.jar"
+        #- Classification: hive-site
+        #  ConfigurationProperties:
+        #    "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+        #- Classification: presto-connector-hive
+        #  ConfigurationProperties:
+        #    "hive.metastore.glue.datacatalog.enabled": "true"
+        #- Classification: spark-hive-site
+        #  ConfigurationProperties:
+        #    "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+      EbsRootVolumeSize: 32
+      Instances:
+        AdditionalMasterSecurityGroups: [ !Ref WorkshopSecurityGroup ]
+        AdditionalSlaveSecurityGroups: [ !Ref WorkshopSecurityGroup ]
+        Ec2KeyName: !Ref EEKeyPair
+        Ec2SubnetId: !Ref PublicSubnet1
+        MasterInstanceGroup:
+          EbsConfiguration:
+            EbsBlockDeviceConfigs:
+              - VolumeSpecification:
+                  SizeInGB: 100
+                  VolumeType: gp2
+          InstanceCount: 1
+          InstanceType: r5.4xlarge
+          Market: ON_DEMAND
+          Name: 'Master instance group'
+        #CoreInstanceGroup:
+        #  EbsConfiguration:
+        #    EbsBlockDeviceConfigs:
+        #      - VolumeSpecification:
+        #          SizeInGB: 100
+        #          VolumeType: gp2
+        #  InstanceCount: 3
+        #  InstanceType: r4.8xlarge
+        #  Market: ON_DEMAND
+        #  Name: 'Core instance group'
+
+  InstallSparkHudiRPM:
+    Type: AWS::EMR::Step
+    Properties:
+      ActionOnFailure: CONTINUE
+      HadoopJarStep:
+        Args:
+          - !Sub s3://${S3HudiArtifacts}/hudi/scripts/InstallHudiSparkRPMs.sh
+        Jar: !Sub s3://${AWS::Region}.elasticmapreduce/libs/script-runner/script-runner.jar
+        MainClass: ''
+      JobFlowId: !Ref EMRSparkHudiCluster
+      Name: 'Update Spark Hudi packages'
+
+  EMRIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - 'ec2.amazonaws.com.cn'
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws-cn:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role
+        - arn:aws-cn:iam::aws:policy/AmazonMSKFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonSageMakerFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonKinesisFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonKinesisFirehoseFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  EMRServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - 'elasticmapreduce.amazonaws.com.cn'
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws-cn:iam::aws:policy/service-role/AmazonElasticMapReduceRole'
+
+  EMRInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles: [ !Ref EMRIAMRole ]
+
+  SagemakerLifecycleConfig:
+    Type: "AWS::SageMaker::NotebookInstanceLifecycleConfig"
+    Properties:
+      NotebookInstanceLifecycleConfigName: !Sub ${EnvironmentName}LifecycleConfig
+      OnStart:
+        - Content:
+            Fn::Base64: !Sub |
+
+              sudo -u ec2-user -i <<'EOF'
+              ## Download and execute lifecycle script
+              aws s3 cp s3://emr-workshops-cn-northwest-1/hudi/scripts/sagemaker_lifecycle.sh /home/ec2-user/scripts/
+              chmod +x /home/ec2-user/scripts/sagemaker_lifecycle.sh
+              /home/ec2-user/scripts/sagemaker_lifecycle.sh
+
+              EOF
+
+  # SageMaker goes last as the lifecycle captures the EMR Private DNS Amazon
+  # and Kafka broker hostnames.
+  SagemakerRole:
+    DependsOn:
+      - EMRSparkHudiCluster
+      - MSKCluster
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - 'sagemaker.amazonaws.com'
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - 'arn:aws-cn:iam::aws:policy/AmazonSageMakerFullAccess'
+        - 'arn:aws-cn:iam::aws:policy/AWSLambdaFullAccess'
+        - 'arn:aws-cn:iam::aws:policy/AmazonAthenaFullAccess'
+        - 'arn:aws-cn:iam::aws:policy/AmazonElasticMapReduceFullAccess'
+        - 'arn:aws-cn:iam::aws:policy/AmazonMSKFullAccess'
+        - 'arn:aws-cn:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws-cn:iam::aws:policy/AmazonRDSReadOnlyAccess'
+
+  SagemakerNotebookInstance:
+    Type: AWS::SageMaker::NotebookInstance
+    DependsOn:
+      - SagemakerLifecycleConfig
+      - WorkshopSecurityGroup
+      - SagemakerRole
+    Properties:
+      DirectInternetAccess: Enabled
+      SubnetId: !Ref PublicSubnet1
+      NotebookInstanceName: 'hudi-on-EMR-workshop-notebook'
+      InstanceType: !Ref NotebookInstanceType
+      LifecycleConfigName: !GetAtt SagemakerLifecycleConfig.NotebookInstanceLifecycleConfigName
+      RoleArn: !GetAtt SagemakerRole.Arn
+      SecurityGroupIds:
+        - !Ref WorkshopSecurityGroup
+      Tags:
+        - Key: 'Name'
+          Value: 'hudi-on-EMR-workshop-notebook'
+
+  KafkaClientEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    DependsOn:
+      - MSKCluster
+    Properties:
+      InstanceType: m5.large
+      KeyName: !Ref EEKeyPair
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: 'AWS::Region'
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt
+          - WorkshopSecurityGroup
+          - GroupId
+      ImageId: !FindInMap
+        - RegionAMI
+        - !Ref 'AWS::Region'
+        - HVM64
+      Tags:
+        - Key: Name
+          Value: KafkaClientInstance
+      UserData:
+        Fn::Base64: !Sub |
+
+          #!/bin/bash -xe
+
+          set -x
+          # exec > >(tee /tmp/user-data.log|logger -t user-data ) 2>&1
+          echo BEGIN
+          date '+%Y-%m-%d %H:%M:%S'
+          whoami
+
+          # Install the basics
+          yum update -y
+          yum install python3.7 -y
+          yum install java-1.8.0-openjdk-devel -y
+          yum erase awscli -y
+          yum install jq -y
+
+          # Install awscli and boto3
+          pip3 install awscli --upgrade --user
+          pip3 install boto3 --user
+          echo "export PATH=~/.local/bin:$PATH" >> .bash_profile
+
+          cd /tmp
+          S3HudiArtifacts=${S3HudiArtifacts}
+          echo "S3Bucket: $S3HudiArtifacts"
+
+          # Download python script to extract stack (MSK, Aurora) info
+          ~/.local/bin/aws s3 cp s3://${S3HudiArtifacts}/hudi/scripts/mini-stack-info.py .
+          python3 mini-stack-info.py
+
+          bootstrap_servers=`cat stack-info.json | jq '.MSKBootstrapServers' | sed 's/"//g'`
+          aurora_endpoint=`cat stack-info.json | jq '.AuroraEndPoint.Address' | sed 's/"//g'`
+
+          cat > /tmp/install_clients.sh << EOF
+
+          echo " Setting up client environment "
+          whoami
+
+          cd /home/ec2-user
+          echo "export PATH=~/.local/bin:$PATH" >> .bash_profile
+
+          cd /home/ec2-user
+
+          # Install Debezium to stream data from Aurora MySQL to Kafka Topic using Kafka connect
+          wget https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/0.10.0.Final/debezium-connector-mysql-0.10.0.Final-plugin.tar.gz
+          tar -zxvf debezium-connector-mysql-0.10.0.Final-plugin.tar.gz
+
+          sleep 1
+
+          echo "Getting Kafka bits"
+          # Install Kafka
+          wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
+          tar -xzf kafka_2.12-2.2.1.tgz
+
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py --user
+
+          # Install boto3, awscli
+          pip3 install boto3 --user
+          pip3 install awscli --upgrade --user
+
+          # We need to now retrieve the Kafka bootstrap server and Aurora endpoint info from
+          cd /home/ec2-user
+
+          # Download the right config files from S3 bucket
+          cd ~/kafka*/config
+          /home/ec2-user/.local/bin/aws s3 cp s3://${S3HudiArtifacts}/hudi/config/connect-mysql-source.properties .
+          /home/ec2-user/.local/bin/aws s3 cp s3://${S3HudiArtifacts}/hudi/config/connect-standalone-hudi.properties .
+
+          # Replace the bootstrap server info in the config files
+          sed -i -e 's/bootstrap.servers=/bootstrap.servers='$bootstrap_servers'/g' connect-standalone-hudi.properties
+          sed -i -e 's/bootstrap.servers=/bootstrap.servers='$bootstrap_servers'/g' connect-mysql-source.properties
+          sed -i -e 's/database.hostname=/database.hostname='$aurora_endpoint'/g' connect-mysql-source.properties
+          EOF
+
+          chown ec2-user:ec2-user /tmp/install_clients.sh && chmod a+x /tmp/install_clients.sh
+          sleep 1; sudo -u ec2-user "/tmp/install_clients.sh"; sleep 1
+
+          echo " Done with installations "
+          whoami
+
+          # Copy debezium connector to /usr/local/share/kafka/plugins - this where Kafka connect expects it to be
+          sudo mkdir -p /usr/local/share/kafka/plugins
+          cd /usr/local/share/kafka/plugins/
+          sudo cp -r /home/ec2-user/debezium-connector-mysql /usr/local/share/kafka/plugins/.
+
+
+Outputs:
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+
+  S3WorkshopBucket:
+    Description: S3 Workshop Bucket Name
+    Value: !Ref S3Bucket
+
+  EmrSparkClusterId:
+    Value: !Ref EMRSparkHudiCluster
+
+  EmrPrestoClusterId:
+    Value: !Ref EMRPrestoHudiCluster
+
+  PublicSubnets:
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
+
+  AuroraEndpoint:
+    Description: The database endpoint
+    Value: !GetAtt AuroraCluster.Endpoint.Address
+
+  DatabasePort:
+    Description: The database port
+    Value: !GetAtt AuroraCluster.Endpoint.Port
+
+  WorkshopSecurityGroup:
+    Description: The ID of the security group created for the MSK clusters
+    Value: !GetAtt
+      - WorkshopSecurityGroup
+      - GroupId
+
+  KafkaClientEC2InstancePublicDNS:
+    Description: The Public DNS for the MirrorMaker EC2 instance
+    Value: !GetAtt
+      - KafkaClientEC2Instance
+      - PublicDnsName
