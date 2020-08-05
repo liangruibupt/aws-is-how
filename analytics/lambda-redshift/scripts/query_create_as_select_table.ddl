@@ -1,7 +1,4 @@
-SELECT
-  airport,
-  to_char(SUM(passengers), '999,999,999') as passengers
-FROM vegas_flights
-GROUP BY airport
-ORDER BY SUM(passengers) desc
-LIMIT 10;
+UNLOAD ('SELECT airport, passengers FROM vegas_flights ORDER BY airport')
+to 's3://ray-redshift-training/results/redshift_etl_demo/vegas_flights_'
+IAM_ROLE 'arn:aws-cn:iam::your-account-id:role/rayRedshiftRole'
+parallel off;

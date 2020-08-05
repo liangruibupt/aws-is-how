@@ -23,7 +23,9 @@
 
 [Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
 
-[Automate athena query by lambda and step function](analytics/athena-automate/README.md)
+[Automate athena query by lambda and step function](analytics/athena-automate)
+
+[Automate Redshift ETL](analytics/lambda-redshift)
 
 ## Security
 

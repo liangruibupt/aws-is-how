@@ -13,7 +13,7 @@ class ScriptReader(object):
 
     @staticmethod
     def get_script(path):
-        return open(path, 'r').read()
+        return open(path, 'r').read().replace('\n', ' ')
 
 # Redshift functions to send and retrieve data
 
@@ -59,29 +59,31 @@ class RedshiftDataManager(object):
             "ExecutionMessage": result
         }
 
-    @staticmethod
-    def execute_query_output(con, cur, script, output_bucket):
-        message = "execute {} done".format(script)
-        try:
-            outputquery = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(script)
-            local_filename = '/tmp/resultsfile.csv'
-            with open(local_filename, 'w') as f:
-                cur.copy_expert(outputquery, f)
-            con.commit()
-            s3_client.upload_file(
-                local_filename, output_bucket, 'resultsfile.csv')
-            status = "Success"
-        except Exception as error:
-            logging.error(error)
-            con.rollback()
-            status = "Failied"
-            message = error
-        finally:
-            con.close()
-        return {
-            "ExecutionState": status,
-            "ExecutionMessage": message
-        }
+    # Redshfit do not support the copy_expert, you can directly use the unload function
+    # @staticmethod
+    # def execute_query_output(con, cur, script, output_bucket, output_prefix):
+    #     message = "execute {} done".format(script)
+    #     try:
+    #         outputquery = "COPY ('{0}') TO STDOUT WITH CSV HEADER".format(script)
+    #         print("outputquery %s" % (outputquery))
+    #         local_filename = '/tmp/resultsfile.csv'
+    #         with open(local_filename, 'w') as f:
+    #             cur.copy_expert(outputquery, f)
+    #         #con.commit()
+    #         s3_client.upload_file(
+    #             local_filename, output_bucket, output_prefix+'resultsfile.csv')
+    #         status = "Success"
+    #     except Exception as error:
+    #         logging.error(error)
+    #         con.rollback()
+    #         status = "Failied"
+    #         message = error
+    #     finally:
+    #         con.close()
+    #     return {
+    #         "ExecutionState": status,
+    #         "ExecutionMessage": message
+    #     }
 
     @staticmethod
     def get_conn_string(db_conn):
@@ -108,6 +110,6 @@ class RedshiftDataManager(object):
         return RedshiftDataManager.execute_query(con, con.cursor(), script)
 
     @staticmethod
-    def run_query_output(script, db_connection, output_bucket):
+    def run_query_output(script, db_connection, output_bucket, output_prefix):
         con = RedshiftDataManager.get_conn(db_connection)
-        return RedshiftDataManager.execute_query_output(con, con.cursor(), script, output_bucket)
+        return RedshiftDataManager.execute_query_output(con, con.cursor(), script, output_bucket, output_prefix)

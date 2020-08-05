@@ -1,6 +1,6 @@
 COPY airports
 FROM 's3://ray-redshift-training/awsu-spl/spl17-redshift/static/data/lookup_airports.csv'
-IAM_ROLE 'arn:aws-cn:iam::876820548815:role/rayRedshiftRole'
+IAM_ROLE 'arn:aws-cn:iam::your-account-id:role/rayRedshiftRole'
 IGNOREHEADER 1
 DELIMITER ','
 REMOVEQUOTES
