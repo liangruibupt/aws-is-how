@@ -1,0 +1,1 @@
+SELECT carrier, SUM (passengers * miles) as sum_miles_passengers FROM flights GROUP BY carrier ORDER BY 2 DESC LIMIT 10;
