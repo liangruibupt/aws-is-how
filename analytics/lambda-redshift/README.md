@@ -1,10 +1,10 @@
 # Automate the AWS Redshift ETL
 
 In this sample, I will show how to use lambda to automate the AWS Redshift SQL scripts execution
-1. Create the source table
-2. Copy the data
-3. Create sematic table by select and join
-4. Query sematic table
+1. Create the 2 source tables
+2. Copy the data into 2 source tables
+3. Create sematic table by select and join 2 source tables
+4. Query sematic table and unload the result to S3
 
 
 ## Build the python code for Redshift ETL demo
