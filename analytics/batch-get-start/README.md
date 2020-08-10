@@ -6,12 +6,15 @@ Follow up the guide [ECS instance_IAM_role](https://docs.aws.amazon.com/batch/la
 
 ```bash
 1. Define a Job: select `No job submission`, then click Next
-2. Compute environment name: small-batch-env
+2. Compute environment name: `small-batch-env`
 3. Service role: `AWSBatchServiceRole`
 4. EC2 instance role: `ecsInstanceRole`
 5. Provisioning Model: `On-Demand`
 6. Allowed instance types: `optimal`
 7. Minimum vCPUs: 1; Desired vCPUs: 2; Maximum vCPUs: 4
+8. VPC Setting: select a VPC, subnet with Amazon ECS service endpoint or NAT Gateway configured. Select Security group with 443 port open.
+9. Tag your instance with: `Name=small-batch-env-instance`
+10. Job queue name: `small-batch-env`
 ```
 
 ## Building the fetch & run Docker image
@@ -110,11 +113,40 @@ Create a batchJobRole IAM role with permission of `AmazonS3ReadOnlyAccess` for t
 1. Create a job definition
 ```bash
 Job Definition Name: fetch_and_run.
+Job attempts: 1
+Execution timeout: 300 seconds
 IAM Role: batchJobRole.
 ECR Repository URI: 012345678901.dkr.ecr.cn-north-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
 Command field: Leave blank.
-For vCPUs, enter 1. For Memory, enter 500.
+For vCPUs, enter 1. For Memory, enter 500. For GPU: enter 0
+For User, enter nobody.
 ```
+
+2. Submit and run a job
+```bash
+Job name: fetch_and_run_script_test
+Job definition: fetch_and_run:1
+Job queue: small-batch-env
+Job Type: Single
+Command: enter `myjob.sh 60`
+environment variables
+Key=BATCH_FILE_TYPE, Value=script
+Key=BATCH_FILE_S3_URL, Value=s3://ray-redshift-training/scripts/batch-samplejob.sh. Don’t forget to use the correct URL for your file.
+Optional: key=S3_BUCKET_REGION, Value=cn-northwest-1
+```
+
+Note: the BATCH_FILE_S3_URL should be the same region with batch job, otherwise, you need modify the fetch_and_run.sh to export the S3_BUCKET_REGION.
+
+3. Check Job status
+
+After the job is completed, check the final status in the console.
+
+| Job ID | Job name | Array size | Number of nodes | Status | Created at | Started at | Run time |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 3291ab00-22b5-40c5-8759-66025a4f4794 | fetch_and_run_script_test | -- | -- | SUCCEEDED | 05:56:36 pm 08/10/20 | 05:56:52 pm 08/10/20 | a minute |
+
+In the job details page, you can also choose View logs for this job in CloudWatch console to see your job log
+![batch-execution-cw-logs](batch-execution-cw-logs.png)
 
 # Reference
 [Creating a Simple “Fetch & Run” AWS Batch Job](https://aws.amazon.com/blogs/compute/creating-a-simple-fetch-and-run-aws-batch-job/)
