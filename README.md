@@ -27,6 +27,8 @@
 
 [Automate Redshift ETL](analytics/lambda-redshift)
 
+[AWS Batch Getting Start demo](analytics/batch-get-start)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
