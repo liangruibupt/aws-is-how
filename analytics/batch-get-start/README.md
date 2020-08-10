@@ -72,11 +72,11 @@ Successfully tagged awsbatch/fetch_and_run:latest
 
 2. Push the image to ECR
 ```bash
-aws ecr create-repository --repository-name awsbatch/fetch_and_run --region cn-north-1
+aws ecr create-repository --repository-name awsbatch/fetch_and_run --region cn-northwest-1
 
-aws ecr get-login-password --region cn-north-1 | docker login --username AWS --password-stdin 012345678901.dkr.ecr.cn-north-1.amazonaws.com.cn
-docker tag awsbatch/fetch_and_run:latest 012345678901.dkr.ecr.cn-north-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
-docker push 012345678901.dkr.ecr.cn-north-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
+aws ecr get-login-password --region cn-northwest-1 | docker login --username AWS --password-stdin 012345678901.dkr.ecr.cn-northwest-1.amazonaws.com.cn
+docker tag awsbatch/fetch_and_run:latest 012345678901.dkr.ecr.cn-northwest-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
+docker push 012345678901.dkr.ecr.cn-northwest-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
 ```
 
 ## Batch Job preparation
@@ -112,14 +112,15 @@ Create a batchJobRole IAM role with permission of `AmazonS3ReadOnlyAccess` for t
 
 1. Create a job definition
 ```bash
-Job Definition Name: fetch_and_run.
+Job Definition Name: fetch_and_run
 Job attempts: 1
-Execution timeout: 300 seconds
+Execution timeout: 600 seconds
 IAM Role: batchJobRole.
 ECR Repository URI: 012345678901.dkr.ecr.cn-north-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
-Command field: Leave blank.
-For vCPUs, enter 1. For Memory, enter 500. For GPU: enter 0
-For User, enter nobody.
+Command field: Leave blank
+For vCPUs, enter 1. For Memory, enter 500. For GPU: leave blank value
+For User, enter nobody
+Leave others as default setting
 ```
 
 2. Submit and run a job
@@ -132,10 +133,9 @@ Command: enter `myjob.sh 60`
 environment variables
 Key=BATCH_FILE_TYPE, Value=script
 Key=BATCH_FILE_S3_URL, Value=s3://ray-redshift-training/scripts/batch-samplejob.sh. Don’t forget to use the correct URL for your file.
-Optional: key=S3_BUCKET_REGION, Value=cn-northwest-1
+key=S3_BUCKET_REGION, Value=cn-northwest-1
+Leave others as default setting
 ```
-
-Note: the BATCH_FILE_S3_URL should be the same region with batch job, otherwise, you need modify the fetch_and_run.sh to export the S3_BUCKET_REGION.
 
 3. Check Job status
 
@@ -143,7 +143,8 @@ After the job is completed, check the final status in the console.
 
 | Job ID | Job name | Array size | Number of nodes | Status | Created at | Started at | Run time |
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| 3291ab00-22b5-40c5-8759-66025a4f4794 | fetch_and_run_script_test | -- | -- | SUCCEEDED | 05:56:36 pm 08/10/20 | 05:56:52 pm 08/10/20 | a minute |
+| 1624b550-55dd-4235-a756-c21e00f4bcf4 | fetch_and_run_script_test | -- | -- | SUCCEEDED | 10:54:25 pm 08/10/20 | 10:54:35 pm 08/10/20 | a minute |
+
 
 In the job details page, you can also choose View logs for this job in CloudWatch console to see your job log
 ![batch-execution-cw-logs](batch-execution-cw-logs.png)
