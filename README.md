@@ -129,6 +129,8 @@
 
 [Codebuild Get Start](devops/codebuild/codebuild-get-start.md)
 
+[CodePiple Workshop](devops/codepipeline)
+
 [X-Ray in AWS China region](https://github.com/liangruibupt/aws-xray-workshop-gcr)
 
 [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)

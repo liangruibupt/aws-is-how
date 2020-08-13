@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - npm install -g typescript
+  build:
+    commands:
+      - tsc index.ts
+artifacts:
+  files:
+    - index.js
+  secondary-artifacts:
+    artifact1:
+      files:
+        - index.js
+      name: secondary_artifact_ts_files
