@@ -1,3 +1,5 @@
+DROP TABLE if exists vegas_flights;
+
 CREATE TABLE vegas_flights
   DISTKEY (origin)
   SORTKEY (origin)

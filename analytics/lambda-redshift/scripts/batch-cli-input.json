@@ -1,0 +1,71 @@
+{
+    "jobName": "",
+    "jobQueue": "",
+    "arrayProperties": {
+        "size": 0
+    },
+    "dependsOn": [
+        {
+            "jobId": "",
+            "type": "SEQUENTIAL"
+        }
+    ],
+    "jobDefinition": "",
+    "parameters": {
+        "KeyName": ""
+    },
+    "containerOverrides": {
+        "vcpus": 0,
+        "memory": 0,
+        "command": [
+            ""
+        ],
+        "instanceType": "",
+        "environment": [
+            {
+                "name": "",
+                "value": ""
+            }
+        ],
+        "resourceRequirements": [
+            {
+                "value": "",
+                "type": "GPU"
+            }
+        ]
+    },
+    "nodeOverrides": {
+        "numNodes": 0,
+        "nodePropertyOverrides": [
+            {
+                "targetNodes": "",
+                "containerOverrides": {
+                    "vcpus": 0,
+                    "memory": 0,
+                    "command": [
+                        ""
+                    ],
+                    "instanceType": "",
+                    "environment": [
+                        {
+                            "name": "",
+                            "value": ""
+                        }
+                    ],
+                    "resourceRequirements": [
+                        {
+                            "value": "",
+                            "type": "GPU"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "retryStrategy": {
+        "attempts": 0
+    },
+    "timeout": {
+        "attemptDurationSeconds": 0
+    }
+}

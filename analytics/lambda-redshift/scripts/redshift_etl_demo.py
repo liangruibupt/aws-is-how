@@ -11,8 +11,11 @@ REDSHIFT_PASSWD = os.environ['REDSHIFT_PASSWD']
 REDSHIFT_PORT = os.environ['REDSHIFT_PORT']
 REDSHIFT_ENDPOINT = os.environ['REDSHIFT_ENDPOINT']
 REDSHIFT_CLUSTER = os.environ['REDSHIFT_CLUSTER']
+S3_BUCKET_REGION = os.environ['S3_BUCKET_REGION']
 
-client = boto3.client('redshift')
+print('my_region %s' % S3_BUCKET_REGION)
+
+client = boto3.client('redshift', region_name=S3_BUCKET_REGION)
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -44,6 +47,7 @@ def redshift_update(event, context, script_path):
 
     DB_CONNECTION = get_creds()
     script = ScriptReader.get_script(script_path)
+    #print(script)
     result = RedshiftDataManager.run_update(script, DB_CONNECTION)
     event = {
         "ExecutionState": result['ExecutionState'],
@@ -68,21 +72,21 @@ def redshift_query(event, context, script_path):
     return event
 
 
-def redshift_long_query(event, context, script_path, output_bucket, output_prefix):
-    logger.info(event)
-    logger.info(context)
+# def redshift_long_query(event, context, script_path, output_bucket, output_prefix):
+#     logger.info(event)
+#     logger.info(context)
 
-    DB_CONNECTION = get_creds()
-    script = ScriptReader.get_script(script_path)
-    result = RedshiftDataManager.run_query_output(
-        script, DB_CONNECTION, output_bucket, output_prefix)
+#     DB_CONNECTION = get_creds()
+#     script = ScriptReader.get_script(script_path)
+#     result = RedshiftDataManager.run_query_output(
+#         script, DB_CONNECTION, output_bucket, output_prefix)
         
-    event = {
-        "ExecutionState": result['ExecutionState'],
-        "ExecutionMessage": result['ExecutionMessage']
-    }
+#     event = {
+#         "ExecutionState": result['ExecutionState'],
+#         "ExecutionMessage": result['ExecutionMessage']
+#     }
 
-    return event
+#     return event
 
 def flights_table_demo(event, context):
     #create_flights_table
@@ -155,19 +159,21 @@ def main():
     context={}
     function=None
     verbose = False
-    opts, args = getopt.getopt(sys.argv[1:],"hf:v",["help","function="])
+    opts, args = getopt.getopt(sys.argv[1:],"hf:s:v",["help","function=", "sql_path="])
     #print(opts, args)
     for opt, arg in opts:
       #print(opt,arg)
       if opt == "-v":
         verbose = True
       elif opt in ("-h", "--help"):
-        print('redshift_etl_demo.py -f <function>')
+        print('redshift_etl_demo.py -f <function> -s <sql_path>')
         sys.exit()
       elif opt in ("-f", "--function"):
         function = arg
+      elif opt in ("-s", "--sql_path"):
+        sql_path = arg
      
-    print('function is ', function)
+    print('function is %s sql_path is %s' % (function, sql_path))
     
     if function=='flights_table_demo':
         flights_table_demo(event, context)
@@ -175,6 +181,20 @@ def main():
         aircraft_table_demo(event, context)
     elif function=='airports_table_demo':
         airports_table_demo(event, context)
-
+    elif function=='redshift_update':
+        if sql_path == "":
+            print('redshift_update missing sql_path')
+            sys.exit() 
+        else:
+            result = redshift_update(event,context,sql_path)
+            print("redshift_update %s" % (result))
+    elif function=='redshift_query':
+        if sql_path == "":
+            print('redshift_query missing sql_path')
+            sys.exit() 
+        else:
+            result = redshift_query(event,context,sql_path)
+            print("redshift_query %s" % (result))
+            
 if __name__ == "__main__":
     main()

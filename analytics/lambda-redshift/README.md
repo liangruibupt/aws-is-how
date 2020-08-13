@@ -19,11 +19,6 @@ In this sample, I will show how to use lambda to automate the AWS Redshift SQL s
 cd scripts
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple psycopg2
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple boto3
-
-mkdir package && cd package
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple psycopg2 -t ./
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple boto3 -t ./
-chmod -R 755 .
 ```
 
 - pg8000
@@ -49,6 +44,11 @@ export REDSHIFT_CLUSTER = YOUR_REDSHIFT_CLUSTER
 
 ```bash
 python redshift_etl_demo.py -f flights_table_demo
+
+#OR you can direct specify the SQL 
+
+python redshift_etl_demo.py -f redshift_update -s create_flights_table_data.ddl
+python redshift_etl_demo.py -f redshift_query -s query_flights_table.ddl
 ```
 
 ```sql
@@ -71,6 +71,12 @@ SELECT carrier, SUM (freight_pounds) as sum_freight_pounds FROM flights GROUP BY
 
 ```bash
 python redshift_etl_demo.py -f aircraft_table_demo
+
+#OR you can direct specify the SQL 
+
+python redshift_etl_demo.py -f redshift_update -s create_aircraft_table.ddl
+python redshift_etl_demo.py -f redshift_update -s copy_aircraft_table_data.ddl
+python redshift_etl_demo.py -f redshift_query -s query_aircraft_table.ddl
 ```
 
 ```sql
@@ -85,6 +91,14 @@ GROUP BY aircraft ORDER BY trips DESC LIMIT 10;
 
 ```bash
 python redshift_etl_demo.py -f airports_table_demo
+
+#OR you can direct specify the SQL 
+
+python redshift_etl_demo.py -f redshift_update -s create_airports_table.ddl
+python redshift_etl_demo.py -f redshift_update -s copy_airports_table_data.ddl
+python redshift_etl_demo.py -f redshift_update -s create_as_select_table.ddl
+python redshift_etl_demo.py -f redshift_update -s query_create_as_select_table.ddl
+python redshift_etl_demo.py -f redshift_update -s query_create_as_select_table2.ddl
 ```
 
 ```sql
@@ -119,9 +133,66 @@ parallel off;
 ```
 
 
-## Orchestrate an ETL process using AWS Step Functions
-TBD
+## Orchestrate an ETL process using AWS Batch and Step Functions
 
+Archiecture
+
+![Orchestrate an ETL process using AWS Batch and Step Functions](media/StepFunction-Batch-Redshift.png)
+
+
+### AWS Batch Script for Redshift ETL
+```bash
+cd scripts
+export REDSHIFT_DATABASE = YOUR_REDSHIFT_DATABASE
+export REDSHIFT_USER = YOUR_REDSHIFT_USER_Name
+export REDSHIFT_PASSWD = YOUR_REDSHIFT_PASSWD
+export REDSHIFT_PORT = YOUR_REDSHIFT_PORT
+export REDSHIFT_ENDPOINT = YOUR_REDSHIFT_ENDPOINT
+export SCRIPT_PATH = YOUR_SCRIPT_PATH
+export REDSHIFT_CLUSTER = YOUR_REDSHIFT_CLUSTER
+
+aws s3 cp redshift_etl_demo.py s3://ray-redshift-training/batch-demo/scripts/redshift_etl_demo.py
+aws s3 cp redshift_utils.py s3://ray-redshift-training/batch-demo/scripts/redshift_utils.py
+aws s3 cp create_flights_table_data.ddl s3://ray-redshift-training/batch-demo/scripts/create_flights_table_data.ddl
+aws s3 cp query_flights_table.ddl s3://ray-redshift-training/batch-demo/scripts/query_flights_table.ddl
+
+export BATCH_FILE_LIBRARY_S3_URL="s3://ray-redshift-training/batch-demo/scripts/redshift_utils.py"
+export BATCH_FILE_S3_URL="s3://ray-redshift-training/batch-demo/scripts/redshift_etl_demo.py"
+export BATCH_FILE_TYPE="script_python"
+export S3_BUCKET_REGION="cn-northwest-1"
+export BATCH_FILE_SQL_S3_URL="s3://ray-redshift-training/batch-demo/scripts/create_flights_table_data.ddl"
+export PYTHON_PARAMS="redshift_update"
+./fetch_and_run.sh
+
+export BATCH_FILE_SQL_S3_URL="s3://ray-redshift-training/batch-demo/scripts/query_flights_table.ddl"
+export PYTHON_PARAMS="redshift_query"
+./fetch_and_run.sh
+```
+
+### Prepare the ECR image used for AWS Batch Service
+```
+docker build -t awsbatch/fetch_and_run .
+
+aws ecr create-repository --repository-name awsbatch/fetch_and_run --region cn-northwest-1
+
+aws ecr get-login-password --region cn-northwest-1 | docker login --username AWS --password-stdin 012345678901.dkr.ecr.cn-northwest-1.amazonaws.com.cn
+docker tag awsbatch/fetch_and_run:latest 012345678901.dkr.ecr.cn-northwest-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
+docker push 012345678901.dkr.ecr.cn-northwest-1.amazonaws.com.cn/awsbatch/fetch_and_run:latest
+```
+
+### Setup the AWS Batch jobs
+
+Follow up the [guide to setup the AWS Batch environment](https://aws.amazon.com/blogs/compute/creating-a-simple-fetch-and-run-aws-batch-job/)
+
+1. IAM Role with permission: AmazonRedshiftFullAccess, AmazonS3ReadOnlyAccess 
+
+2. Submit and run a job
+```bash
+aws batch submit-job --cli-input-json file://batch-cli-input.json --endpoint-url https://batch.cn-northwest-1.amazonaws.com.cn
+aws batch describe-jobs --endpoint-url https://batch.cn-northwest-1.amazonaws.com.cn --jobs 
+```
+
+In the job details page, you can also choose View logs for this job in CloudWatch console to see your job log
 
 
 # Cleanup

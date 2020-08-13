@@ -1,2 +1,4 @@
 scripts/package/**
 scripts/function.zip
+scripts/batch-cli-input-ray.json
+scripts/__pycache__/**

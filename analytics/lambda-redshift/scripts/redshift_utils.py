@@ -1,10 +1,14 @@
 import psycopg2
 import logging
 import boto3
+import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-s3_client = boto3.client('s3')
+S3_BUCKET_REGION = os.environ['S3_BUCKET_REGION']
+
+print('my_region %s' % S3_BUCKET_REGION)
+s3_client = boto3.client('s3', region_name=S3_BUCKET_REGION)
 
 # Functions for reading scripts
 
@@ -58,7 +62,7 @@ class RedshiftDataManager(object):
             "ExecutionState": status,
             "ExecutionMessage": result
         }
-
+        
     # Redshfit do not support the copy_expert, you can directly use the unload function
     # @staticmethod
     # def execute_query_output(con, cur, script, output_bucket, output_prefix):
@@ -109,7 +113,7 @@ class RedshiftDataManager(object):
         con = RedshiftDataManager.get_conn(db_connection)
         return RedshiftDataManager.execute_query(con, con.cursor(), script)
 
-    @staticmethod
-    def run_query_output(script, db_connection, output_bucket, output_prefix):
-        con = RedshiftDataManager.get_conn(db_connection)
-        return RedshiftDataManager.execute_query_output(con, con.cursor(), script, output_bucket, output_prefix)
+    # @staticmethod
+    # def run_query_output(script, db_connection, output_bucket, output_prefix):
+    #     con = RedshiftDataManager.get_conn(db_connection)
+    #     return RedshiftDataManager.execute_query_output(con, con.cursor(), script, output_bucket, output_prefix)

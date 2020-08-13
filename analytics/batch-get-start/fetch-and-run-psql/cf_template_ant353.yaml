@@ -1,0 +1,821 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This template creates a Redshift cluster and primes it with tpcds 1G schema
+Parameters:
+  ClusterType:
+    Description: The type of cluster
+    Type: String
+    Default: single-node
+    AllowedValues:
+      - single-node
+      - multi-node
+  NumberOfNodes:
+    Description: >-
+      The number of compute nodes in the cluster. For multi-node clusters, the
+      NumberOfNodes parameter must be greater than 1
+    Type: Number
+    Default: '1'
+  NodeType:
+    Description: The type of node to be provisioned
+    Type: String
+    Default: dc2.large
+    AllowedValues:
+      - dc2.large
+      - dc2.8xlarge
+      - ds2.xlarge
+      - ds2.8xlarge
+  MasterUsername:
+    Description: >-
+      The user name that is associated with the master user account for the
+      cluster that is being created
+    Type: String
+    Default: awsuser
+    AllowedPattern: '([a-z])([a-z]|[0-9])*'
+  MasterUserPassword:
+    Description: >-
+      The password that is associated with the master user account for the
+      cluster that is being created. Minimum eight characters, at least one
+      uppercase letter, one lowercase letter, one number and one special
+      character
+    Type: String
+    NoEcho: 'true'
+    Default: 'Password#123'
+    AllowedPattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
+  InboundTraffic:
+    Description: Allow inbound traffic to the cluster from this CIDR range.
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid CIDR range of the form x.x.x.x/x.
+  PortNumber:
+    Description: The port number on which the cluster accepts incoming connections.
+    Type: Number
+    Default: '5439'
+Conditions:
+  IsMultiNodeCluster: !Equals
+    - !Ref ClusterType
+    - multi-node
+Resources:
+  RedshiftS3ReadOnly:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - redshift.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8db933b7-64b9-40ae-acf9-ab977b64da27
+  LambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: BatchExecutionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'batch:SubmitJob'
+                  - 'batch:DescribeJobs'
+                  - 'logs:*'
+                Resource: '*'
+  StatesExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - !Sub 'states.${AWS::Region}.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'lambda:InvokeFunction'
+                Resource: '*'
+  RedshiftCluster:
+    Type: 'AWS::Redshift::Cluster'
+    DependsOn:
+      - AttachGateway
+      - RedshiftS3ReadOnly
+    Properties:
+      ClusterType: !Ref ClusterType
+      NumberOfNodes: !If
+        - IsMultiNodeCluster
+        - !Ref NumberOfNodes
+        - !Ref 'AWS::NoValue'
+      IamRoles:
+        - !GetAtt
+          - RedshiftS3ReadOnly
+          - Arn
+      NodeType: !Ref NodeType
+      DBName: dev
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      ClusterParameterGroupName: !Ref RedshiftClusterParameterGroup
+      VpcSecurityGroupIds:
+        - !Ref SecurityGroup
+      ClusterSubnetGroupName: !Ref RedshiftClusterSubnetGroup
+      PubliclyAccessible: 'true'
+      Port: !Ref PortNumber
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: cdda5f7c-0360-41d0-880d-4f284d603ded
+  RedshiftClusterParameterGroup:
+    Type: 'AWS::Redshift::ClusterParameterGroup'
+    Properties:
+      Description: Cluster parameter group
+      ParameterGroupFamily: redshift-1.0
+      Parameters:
+        - ParameterName: enable_user_activity_logging
+          ParameterValue: 'true'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 850fa411-feca-4791-907c-f38062109859
+  RedshiftClusterSubnetGroup:
+    Type: 'AWS::Redshift::ClusterSubnetGroup'
+    Properties:
+      Description: Cluster subnet group
+      SubnetIds:
+        - !Ref PublicSubnet
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: d43fbf80-4398-411a-aed9-e97cc9ed9b8a
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 581aecfb-0b93-4118-9d5e-76d1ab27f58f
+  PublicSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: 'True'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 41ab3157-eeaa-4c4f-a4a3-3b0278746ecd
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security group
+      SecurityGroupIngress:
+        - CidrIp: !Ref InboundTraffic
+          FromPort: !Ref PortNumber
+          ToPort: !Ref PortNumber
+          IpProtocol: tcp
+      VpcId: !Ref VPC
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 03262649-43b3-4d89-8faf-96014b49a1cd
+  myInternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 47784450-5e4b-41ba-8fbf-b9c220b751c7
+  AttachGateway:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref myInternetGateway
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 243b1566-6668-4854-b945-858b29a4c64d
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 93de69b5-0958-420c-8c05-e840d518c891
+  PublicRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref myInternetGateway
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: b894d96d-0887-41da-8047-85b36e5c2c70
+  PublicSubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: cf2304a3-b074-49c1-bc3e-fd5a17597d1f
+  BatchServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: batch.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8db933b7-64b9-40ae-acf9-ab977b64da27
+  IamInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Roles:
+        - !Ref EcsInstanceRole
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 390484fc-cd89-44ef-aeb5-f55d78c651c3
+  EcsInstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2008-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - >-
+          arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: aba8b7a7-71c3-4906-9777-59563f887525
+  ecsTaskRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8db933b7-64b9-40ae-acf9-ab977b64da27
+  JobDefinition:
+    Type: 'AWS::Batch::JobDefinition'
+    DependsOn: RedshiftCluster
+    Properties:
+      Type: container
+      ContainerProperties:
+        Image: !Join
+          - ''
+          - - 987719398599.dkr.ecr.
+            - !Ref 'AWS::Region'
+            - .amazonaws.com/fetchrunpsql
+        JobRoleArn: !Ref ecsTaskRole
+        Vcpus: 2
+        Memory: 2000
+        Environment:
+          - Value: script_psql
+            Name: BATCH_FILE_TYPE
+          - Value: 2010-10-10
+            Name: DATASET_DATE
+          - Value: 's3://salamander-us-east-1/reinvent2018/ant353/etlscript/'
+            Name: S3_DATA_LOC
+          - Value: !GetAtt
+              - RedshiftS3ReadOnly
+              - Arn
+            Name: S3_DATA_READ_ROLE
+          - Value: 's3://salamander-us-east-1/reinvent2018/ant353/etlscript/psql_rs.sh'
+            Name: BATCH_FILE_S3_URL
+          - Value: 's3://salamander-us-east-1/reinvent2018/ant353/etlscript/tpsds.sql'
+            Name: BATCH_FILE_SQL_S3_URL
+          - Value: !GetAtt
+              - RedshiftCluster
+              - Endpoint.Address
+            Name: REDSHIFT_ENDPOINT
+          - Value: !GetAtt
+              - RedshiftCluster
+              - Endpoint.Port
+            Name: REDSHIFT_PORT
+          - Value: dev
+            Name: REDSHIFT_DBNAME
+          - Value: !Ref MasterUsername
+            Name: REDSHIFT_USER
+          - Value: !Ref MasterUserPassword
+            Name: REDSHIFT_PASSWORD
+        Command:
+          - myjob.sh
+      RetryStrategy:
+        Attempts: 1
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 9113156c-e8b7-4785-bbba-4a9290c956a8
+  JobQueue:
+    Type: 'AWS::Batch::JobQueue'
+    Properties:
+      Priority: 1
+      ComputeEnvironmentOrder:
+        - Order: 1
+          ComputeEnvironment: !Ref ComputeEnvironment
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: de7aa432-32fd-4dfb-b874-2231d3f33929
+  ComputeEnvironment:
+    Type: 'AWS::Batch::ComputeEnvironment'
+    Properties:
+      Type: MANAGED
+      ComputeResources:
+        Type: EC2
+        MinvCpus: 0
+        DesiredvCpus: 0
+        MaxvCpus: 64
+        InstanceTypes:
+          - optimal
+        Subnets:
+          - !Ref PublicSubnet
+        SecurityGroupIds:
+          - !Ref SecurityGroup
+        InstanceRole: !Ref IamInstanceProfile
+      ServiceRole: !Ref BatchServiceRole
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 5422a41a-801a-41f5-8c4c-c6ee11ea366b
+  SubmitJobFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Handler: index.lambda_handler
+      Role: !GetAtt
+        - LambdaExecutionRole
+        - Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          print('Loading function')
+          batch = boto3.client('batch')
+          def lambda_handler(event, context):
+              # Log the received event
+              print("Received event: " + json.dumps(event, indent=2))
+              print("Event StepId" + event['stepId'])
+              stepId = event['stepId']
+              # Get parameters for the SubmitJob call
+              # http://docs.aws.amazon.com/batch/latest/APIReference/API_SubmitJob.html
+
+              jobName = event[stepId]['jobName']
+              jobQueue = event[stepId]['jobQueue']
+              jobDefinition = event[stepId]['jobDefinition']
+              # containerOverrides and parameters are optional
+
+              if event.get(stepId).get('containerOverrides'):
+                  containerOverrides = event[stepId]['containerOverrides']
+              else:
+                  containerOverrides = {}
+              if event.get(stepId).get('parameters'):
+                  parameters = event[stepId]['parameters']
+              else:
+                  parameters = {}
+
+              try:
+                  # Submit a Batch Job
+                  response = batch.submit_job(jobQueue=jobQueue, jobName=jobName, jobDefinition=jobDefinition,
+                                              containerOverrides=containerOverrides, parameters=parameters)
+                  # Log response from AWS Batch
+                  print("Response: " + json.dumps(response, indent=2))
+                  # Return the jobId
+                  jobId = response['jobId']
+                  event['jobId'] = response['jobId']
+                  return event
+              except Exception as e:
+                  print(e)
+                  message = 'Error submitting Batch Job'
+                  print(message)
+                  raise Exception(message)
+      Runtime: python3.6
+      Timeout: '25'
+  CheckJobFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Handler: index.lambda_handler
+      Role: !GetAtt
+        - LambdaExecutionRole
+        - Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          print('Loading function')
+
+          batch = boto3.client('batch')
+
+          def lambda_handler(event, context):
+              # Log the received event
+              print("Received event: " + json.dumps(event, indent=2))
+              # Get jobId from the event
+              jobId = event['jobId']
+
+              try:
+                  # Call DescribeJobs
+                  response = batch.describe_jobs(jobs=[jobId])
+                  # Log response from AWS Batch
+                  print("Response: " + json.dumps(response, indent=2))
+                  # Return the jobtatus
+                  jobStatus = response['jobs'][0]['status']
+                  return jobStatus
+              except Exception as e:
+                  print(e)
+                  message = 'Error getting Batch Job status'
+                  print(message)
+                  raise Exception(message)
+      Runtime: python3.6
+      Timeout: '25'
+  JobStatusPollerStateMachine:
+    Type: 'AWS::StepFunctions::StateMachine'
+    Properties:
+      DefinitionString: !Sub
+        - |-
+          {
+             "Comment":"A simple example that submits a Job to AWS Batch",
+             "StartAt":"DBConnectionInit",
+             "States":{
+                "DBConnectionInit":{
+                   "Type":"Pass",
+                   "Next":"SubmitDBConnectionCheckJob",
+                   "Result":"DBConnection",
+                   "ResultPath":"$.stepId"
+                },
+                "SubmitDBConnectionCheckJob":{
+                   "Type":"Task",
+                   "Resource":"${submitJobArn}",
+                   "Next":"GetDBConnectionCheckJobStatus"
+                },
+                "GetDBConnectionCheckJobStatus":{
+                   "Type":"Task",
+                   "Resource":"${checkJobArn}",
+                   "Next":"CheckDBConnectionCheckJobStatus",
+                   "InputPath":"$",
+                   "ResultPath":"$.status"
+                },
+                "CheckDBConnectionCheckJobStatus":{
+                   "Type":"Choice",
+                   "Choices":[
+                      {
+                         "Variable":"$.status",
+                         "StringEquals":"FAILED",
+                         "Next":"FailState"
+                      },
+                      {
+                         "Variable":"$.status",
+                         "StringEquals":"SUCCEEDED",
+                         "Next":"GetFinalDBConnectionCheckJobStatus"
+                      }
+                   ],
+                   "Default":"DBConnectionCheckWait30Seconds"
+                },
+                "DBConnectionCheckWait30Seconds":{
+                   "Type":"Wait",
+                   "Seconds":30,
+                   "Next":"GetDBConnectionCheckJobStatus"
+                },
+                "GetFinalDBConnectionCheckJobStatus":{
+                   "Type":"Task",
+                   "Resource":"${checkJobArn}",
+                   "Next":"Parallel",
+                   "InputPath":"$",
+                   "ResultPath":"$.status"
+                },
+                "Parallel":{
+                   "Type":"Parallel",
+                   "Next":"SalesFACTInit",
+                   "ResultPath":"$.status",
+                   "Branches":[
+                      {
+                         "StartAt":"CustomerAddressDimInit",
+                         "States":{
+                           "CustomerAddressDimInit":{
+                              "Type":"Pass",
+                              "Next":"SubmitCustomerAddressDimJob",
+                              "Result":"CustomerAddressDim",
+                              "ResultPath":"$.stepId"
+                           },
+                            "SubmitCustomerAddressDimJob":{
+                               "Type":"Task",
+                               "Resource":"${submitJobArn}",
+                               "Next":"GetCustomerAddressDimJobStatus"
+                            },
+                            "GetCustomerAddressDimJobStatus":{
+                               "Type":"Task",
+                               "Resource":"${checkJobArn}",
+                               "Next":"CheckCustomerAddressDimJobStatus",
+                               "InputPath":"$",
+                               "ResultPath":"$.status"
+                            },
+                            "CheckCustomerAddressDimJobStatus":{
+                               "Type":"Choice",
+                               "Choices":[
+                                  {
+                                     "Variable":"$.status",
+                                     "StringEquals":"FAILED",
+                                     "Next":"FailStateCustAdd"
+                                  },
+                                  {
+                                     "Variable":"$.status",
+                                     "StringEquals":"SUCCEEDED",
+                                     "Next":"GetFinalCustomerAddressDimJobStatus"
+                                  }
+                               ],
+                               "Default":"Wait30Seconds"
+                            },
+                            "Wait30Seconds":{
+                               "Type":"Wait",
+                               "Seconds":30,
+                               "Next":"GetCustomerAddressDimJobStatus"
+                            },
+                            "GetFinalCustomerAddressDimJobStatus":{
+                               "Type":"Task",
+                               "Resource":"${checkJobArn}",
+                               "End":true
+                            },
+                                                      "FailStateCustAdd":{
+                   "Type":"Fail",
+                   "Cause": "ETL Workflow Failed",
+                   "Error": "Error"
+                }
+                         }
+                      },
+                      {
+                         "StartAt":"ItemDimInit",
+                         "States":{
+                           "ItemDimInit":{
+                              "Type":"Pass",
+                              "Next":"SubmitItemDimJob",
+                              "Result":"ItemDim",
+                              "ResultPath":"$.stepId"
+                           },
+                            "SubmitItemDimJob":{
+                               "Type":"Task",
+                               "Resource":"${submitJobArn}",
+                               "Next":"GetSamtoolsItemDimJobStatus"
+                            },
+                            "GetSamtoolsItemDimJobStatus":{
+                               "Type":"Task",
+                               "Resource":"${checkJobArn}",
+                               "Next":"CheckSamtoolsItemDimJobStatus",
+                               "InputPath":"$",
+                               "ResultPath":"$.status"
+                            },
+                            "CheckSamtoolsItemDimJobStatus":{
+                               "Type":"Choice",
+                               "Choices":[
+                                  {
+                                     "Variable":"$.status",
+                                     "StringEquals":"FAILED",
+                                     "Next":"FailStateItem"
+                                  },
+                                  {
+                                     "Variable":"$.status",
+                                     "StringEquals":"SUCCEEDED",
+                                     "Next":"GetFinalSamtoolsItemDimJobStatus"
+                                  }
+                               ],
+                               "Default":"Wait30SecondsItemDim"
+                            },
+                            "Wait30SecondsItemDim":{
+                               "Type":"Wait",
+                               "Seconds":30,
+                               "Next":"GetSamtoolsItemDimJobStatus"
+                            },
+                            "GetFinalSamtoolsItemDimJobStatus":{
+                               "Type":"Task",
+                               "Resource":"${checkJobArn}",
+                               "End":true
+                            },
+                                     "FailStateItem":{
+                   "Type":"Fail",
+                   "Cause": "ETL Workflow Failed",
+                   "Error": "Error"
+                }
+                         }
+                      }
+                   ]
+                },
+                "SalesFACTInit":{
+                   "Type":"Pass",
+                   "Next":"SubmitStoreSalesFACTJob",
+                   "Result":"SalesFACT",
+                   "ResultPath":"$.stepId"
+                },
+                "SubmitStoreSalesFACTJob":{
+                   "Type":"Task",
+                   "Resource":"${submitJobArn}",
+                   "Next":"GetStoreSalesFACTJobStatus"
+                },
+                "GetStoreSalesFACTJobStatus":{
+                   "Type":"Task",
+                   "Resource":"${checkJobArn}",
+                   "Next":"CheckStoreSalesFACTJobStatus",
+                   "InputPath":"$",
+                   "ResultPath":"$.status"
+                },
+                "CheckStoreSalesFACTJobStatus":{
+                   "Type":"Choice",
+                   "Choices":[
+                      {
+                         "Variable":"$.status",
+                         "StringEquals":"FAILED",
+                         "Next":"FailState"
+                      },
+                      {
+                         "Variable":"$.status",
+                         "StringEquals":"SUCCEEDED",
+                         "Next":"GetFinalStoreSalesFACTJobStatus"
+                      }
+                   ],
+                   "Default":"StoreSalesFACTWait30Seconds"
+                },
+                "StoreSalesFACTWait30Seconds":{
+                   "Type":"Wait",
+                   "Seconds":30,
+                   "Next":"GetStoreSalesFACTJobStatus"
+                },
+                "GetFinalStoreSalesFACTJobStatus":{
+                   "Type":"Task",
+                   "Resource":"${checkJobArn}",
+                   "Next":"FinalState",
+                   "InputPath":"$",
+                   "ResultPath":"$.status"
+                },
+                "FinalState":{
+                   "Type":"Pass",
+                   "End":true
+                },
+                "FailState":{
+                   "Type":"Fail",
+                   "Cause": "ETL Workflow Failed",
+                   "Error": "Error"
+                }
+             }
+          }
+        - submitJobArn: !GetAtt
+            - SubmitJobFunction
+            - Arn
+          checkJobArn: !GetAtt
+            - CheckJobFunction
+            - Arn
+      RoleArn: !GetAtt
+        - StatesExecutionRole
+        - Arn
+Outputs:
+  ClusterEndpoint:
+    Description: Endpoint for the newly created RedShift cluster
+    Value: !Join
+      - ':'
+      - - !GetAtt
+          - RedshiftCluster
+          - Endpoint.Address
+        - !GetAtt
+          - RedshiftCluster
+          - Endpoint.Port
+  ComputeEnvironmentArn:
+    Value: !Ref ComputeEnvironment
+  JobQueueArn:
+    Value: !Ref JobQueue
+  JobDefinitionArn:
+    Value: !Ref JobDefinition
+  ExecutionInput:
+    Description: ETL input to StartExecution.
+    Value: !Sub
+      - |-
+        {
+        "DBConnection":{
+           "jobName":"my-job",
+           "jobDefinition":"${jobDefinition}",
+           "jobQueue":"${jobQueue}",
+           "wait_time":60,
+           "containerOverrides":{
+              "environment":[
+                 {
+                    "name":"BATCH_FILE_TYPE",
+                    "value":"script_psql"
+                 },
+                 {
+                    "name":"BATCH_FILE_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/psql_rs.sh"
+                 },
+                 {
+                    "name":"BATCH_FILE_SQL_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/transform.sql"
+                 }
+              ]
+           }
+        },
+        "CustomerAddressDim" : {
+           "jobName":"my-job",
+           "jobDefinition":"${jobDefinition}",
+           "jobQueue":"${jobQueue}",
+           "wait_time":60,
+           "containerOverrides":{
+              "environment":[
+                 {
+                    "name":"BATCH_FILE_TYPE",
+                    "value":"script_psql"
+                 },
+                 {
+                    "name":"BATCH_FILE_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/psql_rs.sh"
+                 },
+                 {
+                    "name":"BATCH_FILE_SQL_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/customer_address.sql"
+                 },
+                 {
+                    "name":"DATASET_DATE",
+                    "value":"2003-01-02"
+                 }
+              ]
+           }
+        },
+        "ItemDim" : {
+           "jobName":"my-job",
+           "jobDefinition":"${jobDefinition}",
+           "jobQueue":"${jobQueue}",
+           "wait_time":60,
+           "containerOverrides":{
+              "environment":[
+                 {
+                    "name":"BATCH_FILE_TYPE",
+                    "value":"script_psql"
+                 },
+                 {
+                    "name":"BATCH_FILE_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/psql_rs.sh"
+                 },
+                 {
+                    "name":"BATCH_FILE_SQL_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/item.sql"
+                 },
+                 {
+                    "name":"DATASET_DATE",
+                    "value":"2003-01-02"
+                 }
+              ]
+           }
+        },
+        "SalesFACT": {
+           "jobName":"my-job",
+           "jobDefinition":"${jobDefinition}",
+           "jobQueue":"${jobQueue}",
+           "wait_time":60,
+           "containerOverrides":{
+              "environment":[
+                 {
+                    "name":"BATCH_FILE_TYPE",
+                    "value":"script_psql"
+                 },
+                 {
+                    "name":"BATCH_FILE_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/psql_rs.sh"
+                 },
+                 {
+                    "name":"BATCH_FILE_SQL_S3_URL",
+                    "value":"s3://salamander-us-east-1/reinvent2018/ant353/etlscript/store_sales.sql"
+                 },
+                 {
+                    "name":"DATASET_DATE",
+                    "value":"2003-01-02"
+                 }
+              ]
+           }
+        }
+        }
+      - jobDefinition: !Ref JobDefinition
+        jobQueue: !Ref JobQueue
