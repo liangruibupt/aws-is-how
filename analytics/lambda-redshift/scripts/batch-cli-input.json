@@ -1,71 +1,71 @@
 {
-    "jobName": "",
-    "jobQueue": "",
-    "arrayProperties": {
-        "size": 0
-    },
-    "dependsOn": [
-        {
-            "jobId": "",
-            "type": "SEQUENTIAL"
-        }
-    ],
-    "jobDefinition": "",
-    "parameters": {
-        "KeyName": ""
-    },
+    "jobName": "redshift-demo",
+    "jobQueue": "small-batch-env",
+    "jobDefinition": "fetch_and_run:1",
     "containerOverrides": {
-        "vcpus": 0,
-        "memory": 0,
+        "vcpus": 1,
+        "memory": 500,
         "command": [
-            ""
+            "demo"
         ],
-        "instanceType": "",
         "environment": [
             {
-                "name": "",
-                "value": ""
-            }
-        ],
-        "resourceRequirements": [
+                "name": "REDSHIFT_DATABASE",
+                "value": "DATABASE"
+            },
             {
-                "value": "",
-                "type": "GPU"
-            }
-        ]
-    },
-    "nodeOverrides": {
-        "numNodes": 0,
-        "nodePropertyOverrides": [
+                "name": "REDSHIFT_USER",
+                "value": "USER"
+            },
             {
-                "targetNodes": "",
-                "containerOverrides": {
-                    "vcpus": 0,
-                    "memory": 0,
-                    "command": [
-                        ""
-                    ],
-                    "instanceType": "",
-                    "environment": [
-                        {
-                            "name": "",
-                            "value": ""
-                        }
-                    ],
-                    "resourceRequirements": [
-                        {
-                            "value": "",
-                            "type": "GPU"
-                        }
-                    ]
-                }
+                "name": "REDSHIFT_PASSWD",
+                "value": "PASSWD"
+            },
+            {
+                "name": "REDSHIFT_PORT",
+                "value": "5439"
+            },{
+                "name": "REDSHIFT_ENDPOINT",
+                "value": "etl-demo.xxxxxx.cn-northwest-1.redshift.amazonaws.com.cn"
+            },
+            {
+                "name": "SCRIPT_PATH",
+                "value": "."
+            },
+            {
+                "name": "REDSHIFT_CLUSTER",
+                "value": "etl-demo"
+            },
+            {
+                "name": "BATCH_FILE_LIBRARY_S3_URL",
+                "value": "s3://redshift-training/batch-demo/scripts/redshift_utils.py"
+            },
+            {
+                "name": "BATCH_FILE_S3_URL",
+                "value": "s3://redshift-training/batch-demo/scripts/redshift_etl_demo.py"
+            },
+            {
+                "name": "BATCH_FILE_TYPE",
+                "value": "script_python"
+            },
+            {
+                "name": "S3_BUCKET_REGION",
+                "value": "cn-northwest-1"
+            },
+            {
+                "name": "BATCH_FILE_SQL_S3_URL",
+                "value": "s3://redshift-training/batch-demo/scripts/query_flights_table.ddl"
+            },
+            {
+                "name": "PYTHON_PARAMS",
+                "value": "redshift_query"
             }
         ]
     },
     "retryStrategy": {
-        "attempts": 0
+        "attempts": 1
     },
     "timeout": {
-        "attemptDurationSeconds": 0
+        "attemptDurationSeconds": 600
     }
 }

@@ -188,7 +188,7 @@ Follow up the [guide to setup the AWS Batch environment](https://aws.amazon.com/
 
 2. Submit and run a job
 ```bash
-aws batch submit-job --cli-input-json file://batch-cli-input.json --endpoint-url https://batch.cn-northwest-1.amazonaws.com.cn
+aws batch submit-job --cli-input-json file://batch-cli-input.json
 aws batch describe-jobs --endpoint-url https://batch.cn-northwest-1.amazonaws.com.cn --jobs 
 ```
 
