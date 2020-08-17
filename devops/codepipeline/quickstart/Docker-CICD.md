@@ -85,7 +85,7 @@ git push
 ```
 
 ## Step 8: Creating ECS resources
-1. Create the Task Definition for `hello-world` with hello-world ECR image and map to 8080 port
+1. Create the Task Definition for `hello-world` with hello-world ECR image and map to 9080 port
 ```bash
 aws ecr create-repository --repository-name hello-world --region ap-southeast-1 --profile global
 cd webpage-demo
@@ -112,9 +112,9 @@ aws ecs describe-services --cluster ecs-demo --services my-service --region ap-s
   - Runtime(s), choose Standard.
   - Image, choose aws/codebuild/amazonlinux2-x86_64-standard:3.0.
   - Image version and Environment type, use the default values.
-  - Privileged: Check the select box
+  - Privileged: Select Enable this flag if you want to build Docker images or want your builds to get elevated privileges.
   - Service Role: MyCodeBuildRole (with AmazonEC2ContainerRegistryPowerUser permission)
-  - Builspec: Using the buildspec.yml in the source code root directory
+  - Builspec: Using the buildspec.yml in the `webpage-demo` directory
   - CloudWatch logs: /aws/codebuild/codebuilddemo
   - Build type: Single build
 - Deploy stage
@@ -124,7 +124,7 @@ aws ecs describe-services --cluster ecs-demo --services my-service --region ap-s
 
 ## Step 9: Verify your pipeline ran successfully
 1. Verify your pipeline ran successfully
-2. Access the Public DNS of your ALB in your browser to view sample ECS application (8080)
+2. Access the Public DNS of your ALB in your browser to view sample ECS application (9080)
 
 ## TroubleShooting: 
 [Cannot connect to the Docker daemon](https://github.com/aws/aws-codebuild-docker-images/issues/164)

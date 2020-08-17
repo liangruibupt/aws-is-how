@@ -6,7 +6,9 @@
 
 [Docker-CICD](quickstart/Docker-CICD.md)
 
-[Docker-CICD](quickstart/Docker-CICD.md)
+[Cross-Region-CICD](quickstart/Cross-Region-Global.md)
+
+[Add Lambda and StepFunction in pipeline](quickstart/Lambda-StepFunction.md)
 
 # Reference
 [CodePipeline tutorials](https://docs.aws.amazon.com/zh_cn/codepipeline/latest/userguide/tutorials.html)

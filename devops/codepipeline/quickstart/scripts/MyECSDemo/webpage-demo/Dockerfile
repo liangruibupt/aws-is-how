@@ -8,6 +8,6 @@ RUN pip install flask;
 
 COPY . /src
 
-EXPOSE 8080
+EXPOSE 9080
 
 CMD cd /src && python webpage.py
