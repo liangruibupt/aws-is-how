@@ -1,1 +1,5 @@
+/home/ec2-user/workspace/aws-is-how/integration/SQS/quick_example_code/src/main/java/aws/example/sqs/ExampleConfiguration.java
+/home/ec2-user/workspace/aws-is-how/integration/SQS/quick_example_code/src/main/java/aws/example/sqs/TextMessageSender.java
 /home/ec2-user/workspace/aws-is-how/integration/SQS/quick_example_code/src/main/java/aws/example/sqs/SendReceiveMessages.java
+/home/ec2-user/workspace/aws-is-how/integration/SQS/quick_example_code/src/main/java/aws/example/sqs/SyncMessageReceiver.java
+/home/ec2-user/workspace/aws-is-how/integration/SQS/quick_example_code/src/main/java/aws/example/sqs/ExampleCommon.java

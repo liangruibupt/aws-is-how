@@ -145,4 +145,4 @@
 
 [How to build Amazon SNS HTTP Subscription?](integration/SNS/SNS-HTTP-Subscription.md)
 
-[SQS quick start demo](integration/SQS)
+[SQS quick start demo for Standard Queue and JMS](integration/SQS)

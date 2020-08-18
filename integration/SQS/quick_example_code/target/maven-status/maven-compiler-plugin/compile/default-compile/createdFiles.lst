@@ -1,1 +1,5 @@
+aws/example/sqs/SyncMessageReceiver.class
 aws/example/sqs/SendReceiveMessages.class
+aws/example/sqs/TextMessageSender.class
+aws/example/sqs/ExampleConfiguration.class
+aws/example/sqs/ExampleCommon.class
