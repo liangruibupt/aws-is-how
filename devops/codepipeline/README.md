@@ -1,6 +1,6 @@
 # CodePiple Workshop
 
-[CodePiple with CodeCommit and CodeDeploy](quickstart/)
+[CodePiple with CodeCommit and CodeDeploy](quickstart/README.md)
 
 [Static-WebSite](quickstart/Static-WebSite.md)
 

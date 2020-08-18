@@ -1,0 +1,5 @@
+version: 0.0
+os: linux
+files:
+  - source: ./target/messageUtil-1.0.jar
+    destination: /tmp
