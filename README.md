@@ -143,4 +143,6 @@
 
 ## Integration
 
-[如何构建Amazon SNS HTTP Subscription?](integration/SNS-HTTP-Subscription.md)
+[How to build Amazon SNS HTTP Subscription?](integration/SNS/SNS-HTTP-Subscription.md)
+
+[SNS quick start demo](integration/SQS)
