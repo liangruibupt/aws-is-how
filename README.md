@@ -57,7 +57,9 @@
 
 [NLB-TLS-Termination + Access log](network/nlb/NLB-TLS-Termination.md)
 
-[Direct Connect Monitoring](network/DX-Monitoring.md)
+[Direct Connect Cheat sheet](network/direct-connect/)
+
+[Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
 
 [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
 
