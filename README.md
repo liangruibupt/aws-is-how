@@ -29,6 +29,8 @@
 
 [AWS Batch Getting Start demo](analytics/batch-get-start)
 
+[AWS EMR Workshop](analytics/emr/101Workshop)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -86,6 +88,8 @@
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
+
+[How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
 
 ## Storage
 
