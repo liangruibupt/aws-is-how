@@ -27,4 +27,4 @@ if __name__ == "__main__":
 
     print("Total number of records: " + str(updatedNYTaxi.count()))
 
-    updatedNYTaxi.write.parquet(sys.argv[2])
+    updatedNYTaxi.write.format("parquet").mode("overwrite").save(sys.argv[2])
