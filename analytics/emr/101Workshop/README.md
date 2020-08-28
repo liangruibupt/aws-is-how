@@ -20,7 +20,8 @@ ssh -i EMRKeyPair.pem hadoop@ec2-18-162-232-142.ap-east-1.compute.amazonaws.com
 ```
 
 - Emr transient cluster enable auto-termination
-Calculates the total number of requests per operating system over a specified time frame from CloudFront logs
+
+Spark cluster
 
 ```bash
 aws emr create-cluster --name "Add Spark Step Cluster" --release-label emr-5.30.1 \
@@ -30,14 +31,17 @@ aws emr create-cluster --name "Add Spark Step Cluster" --release-label emr-5.30.
 --use-default-roles --log-uri s3://aws-logs-747411437379-ap-east-1/elasticmapreduce/ \
 --steps Type=CUSTOM_JAR,Name="Spark Program",Jar="command-runner.jar",ActionOnFailure=CONTINUE,Args=[spark-example,SparkPi,10] \
 --use-default-roles --auto-terminate --region ap-east-1 --profile hongkong
+```
 
+Hive Cluster
 
+```bash
 aws emr create-cluster --name "emr-lab-transient" --release-label emr-5.30.1 \
 --applications Name=Hadoop Name=Pig Name=Hue Name=Hive Name=Tez \
 --ec2-attributes KeyName=EMRKeyPair,SubnetIds=subnet-0a5ba02735f8cb53d \
 --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m5.xlarge InstanceGroupType=CORE,InstanceCount=2,InstanceType=m5.xlarge \
 --use-default-roles --log-uri s3://aws-logs-747411437379-ap-east-1/elasticmapreduce/ \
---steps Type=Pig,Name="ny_taxi_pig",ActionOnFailure=CONTINUE,Args=[-f,s3://emr-workshop-lab-747411437379/files/ny-taxi.pig,-p,INPUT=s3://emr-workshop-lab-747411437379/input/tripdata.csv,-p,OUTPUT=s3://emr-workshop-lab-747411437379/output/pig] \
+--steps Type=Hive,Name="ny_taxi_test",ActionOnFailure=CONTINUE,Args=[-f,s3://emr-workshop-lab-747411437379/files/ny-taxi.hql,-d,INPUT=s3://emr-workshop-lab-747411437379/input/,-d,OUTPUT=s3://emr-workshop-lab-747411437379/output/hive/,-hiveconf,hive.support.sql11.reserved.keywords=false] \
 --auto-terminate --region ap-east-1 --profile hongkong
 ```
 
@@ -311,17 +315,106 @@ aws emr create-cluster --release-label emr-5.30.1 \
   --region ap-east-1 --profile ap-east-1
 ```
 
+## HBase
+```
+hbase shell
+
+hbase(main):001:0> create 'ODS_DT_ONLINE_TRAIN_DATA_LOG', {NAME => 'F_DATA', TTL => '31536000 SECONDS (365 DAYS)', COMPRESSION => 'SNAPPY'};
+hbase(main):002:0* 
+```
+
+## Real-time Stream Processing Using Amazon Managed Streaming for Apache Kafka (MSK) and EMR Spark
+1. Follow up the [guide to create the MSK cluster](https://docs.aws.amazon.com/msk/latest/developerguide/getting-started.html)
+
+Create the MSKDemoConfig cluster configuration when you create the cluter
+
+```bash
+ auto.create.topics.enable = true
+ delete.topic.enable = true
+ log.retention.hours = 8
+```
+
+2. Access the MSK to test
+- Test the cluster
+```bash
+sudo yum install java-1.8.0
+export JAVA_HOME="/usr/lib/jvm/jre-1.8.0-openjdk.x86_64"
+export PATH=$JAVA_HOME/bin:$PATH
+
+wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
+tar -xzf kafka_2.12-2.2.1.tgz
+cd kafka_2.12-2.2.1/
+
+ClusterArn=YOUR_CLUSTER_ARN
+ZookeeperConnectString=$(aws kafka describe-cluster --cluster-arn $ClusterArn --region ap-east-1 | jq .ClusterInfo.ZookeeperConnectString | sed 's/"//g' )
+echo ${ZookeeperConnectString}
+bin/kafka-topics.sh --create --zookeeper $ZookeeperConnectString --replication-factor 3 --partitions 1 --topic blog-replay
+bin/kafka-topics.sh --zookeeper $ZookeeperConnectString --list
+
+cp $JAVA_HOME/jre/lib/security/cacerts /tmp/kafka.client.truststore.jks
+
+# create client.properties
+cat kafka_2.12-2.2.1/config/client.properties
+security.protocol=SSL
+ssl.truststore.location=/tmp/kafka.client.truststore.jks
+
+BootstrapBrokerString=$(aws kafka get-bootstrap-brokers --cluster-arn $ClusterArn --region ap-east-1 | jq .BootstrapBrokerString | sed 's/"//g' )
+echo ${BootstrapBrokerString}
+
+BootstrapBrokerStringTls=$(aws kafka get-bootstrap-brokers --cluster-arn $ClusterArn --region ap-east-1 | jq .BootstrapBrokerStringTls | sed 's/"//g' )
+echo ${BootstrapBrokerStringTls}
+```
+
+3. Run the Spark Streaming app to process clickstream events
+```bash
+# Build application
+git clone https://github.com/awslabs/aws-big-data-blog.git
+cd aws-big-data-blog/aws-blog-sparkstreaming-from-kafka
+mvn clean install
+
+aws s3 cp target/kafkaandsparkstreaming-0.0.1-SNAPSHOT-jar-with-dependencies.jar s3://emr-workshop-lab-747411437379/files/ --region ap-east-1
+
+# Run the Spark Streaming app and process clickstream events from the Kafka topic.
+aws emr add-steps --cluster-id j-N99HEXWVFXSW --region ap-east-1 \
+--steps Type=spark,Name=SparkstreamingfromKafka,Args=[--deploy-mode,cluster,--master,yarn,--conf,spark.yarn.submit.waitAppCompletion=true,--conf,spark.sql.catalogImplementation=hive,--num-executors,3,--executor-cores,3,--executor-memory,3g,--class,com.awsproserv.kafkaandsparkstreaming.ClickstreamSparkstreaming,s3://emr-workshop-lab-747411437379/files/kafkaandsparkstreaming-0.0.1-SNAPSHOT-jar-with-dependencies.jar,$BootstrapBrokerString,blog-replay],ActionOnFailure=CONTINUE
+
+# Use the Kafka producer app to publish clickstream events into the Kafka topic
+java -cp target/kafkaandsparkstreaming-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.awsproserv.kafkaandsparkstreaming.ClickstreamKafkaProducer 25 blog-replay $BootstrapBrokerString
+log4j:WARN No appenders could be found for logger (kafka.utils.VerifiableProperties).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+sent per second: 1785
+```
+
+4. Explore clickstream event data with SparkSQL
+```bash
+# connecting to the master node with SSH to launch the spark-sql CLI session:
+spark-sql 
+
+select * from csmessages_hive_table limit 10;
+```
+
 ## EMR Notebooks and SageMaker
 EMR Notebooks are serverless Jupyter notebooks that connect to an EMR cluster using Apache Livy. They come preconfigured with Spark, allowing you to interactively run Spark jobs in a familiar Jupyter environment. 
 
+![notebook1.png](media/notebook1.png)
+
 1. Attach the `AmazonSageMakerFullAccess` to `EMR_EC2_DefaultRole` Role
 2. Create the `SageMaker-EMR-ExecutionRole` Role for SageMaker service
-3. Create an EMR Notebook
+3. Create an EMR Notebook and choice cluster created in this lab
+
+![notebook11.png](media/notebook11.png)
+
+4. Run the Jupyter notebook [EMRSparkNotebook.ipynb](scripts/EMRSparkNotebook.ipynb) for training and inference
+
+Remember enter the `SageMaker-EMR-ExecutionRole` ARN and the region code in the first cell.
 
 
 ## Cleanup
 ```bash
-aws emr terminate-clusters --cluster-id j-N99HEXWVFXSW --region ap-east-1
+- delete the EMR Notebook
+- aws emr terminate-clusters --cluster-id j-N99HEXWVFXSW --region ap-east-1
+- delete the S3 bucket
 ```
 
 ## Reference:
@@ -332,3 +425,7 @@ aws emr terminate-clusters --cluster-id j-N99HEXWVFXSW --region ap-east-1
 [Introducing Amazon EMR Managed Scaling – Automatically Resize Clusters to Lower Cost](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-managed-scaling-automatically-resize-clusters-to-lower-cost/)
 
 [Managed Streaming for Apache Kafka](https://noise.getoto.net/tag/managed-streaming-for-apache-kafka/)
+
+[Get Start MSK](https://aws.amazon.com/blogs/aws/amazon-managed-streaming-for-apache-kafka-msk-now-generally-available/)
+
+[Real-time Stream Processing Using Apache Spark Streaming and Apache Kafka on AWS](https://aws.amazon.com/blogs/big-data/real-time-stream-processing-using-apache-spark-streaming-and-apache-kafka-on-aws/)
