@@ -414,6 +414,8 @@ Remember enter the `SageMaker-EMR-ExecutionRole` ARN and the region code in the 
 ```bash
 - delete the EMR Notebook
 - aws emr terminate-clusters --cluster-id j-N99HEXWVFXSW --region ap-east-1
+- delete the MSK cluter
+- termiate the MSK client EC2
 - delete the S3 bucket
 ```
 

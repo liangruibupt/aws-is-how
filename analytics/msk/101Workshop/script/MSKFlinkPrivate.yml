@@ -1,0 +1,524 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Can contain only ASCII characters.
+  SSHLocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x
+Mappings:
+  SubnetConfig:
+      VPC:
+        CIDR: '10.0.0.0/16'
+      PublicOne:
+        CIDR: '10.0.0.0/24'
+      PrivateSubnetMSKOne:
+        CIDR: '10.0.1.0/24'
+      PrivateSubnetMSKTwo:
+        CIDR: '10.0.2.0/24'
+      PrivateSubnetMSKThree:
+        CIDR: '10.0.3.0/24'
+  RegionAMI:
+      us-east-1:
+        HVM64: ami-00dc79254d0461090
+      us-west-2:
+        HVM64: ami-0a85857bfc5345c38
+      eu-west-1:
+        HVM64: ami-040ba9174949f6de4
+      # us-east-1:
+      #   #AMI with kafka, kafkacat, JDK, CLI pre-installed
+      #   HVM64: ami-0dcd7e197722e6874
+      # us-west-2:
+      #   HVM64: ami-0cb72367e98845d43
+      # eu-west-1:
+      #   HVM64: ami-0aaef8347b162f148
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+      Tags:
+        - Key: 'Name'
+          Value: 'MMVPC'
+
+  PublicSubnetOne:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+         Fn::Select:
+         - 0
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PublicOne', 'CIDR']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: 'Name'
+          Value: 'MMPublicSubnet'
+  PrivateSubnetMSKOne:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+         Fn::Select:
+         - 0
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateSubnetMSKOne', 'CIDR']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: 'Name'
+          Value: 'PrivateSubnetMSKOne'
+  PrivateSubnetMSKTwo:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+         Fn::Select:
+         - 1
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateSubnetMSKTwo', 'CIDR']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: 'Name'
+          Value: 'PrivateSubnetMSKTwo'
+  PrivateSubnetMSKThree:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+         Fn::Select:
+         - 2
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateSubnetMSKThree', 'CIDR']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: 'Name'
+          Value: 'PrivateSubnetMSKThree'
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  GatewayAttachement:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref 'VPC'
+      InternetGatewayId: !Ref 'InternetGateway'
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'VPC'
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachement
+    Properties:
+      RouteTableId: !Ref 'PublicRouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref 'InternetGateway'
+  PublicSubnetOneRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetOne
+      RouteTableId: !Ref PublicRouteTable
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'VPC'
+
+  PrivateSubnetMSKOneRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnetMSKOne
+  PrivateSubnetMSKTwoRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnetMSKTwo
+  PrivateSubnetMSKThreeRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnetMSKThree
+  
+  KDASecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable KDA access
+      VpcId: !Ref 'VPC'
+
+  ESSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable ES access
+      VpcId: !Ref 'VPC'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        SourceSecurityGroupId: !GetAtt KDASecurityGroup.GroupId
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        SourceSecurityGroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+
+
+  KafkaClientInstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22 and 8081
+      VpcId: !Ref 'VPC'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Ref 'SSHLocation'
+      - IpProtocol: tcp
+        FromPort: 8081
+        ToPort: 8081
+        CidrIp: !Ref 'SSHLocation'
+      - IpProtocol: tcp
+        FromPort: 8081
+        ToPort: 8081
+        SourceSecurityGroupId: !GetAtt KDASecurityGroup.GroupId
+  MSKSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MSK Security Group
+      VpcId: !Ref 'VPC'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 2181
+        ToPort: 2181
+        SourceSecurityGroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+      - IpProtocol: tcp
+        FromPort: 2181
+        ToPort: 2181
+        SourceSecurityGroupId: !GetAtt KDASecurityGroup.GroupId
+      - IpProtocol: tcp
+        FromPort: 2181
+        ToPort: 2181
+        CidrIp: !Ref 'SSHLocation'
+      - IpProtocol: tcp
+        FromPort: 9094
+        ToPort: 9094
+        SourceSecurityGroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+      - IpProtocol: tcp
+        FromPort: 9094
+        ToPort: 9094
+        CidrIp: !Ref 'SSHLocation'
+      - IpProtocol: tcp
+        FromPort: 9094
+        ToPort: 9094
+        SourceSecurityGroupId: !GetAtt KDASecurityGroup.GroupId
+      - IpProtocol: tcp
+        FromPort: 9092
+        ToPort: 9092
+        SourceSecurityGroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+      - IpProtocol: tcp
+        FromPort: 9092
+        ToPort: 9092
+        CidrIp: !Ref 'SSHLocation'
+      - IpProtocol: tcp
+        FromPort: 9092
+        ToPort: 9092
+        SourceSecurityGroupId: !GetAtt KDASecurityGroup.GroupId
+  KafkaClientEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m5.large
+      KeyName: !Ref 'KeyName'
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      AvailabilityZone: 
+        Fn::Select:
+         - 0
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      SubnetId: !Ref 'PublicSubnetOne'
+      SecurityGroupIds: [!GetAtt KafkaClientInstanceSecurityGroup.GroupId]
+      ImageId: !FindInMap ['RegionAMI', !Ref 'AWS::Region', 'HVM64']
+      Tags:
+        - Key: 'Name'
+          Value: 'KafkaClientInstance'
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 20
+            VolumeType: gp2
+            DeleteOnTermination: true
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install python3.7 -y
+          yum install java-1.8.0-openjdk-devel -y
+          yum install nmap-ncat -y
+          yum install git -y
+          yum erase awscli -y
+          yum install jq -y
+          amazon-linux-extras install docker -y
+          service docker start
+          usermod -a -G docker ec2-user
+
+          cd /home/ec2-user
+          wget https://bootstrap.pypa.io/get-pip.py
+          su -c "python3.7 get-pip.py --user" -s /bin/sh ec2-user
+          su -c "/home/ec2-user/.local/bin/pip3 install boto3 --user" -s /bin/sh ec2-user
+          su -c "/home/ec2-user/.local/bin/pip3 install awscli --user" -s /bin/sh ec2-user
+
+          # install AWS CLI 2 - access with aws2
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install -b /usr/local/bin/aws2
+          su -c "ln -s /usr/local/bin/aws2/aws ~/.local/bin/aws2" -s /bin/sh ec2-user
+
+          su -c "mkdir -p /tmp/kafka" -s /bin/sh ec2-user
+          su -c "aws s3 cp s3://reinvent2019-msk-liftandshift/schema-registry.properties /tmp/kafka" -l ec2-user
+          su -c "aws s3 cp s3://reinvent2019-msk-liftandshift/producer.properties_msk /tmp/kafka" -l ec2-user
+          su -c "aws s3 cp s3://reinvent2019-msk-liftandshift/KafkaClickstreamClient-1.0-SNAPSHOT.jar/KafkaClickstreamClient-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+
+          # get Confluent community
+          cd /home/ec2-user
+          su -c "mkdir -p confluent kafka" -s /bin/sh ec2-user
+          cd confluent
+          su -c "wget http://packages.confluent.io/archive/5.3/confluent-community-5.3.1-2.12.tar.gz" -s /bin/sh ec2-user
+          su -c "tar -xzf confluent-community-5.3.1-2.12.tar.gz --strip 1" -s /bin/sh ec2-user
+
+          cd /home/ec2-user
+          cd kafka
+          su -c "wget https://archive.apache.org/dist/kafka/2.3.1/kafka_2.12-2.3.1.tgz" -s /bin/sh ec2-user
+          su -c "tar -xzf kafka_2.12-2.3.1.tgz --strip 1" -s /bin/sh ec2-user
+
+          echo -n "
+          [Unit]
+          Description=Confluent Schema Registry
+          After=network.target
+
+          [Service]
+          Type=simple
+          User=ec2-user
+          ExecStart=/bin/sh -c '/home/ec2-user/confluent/bin/schema-registry-start /tmp/kafka/schema-registry.properties > /tmp/kafka/schema-registry.log 2>&1'
+          ExecStop=/home/ec2-user/confluent/bin/schema-registry-stop
+          Restart=on-abnormal
+
+          [Install]
+          WantedBy=multi-user.target" > /etc/systemd/system/confluent-schema-registry.service
+
+          # wait until CF stack was created successfully
+          # aws --region ${AWS::Region} cloudformation wait stack-create-complete --stack-name '${AWS::StackName}'
+
+          # create ES indices
+          curl -s https://reinvent2019-msk-liftandshift.s3.amazonaws.com/Flink/departments_count_es_v2| curl -s -w "\n" -XPUT https://${ElasticsearchService.DomainEndpoint}/departments_count -H "Content-Type: application/json" -d @-
+
+          curl -s https://reinvent2019-msk-liftandshift.s3.amazonaws.com/Flink/user_sesion_counts_es| curl -s -w "\n" -XPUT https://${ElasticsearchService.DomainEndpoint}/user_session_counts -H "Content-Type: application/json" -d @-
+
+          curl -s https://reinvent2019-msk-liftandshift.s3.amazonaws.com/Flink/user_session_details_es| curl -s -w "\n" -XPUT https://${ElasticsearchService.DomainEndpoint}/user_session_details -H "Content-Type: application/json" -d @-
+
+  EC2Role: 
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonMSKFullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonKinesisAnalyticsFullAccess
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: !Join
+                            - '-'
+                            - - 'EC2FlinkMSKCFProfile'
+                              - !Ref 'AWS::StackName'
+      Roles:
+        - !Ref EC2Role
+
+  KDARole: 
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: kinesisanalytics.amazonaws.com 
+            Action: 'sts:AssumeRole'
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+
+  # AESSLR:
+  #   Type: 'AWS::IAM::ServiceLinkedRole'
+  #   Properties:
+  #     AWSServiceName: es.amazonaws.com
+  #     Description: SLR for AES
+  #     CustomSuffix: !Ref 'AWS::StackName'
+
+  MSKCluster:
+    Type: AWS::MSK::Cluster
+    Properties: 
+      BrokerNodeGroupInfo: 
+        ClientSubnets: [!Ref 'PrivateSubnetMSKOne', !Ref 'PrivateSubnetMSKTwo', !Ref 'PrivateSubnetMSKThree']
+        InstanceType: kafka.m5.large
+        SecurityGroups: [!GetAtt MSKSecurityGroup.GroupId]
+        StorageInfo: 
+          EBSStorageInfo:
+            VolumeSize: 1000
+      ClusterName: !Join
+                    - '-'
+                    - - 'MSKCluster'
+                      - !Ref 'AWS::StackName'
+      EncryptionInfo: 
+        EncryptionInTransit: 
+          ClientBroker: PLAINTEXT
+          InCluster: false
+      EnhancedMonitoring: DEFAULT
+      KafkaVersion: 2.3.1
+      NumberOfBrokerNodes: 3
+
+  ElasticsearchService:
+    Type: AWS::Elasticsearch::Domain
+    #DependsOn: AESSLR
+    Properties:
+      AccessPolicies:
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "*"
+                },
+                "Action": "es:*",
+                "Resource": {
+                              "Fn::Join": [
+                                ":", [
+                                  "arn:aws:es",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  "domain/*"
+                                ]
+                              ]
+                            }
+              }
+            ]
+          }
+      ElasticsearchClusterConfig:
+        InstanceCount: 1
+        InstanceType: t2.medium.elasticsearch
+      EBSOptions:
+        EBSEnabled: true
+        VolumeSize: 10
+        VolumeType: gp2
+      ElasticsearchVersion: 6.8
+      VPCOptions: 
+        SecurityGroupIds: [!GetAtt ESSecurityGroup.GroupId]
+        SubnetIds: [!Ref PrivateSubnetMSKOne]
+
+  KDAClickstream:
+    Type: AWS::KinesisAnalyticsV2::Application
+    DependsOn: KDARole
+    Properties: 
+      ApplicationConfiguration: 
+        ApplicationCodeConfiguration:
+          CodeContent:
+            S3ContentLocation: 
+              BucketARN: arn:aws:s3:::reinvent2019-msk-liftandshift
+              FileKey: Flink/ClickstreamProcessor-1.0-SNAPSHOT.jar
+          CodeContentType: ZIPFILE
+        ApplicationSnapshotConfiguration:
+          SnapshotsEnabled: false
+        FlinkApplicationConfiguration:
+          MonitoringConfiguration: 
+            ConfigurationType: CUSTOM
+            LogLevel: WARN
+            MetricsLevel: OPERATOR
+        EnvironmentProperties:
+          PropertyGroups: 
+            - PropertyGroupId: FlinkApplicationProperties
+              PropertyMap: {
+                            "ElasticsearchEndpoint": !Sub 'https://${ElasticsearchService.DomainEndpoint}',
+                            "Region": !Ref 'AWS::Region',
+                            "BootstrapServers": "http://127.0.0.1:9092",
+                            "GroupId": "flink-clickstream-processor",
+                            "SchemaRegistryUrl": !Sub 'http://${KafkaClientEC2Instance.PublicDnsName}:8081',
+                            "ZookeeperConnect": "http://127.0.0.1:2181",
+                            "Topic": "ExampleTopic",
+                            "DepartmentsAgg_Topic": "Departments_Agg",
+                            "clickEventsUserIdAggResult_Topic": "ClickEvents_UserId_Agg_Result",
+                            "userSessionsAggregatesWithOrderCheckout_Topic": "User_Sessions_Aggregates_With_Order_Checkout"
+                          }
+      ApplicationDescription: KDA Flink App to analyze Clicktream data from MSK
+      ApplicationName: !Join
+                      - '-'
+                      - - 'KDAFlinkClickstream'
+                        - !Ref 'AWS::StackName'
+      RuntimeEnvironment: FLINK-1_8
+      ServiceExecutionRole: !GetAtt KDARole.Arn
+
+Outputs:
+  VPCId: 
+    Description: The ID of the VPC created
+    Value: !Ref 'VPC'
+  PublicSubnetOne: 
+    Description: The name of the public subnet created
+    Value: !Ref 'PublicSubnetOne'
+  PrivateSubnetMSKOne: 
+    Description: The ID of private subnet one created
+    Value: !Ref 'PrivateSubnetMSKOne'
+  PrivateSubnetMSKTwo: 
+    Description: The ID of private subnet two created
+    Value: !Ref 'PrivateSubnetMSKTwo'
+  PrivateSubnetMSKThree: 
+    Description: The ID of private subnet three created
+    Value: !Ref 'PrivateSubnetMSKThree'
+  MSKSecurityGroupID: 
+    Description: The ID of the security group created for the MSK clusters
+    Value: !GetAtt MSKSecurityGroup.GroupId
+  KafkaClientEC2InstancePublicDNS:
+    Description: The Public DNS for the EC2 instance
+    Value: !GetAtt KafkaClientEC2Instance.PublicDnsName
+  KafkaClientEC2InstanceSsh:
+    Description: The SSH for the EC2 instance
+    Value: !Sub ssh -A ec2-user@${KafkaClientEC2Instance.PublicDnsName}
+  SchemaRegistryPrivateDNS:
+    Description: The Private DNS for the Schema Registry
+    Value: !Sub http://${KafkaClientEC2Instance.PrivateDnsName}:8081
+  MSKClusterArn:
+    Description: The Arn for the MSKMMCluster1 MSK cluster
+    Value: !Ref 'MSKCluster'
+  ElasticsearchEndpoint:
+    Value: !Sub https://${ElasticsearchService.DomainEndpoint}
+  KibanaEndpoint:
+    Value: !Sub https://${ElasticsearchService.DomainEndpoint}_plugin/kibana/
+  KDARoleArn:
+    Description: The Arn for the KDA Role
+    Value: !GetAtt KDARole.Arn
+  KafkaClientEC2InstanceSecurityGroupId:
+    Description: The security group id for the EC2 instance
+    Value: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+  KDASecurityGroupID: 
+    Description: The ID of the security group created for KDA
+    Value: !GetAtt KDASecurityGroup.GroupId
+    
+
+
