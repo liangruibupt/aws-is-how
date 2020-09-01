@@ -206,7 +206,9 @@ Sample resposne
 
 
 ## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams
-1. Checkt below permisions included in IAM Role `lambda-es-role`
+1. Create a Amazon Kinesis Data Streams `lambda-stream` with 1 Shard
+
+2. Checkt below permisions included in IAM Role `lambda-es-role`
 ```json
 {
   "Version": "2012-10-17",
@@ -230,11 +232,83 @@ Sample resposne
 }
 ```
 
+3. Create the function
+
+```bash
+cd kinesis-to-es
+update the region = "cn-north-1" and es = "https://es_domain" in the sample.py
+
+pip install requests -t .
+pip install requests_aws4auth -t .
+zip -r lambda.zip *
+
+aws lambda create-function --function-name kinesis-es-indexing \
+--zip-file fileb://lambda.zip --handler sample.handler --runtime python3.6 \
+--role arn:aws-cn:iam::account-id:role/lambda-es-role --timeout 60 \
+--vpc-config SubnetIds=subnet-08a7b60787d9ed6e6,subnet-0dc2a22813309951d,SecurityGroupIds=sg-0f9473a84c043ed49 \
+--region cn-north-1
+
+aws lambda update-function-code --function-name kinesis-es-indexing \
+--zip-file fileb://lambda.zip --region cn-north-1
+```
+
+4. Add the Kinesis Trigger for lambda function `kinesis-es-indexing`
+  - Kinesis stream: `lambda-es-stream`
+  - Batch size: 100
+  - Starting position: Trim horizon
+
+5. Testing and Verify the index created in ES domain
+- Generate the steam data
+```bash
+python stock-producer.py
+```
+
+- Verify the index created in ES domain
+```bash
+ssh -i ~/.ssh/your-key.pem ec2-user@your-ec2-instance-public-ip -N -L 9200:vpc-your-amazon-es-domain.region.es.amazonaws.com:443
+Acccess: https://localhost:9200/_plugin/kibana/ in your web browser: username: TheMasterUser, password: your TheMasterUser password
+
+Alternately, you can send requests
+curl --user TheMasterUser:secrete https://localhost:9200/lambda-kine-index/_search?pretty
+
+Or send request from ec2 in the same VPC of your ES domain
+curl --user TheMasterUser:secrete $es_domain/lambda-kine-index/_search?pretty
+```
+
+
+## Loading Streaming Data into Amazon ES from Amazon DynamoDB 
+1. Create a DynamoDB table `lambda-es` with Hash Key `id`
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "es:ESHttpPost",
+        "es:ESHttpPut",
+        "dynamodb:DescribeStream",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:ListStreams",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+
+ddb-to-es
+
+aws dynamodb put-item --table-name lambda-es --item '{"director": {"S": "Kevin Costner"},"id": {"S": "00001"},"title": {"S": "The Postman"}}' --region us-west-1
 
 ## Cleanup
 ```bash
 aws lambda delete-function --function-name s3-es-indexing --region cn-north-1
+aws lambda delete-function --function-name kinesis-es-indexing --region cn-north-1
 delete the S3 bucket
+aws delete-stream --stream-name lambda-stream --region cn-north-1
 aws es delete-elasticsearch-domain --domain-name lambda-es-endpoint --region cn-north-1
 ```
 
