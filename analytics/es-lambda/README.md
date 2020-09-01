@@ -11,7 +11,7 @@
 ## Indexing Data in Amazon Elasticsearch Service Using AWS Lambda
 1. Create the IAM Role `lambda-es-role` with `AWSLambdaExecute`, `AmazonESFullAccess`, `AmazonKinesisFullAccess`, `AmazonKinesisFirehoseFullAccess`, ` AWSLambdaVPCAccessExecutionRole` permissions
 2. Create S3 bucket: `ray-aes-lab`
-3. Create Amazon ES Domain: `lambda-es-endpoint`
+3. Create Amazon ES Domain: `lambda-es-endpoint` with version
   - Enable fine-grained access control
   - Create a Master User
   - Access Policy
@@ -204,6 +204,33 @@ Sample resposne
 
 ![s3-to-es-cloudwatch](media/s3-to-es-cloudwatch.png)
 
+
+## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams
+1. Checkt below permisions included in IAM Role `lambda-es-role`
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "es:ESHttpPost",
+        "es:ESHttpPut",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "kinesis:GetShardIterator",
+        "kinesis:GetRecords",
+        "kinesis:DescribeStream",
+        "kinesis:ListStreams"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+
 ## Cleanup
 ```bash
 aws lambda delete-function --function-name s3-es-indexing --region cn-north-1
@@ -217,3 +244,7 @@ aws es delete-elasticsearch-domain --domain-name lambda-es-endpoint --region cn-
 [VPC Support for Amazon Elasticsearch Service Domains](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#kibana-test)
 
 [I get a "User: anonymous is not authorized" error when I try to access my Elasticsearch cluster](https://aws.amazon.com/premiumsupport/knowledge-center/anonymous-not-authorized-elasticsearch/)
+
+[Indexing Metadata in Amazon Elasticsearch Service Using AWS Lambda and Python](https://aws.amazon.com/blogs/database/indexing-metadata-in-amazon-elasticsearch-service-using-aws-lambda-and-python/)
+
+[amazon-elasticsearch-lambda-samples](https://github.com/aws-samples/amazon-elasticsearch-lambda-samples)
