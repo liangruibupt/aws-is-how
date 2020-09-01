@@ -46,5 +46,6 @@ def handler(event, context):
             message = message_pattern.search(line).group(1)
 
             document = {"ip": ip, "timestamp": timestamp, "message": message}
-            r = requests.post(url, auth=awsauth,
+            response = requests.post(url, auth=awsauth,
                               json=document, headers=headers)
+            print(response.text)

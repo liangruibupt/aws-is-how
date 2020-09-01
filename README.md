@@ -31,6 +31,10 @@
 
 [AWS EMR Workshop](analytics/emr/101Workshop)
 
+[AWS Kinesis Workshop](analytics/kinesis/101Workshop)
+
+[Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
