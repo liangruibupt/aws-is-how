@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 
 dynamodb_client = boto3.client('dynamodb', region_name='cn-north-1')
 
-DDB_TABLE_NAME = 'lambda-es-stock'
+DDB_TABLE_NAME = 'lambda-es'
 
 def getStock(count):
     now = datetime.datetime.now()
@@ -15,7 +15,7 @@ def getStock(count):
     price = random.random() * 100
     price_num = round(price, 2)
     data = {
-        'recordId': {'N': str(count)},
+        'recordId': {'S': str(count)},
         'price': {'N': str(price_num)},
         'ticker': {'S': str(ticker)},
         'event_time': {'N': str(str_now)}
@@ -32,5 +32,6 @@ while True:
             Item = item
         )
         print(item)
+        count += 1
     except ClientError as e:
         print(e)

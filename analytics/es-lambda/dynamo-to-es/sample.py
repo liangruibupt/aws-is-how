@@ -20,13 +20,16 @@ def handler(event, context):
     count = 0
     for record in event['Records']:
         # Get the primary key for use as the Elasticsearch ID
-        id = record['dynamodb']['Keys']['id']['S']
+        id = record['dynamodb']['Keys']['recordId']['S']
 
         if record['eventName'] == 'REMOVE':
             r = requests.delete(url + id, auth=awsauth)
         else:
             document = record['dynamodb']['NewImage']
+            print(document)
             r = requests.put(url + id, auth=awsauth,
                              json=document, headers=headers)
         count += 1
-    return str(count) + ' records processed.'
+    myip = requests.get('http://checkip.amazonaws.com').text.rstrip()
+    return_msg = str(count) + " records processed on {}".format(myip)
+    return return_msg

@@ -112,6 +112,7 @@ curl --user TheMasterUser:secrete $es_domain/lambda-s3-index/_search?pretty
 ```
 
 Sample resposne
+
 ```json
 {
   "took" : 5,
@@ -207,6 +208,9 @@ Sample resposne
 
 ## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams
 1. Create a Amazon Kinesis Data Streams `lambda-stream` with 1 Shard
+```bash
+aws kinesis create-stream --stream-name lambda-stream --shard-count 1 --region cn-north-1
+```
 
 2. Checkt below permisions included in IAM Role `lambda-es-role`
 ```json
@@ -236,7 +240,7 @@ Sample resposne
 
 ```bash
 cd kinesis-to-es
-update the region = "cn-north-1" and es = "https://es_domain" in the sample.py
+update the region = "cn-north-1" and es = "https://your_es_domain" in the sample.py
 
 pip install requests -t .
 pip install requests_aws4auth -t .
@@ -253,9 +257,10 @@ aws lambda update-function-code --function-name kinesis-es-indexing \
 ```
 
 4. Add the Kinesis Trigger for lambda function `kinesis-es-indexing`
-  - Kinesis stream: `lambda-es-stream`
+  - Kinesis stream: `lambda-stream`
   - Batch size: 100
   - Starting position: Trim horizon
+  - Enable trigger
 
 5. Testing and Verify the index created in ES domain
 - Generate the steam data
@@ -275,9 +280,155 @@ Or send request from ec2 in the same VPC of your ES domain
 curl --user TheMasterUser:secrete $es_domain/lambda-kine-index/_search?pretty
 ```
 
+Sample resposne
+
+```json
+{
+  "took" : 6,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 99,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074573328797712848415686131714",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074573328797712848415686131714",
+          "timestamp" : 1.598959528007E9,
+          "message" : "{\"EVENT_TIME\": 1598959527.993955, \"TICKER\": \"TBV\", \"PRICE\": 46.82, \"ID\": 4}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074574537723532463044860837890",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074574537723532463044860837890",
+          "timestamp" : 1.598959528064E9,
+          "message" : "{\"EVENT_TIME\": 1598959528.051059, \"TICKER\": \"AAPL\", \"PRICE\": 54.66, \"ID\": 5}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074567284168614760426405625858",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074567284168614760426405625858",
+          "timestamp" : 1.598959312198E9,
+          "message" : "{\"EVENT_TIME\": 1598959312.179779, \"TICKER\": \"MSFT\", \"PRICE\": 73.51, \"ID\": 59}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074568493094434389898987307010",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074568493094434389898987307010",
+          "timestamp" : 1.598959527873E9,
+          "message" : "{\"EVENT_TIME\": 1598959527.584993, \"TICKER\": \"TBV\", \"PRICE\": 69.46, \"ID\": 0}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074522553913289019009502543874",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074522553913289019009502543874",
+          "timestamp" : 1.598959310752E9,
+          "message" : "{\"EVENT_TIME\": 1598959310.732428, \"TICKER\": \"AAPL\", \"PRICE\": 51.12, \"ID\": 22}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074524971764928248267851956226",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074524971764928248267851956226",
+          "timestamp" : 1.598959310848E9,
+          "message" : "{\"EVENT_TIME\": 1598959310.809484, \"TICKER\": \"AMZN\", \"PRICE\": 64.72, \"ID\": 24}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074505628951814414201056657410",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074505628951814414201056657410",
+          "timestamp" : 1.598959310216E9,
+          "message" : "{\"EVENT_TIME\": 1598959310.196727, \"TICKER\": \"AAPL\", \"PRICE\": 67.19, \"ID\": 8}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074506837877634028830231363586",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074506837877634028830231363586",
+          "timestamp" : 1.598959310255E9,
+          "message" : "{\"EVENT_TIME\": 1598959310.235484, \"TICKER\": \"AMZN\", \"PRICE\": 34.21, \"ID\": 9}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074515300358371331234454306818",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074515300358371331234454306818",
+          "timestamp" : 1.598959310523E9,
+          "message" : "{\"EVENT_TIME\": 1598959310.503564, \"TICKER\": \"AMZN\", \"PRICE\": 22.08, \"ID\": 16}"
+        }
+      },
+      {
+        "_index" : "lambda-kine-index",
+        "_type" : "lambda-kine-type",
+        "_id" : "shardId-000000000000:49610383465307002973633427074564866316975531168056213506",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "shardId-000000000000:49610383465307002973633427074564866316975531168056213506",
+          "timestamp" : 1.598959312123E9,
+          "message" : "{\"EVENT_TIME\": 1598959312.103498, \"TICKER\": \"INTC\", \"PRICE\": 39.34, \"ID\": 57}"
+        }
+      }
+    ]
+  }
+}
+```
+
+Kibana Index Data
+
+![kinesis-to-es-kibana](media/kinesis-to-es-kibana.png)
 
 ## Loading Streaming Data into Amazon ES from Amazon DynamoDB 
-1. Create a DynamoDB table `lambda-es` with Hash Key `id`
+1. Create a DynamoDB table `lambda-es` with Hash Key `recordId` (String type)
+```
+aws dynamodb create-table \
+    --table-name lambda-es \
+    --attribute-definitions AttributeName=recordId,AttributeType=S --key-schema AttributeName=recordId,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+    --region cn-north-1
+```
+
+2. Checkt below permisions included in IAM Role `lambda-es-role`
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -299,16 +450,288 @@ curl --user TheMasterUser:secrete $es_domain/lambda-kine-index/_search?pretty
   ]
 }
 
-ddb-to-es
+3. Create the function
 
-aws dynamodb put-item --table-name lambda-es --item '{"director": {"S": "Kevin Costner"},"id": {"S": "00001"},"title": {"S": "The Postman"}}' --region us-west-1
+```bash
+cd dynamo-to-es
+update the region = "cn-north-1" and es = "https://your_es_domain" in the sample.py
+
+pip install requests -t .
+pip install requests_aws4auth -t .
+zip -r lambda.zip *
+
+aws lambda create-function --function-name dynamodb-es-indexing \
+--zip-file fileb://lambda.zip --handler sample.handler --runtime python3.6 \
+--role arn:aws-cn:iam::account-id:role/lambda-es-role --timeout 60 \
+--vpc-config SubnetIds=subnet-08a7b60787d9ed6e6,subnet-0dc2a22813309951d,SecurityGroupIds=sg-0f9473a84c043ed49 \
+--region cn-north-1
+
+aws lambda update-function-code --function-name dynamodb-es-indexing \
+--zip-file fileb://lambda.zip --region cn-north-1
+```
+
+4. Add the DyamoDB Trigger for lambda function `dynamodb-es-indexing`
+  - Table: `lambda-es`
+  - Batch size: 100
+  - Starting position: Trim horizon
+  - Enable trigger
+
+5. Testing and Verify the index created in ES domain
+- Generate the steam data
+```bash
+python stock-ddb.py
+```
+
+- Verify the index created in ES domain
+```bash
+ssh -i ~/.ssh/your-key.pem ec2-user@your-ec2-instance-public-ip -N -L 9200:vpc-your-amazon-es-domain.region.es.amazonaws.com:443
+Acccess: https://localhost:9200/_plugin/kibana/ in your web browser: username: TheMasterUser, password: your TheMasterUser password
+
+Alternately, you can send requests
+curl --user TheMasterUser:secrete https://localhost:9200/lambda-ddb-index/_search?pretty
+
+Or send request from ec2 in the same VPC of your ES domain
+curl --user TheMasterUser:secrete $es_domain/lambda-ddb-index/_search?pretty
+```
+
+Sample resposne
+
+```json
+{
+  "took" : 202,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 53,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "3",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "3"
+          },
+          "ticker" : {
+            "S" : "MSFT"
+          },
+          "price" : {
+            "N" : "87.32"
+          },
+          "event_time" : {
+            "N" : "1598975469.330115"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "5",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "5"
+          },
+          "ticker" : {
+            "S" : "MSFT"
+          },
+          "price" : {
+            "N" : "66.32"
+          },
+          "event_time" : {
+            "N" : "1598975469.392763"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "9",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "9"
+          },
+          "ticker" : {
+            "S" : "INTC"
+          },
+          "price" : {
+            "N" : "81.3"
+          },
+          "event_time" : {
+            "N" : "1598975469.520152"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "11",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "11"
+          },
+          "ticker" : {
+            "S" : "TBV"
+          },
+          "price" : {
+            "N" : "3.6"
+          },
+          "event_time" : {
+            "N" : "1598975469.585362"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "13",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "13"
+          },
+          "ticker" : {
+            "S" : "TBV"
+          },
+          "price" : {
+            "N" : "28.84"
+          },
+          "event_time" : {
+            "N" : "1598975469.648725"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "16",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "16"
+          },
+          "ticker" : {
+            "S" : "AMZN"
+          },
+          "price" : {
+            "N" : "14.12"
+          },
+          "event_time" : {
+            "N" : "1598975469.743607"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "17",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "17"
+          },
+          "ticker" : {
+            "S" : "MSFT"
+          },
+          "price" : {
+            "N" : "30.43"
+          },
+          "event_time" : {
+            "N" : "1598975469.775091"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "19",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "19"
+          },
+          "ticker" : {
+            "S" : "INTC"
+          },
+          "price" : {
+            "N" : "74.17"
+          },
+          "event_time" : {
+            "N" : "1598975469.838101"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "35",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "35"
+          },
+          "ticker" : {
+            "S" : "INTC"
+          },
+          "price" : {
+            "N" : "14.19"
+          },
+          "event_time" : {
+            "N" : "1598975470.340143"
+          }
+        }
+      },
+      {
+        "_index" : "lambda-ddb-index",
+        "_type" : "lambda-type",
+        "_id" : "36",
+        "_score" : 1.0,
+        "_source" : {
+          "recordId" : {
+            "S" : "36"
+          },
+          "ticker" : {
+            "S" : "AMZN"
+          },
+          "price" : {
+            "N" : "57.29"
+          },
+          "event_time" : {
+            "N" : "1598975470.371415"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+DyanmoDB Table
+
+![dynamodb-to-es-kibana](media/dynamodb-to-es-kibana.png)
+
+  
 
 ## Cleanup
 ```bash
 aws lambda delete-function --function-name s3-es-indexing --region cn-north-1
 aws lambda delete-function --function-name kinesis-es-indexing --region cn-north-1
+aws lambda delete-function --function-name dynamodb-es-indexing --region cn-north-1
 delete the S3 bucket
-aws delete-stream --stream-name lambda-stream --region cn-north-1
+aws kinesis delete-stream --stream-name lambda-stream --region cn-north-1
+aws dynamodb delete-table --table-name lambda-es --region cn-north-1
 aws es delete-elasticsearch-domain --domain-name lambda-es-endpoint --region cn-north-1
 ```
 

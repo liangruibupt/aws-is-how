@@ -89,6 +89,13 @@
 
 [How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
 
+[How to get the lambda public IP address](lambda/lambda-access-internet.py)
+
+[How to retrieve the System Manager Parameter Store](lambda/lambda-ssm-variables.py)
+
+[How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
+
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
@@ -98,6 +105,8 @@
 ## Storage
 
 [How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
+
+[Cross region S3 file download and upload](storage/crr-s3-download-upload.py)
 
 [S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
 
@@ -156,3 +165,5 @@
 [How to build Amazon SNS HTTP Subscription?](integration/SNS/SNS-HTTP-Subscription.md)
 
 [SQS quick start demo for Standard Queue and JMS](integration/SQS)
+
+[Sent message to SQS queue using Lambda](integration/SQS/lambda-sqs-sentmsg.js)
