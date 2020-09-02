@@ -95,11 +95,39 @@ PUT /your_index
 GET /your_index/_analyze?text='叻出色'
 ```
 
-3 Setup the Dataset
+3. Setup the Dataset
 
-https://github.com/candlewill/Dialog_Corpus
+The `faq_data.cvs` is built based on  https://github.com/candlewill/Dialog_Corpus
 
+4. Testing
+```bash
+pip install elasticsearch -t .
+pip install pandas -t .
+pip install requests -t .
+pip install requests_aws4auth -t .
 
+export ES_USER=TheMasterUser
+export ES_PASSWORD=YOUR_PASSWORD
+export ES_HOST=YOUR_ES_HOST
+
+#python simple_chatbot.py --create_index
+
+python simple_chatbot.py 
+> 如何开发票
+请在聊天窗口输入抬头，联系人和快递地址
+> 什么是ai
+人工智能是工程和科学的分支,致力于构建具有思维的机器。
+> 迷失迷你是什么编写的
+Python
+> 什么是维纳斯
+超声波,在医学诊断和治疗中使用,在手术等。
+> 什么是聊天机器人
+超声波,在医学诊断和治疗中使用,在手术等。
+```
+
+```json
+GET faq/_search?q=什么是聊天机器人
+```
 
  ## Reference
  [Internal User Database and HTTP Basic Authentication](https://docs.amazonaws.cn/elasticsearch-service/latest/developerguide/fgac.html#fgac-walkthrough-basic)

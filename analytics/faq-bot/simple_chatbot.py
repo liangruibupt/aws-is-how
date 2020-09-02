@@ -1,50 +1,73 @@
 from elasticsearch import Elasticsearch
 import sys
+import pandas as pd
+from elasticsearch import helpers
+import datetime
+import os
+import requests
+from requests_aws4auth import AWS4Auth
+import argparse
+
+ES_USER = os.environ['ES_USER']
+ES_PASSWORD = os.environ['ES_PASSWORD']
+ES_HOST = os.environ['ES_HOST']
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--create_index', action='store_true', default=False)
+args = parser.parse_args()
+create_index = args.create_index
+
 
 class ESUtils(object):
-    def __init__(self, index_name, create_index=False):
-        self.es = Elasticsearch()
+    def __init__(self, ip, port, index_name):
+        self.es = Elasticsearch(
+            hosts=[ip], port=port, http_auth=(ES_USER, ES_PASSWORD))
         self.index = index_name
-        if create_index:
-            mapping = {
-                'properties': {
-                    'question': {
-                        'type': 'text',
-                        'analyzer': 'ik_max_word',
-                        'search_analyzer': 'ik_smart'
-                    }
+
+    def create_index(self):
+        mapping = {
+            'properties': {
+                'question': {
+                    'type': 'text',
+                    'analyzer': 'smartcn'
                 }
             }
-            # 创建index
-            if self.es.indices.exists(index=self.index):
-                self.es.indices.delete(index=self.index)
-            self.es.indices.create(index=self.index)
-            # 创建mapping
-            self.es.indices.put_mapping(body=mapping, index=self.index)
+        }
+        # 创建index
+        if self.es.indices.exists(index=self.index):
+            self.es.indices.delete(index=self.index)
+        self.es.indices.create(index=self.index)
+        # 创建mapping
+        self.es.indices.put_mapping(body=mapping, index=self.index)
 
     def insert_qa_pairs(self, qa_pairs, data_source):
-        count = self.es.count(index=self.index)['count']  # 获取当前数据库中的已有document数量
+        count = self.es.count(index=self.index)[
+            'count']  # 获取当前数据库中的已有document数量
+
         def gen_data():
             for i, qa in enumerate(qa_pairs):
                 yield {
                     '_index': self.index,
                     '_id': i + count,
                     'data_source': data_source,
+                    'timestamp': datetime.datetime.now().timestamp(),
                     'question': qa[0],
                     'answer': qa[1]
                 }
-        bulk(self.es, gen_data())
+        helpers.bulk(self.es, gen_data())
 
     def get_qa_pairs(self, csv_path):
-	qa_pairs = pd.read_csv(csv_path)
-	#qa_pairs = list(zip(qa_pairs['question'], qa_pairs['answer']))
-    qa_pairs = list(qa_pairs['question'], qa_pairs['answer'])
-    return qa_pairs
+    qa_pairs = pd.read_csv(csv_path, delimiter=',', quotechar='"')
+    r_qa_pairs = list(zip(qa_pairs['question'], qa_pairs['answer']))
+    #qa_pairs = list(qa_pairs['question'], qa_pairs['answer'])
+    print(r_qa_pairs)
+    return r_qa_pairs
 
 
 class ESChat(object):
     def __init__(self, ip, port, index_name):
-        self.es = Elasticsearch(hosts=[ip], port=port)
+        self.es = Elasticsearch(
+            hosts=[ip], port=port, http_auth=(ES_USER, ES_PASSWORD))
         self.index = index_name
 
     def search(self, input_str):
@@ -77,6 +100,7 @@ class ESChat(object):
         while sentence:
             if sentence == 'exit':
                 break
+            # 使用最高score的结果，但是需要优化：从多个结果找出最匹配的
             print(self.search(sentence)[0]['answer'])
             print("> ", end='')
             sys.stdout.flush()
@@ -84,5 +108,13 @@ class ESChat(object):
 
 
 if __name__ == '__main__':
-    es_chat = ESChat(ip='localhost', port=9200, index_name='qa')
+    es_util = ESUtils(ip=ES_HOST, port=9200, index_name='faq')
+    if create_index:
+        print('create index and load question')
+        es_util.create_index()
+        qa_pair = es_util.get_qa_pairs('faq_data.csv')
+        es_util.insert_qa_pairs(qa_pair, 'faq_dataset_manual')
+    else:
+        print('Skip create index and load question')
+    es_chat = ESChat(ip=ES_HOST, port=9200, index_name='faq')
     es_chat.chat()
