@@ -11,6 +11,8 @@
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
+[Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
+
 ## Computing
 
 [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
