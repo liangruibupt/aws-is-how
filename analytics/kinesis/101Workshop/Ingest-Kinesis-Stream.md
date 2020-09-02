@@ -16,8 +16,10 @@ mvn clean install
 ```
 
 - Produce the stream data
-```
-java -jar amazon-kinesis-replay-1.0-SNAPSHOT.jar -streamName ingest-taxi-trips -streamRegion us-west-2 -speedup 3600 -aggregate
+```bash
+#java -jar amazon-kinesis-replay-1.0-SNAPSHOT.jar -streamName ingest-taxi-trips -streamRegion us-west-2 -speedup 3600 -aggregate
+java -jar amazon-kinesis-replay-1.0-SNAPSHOT.jar -streamName ingest-taxi-trips -streamRegion us-west-2 -speedup 180
+
 ```
 
 ### Process stream with analytics application
@@ -28,25 +30,35 @@ java -jar amazon-kinesis-replay-1.0-SNAPSHOT.jar -streamName ingest-taxi-trips -
 - Application Name: taxi-trip-KDA
 - Source Stream: ingest-taxi-trips
 - Record pre-processing with AWS Lambda: Disable
-- Click Discover Schema
 
 ![taxi-trip-KDA.png](media/process-steam-by-kda-sql1.png)
 
 ![taxi-trip-KDA2.png](media/process-steam-by-kda-sql2.png)
 
+2. Click Discover Schema
+
 Once Disocver Schema Successfully complete, you can `Edit the Schema`
 
-![taxi-trip-KDA3.png](media/process-steam-by-kda-sql3.png)
+![kda-discover-schema](media/kda-discover-schema.png)
 
 - trip.id, change the type from INT to BIGINT
 - type, change the Length from 4 to 9. 
 
 Complete this step by pressing Save schema and update stream samples.
 
-2. Go to SQL editor
+3. Verify the incoming events are successfully mapped to the corrected schema and click on Exit (done)
 
-Our first stream is called cleaned_trips which is populated by our clean_pump pump which selects only those records of the type='trip' that have valid longitude and latitudes.
-Our second stream is called trip_statistics which is populated by our statistics_pump pump. The statistics_pump pump calculates summary statistics for every 2 second interval. These results can give you a real-time look at what is happening as data arrives into the stream.
+![kda-discover-schema2](media/kda-discover-schema2.png)
+
+4. Analysis the trip stream
+
+- Go to SQL editor, then Select Save and run to start the execution of the SQL code.
+
+The first stream is called cleaned_trips which is populated by our clean_pump pump which selects only those records of the type='trip' that have valid longitude and latitudes.
+
+The second stream is called trip_statistics which is populated by our statistics_pump pump. The statistics_pump pump calculates summary passenger_count and total_amount of trips for every 2 second interval. These results can give you a real-time look at what is happening as data arrives into the stream.
+
+A Stream is like an in-memory table. A Pump is like a continuous query that is used to populate our stream.
 
 ```sql
     CREATE OR REPLACE STREAM cleaned_trips (
@@ -96,7 +108,22 @@ Our second stream is called trip_statistics which is populated by our statistics
             ORDER BY STEP(cleaned_trips.ROWTIME BY INTERVAL '2' SECOND);
 ```
 
-The random cut forest algorithm takes a couple of minutes to initialize (during which the ANOMALY_SCORE will be zero). Once the initialization phase has completed, you should see a meaningful ANOMALY_SCORE value and ANOMALY_SCORE_EXPLANATION.
+- Check the result
+
+Select CLEANED_TRIP to query the ETL trip data
+
+![kda-sql-analysis-realtime-cleaned-trip](media/kda-sql-analysis-realtime-cleaned-trip.png)
+
+Select TRIP_STATISTICS to query the CLEANED_TRIP with 2 seconds interval statics in real time.
+
+![kda-sql-analysis-realtime](media/kda-sql-analysis-realtime.png)
+
+
+5. Add AI/ML for check the trip anomaly score
+
+- Append the following code to the bottom of the existing SQL.
+
+The `random cut forest algorithm` used to caculate the ANOMALY_SCORE and give the explanation of ANOMALY_SCORE in ANOMALY_SCORE_EXPLANATION. 
 
 ```sql
     CREATE OR REPLACE STREAM trip_statistics_anomaly_tmp (
@@ -133,6 +160,8 @@ The random cut forest algorithm takes a couple of minutes to initialize (during 
                 100, 256, 100000, 24, false));
 
 ```
+
+![kda-sql-analysis-realtime-trip-anomaly](media/kda-sql-analysis-realtime-trip-anomaly.png)
 
 
 ## Option2 Using CloudFormation to create the Lab environment resources
