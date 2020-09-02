@@ -42,3 +42,5 @@ TimePeriod	LinkedAccount	Service	Cost	Cost-Unit	Usage	Usage-Unit	Estimated
 [AWS Cost Explorer Report Generator](https://github.com/aws-samples/aws-cost-explorer-report)
 
 [Querying Cost and Usage Reports using Amazon Athena](https://docs.aws.amazon.com/cur/latest/userguide/cur-query-athena.html)
+
+[Boto3 CostExplorer API](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ce.html)
