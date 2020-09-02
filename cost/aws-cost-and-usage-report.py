@@ -13,7 +13,7 @@ now = datetime.datetime.utcnow()
 start = (now - datetime.timedelta(days=args.days)).strftime('%Y-%m-%d')
 end = now.strftime('%Y-%m-%d')
 
-cd = boto3.client('ce', 'cn-north-1')
+cd = boto3.client('ce', 'cn-northwest-1')
 
 results = []
 
@@ -23,8 +23,18 @@ while True:
         kwargs = {'NextPageToken': token}
     else:
         kwargs = {}
-    data = cd.get_cost_and_usage(TimePeriod={'Start': start, 'End':  end}, Granularity='DAILY', Metrics=['UnblendedCost'], GroupBy=[
-                                 {'Type': 'DIMENSION', 'Key': 'LINKED_ACCOUNT'}, {'Type': 'DIMENSION', 'Key': 'SERVICE'}], **kwargs)
+    data = cd.get_cost_and_usage(
+        TimePeriod={'Start': start, 'End':  end},
+        Granularity='DAILY',
+        Filter={"And": [
+            {'Dimensions': {'Key': 'USAGE_TYPE', 'Values': ['CNN1-DataTransfer-Out-Bytes', 'CNW1-DataTransfer-Out-Bytes',
+                                                            'CNN1-DataTransfer-Regional-Bytes', 'CNW1-DataTransfer-Regional-Bytes', 'CN-DataTransfer-Out-Bytes']}},
+            {'Tags': {'Key': 'Name', 'Values': [
+                'C9', 'mysql56', 'mysql8', 'ray-demo-tool', 'ray-demo-tools']}}
+        ]
+        },
+        Metrics=['UnblendedCost'],
+        GroupBy=[{'Type': 'DIMENSION', 'Key': 'LINKED_ACCOUNT'}, {'Type': 'DIMENSION', 'Key': 'SERVICE'}], **kwargs)
     results += data['ResultsByTime']
     token = data.get('NextPageToken')
     if not token:
