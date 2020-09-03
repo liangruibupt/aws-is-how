@@ -10,12 +10,6 @@ ES_USER = os.environ['ES_USER']
 ES_PASSWORD = os.environ['ES_PASSWORD']
 ES_HOST = os.environ['ES_HOST']
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--create_index', action='store_true', default=False)
-args = parser.parse_args()
-create_index = args.create_index
-
-
 class ESUtils(object):
     def __init__(self, ip, port, index_name):
         self.es = Elasticsearch(
@@ -126,30 +120,36 @@ class ESChat(object):
                 {'score': h['_score'], 'question': h['_source']['question'], 'answer': h['_source']['answer']})
         return qa_pairs
 
-    def chat(self):
-        """聊天方法，在系统输出'> '后输入句子，得到系统回复，输入exit结束聊天。"""
-        sys.stdout.write("> ")
-        sys.stdout.flush()
-        sentence = sys.stdin.readline().strip()
-
-        while sentence:
-            if sentence == 'exit':
-                break
-            # 使用最高score的结果，从多个结果找出最匹配的
-            print(self.search(sentence)[0]['answer'])
-            print("> ", end='')
-            sys.stdout.flush()
-            sentence = sys.stdin.readline().strip()
+    def chat(self, input_str):
+        return self.search(input_str)[0]['answer']
 
 
-if __name__ == '__main__':
-    es_util = ESUtils(ip=ES_HOST, port=9200, index_name='faq')
-    if create_index:
-        print('create index and load question')
-        es_util.create_index()
-        qa_pair = es_util.get_qa_pairs('faq_data.csv')
-        es_util.insert_qa_pairs(qa_pair, 'faq_dataset_manual')
+def handler(event, context):
+    create_index_str = event.get('create_index', 'False')
+    if create_index_str == 'True' or create_index_str == 'true':
+        create_index = True
     else:
-        print('Skip create index and load question')
-    es_chat = ESChat(ip=ES_HOST, port=9200, index_name='faq')
-    es_chat.chat()
+        create_index = False
+    input_str = event.get('question', None)
+
+    if input_str == None:
+        return {
+            'statusCode': 500,
+            'body': 'Required input parameter "question" is missing! '
+        }
+    else:
+        es_util = ESUtils(ip=ES_HOST, port=9200, index_name='faq')
+        if create_index:
+            print('create index and load question')
+            es_util.create_index()
+            qa_pair = es_util.get_qa_pairs('faq_data.csv')
+            es_util.insert_qa_pairs(qa_pair, 'faq_dataset_manual')
+        else:
+            print('Skip create index and load question')
+        es_chat = ESChat(ip=ES_HOST, port=9200, index_name='faq')
+        answer_str = es_chat.chat(input_str)
+
+        return {
+            'statusCode': 200,
+            'body': {'answer': answer_str}
+        }

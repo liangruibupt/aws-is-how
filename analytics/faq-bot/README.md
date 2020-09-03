@@ -103,8 +103,6 @@ The `faq_data.cvs` is built based on  https://github.com/candlewill/Dialog_Corpu
 ```bash
 pip install elasticsearch -t .
 pip install pandas -t .
-pip install requests -t .
-pip install requests_aws4auth -t .
 
 export ES_USER=TheMasterUser
 export ES_PASSWORD=YOUR_PASSWORD
@@ -238,6 +236,25 @@ Skip create index and load question
 
 
 ## ElasticSearch and Lambda Based
+1. Build the lambda function
+```bash
+mkdir temp
+cp simple_chatbot_lambda.py temp/
+cd temp/
+pip install elasticsearch -t .
+pip install pandas -t .
+
+zip -r lambda.zip *
+
+aws lambda create-function --function-name faq-es-lambda \
+--zip-file fileb://lambda.zip --handler simple_chatbot_lambda.handler --runtime python3.6 \
+--role arn:aws-cn:iam::account-id:role/lambda-es-role --timeout 60 \
+--environment Variables={ES_USER=string,ES_PASSWORD=string,ES_HOST=string}
+--region cn-north-1
+
+aws lambda update-function-code --function-name simple_chatbot_lambda \
+--zip-file fileb://lambda.zip --region cn-north-1
+```
 
  ## Reference
  [Internal User Database and HTTP Basic Authentication](https://docs.amazonaws.cn/elasticsearch-service/latest/developerguide/fgac.html#fgac-walkthrough-basic)
