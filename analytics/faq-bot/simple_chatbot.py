@@ -80,7 +80,11 @@ class ESChat(object):
         dsl = {
             "query": {
                 "match": {
-                    "question": input_str
+                    "question": {
+                        "query": input_str,
+                        "analyzer": "smartcn",
+                        "operator": "AND"
+                    }
                 }
             }
         }
