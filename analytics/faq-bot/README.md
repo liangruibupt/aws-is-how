@@ -240,23 +240,56 @@ Skip create index and load question
 ```bash
 mkdir temp
 cp simple_chatbot_lambda.py temp/
+cp faq_data.csv temp/
 cd temp/
 pip install elasticsearch -t .
-pip install pandas -t .
+download the pandas package from https://pypi.org/project/pandas/ For Python 3.8, pandas-1.1.1-cp38-cp38-manylinux1_x86_64.whl
+unzip pandas-1.1.1-cp38-cp38-manylinux1_x86_64.whl
+download the numpy package from https://pypi.org/project/numpy/ For Python 3.8, numpy-1.19.1-cp38-cp38-manylinux1_x86_64.whl
+unzip numpy-1.19.1-cp38-cp38-manylinux1_x86_64.whl
 
 zip -r lambda.zip *
 
 aws lambda create-function --function-name faq-es-lambda \
---zip-file fileb://lambda.zip --handler simple_chatbot_lambda.handler --runtime python3.6 \
---role arn:aws-cn:iam::account-id:role/lambda-es-role --timeout 60 \
---environment Variables={ES_USER=string,ES_PASSWORD=string,ES_HOST=string}
---region cn-north-1
+--zip-file fileb://lambda.zip --handler simple_chatbot_lambda.handler --runtime python3.8 \
+--role arn:aws-cn:iam::876820548815:role/lambda-es-role --timeout 60 \
+--environment  '{"Variables":{"ES_USER":"TheMasterUser","ES_PASSWORD":"PWD","ES_HOST":"https://es_domain"}}' \
+--region cn-northwest-1
 
-aws lambda update-function-code --function-name simple_chatbot_lambda \
---zip-file fileb://lambda.zip --region cn-north-1
+aws lambda update-function-code --function-name faq-es-lambda \
+--zip-file fileb://lambda.zip --region cn-northwest-1
+```
+
+2. Testing
+
+```bash
+# Create index and initial laod question list
+aws lambda invoke --function-name faq-es-lambda \
+--payload '{ "create_index": "true", "question": "如何开发票" }' \
+response.json --log-type Tail --query 'LogResult' --output text --region cn-northwest-1 |  base64 -d
+
+# Invoke the function with quetion
+aws lambda invoke --function-name faq-es-lambda --payload '{"question": "如何开发票" }' \
+response.json --log-type Tail --query 'LogResult' --output text --region cn-northwest-1 |  base64 -d
+
+START RequestId: 45b0145b-03df-4f1f-9567-da4a0c625861 Version: $LATEST
+Skip create index and load question
+answer: 请在聊天窗口输入抬头，联系人和快递地址
+END RequestId: 45b0145b-03df-4f1f-9567-da4a0c625861
+REPORT RequestId: 45b0145b-03df-4f1f-9567-da4a0c625861  Duration: 173.46 ms     Billed Duration: 200 ms Memory Size: 128 MB     Max Memory Used: 95 MB  Init Duration: 1495.90 ms
+```
+
+![lambda-execution-output](media/lambda-execution-output.png)
+
+## Cleanup
+```bash
+aws lambda delete-function --function-name faq-es-lambda --region cn-northwest-1
+aws es delete-elasticsearch-domain --domain-name faq-es --region cn-northwest-1
 ```
 
  ## Reference
  [Internal User Database and HTTP Basic Authentication](https://docs.amazonaws.cn/elasticsearch-service/latest/developerguide/fgac.html#fgac-walkthrough-basic)
 
  [ES query-dsl-match-query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html)
+
+ [Pandas in AWS lambda gives numpy error](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-python-package-compatible/)
