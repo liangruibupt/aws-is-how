@@ -2,6 +2,8 @@
 
 Running a producer client program on an EC2 instance that streams a data set of taxi trips in New York City. Ingest the stream data to Amazon Kinesis Data Stream.
 
+![Labs-Kinesis-KDA](media/Labs-Kinesis-KDA.png)
+
 ## Option1 Build manually
 
 ### Create Kinesis Data Stream
