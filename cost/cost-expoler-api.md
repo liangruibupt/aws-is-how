@@ -36,6 +36,21 @@ TimePeriod	LinkedAccount	Service	Cost	Cost-Unit	Usage	Usage-Unit	Estimated
 2020-09-01 	 your-account-id	Amazon Elastic Compute Cloud - Compute 	 0.002173082 	 CNY 	 0.0023291337 	 GB 	 True
 ```
 
+- get_tags example
+```python
+tags = ce.get_tags(TimePeriod={'Start': start, 'End':  end},
+    **kwargs)
+    print(tags)
+```
+
+Results
+```
+{'Tags': ['aws:autoscaling:groupName', 'aws:cloudformation:logical-id', 'aws:cloudformation:stack-id', 'aws:cloudformation:stack-name', 'Customer', 'Name', 'STAGE', 'workload-type'], 
+    'ReturnSize': 8, 'TotalSize': 8, 'ResponseMetadata': {'RequestId': '0d4eddd4-d24b-49d4-87d0-b221eb20f99b', 'HTTPStatusCode': 200, 
+    'HTTPHeaders': {'date': 'Thu, 03 Sep 2020 14:49:03 GMT', 'content-type': 'application/x-amz-json-1.1', 'content-length': '203', 'connection': 'keep-alive', 'x-amzn-requestid': '0d4eddd4-d24b-49d4-87d0-b221eb20f99b', 'cache-control': 'no-cache'}, 
+    'RetryAttempts': 0}}
+```
+
 ## Reference
 [Using AWS Cost Explorer to analyze data transfer costs](https://aws.amazon.com/blogs/mt/using-aws-cost-explorer-to-analyze-data-transfer-costs/)
 

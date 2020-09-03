@@ -13,7 +13,7 @@ now = datetime.datetime.utcnow()
 start = (now - datetime.timedelta(days=args.days)).strftime('%Y-%m-%d')
 end = now.strftime('%Y-%m-%d')
 
-cd = boto3.client('ce', 'cn-northwest-1')
+ce = boto3.client('ce', 'cn-northwest-1')
 
 results = []
 
@@ -23,7 +23,10 @@ while True:
         kwargs = {'NextPageToken': token}
     else:
         kwargs = {}
-    data = cd.get_cost_and_usage(
+    tags = ce.get_tags(TimePeriod={'Start': start, 'End':  end},
+    **kwargs)
+    print(tags)
+    data = ce.get_cost_and_usage(
         TimePeriod={'Start': start, 'End':  end},
         Granularity='DAILY',
         Filter={"And": [
