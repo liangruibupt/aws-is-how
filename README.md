@@ -85,7 +85,7 @@
 
 [SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
 
-[Using AWS Lambda with Amazon Kinesis](lambda/lambda-kinesis.md)
+[Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
 
 [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
 
@@ -96,6 +96,8 @@
 [How to retrieve the System Manager Parameter Store](lambda/lambda-ssm-variables.py)
 
 [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
+
+[AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshops)
 
 
 ## Migration
@@ -130,11 +132,15 @@
 
 [Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
 
+[AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
 
 [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
+
+[Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
 
 [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
 
