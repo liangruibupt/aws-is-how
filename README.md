@@ -150,6 +150,8 @@
 
 [How can I a ECS service serve traffic from multiple port?](container/ECS-Dynamic-Port-Mapping.md)
 
+[How to launch tomcat server on ECS](container/tomcat)
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
