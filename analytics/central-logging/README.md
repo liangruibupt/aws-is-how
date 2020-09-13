@@ -3,7 +3,7 @@
 - Basic Deployment - CloudWatch logs to ElasticSearch
 - Advance Deployment - Logstash, Fluentd and Metricbeat
 - Ingest AWS logs from S3 to Elasticsearch by using Filebeat.
-- [Logging with Elasticsearch, Fluent Bit, and Kibana](https://www.eksworkshop.com/intermediate/230_logging/)
+- [Logging with Elasticsearch, Fluent Bit, and Kibana for Amazon EKS and Amazon ECS]
 
 ## Basic Deployment - CloudWatch logs to ElasticSearch
 
@@ -511,13 +511,20 @@ chown root filebeat.yml
 GET _cat/indices 
 ```
 
-# [Logging with Elasticsearch, Fluent Bit, and Kibana](https://www.eksworkshop.com/intermediate/230_logging/)
+# Logging with Elasticsearch, Fluent Bit, and Kibana
 
 Fluent Bit, Elasticsearch and Kibana is also known as “EFK stack”. It can be used for Amazon EKS and Amazon ECS central logging.
 
 Fluent Bit: an open source and multi-platform Log Processor and Forwarder which allows you to collect data/logs from different sources, unify and send them to multiple destinations. It’s fully compatible with Docker and Kubernetes environments.
 
 Fluent Bit will forward logs from the individual instances in the cluster to a centralized logging backend where they are combined for higher-level reporting using ElasticSearch and Kibana.
+
+[Logging with Elasticsearch, Fluent Bit, and Kibana for Amazon EKS](https://www.eksworkshop.com/intermediate/230_logging/)
+
+[Fluent Bit for Amazon ECS](https://github.com/aws-samples/amazon-ecs-fluent-bit-daemon-service)
+
+[centralized ECS logging with Fluent Bit](https://amazonaws-china.com/cn/blogs/china/centralized-container-logging-fluent-bit/)
+
 
 # Cleanup
 ```bash
