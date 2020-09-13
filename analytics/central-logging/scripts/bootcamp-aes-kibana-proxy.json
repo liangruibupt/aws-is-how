@@ -1,0 +1,518 @@
+{
+    "AWSTemplateFormatVersion":"2010-09-09", 
+    "Description":"AES Logging (HYFEAMIT) - Kibana Proxy Stack.  **Attention** This template creates AWS resources that will incur charges on your account.",
+    "Parameters":{
+        "NetworkStackName": {
+            "Description": "Name of an active CloudFormation stack that contains the networking resources.",
+            "Type": "String"
+        },
+	"ElasticsearchEndpoint": {
+            "Description": "Endpoint of the Amazon Elasticsearch Domain",
+            "Type": "String"
+	},
+	"CognitoUserPoolEndpoint": {
+            "Description": "Name of the Cognito User Pool Endpoint for Kibana Auth.",
+            "Type": "String"
+	},
+	"KinesisStreamName": {
+            "Description": "Name of the Kinesis Stream for logging.",
+            "Type": "String"
+	},
+      "ElasticsearchDomainName":{
+         "Description":"Name of the Elasticsearch Domain you wish to create.",
+         "Type":"String",
+         "MinLength":3,
+         "MaxLength":28
+      }	
+    },
+    "Mappings":{
+        "AWSEC2AMILinux":{
+            "us-east-1":{"AmiId":"ami-0b69ea66ff7391e80"},
+            "us-east-2":{"AmiId":"ami-00c03f7f7f2ec15c3"},
+            "us-west-1":{"AmiId":"ami-0245d318c6788de52"},
+            "us-west-2":{"AmiId":"ami-04b762b4289fba92b"},
+            "ap-south-1":{"AmiId":"ami-0cb0e70f44e1a4bb5"},
+            "ap-northeast-3":{"AmiId":"ami-0a08c193321922022"},
+            "ap-northeast-2":{"AmiId":"ami-0d097db2fb6e0f05e"},
+            "ap-southeast-1":{"AmiId":"ami-048a01c78f7bae4aa"},
+            "ap-southeast-2":{"AmiId":"ami-03ed5bd63ba378bd8"},
+            "ap-northeast-1":{"AmiId":"ami-0ff21806645c5e492"},
+            "ca-central-1":{"AmiId":"ami-085edf38cedbea498"},
+            "eu-central-1":{"AmiId":"ami-00aa4671cbf840d82"},
+            "eu-west-1":{"AmiId":"ami-0ce71448843cb18a1"},
+            "eu-west-2":{"AmiId":"ami-00a1270ce1e007c27"},
+            "eu-west-3":{"AmiId":"ami-03b4b78aae82b30f1"},
+	    "eu-north-1":{"AmiId":"ami-1b2fa465"},
+            "sa-east-1":{"AmiId":"ami-0a1f49a762473adbd"}
+	}
+    },
+    "Resources":{
+        "KibanaProxySecurityGroup":{
+            "Type":"AWS::EC2::SecurityGroup",
+            "Properties":{
+                "GroupDescription":"Rules for allowing access to the proxy",
+                "VpcId" : {"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-VPCID"}},		
+                "SecurityGroupIngress":
+                [
+                    {
+                        "IpProtocol":"tcp",
+                        "FromPort":"443",
+                        "ToPort":"443",
+                        "CidrIp":"0.0.0.0\/0"
+                    }
+                ],
+                "SecurityGroupEgress":
+		[
+                    {
+		        "IpProtocol":"-1",
+			"FromPort":"0",
+			"ToPort":"65535",
+			"CidrIp":"0.0.0.0\/0"
+                    }
+                ],
+		"Tags":[
+                    {"Key": "Name","Value": {"Fn::Join": ["",[{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}},"-kibana-proxy-sg"]]}}
+                ]
+            }
+        },
+        "KibanaProxyIPAddress":{
+            "Type":"AWS::EC2::EIP",
+            "Properties":{
+                "Domain":"vpc"
+            }
+        },
+        "KibanaProxyNetworkInterface":{
+            "Type":"AWS::EC2::NetworkInterface",
+            "Properties":{
+                "Description":"Kibana Proxy ENI",
+                "PrivateIpAddress": {"Fn::Join": ["",[{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-VPCCIDRPrefix"}},".0.150"]]},
+                "GroupSet":[{"Ref":"KibanaProxySecurityGroup"}],
+                "SubnetId": {"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-PublicSubnet0"}},
+                "Tags":[
+                    {"Key": "Name","Value": {"Fn::Join": ["",[{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}},"-kibana-proxy-if"]]}}
+                ]
+            }
+        },
+        "AssociateEIPKibanaProxy" : {
+            "Type" : "AWS::EC2::EIPAssociation",
+            "Properties" : {
+                "AllocationId" : { "Fn::GetAtt" : [ "KibanaProxyIPAddress", "AllocationId" ]},
+                "NetworkInterfaceId" : { "Ref" : "KibanaProxyNetworkInterface" }
+            }
+        },
+        "KibanaProxyRole":{
+            "Type":"AWS::IAM::Role",
+            "Properties":{
+                "RoleName": { "Fn::Join": [ "", [ {"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}}, "-kibana-proxy-role"]]},
+                "AssumeRolePolicyDocument":{
+                    "Version":"2012-10-17",
+                    "Statement":[{
+                       "Effect":"Allow",
+                       "Principal":{"Service":["ec2.amazonaws.com"]},
+                       "Action":["sts:AssumeRole"]
+                    }]
+                },
+                "Path":"/",
+		"ManagedPolicyArns":["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"],
+		"Policies": [{
+	      	    "PolicyName": { "Fn::Join": [ "", [ {"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}}, "-kibana-proxy-policy"]]},
+		    "PolicyDocument": {
+			"Version": "2012-10-17",
+			"Statement": [
+			    {
+			        "Effect": "Allow",
+			        "Action": "kinesis:*",
+			        "Resource": {"Fn::Join":["",["arn:aws:kinesis:",{"Ref":"AWS::Region"},":",{"Ref":"AWS::AccountId"},":stream/",{"Ref":"KinesisStreamName"}]]}
+			    },
+			    {
+			        "Effect":"Allow",
+			        "Action":"ec2:Describe*",
+			        "Resource":"*"
+			    },
+			    {
+			        "Effect":"Allow",
+			        "Action":"elasticloadbalancing:Describe*",
+			        "Resource":"*"
+			    },
+			    {
+			        "Effect":"Allow",
+			        "Action":[
+				    "cloudwatch:ListMetrics",
+				    "cloudwatch:GetMetricStatistics",
+				    "cloudwatch:Describe*"
+			        ],
+			        "Resource":"*"
+			    },
+			    {
+			        "Effect":"Allow",
+			        "Action":"autoscaling:Describe*",
+			        "Resource":"*"
+			    },
+                            {
+			        "Effect": "Allow",
+			        "Action": ["es:ESHttp*"],
+			        "Resource": {"Fn::Join":["",["arn:aws:es:",{"Ref":"AWS::Region"},":",{"Ref":"AWS::AccountId"},":domain/",{"Ref":"ElasticsearchDomainName"},"/*"]]}
+			    }
+			]
+		    }
+                }]
+            }
+        },  
+	"KibanaProxyInstanceProfile":{
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [{"Ref": "KibanaProxyRole"}]
+            }	
+	}, 	
+        "KibanaProxy":{
+            "Type":"AWS::EC2::Instance",
+            "Metadata":{
+                "Comment":"Install a simple application",
+                "AWS::CloudFormation::Init":{
+		    "configSets":{
+		        "default":["step1","step2"]
+		    },   
+                    "step1":{
+		        "files":{
+			    "/etc/yum.repos.d/elastic.repo":{
+                                "content":{
+                                    "Fn::Join":[
+                                        "",
+                                        [
+					    "[elastic-7.x]\n",
+					    "name=Elastic repository for 7.x packages\n",
+					    "baseurl=https://artifacts.elastic.co/packages/7.x/yum\n",
+					    "gpgcheck=1\n",
+					    "gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch\n",
+					    "enabled=1\n",
+					    "autorefresh=1\n",
+					    "type=rpm-md\n"
+                                        ]
+                                    ]
+                                },
+                                "mode":"000644",
+                                "owner":"root",
+                                "group":"root"
+			    },
+			    "/usr/share/es-scripts/es-proxy-downloader.sh":{
+                                "content":{
+                                    "Fn::Join":[
+                                        "",
+                                        [
+					    "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash\n",
+					    ". ~/.nvm/nvm.sh\n",
+					    "nvm install node\n",
+					    "npm install aws-es-curl -g\n",
+					    "aws-es-curl --region ",
+					    {"Ref":"AWS::Region"},
+					    " -X GET 'https://",
+					    {"Ref":"ElasticsearchEndpoint"},
+					    "/'\n"
+                                        ]
+                                    ]
+                                },
+                                "mode":"000755",
+                                "owner":"root",
+                                "group":"root"
+			    },				    
+			    "/usr/share/es-scripts/es-commands.sh":{
+                                "content":{
+                                    "Fn::Join":[
+                                        "",
+                                        [
+					    "pip install boto3 --user\n",
+					    "pip install elasticsearch --user\n",
+					    "pip install requests --user\n",
+					    "pip install requests-aws4auth --user\n",
+					    "wget https://search-sa-log-solutions.s3-us-east-2.amazonaws.com/fluentd-kinesis-logstash/packages/put-data.py\n",
+					    "wget https://search-sa-log-solutions.s3-us-east-2.amazonaws.com/fluentd-kinesis-logstash/packages/put-mappings.py\n",					    
+					    "wget https://search-sa-log-solutions.s3-us-east-2.amazonaws.com/fluentd-kinesis-logstash/data/2013Imdb.txt\n",
+					    "echo 'putting mappings'\n",
+				            "python put-mappings.py --endpoint ",
+				            {"Ref" : "ElasticsearchEndpoint"},
+					    " --region ",
+					    {"Ref":"AWS::Region"},
+				            "\n",
+					    "echo 'posting data'\n",
+				            "python put-data.py --endpoint ",
+				            {"Ref" : "ElasticsearchEndpoint"},
+					    " --region ",
+					    {"Ref":"AWS::Region"},
+				            "\n"
+                                        ]
+                                    ]
+                                },
+                                "mode":"000755",
+                                "owner":"root",
+                                "group":"root"
+			    }
+			}
+		    },
+                    "step2":{
+                        "packages":{
+                            "yum":{
+			    	"nginx":[],
+				"chrony":[],
+                                "metricbeat":[]
+                            }
+                        },
+                        "files":{
+                            "/etc/nginx/conf.d/default.conf":{
+
+                                "content":{
+                                    "Fn::Join":[
+                                        "",
+                                        [
+					    "server {\n",
+					    "    listen 443;\n",
+					    "    server_name $host;\n",
+					    "    rewrite ^/$ https://$host/_plugin/kibana redirect;\n",
+					    "\n", 
+					    "    ssl_certificate           /etc/nginx/cert.crt;\n",
+					    "    ssl_certificate_key       /etc/nginx/cert.key;\n",
+					    "\n", 
+					    "    ssl on;\n",
+					    "    ssl_session_cache  builtin:1000  shared:SSL:10m;\n",
+					    "    ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;\n",
+					    "    ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;\n",
+					    "    ssl_prefer_server_ciphers on;\n",
+					    "\n", 
+					    "\n", 
+					    "    location ^~ /_plugin/kibana {\n",
+					    "        # Forward requests to Kibana\n",
+                                            "        proxy_pass https://",
+					    {"Ref":"ElasticsearchEndpoint"},
+					    "/_plugin/kibana;\n",
+					    "\n", 
+					    "        # Handle redirects to Amazon Cognito\n",
+					    "        proxy_redirect https://",
+					    {"Ref":"CognitoUserPoolEndpoint"},
+					    " https://$host;\n",
+					    "\n", 
+					    "        # Update cookie domain and path\n",
+					    "        proxy_cookie_domain ",
+					    {"Ref":"ElasticsearchEndpoint"},
+					    " $host;\n",
+					    "\n", 
+					    "        proxy_set_header Accept-Encoding \"\";\n",
+					    "        sub_filter_types *;\n",
+					    "        sub_filter ",
+					    {"Ref":"ElasticsearchEndpoint"},
+					    " $host;\n",
+					    "        sub_filter_once off;\n",
+					    "\n", 
+					    "        # Response buffer settings\n",
+					    "        proxy_buffer_size 128k;\n",
+					    "        proxy_buffers 4 256k;\n",
+					    "        proxy_busy_buffers_size 256k;\n",
+					    "    }\n",
+					    "\n", 
+					    "    location ~ \\/(log|sign|error|fav|forgot|change) {\n",
+					    "        # Forward requests to Cognito\n",
+					    "        proxy_pass https://",
+					    {"Ref":"CognitoUserPoolEndpoint"},
+					    " ;\n",
+					    "\n", 
+					    "        # Handle redirects to Kibana\n",
+					    "        proxy_redirect https://",
+					    {"Ref":"ElasticsearchEndpoint"},
+					    " https://$host;\n",
+					    "\n", 
+					    "        # Handle redirects to Amazon Cognito\n",
+					    "        proxy_redirect https://",
+					    {"Ref":"CognitoUserPoolEndpoint"},
+					    "  https://$host;\n",
+					    "\n", 
+					    "        # Update cookie domain\n",
+					    "        proxy_cookie_domain ",
+					    {"Ref":"CognitoUserPoolEndpoint"},
+					    "  $host;\n",
+					    "    }\n",
+					    "}\n"
+    
+					]
+				    ]         
+                                },
+                                "mode":"000644",
+                                "owner":"root",
+                                "group":"root"
+                            },
+                            "/etc/metricbeat/metricbeat.yml":{
+                                "content":{
+                                    "Fn::Join":[
+                                        "",
+                                        [
+                                            "metricbeat.modules:\n",
+                                            "- module: system\n",
+                                            "  metricsets:\n",
+                                            "    - cpu\n",
+                                            "    - load\n",
+                                            "    - filesystem\n",
+                                            "    - fsstat\n",
+                                            "    - memory\n",
+                                            "    - network\n",
+                                            "    - process\n",
+                                            "  enabled: true\n",
+                                            "  period: 10s\n",
+                                            "  processes: ['.*']\n",
+                                            "name: \"proxyserver\"\n",
+                                            "output.file:\n",
+                                            "  path: \"/var/log/fluentdinput/metricbeat\"\n",
+                                            "  rotate_every_kb: 100000\n",
+					    "  number_of_files: 7\n",
+					    "  permissions: 0644\n",
+                                            "logging.to_syslog: true\n"	
+                                        ]
+                                    ]         
+                                },
+                                "mode":"000644",
+                                "owner":"root",
+                                "group":"root"
+                            },
+                            "/etc/td-agent/td-agent.conf":{
+                                "content":{
+                                    "Fn::Join":[
+                                        "",
+                                        [
+					    "<source>\n",
+					    "  @type tail\n",
+					    "  path /var/log/nginx/access.log\n",
+					    "  pos_file /var/log/td-agent/access.log.pos\n",
+					    "  tag proxy.nginx.access\n",
+					    "  <parse>\n",
+					    "    @type nginx\n",
+					    "  </parse>\n",
+					    "</source>\n",
+					    "<filter proxy.nginx.access>\n",
+					    "  @type ec2_metadata\n",
+					    "\n",
+					    "  metadata_refresh_seconds 300 # Optional, default 300 seconds\n",
+					    "\n",
+					    "  <record>\n",
+					    "    hostname      ${tagset_name}\n",
+					    "    instance_id   ${instance_id}\n",
+					    "    instance_type ${instance_type}\n",
+					    "    private_ip    ${private_ip}\n",
+					    "    az            ${availability_zone}\n",
+					    "    vpc_id        ${vpc_id}\n",
+					    "    ami_id        ${image_id}\n",
+					    "    account_id    ${account_id}\n",
+					    "  </record>\n",
+					    "</filter>\n",
+					    "<filter proxy.nginx.access>\n",
+					    "  @type record_transformer\n",
+					    "  <record>\n",
+					    "    event_group proxy\n",
+					    "  </record>\n",
+					    "</filter>\n",
+					    "<match proxy.nginx.access>\n",
+					    "  # plugin type\n",
+					    "  @type kinesis_streams\n",
+					    "\n",
+					    "  # your kinesis stream name\n",
+					    "  stream_name ",
+					    {"Ref":"KinesisStreamName"},
+                                            "\n",
+                                            "  # AWS region\n",
+                                            "  region ",
+                                            {"Ref":"AWS::Region"},
+                                            "\n",
+                                            "\n",
+                                            "  <buffer>\n",
+                                            "    # Frequency of ingestion\n",
+                                            "    flush_interval 5s\n",
+                                            "    # Parallelism of ingestion\n",
+                                            "    flush_thread_count 8\n",
+                                            "  </buffer>\n",
+                                            "</match>\n"
+                                        ]
+                                    ]         
+                                },
+                                "mode":"000644",
+                                "owner":"td-agent",
+                                "group":"td-agent"
+                            }    
+                                
+                        },
+                        "services":{
+                            "sysvinit":{
+				"amazon-ssm-agent":{
+                                    "enabled":"true",
+                                    "ensureRunning":"true"
+				},
+				"nginx":{
+                                    "enabled":"true",
+                                    "ensureRunning":"true"
+				}                              
+			    }
+                        }
+                    }
+                }
+            },
+            "Properties":{
+                "Tags":[
+                    {"Key": "Name","Value": {"Fn::Join": ["",[{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}},"-kibana-proxy"]]}}
+                ],                            
+                "ImageId":{
+                    "Fn::FindInMap":[
+                        "AWSEC2AMILinux",
+                        {"Ref":"AWS::Region"},
+			"AmiId"
+                    ]
+                },
+                "InstanceType":"t2.large",
+                "IamInstanceProfile":{ "Ref":"KibanaProxyInstanceProfile"},
+                "UserData":{
+                    "Fn::Base64":{
+                        "Fn::Join":[
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "yum update -y aws-cfn-bootstrap\n",
+                                "yum update -y aws-cli\n",
+				"mkdir /usr/share/es-scripts\n",
+                                "amazon-linux-extras install nginx1.12 -y\n",
+				"openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n",
+				"rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch\n",
+				"curl -L https://toolbelt.treasuredata.com/sh/install-amazon2-td-agent3.sh | sh\n",
+				"/usr/sbin/td-agent-gem install fluent-plugin-kinesis\n",
+				"/usr/sbin/td-agent-gem install fluent-plugin-ec2-metadata\n",
+				"mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.old\n",
+				"yum install -y python-pip\n",
+				"chown -R root:td-agent /var/log\n",
+                                "chmod -R 775 /var/log/\n",
+                                "/opt/aws/bin/cfn-init -c default -v ",
+                                "         --stack ",
+                                {
+                                    "Ref":"AWS::StackName"
+                                },
+                                "         --resource KibanaProxy ",
+                                "         --region ",
+                                {
+                                    "Ref":"AWS::Region"
+                                },
+                                "\n"
+                            ]
+                        ]
+                    }
+		    
+		},    
+                "NetworkInterfaces":[
+                    {
+                        "DeviceIndex":"0",
+                        "NetworkInterfaceId":{"Ref":"KibanaProxyNetworkInterface"}
+		    }
+                ]
+            }
+        }
+    },
+    "Outputs":{
+        "KibanaProxyURL":{
+            "Description":"Kibana Proxy Public IP address.",
+            "Value": {"Fn::Join":["",["https://",{"Ref":"KibanaProxyIPAddress"},"/_plugin/kibana/"]]},       
+            "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-KibanaProxyURL" }}
+        }
+    }
+}    
+

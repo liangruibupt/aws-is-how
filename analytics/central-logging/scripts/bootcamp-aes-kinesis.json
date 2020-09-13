@@ -1,0 +1,71 @@
+{
+    "AWSTemplateFormatVersion":"2010-09-09",
+    "Description":"AES Logging (HYFEAMIT) - Kinesis Stack. **Attention** This template creates AWS resources that will incur charges on your account.",
+    "Parameters":{
+        "NetworkStackName": {
+            "Description": "Name of an active CloudFormation stack that contains the networking resources, such as the subnet and security group, that will be used in this stack.",
+            "Type": "String"
+        }
+    },
+    "Resources":{
+    
+	"KinesisDeliveryStream": { 
+	    "Type": "AWS::Kinesis::Stream", 
+	    "Properties": {
+	        "Name": {"Fn::Join":["", [ "log-delivery-",{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}}]]}, 
+	        "RetentionPeriodHours" : 24, 
+	        "ShardCount": 2,
+	        "StreamEncryption": { 
+	    	    "EncryptionType": "KMS", 
+	    	    "KeyId": "alias/aws/kinesis"
+		},
+	        "Tags": [{"Key": "Name","Value": {"Fn::Join": ["",[{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-EnvTag"}},"-kinesis-es-delivery"]]}}]
+	    } 
+        },
+        "KinesisPrivateEndpointSecurityGroup":{
+            "Type":"AWS::EC2::SecurityGroup",
+            "Properties":{
+                "GroupDescription":"Kinesis Private Endpoint Security Group",
+                "SecurityGroupIngress":[
+                    {
+                        "IpProtocol":"-1",
+                        "CidrIp":{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-VPCCIDRBlock"}}
+                    }
+                ],
+                "VpcId":{"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-VPCID"}}
+            }
+        },
+	"KinesisPrivateEndpoints": {
+            "Type" : "AWS::EC2::VPCEndpoint",
+            "Properties" : {
+                "PrivateDnsEnabled" : "true",
+                "SecurityGroupIds" : [ {"Ref":"KinesisPrivateEndpointSecurityGroup"} ],
+                "ServiceName" : { "Fn::Sub": "com.amazonaws.${AWS::Region}.kinesis-streams" },
+                "SubnetIds" : [ 
+                    { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-PrivateSubnetApp0"}},
+                    { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-PrivateSubnetApp1"}},
+                    { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-PrivateSubnetApp2"}}
+		],
+                "VpcEndpointType" : "Interface",
+                "VpcId" : {"Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-VPCID"}}
+            }
+        }
+    }, 
+    "Outputs":{
+        "StackName":{
+            "Description":"This is the stack name.",
+            "Value": {"Ref":"AWS::StackName"},
+            "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-StackName"}}
+        },    
+	"StreamName":{
+            "Description":"The Kinesis Stream Name used for delivery to logstash",
+            "Value": {"Ref":"KinesisDeliveryStream"},
+            "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-StreamName"}}
+	},
+        "StreamARN":{
+            "Description":"The Kinesis Stream ARN used for delivery to logstash",
+            "Value":{"Fn::GetAtt":["KinesisDeliveryStream","Arn"]},
+            "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-StreamARN"}}
+        }
+    }
+}

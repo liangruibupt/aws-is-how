@@ -37,6 +37,8 @@
 
 [Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
 
+[Amazon Elasticsearch Service Workshop](https://www.aesworkshops.com/)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -165,6 +167,8 @@
 [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
 
 [How to send CloudWatch logs to S3](devops/cloudwatch/How-to-send-logs-to-S3.md)
+
+[Central Logging on AWS](analytics/central-logging)
 
 ## Infra as Code
 

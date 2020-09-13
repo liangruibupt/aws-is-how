@@ -1,0 +1,61 @@
+{
+    "AWSTemplateFormatVersion":"2010-09-09", 
+    "Description":"AES Logging (HYFEAMIT) - Lab 1 Stack. **Attention** This template creates AWS resources that will incur charges on your account.",
+    "Parameters":{  
+        "OperatorEMail":{
+            "Description":"EMail address to notify if there are any scaling operations",
+            "Type":"String",
+            "AllowedPattern":"([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)",
+            "ConstraintDescription":"must be a valid email address."
+        },
+        "ElasticsearchEndpoint": {
+            "Description": "Elasticsearch Endpoint",
+            "Type": "String"
+        },
+        "ElasticsearchDomainName": {
+            "Description": "Elasticsearch Domain Name",
+            "Type": "String"
+        },
+        "NetworkStackName": {
+            "Description": "Name of an active CloudFormation stack that contains the networking resources, such as the subnet and security group, that will be used in this stack.",
+            "Type": "String"
+        },
+        "KinesisStackName": {
+            "Description": "Name of an active CloudFormation stack that contains the kinesis resources, that will be used in this stack.",
+            "Type": "String"
+        }
+    },
+    "Resources":{
+        "apigw" : {
+            "Type" : "AWS::CloudFormation::Stack",
+            "Properties" : {
+                "TemplateURL" : "https://s3-us-east-2.amazonaws.com/search-sa-log-solutions/fluentd-kinesis-logstash/templates/json/bootcamp-aes-api-lambda-layers",
+                "Parameters" : {
+                    "NetworkStackName" : {"Ref": "NetworkStackName"},
+                    "ElasticsearchEndpoint" : {"Ref": "ElasticsearchEndpoint"},
+		            "ElasticsearchDomainName" : {"Ref": "ElasticsearchDomainName"}
+                }
+            }            
+        },
+        "application" : {
+            "Type" : "AWS::CloudFormation::Stack",
+            "Properties" : {
+                "TemplateURL" : "https://s3-us-east-2.amazonaws.com/search-sa-log-solutions/fluentd-kinesis-logstash/templates/json/bootcamp-aes-react",
+                "Parameters" : {
+                    "NetworkStackName" : {"Ref": "NetworkStackName"},
+                    "ApiGwEndpoint":{"Fn::GetAtt":["apigw","Outputs.ApiGwEndpoint"]},
+                    "OperatorEMail" : {"Ref" : "OperatorEMail"},
+                    "KinesisStreamName" : {"Fn::ImportValue" : {"Fn::Sub": "${KinesisStackName}-StreamName"}}
+                }
+            }            
+        }
+    },
+    "Outputs":{
+        "ApplicationLoadBalancerURL":{
+            "Description":"Access URL of the Application ALB",
+            "Value": { "Fn::GetAtt" : [ "application", "Outputs.URL" ] },
+            "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-ApplicationLoadBalancerURL" }}
+        }
+    }
+}
+        
