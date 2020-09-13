@@ -9,7 +9,7 @@
 
 Overall solutions can be found in [Centralized Logging](https://docs.aws.amazon.com/solutions/latest/centralized-logging/overview.html)
 
-[central-logging-architecture](media/central-logging-architecture.png)
+![central-logging-architecture](media/central-logging-architecture.png)
 
 This solution launches an Amazon EC2 instance with a Apache server that hosts a simple web application in an Amazon VPC. During initial launch, the Amazon CloudWatch Logs agent is automatically installed on the instance, which is used to direct raw log data to Amazon CloudWatch.
 
