@@ -256,6 +256,8 @@ We will modify the MP4 output by adding captions from a side-car SRT file.
 
     You can play the MP4 using Chrome browser http://YOUR_WebSite_Domain/vod/outputs/CAPTIONS/MP4/VANLIFE.mp4
 
+![mediaconvert-outputs](media/mediaconvert/media/mediaconvert-outputs.png)
+
 ### Working with embedded input metadata 插入元数据
 
 Videos can have embedded metadata that is stored in the video package itself. In this module, we will look at some common examples of embedded metadata including Ad markers, embedded captions, and multi-language audio tracks. 
@@ -284,6 +286,8 @@ Videos can have embedded metadata that is stored in the video package itself. In
 ### Automating Jobs with Lambda and S3 Event Triggers 由 S3 文件自动触发 MediaConvert 转码任务
 
 Video files added to an S3 bucket automatically trigger a MediaConvert job by creating an automated "watchfolder" workflow. 
+
+![mediaconvert-trigger-workflow](media/mediaconvert/media/mediaconvert-trigger-workflow.png)
 
 1. Create an IAM Role `VODLambdaRole` for Lambda function
  - AWSLambdaBasicExecutionRole
