@@ -1,4 +1,4 @@
-# Video on Demand on AWS
+# Video on Demand on AWS 视频点播解决方案
 
 Video on Demand on AWS（视频点播解决方案） automatically provisions the AWS services necessary to build a scalable, distributed video-on-demand workflow. The video-on-demand solution ingests metadata files and source videos, processes the videos for playback on a wide range of devices, stores the transcoded media files, and delivers the videos to end users through Amazon CloudFront.
 
@@ -6,7 +6,7 @@ Video on Demand on AWS（视频点播解决方案） automatically provisions th
 2. This solution also supports AWS Elemental MediaConvert Quality-Defined Variable Bitrate (QVBR) encoding mode which ensures consistent, high-quality video transcoding with the smallest file size for any type of source video content. 
 3. This solution outputs 4K, 1080p, and 720p MP4, and any combination of 1080p, 720p, 540p, 360p, and 270p HLS and DASH.
 
-## Architecture Overview
+## Architecture Overview 架构概览
 
 ![Architect](media/mediaconvert/media/vod-architect.png)
 
@@ -16,18 +16,18 @@ A Step Functions workflow ingests a source video, or a source video and metadata
 
 AWS Elemental MediaConvert uses two-pass encoding to generate multiple high-quality versions of the original file. Source and destination media files are stored in Amazon Simple Storage Service (Amazon S3) and file metadata is stored in Amazon DynamoDB. If enabled, source files are tagged to allow the files to be moved to Amazon Glacier using an Amazon S3 lifecycle policy.
 
-## Deployment guide
+## Deployment guide 部署指南
 [China region](https://github.com/nwcd-samples/video-on-demand-on-aws)
 
 [Global region](https://docs.aws.amazon.com/solutions/latest/video-on-demand/architecture.html)
 
-# Hands on Lab
+# AWS Elemental MediaConvert Hands on Lab 转码服务动手实验
 
 If you just want to familar with AWS Video On Demand with MediaConvert, you can hands on the [MediaConvert workshop](https://github.com/aws-samples/aws-media-services-simple-vod-workflow)
 
 Each MediaConvert job from this lab produces outputs with the following characteristics:
 
-1. ABR stack
+1. Apple HLS
   - 3 outputs: 1280x720, 960x540, 680x360
 
 2. MP4
@@ -43,9 +43,9 @@ Each MediaConvert job from this lab produces outputs with the following characte
   - 30 - 60 FPS
   - 1.5 - 2 minutes long depending on which job in the lab you are running.
 
-## Workshop Modules
+## Workshop Modules 实验模块
 
-### Prerequisite
+### Prerequisite 前置准备
 
 1. Create the IAM Role `vod-MediaConvertRole` for AWS MediaConvert Service with default permissions policies: `AmazonAPIGatewayInvokeFullAccess` and `AmazonS3FullAccess`
 
@@ -84,7 +84,7 @@ Each MediaConvert job from this lab produces outputs with the following characte
 ```
 
 
-### AWS Elemental MediaConvert Jobs
+### AWS Elemental MediaConvert Jobs 创建 MediaConvert HLS, MP4和缩略图 转码任务
 
 This sample to use MediaConvert converting an HLS input into HLS, MP4 and Thumbnail outputs.
 
@@ -145,7 +145,7 @@ This sample to use MediaConvert converting an HLS input into HLS, MP4 and Thumbn
 
     You can play the HLS using Safari browser http://YOUR_WebSite_Domain//vod/outputs/VANLIFE/HLS/VANLIFE.m3u8
 
-### Modifying AWS Elemental MediaConvert Inputs
+### Modifying AWS Elemental MediaConvert Inputs 合并多个输入
 
 This sample is used to show how to clip and stitch inputs to AWS MediaConvert.
 
@@ -175,7 +175,7 @@ This sample is used to show how to clip and stitch inputs to AWS MediaConvert.
     You can play the MP4 using Chrome browser http://YOUR_WebSite_Domain/vod/outputs/TRAILER/MP4/VANLIFE.mp4
 
 
-### Modifying AWS Elemental MediaConvert Outputs
+### Modifying AWS Elemental MediaConvert Outputs 插入水印，图片和广告到输出视频
 
 This sample is used to show how to "burn-in" different kinds of information into a video ouput.
 
@@ -222,7 +222,7 @@ For example: create a video with timecodes and watermarks burned in to the eleme
 
     You can play the MP4 using Chrome browser http://YOUR_WebSite_Domain/vod/outputs/TRAILER-timecode/MP4/VANLIFE.mp4
 
-### Working with Captions
+### Working with Captions 插入字幕
 
 This sample is used to show how to create media assets with burned in caption generated from a side-car captions file.
 
@@ -256,7 +256,7 @@ We will modify the MP4 output by adding captions from a side-car SRT file.
 
     You can play the MP4 using Chrome browser http://YOUR_WebSite_Domain/vod/outputs/CAPTIONS/MP4/VANLIFE.mp4
 
-### Working with embedded input metadata
+### Working with embedded input metadata 插入元数据
 
 Videos can have embedded metadata that is stored in the video package itself. In this module, we will look at some common examples of embedded metadata including Ad markers, embedded captions, and multi-language audio tracks. 
 
@@ -281,7 +281,7 @@ Videos can have embedded metadata that is stored in the video package itself. In
 
     You can play the MP4 using Chrome browser http://YOUR_WebSite_Domain/vod/outputs/Metadata/MP4/VANLIFE.mp4
 
-### Automating Jobs with Lambda and S3 Event Triggers
+### Automating Jobs with Lambda and S3 Event Triggers 由 S3 文件自动触发 MediaConvert 转码任务
 
 Video files added to an S3 bucket automatically trigger a MediaConvert job by creating an automated "watchfolder" workflow. 
 
@@ -405,3 +405,152 @@ The MediaConvert Job can be created and execution successfully
     - Select `S3` from the Trigger Source and Enter the bucket name as `vod-mediaconvert-workshop`
     - Select `All object create events` for the Event type.
     - Prefix: `vod/inputs/WatchFolder/`
+
+5. [Use Amazon CloudWatch Events to monitor your AWS Elemental MediaConvert jobs](https://docs.aws.amazon.com/mediaconvert/latest/ug/cloudwatch_events.html)
+
+AWS Elemental MediaConvert sends change events about the status of jobs to CloudWatch Events.
+
+  - `PROGRESSING` : A job moves from the `SUBMITTED` state to the `PROGRESSING` state. 
+  - `STATUS_UPDATE` : By default, MediaConvert sends these events approximately once per minute. You can change the frequency by `Status update interval setting`
+  - `COMPLETE`: A job completes successfully.
+  - `ERROR`: A job has an error
+
+After a job has been in the `PROGRESSING` state for 48 hours, the service puts it into an `ERROR` state and stops working on it. You are not billed for jobs that end in an `ERROR` state. 
+
+
+- Step 1. Create the SNS Topic `MediaConvertJobStatus`
+    - Topic Name: `MediaConvertJobStatus`
+    - Subscription: You can define Lambda or Email or HTTP endpoint
+
+- Step 2. Specify an event source in a `CloudWatch Events` -> `Rules`
+    - Create a new rule
+    - `Event Source` -> `Event Pattern`
+        - Service Name: `MediaConvert`
+        - Event Type: `MediaConvert job status change`
+        - Specific states: `COMPLETE` and `ERROR`
+```json
+{
+  "source": [
+    "aws.mediaconvert"
+  ],
+  "detail-type": [
+    "MediaConvert Job State Change"
+  ],
+  "detail": {
+    "status": [
+      "COMPLETE",
+      "ERROR"
+    ]
+  }
+}
+```
+
+- Step 3. Add the Amazon SNS topic to CloudWatch Event Rule
+    - Target: SNS Topic
+    - Topic: MediaConvertJobStatus
+
+    You can add other Target such Lambda function
+
+- Set the Rule name as `MediaConvertJobStatusEvent` and state as `enable`
+
+6. Upload the video file to WatchFolder
+```bash
+aws s3 cp MediaConvert.mp4 s3://vod-mediaconvert-workshop/vod/inputs/WatchFolder/
+```
+
+7. Monitor the progress of your job and check the SNS notification
+
+```json
+{
+  "version": "0",
+  "id": "262173ec-8e71-4741-f6f5-bbb5c8d8e18a",
+  "detail-type": "MediaConvert Job State Change",
+  "source": "aws.mediaconvert",
+  "account": "account-id",
+  "time": "2020-09-17T10:13:36Z",
+  "region": "cn-northwest-1",
+  "resources": [
+    "arn:aws-cn:mediaconvert:cn-northwest-1:account-id:jobs/1600337597161-op9448"
+  ],
+  "detail": {
+    "timestamp": 1600337616637,
+    "accountId": "account-id",
+    "queue": "arn:aws-cn:mediaconvert:cn-northwest-1:account-id:queues/Default",
+    "jobId": "1600337597161-op9448",
+    "status": "COMPLETE",
+    "userMetadata": {
+      "assetID": "d8cf6536-d0e7-4a5b-b54d-52990056037b"
+    },
+    "outputGroupDetails": [
+      {
+        "outputDetails": [
+          {
+            "outputFilePaths": [
+              "s3://vod-mediaconvert-workshop/assets/d8cf6536-d0e7-4a5b-b54d-52990056037b/HLS/MediaConvert_360.m3u8"
+            ],
+            "durationInMs": 60333,
+            "videoDetails": {
+              "widthInPx": 640,
+              "heightInPx": 360
+            }
+          },
+          {
+            "outputFilePaths": [
+              "s3://vod-mediaconvert-workshop/assets/d8cf6536-d0e7-4a5b-b54d-52990056037b/HLS/MediaConvert_540.m3u8"
+            ],
+            "durationInMs": 60333,
+            "videoDetails": {
+              "widthInPx": 960,
+              "heightInPx": 540
+            }
+          },
+          {
+            "outputFilePaths": [
+              "s3://vod-mediaconvert-workshop/assets/d8cf6536-d0e7-4a5b-b54d-52990056037b/HLS/MediaConvert_720.m3u8"
+            ],
+            "durationInMs": 60333,
+            "videoDetails": {
+              "widthInPx": 1280,
+              "heightInPx": 720
+            }
+          }
+        ],
+        "playlistFilePaths": [
+          "s3://vod-mediaconvert-workshop/assets/d8cf6536-d0e7-4a5b-b54d-52990056037b/HLS/MediaConvert.m3u8"
+        ],
+        "type": "HLS_GROUP"
+      },
+      {
+        "outputDetails": [
+          {
+            "outputFilePaths": [
+              "s3://vod-mediaconvert-workshop/assets/d8cf6536-d0e7-4a5b-b54d-52990056037b/MP4/MediaConvert.mp4"
+            ],
+            "durationInMs": 60333,
+            "videoDetails": {
+              "widthInPx": 1280,
+              "heightInPx": 720
+            }
+          }
+        ],
+        "type": "FILE_GROUP"
+      },
+      {
+        "outputDetails": [
+          {
+            "outputFilePaths": [
+              "s3://vod-mediaconvert-workshop/assets/d8cf6536-d0e7-4a5b-b54d-52990056037b/Thumbnails/MediaConvert.0000012.jpg"
+            ],
+            "durationInMs": 65000,
+            "videoDetails": {
+              "widthInPx": 1280,
+              "heightInPx": 720
+            }
+          }
+        ],
+        "type": "FILE_GROUP"
+      }
+    ]
+  }
+}
+```
