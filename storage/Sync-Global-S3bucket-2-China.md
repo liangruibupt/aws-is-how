@@ -68,3 +68,80 @@ alarm_email = "alarm_your_email@email.com"
 
 cdk deploy --profile ${AWS_GLOBAL_PROFILE} --outputs-file "stack-outputs.json"
 ```
+
+# Case 4 Cluster version
+Use the [Amazon S3 MultiThread Resume Migration Cluster Solution](https://github.com/aws-samples/amazon-s3-resumable-upload/blob/master/cluster/README-English.md)
+
+1. Create System Manager Parameter Store
+
+- Name: s3_migration_credentials
+- Type: SecureString
+- Content: 
+```json
+{
+  "aws_access_key_id": "your_aws_access_key_id",
+  "aws_secret_access_key": "your_aws_secret_access_key",
+  "region": "cn-northwest-1"
+}
+```
+
+2. Configure AWS CDK  app.py setting about source / desination S3 bucket and prefix
+
+```json
+[{
+    "src_bucket": "ray-cross-region-sync-oregon",
+    "src_prefix": "broad-references",
+    "des_bucket": "ray-cross-region-sync-zhy",
+    "des_prefix": "broad-references"
+    }, {
+    "src_bucket": "your_global_bucket_2",
+    "src_prefix": "your_prefix",
+    "des_bucket": "your_china_bucket_2",
+    "des_prefix": "prefix_2"
+    }]
+```
+
+3. Configure the alarm notification email address in cdk_ec2stack.py
+
+```python
+# Setup your alarm email
+alarm_email = "you-email@amazon.com"
+```
+
+4. Modify s3_migration_cluster_config.ini Des_bucket_default, JobType，Concurrent Threads.
+```bash
+cluster/cdk-cluster/code/s3_migration_cluster_config.ini
+Des_bucket_default =  NewS3BucketMigrateObjects
+Des_prefix_default = your_prefix/
+```
+
+3. deploy CDK
+
+```bash
+cd amazon-s3-resumable-upload/cluster/cdk-cluster
+source ~/python3/env/bin/activate
+pip3 install -r requirements.txt
+export AWS_DEFAULT_REGION=us-west-2
+npm install -g aws-cdk
+cdk synth
+cdk deploy s3-migration-cluster* --profile ${AWS_GLOBAL_PROFILE} --outputs-file "stack-outputs.json"
+```
+
+4. Testing
+
+- cdk deploy the resource for you, locate the S3 bucket `NewS3BucketMigrateObjects` in global region for upload new objects
+- upload the files 
+```bash
+aws s3 cp amazon-corretto-8-x64-linux-jdk.rpm s3://s3-migration-cluster-reso-s3migratebucket676429fa-lt3gfz9nbfn7/crr-ningxia/
+```
+- check the des_bucket
+```bash
+aws s3 ls s3://ray-cross-region-sync-zhy --region cn-northwest-1 --profile china
+```
+- check the cloudwatch dashboard `s3migrate*` created by CDK
+- check the `s3-migration-cluster-ec2-applog*` CloudWatch log group
+
+5. Cleanup
+```bash
+cdk destroy s3-migration-cluster*
+```
