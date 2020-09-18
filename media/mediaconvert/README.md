@@ -8,7 +8,7 @@ Video on Demand on AWS（视频点播解决方案） automatically provisions th
 
 ## Architecture Overview 架构概览
 
-![Architect](media/mediaconvert/media/vod-architect.png)
+![Architect](media/vod-architect.png)
 
 This solution uses AWS Lambda to trigger AWS Step Functions for ingest, processing, and publishing workflows.
 
@@ -149,7 +149,7 @@ This sample to use MediaConvert converting an HLS input into HLS, MP4 and Thumbn
 
 This sample is used to show how to clip and stitch inputs to AWS MediaConvert.
 
-![mediaconvert-job-clip-stitch](media/mediaconvert/media/mediaconvert-job-clip-stitch.png)
+![mediaconvert-job-clip-stitch](media/mediaconvert-job-clip-stitch.png)
 
 1. Clip the first 30 seconds of the Input 1 VANLIFE video
 
@@ -181,7 +181,7 @@ This sample is used to show how to "burn-in" different kinds of information into
 
 For example: create a video with timecodes and watermarks burned in to the elemental video stream of one of the outputs of MediaConvert job.
 
-![mediaconvert-job-burnin](media/mediaconvert/media/mediaconvert-job-burnin.png)
+![mediaconvert-job-burnin](media/mediaconvert-job-burnin.png)
 
 1. Modify the HLS output to include a timecode
 
@@ -228,7 +228,7 @@ This sample is used to show how to create media assets with burned in caption ge
 
 We will modify the MP4 output by adding captions from a side-car SRT file.
 
-![mediaconvert-job-captions](media/mediaconvert/media/mediaconvert-job-captions.png)
+![mediaconvert-job-captions](media/mediaconvert-job-captions.png)
 
 1. Burn in captions to the MP4 output
 
@@ -256,13 +256,13 @@ We will modify the MP4 output by adding captions from a side-car SRT file.
 
     You can play the MP4 using Chrome browser http://YOUR_WebSite_Domain/vod/outputs/CAPTIONS/MP4/VANLIFE.mp4
 
-![mediaconvert-outputs](media/mediaconvert/media/mediaconvert-outputs.png)
+![mediaconvert-outputs](media/mediaconvert-outputs.png)
 
 ### Working with embedded input metadata 插入元数据
 
 Videos can have embedded metadata that is stored in the video package itself. In this module, we will look at some common examples of embedded metadata including Ad markers, embedded captions, and multi-language audio tracks. 
 
-![mediaconvert-job-admarker](media/mediaconvert/media/mediaconvert-job-admarker.png)
+![mediaconvert-job-admarker](media/mediaconvert-job-admarker.png)
 
 1. Detect SCTE35 markers in the input and blank out embedded Ads
 
@@ -287,7 +287,7 @@ Videos can have embedded metadata that is stored in the video package itself. In
 
 Video files added to an S3 bucket automatically trigger a MediaConvert job by creating an automated "watchfolder" workflow. 
 
-![mediaconvert-trigger-workflow](media/mediaconvert/media/mediaconvert-trigger-workflow.png)
+![mediaconvert-trigger-workflow](media/mediaconvert-trigger-workflow.png)
 
 1. Create an IAM Role `VODLambdaRole` for Lambda function
  - AWSLambdaBasicExecutionRole
