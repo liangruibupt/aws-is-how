@@ -140,6 +140,8 @@
 
 [AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
 
+[How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
@@ -173,6 +175,8 @@
 [How to send CloudWatch logs to S3](devops/cloudwatch/How-to-send-logs-to-S3.md)
 
 [Central Logging on AWS](analytics/central-logging)
+
+[AWS DevOps Management Observability workshop](devops/managed-platform)
 
 ## Infra as Code
 
