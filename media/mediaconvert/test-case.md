@@ -54,7 +54,7 @@ http://ruicftest.awesomehao.wang/vod/outputs/Metadata/Thumbnails/VANLIFE.0000000
 
 ## S3 trigger lambda
 
-aws s3 cp MediaConvert.mp4 s3://ray-website-cloudfront-20190409/vod/inputs/WatchFolder/
+aws s3 cp SampleVideo_1280x720_5mb.mp4 s3://ray-website-cloudfront-20190409/vod/inputs/WatchFolder/
 
 http://ruicftest.awesomehao.wang/assets/46deafdf-ea21-42f0-9bda-4985ff4cf6fa/HLS/SampleVideo_1920_18MG.m3u8
 
