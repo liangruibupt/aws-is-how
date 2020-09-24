@@ -106,7 +106,7 @@ pip install pandas -t .
 
 export ES_USER=TheMasterUser
 export ES_PASSWORD=YOUR_PASSWORD
-export ES_HOST=YOUR_ES_HOST
+export ES_HOST=YOUR_ES_ENDPOINT_WITH_HTTPS
 
 #python simple_chatbot.py --create_index
 
@@ -236,6 +236,9 @@ Skip create index and load question
 
 
 ## ElasticSearch and Lambda Based
+
+![faq-bot](media/faq-bot.png)
+
 1. Build the lambda function
 ```bash
 mkdir temp
@@ -260,7 +263,7 @@ aws lambda update-function-code --function-name faq-es-lambda \
 --zip-file fileb://lambda.zip --region cn-northwest-1
 ```
 
-2. Testing
+2. Testing Lambda
 
 ```bash
 # Create index and initial laod question list
@@ -281,10 +284,19 @@ REPORT RequestId: 45b0145b-03df-4f1f-9567-da4a0c625861  Duration: 173.46 ms     
 
 ![lambda-execution-output](media/lambda-execution-output.png)
 
+3. Testing API GW
+
+```bash
+curl -X POST -d "{\"question\": \"什么是聊天机器人\" }" -k https://b6vzdwacz8.execute-api.cn-northwest-1.amazonaws.com.cn/prod/mybot
+```
+
+![faq-bot-postman](media/faq-bot-postman.png)
+
 ## Cleanup
 ```bash
 aws lambda delete-function --function-name faq-es-lambda --region cn-northwest-1
 aws es delete-elasticsearch-domain --domain-name faq-es --region cn-northwest-1
+remove the api-gw
 ```
 
  ## Reference
