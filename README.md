@@ -17,6 +17,10 @@
 
 [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
 
+[How to connect to EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
+
+[How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
