@@ -56,6 +56,6 @@ http://ruicftest.awesomehao.wang/vod/outputs/Metadata/Thumbnails/VANLIFE.0000000
 
 aws s3 cp SampleVideo_1280x720_5mb.mp4 s3://ray-website-cloudfront-20190409/vod/inputs/WatchFolder/
 
-http://ruicftest.awesomehao.wang/assets/46deafdf-ea21-42f0-9bda-4985ff4cf6fa/HLS/SampleVideo_1920_18MG.m3u8
+http://ruicftest.awesomehao.wang/assets/46deafdf-ea21-42f0-9bda-4985ff4cf6fa/MP4/SampleVideo_1280x720_5mb.mp4
 
-http://ruicftest.awesomehao.wang/assets/46deafdf-ea21-42f0-9bda-4985ff4cf6fa/MP4/SampleVideo_1920_18MG.mp4
+http://ruicftest.awesomehao.wang/assets/79af6e43-81c8-4623-88d1-999f744f1bd7/HLS/SampleVideo_1280x720_5mb_540.m3u8
