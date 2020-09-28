@@ -28,7 +28,11 @@ Upload the assetmanagement.ipynb and run it
 
 ## Run Air Routes Notebook
 
-1. Launch the Terminal from Jupyter Notebooks to install dependency
+1. Launch the CloudFromation Stack to create the neptune database and sagemaker Notebook
+
+https://s3.amazonaws.com/aws-neptune-customer-samples/neptune-sagemaker/cloudformation-templates/neptune-sagemaker/neptune-sagemaker-base-stack.json
+
+Or you can reuse the Launch the Terminal from Jupyter Notebooks to install dependency
 
 ```bash
 /home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ msgpack
