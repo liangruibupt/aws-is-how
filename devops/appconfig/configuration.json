@@ -1,0 +1,6 @@
+{
+    "session":6000,
+    "process":5000,
+    "timeout":120,
+    "poolsize":300
+}

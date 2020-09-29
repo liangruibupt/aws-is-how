@@ -178,6 +178,8 @@
 
 [AWS DevOps Management Observability workshop](devops/managed-platform)
 
+[AWS AppConfig Workshop](devops/appconfig)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
