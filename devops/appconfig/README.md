@@ -347,7 +347,15 @@ AWS AppConfig calls your validation Lambda when calling the StartDeployment and 
 
 - Create new configuration profile `AppConfigLabS3ConfigurationProfile`
 
-![test-validator-profile](devops/appconfig/media/test-validator-profile.png)
+![test-validator-profile](media/test-validator-profile.png)
+
+**Make sure your S3 bucket enable versioning**
+
+![AppConfigLabS3ConfigurationProfile](media/test-validator-s3.png)
+
+- Add the Json Validator content
+
+![test-validator-role-validator](media/test-validator-role-validator.png)
 
 - Start deploy, check the validation error
 
@@ -370,20 +378,6 @@ AWS AppConfig calls your validation Lambda when calling the StartDeployment and 
       "minProperties": 1
     }
 ```
-
-**Make sure your S3 bucket enable versioning**
-
-![AppConfigLabS3ConfigurationProfile](media/test-validator-s3.png)
-
-Add the Json Validator content
-
-![test-validator-role-validator](media/test-validator-role-validator.png)
-
-- Start Deployment
-
-![test-validator-startdeploy](media/test-validator-startdeploy.png)
-
-
 
 ## Receiving the configuration
 
