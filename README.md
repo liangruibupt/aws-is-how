@@ -180,6 +180,8 @@
 
 [AWS AppConfig Workshop](devops/appconfig)
 
+[AWS Management Tool stack workshop](https://workshop.aws-management.tools/)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)

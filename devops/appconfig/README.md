@@ -14,6 +14,12 @@ AWS AppConfig enable customer to manage configuration changes, similar to the wa
     - AWS AppConfig hosted configuration store: YAML, JSON, or text documents
     - Amazon S3 bucket: Objects
 
+You can also [integrate the AWS AppConfig in your CICD pipeline](https://aws.amazon.com/cn/blogs/mt/automating-feature-release-using-aws-appconfig-integration-with-aws-codepipeline/)
+
+![AppConfig-pipeline.png)
+
+Now let's build the QuickStart demo!
+
 ## Create the AppConfig quickstart application
 
 1. Prepare the AppConfig ReadOnly permission
@@ -394,7 +400,7 @@ cat devops/appconfig/configuration.json                                         
     "process":5000,
     "timeout":120,
     "poolsize":300
-}                                                   
+}
 ```
 
 2. Using Application Code - Here we use the lambda as example
