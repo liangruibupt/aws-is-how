@@ -54,6 +54,9 @@ kubectl get svc --all-namespaces
 kubectl delete svc service-name
 
 # Delete the cluster and its associated nodes
+aws iam detach-role-policy --role-name $NodeInstanceRole --policy-arn $AmazonSQSFullAccess_ARN  --region=eu-west-1
+aws iam detach-role-policy --role-name $NodeInstanceRole --policy-arn $AmazonDynamoDBFullAccess_ARN  --region=eu-west-1
+aws iam detach-role-policy --role-name $NodeInstanceRole --policy-arn $CloudWatchLogsFullAccess_ARN  --region=eu-west-1
 eksctl delete cluster --name observability-workshop --region eu-west-1
 
 # Cleanup the ServiceLens resources
