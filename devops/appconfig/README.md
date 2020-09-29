@@ -4,13 +4,15 @@ AWS AppConfig makes it easy for customers to quickly roll out application config
 
 AWS AppConfig enable customer to manage configuration changes, similar to the way they manage code. Additional AWS AppConfig provide valuable features: 
 
-1. validate application’s configuration data against a schema or validate via a Lambda function. This ensure your configuration data is syntactically and semantically correct before making it available to your application
-2. rolling out configuration changes over a defined time period while monitoring the application to catch any errors and rollback the changes if in case any errors occur
-3. store and manage your configuration content either as Systems Manager Parameters or Systems Manager Documents
- - Systems Manager Parameters: configuration parameters such as URLs, certificates, accounts, and names
- - Systems Manager Documents: typed configuration data in structured formats such as JSON or YAML.  
- - AWS AppConfig hosted configuration store: YAML, JSON, or text documents
- - Amazon S3 bucket: Objects
+1. **Validate application’s configuration data against a schema or validate via a Lambda function**. This ensure your configuration data is syntactically and semantically correct before making it available to your application
+2. Rolling out configuration changes over a defined time period while **monitoring the application to catch any errors and rollback the changes** if in case any errors occur
+3. **Store and manage your configuration content similar to the way they manage code**. 
+
+    The type can be either as Systems Manager Parameters or Systems Manager Documents
+    - Systems Manager Parameters: configuration parameters such as URLs, certificates, accounts, and names
+    - Systems Manager Documents: typed configuration data in structured formats such as JSON or YAML.  
+    - AWS AppConfig hosted configuration store: YAML, JSON, or text documents
+    - Amazon S3 bucket: Objects
 
 ## Create the AppConfig quickstart application
 
@@ -151,7 +153,8 @@ And trusted entity as `appconfig.amazonaws.com`
 - Add configuration profile details
 
 Create the `ProductionEnvProfile`
-![create-configuration-profile](devops/appconfig/media/create-configuration-profile1.png)
+
+![create-configuration-profile](media/create-configuration-profile1.png)
 
 - Select configuration source
 
@@ -168,91 +171,6 @@ If you choice the `AWS AppConfig hosted configuration`, then input below `JSON` 
 ![create-configuration-source](media/create-configuration-source.png)
 
 If you choice the `AWS Systems Manager document`, then `New document`
-
-- Add validators
-
-1. Json Validator
-```json
-{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "description": "AppConfig Validator example",
-  "type": "object",
-  "properties": {
-    "session": {
-      "type": "number",
-      "allowedValues": [
-        6000,
-        1000,
-        3000
-      ]
-    },
-    "process": {
-      "type": "number",
-      "allowedValues": [
-        5000,
-        2500,
-        1000
-      ]
-    },
-    "timeout": {
-      "type": "number",
-      "allowedValues": [
-        60,
-        120,
-        180
-      ]
-    }
-  },
-  "minProperties": 3,
-  "required": [
-    "session",
-    "process",
-    "timeout"
-  ]
-}
-```
-
-2. Lambda Validator
-    - Function Name: AppConfigLabLambdaValidator 
-    - Runtime: Node.js 12.x
-    - Grant permission
-    ```bash
-    aws lambda add-permission --function-name AppConfigLabLambdaValidator --action lambda:InvokeFunction --statement-id appconfig --principal appconfig.amazonaws.com --output json --region cn-northwest-1
-    ```
-    - Lambda Code
-```js
-exports.handler = async (event, context) => {
-  try {
-    console.log('Received event:', JSON.stringify(event, null, 2));
-    const data = JSON.parse(Buffer.from(event.content, 'base64').toString('ascii'));
-    console.log('Configuration Data: ', data);
-    Object.keys(data).forEach(function (item) {
-      console.log('key: ',item); // key
-      console.log('value: ', data[item]); // value
-      const dataType = typeof data[item];
-      console.log('Data type: ', dataType);
-          
-      if (item === 'poolsize' && dataType !== 'number')
-        throw new TypeError(`Configuration property ${item} configured as type ${dataType}; expecting type number`);
-    });
-  } catch(err) {
-    throw err;
-  }
-};
-```
-
- - Test lambda with data
- ```json
-    {
-      "content": "ewogICAgInNlc3Npb24iOjYwMDAsCiAgICAicHJvY2VzcyI6NTAwMCwKICAgICJ0aW1lb3V0IjoxMjAsCiAgICAicG9vbHNpemUiOjMwMAp9",
-      "uri": "arn:aws-cn:lambda:cn-northwest-1:xxxxx:function:AppConfigLabLambdaValidator"
-    }
-
-    {
-      "content": "ewogICAgInNlc3Npb24iOjYwMDAsCiAgICAicHJvY2VzcyI6NTAwMCwKICAgICJ0aW1lb3V0IjoxMjAsCiAgICAicG9vbHNpemUiOiJmYWlsZWQgY2FzZSIKfQ==",
-      "uri": "arn:aws-cn:lambda:cn-northwest-1:xxxxx:function:AppConfigLabLambdaValidator"
-    }
- ```
 
 ## Deploy a configuration
 
@@ -297,11 +215,175 @@ aws cloudwatch put-metric-data --metric-name production-error-count --namespace 
 
 ![start-deployment-rolledBack](media/start-deployment-rolledBack.png)
 
-- Make Alarm status to `OK`
+- Make Alarm status back to `OK`
 ```bash
 aws cloudwatch put-metric-data --metric-name production-error-count --namespace "Custom" \
 --value 0 --region cn-northwest-1
 ```
+
+## Testing the validator
+
+AWS AppConfig calls your validation Lambda when calling the StartDeployment and ValidateConfigurationActivity API actions. 
+
+1. Prepare validators
+
+- Json Validator
+```json
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "AppConfig Validator example",
+  "type": "object",
+  "properties": {
+    "session": {
+      "type": "number",
+      "allowedValues": [
+        6000,
+        1000,
+        3000
+      ]
+    },
+    "process": {
+      "type": "number",
+      "allowedValues": [
+        5000,
+        2500,
+        1000
+      ]
+    },
+    "timeout": {
+      "type": "number",
+      "allowedValues": [
+        60,
+        120,
+        180
+      ]
+    }
+  },
+  "minProperties": 3,
+  "required": [
+    "session",
+    "process",
+    "timeout"
+  ]
+}
+```
+
+- Lambda Validator
+    - Function Name: AppConfigLabLambdaValidator 
+    - Runtime: Node.js 12.x
+    - Grant permission
+        ```bash
+        aws lambda add-permission --function-name AppConfigLabLambdaValidator --action lambda:InvokeFunction --statement-id appconfig --principal appconfig.amazonaws.com --output json --region cn-northwest-1
+        ```
+    - Lambda Code
+    ```js
+    function isPrime(value) {
+        if (value < 2) {
+            return false;
+        }
+        for (i = 2; i < value; i++) {
+            if (value % i === 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    exports.handler = async (event, context) => {
+    try {
+        console.log('Received event:', JSON.stringify(event, null, 2));
+        const data = JSON.parse(Buffer.from(event.content, 'base64').toString('ascii'));
+        console.log('Configuration Data: ', data);
+        Object.keys(data).forEach(function (item) {
+        console.log('key: ',item); // key
+        console.log('value: ', data[item]); // value
+        const dataType = typeof data[item];
+        console.log('Data type: ', dataType);
+            
+        if (item === 'poolsize' && dataType !== 'number')
+            throw new TypeError(`Configuration property ${item} configured as type ${dataType}; expecting type number`);
+        if (item === 'poolsize'){
+            const prime = isPrime(data[item]);
+            console.log('RESULT: ' + item + 'value: ' + data[item] + (prime ? ' is' : ' is not') + ' prime');
+            if (!prime) {
+                throw item + "is not prime";
+            }
+        }
+        });
+    } catch(err) {
+        throw err;
+    }
+    };
+    ```
+
+    - Test lambda with data
+    ```json
+        # success
+        {
+        "content": "ewogICAgInNlc3Npb24iOjYwMDAsCiAgICAicHJvY2VzcyI6NTAwMCwKICAgICJ0aW1lb3V0IjoxMjAsCiAgICAicG9vbHNpemUiOjMwMAp9",
+        "uri": "arn:aws-cn:lambda:cn-northwest-1:xxxxx:function:AppConfigLabLambdaValidator"
+        }
+        # failed type
+        {
+        "content": "ewogICAgInNlc3Npb24iOjYwMDAsCiAgICAicHJvY2VzcyI6NTAwMCwKICAgICJ0aW1lb3V0IjoxMjAsCiAgICAicG9vbHNpemUiOiJmYWlsZWQgY2FzZSIKfQ==",
+        "uri": "arn:aws-cn:lambda:cn-northwest-1:xxxxx:function:AppConfigLabLambdaValidator"
+        }
+        # failed prime
+        {
+            "content": "ewogICAgInNlc3Npb24iOjYwMDAsCiAgICAicHJvY2VzcyI6NTAwMCwKICAgICJ0aW1lb3V0IjoxMjAsCiAgICAicG9vbHNpemUiOjk5Cn0=",
+            "uri": "arn:aws-cn:lambda:cn-northwest-1:xxxxx:function:AppConfigLabLambdaValidator"
+        }
+    ```
+
+- Create S3 file `AppConfigLabS3ConfigurationDocument.json` We can see the `timeout` is not in the allowed type
+```json
+{
+  "session": 6000,
+  "process": 5000,
+  "timeout": "invalid",
+  "poolsize": 300
+}
+```
+
+- Create new configuration profile `AppConfigLabS3ConfigurationProfile`
+
+![test-validator-profile](devops/appconfig/media/test-validator-profile.png)
+
+- Start deploy, check the validation error
+
+![test-validator-startdeploy](media/test-validator-startdeploy.png)
+
+- System Manager Document json schema validator example
+
+```json
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "title": "$id$",
+      "description": "BasicFeatureToggle-1",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+          "[^\\s]+$": {
+              "type": "boolean"
+          }
+      },
+      "minProperties": 1
+    }
+```
+
+**Make sure your S3 bucket enable versioning**
+
+![AppConfigLabS3ConfigurationProfile](media/test-validator-s3.png)
+
+Add the Json Validator content
+
+![test-validator-role-validator](media/test-validator-role-validator.png)
+
+- Start Deployment
+
+![test-validator-startdeploy](media/test-validator-startdeploy.png)
+
+
 
 ## Receiving the configuration
 

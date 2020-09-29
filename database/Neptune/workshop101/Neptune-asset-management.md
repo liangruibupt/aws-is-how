@@ -28,26 +28,11 @@ Upload the assetmanagement.ipynb and run it
 
 ## Run Air Routes Notebook
 
-1. Launch the CloudFromation Stack to create the neptune database and sagemaker Notebook
+1. Launch the CloudFromation Stack to create the Neptune database and sagemaker Notebook
 
 https://s3.amazonaws.com/aws-neptune-customer-samples/neptune-sagemaker/cloudformation-templates/neptune-sagemaker/neptune-sagemaker-base-stack.json
 
-Or you can reuse the Launch the Terminal from Jupyter Notebooks to install dependency
-
-```bash
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ msgpack
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ ipython-gremlin
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ gremlinpython
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ tornado
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ ipython_unittest
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ jupyter_dojo
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ sparqlwrapper
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ ipython-sparql
-/home/ec2-user/anaconda3/bin/python3 -m  pip install --target /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/ ipywidgets
-
-aws s3 cp s3://aws-neptune-customer-samples-us-west-2/neptune-sagemaker/bin/neptune-python-utils/neptune_python_utils.zip /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/
-unzip -n /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/neptune_python_utils.zip -d /home/ec2-user/anaconda3/envs/python3/lib/python3.6/site-packages/
-```
+2. Run the sagemaker Notebook to interactive with Neptune database
 
 # Reference
 [Integrating Sales and Service with AWS Neptune](https://github.com/aws-samples/aws-neptune-asset-management)
