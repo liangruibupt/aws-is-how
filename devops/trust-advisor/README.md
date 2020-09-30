@@ -7,6 +7,7 @@ Trust Advisor help identify the baseline issue of below 5 pillars. There is no a
 Make sure 
 1. customers with a Business or Enterprise support plan
 2. The lambda execution role has the `trustedadvisor` permission
+3. You can use the **AWS Security Token Service (AWS STS) token to cross account** trigger and retrieve Trust Advisor report.
 
 ## Refresh Function RefereshTrustedAdvisor
 
