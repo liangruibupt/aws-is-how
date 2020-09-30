@@ -3,9 +3,12 @@ import traceback
 from botocore.exceptions import ClientError
 import logging
 import json
+import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+sts_role_arn = os.environ['STS_ROLE_ARN']
 
 class CustomError(Exception):
     pass
@@ -13,7 +16,16 @@ class CustomError(Exception):
 def lambda_handler(event, context):
     message = "Success refresh trusted advisor"
     try:
-        support_client = boto3.client('support')
+        sts_client = boto3.client('sts')
+        sts_response = sts_client.assume_role(
+            RoleArn=sts_role_arn,
+            RoleSessionName='TA_Role',
+        )
+        support_client = boto3.client('support',
+            aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
+            aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
+            aws_session_token=sts_response['Credentials']['SessionToken']
+        )
         ta_checks = support_client.describe_trusted_advisor_checks(language='en')
         for checks in ta_checks['checks']:
             try:
