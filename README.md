@@ -21,6 +21,8 @@
 
 [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
 
+[Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -181,6 +183,8 @@
 [AWS AppConfig Workshop](devops/appconfig)
 
 [AWS Management Tool stack workshop](https://workshop.aws-management.tools/)
+
+[How to make the Trust Advisor Check automatically](devops/trust-advisor)
 
 ## Infra as Code
 
