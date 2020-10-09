@@ -107,6 +107,8 @@
 
 [AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshops)
 
+[Serverless CI/CD based on Jenkins](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
+
 
 ## Migration
 

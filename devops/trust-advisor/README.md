@@ -78,6 +78,10 @@ Get the Trust Advisor report and sent out via email to receiver [get-trusted-adv
 - Timeout: 120 seconds
 - Env variable: TO_EMAIL and FROM_EMAIL for sender email and receiver email; STS_ROLE_ARN cross account STS Role ARN
 
+Email example:
+
+![reports](media/reports.png)
+
 ## Step Function
 
 Integrate 2 function and automatically triggered by Amazon EventBridge (CloudWatch Events)
