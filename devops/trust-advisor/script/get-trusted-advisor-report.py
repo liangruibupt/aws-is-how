@@ -12,6 +12,7 @@ region = os.environ['AWS_DEFAULT_REGION']
 colour_map = {'error': '#ff0000', 'warning': '#ffff00', 'ok': '#00ff00'}
 to_email = os.environ['TO_EMAIL']
 from_email = os.environ['FROM_EMAIL']
+sts_role_arn = os.environ['STS_ROLE_ARN']
 
 class CustomError(Exception):
     pass
@@ -54,9 +55,19 @@ def email_notification(email_subject, email_to, email_from, email_body):
 
 
 def lambda_handler(event, context):
-    message = ""
+    message = "Successfuly get Trusted Advisor Check Summary and send the email"
     try:
-        support_client = boto3.client('support')
+        sts_client = boto3.client('sts')
+        sts_response = sts_client.assume_role(
+            RoleArn=sts_role_arn,
+            RoleSessionName='TA_Role',
+        )
+        #support_client = boto3.client('support')
+        support_client = boto3.client('support',
+            aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
+            aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
+            aws_session_token=sts_response['Credentials']['SessionToken']
+        )
         ta_checks = support_client.describe_trusted_advisor_checks(language='en')
         checks_list = {ctgs: [] for ctgs in list(
             set([checks['category'] for checks in ta_checks['checks']]))}
