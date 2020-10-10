@@ -306,13 +306,25 @@ AWS AppConfig calls your validation Lambda when calling the StartDeployment and 
         const dataType = typeof data[item];
         console.log('Data type: ', dataType);
             
-        if (item === 'poolsize' && dataType !== 'number')
+        if ((item === 'poolsize' || item === 'timeout' ) && dataType !== 'number')
             throw new TypeError(`Configuration property ${item} configured as type ${dataType}; expecting type number`);
         if (item === 'poolsize'){
             const prime = isPrime(data[item]);
             console.log('RESULT: ' + item + 'value: ' + data[item] + (prime ? ' is' : ' is not') + ' prime');
             if (!prime) {
                 throw item + "is not prime";
+            }
+        }
+        if (item === 'timeout'){
+            var timeout_range = [60, 120, 180];
+            var a = timeout_range.indexOf(data[item]);
+            var timeout_check = true
+            if (a < 0){
+  	            timeout_check = false
+            }
+            console.log('RESULT: ' + item + 'value: ' + data[item] + ' allow value check: ' + timeout_check);
+            if (!timeout_check) {
+                throw item + " : " + data[item] + " is not allowed value: " + timeout_range;
             }
         }
         });
@@ -340,6 +352,18 @@ AWS AppConfig calls your validation Lambda when calling the StartDeployment and 
             "uri": "arn:aws-cn:lambda:cn-northwest-1:xxxxx:function:AppConfigLabLambdaValidator"
         }
     ```
+
+    - Test on AppConfig Deployment
+      - Update configuration profile to add Lambda Validator: 
+      
+      input the arn of Lambda Validator. **Important!** Do not make a selection from the Function version dropdown list. Leave it blank.
+
+      ![lambda_validator_add_validator](media/lambda_validator_add_validator.png)
+
+      - Start a new deployment, check the lambda_validator report validation error
+
+      ![lambda_validator_test](media/lambda_validator_test.png)
+
 
 - Create S3 file `AppConfigLabS3ConfigurationDocument.json` We can see the `timeout` is not in the allowed type
 ```json
