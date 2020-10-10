@@ -86,6 +86,8 @@ Email example:
 
 Integrate 2 function and automatically triggered by Amazon EventBridge (CloudWatch Events)
 
+![step-function](media/step-function.png)
+
 Sample step function define:
 
 [step-function.json](script/step-function.json)
