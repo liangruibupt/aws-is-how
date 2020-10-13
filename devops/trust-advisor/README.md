@@ -5,7 +5,7 @@ Trust Advisor help identify the baseline issue of below 5 pillars. There is no a
 ![5 pillars](media/pillars.png)
 
 Make sure 
-1. customers with a Business or Enterprise support plan
+1. customers with a **Business or Enterprise** support plan
 2. The lambda execution role has the `AssumeRole` permission
 ```json
 {
@@ -52,7 +52,7 @@ Make sure
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::710299592439:role/lambda_basic_execution"
+        "AWS": "arn:aws:iam::you-account:role/lambda_basic_execution"
       },
       "Action": "sts:AssumeRole"
     }
