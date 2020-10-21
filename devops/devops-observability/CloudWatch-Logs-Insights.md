@@ -327,3 +327,28 @@ filter statusCode = 500
 stats count(*) as no_of_events by myarrray.items.0.account 
 | display myarrray.items.0.account, no_of_events
 ```
+
+## More CloudWatch logs Insight
+
+- log message
+```json
+{
+    "EVENT_TIME": "2020-10-20T08:43:43.738852",
+    "TICKER": "TBV",
+    "PRICE": 29.73
+}
+```
+
+- Aggregate field in JSON logs
+```
+filter TICKER like /AMZN/
+| stats count(*) as exceptionCount by bin(5m)
+| sort exceptionCount desc
+```
+
+- Aggregate field in Text logs
+```
+filter @message like /"TICKER": "TBV"/
+| stats count(*) as exceptionCount by bin(5m)
+| sort exceptionCount desc
+```

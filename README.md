@@ -190,6 +190,8 @@
 
 [How to make the Trust Advisor Check automatically](devops/trust-advisor)
 
+[AWS Serverless CI/CD hands on lab](devops/serverless-cicd/README.md)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
