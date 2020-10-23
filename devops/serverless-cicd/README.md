@@ -310,3 +310,166 @@ And you can testing the URL, you can find the `hello world! Latest canary`
 {"message": "hello world! canary 2020-10-21-23-42-53", "location": "100.24.118.93"}[ec2-user@ip-10-0-2-83 sam-cicd]$ curl https://ac0acgrwej.execute-api.us-east-1.amazonaws.com/staging/hello
 {"message": "hello world! Latest canary 2020-10-21-23-42-56", "location": "18.204.205.147"}[ec2-user@ip-10-0-2-83 sam-cicd]$ curl https://ac0acgrwej.execute-api.us-east-1.amazonaws.com/staging/hello
 ```
+
+
+# Using Jenkins and CodeDeploy automatic deploy Lambda
+
+![jenkins-architecture](media/jenkins-architecture.png)
+
+## Jenkins Server setup
+1. Launch the EC2 with Amazon Linux 2 AMI and Security group open 22, 8080, 443 ports
+2. Set the EC2 instance profile has permission to access the lambda, S3, CodeBuild, CodeDeploy
+3. Install Jenkins
+```bash
+sudo yum install java  #安装java
+# 此为官方镜像
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum install jenkins
+sudo chkconfig jenkins on
+sudo service jenkins start
+
+sudo yum install git -y
+sudo yum install docker -y
+sudo service docker start
+```
+4. Check the Jenkins initial password
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+5. Open the Jenkins Web Page: http://EC2_IP:8080/
+6. Install suggested plugins
+7. Configure the First Admin User: jenkinsAdmin
+
+## Github integration
+1. New personal access token for Jenkins access github
+![github-webhook-token](media/github-webhook-token.png)
+
+The scope:
+
+  - admin:repo_hook - For managing hooks at GitHub Repositories level including for Multibranch Pipeline
+  - admin:org_hook - For managing hooks at GitHub Organizations level for GitHub Organization Folders
+  - repo - to see private repos. Please note that this is a parent scope, allowing full control of private repositories that includes:
+  - repo:status - to manipulate commit statuses
+  - repo:repo_deployment - to manipulate deployment statuses
+  - repo:public_repo - to access to public repositories
+  - read:org and user:email - recommended minimum for GitHub OAuth Plugin scopes.
+  - notifications
+
+2. Add the Github Webhooks
+  - Create a specific user `github_hook` in Jenkins for GitHub pushes and to grant it Overall read, Job create and Job read. 
+  - Select the sam-cicd github repo
+  - Settings - Webhooks - Add webhook
+  - Payload URL - http://github_hook:APITOKEN@EC2_IP:8080/github-wekhook/ or http://github_hook:APITOKEN@ALB_Domain/github-wekhook/
+
+  ![github-webhook](media/github-webhook.png)
+
+3. Jenkins Setting for Github Webhooks
+  - Manage Jenkins - System Configuration - GitHub
+
+  ![github-webhook-jenkins1](media/github-webhook-jenkins1.png)
+
+  - secret text - `Github Access Token`
+
+  ![github-webhook-jenkins2](media/github-webhook-jenkins2.png)
+
+  - Test connection
+
+  ![github-webhook-jenkins3](media/github-webhook-jenkins3.png)
+
+## Prepare the source code
+1. In your sam_cicd project
+```bash
+mkdir jenkins_hello_world
+cd jenkins_hello_world/
+
+wget https://raw.githubusercontent.com/aws-samples/aws-serverless-workshop-greater-china-region/master/Lab8B-CICD-Jenkins/buildspec.yml
+
+wget https://raw.githubusercontent.com/aws-samples/aws-serverless-workshop-greater-china-region/master/Lab8B-CICD-Jenkins/appspec.template.yaml
+
+wget https://raw.githubusercontent.com/aws-samples/aws-serverless-workshop-greater-china-region/master/Lab8B-CICD-Jenkins/lambda_function.py
+```
+
+2. Using the lambda_function.py to create the simple lambda function `jenkins-cicd-helloworld`
+3. publish lambda，with version `1` and create the alias `stable_helloworld`
+4. Update the appspec.template.yaml and buildspec.yml
+
+## Configure the CodeDeploy
+1. Create CodeDeploy application `first-try-with-jenkins`, Computer Platform as `lambda`
+
+![CodeDeploy-application1](media/CodeDeploy-application1.png)
+
+2. Create deployment group under application with group name `first-try-with-jenkins`
+
+![CodeDeploy-application-dp-group](media/CodeDeploy-application-dp-group.png)
+
+## Create Jenkins Project
+1. Create a new project - `freestyle project` - `AWS-BJS-CodeDeploy-Jenkins` as Name
+2. Source Management - Git - `https://github.com/you_account/sam-cicd.git`
+3. Trigger - `Github hook trigger for GITScm polling`
+4. Add the execution Shell and update based on the buildspec.yml content
+```bash
+ls 
+mkdir -p jenkins_build
+CurrentVersion=$(echo $(aws lambda get-alias --function-name arn:aws-cn:lambda:cn-north-1:account_id:function:jenkins-cicd-helloworld --name stable_helloworld --region cn-north-1 | grep FunctionVersion | tail -1 |tr -cd "[0-9]"))
+zip -r ./jenkins_build/lambda.zip ./jenkins_hello_world/lambda_function.py
+aws lambda update-function-code --function-name arn:aws-cn:lambda:cn-north-1:account_id:function:jenkins-cicd-helloworld --zip-file fileb://jenkins_build/lambda.zip  --region cn-north-1 --publish
+TargetVersion=$(echo $(aws lambda list-versions-by-function --function-name arn:aws-cn:lambda:cn-north-1:account_id:function:jenkins-cicd-helloworld --region cn-north-1 | grep Version | tail -1 | tr -cd "[0-9]"))
+echo $CurrentVersion
+echo $TargetVersion
+sed -e 's/{{CurrentVersion}}/'$CurrentVersion'/g' -e 's/{{TargetVersion}}/'$TargetVersion'/g' ./jenkins_hello_world/appspec.template.yaml > appspec.yaml
+aws s3 cp appspec.yaml s3://serverless-hands-on/jenkins_build/helloworld/codedeploy/appspec.yaml --region cn-north-1
+rm ./jenkins_hello_world/appspec.template.yaml
+cat appspec.yaml
+aws deploy create-deployment --region cn-north-1 --application-name first-try-with-jenkins --deployment-group-name first-try-with-jenkins --s3-location bucket='serverless-hands-on',key='jenkins_build/helloworld/codedeploy/appspec.yaml',bundleType=YAML
+```
+5. git commit, git push to trigger the CodeBuild
+6. Check the Jenkins Build result
+![CodeDeploy-jenkins-result](media/CodeDeploy-jenkins-result.png)
+7. Check the CodeBuild result
+![CodeDeploy-lambda-deployment](media/CodeDeploy-lambda-deployment.png)
+
+## Jenkins Trigger CodeBuild and CodeDeploy to update lambda function
+1. Create the CodeBuild Project `first-try-with-jenkins`
+  - Source provider - GitHub
+
+  ![CodeBuild-github](media/CodeBuild-github.png)
+
+  - Environment
+  ![CodeBuild-env](media/CodeBuild-env.png)
+
+  - buildspec
+  ![CodeBuild-buildspec](media/CodeBuild-buildspec.png)
+
+  - Update the `codebuild-first-try-with-jenkins-service-role` by adding the 
+    - lambda permission for 'aws lambda update-function-code' 
+    - permission to upload data to S3 bucket `serverless-hands-on`
+    - `codedeploy:CreateDeployment` permission
+
+2. Start the Build to verity the configuration and test build
+
+![CodeBuild-startbuild](media/CodeBuild-startbuild.png)
+
+![CodeBuild-result](media/CodeBuild-result.png)
+
+3. Install Jenkins CodeBuild plugins
+
+![jenkins-plugins](media/jenkins-plugins.png)
+
+![jenkins-plugins-codebuild](media/jenkins-plugins-codebuild.png)
+
+4. Modify the Jenkins project `first-try-with-jenkins`
+
+![jenkins-add-codebuild](media/jenkins-add-codebuild.png)
+
+![jenkins-plugins-codebuild-config](media/jenkins-plugins-codebuild-config.png)
+
+6. Replace the `execution Shell` by CodeBuild. Here we will use the `sam-cicd/jenkins_hello_world/buildspec.yml`
+
+7. Testing
+
+![jenkins-codebuild-result1](media/jenkins-codebuild-result1.png)
+
+![jenkins-codebuild-result2](media/jenkins-codebuild-result2.png)
+
+![jenkins-codebuild-result3](media/jenkins-codebuild-result3.png)

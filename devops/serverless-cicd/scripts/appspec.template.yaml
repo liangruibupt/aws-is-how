@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - test: # Replace "MyFunction" with the name of your Lambda function
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "jenkins-cicd-helloworld" # Specify the name of your Lambda function
+        Alias: "stable_helloworld" # Specify the alias for your Lambda function
+        CurrentVersion: "{{CurrentVersion}}" # Specify the current version of your Lambda function
+        TargetVersion: "{{TargetVersion}}" # Specify the version of your Lambda function to deploy
