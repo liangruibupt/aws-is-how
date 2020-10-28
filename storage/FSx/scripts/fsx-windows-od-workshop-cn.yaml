@@ -489,7 +489,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Code:
-        S3Bucket: !Sub solution-references-${AWS::Region}
+        S3Bucket: !Sub solutions-aws-cn
         S3Key: fsx/dfs/ActiveDirectoryCustomResource.zip
       Handler: ad.handler
       Runtime: nodejs12.x
@@ -506,7 +506,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Code:
-        S3Bucket: !Sub solution-references-${AWS::Region}
+        S3Bucket: !Sub solutions-aws-cn
         S3Key: fsx/amilookup-lin.zip
       Handler: amilookup-lin.handler
       Runtime: nodejs12.x
@@ -517,7 +517,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Code:
-        S3Bucket: !Sub solution-references-${AWS::Region}
+        S3Bucket: !Sub solutions-aws-cn
         S3Key: fsx/dfs/amilookup-win.zip
       Handler: amilookup-win.handler
       Runtime: nodejs12.x
