@@ -73,14 +73,27 @@ Invoke the Trust Advisor API to trigger the Check [referesh-trusted-advisor.py](
 
 Get the Trust Advisor report and sent out via email to receiver [get-trusted-advisor-report.py](script/get-trusted-advisor-report.py)
 
+You can select use the SES or SNS to sent email
+
 - Runtime: Python 3.8
 - Memory: 256MB
 - Timeout: 120 seconds
-- Env variable: TO_EMAIL and FROM_EMAIL for sender email and receiver email; STS_ROLE_ARN cross account STS Role ARN
+- Env variable: 
+  - Use the SES to send email: TO_EMAIL and FROM_EMAIL for sender email and receiver email; 
+  - Use the SNS to send email: SNS_TOPIC_ARN for SNS topic arn;
+  - STS_ROLE_ARN cross account STS Role ARN
+- events:
+  - 'via_sns':'true' sent mail via SNS, by default use the SES to sent the email, if you need use the SNS, set this event.
 
 Email example:
 
+SES Email:
+
 ![reports](media/reports.png)
+
+SNS Email:
+
+![reports](media/reports-sns.png)
 
 ## Step Function
 
@@ -90,7 +103,9 @@ Integrate 2 function and automatically triggered by Amazon EventBridge (CloudWat
 
 Sample step function define:
 
-[step-function.json](script/step-function.json)
+SES [step-function.json](script/step-function-ses.json), using SES to send email. This is recommanded deployment which can generate well format email.
+
+SNS [step-function.json](script/step-function-sns.json), using SNS to send email, which used for AWS region which SES service is not available
 
 # Reference
 [Using Trusted Advisor as a web service](https://docs.aws.amazon.com/awssupport/latest/user/trustedadvisor.html)

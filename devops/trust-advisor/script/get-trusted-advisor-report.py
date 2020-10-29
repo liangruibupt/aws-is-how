@@ -10,9 +10,10 @@ logger.setLevel(logging.INFO)
 
 region = os.environ['AWS_DEFAULT_REGION']
 colour_map = {'error': '#ff0000', 'warning': '#ffff00', 'ok': '#00ff00'}
-to_email = os.environ['TO_EMAIL']
-from_email = os.environ['FROM_EMAIL']
+to_email = os.environ.get('TO_EMAIL', default=None)
+from_email = os.environ.get('FROM_EMAIL', default=None)
 sts_role_arn = os.environ['STS_ROLE_ARN']
+sns_topic_arn = os.environ.get('SNS_TOPIC_ARN', default=None)
 
 class CustomError(Exception):
     pass
@@ -27,6 +28,11 @@ def get_console_url(region):
 
 def email_notification(email_subject, email_to, email_from, email_body):
     message = "Send email successfully"
+
+    if (to_email == None or from_email == None):
+        message = "Failed to get the environment variable TO_EMAIL or FROM_EMAIL"
+        raise CustomError(message)
+
     client = boto3.client('ses')
     try:
         send_response = client.send_email(Source=email_from,
@@ -54,8 +60,44 @@ def email_notification(email_subject, email_to, email_from, email_body):
     return message
 
 
+def email_notification_sns(email_subject, email_body):
+    message = "Send SNS email successfully"
+
+    if (sns_topic_arn == None):
+        message = "Failed to get the environment variable SNS_TOPIC_ARN"
+        raise CustomError(message)
+
+    client = boto3.client('sns')
+    sns_message = {
+        'Subject': {
+            'Charset': 'UTF-8',
+            'Data': email_subject,
+        },
+        'Body': {
+            'Html': {
+                'Charset': 'UTF-8',
+                'Data': email_body
+            }
+        }
+    }
+    try:
+        send_response = client.publish(TopicArn=sns_topic_arn,
+                                       Subject=email_subject,
+                                       Message=json.dumps(sns_message))
+        print('Successfuly send the email SNS with message ID: ' +
+              send_response['MessageId'])
+    except ClientError as e:
+        message = "Failed to send email, check the stack trace below." + \
+            json.dumps(e.response['Error'])
+        logging.error(message)
+        raise CustomError("Failed_Sent_Check_Summary")
+
+    return message
+
 def lambda_handler(event, context):
     message = "Successfuly get Trusted Advisor Check Summary and send the email"
+    via_sns = event.get('via_sns', None)
+
     try:
         sts_client = boto3.client('sts')
         sts_response = sts_client.assume_role(
@@ -113,7 +155,10 @@ def lambda_handler(event, context):
         email_content += "</table>"
         # print(email_content)
         subject = 'AWS Trusted Advisor Check Summary'
-        email_notification(subject, to_email, from_email, email_content)
+        if (via_sns == None):
+            email_notification(subject, to_email, from_email, email_content)
+        else:
+            email_notification_sns(subject, email_content)
     except ClientError as e:
         message = 'Failed to get check_summary: ' + json.dumps(e.response['Error'])
         logging.error(message)

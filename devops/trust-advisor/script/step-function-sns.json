@@ -1,0 +1,58 @@
+{
+    "Comment": "A Catch example of the Amazon States Language using an AWS Lambda Function",
+    "StartAt": "RefereshTrustedAdvisor",
+    "States": {
+        "RefereshTrustedAdvisor": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:us-east-1:account-id:function:RefereshTrustedAdvisor",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "ResultPath": "$.error",
+                    "Next": "CustomErrorFallback"
+                }
+            ],
+            "Next": "TrustedAdvisorReport"
+        },
+        "TrustedAdvisorReport": {
+            "Type": "Task",
+            "Parameters":{
+                "via_sns": "true"
+            },
+            "Resource": "arn:aws:lambda:us-east-1:account-id:function:TrustedAdvisorReport",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "ResultPath": "$.error",
+                    "Next": "CustomErrorFallback"
+                }
+            ],
+            "Next": "SuccessComplete"
+        },
+        "CustomErrorFallback": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sns:publish",
+            "Parameters": {
+                "TopicArn": "arn:aws:sns:us-east-1:account-id:NotifyMe",
+                "Message": {
+                    "Alarm": "Lambda Job Failed",
+                    "Error.$": "$.error"
+                }
+            },
+            "End": true
+        },
+        "SuccessComplete": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sns:publish",
+            "Parameters": {
+                "TopicArn": "arn:aws:sns:us-east-1:account-id:NotifyMe",
+                "Message": "TrustedAdvisorReport delivered!"
+            },
+            "End": true
+        }
+    }
+}
