@@ -15,8 +15,10 @@ from_email = os.environ.get('FROM_EMAIL', default=None)
 sts_role_arn = os.environ['STS_ROLE_ARN']
 sns_topic_arn = os.environ.get('SNS_TOPIC_ARN', default=None)
 
+
 class CustomError(Exception):
     pass
+
 
 def get_console_url(region):
     url_path = 'https://console.aws.amazon.com/trustedadvisor/home?region=' + \
@@ -25,6 +27,7 @@ def get_console_url(region):
         url_path = 'https: // console.amazonaws.cn/trustedadvisor/home?region=' + \
             region + '#/category/'
     return url_path
+
 
 def email_notification(email_subject, email_to, email_from, email_body):
     message = "Send email successfully"
@@ -36,7 +39,8 @@ def email_notification(email_subject, email_to, email_from, email_body):
     client = boto3.client('ses')
     try:
         send_response = client.send_email(Source=email_from,
-                                          Destination={'ToAddresses': [email_to]},
+                                          Destination={
+                                              'ToAddresses': [email_to]},
                                           Message={
                                               'Subject': {
                                                   'Charset': 'UTF-8',
@@ -49,14 +53,14 @@ def email_notification(email_subject, email_to, email_from, email_body):
                                                   }
                                               }
                                           })
-        print('Successfuly send the email with message ID: ' +
+        logging.info('Successfuly send the email with message ID: ' +
               send_response['MessageId'])
     except ClientError as e:
         message = "Failed to send email, check the stack trace below." + \
             json.dumps(e.response['Error'])
         logging.error(message)
         raise CustomError("Failed_Sent_Check_Summary")
-    
+
     return message
 
 
@@ -84,7 +88,7 @@ def email_notification_sns(email_subject, email_body):
         send_response = client.publish(TopicArn=sns_topic_arn,
                                        Subject=email_subject,
                                        Message=json.dumps(sns_message))
-        print('Successfuly send the email SNS with message ID: ' +
+        logging.info('Successfuly send the email SNS with message ID: ' +
               send_response['MessageId'])
     except ClientError as e:
         message = "Failed to send email, check the stack trace below." + \
@@ -94,27 +98,27 @@ def email_notification_sns(email_subject, email_body):
 
     return message
 
-def lambda_handler(event, context):
-    message = "Successfuly get Trusted Advisor Check Summary and send the email"
-    via_sns = event.get('via_sns', None)
 
+def single_account_execution(via_sns, role_arn):
+    message = "Successfuly get Trusted Advisor Check Summary and send the email for {}".format(role_arn)
     try:
         sts_client = boto3.client('sts')
         sts_response = sts_client.assume_role(
-            RoleArn=sts_role_arn,
+            RoleArn=role_arn,
             RoleSessionName='TA_Role',
         )
         #support_client = boto3.client('support')
         support_client = boto3.client('support',
-            aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
-            aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
-            aws_session_token=sts_response['Credentials']['SessionToken']
-        )
-        ta_checks = support_client.describe_trusted_advisor_checks(language='en')
+                                      aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
+                                      aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
+                                      aws_session_token=sts_response['Credentials']['SessionToken']
+                                      )
+        ta_checks = support_client.describe_trusted_advisor_checks(
+            language='en')
         checks_list = {ctgs: [] for ctgs in list(
             set([checks['category'] for checks in ta_checks['checks']]))}
         for checks in ta_checks['checks']:
-            print('Getting check:' + checks['name'])
+            logging.info('Getting check:' + checks['name'])
             try:
                 check_summary = support_client.describe_trusted_advisor_check_summaries(
                     checkIds=[checks['id']])['summaries'][0]
@@ -134,7 +138,8 @@ def lambda_handler(event, context):
                 logging.error(message)
                 continue
         # print(checks_list)
-        email_content = '<style>table, th, td {border: 1px solid black;border-collapse: collapse;}th,' + \
+        email_content = role_arn
+        email_content += '<style>table, th, td {border: 1px solid black;border-collapse: collapse;}th,' + \
                         ' td{padding: 5px;text-align: left;}</style><table border="1"><tr><th>Category' + \
                         '</th><th>Check</th><th>Status</th><th>Resources Processed</th><th>Resources Flagged</th>' + \
                         '<th>Resources Suppressed</th><th>Resources Ignored</th></tr>'
@@ -160,9 +165,20 @@ def lambda_handler(event, context):
         else:
             email_notification_sns(subject, email_content)
     except ClientError as e:
-        message = 'Failed to get check_summary: ' + json.dumps(e.response['Error'])
+        message = 'Failed to get check_summary: {} {}'.format(role_arn, json.dumps(e.response['Error']))
         logging.error(message)
         raise CustomError("Failed_Get_Delivery_Check_Summary")
+    return message
+
+
+def lambda_handler(event, context):
+    via_sns = event.get('via_sns', None)
+
+    sts_role_list = sts_role_arn.split("|")
+    for sts_role in sts_role_list:
+        logging.info("Start get report for {}".format(sts_role))
+        message = single_account_execution(via_sns, sts_role)
+        logging.info(message)
 
     return {
         "statusCode": 200,

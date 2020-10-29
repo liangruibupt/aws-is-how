@@ -67,7 +67,7 @@ Invoke the Trust Advisor API to trigger the Check [referesh-trusted-advisor.py](
 - Runtime: Python 3.8
 - Memory: 128MB
 - Timeout: 60 seconds
-- Env variable: STS_ROLE_ARN cross account STS Role ARN
+- Env variable: `STS_ROLE_ARN`: cross account STS Role ARN list, split by "|"
 
 ## Report Function TrustedAdvisorReport
 
@@ -79,9 +79,9 @@ You can select use the SES or SNS to sent email
 - Memory: 256MB
 - Timeout: 120 seconds
 - Env variable: 
-  - Use the SES to send email: TO_EMAIL and FROM_EMAIL for sender email and receiver email; 
-  - Use the SNS to send email: SNS_TOPIC_ARN for SNS topic arn;
-  - STS_ROLE_ARN cross account STS Role ARN
+  - Use the SES to send email: `TO_EMAIL` and `FROM_EMAIL` for sender email and receiver email; 
+  - Use the SNS to send email: `SNS_TOPIC_ARN` for SNS topic arn;
+  - `STS_ROLE_ARN`: cross account STS Role ARN list, split by "|"
 - events:
   - 'via_sns':'true' sent mail via SNS, by default use the SES to sent the email, if you need use the SNS, set this event.
 
