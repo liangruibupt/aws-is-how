@@ -8,6 +8,8 @@
 
 [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
 
+[Use AWS SageMaker BlazingText to process un-balance data for text multiple classification](https://amazonaws-china.com/cn/blogs/china/use-aws-sagemaker-blazingtext-to-multi-classify-unbalanced-text/) (https://github.com/zhangbeibei/sagemaker-unbalanced-text-multiclassification)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 

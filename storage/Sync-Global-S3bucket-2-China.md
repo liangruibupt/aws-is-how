@@ -1,5 +1,16 @@
 # Sync the public dataset s3 bucket to your bucket
-Use the [amazon-s3-resumable-upload toolkit](https://github.com/aws-samples/amazon-s3-resumable-upload)
+
+# Use the aws-data-replication-hub
+
+https://github.com/aws-samples/aws-data-replication-hub
+
+# Directly copy using aws S3 CLI
+
+```
+aws s3 cp s3://frankfurt-demo-bucket/demo2ebc.zip - --region eu-central-1 | aws s3 cp - s3://ray-cross-region-sync-bjs/speed-test/demo2ebc.zip --profile china --region cn-north-1
+```
+
+# Use the [amazon-s3-resumable-upload toolkit](https://github.com/aws-samples/amazon-s3-resumable-upload)
 
 ## Case 1: sync the file in the bucket created by [amazon-s3-resumable-upload toolkit](https://github.com/aws-samples/amazon-s3-resumable-upload)
 
