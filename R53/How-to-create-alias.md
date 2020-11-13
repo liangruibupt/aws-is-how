@@ -38,9 +38,28 @@ aws route53 change-resource-record-sets --hosted-zone-id Z0807456FWSN21W2TRAZ --
 # create CNAME in private Zone point to API GW regional API domain
 aws route53 change-resource-record-sets --hosted-zone-id Z0807456FWSN21W2TRAZ --change-batch file://apigw-regionalpi-cname-bjs.json --endpoint-url https://route53.amazonaws.com.cn --region cn-northwest-1 --profile cn-north-1
 
-# Create APIGW alias in private Zone with regional API - Not support
-aws route53 change-resource-record-sets --hosted-zone-id Z0807456FWSN21W2TRAZ --change-batch file://apigw-alias-bjs.json --endpoint-url https://route53.amazonaws.com.cn --region cn-northwest-1 --profile cn-north-1
-An error occurred (NoSuchHostedZone) when calling the ChangeResourceRecordSets operation: The specified hosted zone does not exist.
+# Create APIGW alias in private Zone with regional API
+aws route53 change-resource-record-sets --hosted-zone-id Z08202231ZEUWA2PZ7ZBZ --change-batch file://apigw-alias-bjs.json --endpoint-url https://route53.amazonaws.com.cn --region cn-northwest-1 --profile cn-north-1
+
+{
+    "ChangeInfo": {
+        "Id": "/change/C02705502PO8W4CH3L7UG",
+        "Status": "PENDING",
+        "SubmittedAt": "2020-11-13T08:44:40.330Z",
+        "Comment": "Creating Alias resource record sets in Route 53"
+    }
+}
+
+aws route53 list-resource-record-sets --hosted-zone-id  Z08202231ZEUWA2PZ7ZBZ --region cn-northwest-1 --profile cn-north-1
+{
+            "Name": "apigw-regional-alias.api.ray-alb-webapp.top.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z3N456W6CBMXJZ",
+                "DNSName": "d-tsvr8qjugg.execute-api.cn-north-1.amazonaws.com.cn.",
+                "EvaluateTargetHealth": false
+            }
+}
 
 aws route53 list-resource-record-sets --hosted-zone-id Z0807456FWSN21W2TRAZ --endpoint-url https://route53.amazonaws.com.cn --region cn-northwest-1 --profile cn-north-1
 ```

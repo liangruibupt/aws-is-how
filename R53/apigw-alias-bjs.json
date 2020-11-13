@@ -6,8 +6,8 @@
                             "Name": "apigw-regional-alias.api.ray-alb-webapp.top",
                             "Type": "A",
                             "AliasTarget":{
-                                    "HostedZoneId": "Z5NA05YM8BTL5",
-                                    "DNSName": "d-kjec3qhpcf.execute-api.cn-north-1.amazonaws.com.cn",
+                                    "HostedZoneId": "Z3N456W6CBMXJZ",
+                                    "DNSName": "d-tsvr8qjugg.execute-api.cn-north-1.amazonaws.com.cn",
                                     "EvaluateTargetHealth": false
                               }}
                           }]
