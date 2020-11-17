@@ -13,9 +13,9 @@ It uses threat intelligence feeds, such as lists of malicious IP addresses and d
 
 # Tester
 
-Simulate attacks, and generate GuardDuty Findings.
+Simulate attacks, and generate GuardDuty Findings. The [original github repo](https://github.com/awslabs/amazon-guardduty-tester)
 
-1. Create a new CloudFormation stack using [guardduty tester template](scripts/guardduty-tester-cn.json)
+1. Create a new CloudFormation stack using [China region guardduty tester template](scripts/guardduty-tester-cn.json) or [Global region guardduty tester template](https://github.com/awslabs/amazon-guardduty-tester/blob/master/guardduty-tester.template)
 
 2. From CloudFormation Output get the BastionIp and RedTeamIp
 - SSH to Bastion with BastionIp
