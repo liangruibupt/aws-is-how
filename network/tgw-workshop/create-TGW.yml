@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description:  Create a TGW and the Route tables for the TGW workshop
+
+
+####
+#### CloudFormation Metadata - makes the parameter inputs look nice
+####
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: External Accounts
+      Parameters:
+      - pLowerAccount
+      - pUpperAccount
+    - Label:
+        default: Transit Gateway Details
+      Parameters:
+      - pTgwAsn
+    ParameterLabels:
+      pLowerAccount:
+        default: Lower AWS Account
+      pUpperAccount:
+        default: Upper AWS Account
+      pTgwAsn:
+        default: TGW ASN Number to Assign
+
+
+Parameters:
+  pTgwAsn:
+    Type: Number
+    Description: Enter the TGW ASN Number
+    Default: 64512
+  pLowerAccount:
+    Type: Number
+    Description: External AWS account Number for the Lower (Dev & test) account
+  pUpperAccount:
+    Type: Number
+    Description: External AWS account Number for the Upper (Prod) account
+
+Resources:
+
+  ####
+  #### Creates the TGW
+  ####
+
+  rTGW:
+    Type: AWS::EC2::TransitGateway
+    Properties: 
+      AmazonSideAsn: !Ref pTgwAsn
+      AutoAcceptSharedAttachments: disable
+      DefaultRouteTableAssociation: disable
+      DefaultRouteTablePropagation: disable
+      Description: TGW Workshop
+      DnsSupport: enable
+      VpnEcmpSupport: enable
+      Tags: 
+      - Key: Name
+        Value: !Sub "TGW ${AWS::StackName}"
+
+  ####
+  #### Creates 5 separate route tables inside the TGW
+  ####
+
+  rTGWRouteTableLower:
+    Type: AWS::EC2::TransitGatewayRouteTable
+    Properties:
+      TransitGatewayId: !Ref rTGW
+      Tags:
+      - Key: Name
+        Value: !Sub "Lower Route Table ${AWS::StackName}"
+
+  rTGWRouteTableUpper:
+    Type: AWS::EC2::TransitGatewayRouteTable
+    Properties:
+      TransitGatewayId: !Ref rTGW
+      Tags:
+      - Key: Name
+        Value: !Sub "Upper Route Table ${AWS::StackName}"
+
+  rTGWRouteTableShared:
+    Type: AWS::EC2::TransitGatewayRouteTable
+    Properties:
+      TransitGatewayId: !Ref rTGW
+      Tags:
+      - Key: Name
+        Value: !Sub "Shared Route Table ${AWS::StackName}"
+
+  ####
+  #### Creates 5 separate route tables inside the TGW
+  ####
+
+  rTGWResourceShare:
+    Type: AWS::RAM::ResourceShare
+    Properties:
+      AllowExternalPrincipals: true
+      Name: ResourceShareTGW
+      ResourceArns: 
+      - !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:transit-gateway/${rTGW}
+      Principals:
+      - !Ref pLowerAccount
+      - !Ref pUpperAccount
+      Tags:
+      - Key: Name
+        Value: !Sub "ResourceShareTGW ${AWS::StackName}"
+
+####
+#### Output
+####
+
+Outputs:
+  oTGW: # Output for TGW
+    Description: TGW For the Stack
+    Value:
+      !Ref rTGW
+    Export:
+      Name: !Sub "tgw-${AWS::StackName}"
+
+  oTGW: # Output for TGW Resource Sharing
+    Description: Resource Sharing for TGW
+    Value:
+      !Ref rTGWResourceShare
+    Export:
+      Name: !Sub "tgw-${AWS::StackName}"

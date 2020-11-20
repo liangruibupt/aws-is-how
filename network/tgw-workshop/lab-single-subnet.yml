@@ -1,0 +1,420 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description:  Provides a basic VPC with public and private subnets in single AZ with bastion host and a test host in private
+
+####
+#### CloudFormation Metadata - makes the parameter inputs look nice
+####
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Network settings
+      Parameters:
+      - pVpcCidr
+      - pPublicSubnet1Cidr
+      - pPrivateSubnet1Cidr
+      - pAvailabilityZone1
+    - Label:
+        default: Bastion/EC2 host
+      Parameters:
+      - pTestEc2InstancePrivateIp
+      - pKeyName
+      - pInstanceType
+      - pBastionAllowedPrefix
+      - pInstanceRoleManagedPolicy
+    ParameterLabels:
+      pVpcCidr:
+        default: VPC CIDR
+      pPublicSubnet1Cidr:
+        default: Public Subnet 1 CIDR
+      pPrivateSubnet1Cidr:
+        default: Private Subnet 1 CIDR
+      pAvailabilityZone1:
+        default: Availability Zone 1
+      pKeyName:
+        default: Bastion host key
+      pInstanceType:
+        default: Instance type for EC2 host
+      pBastionAllowedPrefix:
+        default: Prefix ID for Amazon Network
+      pInstanceRoleManagedPolicy:
+        default: Managed Policy to attach to EC2 instance
+      pTestEc2InstancePrivateIp:
+        default: Private IP address of the test EC2 instance to assign         
+
+####
+#### Template input parameters
+####
+
+Parameters:
+  pVpcCidr:
+    Type: String
+    Default: 10.1.0.0/16
+    # AllowedPattern: "^((\\d)+.){3}(0)\\/(16|17|18|19|20|21|22)"
+    AllowedValues:
+    - 10.1.0.0/16
+    - 10.2.0.0/16
+    - 10.3.0.0/16
+    - 10.4.0.0/16
+    - 10.5.0.0/16
+    Description: Must be a valid IPv4 CIDR, max /16.
+  pPublicSubnet1Cidr:
+    Type: String
+    Default: 10.1.1.0/24
+    AllowedValues:
+    - 10.1.1.0/24
+    - 10.2.1.0/24
+    - 10.3.1.0/24
+    - 10.4.1.0/24
+    - 10.5.1.0/24
+    Description: Must be a valid IPv4 CIDR and fit within the CIDR declared for the VPC.
+  pPrivateSubnet1Cidr:
+    Type: String
+    Default: 10.1.2.0/24
+    AllowedValues:
+    - 10.1.2.0/24
+    - 10.2.2.0/24
+    - 10.3.2.0/24
+    - 10.4.2.0/24
+    - 10.5.2.0/24
+    Description: Must be a valid IPv4 CIDR and fit within the CIDR declared for the VPC.
+  pAvailabilityZone1:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Description: First availability zone to create subnets
+  pKeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Access key for the Bastion & Test instance
+  pBastionAllowedPrefix: 
+    Type: String
+    Description: Enter the prefix for Amazon network for the region to allow ingress to bastion host (see https://apll.corp.amazon.com/?region=us-east-1) 
+    Default: pl-60b85b09
+    AllowedValues:
+    - pl-60b85b09
+    - pl-90a045f9
+    - pl-b5a540dc
+  pInstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+    - t1.micro
+    - t2.nano
+    - t2.micro
+    - t2.small
+    - t2.medium
+  pInstanceRoleManagedPolicy:
+    Description: Managed Policy to attach to EC2 instance
+    Type: String
+    Default: AmazonSSMManagedInstanceCore
+    AllowedValues:
+    - AmazonSSMManagedInstanceCore
+  pTestEc2InstancePrivateIp:
+    Type: String
+    Default: '10.1.2.11'
+    AllowedValues:
+    - '10.1.2.11'
+    - '10.2.2.11'
+    - '10.3.2.11'
+    - '10.4.2.11'
+    - '10.5.2.11'
+    Description: Private IP address of the test EC2 instance to assign 
+
+# Conditions:
+#   # Determine which OS type to use for Bastion
+#   cBastionWindows: !Equals [ pInstanceOS, Windows ]
+#   cBastionLinux: !Equals [ pInstanceOS, Linux ]
+
+Mappings:
+  mLinuxAmiMap:
+    'us-east-1':
+      hvmEbs64: ami-00eb20669e0990cb4
+    'us-east-2':
+      hvmEbs64: ami-8a7859ef
+    'us-west-2':
+      hvmEbs64: ami-6df1e514
+    'us-west-1':
+      hvmEbs64: ami-327f5352
+    'ca-central-1':
+      hvmEbs64: ami-a7aa15c3
+    'eu-west-1':
+      hvmEbs64: ami-d7b9a2b1
+    'eu-west-2':
+      hvmEbs64: ami-ed100689
+    'eu-central-1':
+      hvmEbs64: ami-82be18ed
+    'ap-southeast-1':
+      hvmEbs64: ami-77af2014
+    'ap-northeast-2':
+      hvmEbs64: ami-e21cc38c
+    'ap-northeast-1':
+      hvmEbs64: ami-3bd3c45c
+    'ap-southeast-2':
+      hvmEbs64: ami-10918173
+    'ap-south-1':
+      hvmEbs64: ami-47205e28
+    'sa-east-1':
+      hvmEbs64: ami-87dab1eb
+    'us-gov-west-1':
+      hvmEbs64: ami-899412e8
+    'cn-north-1':
+      hvmEbs64: ami-0a70df9d5c6955abf
+    'cn-northwest-1':
+      hvmEbs64: ami-08af324f69cf03287
+
+Resources:
+
+  ####
+  #### Creates the base VPC and subnets
+  ####
+
+  rVpc: # Creates the VPC itself
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref pVpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+      - Key: Name
+        Value: !Sub "VPC ${AWS::StackName}"
+
+  rPublicSubnet1:   # Public Subnet 1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref pAvailabilityZone1
+      CidrBlock: !Ref pPublicSubnet1Cidr
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref rVpc
+      Tags:
+      - Key: Name
+        Value: !Sub "Public Subnet 1 ${AWS::StackName}"
+
+  rPrivateSubnet1:    # Private Subnet 1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref pAvailabilityZone1
+      CidrBlock: !Ref pPrivateSubnet1Cidr
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref rVpc
+      Tags:
+      - Key: Name
+        Value: !Sub "Private Subnet 1 ${AWS::StackName}"
+
+  ####
+  #### Create internet / NAT gateways for outbound access
+  ####
+
+  rNat1Eip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  
+  rNatGateway1: #NAT GW #1
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt rNat1Eip.AllocationId
+      SubnetId: !Ref rPublicSubnet1
+  
+  rInternetGateway: #IGW
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Sub "Internet Gateway - ${AWS::StackName}"
+      
+  rInternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref rInternetGateway
+      VpcId: !Ref rVpc
+  
+  ####
+  #### Create and attach routing tables
+  ####
+
+  rPublicSubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref rVpc
+      Tags:
+      - Key: Name
+        Value: !Sub "Public subnet route table - ${AWS::StackName}"
+
+  rPrivateSubnet1RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref rVpc
+      Tags:
+      - Key: Name
+        Value: !Sub "Private subnet route table - ${AWS::StackName}"
+
+  rPublicSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref rPublicSubnetRouteTable
+      SubnetId: !Ref rPublicSubnet1
+
+  rPrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref rPrivateSubnet1RouteTable
+      SubnetId: !Ref rPrivateSubnet1
+
+  ####
+  #### Create routing rules to allow internet access
+  ####
+
+  rPublicRouteToInternet:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref rInternetGateway
+      RouteTableId: !Ref rPublicSubnetRouteTable
+
+  rPrivateSubnet1RouteToInternet:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref rNatGateway1
+      RouteTableId: !Ref rPrivateSubnet1RouteTable
+
+  ####
+  #### Bastion host security group
+  ####
+
+  rBastionSecurityGroup:  # SG for Bastion Hosts - use the prefix pBastionAllowedPrefix
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "Bastion security group ${AWS::StackName}"
+      GroupDescription: Allows access to the Bastion host
+      SecurityGroupIngress:
+      - SourcePrefixListId: !Ref pBastionAllowedPrefix
+        IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+      VpcId: !Ref rVpc
+
+  rTestHostSecurityGroup: # SG for test host -- allow ssh from Bastion Host
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "Test Host Security group ${AWS::StackName}"
+      GroupDescription: Allows access from the Bastion host to Test host
+      SecurityGroupIngress:
+      - SourceSecurityGroupId: !Ref rBastionSecurityGroup
+        IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+      - CidrIp: 10.0.0.0/8
+        IpProtocol: icmp
+        FromPort: -1
+        ToPort: -1
+      VpcId: !Ref rVpc
+
+  ####
+  #### role for SSM console
+  ####
+  rEc2SsmRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'ec2SSMRole-${AWS::StackName}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com.cn
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+      - !Sub 'arn:${AWS::Partition}:iam::aws:policy/${pInstanceRoleManagedPolicy}'
+
+  rEc2SsmRoleInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub 'ec2SSMRole-${AWS::StackName}'
+      Path: /
+      Roles: 
+      - !Ref rEc2SsmRole
+
+  rBastionHost: # Bastion Host for the stack
+    Type: AWS::EC2::Instance
+    Properties:
+      #ImageId: !If [ cBastionLinux, !FindInMap [ mLinuxAmiMap, !Ref "AWS::Region", hvmEbs64 ], !FindInMap [ mWindowsAmiMap, !Ref "AWS::Region", windows2016base ] ]
+      ImageId: !FindInMap [ mLinuxAmiMap, !Ref "AWS::Region", hvmEbs64 ]
+      IamInstanceProfile: !Ref rEc2SsmRoleInstanceProfile
+      InstanceType: !Ref pInstanceType
+      KeyName: !Ref pKeyName
+      SubnetId: !Ref rPublicSubnet1
+      SecurityGroupIds:
+      - !Ref rBastionSecurityGroup
+      UserData:
+        'Fn::Base64': 
+          !Sub |
+            #!/bin/bash
+            yum update -y
+      Tags:
+      - Key: Name
+        Value: !Sub "BastionHost - ${AWS::StackName}"
+
+  rTestEC2Host: # Test Host for the stack
+    Type: AWS::EC2::Instance
+    Properties:
+      #ImageId: !If [ cBastionLinux, !FindInMap [ mLinuxAmiMap, !Ref "AWS::Region", hvmEbs64 ], !FindInMap [ mWindowsAmiMap, !Ref "AWS::Region", windows2016base ] ]
+      ImageId: !FindInMap [ mLinuxAmiMap, !Ref "AWS::Region", hvmEbs64 ]
+      IamInstanceProfile: !Ref rEc2SsmRoleInstanceProfile
+      InstanceType: !Ref pInstanceType
+      KeyName: !Ref pKeyName
+      SubnetId: !Ref rPrivateSubnet1
+      PrivateIpAddress: !Ref pTestEc2InstancePrivateIp
+      SecurityGroupIds:
+      - !Ref rTestHostSecurityGroup
+      UserData:
+        'Fn::Base64': 
+          !Sub |
+            #!/bin/bash
+            yum update -y
+      Tags:
+      - Key: Name
+        Value: !Sub "TestEC2 - ${AWS::StackName}"
+
+####
+#### CloudFormation Outputs
+####
+
+Outputs:
+  oVpc: # Output for VPC
+    Description: VPC For the Stack
+    Value:
+      !Ref rVpc
+    Export:
+      Name: !Sub "vpc-${AWS::StackName}"
+  oPublicSubnet1: # Output for Public Subnet 
+    Description: Public Subnet
+    Value:
+      !Ref rPublicSubnet1
+    Export:
+      Name: !Sub "PublicSubnet-${AWS::StackName}"
+  oPrivateSubnet1: # Output for Private Subnet 
+    Description: Private  Subnet
+    Value:
+      !Ref rPrivateSubnet1
+    Export:
+      Name: !Sub "PrivateSubnet-${AWS::StackName}"
+  oBastionSecurityGroup: # Output for SG for Basiton Host
+    Description: Bastion Host Security Group SG
+    Value:
+      !Ref rBastionSecurityGroup
+    Export:
+      Name: !Sub "BastionHostSg-${AWS::StackName}"
+  oTestEC2HostIp:
+    Description: Test Host Private IP
+    Value:
+      !GetAtt rTestEC2Host.PrivateIp
+  oBastionPublicIp:
+    Description: Bastion Host Public IP
+    Value:
+      !GetAtt rBastionHost.PublicIp
+
+
+

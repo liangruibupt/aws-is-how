@@ -85,6 +85,8 @@
 
 [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
 
+[TGW cross account sharing and inter-connection testing](network/tgw-workshop)
+
 ## DNS
 
 [R53 in China region](R53/README.md)
