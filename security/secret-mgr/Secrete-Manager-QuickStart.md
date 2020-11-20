@@ -2,7 +2,10 @@
 
 [Offical Secrets Manager Tutorials doc](https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials.html)
 
+Example: Using CloudFormation templates create a secret and an Amazon RDS MySQL DB instance using the credentials in the secret as the master user and password. The secret has a resource-based policy attached that specifies access to the secret. The template also creates a Lambda rotation function and configures the secret to automatically rotate every 30 days. 
+
 [Automating secret creation in AWS CloudFormation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_cloudformation.html)
+
 
 ## Customer type secret
 1. Create new Secrets from AWS Secrets Manager Console
