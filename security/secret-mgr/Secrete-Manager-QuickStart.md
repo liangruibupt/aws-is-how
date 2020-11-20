@@ -2,6 +2,8 @@
 
 [Offical Secrets Manager Tutorials doc](https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials.html)
 
+[Automating secret creation in AWS CloudFormation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_cloudformation.html)
+
 ## Customer type secret
 1. Create new Secrets from AWS Secrets Manager Console
 
@@ -41,4 +43,3 @@ A secret named quickstart/ExternalCMKSecret in your Security_Account is encrypte
 Follow the guide https://aws.amazon.com/premiumsupport/knowledge-center/secrets-manager-share-between-accounts/
 
 Then run the [secret-mgr-demo-external-account](secret-mgr-demo-external-account.py) on EC2 or Lambda
-
