@@ -1,0 +1,366 @@
+{
+    "Comment": "A simple AWS Step Functions state machine that athena query",
+    "StartAt": "Create_database_and_table",
+    "States": {
+        "Create_database_and_table": {
+            "Type": "Task",
+            "TimeoutSeconds": 300,
+            "ResultPath": "$.taskresult",
+            "Parameters":{
+                "TaskName": "Create_database_and_table",
+                "Athena_DDL_File": "scripts/blogdb/create_blogdb_original_csv.ddl",
+                "Athena_Database.$":"$.InputData.Athena_Database",
+                "Athena_Table.$": "$.InputData.Athena_Table",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_createdb_createtable",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Choice_action"
+        },
+        "Convert_Parquet_table_as_select": {
+            "Type": "Task",
+            "TimeoutSeconds": 300,
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Convert_Parquet_table_as_select",
+                "Athena_DDL_File": "scripts/blogdb/create_blogdb_new_parquet.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_createdb_createtable",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Choice_action"
+        },
+        "Insert_Data": {
+            "Type": "Task",
+            "TimeoutSeconds": 300,
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Insert_Data",
+                "Athena_DDL_File": "scripts/blogdb/insert_blogdb_new_parquet.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_start_long_running_query",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Wait_five_seconds"
+        },
+        "Query_data_measure_performance1": {
+            "Type": "Task",
+            "TimeoutSeconds": 300,
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Query_data_measure_performance1",
+                "Athena_DDL_File": "scripts/blogdb/query_orders_group_by_year.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_start_long_running_query",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Wait_five_seconds"
+        },
+        "Query_data_measure_performance2": {
+            "Type": "Task",
+            "TimeoutSeconds": 300,
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName": "Query_data_measure_performance2",
+                "Athena_DDL_File": "scripts/blogdb/analysis_orders_in_2018.ddl",
+                "Athena_Database.$": "$.InputData.Athena_Database",
+                "Athena_Table": "new_parquet",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "Athena_DDL_Bucket.$": "$.InputData.Athena_DDL_Bucket"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_start_long_running_query",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Wait_five_seconds"
+        },
+        "Get_long_running_result": {
+            "Type": "Task",
+            "TimeoutSeconds": 300,
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName.$": "$.taskresult.TaskName",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "QueryExecutionId.$": "$.taskresult.WaitTask.QueryExecutionId"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_get_long_running_result",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Choice_action"
+        },
+        "Wait_five_seconds": {
+            "Type": "Wait",
+            "Seconds": 5,
+            "Next": "Get_execution_status"
+        },
+        "Get_execution_status": {
+            "Type": "Task",
+            "ResultPath": "$.taskresult",
+            "Parameters": {
+                "TaskName.$": "$.taskresult.TaskName",
+                "Output_Data_Bucket.$": "$.InputData.Output_Data_Bucket",
+                "Output_Prefix.$": "$.InputData.Output_Prefix",
+                "QueryExecutionId.$": "$.taskresult.WaitTask.QueryExecutionId"
+            },
+            "Resource": "arn:aws-cn:lambda:cn-northwest-1:$account_id:function:athena_get_long_running_status",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "CustomError"
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "Failed"
+                }
+            ],
+            "Next": "Check_execution_status"
+        },
+        "Check_execution_status": {
+            "Type": "Choice",
+            "Choices": [
+                {
+                    "Or": [
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "FAILED"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "CANCELED"
+                        }
+                    ],
+                    "Next": "Failed"
+                },
+                {
+                    "Or": [
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "RUNNING"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "QUEUED"
+                        }
+                    ],
+                    "Next": "Wait_five_seconds"
+                },
+                {
+                    "And": [
+                        {
+                            "Variable": "$.taskresult.WaitTask.ResultPrefix",
+                            "StringEquals": "LongRunning"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "SUCCEEDED"
+                        }
+                    ],
+                    "Next": "Get_long_running_result"
+                }
+            ]
+        },
+        "Choice_action": {
+            "Type": "Choice",
+            "Choices": [
+                {
+                    "And": [
+                        {
+                            "Variable": "$.taskresult.TaskName",
+                            "StringEquals": "Create_database_and_table"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.ResultPrefix",
+                            "StringEquals": "CreateTable"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "SUCCEEDED"
+                        }
+                    ],
+                    "Next": "Convert_Parquet_table_as_select"
+                },
+                {
+                    "And": [
+                        {
+                            "Variable": "$.taskresult.TaskName",
+                            "StringEquals": "Convert_Parquet_table_as_select"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.ResultPrefix",
+                            "StringEquals": "CreateTable"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "SUCCEEDED"
+                        }
+                    ],
+                    "Next": "Insert_Data"
+                },
+                {
+                    "And": [
+                        {
+                            "Variable": "$.taskresult.TaskName",
+                            "StringEquals": "Insert_Data"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.ResultPrefix",
+                            "StringEquals": "LongRunning"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "SUCCEEDED"
+                        }
+                    ],
+                    "Next": "Query_data_measure_performance1"
+                },
+                {
+                    "And": [
+                        {
+                            "Variable": "$.taskresult.TaskName",
+                            "StringEquals": "Query_data_measure_performance1"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.ResultPrefix",
+                            "StringEquals": "LongRunning"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "SUCCEEDED"
+                        }
+                    ],
+                    "Next": "Query_data_measure_performance2"
+                },
+                {
+                    "And": [
+                        {
+                            "Variable": "$.taskresult.TaskName",
+                            "StringEquals": "Query_data_measure_performance2"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.ResultPrefix",
+                            "StringEquals": "LongRunning"
+                        },
+                        {
+                            "Variable": "$.taskresult.WaitTask.QueryState",
+                            "StringEquals": "SUCCEEDED"
+                        }
+                    ],
+                    "Next": "SuccessState"
+                },
+                {
+                    "Variable": "$.taskresult.WaitTask.QueryState",
+                    "StringEquals": "FAILED",
+                    "Next": "Failed"
+                },
+                {
+                    "Variable": "$.taskresult.WaitTask.QueryState",
+                    "StringEquals": "SUCCEEDED",
+                    "Next": "SuccessState"
+                }
+            ]
+        },
+        "Failed": {
+            "Type": "Fail",
+            "Cause": "Cause unclear, investigate the cloudwatch logs",
+            "Error": "The athena execution failed, check the logs."
+        },
+        "SuccessState": {
+            "Type": "Succeed"
+        }
+    }
+}
