@@ -14,7 +14,7 @@ Navigate to AWS Secrets Manager->Secrets
 
 ![customType](media/customType.png)
 
-Then Run the [secret-mgr-demo](secret-mgr-demo.py) on EC2 or Lambda
+Then Run the [secret-mgr-demo](scripts/secret-mgr-demo.py) on EC2 or Lambda
 
 2. Create new AWS Secrets by AWS CLI under 444455556666 account and use the CMK created above.
   ```bash
@@ -22,7 +22,7 @@ Then Run the [secret-mgr-demo](secret-mgr-demo.py) on EC2 or Lambda
     --kms-key-id {cmk-arn} --secret-string file://mycreds.json \
     --region cn-north-1 --profile cn-north-1
   ```
-Then Run the [rds-secret-mgr-demo](rds-secret-mgr-demo.py) on EC2 or Lambda
+Then Run the [rds-secret-mgr-demo](scripts/rds-secret-mgr-demo.py) on EC2 or Lambda
 
 ## Secret for AWS RDS / AWS Redshift
 1. Create new Secrets from AWS Secrets Manager Console
@@ -35,7 +35,7 @@ Select the RDS instance
 
 ![rds2](media/rds2.png)
 
-Then Run the [rds-secret-mgr-demo.py](rds-secret-mgr-demo.py) on EC2 or Lambda
+Then Run the [rds-secret-mgr-demo.py](scripts/rds-secret-mgr-demo.py) on EC2 or Lambda
 
 ## How do I share AWS Secrets Manager secrets between AWS accounts?
 
@@ -45,4 +45,4 @@ A secret named quickstart/ExternalCMKSecret in your Security_Account is encrypte
 
 Follow the guide https://aws.amazon.com/premiumsupport/knowledge-center/secrets-manager-share-between-accounts/
 
-Then run the [secret-mgr-demo-external-account](secret-mgr-demo-external-account.py) on EC2 or Lambda
+Then run the [secret-mgr-demo-external-account](scripts/secret-mgr-demo-external-account.py) on EC2 or Lambda
