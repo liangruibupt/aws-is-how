@@ -4,6 +4,8 @@
 
 ## Example: Using CloudFormation templates create an Amazon RDS MySQL DB instance using the credentials stored in the Secrets Manager as the master user and password. 
 
+![Test cases cfn1](media/scenario-cfn1.png)
+
 The secret has a resource-based policy attached that specifies access to the secret. The template also creates a Lambda rotation function and configures the secret to automatically rotate every 30 days. 
 
 1. Deploy [CloudFormation Template](scripts/secrets-mgr-rds.yaml)
@@ -39,6 +41,8 @@ The secret has a resource-based policy attached that specifies access to the sec
 
 
 ## Example: RDS MySQL DB instance using the credentials stored in the Secrets Manager as the master user and password. The Secrets is created by other account
+
+![Test cases cfn2](media/scenario-cfn2.png)
 
 1. Finish the steps for [Access Secrets from other Account](https://aws.amazon.com/premiumsupport/knowledge-center/secrets-manager-share-between-accounts/)
 

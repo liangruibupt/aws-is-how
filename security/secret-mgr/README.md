@@ -6,6 +6,8 @@ Secrets Manager enables you to replace hardcoded credentials in your code, inclu
 
 [Offical Secrets Manager Tutorials doc](https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials.html)
 
+![Test cases](media/scenario.png)
+
 1. [The key/value pairs to be stored in the secret](Custom-Type-Secrets.md)
 
 2. [Secret for AWS RDS / AWS Redshift](Secrets-RDS.md)
