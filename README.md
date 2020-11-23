@@ -51,7 +51,7 @@
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
 
-[Secret Manager quick start demo](security/secret-mgr/Secrete-Manager-QuickStart.md)
+[Secret Manager quick start demo](security/secret-mgr/README.md)
 
 [Upload-SSL-Certificate](security/Upload-SSL-Certificate.md)
 
