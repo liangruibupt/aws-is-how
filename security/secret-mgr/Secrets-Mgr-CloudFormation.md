@@ -151,6 +151,10 @@ The RDS endpoint and port can get from CloudFormation stack `Outputs`
 In my demo, I use the existed secret named `SecurityAcount/SharedSecrets/RDSMySQL`
 
 ```bash
+sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+sudo yum install -y mysql-community-client
+sudo yum install -y jq
+
 # Get the value of master user and password
 masterUser=$(aws secretsmanager get-secret-value --secret-id "arn:aws-cn:secretsmanager:cn-north-1:SecurityAcount:secret:SecurityAcount/SharedSecrets/RDSMySQL" --version-stage AWSCURRENT --output json --region cn-north-1 | jq -r .SecretString | jq -r .username )
 echo $masterUser
@@ -159,6 +163,7 @@ echo $masterPassword
 
 # Get the RDS MySQL endpoint
 dbEndPoint=$(aws cloudformation describe-stacks --region cn-north-1 --stack-name Screte-Mgr-RDS --query 'Stacks[0].Outputs[?OutputKey==`dbEndPoint`].OutputValue' --output json | jq -r '.[0]')
+echo $dbEndPoint
 
 # Connect the RDS MySQL
 mysql -h $dbEndPoint -u $masterUser -p
