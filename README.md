@@ -15,6 +15,8 @@
 
 [Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
 
+[Cost and Usage Report analysis](cost/analysis-cost-usage-report.md)
+
 ## Computing
 
 [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
