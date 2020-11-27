@@ -27,6 +27,8 @@
 
 [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
 
+[ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -48,6 +50,8 @@
 [Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
 
 [Amazon Elasticsearch Service Workshop](https://www.aesworkshops.com/)
+
+[Elasticsearch Service Snapshot Lifecycle](analytics/elasticsearch-lifecycle)
 
 ## Security
 
