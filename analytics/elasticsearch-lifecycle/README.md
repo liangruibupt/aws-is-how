@@ -131,6 +131,22 @@ curl -X PUT "localhost:9200/_slm/policy/daily-snapshots?pretty" -H 'Content-Type
   }
 }
 '
+
+curl -X PUT "localhost:9200/_slm/policy/nightly-snapshots?pretty" -H 'Content-Type: application/json' -d'
+{
+  "schedule": "0 10 10 * * ?", 
+  "name": "<nightly-snap-{now/d}>", 
+  "repository": "my_s3_repository", 
+  "config": { 
+    "indices": ["testes-*"] 
+  },
+  "retention": { 
+    "expire_after": "1d", 
+    "min_count": 1, 
+    "max_count": 2
+  }
+}
+'
 ```
 
 2. Create some new index or add data to existed index
@@ -244,7 +260,7 @@ Create Elasticsearch daily. And create the snapshot daily; Set the S3 lifecycle 
 
 1. Check Elasticsearch whether can get the snapshot status
 
-- Result: Failed to Elasticsearch retrieve the snapshot info when the snapshot has been convert to Glacier storage class
+- Result: Failed to Elasticsearch retrieve the snapshot info when the snapshot has been converted to Glacier storage class
 
 ```bash
 curl -X GET "localhost:9200/_snapshot/my_s3_repository/_all?pretty"
@@ -268,7 +284,7 @@ curl -X GET "localhost:9200/_snapshot/my_s3_repository/_all?pretty"
 ```
 
 
-2. Check using Elasticsearch snapshot delete API to delete the snapshot when the snapshot has been convert to Glacier storage class
+2. Check using Elasticsearch snapshot delete API to delete the snapshot when the snapshot has been converted to Glacier storage class
 
 - Result: Success
 
@@ -335,84 +351,81 @@ curl -X GET "localhost:9200/_snapshot/my_s3_repository/daily-snap-2020.11.25-igi
 }
 ```
 
-3. Check Elasticsearch SLM whether can successfully delete the snapshot when the snapshot has been convert to Glacier storage class
+3. Check Elasticsearch SLM whether can successfully delete the snapshot when the snapshot has been converted to Glacier storage class
+
+- Success
 
 ```bash
-# Deletes any snapshots that are expired according to the policy’s retention rules.
-curl -X POST "localhost:9200/_slm/_execute_retention?pretty"
-
-curl -XGET 'localhost:9200/_cat/indices?v&pretty' | grep testes
-health status index   uuid  pri rep docs.count docs.deleted store.size pri.store.size
-yellow open   testes-lifecycle-2020-11-25     7fluXBYtRRqz_Ai-J5BqVQ   1   1       2000            0      175kb          175kb
-yellow open   testes-lifecycle-2020-11-26     XBqHH3CTRDOaNIC8LbviJg   1   1       2000            0    162.9kb        162.9kb
-yellow open   testes-lifecycle-2020-11-27         n0YnPNKWTIehqcmR_J0c1Q   1   1       1000            0       89kb           89kb
-
+# Check SLM status
 curl -X GET "localhost:9200/_slm/stats?pretty"
 {
-  "retention_runs" : 1,
-  "retention_failed" : 0,
+  "retention_runs" : 15,
+  "retention_failed" : 1,
   "retention_timed_out" : 0,
-  "retention_deletion_time" : "0s",
-  "retention_deletion_time_millis" : 0,
-  "total_snapshots_taken" : 2,
-  "total_snapshots_failed" : 0,
-  "total_snapshots_deleted" : 0,
+  "retention_deletion_time" : "1.2s",
+  "retention_deletion_time_millis" : 1285,
+  "total_snapshots_taken" : 10,
+  "total_snapshots_failed" : 15,
+  "total_snapshots_deleted" : 1,
   "total_snapshot_deletion_failures" : 0,
   "policy_stats" : [
     {
       "policy" : "daily-snapshots",
-      "snapshots_taken" : 2,
-      "snapshots_failed" : 0,
+      "snapshots_taken" : 6,
+      "snapshots_failed" : 10,
+      "snapshots_deleted" : 1,
+      "snapshot_deletion_failures" : 0
+    },
+    {
+      "policy" : "nightly-snapshots",
+      "snapshots_taken" : 4,
+      "snapshots_failed" : 5,
       "snapshots_deleted" : 0,
       "snapshot_deletion_failures" : 0
     }
   ]
 }
 
-
-
-curl -X GET "localhost:9200/_slm/policy/daily-snapshots?human&pretty"
+# Deletes any snapshots that are expired according to the policy’s retention rules.
+curl -X POST "localhost:9200/_slm/_execute_retention?pretty"
 {
-  "daily-snapshots" : {
-    "version" : 1,
-    "modified_date" : "2020-11-25T10:31:14.039Z",
-    "modified_date_millis" : 1606300274039,
-    "policy" : {
-      "name" : "<daily-snap-{now/d}>",
-      "schedule" : "0 0 10 * * ?",
-      "repository" : "my_s3_repository",
-      "config" : {
-        "indices" : [
-          "testes-lifecycle-*"
-        ]
-      },
-      "retention" : {
-        "expire_after" : "2d",
-        "min_count" : 1,
-        "max_count" : 3
-      }
-    },
-    "last_success" : {
-      "snapshot_name" : "daily-snap-2020.11.26-91n9xu-xr0m2gqutcq7uxw",
-      "time_string" : "2020-11-26T10:00:01.793Z",
-      "time" : 1606384801793
-    },
-    "next_execution" : "2020-11-27T10:00:00.000Z",
-    "next_execution_millis" : 1606471200000,
-    "stats" : {
+  "acknowledged" : true
+}
+
+# Check SLM status
+curl -X GET "localhost:9200/_slm/stats?pretty"
+{
+  "retention_runs" : 16,
+  "retention_failed" : 1,
+  "retention_timed_out" : 0,
+  "retention_deletion_time" : "3.4s",
+  "retention_deletion_time_millis" : 3438,
+  "total_snapshots_taken" : 10,
+  "total_snapshots_failed" : 15,
+  "total_snapshots_deleted" : 3,
+  "total_snapshot_deletion_failures" : 0,
+  "policy_stats" : [
+    {
       "policy" : "daily-snapshots",
-      "snapshots_taken" : 2,
-      "snapshots_failed" : 0,
-      "snapshots_deleted" : 0,
+      "snapshots_taken" : 6,
+      "snapshots_failed" : 10,
+      "snapshots_deleted" : 2,
+      "snapshot_deletion_failures" : 0
+    },
+    {
+      "policy" : "nightly-snapshots",
+      "snapshots_taken" : 4,
+      "snapshots_failed" : 5,
+      "snapshots_deleted" : 1,
       "snapshot_deletion_failures" : 0
     }
-  }
+  ]
 }
 ```
 
 4. Before Glacier delete the snapshot, try restore snapshot into Elasticsearch.
 
-- Result: Failed to Elasticsearch restore the snapshot info when the snapshot has been convert to Glacier storage class
+- Result: Failed to Elasticsearch restore the snapshot info when the snapshot has been converted to Glacier storage class
 
 ```bash
 curl -X POST "localhost:9200/_snapshot/my_s3_repository/snapshot_1/_restore?pretty" -H 'Content-Type: application/json' -d'
@@ -440,4 +453,6 @@ curl -X POST "localhost:9200/_snapshot/my_s3_repository/snapshot_1/_restore?pret
 }
 ```
 
-5. Before Glacier delete the snapshot, convert the snapshot back to S3 Standard storage class and try restore snapshot into Elasticsearch.
+5. Before Glacier delete the snapshot, restore the snapshot back to S3 Standard storage class and try restore snapshot into Elasticsearch.
+
+- Failed. After initial restore, the snapshot files can only download and cannot be converted to Standard storage class. The Elasticsearch restore snapshot API report error as `#4` test case.
