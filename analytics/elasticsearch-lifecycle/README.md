@@ -256,7 +256,14 @@ curl -X GET "localhost:9200/_slm/stats?pretty"
 
 ## Test Elasticsearch SLM policy and S3 lifecycle rule
 
-Create Elasticsearch daily. And create the snapshot daily; Set the S3 lifecycle transit standard class to Glacier after 1 day when snapshot upload to S3; Set Glacier delele the objects after 4 days when snapshot upload to S3; Set the SLM policy after 2 days when snapshot taken. 
+- Create Elasticsearch daily. 
+- Create the snapshot daily; 
+- Set the S3 lifecycle transit standard class to Glacier after 1 day when snapshot upload to S3; 
+- Set Glacier delele the objects after 4 days when snapshot upload to S3; 
+- Set the SLM policy after 2 days when snapshot taken. 
+
+**Summary**
+You can use the S3 lifecycle rule to control the achieve (convert the storage class from Standard to Glacier) and use the ES SLM to control the snapshot creation and retention on schedule
 
 1. Check Elasticsearch whether can get the snapshot status
 
