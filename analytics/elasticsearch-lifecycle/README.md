@@ -463,3 +463,8 @@ curl -X POST "localhost:9200/_snapshot/my_s3_repository/snapshot_1/_restore?pret
 5. Before Glacier delete the snapshot, restore the snapshot back to S3 Standard storage class and try restore snapshot into Elasticsearch.
 
 - Failed. After initial restore, the snapshot files can only download and cannot be converted to Standard storage class. The Elasticsearch restore snapshot API report error as `#4` test case.
+
+# Reference
+[Snapshot S3 repository plugin](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3.html)
+
+[ES snapshot-lifecycle-management](https://www.elastic.co/guide/en/elasticsearch/reference/7.10/getting-started-snapshot-lifecycle-management.html)
