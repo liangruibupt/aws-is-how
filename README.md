@@ -162,6 +162,8 @@
 
 [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
 
+[Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
