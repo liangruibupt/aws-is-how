@@ -71,6 +71,8 @@
 
 [GuardDuty Simulator](security/guard-duty/README.md)
 
+[Create certificate using openssl](security/acm/create-certificate-openssl.md)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
