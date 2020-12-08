@@ -32,6 +32,13 @@ Amazon FSx for Windows File Server performs routine software patching for the Mi
 ![FSx-Backup](media/FSx-Backup.png)
 
 ## Working on file share
+
+Before you can mount a file share on a Windows instance, you must launch the EC2 instance and join it to an AWS Directory Service for Microsoft Active Directory. To perform this action, choose one of the following procedures from the AWS Directory Service Administration Guide:
+
+- [Seamlessly Join a Windows EC2 Instance](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/launching_instance.html)
+
+- [Manually Join a Windows Instance](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/join_windows_instance.html)
+
 1. Map network driver
 
 ![FSx-Map-default-file-share](media/FSx-Map-default-file-share.png)
@@ -115,6 +122,20 @@ data        AMZNFSXC1RVI8EA Everyone    Allow             Full
 share       AMZNFSXC1RVI8EA Everyone    Allow             Full
 application AMZNFSXC1RVI8EA Everyone    Allow             Full
 ```
+
+## Accessing Amazon FSx for Windows File Server File Systems from On-Premises
+
+Amazon FSx for Windows File Server supports the use of AWS Direct Connect or AWS VPN to access your file systems from your on-premises compute instances.
+
+## Accessing Amazon FSx for Windows File Server File Systems from Another VPC, Account, or AWS Region 
+
+You can access your Amazon FSx for Windows File Server file system from compute instances in a different VPC, AWS account, or AWS Region from that associated with your file system. To do so, you can use VPC peering or transit gateways.
+
+1. Join an EC2 Instance to Your AWS Managed Microsoft AD Directory
+https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_join_instance.html
+
+2. Validating connectivity to your Active Directory domain controllers
+https://docs.aws.amazon.com/fsx/latest/WindowsGuide/validate-ad-domain-controllers.html 
 
 ## Test Performance
 
