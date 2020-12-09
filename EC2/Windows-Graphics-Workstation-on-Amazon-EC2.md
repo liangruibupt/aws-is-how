@@ -54,7 +54,7 @@ cd "C:\Program Files\NVIDIA Corporation\NVSMI"
 .\nvidia-smi -ac "5001,1590"
 ```
 
-![install-nice-dcv-GPU-Setting](EC2/media/install-nice-dcv-GPU-Setting.png)
+![install-nice-dcv-GPU-Setting](media/install-nice-dcv-GPU-Setting.png)
 
 5. Install Windows components
 
@@ -67,9 +67,9 @@ cd "C:\Program Files\NVIDIA Corporation\NVSMI"
 - Review and Click `Install`
 - Restart the Windows
 
-![Server-Manager](EC2/media/install-nice-dcv-Server-Manager.png)
+![Server-Manager](media/install-nice-dcv-Server-Manager.png)
 
-![Server-Manager-Feature](EC2/media/install-nice-dcv-Server-Manager-Feature.png)
+![Server-Manager-Feature](media/install-nice-dcv-Server-Manager-Feature.png)
 
 6. Disable the licensing page in the control panel to prevent users from accidentally changing the product type
 
@@ -79,7 +79,7 @@ Run Powershell as Administrator
 New-ItemProperty -Path "HKLM:\SOFTWARE\NVIDIA Corporation\Global\GridLicensing" -Name "NvCplDisableManageLicensePage" -PropertyType "DWord" -Value "1"
 ```
 
-![DisableManageLicense](EC2/media/install-nice-dcv-DisableManageLicense.png)
+![DisableManageLicense](media/install-nice-dcv-DisableManageLicense.png)
 
 7. Install GRID driver
 
@@ -137,20 +137,20 @@ Tue Sep 22 09:22:32 2020
 
 - Check the double display
 
-![double-display](EC2/media/install-nice-dcv-double-display.png)
+![double-display](media/install-nice-dcv-double-display.png)
 
 - Disable the default display card
 
-![disable-display-card](EC2/media/install-nice-dcv-disable-display.png)
+![disable-display-card](media/install-nice-dcv-disable-display.png)
 
 - High Display Resolution
-![high-resolution](EC2/media/install-nice-dcv-high-resolution.png)
+![high-resolution](media/install-nice-dcv-high-resolution.png)
 
 10. Test the 3D graphic acceleration
 
 https://s3.cn-north-1.amazonaws.com.cn/lxy-sa-software/EC2-G4-Instance/05_Benchmark/FurMark_1.21.2.0_Setup.exe
 
-![3D-test](EC2/media/install-nice-dcv-3D-test.png)
+![3D-test](media/install-nice-dcv-3D-test.png)
 
 # Reference
 [Installing NVIDIA drivers on Windows instances](https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/install-nvidia-driver.html)
