@@ -8,7 +8,7 @@ For global region, you can directly Launch it from [github](https://github.com/a
 
 For China region, use the [CloudFormation Template](scripts/fsx-windows-od-workshop-cn.yaml) to manually deploy.
 
-![fsx-windows-workshop-architecture-v1](media/fsx-windows-workshop-architecture-v1.png)
+![fsx-windows-workshop-architecture-v2](media/fsx-windows-workshop-architecture-v2.png)
 
 ## FSx file system Console Overview
 
@@ -136,6 +136,26 @@ https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_join_insta
 
 2. Validating connectivity to your Active Directory domain controllers
 https://docs.aws.amazon.com/fsx/latest/WindowsGuide/validate-ad-domain-controllers.html 
+
+## Audit
+1. [Amazon FSx Information in CloudTrail](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/logging-using-cloudtrail-win.html)
+
+2. Windows file share audit
+![FSx-file-share-audit](media/FSx-file-share-audit.png)
+
+## File and Folder-Level Access Control Using Windows ACLs 
+Follow up the guide: https://docs.aws.amazon.com/fsx/latest/WindowsGuide/limit-access-file-folder.html
+
+1. Create 2 instances: EC2-Full and EC2-Read
+2. Create 2 AD users with Full control for `firstec2user` and Read-Only for `secondec2user`.
+3. Default `share` file share can read/write by Everyone
+4. New `data` file share can read/write for `firstec2user` but only read permission for `secondec2user`.
+![FSx-firstuser-full-control](media/FSx-firstuser-full-control.png)
+
+![FSx-Everyone-read](media/FSx-Everyone-read.png)
+
+5. Verify `secondec2user` cannot create the file under `data` file share
+![FSx-secondec2user-failed](media/FSx-secondec2user-failed.png)
 
 ## Test Performance
 
