@@ -23,17 +23,17 @@ China Region - NICE-DCV policy
 
 2. Download the DCV Server from https://download.nice-dcv.com/ and install it
 
-![install-nice-dcv-server1](Emedia/install-nice-dcv-server.png)
+![install-nice-dcv-server1](media/install-nice-dcv-server.png)
 
 - On the DCV Service Configuration screen: 
   - `select No, I will manually configure my firewall later.`
   - `select No, I want to start a DCV Service manually`. 
 
-![install-nice-dcv-server2](Emedia/install-nice-dcv-server2.png)
+![install-nice-dcv-server2](media/install-nice-dcv-server2.png)
 
 - On the DCV Session Management Configuration screen, `select No, I will create the session manually` and specify the `Administrator` for the console session.
 
-![install-nice-dcv-server3](Emedia/install-nice-dcv-server3.png)
+![install-nice-dcv-server3](media/install-nice-dcv-server3.png)
 
 3. Setup the secuirty group inbound rule open `8443` port
 
@@ -46,7 +46,7 @@ Connect to EC2 via DCV Client
 - username: Administrator
 - password: Administrator password
 
-![install-nice-dcv-client](EC2/media/install-nice-dcv-client.png)
+![install-nice-dcv-client](media/install-nice-dcv-client.png)
 
 # Reference
 [Installing the NICE DCV Server on Windows](https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-installing-windows.html)
