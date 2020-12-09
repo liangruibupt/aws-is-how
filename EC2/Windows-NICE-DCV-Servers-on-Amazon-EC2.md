@@ -29,11 +29,11 @@ China Region - NICE-DCV policy
   - `select No, I will manually configure my firewall later.`
   - `select No, I want to start a DCV Service manually`. 
 
-![install-nice-dcv-server2](media/install-nice-dcv-server2.png)
+![install-nice-dcv-server2](media/install-nice-dcv-server-2.png)
 
 - On the DCV Session Management Configuration screen, `select No, I will create the session manually` and specify the `Administrator` for the console session.
 
-![install-nice-dcv-server3](media/install-nice-dcv-server3.png)
+![install-nice-dcv-server3](media/install-nice-dcv-server-3.png)
 
 3. Setup the secuirty group inbound rule open `8443` port
 
