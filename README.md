@@ -152,6 +152,7 @@
 
 [Amazon FSx for Lustre or Amazon FSx for Windows File Server Workshop](storage/FSx/README.md)
 
+[S3 Web Explorer](storage/s3explorer)
 ## Database
 
 [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
