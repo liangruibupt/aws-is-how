@@ -217,15 +217,15 @@ There are no sessions available.
 sudo passwd ec2-user
 
 # Example 1 - Console session
-sudo dcv create-session --type=console --owner dcv-user --name "my graphics session" my-session
+sudo dcv create-session --type=console --owner ec2-user --name "my graphics session" my-session
 
 # Example 2 - Virtual Session (Linux NICE DCV servers only)
-sudo dcv create-session --owner dcv-user --user dcv-user my-session
+sudo dcv create-session --owner ec2-user --user ec2-user my-session
 
 # Example 3 - Virtual Session (Linux NICE DCV servers only)
-dcv create-session my-session
+sudo dcv create-session my-session
 
-dcv close-session my-session
+sudo dcv close-session my-session
 
 dcv describe-session my-session
 dcv describe-session my-session --json
@@ -261,6 +261,8 @@ Connect to EC2 via DCV Client
 - password: ec2-user password
 
 ![install-nice-dcv-client](media/install-nice-dcv-client.png)
+
+![access-linux-nice-dcv](media/access-linux-nice-dcv.png)
 
 # Reference
 [Installing the NICE DCV Server on Linux](https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-installing-linux.html)
