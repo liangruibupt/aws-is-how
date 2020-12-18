@@ -267,7 +267,7 @@ c:[Type == "http://temp/variable", Value =~ "(?i)^AWS-"] => issue(Type = "https:
 
 13. Click `Finish` and `OK`
 
-## Active Directory Federation Service
+## Restart Active Directory Federation Service
 
 ![configure-ADFS-Restart-ADFS](media/configure-ADFS-Restart-ADFS.png)
 
