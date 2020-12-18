@@ -3,7 +3,7 @@
 When you authentication for Kibana, you can
 1. Authenticating through Amazon Cognito
 2. Authenticating through the Fine-grained access control [internal user database](https://docs.amazonaws.cn/en_us/elasticsearch-service/latest/developerguide/fgac.html#fgac-kibana)
-**3. SAML authentication for Kibana lets you use your existing identity provider to offer single sign-on (SSO) for Kibana on domains running `Elasticsearch 6.7 or later`. To use this feature, you must enable `fine-grained access control`.**
+3. **SAML authentication for Kibana lets you use your existing identity provider to offer single sign-on (SSO) for Kibana on domains running `Elasticsearch 6.7 or later`. To use this feature, you must enable `fine-grained access control`.**
 
 
 ## SAML Authentication for Kibana - Okta as the identity provider
@@ -54,7 +54,7 @@ SP-initiated SSO URL: https://<es-domain>/_plugin/kibana/_opendistro/_security/s
 
 - Choose `Submit`. The domain enters a `processing` state for approximately one minute and change to `Active` state
 
-4. Access to kibana via https://<es-domain>/_plugin/kibana, the Okta SAML login window will shown up
+4. Access to kibana via https://es-domain/_plugin/kibana, the Okta SAML login window will shown up
 ![saml-login-kibana](media/saml-login-kibana.png)
 
 Tips: view a sample assertion during the process, and tools like [SAML-tracer](https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/)

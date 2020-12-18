@@ -5,9 +5,8 @@ When you authentication for Kibana, you can
 2. Authenticating through the Fine-grained access control [internal user database](https://docs.amazonaws.cn/en_us/elasticsearch-service/latest/developerguide/fgac.html#fgac-kibana)
 3. SAML authentication for Kibana lets you use your existing identity provider to offer single sign-on (SSO) for Kibana on domains running `Elasticsearch 6.7 or later`. To use this feature, you must enable `fine-grained access control`.
 
-## Create a domain and authenticate through internal user database
-[Sample Configure Guide](InternalUser.md)
-
+## Authenticate through internal user database
+[Create a Elastic Search domain and authenticate through internal user database](InternalUser.md)
 
 ## SAML Authentication for Kibana
 
