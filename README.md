@@ -57,6 +57,8 @@
 
 [Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
 
+[SAML Authentication for Kibana](analytics/saml-kibana)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
