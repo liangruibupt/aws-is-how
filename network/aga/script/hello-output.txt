@@ -1,0 +1,1 @@
+{"statusCode": 200, "body": "\"Call global lambda via alb: \\\"Hello from Lambda!34.242.161.121\\\" , via AGA: \\\"Hello from Lambda!34.242.161.121\\\"\""}

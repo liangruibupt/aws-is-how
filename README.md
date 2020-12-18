@@ -99,6 +99,8 @@
 
 [TGW cross account sharing and inter-connection testing](network/tgw-workshop)
 
+[Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
+
 ## DNS
 
 [R53 in China region](R53/README.md)
