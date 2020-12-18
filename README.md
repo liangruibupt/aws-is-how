@@ -79,6 +79,8 @@
 
 [Create certificate using openssl](security/acm/create-certificate-openssl.md)
 
+[Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -161,6 +163,7 @@
 [Amazon FSx for Lustre or Amazon FSx for Windows File Server Workshop](storage/FSx/README.md)
 
 [S3 Web Explorer](storage/s3explorer)
+
 ## Database
 
 [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
