@@ -50,7 +50,7 @@ At the top-left of your contact flow, under the `Name`, see the `Additional Info
 
 ![event-bridge-lambda2](media/event-bridge-lambda2.png)
 
-- Fire sample Event
+- Fire sample Event, when `{"customEvent": {"ConnectEvent": "alert"}}`, the lambda will be triggered, then invoke the Amazon Connect to drop a call to `Destination Phone Number`
 ```bash
 python scripts/put-sample-event.py
 [ec2-user@ip-10-0-2-83 scripts]$ python put-sample-event.py 
@@ -60,6 +60,7 @@ python scripts/put-sample-event.py
 {"customEvent": {"ConnectEvent": "alert"}}
 {'FailedEntryCount': 0, 'Entries': [{'EventId': '7b42cd9e-7971-79cb-d29a-f09d7b4faacc'}], 'ResponseMetadata': {'RequestId': 'ec345be1-cae7-4d00-8bdd-d35109da74ae', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'ec345be1-cae7-4d00-8bdd-d35109da74ae', 'content-type': 'application/x-amz-json-1.1', 'content-length': '85', 'date': 'Mon, 21 Dec 2020 15:35:31 GMT'}, 'RetryAttempts': 0}}
 ```
+[cloudwatch-metrics](media/cloudwatch-metrics.png)
 
 6. Verify the call-out can be reach to your `Destination Phone Number`
 
