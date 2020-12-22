@@ -67,6 +67,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [SAML Authentication for Kibana](analytics/saml-kibana)
 
+[How to use the Athena to create the complex embeded table and query the table](analytics/athena-complex-table/Athena-complex-table-creation.md)
+
+[Split and search comma separated column in Athena](analytics/athena-complex-table/Split-search-comma-seprated-column.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
