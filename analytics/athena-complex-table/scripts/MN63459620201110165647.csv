@@ -1,5 +1,5 @@
-             BARCODE  INDEX     DATE     S.TIME    E.TIME   CYCLE             JOB        RESULT       USER          LOTINFO        MACHINE              SIDE        ,,,,,,,,,,,,,,,,,,,,
-                M4634596 24878 11/10/2020   16:56:38  16:56:46      8   A5E41637164-04-TOP     GOOD           SV              KOHYOUNG T,,,,,,,,,,,,,,,,,,,,
+             BARCODE  INDEX     DATE     S.TIME    E.TIME   CYCLE             JOB        RESULT       USER          LOTINFO        MACHINE              SIDE
+                M4634596 24878 11/10/2020   16:56:38  16:56:46      8   A5E41637164-04-TOP     GOOD           SV              KOHYOUNG T
 Component ID,Volume(%),Height(um),Area(%),OffsetX(%),OffsetY(%),Volume(um3),Area(um2),Result,PinNumber,Pad Verification,Shape,Library_Name,Vol_Min(%),Vol_Max(%),Height_Low(um),Height_High(um),Area_Min(%),Area_Max(%),OffsetX_Error(mm),OffsetY_Error(mm)
 1:00,118.496,137.565,103.366,0.43,-5.175,54887270,398990,GOOD,,,56.4um,PART0,45,200,60,230,60,170,0.18,0.18
 1:00,108.261,128.979,100.724,0.278,-5.761,50146240,388794,GOOD,,,54.3um,PART0,45,200,60,230,60,170,0.18,0.18

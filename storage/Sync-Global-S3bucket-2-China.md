@@ -1,8 +1,8 @@
 # Sync the public dataset s3 bucket to your bucket
 
-# Use the aws-data-replication-hub
+# Use the aws-data-replication-hub (Recommanded)
 
-https://github.com/aws-samples/aws-data-replication-hub
+https://github.com/awslabs/aws-data-replication-hub
 
 # Directly copy using aws S3 CLI
 

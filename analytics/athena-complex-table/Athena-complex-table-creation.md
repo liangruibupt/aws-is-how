@@ -19,10 +19,10 @@ The complex embeded table example: you can find the first 2 rows schema (red rec
 
 - Step 3: You can query the red rectangle rows data
     ```sql
-    SELECT "component id" 
+    SELECT * 
     FROM "rawdata_csv"
-    WHERE "Volume(%)" IS NULL AND "Height(um)" IS NULL AND "Area(%)" IS NULL
-    ORDER BY 'Volume(%)' NULLS FIRST LIMIT 1
+    WHERE "Volume(%)" IS NOT NULL AND "Height(um)" IS NOT NULL AND "Area(%)" IS NOT NULL
+    limit 10;
     ```
     ![preview_rawdata_component](media/preview_rawdata_component.png)
 
@@ -30,10 +30,10 @@ The complex embeded table example: you can find the first 2 rows schema (red rec
     
     1. query as string
     ```sql
-    SELECT * 
+    SELECT "component id" 
     FROM "rawdata_csv"
-    WHERE "Volume(%)" IS NOT NULL AND "Height(um)" IS NOT NULL AND "Area(%)" IS NOT NULL
-    limit 10;
+    WHERE "Volume(%)" IS NULL AND "Height(um)" IS NULL AND "Area(%)" IS NULL
+    ORDER BY 'Volume(%)' NULLS FIRST LIMIT 1
     ```
     ![preview_rawdata_board](media/preview_rawdata_board.png)
 
@@ -97,3 +97,99 @@ The complex embeded table example: you can find the first 2 rows schema (red rec
     ![preview_boardcsv](media/preview_boardcsv.png)
 
 
+## Case 4, You want to setup the relationship for red and green rectangle rows data within same file and you will have multiple similar csv files in S3 bucket
+
+For example, if I want to query the "BARCODE"="MN635582" and "INDEX"= 24566 and "JOB"="A5E41637164-04-BOT" and "Result"="GOOD", I need setup the relationship of red and green rectangle rows data within same file
+
+Here I add red rectangle info to each row of green rectangle. Json format can well define such schema, such as below
+
+```json
+{"BARCODE":"MN635582","INDEX":24566,"DATE":"11\/10\/2020","S.TIME":"11:54:09","E.TIME":"11:54:15","CYCLE":6,"JOB":"A5E41637164-04-BOT","RESULT":"FAIL","USER":"SV","LOTINFO":"KOHYOUNG","MACHINE":null,"aggrate_component_info":{"ComponentID":"1:","Volume_percentage_":105.857,"Height_um_":125.153,"Area_percentage_":101.498,"OffsetX_percentage_":-0.04,"OffsetY_percentage_":0.47,"Volume_um3_":31230310,"Area_um2_":249537,"Result":"GOOD","PinNumber":null,"PadVerification":null,"Shape":"45.6um","Library_Name":"PART2","Vol_Min_percentage_":45,"Vol_Max_percentage_":190,"Height_Low_um_":60,"Height_High_um_":230,"Area_Min_percentage_":60,"Area_Max_percentage_":170,"OffsetX_Error_mm_":0.18,"OffsetY_Error_mm_":0.18,"Unnamed_21":null}}
+```
+
+Then I can query the data
+```sql
+SELECT * FROM "sampledb"."complex_json_structure" as t 
+where t.barcode='MN635582' and t.index=24566 and t.JOB='A5E41637164-04-BOT' and t.aggrate_component_info.Result='GOOD' limit 10;
+```
+
+Python library [pandas](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html) is very popular data analysis tool which provide the API for read/write csv file or json file and DataFrame/Series are powerful data structure used in data analysis
+
+AWS [aws-data-wrangler](https://aws-data-wrangler.readthedocs.io/en/stable/index.html)
+extends the power of Pandas library to AWS connecting DataFrames and AWS data related services (Amazon Redshift, AWS Glue, Amazon Athena, Amazon Timestream, Amazon EMR, Amazon QuickSight, etc).
+
+I use the Jupyter notebook do finish the transformation by leverage the [pandas](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html) and using [aws-data-wrangler](https://aws-data-wrangler.readthedocs.io/en/stable/index.html) to create the AWS Glue data catalog and execute Amazon Athen query in python script
+
+```python
+# Read the csv from S3 bucket
+raw_component_csv_df = wr.s3.read_csv(s3_file_path, index_col=None, header=2, delimiter=',', skipinitialspace=True, keep_default_na=True, na_filter=True)
+
+#Add your logic add barcode info to each row of component
+raw_component_csv_df -> raw_data_json
+raw_data_json_df = pd.DataFrame.from_dict(raw_data_json)
+
+# upload transformed object to S3 bucket
+wr.s3.to_json(
+        df=raw_data_json_df,
+        path=upload_file_path,
+        orient="records", 
+        lines=True
+    )
+
+# Create the Athena Table (AWS Glue Catalog table)
+query = r'''
+      CREATE EXTERNAL TABLE IF NOT EXISTS `sampledb`.`complex_json_structure` (
+      `BARCODE` string, 
+      `INDEX` int,
+      `DATE` string,
+      `S.TIME` string,
+      `E.TIME` string,
+      `JOB` string,
+      `RESULT` string,
+      `USER` string,
+      `LOTINFO` string,
+      `MACHINE` string,
+      `SIDE` string,
+      `aggrate_component_info` struct<ComponentID:string,Volume_percentage_:float,Height_um_:float,Area_percentage_:float,OffsetX_percentage_:float,OffsetY_percentage_:float,Volume_um3_:int,Area_um2_:int,Result:string,PinNumber:string,PadVerification:string,Shape:string,Library_Name:string,Vol_Min_percentage_:int,Vol_Max_percentage_:int,Height_Low_um_:int,Height_High_um_:int,Area_Min_percentage_:int,Area_Max_percentage_:int,OffsetX_Error_mm_:float,OffsetY_Error_mm_:float,Unnamed_21:string>
+      )
+    ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+    WITH SERDEPROPERTIES (
+      'ignore.malformed.json'='true',
+      'paths'='BARCODE,INDEX,DATE,S.TIME,E.TIME,JOB,RESULT,USER,LOTINFO,MACHINE,SIDE,aggrate_component_info'
+    )
+    STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat' 
+    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+    LOCATION '{}'
+    '''
+
+query_exec_id = wr.athena.start_query_execution(sql=query, database="sampledb")
+wr.athena.wait_query(query_execution_id=query_exec_id)
+res = wr.athena.get_query_execution(query_execution_id=query_exec_id)
+
+# Run the Athena query
+query = r'''
+SELECT * FROM "sampledb"."complex_json_structure" as t 
+where t.barcode='MN635582' and t.index=24566 and t.JOB='A5E41637164-04-BOT' and t.aggrate_component_info.ComponentID='1:C82_01' 
+limit 10;
+'''
+df = wr.athena.read_sql_query(sql=query, database="sampledb")
+```
+
+The whole script can be found in [Handle_Complex_CSV.ipynb](scripts/Handle_Complex_CSV.ipynb) or [Handle_Complex_CSV.py](scripts/Handle_Complex_CSV.py)
+
+More Athena query
+
+```sql
+select count(1) FROM "sampledb"."complex_json_structure"; 
+
+SELECT * FROM "sampledb"."complex_json_structure" as t where t.barcode='MN634850' and t.index=24857 and t.JOB='A5E41637164-04-TOP' and t.aggrate_component_info.result='GOOD' limit 10;
+```
+![json_preview1](media/json_preview1.png)
+
+```sql
+SELECT COUNT(t.aggrate_component_info.ComponentID), t.barcode, t.index, t.JOB
+FROM "sampledb"."complex_json_structure" as t 
+where t.aggrate_component_info.result='GOOD'
+group by t.barcode, t.index, t.JOB;
+```
+![json_preview2](media/json_preview2.png)
