@@ -71,6 +71,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Split and search comma separated column in Athena](analytics/athena-complex-table/Split-search-comma-seprated-column.md)
 
+[AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -123,6 +125,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ## Serverless
 
+[AWS Serverless Day](https://serverlessday.cbuilder.tech/index.html)
+
 [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
 
 [hello-cdk](https://github.com/liangruibupt/hello-cdk)
@@ -153,6 +157,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
 
 [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
+
+[aws-database-migration-samples
+](https://github.com/aws-samples/aws-database-migration-samples)
 
 ## Storage
 
