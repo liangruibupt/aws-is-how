@@ -242,18 +242,48 @@ group by t.barcode, t.index, t.JOB;
 - Name: lambda_handle_complex_csv
 - Runtime: python 3.8
 - Memory: 512MB
-- Timeout: 60 seconds
+- Timeout: 120 seconds
 
-4. Deploy and test Lambda function
 ```bash
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple awswrangler
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pandas
+# install dependency
+mkdir package && cd package
+pip install --use-feature=2020-resolver -i https://pypi.tuna.tsinghua.edu.cn/simple awswrangler -t ./
+chmod -R 755 .
+zip -r9 ../function.zip .
+
+cd .. && zip -g function.zip lambda_handle_complex_csv.py
+aws s3 cp function.zip s3://ray-glue-streaming/catalog_test/lambda_code/function.zip --region cn-north-1
+
+# 2. Create lambda function
+aws lambda create-function --function-name  lambda_handle_complex_csv --runtime python3.8 \
+--code S3Bucket=ray-glue-streaming,S3Key=catalog_test/lambda_code/function.zip \
+--package-type Zip --handler lambda_handle_complex_csv.lambda_handler \
+--role arn:aws-cn:iam::$account_id:role/lambda_basic_execution \
+--timeout 120 --memory-size 512 --region cn-north-1
+
+# 3. Update the lambda function code
+zip -g function.zip lambda_handle_complex_csv.py
+
+aws s3 cp function.zip s3://ray-glue-streaming/catalog_test/lambda_code/function.zip --region cn-north-1
+
+aws lambda update-function-code --function-name lambda_handle_complex_csv \
+--s3-bucket ray-glue-streaming --s3-key catalog_test/lambda_code/function.zip \
+--region cn-north-1
 ```
 
-5. Configure Amazon S3 to publish events
+4. Configure Amazon S3 to publish events
 - To add permissions to the function policy to grant Amazon S3 service to perform the lambda:InvokeFunction action
+```bash
+aws lambda add-permission --function-name lambda_handle_complex_csv \
+--principal s3.amazonaws.com \
+--statement-id s3invoke --action "lambda:InvokeFunction" \
+--source-arn arn:aws-cn:s3:::ray-glue-streaming \
+--source-account account-id
+```
 - To configure S3 notifications
-  - Name – lambda-trigger.
+  - Name: s3-upload-lambda-trigger.
+  - Prefix: catalog_test/complextable/
+  - Suffix: .csv
   - Events – All object create events.
   - Send to – Lambda function.
   - Lambda – lambda_handle_complex_csv.

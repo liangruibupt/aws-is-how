@@ -8,7 +8,7 @@ import pandas as pd
 
 s3_client = boto3.client('s3')
 
-s3_json_prefix = 'complex_json/'
+s3_json_prefix = 'lambda_json/'
 
 def convert_schema(s3_bucket, s3_key):
     file_path = 's3://{}/{}'.format(s3_bucket, s3_key)
