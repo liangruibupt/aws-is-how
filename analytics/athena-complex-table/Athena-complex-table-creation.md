@@ -193,3 +193,69 @@ where t.aggrate_component_info.result='GOOD'
 group by t.barcode, t.index, t.JOB;
 ```
 ![json_preview2](media/json_preview2.png)
+
+## Case 5: I want to handle the schema convert automatically (in Case 4) when the new csv file uplaod to S3 bucket
+
+[You can create a Lambda function to handle each Amazon S3 object upload event](https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html)
+
+![lambda-automation](media/lambda-automation.png)
+
+1. Lambda Execution Policy `AWSLambdaS3Policy`
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:PutLogEvents",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream"
+            ],
+            "Resource": "arn:aws-cn:logs:*:*:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": "arn:aws-cn:s3:::mybucket/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3-cn:::mybucket-resized/*"
+        }
+    ]
+}         
+```
+
+2. Create Lambda Execution Role
+- IAM Create new Role
+  - Trusted entity – AWS Lambda.
+  - Permissions – AWSLambdaS3Policy.
+  - Role name – lambda-s3-role.
+
+3. Create the function [lambda_handle_complex_csv](scripts/lambda_handle_complex_csv.py)
+- Name: lambda_handle_complex_csv
+- Runtime: python 3.8
+- Memory: 512MB
+- Timeout: 60 seconds
+
+4. Deploy and test Lambda function
+```bash
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple awswrangler
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pandas
+```
+
+5. Configure Amazon S3 to publish events
+- To add permissions to the function policy to grant Amazon S3 service to perform the lambda:InvokeFunction action
+- To configure S3 notifications
+  - Name – lambda-trigger.
+  - Events – All object create events.
+  - Send to – Lambda function.
+  - Lambda – lambda_handle_complex_csv.
+
+6. Test the setup
