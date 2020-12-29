@@ -8,7 +8,6 @@ The complex embeded table example: you can find the first 2 rows schema (red rec
 - You create external table in Athena by using the `TBLPROPERTIES ("skip.header.line.count"="3")` to skip the first 2 rows and header. The [create_athena_device_table](scripts/create_athena_device_table.ddl) script for your reference.
 
 - Then you can query the table `SELECT * FROM "sampledb"."device_csv" limit 10;`
-
 ![preview_device](media/preview_device.png)
 
 ## Case 2: You want to create the table for both red and green rectangle rows data
@@ -243,7 +242,6 @@ group by t.barcode, t.index, t.JOB;
 - Runtime: python 3.8
 - Memory: 512MB
 - Timeout: 120 seconds
-
 ```bash
 # install dependency
 mkdir package && cd package
@@ -295,16 +293,41 @@ aws lambda add-permission --function-name lambda_handle_complex_csv \
   - Events: All object create events.
   - Send to: Lambda function.
   - Lambda: lambda_handle_complex_csv.
-
 ![lambda-s3-trigger](media/lambda-s3-trigger.png)
 
 6. Test the setup
 - Upload file to the source bucket using the Amazon S3 console.
-```bash
-aws s3 cp MN63459620201110165647.csv s3://ray-glue-streaming/catalog_test/complextable/MN63459620201110165647.csv --region cn-north-1
-```
+    ```bash
+    aws s3 cp MN63459620201110165647.csv s3://ray-glue-streaming/catalog_test/complextable/MN63459620201110165647.csv --region cn-north-1
+    ```
 - Verify that the json file was created in the source bucket `lambda_json/` folder
 - View function logs in the CloudWatch console
+
+7. Batch upload multiple files
+    ```bash
+    aws s3 sync . s3://ray-glue-streaming/catalog_test/complextable/ --exclude "*" --include "*.csv" --exclude "package/*" --region cn-north-1
+    ```
+    Verify the files has been generated under sementic layer `lambda_json/`
+
+7. Query by Athena
+- Using the Glue Crawler automatically discovery the schema for files under under sementic layer `lambda_json/`
+![lambda-json-crawler](media/lambda-json-crawler.png)
+- Using Athena to query the table
+```sql
+SELECT * FROM "sampledb"."lambda_json" limit 10;
+SELECT count(1) FROM "sampledb"."lambda_json"; 
+SELECT count(1) FROM "sampledb"."lambda_json" as t where t.barcode='MN634850'; 
+SELECT t.barcode, t.index, t.job, t.aggrate_component_info.result, t.aggrate_component_info.volume_percentage_ FROM "sampledb"."lambda_json" as t where t.barcode='MN634850' and t.index=24857 and t.JOB='A5E41637164-04-TOP' and t.aggrate_component_info.result='GOOD' limit 10;
+```
+![lambda-json-preview1](media/lambda-json-preview1.png)
+
+```sql
+SELECT COUNT(t.aggrate_component_info.ComponentID), t.barcode, t.index, t.JOB
+FROM "sampledb"."lambda_json" as t 
+where t.aggrate_component_info.result='GOOD'
+group by t.barcode, t.index, t.JOB;
+```
+![lambda-json-preview2](media/lambda-json-preview2.png)
 
 ## Reference
 [AWS Lambda with Pandas and NumPy](https://korniichuk.medium.com/lambda-with-pandas-fd81aa2ff25e)
