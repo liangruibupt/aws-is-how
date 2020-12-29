@@ -242,6 +242,10 @@ group by t.barcode, t.index, t.JOB;
 - Runtime: python 3.8
 - Memory: 512MB
 - Timeout: 120 seconds
+
+Option 1: [Build the pandas lambda layer and use it for your function](../lambda/How-to-build-lambda-layer.md)
+
+Option 2: Build from sctach
 ```bash
 # install dependency
 mkdir package && cd package
