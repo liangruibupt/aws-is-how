@@ -247,14 +247,22 @@ group by t.barcode, t.index, t.JOB;
 ```bash
 # install dependency
 mkdir package && cd package
-pip install --use-feature=2020-resolver -i https://pypi.tuna.tsinghua.edu.cn/simple awswrangler -t ./
+pip install --use-feature=2020-resolver -i https://pypi.tuna.tsinghua.edu.cn/simple pytz -t ./
+pip install --use-feature=2020-resolver -i https://pypi.tuna.tsinghua.edu.cn/simple s3fs -t ./
+# Download the pandas package from https://pypi.org/project/pandas/ For Python 3.8, pandas-1.2.0-cp38-cp38-manylinux1_x86_64.whl
+wget https://files.pythonhosted.org/packages/7d/4d/c1df56ed2370839f5a1b7bc5a4835ee73f46c2582beb5d3b14e87f2b3dc0/pandas-1.2.0-cp38-cp38-manylinux1_x86_64.whl
+unzip pandas-1.2.0-cp38-cp38-manylinux1_x86_64.whl
+# Download the numpy package from https://pypi.org/project/numpy/ For Python 3.8, numpy-1.19.4-cp38-cp38-manylinux1_x86_64.whl
+wget https://files.pythonhosted.org/packages/77/0b/41e345a4f224aa4328bf8a640eeeea1b2ad0d61517f7d0890f167c2b5deb/numpy-1.19.4-cp38-cp38-manylinux1_x86_64.whl
+unzip numpy-1.19.4-cp38-cp38-manylinux1_x86_64.whl
+rm -r *.whl *.dist-info __pycache__
 chmod -R 755 .
 zip -r9 ../function.zip .
 
+# 2. Create lambda function
 cd .. && zip -g function.zip lambda_handle_complex_csv.py
 aws s3 cp function.zip s3://ray-glue-streaming/catalog_test/lambda_code/function.zip --region cn-north-1
 
-# 2. Create lambda function
 aws lambda create-function --function-name  lambda_handle_complex_csv --runtime python3.8 \
 --code S3Bucket=ray-glue-streaming,S3Key=catalog_test/lambda_code/function.zip \
 --package-type Zip --handler lambda_handle_complex_csv.lambda_handler \
@@ -283,9 +291,22 @@ aws lambda add-permission --function-name lambda_handle_complex_csv \
 - To configure S3 notifications
   - Name: s3-upload-lambda-trigger.
   - Prefix: catalog_test/complextable/
-  - Suffix: .csv
-  - Events – All object create events.
-  - Send to – Lambda function.
-  - Lambda – lambda_handle_complex_csv.
+  - Suffix: csv
+  - Events: All object create events.
+  - Send to: Lambda function.
+  - Lambda: lambda_handle_complex_csv.
+
+![lambda-s3-trigger](media/lambda-s3-trigger.png)
 
 6. Test the setup
+- Upload file to the source bucket using the Amazon S3 console.
+```bash
+aws s3 cp MN63459620201110165647.csv s3://ray-glue-streaming/catalog_test/complextable/MN63459620201110165647.csv --region cn-north-1
+```
+- Verify that the json file was created in the source bucket `lambda_json/` folder
+- View function logs in the CloudWatch console
+
+## Reference
+[AWS Lambda with Pandas and NumPy](https://korniichuk.medium.com/lambda-with-pandas-fd81aa2ff25e)
+
+[Pandas in AWS lambda gives numpy error](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-python-package-compatible/)

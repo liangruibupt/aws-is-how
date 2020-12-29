@@ -158,8 +158,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
 
-[aws-database-migration-samples
-](https://github.com/aws-samples/aws-database-migration-samples)
+[aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
 
 ## Storage
 
