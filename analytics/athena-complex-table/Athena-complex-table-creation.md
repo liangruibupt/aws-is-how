@@ -333,6 +333,16 @@ group by t.barcode, t.index, t.JOB;
 ```
 ![lambda-json-preview2](media/lambda-json-preview2.png)
 
+```sql
+SELECT COUNT(t.aggrate_component_info.result), t.job, t.aggrate_component_info.componentid
+FROM "sampledb"."lambda_json" as t 
+where t.aggrate_component_info.result='GOOD'
+group by t.job, t.aggrate_component_info.componentid
+order by t.job, t.aggrate_component_info.componentid;
+```
+![lambda-json-preview3](media/lambda-json-preview3.png)
+
+
 ## Reference
 [AWS Lambda with Pandas and NumPy](https://korniichuk.medium.com/lambda-with-pandas-fd81aa2ff25e)
 
