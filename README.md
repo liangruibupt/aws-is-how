@@ -41,6 +41,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions --output json --profile us-east-1 --region us-east-1 | jq '.Parameters[].Name' | wc -l
 ```
 
+[Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
+
+[What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
