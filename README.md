@@ -12,6 +12,8 @@
 
 [Set up a Jupyter Notebook Server on deep learning AMI](https://docs.aws.amazon.com/dlami/latest/devguide/setup-jupyter.html)
 
+[Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
