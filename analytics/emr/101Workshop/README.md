@@ -420,7 +420,7 @@ Remember enter the `SageMaker-EMR-ExecutionRole` ARN and the region code in the 
 ```
 
 ## Reference:
-[Workshop Link](https://www.immersionday.com/emr/content)
+[Workshop Link](https://emr-etl.workshop.aws/)
 
 [Amazon EMR 6.0.0 supports Hadoop 3, which allows the YARN NodeManager to launch Docker containers](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-docker.html)
 

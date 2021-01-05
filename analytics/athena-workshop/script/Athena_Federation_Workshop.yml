@@ -1,0 +1,417 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Athena Federation Workshop - Deploy EMR Cluster with Hbase, Elasticache RedisDB, Aurora Mysql, DynamoDB, Cloud9 IDE, Sagemaker Notebook instance, Glue Database, Athena Named Queries 
+
+Mappings:
+  Map:
+    DatabaseMap:
+      DatabaseName: 'sales'
+      DatabaseInstanceType: 'db.r5.large'
+      DatabasePassword: 'S3cretPwd99'
+      DatabaseUsername: 'master'     
+    Cloud9Map:
+      EC2InstanceType: 't2.micro'
+      AutoHibernateTimeout: '30'
+
+Resources:
+  VPCStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: >-
+        https://aws-data-analytics-workshops.s3.amazonaws.com/athena-workshop/cloudformation/vpc_s3_stack.yml
+      TimeoutInMinutes: 10
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 7aa57bac-380e-4523-a72b-ef898d0a0367
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: BucketOwnerFullControl
+      BucketName: !Join [ '-', [athena-federation-workshop, !Ref 'AWS::AccountId'] ]
+
+  DDBPartTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: p_partkey
+        AttributeType: N
+      KeySchema:
+      - AttributeName: p_partkey
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: '50'
+        WriteCapacityUnits: '200'
+      TableName: part      
+  
+  DDBPartSuppTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: ps_partkey
+        AttributeType: N
+      - AttributeName: ps_suppkey
+        AttributeType: N
+      KeySchema:
+      - AttributeName: ps_partkey
+        KeyType: HASH
+      - AttributeName: ps_suppkey
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: '50'
+        WriteCapacityUnits: '200'
+      TableName: partsupp    
+
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: CloudFormation managed DB subnet group.
+      SubnetIds:
+        - !GetAtt VPCStack.Outputs.PublicSubnet1Id
+        - !GetAtt VPCStack.Outputs.PublicSubnet2Id
+        - !GetAtt VPCStack.Outputs.PublicSubnet3Id                  
+
+  CacheSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: CloudFormation managed Cache subnet group.
+      SubnetIds:
+        - !GetAtt VPCStack.Outputs.PublicSubnet1Id
+        - !GetAtt VPCStack.Outputs.PublicSubnet2Id
+        - !GetAtt VPCStack.Outputs.PublicSubnet3Id  
+
+  IDE:
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties:
+      Description: Cloud9 IDE
+      AutomaticStopTimeMinutes:
+        !FindInMap [Map, Cloud9Map, AutoHibernateTimeout]
+      SubnetId: !GetAtt VPCStack.Outputs.PublicSubnet1Id
+      InstanceType:
+        !FindInMap [Map, Cloud9Map, EC2InstanceType]
+      Name: Cloud9 IDE
+
+  ElasticacheCluster:
+    Type: 'AWS::ElastiCache::CacheCluster'
+    DependsOn:
+      - VPCStack
+      - DatabaseSubnetGroup
+    Properties:
+      AutoMinorVersionUpgrade: 'true'
+      Engine: redis
+      CacheNodeType: cache.t2.micro
+      NumCacheNodes: '1'
+      CacheSubnetGroupName: !Ref CacheSubnetGroup
+      VpcSecurityGroupIds:
+        - !GetAtt VPCStack.Outputs.WorkshopSecurityGroup  
+
+  GlueDatabaseRedis:
+    Type: AWS::Glue::Database
+    Properties:
+      # The database is created in the Data Catalog for your account
+      CatalogId: !Ref AWS::AccountId   
+      DatabaseInput:
+        # The name of the database is defined in the Parameters section above
+        Name: redis
+        Description: Database to hold tables for redis data
+        LocationUri: s3://fake-bucket?redis-db-flag=redis-db-flag
+        #Parameters: Leave AWS database parameters blank
+
+  GlueTableActiveOrders:
+    Type: AWS::Glue::Table
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: redis
+      TableInput:
+        Name: active_orders
+        Description: Define the first few columns of the flights table
+        TableType: EXTERNAL_TABLE
+        Parameters: {
+          "redis-db-flag": "redis-db-flag", 
+          "redis-endpoint": !Join [ '', [!GetAtt ElasticacheCluster.RedisEndpoint.Address, ':', !GetAtt ElasticacheCluster.RedisEndpoint.Port]] , 
+          "redis-key-prefix": "order-*", 
+          "redis-value-type": "literal" 
+        } 
+        PartitionKeys:
+          - {Name: orderkey, Type: string}
+        StorageDescriptor:
+          Columns:
+            - Type: int
+              Name: orderkey
+          Location: s3://fake-bucket/ 
+    
+  GlueTableNation:
+    Type: AWS::Glue::Table
+    DependsOn: 
+      - ElasticacheCluster
+      - EMRClusterDataIngestion
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: redis
+      TableInput:
+        Name: nation
+        Description: Define the first few columns of the flights table
+        TableType: EXTERNAL_TABLE
+        Parameters: {
+          "redis-db-flag": "redis-db-flag", 
+          "redis-endpoint": !Join [ '', [!GetAtt ElasticacheCluster.RedisEndpoint.Address, ':', !GetAtt ElasticacheCluster.RedisEndpoint.Port]] , 
+          "redis-key-prefix": "nation-*", 
+          "redis-value-type": "literal" 
+          } 
+        PartitionKeys:
+          - {Name: n_name, Type: string} 
+        StorageDescriptor:
+          Columns:
+            - Type: string
+              Name: n_name
+          Location: s3://fake-bucket/                
+
+  AuroraDBParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: Hudi Worshop DB parameter group
+      Family: aurora-mysql5.7
+      Parameters:
+        max_connections: 300
+
+  AuroraDBClusterParameterGroup:
+    Type: AWS::RDS::DBClusterParameterGroup
+    Properties:
+      Description: 'CloudFormation Sample Aurora Cluster Parameter Group'
+      Family: aurora-mysql5.7
+      Parameters:
+        time_zone: US/Eastern
+        binlog_format: ROW
+        binlog_checksum: NONE
+
+  AuroraCluster:
+    Type: AWS::RDS::DBCluster
+    DependsOn:
+      - VPCStack
+      - DatabaseSubnetGroup
+    Properties:
+      Engine: aurora-mysql
+      MasterUsername: !FindInMap [Map, DatabaseMap, DatabaseUsername]
+      MasterUserPassword: !FindInMap [Map, DatabaseMap, DatabasePassword]
+      DatabaseName: !FindInMap [Map, DatabaseMap, DatabaseName]
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      DBClusterParameterGroupName: !Ref AuroraDBClusterParameterGroup
+      VpcSecurityGroupIds:
+        - !GetAtt VPCStack.Outputs.WorkshopSecurityGroup
+
+  AuroraDB:
+    Type: AWS::RDS::DBInstance
+    DependsOn: AuroraCluster
+    Properties:
+      Engine: aurora-mysql
+      DBClusterIdentifier: !Ref AuroraCluster
+      DBInstanceClass: !FindInMap [Map, DatabaseMap, DatabaseInstanceType]
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      DBParameterGroupName: !Ref AuroraDBParameterGroup
+      PubliclyAccessible: 'false'
+      DBInstanceIdentifier: !FindInMap [Map, DatabaseMap, DatabaseName]
+      Tags:
+        - Key: 'Name'
+          Value: !Ref AWS::StackName  
+
+  EMRCluster:
+    DependsOn:
+      - EMRClusterServiceRole
+      - EMRClusterinstanceProfileRole
+      - EMRClusterinstanceProfile
+    Type: 'AWS::EMR::Cluster'
+    Properties:
+      Applications:
+        - Name: Hadoop
+        - Name: Hbase
+        - Name: Livy
+        - Name: Hive
+        - Name: Tez      
+      Instances:
+        Ec2SubnetIds:
+          - !GetAtt VPCStack.Outputs.PublicSubnet1Id
+          - !GetAtt VPCStack.Outputs.PublicSubnet2Id
+          - !GetAtt VPCStack.Outputs.PublicSubnet3Id
+        AdditionalMasterSecurityGroups:
+          - !GetAtt VPCStack.Outputs.EMRSecurityGroup
+        AdditionalSlaveSecurityGroups:
+          - !GetAtt VPCStack.Outputs.EMRSecurityGroup
+        MasterInstanceFleet:
+          Name: master
+          InstanceTypeConfigs:
+            - InstanceType: m5.xlarge
+          TargetOnDemandCapacity: 1
+        CoreInstanceFleet:
+          Name: corefleet
+          InstanceTypeConfigs:
+            - BidPriceAsPercentageOfOnDemandPrice: 100
+              InstanceType: m5.xlarge
+              WeightedCapacity: 4
+            - BidPriceAsPercentageOfOnDemandPrice: 100
+              InstanceType: r4.xlarge
+              WeightedCapacity: 4
+            - BidPriceAsPercentageOfOnDemandPrice: 100
+              InstanceType: r5.xlarge
+              WeightedCapacity: 4              
+          TargetOnDemandCapacity: 2
+          TargetSpotCapacity: 2
+        TerminationProtected: false
+      VisibleToAllUsers: true
+      JobFlowRole: !Ref EMRClusterinstanceProfile
+      LogUri: !Join [ '', [ 's3://aws-logs-', !Ref 'AWS::AccountId', '-', !Ref 'AWS::Region', '/elasticmapreduce/' ]]
+      ReleaseLabel: emr-5.28.0
+      Name: EMR-Hbase-Cluster
+      ServiceRole: !Ref EMRClusterServiceRole
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 9fc6531a-444b-4ffd-80c9-a0b9918d3b5c
+  EMRClusterServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - elasticmapreduce.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole'
+      Path: /
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: f65fc89d-e8a4-4123-ab1f-2356afdbb78a
+  EMRClusterinstanceProfileRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role'
+        - 'arn:aws:iam::aws:policy/AmazonRoute53FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonElastiCacheReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
+      Path: /
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8a829993-989c-4b6b-bf85-9075a75fa5d2
+  EMRClusterinstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EMRClusterinstanceProfileRole
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 6b57c761-da69-4eed-a697-1c8f86db53bd
+        
+  EMRClusterDataIngestion:
+    Type: AWS::EMR::Step
+    DependsOn:
+      - EMRCluster
+      - AuroraDB
+      - DDBPartTable
+      - DDBPartSuppTable
+      - ElasticacheCluster
+    Properties:
+      ActionOnFailure: CONTINUE
+      HadoopJarStep:
+        Args:
+          - s3://aws-data-analytics-workshops/athena-workshop/scripts/bootstrap.sh
+        Jar: !Sub s3://${AWS::Region}.elasticmapreduce/libs/script-runner/script-runner.jar
+        MainClass: ''
+      JobFlowId: !Ref EMRCluster
+      Name: 'EMR Cluster Data Ingestion Step'
+
+  SagemakerNotebookInstance:
+    Type: 'AWS::SageMaker::NotebookInstance'
+    DependsOn:
+      - SagemakerRoleWS
+    Properties:
+      DirectInternetAccess: Enabled
+      SubnetId: !GetAtt VPCStack.Outputs.PublicSubnet1Id
+      NotebookInstanceName: workshop-notebook
+      InstanceType: ml.t2.medium
+      RoleArn: !GetAtt 
+        - SagemakerRoleWS
+        - Arn
+      SecurityGroupIds:
+        - !GetAtt VPCStack.Outputs.WorkshopSecurityGroup
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: e21daf67-33db-4c6d-9319-1bc530456386
+  SagemakerRoleWS:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - sagemaker.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonElasticMapReduceFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonRoute53ReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
+        - 'arn:aws:iam::aws:policy/AWSLambdaFullAccess'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: f22a03d5-41e0-4d45-b2b9-bcc787179647
+
+Outputs:
+
+  EMRMasterAddress:
+    Description: EMR Cluster Master address
+    Value: !GetAtt EMRCluster.MasterPublicDNS
+
+  HbaseConnectionString:
+    Description: Hbase Instance address for Athena Connector
+    Value: !Join [ '', [!GetAtt EMRCluster.MasterPublicDNS , ':16010:2181']]
+    
+  RDSInstanceAddress:
+    Description: RDS Instance endpoint
+    Value: !Join [ ':', [!GetAtt AuroraCluster.Endpoint.Address , !GetAtt AuroraCluster.Endpoint.Port]]
+
+  RDSConnectionString:
+    Description: RDS Instance endpoint
+    Value: !Join [ '', ['mysql://jdbc:mysql://',!GetAtt AuroraCluster.Endpoint.Address , ':', !GetAtt AuroraCluster.Endpoint.Port, '/', !FindInMap [Map, DatabaseMap, DatabaseName], '?user=', !FindInMap [Map, DatabaseMap, DatabaseUsername], '&password=', !FindInMap [Map, DatabaseMap, DatabasePassword] ]]    
+
+  ElastiCacheAddress:
+    Description: ElastiCache endpoint address
+    Value: !GetAtt ElasticacheCluster.RedisEndpoint.Address    
+
+  ElastiCachePort:
+    Description: ElastiCache port
+    Value: 6379 
+
+  S3Bucket:
+    Description: S3 bucket
+    Value: !Ref  S3Bucket
+
+  Subnets:
+    Description: Subnets for workshop
+    Value: !Join [',', [!GetAtt VPCStack.Outputs.PublicSubnet1Id,!GetAtt VPCStack.Outputs.PublicSubnet2Id,!GetAtt VPCStack.Outputs.PublicSubnet3Id]]  
+
+  WorkshopSecurityGroup:
+    Description: 'Security Group'
+    Value: !GetAtt VPCStack.Outputs.WorkshopSecurityGroup
+
+  EMRSecurityGroup:
+    Description: 'Security Group'
+    Value: !GetAtt VPCStack.Outputs.EMRSecurityGroup 
+
+
