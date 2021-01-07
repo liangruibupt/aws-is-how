@@ -81,7 +81,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
 
-[Amazon Athena Workshop](https://athena-in-action.workshop.aws/10-intro.html)
+[Amazon Athena Workshop](analytics/athena-workshop/Athena-workshop.md)
 
 [Serverless Data Lake Workshop](https://serverless-data-lake-immersionday.workshop.aws/en/introduction.html)
 
