@@ -85,6 +85,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Serverless Data Lake Workshop](https://serverless-data-lake-immersionday.workshop.aws/en/introduction.html)
 
+[Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
