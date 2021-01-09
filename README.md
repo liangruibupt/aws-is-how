@@ -87,6 +87,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
 
+[EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
+Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -164,6 +167,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshops)
 
 [Serverless CI/CD based on Jenkins](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
+
+[Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
 
 
 ## Migration
