@@ -415,11 +415,13 @@ aws emr create-cluster --name "glue-emr-lab" \
 --configurations file://configurations.json \
 --release-label emr-5.32.0 \
 --applications Name=Hadoop Name=Pig Name=Hue Name=Spark Name=Hive Name=Tez \
---ec2-attributes KeyName=EMRKeyPair,SubnetIds=subnet-0a5ba02735f8cb53d \
+--ec2-attributes KeyName=EMRKeyPair,SubnetIds=subnet-id \
 --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m5.xlarge InstanceGroupType=CORE,InstanceCount=2,InstanceType=m5.xlarge \
 --use-default-roles \
 --region cn-north-1
 ```
+
+![emr-hive-spark-glue](media/emr-hive-spark-glue.png)
 
 [Using the AWS Glue Data Catalog as the Metastore for Hive](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hive-metastore-glue.html)
 
