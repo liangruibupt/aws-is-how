@@ -343,6 +343,36 @@ order by t.job, t.aggrate_component_info.componentid;
 ![lambda-json-preview3](media/lambda-json-preview3.png)
 
 
+## Using AWS Athena To Convert A CSV File To Parquet
+```sql
+CREATE TABLE sampledb.athena_created_parquet_snappy_data
+    WITH (
+          format = 'PARQUET',
+          parquet_compression = 'SNAPPY',
+          external_location = 's3://ray-glue-streaming/catalog_test/lambda_json_parquet/'
+    ) AS SELECT "barcode", "index", "date", "s.time", "e.time", "cycle", "job", "result", user, lotinfo, machine, side, t.aggrate_component_info.componentid, t.aggrate_component_info.volume_percentage_, t.aggrate_component_info.height_um_, t.aggrate_component_info.area_percentage_, t.aggrate_component_info.offsetx_percentage_, t.aggrate_component_info.offsety_percentage_, t.aggrate_component_info.volume_um3_, t.aggrate_component_info.area_um2_, t.aggrate_component_info.result as c_result, t.aggrate_component_info.pinnumber, t.aggrate_component_info.padverification, t.aggrate_component_info.shape, t.aggrate_component_info.library_name, t.aggrate_component_info.vol_min_percentage_, t.aggrate_component_info.vol_max_percentage_,t.aggrate_component_info.height_low_um_,t.aggrate_component_info.height_high_um_,t.aggrate_component_info.area_min_percentage_,t.aggrate_component_info.area_max_percentage_,t.aggrate_component_info.offsetx_error_mm_,t.aggrate_component_info.offsety_error_mm_,t.aggrate_component_info.unnamed_21
+    FROM sampledb.lambda_json as t
+```
+
+```sql
+SELECT * FROM "sampledb"."athena_created_parquet_snappy_data" limit 10;
+
+SELECT COUNT(t.componentid), t.barcode, t.index, t.job
+FROM "sampledb"."athena_created_parquet_snappy_data" as t 
+where t.c_result='GOOD'
+group by t.barcode, t.index, t.job;
+```
+
+| Task | Runtime | Data Scanned |
+| --- | --- | --- |
+| json preview 10 lines | 1.65s | 580.37 KB |
+| parquet preview 10 lines | 1.64s | 234.14 KB |
+| json count (*) | 1.64 | 4.84 MB |
+| parquet count (*) | 1.56s | 0 KB |
+| json group query | 1.97s |  4.84 MB |
+| parquet group query | 0.65s |  12.46 KB |
+
+
 ## Reference
 [AWS Lambda with Pandas and NumPy](https://korniichuk.medium.com/lambda-with-pandas-fd81aa2ff25e)
 
