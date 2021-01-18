@@ -259,6 +259,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS Serverless CI/CD hands on lab](devops/serverless-cicd/README.md)
 
+[Accessing the AWS Health API](devops/personal-health-dashboard/Accessing-the-AWS-Health-API.md)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
