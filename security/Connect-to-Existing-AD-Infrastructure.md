@@ -20,8 +20,11 @@ For example:
 - You can use AD Connector to authenticate AWS Management Console users with their Active Directory credentials without setting up SAML infrastructure. 
 [Enable Access to the AWS Management Console with AD Credentials](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_management_console_access.html)
 
+- Seamlessly join Windows instances to your Active Directory domain either through the Amazon EC2 launch wizard or programmatically through the EC2 Simple System Manager (SSM) API.
+
 - You can use AD Connector to enable multi-factor authentication MFA
 
 You can spread application loads across multiple AD Connectors to scale to your performance needs. There are no enforced user or connection limits. 
 
+AD Connector cannot be used with your custom applications, as it is only used for secure AWS integration for the three use-cases mentioned above.
 
