@@ -15,3 +15,6 @@ Lets users who sign in to your organization's identity provider access the AWS M
 Follow up [Enabling custom identity broker access to the AWS console official guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html)
 
 [Example using python code](scripts/customer_idp_broker.py) to construct the URL
+
+# Reference
+[How do I assume an IAM role](https://aws.amazon.com/premiumsupport/knowledge-center/iam-assume-role-cli/)
