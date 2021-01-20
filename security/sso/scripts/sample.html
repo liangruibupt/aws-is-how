@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AWS and Okta - Sample Application</title>
+    <script src="//sdk.amazonaws.com/js/aws-sdk-2.3.7.js"></script>
+    <script src="/js/okta-sign-in.min.js" type="text/javascript"></script>
+    <link href="/css/okta-sign-in.min.css" type="text/css" rel="stylesheet">
+    <link href="/css/okta-theme.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="okta-login-container"></div>
+    <div id="upload-dialog" style="display:none">
+        <input type="file" id="file-chooser" />
+        <button id="upload-button" style="display:block">Upload to S3</button>
+    </div>
+    <div id="results"></div>
+    <script type="text/javascript">
+        // e.g.: example.okta.com
+        var AWS_OIDC_PROVIDER_URL = 'YOUR_OIDC_PROVIDER_URL';
+        // e.g.: arn:aws:iam::123456789012:role/OktaSampleRole
+        var AWS_ROLE_ARN = 'YOUR_AWS_ROLE_ARN';
+        // e.g.: us-east-1
+        var AWS_REGION = 'YOUR_AWS_REGION';
+        // e.g.: example-s3-bucket
+        var AWS_S3_BUCKET_NAME = 'YOUR_S3_BUCKET_NAME';
+
+        // e.g.: https://example.okta.com
+        var OKTA_ORG_URL = 'YOUR_OKTA_ORG_URL';
+        // e.g.: aBCdEf0GhiJkLMno1pq2
+        var OKTA_CLIENT_ID = 'YOUR_OKTA_APP_CLIENT_ID';
+
+        AWS.config.region = AWS_REGION;
+        AWS.config.logger = console;
+
+        var oktaUserId;
+        var bucket;
+
+        var fileChooser = document.getElementById('file-chooser');
+        var uploadButton = document.getElementById('upload-button');
+        var results = document.getElementById('results');
+        var oktaLoginContainer = document.getElementById('okta-login-container');
+        var uploadDialog = document.getElementById('upload-dialog');
+
+        uploadButton.addEventListener('click', function () {
+            var file = fileChooser.files[0];
+            if (file) {
+                results.innerHTML = '';
+                // e.g.: "okta-00u0abcd1eFghIJKl2m3/Ajax-loader.gif"
+                var objKey = 'okta-' + oktaUserId + '/' + file.name;
+                var params = {
+                    Key: objKey,
+                    ContentType: file.type,
+                    Body: file,
+                    ACL: 'private'
+                };
+                bucket.putObject(params, function (err, data) {
+                    if (err) {
+                        results.innerHTML = 'ERROR: ' + err;
+                    } else {
+                        listObjs();
+                    }
+                });
+            } else {
+                results.innerHTML = 'Nothing to upload.';
+            }
+        }, false);
+
+        function listObjs() {
+            var prefix = 'okta-' + oktaUserId;
+            bucket.listObjects({ Prefix: prefix }, function (err, data) {
+                if (err) {
+                    results.innerHTML = 'ERROR: ' + err;
+                } else {
+                    var objKeys = "";
+                    data.Contents.forEach(function (obj) {
+                        objKeys += obj.Key + "<br>";
+                    });
+                    results.innerHTML = objKeys;
+                }
+            });
+        }
+
+        var oktaSignIn = new OktaSignIn({
+            authParams: {
+                responseType: 'id_token',
+                responseMode: 'okta_post_message',
+                scopes: ['openid', 'groups']
+            },
+            clientId: OKTA_CLIENT_ID,
+            baseUrl: OKTA_ORG_URL
+        });
+
+        oktaSignIn.renderEl(
+            { el: '#okta-login-container' },
+            function (res) {
+                if (res.status === 'SUCCESS') {
+                    console.log('User successfully authenticated');
+                    console.log(res);
+                    oktaUserId = res.claims.sub;
+                    AWS.config.credentials = new AWS.WebIdentityCredentials({
+                        RoleArn: AWS_ROLE_ARN,
+                        WebIdentityToken: res.idToken
+                    });
+                    AWS.config.credentials.get(function (err) {
+                        if (err) {
+                            console.log("Error creating AWS Web Identity: " + err);
+                            return;
+                        }
+                        bucket = new AWS.S3({
+                            params: {
+                                Bucket: AWS_S3_BUCKET_NAME
+                            }
+                        });
+                        oktaLoginContainer.style.display = 'none';
+                        uploadDialog.style.display = 'block';
+                        listObjs();
+                    });
+                } else {
+                    console.log('Login status is not "SUCCESS"');
+                    console.log(res);
+                }
+            }
+        );
+    </script>
+</body>
+
+</html>

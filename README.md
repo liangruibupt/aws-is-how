@@ -4,6 +4,8 @@
 
 ## AI/ML
 
+[SageMaker-Workshop](ai-ml/SageMaker/SageMaker-Workshop.md)
+
 [Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
 
 [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -111,6 +113,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Create certificate using openssl](security/acm/create-certificate-openssl.md)
 
 [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
+
+[Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
 
 ## Network
 
@@ -232,6 +236,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [How can I a ECS service serve traffic from multiple port?](container/ECS-Dynamic-Port-Mapping.md)
 
 [How to launch tomcat server on ECS](container/tomcat)
+
+[Windows pod in EKS](container/Windows-pod-EKS.md)
 
 ## DevOps
 
