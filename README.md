@@ -6,6 +6,8 @@
 
 [SageMaker-Workshop](ai-ml/SageMaker/SageMaker-Workshop.md)
 
+[A gallery of interesting Jupyter Notebooks](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
+
 [Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
 
 [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)

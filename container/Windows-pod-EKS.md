@@ -94,15 +94,24 @@ kubectl create namespace windows
 
 kubectl apply -f script/windows_server_iis.yaml
 
-kubectl get pods -o wide --watch
+kubectl get pods -n windows -o wide --watch
 
 kubectl -n windows get svc,deploy,pods
+NAME     TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)        AGE
+service/windows-server-iis-service   LoadBalancer   10.100.7.144   xxxxxx.cn-northwest-1.elb.amazonaws.com.cn   80:30843/TCP   26m
 
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/windows-server-iis   1/1     1            1           26m
+
+NAME                                      READY   STATUS    RESTARTS   AGE
+pod/windows-server-iis-65f757d98f-m5cq7   1/1     Running   0          26m
 ```
 
 2. Testing
 ```bash
 export WINDOWS_IIS_SVC=$(kubectl -n windows get svc -o jsonpath='{.items[].status.loadBalancer.ingress[].hostname}')
 
-echo http://${WINDOWS_IIS_SVC}
+curl http://${WINDOWS_IIS_SVC}
 ```
+
+![windows-iis](media/windows-iis.png)
