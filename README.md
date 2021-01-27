@@ -178,6 +178,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
 
+[Chalice - A framework for writing serverless applications](https://aws.github.io/chalice/)
+
 
 ## Migration
 
