@@ -71,3 +71,5 @@ This demo will use the Amazon Connect to call out the mobile phone which invoked
 [Automating outbound calling to customers using Amazon Connect](https://aws.amazon.com/blogs/contact-center/automating-outbound-calling-to-customers-using-amazon-connect/)
 
 [Amazon Connect](https://aws.amazon.com/connect/)
+
+[Connect Demo](https://www.connectdemo.com/?)

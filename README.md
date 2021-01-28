@@ -18,6 +18,8 @@
 
 [Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
 
+[Install External Libraries and Kernels in Notebook Instances](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-add-external.html)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -143,6 +145,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [TGW cross account sharing and inter-connection testing](network/tgw-workshop)
 
 [Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
+
+[AWS WAF-Workshop](security/waf/WAF-Workshop.md)
 
 ## DNS
 

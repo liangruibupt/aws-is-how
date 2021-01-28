@@ -1,0 +1,261 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters: 
+  UniqueDBName: 
+    Default: CustomerTable
+    Type: String
+    Description: If more than one team using an instance, give your team a unique DB name (no spaces)
+Metadata:
+  'AWS::CloudFormation::Designer':
+    6e8ba4fc-f8a8-40c5-87b4-30d34c5d7afd:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 220
+        'y': 130
+      z: 0
+      embeds: []
+    01dbdae8-feac-4f86-84d3-5dfbc5cf2f5b:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 300
+        'y': 220
+      z: 0
+      embeds: []
+      isassociatedwith:
+        - 01dbdae8-feac-4f86-84d3-5dfbc5cf2f5b
+    e36af513-c8df-4977-8bb4-46c0589a8069:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 220
+        'y': 220
+      z: 0
+      embeds: []
+    ca45c574-0cbd-423b-8e75-9ffad60c8aae:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 130
+        'y': 220
+      z: 0
+      embeds: []
+      isassociatedwith:
+        - e36af513-c8df-4977-8bb4-46c0589a8069
+Resources:
+  RootRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: RootRole
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: "Allow"
+                Action: 
+                - "sns:Publish"
+                - "dynamodb:PutItem"
+                - "lambda:*"
+                - "dynamodb:GetItem"
+                - "dynamodb:Scan"
+                - "dynamodb:Query"
+                - "dynamodb:UpdateItem"
+                - "dynamodb:GetRecords"
+                - "xray:PutTraceSegments"
+                Resource: '*'
+      RoleName: 
+        Ref: UniqueDBName
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 01dbdae8-feac-4f86-84d3-5dfbc5cf2f5b
+  TestCallerDynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: CallerID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: CallerID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: '5'
+        WriteCapacityUnits: '5'
+      TableName: 
+        Ref: UniqueDBName
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 6e8ba4fc-f8a8-40c5-87b4-30d34c5d7afd
+  AmazonConnectRights1:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref CustomerTableRead
+      Action: 'lambda:InvokeFunction'
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: ca45c574-0cbd-423b-8e75-9ffad60c8aae
+  AmazonConnectRights2:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref CustomerTableWrite
+      Action: 'lambda:InvokeFunction'
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: ca45c574-0cbd-423b-8e75-9ffad60c8aae
+  CustomerTableRead:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt RootRole.Arn
+      Code:
+        ZipFile: !Sub |
+          var AWS = require("aws-sdk");
+          var docClient = new AWS.DynamoDB.DocumentClient();
+
+          exports.handler = (event, context, callback) => {
+            var CallerID = event.Details.Parameters.CallerID;
+            var paramsQuery = {
+              TableName: 'CustomerTable',
+              KeyConditionExpression: "CallerID = :varNumber",
+              ExpressionAttributeValues: { ":varNumber": CallerID }
+            };
+
+            docClient.query(paramsQuery, function(err, data) {
+              if (err) {
+                console.log(err);
+                callback(null, buildResponse(false));
+              }
+              else {
+                console.log("DynamoDB Query Results:" + JSON.stringify(data));
+
+                if (data.Items.length === 0) {
+                  console.log("Customer not Found in CustomerTable");
+                  var recordFound = "False";
+                  callback(null, buildResponse(true, recordFound));
+                }
+                else {
+                  var recordFound = "True"
+                  var lastName = data.Items[0].lastName;
+                  var firstName = data.Items[0].firstName;
+                  var custLevel = data.Items[0].custLevel;
+                  var callerPIN = data.Items[0].callerPIN;
+                  var language = data.Items[0].language;
+                  callback(null, buildResponse(true, recordFound, lastName, firstName, custLevel, callerPIN, language));
+                }
+              }
+            });
+          };
+
+          function buildResponse(isSuccess, recordFound, lastName, firstName, custLevel, callerPIN, language) {
+            if (isSuccess) {
+              return {
+                recordFound: recordFound,
+                lastName: lastName,
+                firstName: firstName,
+                custLevel: custLevel,
+                callerPIN: callerPIN,
+                language: language,
+                lambdaResult: "Success"
+              };
+            }
+            else {
+              console.log("Lambda returned error to Connect");
+              return { lambdaResult: "Error" };
+            }
+          }
+      Runtime: nodejs12.x
+      Timeout: '25'
+      TracingConfig:
+        Mode: Active
+      FunctionName: !Sub '${UniqueDBName}Read'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: e36af513-c8df-4977-8bb4-46c0589a8069
+  CustomerTableWrite:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt RootRole.Arn
+      Code:
+        ZipFile: !Sub |
+          var AWS = require("aws-sdk");
+          var docClient = new AWS.DynamoDB.DocumentClient();
+          var sns = new AWS.SNS();
+
+          exports.handler = (event, context, callback) => {
+            console.log(event);
+            var CallerID = event.Details.ContactData.CustomerEndpoint.Address;
+            var callerPIN = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+            console.log("CallerPIN set to" & callerPIN);
+              var firstName = "New";
+              var lastName = "Customer";
+              var custLevel = "Welcome";
+              var language = event.Details.Parameters.language;
+            var paramsPut = {
+              TableName: 'CustomerTable',
+              Item:{
+                  "CallerID": CallerID,
+                  "callerPIN": callerPIN,
+                  "firstName": firstName,
+                  "lastName": lastName,
+                  "custLevel": custLevel,
+                  "language": language
+              }
+            };
+            docClient.put(paramsPut, function(err, data) {
+              if (err) {
+                console.log(err);
+                callback(null, buildResponse(false));
+              }
+              else {
+                console.log("DynamoDB record created:" + paramsPut);
+                  var SMSparams = {
+                              Message: 'Welcome to wiser bank, your temporary PIN is '+callerPIN,
+                              MessageStructure: 'string',
+                              PhoneNumber: CallerID
+                              };
+                      sns.publish(SMSparams, function(err, data) {
+                              if (err) console.log(err, err.stack); // an error occurred
+                              else     console.log(data);           // successful response
+                              callback(null, buildResponse(true));
+                              });
+                      }
+            });
+          };
+
+          function buildResponse(isSuccess) {
+            if (isSuccess) {
+              return {
+                lambdaResult: "Success"
+              };
+            }
+            else {
+              console.log("Lambda returned error to Connect");
+              return { lambdaResult: "Error" };
+            }
+          }
+      Runtime: nodejs12.x
+      Timeout: '25'
+      TracingConfig:
+        Mode: Active
+      FunctionName: !Sub '${UniqueDBName}Write'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: e36af513-c8df-4977-8bb4-46c0589a8069
