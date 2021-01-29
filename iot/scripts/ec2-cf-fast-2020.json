@@ -1,0 +1,1029 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Cloud formation template for AWS IoT Workshop",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "Workshop Configuration"
+                    },
+                    "Parameters": [
+                        "ExistingVPC"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Cloud 9 Configuration"
+                    },
+                    "Parameters": [
+                        "c9UserName",
+                        "c9Password"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "ExistingVPC": {
+                    "default": "Use default VPC?: "
+                },
+                "c9UserName": {
+                    "default": "c9 username: "
+                },
+                "c9Password": {
+                    "default": "c9 password: "
+                }
+            }
+    }
+    },
+    "Parameters": {
+        "ExistingVPC": {
+            "Default": "Yes",
+            "Type": "String",
+            "AllowedValues": [
+                "Yes",
+                "No"
+            ],
+            "Description" : "If you don't use the default VPC, one will be created for you. Older accounts might not have a default VPC set."
+        },
+        "c9UserName": {
+            "Type": "String",
+            "Default": "aws",
+            "Description": "Provide a login name for your C9 instance."
+        },
+        "c9Password": {
+            "Type": "String",
+            "Default": "icebreaker",
+            "Description": "Provide a strong password for your C9 instance."
+        }
+    },
+    "Mappings": {
+        "InstanceAMI": {
+            "us-east-1": {
+                "Name": "ami-03eebf924505ac14b"
+            },
+            "us-west-2": {
+                "Name": "ami-040dfc242fcd2e4ed"
+            },
+            "us-east-2": {
+                "Name": "ami-054fbc092b4e3c942"
+            },
+            "us-west-1": {
+                "Name": "ami-02fb4a61d45fbe865"
+            },
+            "sa-east-1": {
+                "Name": "ami-0cd296bc62c68e239"
+            },
+            "eu-west-3": {
+                "Name": "ami-0cff09b6566f6698e"
+            },
+            "eu-west-2": {
+                "Name": "ami-04cdfe115e5bb59e8"
+            },
+            "eu-west-1": {
+                "Name": "ami-0feb7528a03d682de"
+            },
+            "eu-central-1": {
+                "Name": "ami-0bcf7569f0afd438a"
+            },
+            "eu-north-1": {
+                "Name": "ami-06e15b061b9aa39d5"
+            },
+            "ca-central-1": {
+                "Name": "ami-0e857c442799090b0"
+            },
+            "ap-southeast-2": {
+                "Name": "ami-0b597af8c8faa6197"
+            },
+            "ap-southeast-1": {
+                "Name": "ami-0cd296bc62c68e239"
+            },
+            "ap-south-1": {
+                "Name": "ami-09cdd128fa9cf2d2b"
+            },
+            "ap-northeast-1": {
+                "Name": "ami-0ff8b26e4569668f3"
+            },
+            "ap-northeast-2": {
+                "Name": "ami-052e1e044cff72a3e"
+            }
+        }
+    },
+    "Conditions": {
+        "CreateVPCResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "ExistingVPC"
+                },
+                "No"
+            ]
+        },
+        "DontCreateVPCResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "ExistingVPC"
+                },
+                "Yes"
+            ]
+        }
+    },
+    "Resources": {
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "CidrBlock": "172.31.0.0/24",
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "InstanceTenancy": "default",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Fn::Sub": "${AWS::StackName}"
+                                    },
+                                    "IoTWorkshop"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1a6caa72-a725-4d78-818d-fc081adeb018"
+                }
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Fn::Sub": "${AWS::StackName}"
+                                    },
+                                    "IoTWorkshop"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "cfb568d1-99d3-47c2-be8a-01a382497349"
+                }
+            }
+        },
+        "VPCGatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "b98ad191-db99-4d53-9551-f2026a7f7648"
+                }
+            }
+        },
+        "SubnetAPublic": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "CidrBlock": "172.31.0.0/24",
+                "MapPublicIpOnLaunch": true,
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Fn::Sub": "${AWS::StackName}"
+                                    },
+                                    "IoTWorkshop-public"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "dff94b83-4780-4861-bab2-6874be3d6d94"
+                }
+            }
+        },
+        "RouteTablePublic": {
+            "Type": "AWS::EC2::RouteTable",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Fn::Sub": "${AWS::StackName}"
+                                    },
+                                    "IoTWorkshop-public"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "180df06e-b55b-4b7b-b468-4fecc3040fd0"
+                }
+            }
+        },
+        "RouteTableAssociationAPublic": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "SubnetAPublic"
+                },
+                "RouteTableId": {
+                    "Ref": "RouteTablePublic"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1cd2d28b-19fa-42fa-8dfd-d575b99807a1"
+                }
+            }
+        },
+        "RouteTablePublicInternetRoute": {
+            "Type": "AWS::EC2::Route",
+            "Condition": "CreateVPCResources",
+            "DependsOn": [
+                "VPCGatewayAttachment"
+            ],
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "RouteTablePublic"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "731836f0-50c2-4568-902f-912bc0147a18"
+                }
+            }
+        },
+        "InstanceSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Condition": "DontCreateVPCResources",
+            "Properties": {
+                "GroupDescription": "AWS IoT Workshop Port Access",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8180",
+                        "ToPort": "8180",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8883",
+                        "ToPort": "8883",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "1880",
+                        "ToPort": "1880",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3389",
+                        "ToPort": "3389",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "5439",
+                        "ToPort": "5439",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "AWS IoT Workshop SG"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "834fc06f-7944-4e3c-baa0-0e75de5ff9cd"
+                }
+            }
+        },
+        "Instance": {
+            "Type": "AWS::EC2::Instance",
+            "Condition": "DontCreateVPCResources",
+            "Properties": {
+                "InstanceType": "t3.medium",
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "InstanceAMI",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "Name"
+                    ]
+                },
+                "IamInstanceProfile": {
+                    "Ref": "IotWorkshopInstanceProfile"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "InstanceSecurityGroup"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "${AWS::StackName}-IoT Workshop"
+                        }
+                    }
+                ],
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvda",
+                        "Ebs": {
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true",
+                            "VolumeSize": "16"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -ex\n",
+                                "# This script downloads our real script and runs it as ec2-user\n",
+                                "echo 'Craig''s script started'\n",
+                                "echo '/opt/aws/bin/cfn-signal --success true",
+                                "  --stack ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                "  --resource Instance",
+                                "  --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "' > signal.txt \n",
+                                "wget https://s3-us-west-2.amazonaws.com/iotworkshop/ec2-fast.sh\n",
+                                "chmod +x /ec2-fast.sh\n",
+                                "echo 'Downloaded the main script and set execute'\n",
+                                {
+                                    "Fn::Sub": "echo region = ${AWS::Region} >> /home/ec2-user/region.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/region.txt\n",
+                                {
+                                    "Fn::Sub": "echo ${AWS::StackName} >> /home/ec2-user/prefix.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/prefix.txt\n",
+                                {
+                                    "Fn::Sub": "echo '${c9UserName}' >> /home/ec2-user/c9UserName.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/c9UserName.txt\n",
+                                {
+                                    "Fn::Sub": "echo '${c9Password}' >> /home/ec2-user/c9Password.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/c9Password.txt\n",
+                                "sudo -u ec2-user /ec2-fast.sh\n",
+                                "echo 'Completed main script install'\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "CreationPolicy": {
+                "ResourceSignal": {
+                    "Count": 1,
+                    "Timeout": "PT20M"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5fd268bb-5977-476f-9473-b0f3eb8fb95e"
+                }
+            }
+        },
+        "InstanceSecurityGroupVPC": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "GroupDescription": "AWS IoT Workshop Port Access",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8180",
+                        "ToPort": "8180",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8883",
+                        "ToPort": "8883",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "1880",
+                        "ToPort": "1880",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3389",
+                        "ToPort": "3389",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "5439",
+                        "ToPort": "5439",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "AWS IoT Workshop SG"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fda5044d-15e1-41d7-9c52-b09bc545c082"
+                }
+            }
+        },
+        "InstanceVPC": {
+            "Type": "AWS::EC2::Instance",
+            "Condition": "CreateVPCResources",
+            "Properties": {
+                "InstanceType": "t3.medium",
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "InstanceAMI",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "Name"
+                    ]
+                },
+                "IamInstanceProfile": {
+                    "Ref": "IotWorkshopInstanceProfile"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "GroupSet": [
+                            {
+                                "Ref": "InstanceSecurityGroupVPC"
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "SubnetAPublic"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Sub": "${AWS::StackName}-IoT Workshop"
+                        }
+                    }
+                ],
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvda",
+                        "Ebs": {
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true",
+                            "VolumeSize": "16"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -ex\n",
+                                "# This script downloads our real script and runs it as ec2-user\n",
+                                "echo 'Craig''s script started'\n",
+                                "echo '/opt/aws/bin/cfn-signal --success true",
+                                "  --stack ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                "  --resource InstanceVPC",
+                                "  --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "' > signal.txt \n",
+                                "wget https://s3-us-west-2.amazonaws.com/iotworkshop/ec2-fast.sh\n",
+                                "chmod +x /ec2-fast.sh\n",
+                                "echo 'Downloaded the main script and set execute'\n",
+                                {
+                                    "Fn::Sub": "echo region = ${AWS::Region} >> /home/ec2-user/region.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/region.txt\n",
+                                {
+                                    "Fn::Sub": "echo ${AWS::StackName} >> /home/ec2-user/prefix.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/prefix.txt\n",
+                                {
+                                    "Fn::Sub": "echo '${c9UserName}' >> /home/ec2-user/c9UserName.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/c9UserName.txt\n",
+                                {
+                                    "Fn::Sub": "echo '${c9Password}' >> /home/ec2-user/c9Password.txt\n"
+                                },
+                                "chown ec2-user:ec2-user /home/ec2-user/c9Password.txt\n",
+                                "sudo -u ec2-user /ec2-fast.sh\n",
+                                "echo 'Completed main script install'\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "CreationPolicy": {
+                "ResourceSignal": {
+                    "Count": 1,
+                    "Timeout": "PT20M"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "57773f6e-c6b7-490f-ae0f-f85793955db1"
+                }
+            }
+        },
+        "IotWorkshopInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "IotWorkshopEC2Role"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f985c011-12f2-4baa-bdfe-dd12421564fe"
+                }
+            }
+        },
+        "IotWorkshopEC2Policy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "IotWorkshopEC2Policy",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "iot:*",
+                                "greengrass:*",
+                                "sqs:*",
+                                "sns:*",
+                                "firehose:*",
+                                "ecr:*",
+                                "lambda:*",
+                                "iam:GetRole",
+                                "iam:UpdateAssumeRolePolicy",
+                                "iam:GetPolicyVersion",
+                                "iam:GetPolicy",
+                                "iam:CreateRole",
+                                "iam:AttachRolePolicy",
+                                "iam:PassRole",
+                                "iam:UpdateRole",
+                                "iam:GetRolePolicy",
+                                "ec2:CreateNetworkInterface",
+                                "ec2:DeleteNetworkInterface",
+                                "ec2:DescribeNetworkInterfaces",
+                                "ec2:ModifyNetworkInterfaceAttribute",
+                                "ec2:DescribeSecurityGroups",
+                                "ec2:DescribeSubnets",
+                                "ec2:DescribeVpcs"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": "arn:aws:logs:*:*:*"
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "IotWorkshopEC2Role"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "9a778526-cd67-4e5f-9f4e-1a47822ebada"
+                }
+            }
+        },
+        "IotWorkshopEC2Role": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "abcdf9f8-27c2-4144-af89-68d5292afd54"
+                }
+            }
+        },
+        "IotWorkshopIoTPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "IotWorkshopIoTPolicy",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "iot:*",
+                                "greengrass:*",
+                                "sqs:*",
+                                "sns:*",
+                                "firehose:*",
+                                "ecr:*",
+                                "lambda:*",
+                                "iam:GetRole",
+                                "iam:UpdateAssumeRolePolicy",
+                                "iam:GetPolicyVersion",
+                                "iam:GetPolicy",
+                                "iam:CreateRole",
+                                "iam:AttachRolePolicy",
+                                "iam:PassRole",
+                                "iam:UpdateRole",
+                                "iam:GetRolePolicy",
+                                "ec2:CreateNetworkInterface",
+                                "ec2:DeleteNetworkInterface",
+                                "ec2:DescribeNetworkInterfaces",
+                                "ec2:ModifyNetworkInterfaceAttribute",
+                                "ec2:DescribeSecurityGroups",
+                                "ec2:DescribeSubnets",
+                                "ec2:DescribeVpcs"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": "arn:aws:logs:*:*:*"
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "IotWorkshopIoTRole"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "97311a19-20a2-4ccd-aedd-acc50f8bd754"
+                }
+            }
+        },
+        "IotWorkshopIoTRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "iot.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1920a8a8-d0bf-4010-ac02-a56544cfdf6e"
+                }
+            }
+        },
+        "IotWorkshopLambdaPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "IotWorkshopLambdaPolicy",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "iot:*",
+                                "greengrass:*",
+                                "sqs:*",
+                                "sns:*",
+                                "firehose:*",
+                                "ecr:*",
+                                "lambda:*",
+                                "iam:GetRole",
+                                "iam:UpdateAssumeRolePolicy",
+                                "iam:GetPolicyVersion",
+                                "iam:GetPolicy",
+                                "iam:CreateRole",
+                                "iam:AttachRolePolicy",
+                                "iam:PassRole",
+                                "iam:UpdateRole",
+                                "iam:GetRolePolicy",
+                                "ec2:CreateNetworkInterface",
+                                "ec2:DeleteNetworkInterface",
+                                "ec2:DescribeNetworkInterfaces",
+                                "ec2:ModifyNetworkInterfaceAttribute",
+                                "ec2:DescribeSecurityGroups",
+                                "ec2:DescribeSubnets",
+                                "ec2:DescribeVpcs"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": "arn:aws:logs:*:*:*"
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "IotWorkshopLambdaRole"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f69744e3-4b1c-42ca-acd8-317969254ead"
+                }
+            }
+        },
+        "IotWorkshopLambdaRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "lambda.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6658cfe5-bd84-4673-a285-61962096d911"
+                }
+            }
+        },
+        "IotWorkshopFirehosePolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "IotWorkshopFirehosePolicy",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "redshift:*",
+                                "ec2:DescribeAccountAttributes",
+                                "ec2:DescribeAddresses",
+                                "ec2:DescribeAvailabilityZones",
+                                "ec2:DescribeSecurityGroups",
+                                "ec2:DescribeSubnets",
+                                "ec2:DescribeVpcs",
+                                "ec2:DescribeInternetGateways",
+                                "sns:CreateTopic",
+                                "sns:Get*",
+                                "sns:List*",
+                                "cloudwatch:Describe*",
+                                "cloudwatch:Get*",
+                                "cloudwatch:List*",
+                                "cloudwatch:PutMetricAlarm",
+                                "cloudwatch:EnableAlarmActions",
+                                "cloudwatch:DisableAlarmActions"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": "arn:aws:logs:*:*:*"
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "IotWorkshopFirehoseRole"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "34aa3339-e792-4695-8f3e-6715cb8abc04"
+                }
+            }
+        },
+        "IotWorkshopFirehoseRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "firehose.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "805e42b6-82b6-4b81-8f8b-240dbe4a0c3b"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "WebIP": {
+            "Description": "AWS IoT Workshop IP",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::If": [
+                                "CreateVPCResources",
+                                {
+                                    "Fn::GetAtt": [
+                                        "InstanceVPC",
+                                        "PublicIp"
+                                    ]
+                                },
+                                {
+                                    "Fn::GetAtt": [
+                                        "Instance",
+                                        "PublicIp"
+                                    ]
+                                }
+                            ]
+                        },
+                        "/"
+                    ]
+                ]
+            }
+        }
+    }
+}
