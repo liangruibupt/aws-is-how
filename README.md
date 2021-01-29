@@ -96,6 +96,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
 Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
 
+[Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
+
+## IOT
+[IoT-Workshop](iot/IoT-Workshop.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -276,6 +281,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [AWS Serverless CI/CD hands on lab](devops/serverless-cicd/README.md)
 
 [Accessing the AWS Health API](devops/personal-health-dashboard/Accessing-the-AWS-Health-API.md)
+
+[CSV tools](https://github.com/secretGeek/AwesomeCSV)
 
 ## Infra as Code
 
