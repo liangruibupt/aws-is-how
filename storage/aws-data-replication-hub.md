@@ -103,14 +103,12 @@
     2021-02-01 13:51:45  117.6 MiB Apach Kylin Introduction.mp4
     2021-02-01 13:43:18  333.0 MiB DynamoDB_Deep_Dive_1.mp4
     2021-02-01 13:44:37  313.8 MiB DynamoDB_Deep_Dive_2.mp4
-    2021-02-01 13:50:55  150.5 MiB EMR Cost Optimization.mp4
     2021-02-01 13:55:00  177.3 MiB FreeRTOS_Demo.mov
-    2021-02-01 13:40:34  373.5 MiB Prerequisite_Networking_knowledge_when_you_starting_your_AWS_networking_trip_Part_1.mp4
     2021-02-01 13:41:49  239.3 MiB Prerequisite_Networking_knowledge_when_you_starting_your_AWS_networking_trip_Part_2.mp4
     2021-02-01 13:52:27  233.8 MiB Redshift for new colleagues.mp4
 
-    Total Objects: 9
-      Total Size: 1.9 GiB
+    Total Objects: 7
+      Total Size: 1.4 GiB
     ```
 
     2. Destination data
@@ -118,11 +116,12 @@
     aws s3 ls s3://vod-mediaconvert-workshop-ray/lreland-learning-inputs/learning_media/ --region cn-northwest-1 --summarize --human-readable
     2021-02-01 14:17:47    0 Bytes
     2021-02-01 14:17:46  117.6 MiB Apach Kylin Introduction.mp4
+    2021-02-01 14:17:45  333.0 MiB DynamoDB_Deep_Dive_1.mp4
     2021-02-01 14:17:54  313.8 MiB DynamoDB_Deep_Dive_2.mp4
     2021-02-01 14:17:49  177.3 MiB FreeRTOS_Demo.mov
     2021-02-01 14:17:46  239.3 MiB Prerequisite_Networking_knowledge_when_you_starting_your_AWS_networking_trip_Part_2.mp4
     2021-02-01 14:17:52  233.8 MiB Redshift for new colleagues.mp4
 
-    Total Objects: 6
-      Total Size: 1.1 GiB
+    Total Objects: 7
+      Total Size: 1.4 GiB
     ```
