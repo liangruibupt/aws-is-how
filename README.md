@@ -20,6 +20,8 @@
 
 [Install External Libraries and Kernels in Notebook Instances](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-add-external.html)
 
+[CloudFormation to launch SageMaker Notebook on Glue Dev Endpoint](https://github.com/aws-samples/aws-glue-samples/blob/master/utilities/sagemaker_notebook_automation/glue_sagemaker_notebook_cn.yaml)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -127,6 +129,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
 
+[Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -189,6 +193,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Chalice - A framework for writing serverless applications](https://aws.github.io/chalice/)
 
+[Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
 
 ## Migration
 

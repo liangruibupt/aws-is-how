@@ -25,7 +25,7 @@
           ]
         }
       },
-      "Resource": "arn:aws-cn:es:cn-northwest-1:876820548815:domain/faq-es/*"
+      "Resource": "arn:aws-cn:es:cn-northwest-1:your-account:domain/faq-es/*"
     }
   ]
 }

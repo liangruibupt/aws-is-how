@@ -53,7 +53,7 @@ Resources:
       RoleName: !Sub AWSGlueServiceSageMakerNotebookRole-${AWS::StackName}
       Path: /
       ManagedPolicyArns:
-        - arn:aws-cn:iam::aws:policy/AmazonSageMakerFullAccess
+        - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
       Policies:
         -
           PolicyName: "root"
