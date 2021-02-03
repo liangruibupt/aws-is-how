@@ -11,7 +11,7 @@
 - You will be asked to set a new password when you login the portal
 ![DataReplicationHubPortal](media/DataReplicationHubPortal.png)
 
-3. Start to create your first replication task.
+## Start to create your `Ningxia (cn-northwest-1)` region S3 bucket data to destination - `Ireland (eu-west-1)` region S3 bucket task.
 
   Here I replicate source - `Ningxia (cn-northwest-1)` region S3 bucket data to destination - `Ireland (eu-west-1)` region S3 bucket as example
 
@@ -71,7 +71,7 @@
   3. CloudWatch
   ![S3-replicate-task-cloudwatch](media/S3-replicate-task-cloudwatch.png)
 
-4. Start to create your second replication task.
+## Start to create `Ireland (eu-west-1)` region S3 bucket data to destination - `Ningxia (cn-northwest-1)` region S3 bucket task.
 
     Here I replicate source - `Ireland (eu-west-1)` region S3 bucket data to destination - `Ningxia (cn-northwest-1)` region S3 bucket as example
 
