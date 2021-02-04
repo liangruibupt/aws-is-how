@@ -241,6 +241,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
 
+[MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
