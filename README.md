@@ -203,6 +203,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
 
+[DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
+
 ## Storage
 
 [How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)

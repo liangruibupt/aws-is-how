@@ -5,7 +5,7 @@ Simlar, if you configure the desitnation of Firehose is S3, you can use the S3 +
 
 [Kinesis Firehose + S3 + Athena](https://aws.amazon.com/blogs/database/how-to-perform-advanced-analytics-and-build-visualizations-of-your-amazon-dynamodb-data-by-using-amazon-athena/)
 
-![How-to-do-Virtulization-DynamoDB](analytics/media/Superset4DDB.png)
+![How-to-do-Virtulization-DynamoDB](media/Superset4DDB.png)
 
 Simlar, if you configure the desitnation of Firehose is redshift, you can use the redshift + superset to do analysis
 
