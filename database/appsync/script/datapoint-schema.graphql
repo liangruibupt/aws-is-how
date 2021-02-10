@@ -1,0 +1,111 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type DataPoint {
+  createdAt: AWSDateTime!
+  name: ID!
+  value: Int
+}
+
+type DataPointConnection {
+  items: [DataPoint]
+  nextToken: String
+}
+
+type Mutation {
+  createDataPoint(input: CreateDataPointInput!): DataPoint
+  deleteDataPoint(input: DeleteDataPointInput!): DataPoint
+  updateDataPoint(input: UpdateDataPointInput!): DataPoint
+}
+
+type Query {
+  getDataPoint(createdAt: AWSDateTime!, name: ID!): DataPoint
+  listDataPoints(filter: TableDataPointFilterInput, limit: Int, nextToken: String): DataPointConnection
+}
+
+type Subscription {
+  onCreateDataPoint(createdAt: AWSDateTime, name: ID, value: Int): DataPoint @aws_subscribe(mutations : ["createDataPoint"])
+  onDeleteDataPoint(createdAt: AWSDateTime, name: ID, value: Int): DataPoint @aws_subscribe(mutations : ["deleteDataPoint"])
+  onUpdateDataPoint(createdAt: AWSDateTime, name: ID, value: Int): DataPoint @aws_subscribe(mutations : ["updateDataPoint"])
+}
+
+input CreateDataPointInput {
+  createdAt: AWSDateTime!
+  name: ID!
+  value: Int
+}
+
+input DeleteDataPointInput {
+  createdAt: AWSDateTime!
+  name: ID!
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableDataPointFilterInput {
+  createdAt: TableStringFilterInput
+  name: TableIDFilterInput
+  value: TableIntFilterInput
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input UpdateDataPointInput {
+  createdAt: AWSDateTime!
+  name: ID!
+  value: Int
+}
