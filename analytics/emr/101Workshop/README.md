@@ -425,6 +425,8 @@ aws emr create-cluster --name "glue-emr-lab" \
 
 [Using the AWS Glue Data Catalog as the Metastore for Hive](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hive-metastore-glue.html)
 
+[Using the AWS Glue Data Catalog as the Metastore for Spark SQL ](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-glue.html)
+
 ## Cleanup
 ```bash
 - delete the EMR Notebook
