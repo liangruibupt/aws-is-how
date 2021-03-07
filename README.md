@@ -102,8 +102,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
 
+[Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
+
+[IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
 
 ## Security
 

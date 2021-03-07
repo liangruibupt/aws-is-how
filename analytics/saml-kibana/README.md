@@ -12,3 +12,6 @@ When you authentication for Kibana, you can
 
 - [Okta as Identity Provider](Okta.md)
 - [Active_Directory as Identity Provider](Active_Directory.md)
+
+## Role Mapping for LDAP Integration Open Distro for Elasticsearch
+[Map LDAP Backend Roles to Elasticsearch Security Roles](https://aws.amazon.com/blogs/opensource/ldap-integration-for-open-distro-for-elasticsearch/)
