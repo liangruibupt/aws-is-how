@@ -16,8 +16,13 @@ import boto3  # AWS SDK for Python (Boto3) 'pip install boto3'
 # client('sts') function. For more information, see the Python SDK docs:
 # http://boto3.readthedocs.io/en/latest/reference/services/sts.html
 # http://boto3.readthedocs.io/en/latest/reference/services/sts.html#STS.Client.assume_role
+
+# Use the service role with STS permission
 sts_connection = boto3.client('sts')
 
+# Step 2.1 Sessin Revoke
+
+# Step 2.2 Assume Role
 assumed_role_object = sts_connection.assume_role(
     RoleArn="arn:aws-cn:iam::ACCOUNT-ID-WITHOUT-HYPHENS:role/ROLE-NAME",
     RoleSessionName="AssumeRoleSession",

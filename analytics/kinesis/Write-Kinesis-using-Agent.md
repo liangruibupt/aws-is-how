@@ -197,6 +197,17 @@ PowerShell.exe -File ".\InstallKinesisAgent.ps1" -version "version"
 }
 ```
 
+3. Update the AWSKinesisTap.exe.config file in the %PROGRAMFILES%\Amazon\AWSKinesisTap directory to specify the name of the AWS profile. More details, please refer: [Sink Security Configuration](https://docs.aws.amazon.com/kinesis-agent-windows/latest/userguide/sink-object-declarations.html#configuring-kinesis-agent-windows-sink-security-configuration)
+
+```
+<configuration>
+  <appSettings>
+    <add key="AWSProfileName" value="development"/>
+    <add key="AWSProfilesLocation" value="C:\Users\USERNAME\.aws\credentials"/>
+  </appSettings>
+</configuration>
+```
+
 ## Send test logs
 
 - Create directory: `C:\LogSource` and create c:\LogSource\windows-iot-app.log
@@ -233,6 +244,7 @@ The agent writes its logs to C:\ProgramData\Amazon\AWSKinesisTap\logs\KinesisTap
 ![kinsis-firehose-s3-bucket](media/kinsis-firehose-s3-bucket.png)
 
 ## Step 3: Query the Log Data in Amazon S3 by using Athena
+
 ```bash
 CREATE EXTERNAL TABLE iotlogs (
   Critical int,
