@@ -22,6 +22,9 @@
 
 [CloudFormation to launch SageMaker Notebook on Glue Dev Endpoint](https://github.com/aws-samples/aws-glue-samples/blob/master/utilities/sagemaker_notebook_automation/glue_sagemaker_notebook_cn.yaml)
 
+[SageMaker End-to-End Demo- Fraud Detection for Auto Claims](https://aws.amazon.com/blogs/machine-learning/architect-and-build-the-full-machine-learning-lifecycle-with-amazon-sagemaker/) and [github repo](https://github.com/aws/amazon-sagemaker-examples/tree/master/end_to_end)
+
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -50,6 +53,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions --output json --profile us-east-1 --region us-east-1 | jq '.Parameters[].Name' | wc -l
 ```
+
+[Get the spot instance price](EC2/How-to-Get-Spot-Price.md)
 
 [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
 
@@ -193,7 +198,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
 
-[AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshops)
+[AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region)
 
 [Serverless CI/CD based on Jenkins](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
 
