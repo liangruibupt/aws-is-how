@@ -62,6 +62,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
+[How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -109,12 +111,18 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
 
+[Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
 [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
 
 [Using AWS IoT and Amazon SageMaker to do IoT Devices Predictive Maintenance](iot/IOT-SageMaker-Predictive-Maintenance/README.md)
+
+[AWS IoT SiteWise Workshop](https://iot-sitewise.workshop.aws/)
+
+[AWS IoT Analytics Workshop](https://iot-analytics.workshop.aws/)
 
 ## Security
 
@@ -327,3 +335,6 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Media
 
 [Video on Demand on AWS](media/mediaconvert)
+
+## Migration
+[Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
