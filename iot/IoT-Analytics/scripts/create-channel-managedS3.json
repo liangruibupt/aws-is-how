@@ -1,0 +1,11 @@
+{
+    "channelName": "ratchannel",
+    "channelStorage": {
+        "serviceManagedS3": {
+        }
+    },
+    "retentionPeriod": {
+        "unlimited": false,
+        "numberOfDays": 30
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "channelName": "ratchannel",
+    "channelStorage": {
+        "customerManagedS3": {
+            "bucket": "ruiliang-smarthome-iot-analytics-channel",
+            "roleArn": "arn:aws:iam::710299592439:role/service-role/iot-analytics-role"
+        }
+    }
+}

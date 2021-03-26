@@ -1,0 +1,11 @@
+{
+    "datasetName": "ratdataset",
+    "actions": [
+        {
+            "actionName": "selectAll",
+            "queryAction": {
+                "sqlQuery": "Select * from ratstore"
+            }
+        }
+    ]
+}

@@ -19,13 +19,21 @@ Simulate attacks, and generate GuardDuty Findings. The [original github repo](ht
 
 2. From CloudFormation Output get the BastionIp and RedTeamIp
 - SSH to Bastion with BastionIp
+```bash
+ssh -A ec2-user@BastionIp
+```
 - SSH from Bastion to Tester with RedTeamIp
+```bash
+ssh RedTeamIp
+```
 
 3. Run guardduty_tester.sh 
 
 The script initiate interaction between your tester and target EC2 instances, simulate attacks, and generate GuardDuty Findings.
 
 ```bash
+./guardduty_tester.sh
+
 Expected GuardDuty Findings
 
 Test 1: Internal Port Scanning

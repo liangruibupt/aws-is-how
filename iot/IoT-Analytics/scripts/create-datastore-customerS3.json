@@ -1,0 +1,45 @@
+{
+    "datastoreName": "ratstore",
+    "datastoreStorage": {
+        "customerManagedS3": {
+            "bucket": "ruiliang-smarthome-iot-analytics-datastore",
+            "roleArn": "arn:aws:iam::710299592439:role/service-role/iot-analytics-datastore-role"
+        }
+    },
+    "fileFormatConfiguration": {
+        "parquetConfiguration": {
+            "schemaDefinition": {
+                "columns": [
+                    {
+                        "name": "vin",
+                        "type": "string"
+                    },
+                    {
+                        "name": "trip_id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Systolic",
+                        "type": "int"
+                    },
+                    {
+                        "name": "Diastolic",
+                        "type": "int"
+                    },
+                    {
+                        "name": "PressureLevel",
+                        "type": "string"
+                    },
+                    {
+                        "name": "temp",
+                        "type": "float"
+                    },
+                    {
+                        "name": "event_time",
+                        "type": "timestamp"
+                    }
+                ]
+            }
+        }
+    }
+}

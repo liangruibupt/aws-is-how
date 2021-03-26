@@ -113,6 +113,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
 
+[Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
@@ -151,6 +153,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
 
 [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
+
+[aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
 
 ## Network
 
@@ -217,6 +221,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
 
 [AppSync-Workshop](database/appsync/AppSync-Workshop.md)
+
+[Lambda CICD with Jenkins and CodeBuild and CodeDeploy](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
 
 ## Migration
 
@@ -288,6 +294,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Windows pod in EKS](container/Windows-pod-EKS.md)
 
+[Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
+
+[How can I check, scale, delete, or drain my worker nodes on EKS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-node-actions/)
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
@@ -317,6 +327,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Accessing the AWS Health API](devops/personal-health-dashboard/Accessing-the-AWS-Health-API.md)
 
 [CSV tools](https://github.com/secretGeek/AwesomeCSV)
+
+[在 AWS 中国区 EKS 上以 GitOps 方式构建 CI/CD 流水线](https://aws.amazon.com/cn/blogs/china/build-ci-cd-pipeline-in-gitops-on-aws-china-eks/)
 
 ## Infra as Code
 

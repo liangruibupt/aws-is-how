@@ -1,0 +1,29 @@
+{
+    "datasetName": "ratdataset_5mins",
+    "actions": [
+        {
+            "actionName": "select_PressureLevel",
+            "queryAction": {
+                "sqlQuery": "SELECT rs.vin, rs.Systolic AS min_pressure, rs.Diastolic AS max_pressure, rs.temp, rs.event_time FROM ratstore rs WHERE rs.trip_id IS NOT NULL AND (rs.PressureLevel = 'HIGH') ORDER BY rs.event_time"
+            }
+        }
+    ],
+    "triggers": [
+        {
+            "schedule": {
+                "expression": "rate(5 minutes)"
+            }
+        }
+    ],
+    "contentDeliveryRules": [
+        {
+            "destination": {
+                "s3DestinationConfiguration": {
+                    "bucket": "ruiliang-smarthome-iot-analytics-dataset",
+                    "key": "ratdataset_5mins/Version/!{iotanalytics:scheduleTime}_!{iotanalytics:versionId}.csv",
+                    "roleArn": "arn:aws:iam::710299592439:role/service-role/iot-analytics-dataset-role"
+                }
+            }
+        }
+    ]
+}
