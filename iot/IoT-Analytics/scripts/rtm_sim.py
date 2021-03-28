@@ -9,8 +9,8 @@ import time
 import datetime
 from botocore.exceptions import ClientError
 
-CHANNEL_NAME = "ratchannel"
-session = boto3.Session(profile_name='us-east-1', region_name='us-east-1')
+CHANNEL_NAME = "rtmchannel"
+session = boto3.Session(profile_name='cn-north-1', region_name='cn-north-1')
 client = session.client('iotanalytics')
 
 #Function to encode a payload into JSON
@@ -64,7 +64,8 @@ def get_normal_pressure(vin):
         "Diastolic": random.randint(60, 80),
         "PressureLevel": 'NORMAL',
         "temp": random.randint(0, 1000),
-        "event_time": str(datetime.datetime.now())
+        "event_time": str(datetime.datetime.now()),
+        "bms_tbc_volt": ["3.660", "3.660", "3.661", "3.660", "3.662", "3.661", "3.660", "3.657", "3.662", "3.660"]
     }
     data = json.dumps(data)
     return data
@@ -82,7 +83,8 @@ def get_high_pressure(vin):
         "Diastolic": random.randint(90, 150),
         "PressureLevel": 'HIGH',
         "temp": random.randint(0, 1000),
-        "event_time": str(datetime.datetime.now())
+        "event_time": str(datetime.datetime.now()),
+        "bms_tbc_volt": ["3.660", "3.660", "3.661", "3.660", "3.662", "3.661", "3.660", "3.657", "3.662", "3.660"]
     }
     data = json.dumps(data)
     return data
@@ -99,7 +101,8 @@ def get_low_pressure(vin):
         "Diastolic": random.randint(30, 50),
         "PressureLevel": 'LOW',
         "temp": random.randint(0, 1000),
-        "event_time": str(datetime.datetime.now())
+        "event_time": str(datetime.datetime.now()),
+        "bms_tbc_volt": ["3.660", "3.660", "3.661", "3.660", "3.662", "3.661", "3.660", "3.657", "3.662", "3.660"]
     }
     data = json.dumps(data)
     return data
@@ -124,4 +127,4 @@ while True:
         data = get_normal_pressure(vin)
         print(data)
         send(data)
-    time.sleep(3)
+    time.sleep(1)

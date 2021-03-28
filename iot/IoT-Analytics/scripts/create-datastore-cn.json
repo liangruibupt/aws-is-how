@@ -1,0 +1,49 @@
+{
+    "datastoreName": "rtmstore_parquet",
+    "datastoreStorage": {
+        "customerManagedS3": {
+            "bucket": "ruiliang-iot-datastore",
+            "roleArn": "arn:aws-cn:iam::876820548815:role/service-role/iot-analytics-datastore-role"
+        }
+    },
+    "fileFormatConfiguration": {
+        "parquetConfiguration": {
+            "schemaDefinition": {
+                "columns": [
+                    {
+                        "name": "vin",
+                        "type": "string"
+                    },
+                    {
+                        "name": "trip_id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Systolic",
+                        "type": "int"
+                    },
+                    {
+                        "name": "Diastolic",
+                        "type": "int"
+                    },
+                    {
+                        "name": "PressureLevel",
+                        "type": "string"
+                    },
+                    {
+                        "name": "temp",
+                        "type": "int"
+                    },
+                    {
+                        "name": "event_time",
+                        "type": "timestamp"
+                    },
+                    {
+                        "name": "bms_tbc_volt",
+                        "type": "ARRAY"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "datasetName": "rtmdataset_count",
+    "actions": [
+        {
+            "actionName": "select_count",
+            "queryAction": {
+                "sqlQuery": "SELECT count (*) FROM rtmstore"
+            }
+        }
+    ],
+    "triggers": [
+        {
+            "schedule": {
+                "expression": "rate(5 minutes)"
+            }
+        }
+    ],
+    "contentDeliveryRules": [
+        {
+            "destination": {
+                "s3DestinationConfiguration": {
+                    "bucket": "ruiliang-iot-dataset",
+                    "key": "rtmdataset_count/Version/!{iotanalytics:scheduleTime}_!{iotanalytics:versionId}.csv",
+                    "roleArn": "arn:aws-cn:iam::876820548815:role/service-role/iot-analytics-dataset-role"
+                }
+            }
+        }
+    ]
+}

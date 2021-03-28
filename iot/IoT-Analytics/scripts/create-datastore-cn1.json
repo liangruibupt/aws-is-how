@@ -1,0 +1,9 @@
+{
+    "datastoreName": "rtmstore_parquet",
+    "datastoreStorage": {
+        "customerManagedS3": {
+            "bucket": "ruiliang-iot-datastore",
+            "roleArn": "arn:aws-cn:iam::876820548815:role/service-role/iot-analytics-datastore-role"
+        }
+    }
+}
