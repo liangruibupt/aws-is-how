@@ -21,7 +21,7 @@
                 "s3DestinationConfiguration": {
                     "bucket": "ruiliang-smarthome-iot-analytics-dataset",
                     "key": "ratdataset_5mins/Version/!{iotanalytics:scheduleTime}_!{iotanalytics:versionId}.csv",
-                    "roleArn": "arn:aws:iam::710299592439:role/service-role/iot-analytics-dataset-role"
+                    "roleArn": "arn:aws:iam::account_id:role/service-role/iot-analytics-dataset-role"
                 }
             }
         }

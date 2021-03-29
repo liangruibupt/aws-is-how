@@ -1,5 +1,5 @@
 {
-    "channelName": "ratchannel",
+    "channelName": "rtm_complex_channel",
     "channelStorage": {
         "customerManagedS3": {
             "bucket": "ruiliang-smarthome-iot-analytics-channel",

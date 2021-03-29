@@ -19,6 +19,15 @@ def func_count(cursor):
     print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
     print(df.head())
 
+
+def func_count_rtm_parquet(cursor):
+    query_string = "select count(*) from quicksightdb.rtm_rtmstore_parquet"
+    df = cursor.execute(query_string).as_pandas()
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(df.head())
+
 # TIMESTAMP `BETWEEN AND` + Integer greater than
 def func_between_and(cursor):
     cursor.execute("""
@@ -36,6 +45,22 @@ def func_between_and(cursor):
     print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
     print(cursor.fetchmany(size=10))
 
+def func_between_and_rtm_parquet(cursor):
+    cursor.execute("""
+        SELECT vd.vin, vd.trip_id, vd.temp, vd.pressurelevel
+        FROM quicksightdb.rtm_rtmstore_parquet vd
+        where(vd.pressurelevel=%(param1)s)
+        AND(vd.event_time BETWEEN TIMESTAMP %(param2)s AND TIMESTAMP %(param3)s)
+        AND vd.temp > %(param4)d
+        ORDER BY vd.event_time
+        Limit 100
+        """, {"param1": "NORMAL", "param2": "2021-03-28 22:59:20.270",
+              "param3": "2021-03-28 23:59:20.270", "param4": 100})
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(cursor.fetchmany(size=10))
+
 # GROUP BY
 def func_groupby(cursor):
     cursor.execute("""
@@ -47,6 +72,36 @@ def func_groupby(cursor):
         GROUP BY se.sport_type_name
         """, {"param1": 1, "param2": 5, 
             "param3": "2020-04-01 12:00:00.000", "param4": "2020-05-1 12:01:00.000"})
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(cursor.fetchmany(size=10))
+
+
+def func_groupby_rtm_parquet(cursor):
+    cursor.execute("""
+        SELECT vd.vin, COUNT(DISTINCT vd.trip_id) AS total
+        FROM quicksightdb.rtm_rtmstore_parquet vd
+        WHERE (vd.pressurelevel = %(param1)s)
+        AND (vd.event_time BETWEEN TIMESTAMP %(param2)s AND TIMESTAMP %(param3)s)
+        GROUP BY vd.vin
+        """, {"param1": "NORMAL",
+              "param2": "2021-03-28 22:59:20.270", "param3": "2021-03-28 23:59:20.270"})
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(cursor.fetchmany(size=10))
+
+
+def func_approx_distinct_rtm_parquet(cursor):
+    cursor.execute("""
+        SELECT vd.vin, approx_distinct(vd.trip_id) AS total
+        FROM quicksightdb.rtm_rtmstore_parquet vd
+        WHERE (vd.pressurelevel = %(param1)s)
+        AND (vd.event_time BETWEEN TIMESTAMP %(param2)s AND TIMESTAMP %(param3)s)
+        GROUP BY vd.vin
+        """, {"param1": "NORMAL",
+              "param2": "2021-03-28 22:59:20.270", "param3": "2021-03-28 23:59:20.270"})
     print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
     print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
     print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
@@ -100,6 +155,23 @@ def func_case(cursor):
     print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
     print(cursor.fetchmany(size=10))
 
+
+def func_case_rtm_parquet(cursor):
+    cursor.execute("""
+        SELECT vd.vin, vd.trip_id, vd.systolic,
+        CASE vd.pressureLevel WHEN %(param1)s THEN %(param2)s WHEN %(param3)s THEN %(param4)s ELSE 'go' END as instructions 
+        FROM quicksightdb.rtm_rtmstore_parquet vd
+        WHERE (vd.diastolic > %(param5)d)
+        AND (vd.event_time BETWEEN TIMESTAMP %(param6)s AND TIMESTAMP %(param7)s)
+        ORDER BY vd.vin
+        """, {"param1": "High", "param2": "alert", "param3": "Low", "param4": "caution",
+              "param5": 100,
+              "param6": "2021-03-28 22:59:20.270", "param7": "2021-03-28 23:59:20.270"})
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(cursor.fetchmany(size=10))
+
 # JOIN and Left Join
 def func_join(cursor):
     cursor.execute("""
@@ -114,6 +186,22 @@ def func_join(cursor):
         """, {"param1": "Citi Field", "param2": "go", "param3": "Miller Park", "param4": "caution",
               "param5": "Angel Stadium", "param6": "stop", "param7": "New York Mets",
               "param8": "2020-04-01 12:00:00.000", "param9": "2020-07-01 12:01:00.000"})
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(cursor.fetchmany(size=10))
+
+
+def func_join_rtm_parquet(cursor):
+    cursor.execute("""
+        SELECT vd.vin, vd.trip_id, vd.systolic, l.vin_amount vin_amount,
+        CASE vd.pressureLevel WHEN %(param1)s THEN %(param2)s WHEN %(param3)s THEN %(param4)s ELSE 'go' END as instructions 
+        FROM quicksightdb.rtm_rtmstore_parquet vd, quicksightdb.vin_metadata l
+        WHERE vd.vin = l.vin AND (vd.diastolic > %(param5)d)
+        AND (vd.event_time BETWEEN TIMESTAMP %(param6)s AND TIMESTAMP %(param7)s)
+        """, {"param1": "High", "param2": "alert", "param3": "Low", "param4": "caution",
+              "param5": 100,
+              "param6": "2021-03-28 22:59:20.270", "param7": "2021-03-28 23:59:20.270"})
     print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
     print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
     print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
@@ -162,6 +250,20 @@ def func_max2(cursor):
     print(cursor.fetchmany(size=10))
 
 
+def func_max_rtm_parquet(cursor):
+    cursor.execute("""
+        SELECT max(vd.systolic) AS max_systolic, vd.vin, l.vin_amount vin_amount
+        FROM quicksightdb.rtm_rtmstore_parquet vd, quicksightdb.vin_metadata l
+        WHERE vd.vin = l.vin AND (vd.diastolic > %(param5)d)
+        AND (vd.event_time BETWEEN TIMESTAMP %(param6)s AND TIMESTAMP %(param7)s)
+        Group by vd.vin, vin_amount
+        """, {"param1": "High", "param2": "alert", "param3": "Low", "param4": "caution",
+              "param5": 100,
+              "param6": "2021-03-28 22:59:20.270", "param7": "2021-03-28 23:59:20.270"})
+    print("datascan {} KB".format(cursor.data_scanned_in_bytes/1024))
+    print("execution time {} ms".format(cursor.engine_execution_time_in_millis))
+    print("query_queue time {} ms".format(cursor.query_queue_time_in_millis))
+    print(cursor.fetchmany(size=10))
 
 #func_count(cursor)
 # func_between_and(cursor)
@@ -171,4 +273,11 @@ def func_max2(cursor):
 # func_case(cursor)
 # func_join(cursor)
 # func_max1(cursor)
-func_max2(cursor)
+# func_max2(cursor)
+# func_count_rtm_parquet(cursor)
+# func_between_and_rtm_parquet(cursor)
+# func_groupby_rtm_parquet(cursor)
+# func_case_rtm_parquet(cursor)
+# func_join_rtm_parquet(cursor)
+func_max_rtm_parquet(cursor)
+

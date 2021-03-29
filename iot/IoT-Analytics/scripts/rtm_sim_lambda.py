@@ -7,19 +7,24 @@ import time
 import datetime
 from botocore.exceptions import ClientError
 
-CHANNEL_NAME = "newrtmchannel"
-session = boto3.Session(profile_name='us-east-1', region_name='us-east-1')
+CHANNEL_NAME = "rtmchannel"
+session = boto3.Session(region_name='us-east-1')
 client = session.client('iotanalytics')
 
 #Function to encode a payload into JSON
+
+
 def json_encode(message):
     return json.dumps(message)
 
 # Function to get the randomvin
+
+
 def rand_n(n):
     start = pow(10, n-1)
     end = pow(10, n) - 1
     return random.randint(start, end)
+
 
 def random_vin():
     VIN = 'vin-' + str(rand_n(14))
@@ -128,59 +133,18 @@ def get_low_pressure(vin):
     return data
 
 
-def generate_data(vin):
-    signals = []
-    listsignals = []
-    signal_index = 2
-    listsingal_index = 2
-    while signal_index > 0:
-        signal_value = random.uniform(1, 300)
-        signal_name = "powertrain_state_{}".format(signal_index)
-        signals.append({signal_name : signal_value})
-        signal_index = signal_index - 1
-
-    while listsingal_index > 0:
-        listsignal_values = []
-        for i in range(2):
-            value = 3.6 + random.uniform(0, 1)
-            listsignal_values.append(value)
-        listsignal_name = "bms_id_{}".format(listsingal_index)
-        listsignals.append(
-            {listsignal_name : listsignal_values})
-        listsingal_index = listsingal_index - 1
-
-    data = {
-        "data": [{"signals": signals}, {"listsignals": listsignals}],
-        "vin": vin,
-        "event_time": str(datetime.datetime.now())
-    }
-    data = json.dumps(data)
-    return data
-
-vin = random_vin()
-count = 0
-while True:
-    count += 1
-    if(count % 100 == 0):
-        vin = random_vin()
-    # rnd = random.random()
-    # if (rnd < 0.25):
-    #     data = get_low_pressure(vin)
-    #     #print(data)
-    #     send(data)
-    # elif (rnd > 0.85):
-    #     data = get_high_pressure(vin)
-    #     #print(data)
-    #     send(data)
-    # else:
-    #     data = get_normal_pressure(vin)
-    #     #print(data)
-    #     send(data)
-    # data1 = get_low_pressure(vin)
-    # data2 = get_normal_pressure(vin)
-    # data3 = get_high_pressure(vin)
-    # send_batch(data1, data2, data3)
-    data = generate_data(vin)
-    send(data)
-    #print(data)
-    time.sleep(0.1)
+def lambda_handler(event, context):
+    vin = random_vin()
+    count = 0
+    while True:
+        count += 1
+        if(count % 100 == 0):
+            vin = random_vin()
+        if(count == 1000):
+            break
+        data1 = get_low_pressure(vin)
+        data2 = get_normal_pressure(vin)
+        data3 = get_high_pressure(vin)
+        #print(data)
+        send_batch(data1, data2, data3)
+        time.sleep(0.1)

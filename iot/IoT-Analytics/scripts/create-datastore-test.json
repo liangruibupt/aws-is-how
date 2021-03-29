@@ -1,5 +1,5 @@
 {
-    "datastoreName": "ratstore",
+    "datastoreName": "rtmstore_parquet",
     "datastoreStorage": {
         "customerManagedS3": {
             "bucket": "ruiliang-smarthome-iot-analytics-datastore",
@@ -32,11 +32,15 @@
                     },
                     {
                         "name": "temp",
-                        "type": "float"
+                        "type": "int"
                     },
                     {
                         "name": "event_time",
                         "type": "timestamp"
+                    },
+                    {
+                        "name": "bms_tbc_volt",
+                        "type": "array <STRING>"
                     }
                 ]
             }

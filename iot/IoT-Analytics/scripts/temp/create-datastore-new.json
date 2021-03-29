@@ -1,5 +1,5 @@
 {
-    "datastoreName": "ratstore",
+    "datastoreName": "rtm_complex_store",
     "datastoreStorage": {
         "customerManagedS3": {
             "bucket": "ruiliang-smarthome-iot-analytics-datastore",
@@ -15,28 +15,12 @@
                         "type": "string"
                     },
                     {
-                        "name": "trip_id",
-                        "type": "string"
-                    },
-                    {
-                        "name": "Systolic",
-                        "type": "int"
-                    },
-                    {
-                        "name": "Diastolic",
-                        "type": "int"
-                    },
-                    {
-                        "name": "PressureLevel",
-                        "type": "string"
-                    },
-                    {
-                        "name": "temp",
-                        "type": "float"
-                    },
-                    {
                         "name": "event_time",
                         "type": "timestamp"
+                    },
+                    {
+                        "name": "data",
+                        "type": "ARRAY < STRUCT < spouse: STRING, signals: ARRAY <STRING> > >"
                     }
                 ]
             }

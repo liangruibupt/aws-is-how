@@ -3,7 +3,7 @@
     "datastoreStorage": {
         "customerManagedS3": {
             "bucket": "ruiliang-iot-datastore",
-            "roleArn": "arn:aws-cn:iam::876820548815:role/service-role/iot-analytics-datastore-role"
+            "roleArn": "arn:aws-cn:iam::account_id:role/service-role/iot-analytics-datastore-role"
         }
     }
 }
