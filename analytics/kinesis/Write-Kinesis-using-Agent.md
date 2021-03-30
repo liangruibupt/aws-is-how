@@ -263,3 +263,40 @@ MSCK REPAIR TABLE iotlogs;
 SELECT * FROM "blogdb"."iotlogs" limit 10;
 SELECT * FROM "blogdb"."iotlogs" WHERE Critical = 1
 ```
+
+# Limit
+Kinesis Agent right now do not support the gz,zip compression file. Here is tracking issue. https://github.com/awslabs/amazon-kinesis-agent/issues/37
+From the source code, these files have been ignored https://github.com/awslabs/amazon-kinesis-agent/blob/master/src/com/amazon/kinesis/streaming/agent/tailing/SourceFile.java#L124 
+
+- Using the rar as package format
+- Kinesis Agent setting
+```json
+{
+  "Sources": [
+    {
+      "Id": "JsonLogSource",
+      "SourceType": "DirectorySource",
+      "RecordParser": "SingleLine",
+      "Directory": "C:\\LogSource\\",
+      "InitialPosition": 0
+    }
+  ],
+  "Sinks": [
+    {
+      "Id": "FirehoseLogStream",
+      "SinkType": "KinesisFirehose",
+      "StreamName": "iot-data-collector",
+      "Region": "cn-northwest-1",
+      "ObjectDecoration": "ComputerName={ComputerName};DT={timestamp:yyyy-MM-dd HH:mm:ss}"
+    }
+  ],
+  "Pipes": [
+    {
+      "Id": "JsonLogSourceToFirehoseLogStream",
+      "SourceRef": "JsonLogSource",
+      "SinkRef": "FirehoseLogStream"
+    }
+  ],
+  "SelfUpdate": 0 //minutes
+}
+```

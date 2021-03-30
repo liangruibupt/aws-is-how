@@ -7,7 +7,7 @@ import time
 import datetime
 from botocore.exceptions import ClientError
 
-CHANNEL_NAME = "newrtmchannel"
+CHANNEL_NAME = "rtm_complex_channel"
 session = boto3.Session(profile_name='us-east-1', region_name='us-east-1')
 client = session.client('iotanalytics')
 
@@ -119,7 +119,7 @@ def get_low_pressure(vin):
         "trip_id": trip_id,
         "Systolic": random.randint(50, 80),
         "Diastolic": random.randint(30, 50),
-        "PressureLevel": 'LOW',
+        "PressureLevel": '',
         "temp": random.randint(0, 1000),
         "event_time": str(datetime.datetime.now()),
         "bms_tbc_volt": ["3.660", "3.660", "3.661", "3.660", "3.662", "3.661", "3.660", "3.657", "3.662", "3.660"]
@@ -129,30 +129,37 @@ def get_low_pressure(vin):
 
 
 def generate_data(vin):
+    trip_id = str(uuid.uuid4())
     signals = []
     listsignals = []
-    signal_index = 2
-    listsingal_index = 2
+    signal_index = 90
+    listsingal_index = 5
     while signal_index > 0:
-        signal_value = random.uniform(1, 300)
+        signal_value = round(random.uniform(1, 300), 2)
         signal_name = "powertrain_state_{}".format(signal_index)
-        signals.append({signal_name : signal_value})
+        signals.append({"name": signal_name, "value" : signal_value})
         signal_index = signal_index - 1
 
     while listsingal_index > 0:
         listsignal_values = []
-        for i in range(2):
-            value = 3.6 + random.uniform(0, 1)
+        for i in range(10):
+            value = round(random.uniform(3, 5), 2)
             listsignal_values.append(value)
         listsignal_name = "bms_id_{}".format(listsingal_index)
         listsignals.append(
-            {listsignal_name : listsignal_values})
+            {"name": listsignal_name, "value": listsignal_values})
         listsingal_index = listsingal_index - 1
 
     data = {
-        "data": [{"signals": signals}, {"listsignals": listsignals}],
         "vin": vin,
-        "event_time": str(datetime.datetime.now())
+        "event_time": str(datetime.datetime.now()),
+        "trip_id": trip_id,
+        "Systolic": random.randint(50, 80),
+        "Diastolic": random.randint(30, 50),
+        "PressureLevel": random.choice(['LOW', 'NORMAL', 'HIGH']),
+        "temp": random.randint(0, 1000),
+        "signals": signals,
+        "listsignals": listsignals
     }
     data = json.dumps(data)
     return data

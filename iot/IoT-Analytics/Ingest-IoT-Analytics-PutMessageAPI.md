@@ -21,6 +21,9 @@ aws iotanalytics describe-datastore --datastore-name ratstore --region us-east-1
 
 aws iotanalytics update-datastore --cli-input-json file://scripts/create-datastore-customerS3.json \
 --region us-east-1 --profile us-east-1
+
+aws iotanalytics create-datastore --datastore-name rtmstore_parquet \
+--datastore-storagecustomerManagedS3={bucket=ruiliang-iot-datastore,roleArn=arn:aws-cn:iam::account_id:role/service-role/iot-analytics-datastore-role} --region cn-north-1 --profile cn-north-1
 ```
 
 3. Creating a pipeline
@@ -43,7 +46,7 @@ python scripts/bloodpressure_sim.py
 channel-monitoring
 ![channel-monitoring](image/channel-monitoring.png)
 
-5. Creating a dataset
+5. Creating a dataset to get the SQL query result
 
 You retrieve data from a data store by creating a SQL dataset or a container dataset. 
 
@@ -88,4 +91,10 @@ You can use the Athena to exploer the data
 ```bash
 aws iotanalytics get-dataset-content --dataset-name ratdataset \
 --region us-east-1 --profile us-east-1
+```
+
+6. Using Athena to get the SQL query result
+```bash
+pip install pyathena
+python scripts/query_athena.py
 ```

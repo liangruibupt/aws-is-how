@@ -7,6 +7,23 @@ Highlight steps:
 
 ![CUR_Config](media/CUR_Config.png)
 
+## CLI query
+```bash
+aws ce get-cost-and-usage \
+    --time-period Start=2021-01-01,End=2021-02-01 \
+    --granularity MONTHLY \
+    --metrics "BlendedCost" "UnblendedCost" "UsageQuantity" \
+    --group-by Type=DIMENSION,Key=USAGE_TYPE\
+    --region cn-north-1 --profile cn-north-1
+  
+aws ce get-cost-and-usage \
+    --time-period Start=2021-01-01,End=2021-02-01 \
+    --granularity MONTHLY \
+    --metrics "BlendedCost" "UnblendedCost" "UsageQuantity" \
+    --group-by Type=DIMENSION,Key=SERVICE\
+    --region cn-north-1 --profile cn-north-1
+```
+
 ## Glue Crawler Job
 
 - Glue Crawler Job

@@ -24,6 +24,7 @@
 
 [SageMaker End-to-End Demo- Fraud Detection for Auto Claims](https://aws.amazon.com/blogs/machine-learning/architect-and-build-the-full-machine-learning-lifecycle-with-amazon-sagemaker/) and [github repo](https://github.com/aws/amazon-sagemaker-examples/tree/master/end_to_end)
 
+[Amazon Personalize workshop](https://github.com/nwcd-samples/Personalize_workshop_CHN)
 
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
@@ -31,6 +32,10 @@
 [Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
 
 [Cost and Usage Report analysis](cost/analysis-cost-usage-report.md)
+
+[Networking calculator](https://netcalc.solution-architecture.aws.a2z.com/)
+
+
 
 ## Computing
 
@@ -63,6 +68,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
 [How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
+
+[ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
 
 ## Analytics
 
@@ -114,6 +121,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
 
 [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
+
+[Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/cn/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
+
+[Use CTAS statements with Amazon Athena to reduce cost and improve performance](https://aws.amazon.com/blogs/big-data/using-ctas-statements-with-amazon-athena-to-reduce-cost-and-improve-performance/)
 
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -223,6 +234,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [AppSync-Workshop](database/appsync/AppSync-Workshop.md)
 
 [Lambda CICD with Jenkins and CodeBuild and CodeDeploy](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
+
+[Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
 
 ## Migration
 
@@ -350,3 +363,5 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## Migration
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
+
+[Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)

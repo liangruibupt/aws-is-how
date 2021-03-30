@@ -1,17 +1,17 @@
 {
-    "pipelineName": "rtmpipeline",
+    "pipelineName": "rtm_complex_pipeline",
     "pipelineActivities": [
         {
             "channel": {
                 "name": "rtmchannelactivity",
-                "channelName": "rtmchannel",
+                "channelName": "rtm_complex_channel",
                 "next": "rtmstoreactivity"
             }
         },
         {
             "datastore": {
                 "name": "rtmstoreactivity",
-                "datastoreName": "rtmstore_parquet"
+                "datastoreName": "rtm_complex_store"
             }
         }
     ]

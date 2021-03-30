@@ -1,0 +1,53 @@
+{
+    "datastoreName": "rtm_complex_store",
+    "datastoreStorage": {
+        "customerManagedS3": {
+            "bucket": "ruiliang-smarthome-iot-analytics-datastore",
+            "roleArn": "arn:aws:iam::account_id:role/service-role/iot-analytics-datastore-role"
+        }
+    },
+    "fileFormatConfiguration": {
+        "parquetConfiguration": {
+            "schemaDefinition": {
+                "columns": [
+                    {
+                        "name": "vin",
+                        "type": "string"
+                    },
+                    {
+                        "name": "event_time",
+                        "type": "timestamp"
+                    },
+                    {
+                        "name": "trip_id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Systolic",
+                        "type": "int"
+                    },
+                    {
+                        "name": "Diastolic",
+                        "type": "int"
+                    },
+                    {
+                        "name": "PressureLevel",
+                        "type": "string"
+                    },
+                    {
+                        "name": "temp",
+                        "type": "int"
+                    },
+                    {
+                        "name": "signals",
+                        "type": "array <STRUCT < name : string, value: float>>"
+                    },
+                    {
+                        "name": "listsignals",
+                        "type": "array <STRUCT < name : string, value: array<float> > >"
+                    }
+                ]
+            }
+        }
+    }
+}
