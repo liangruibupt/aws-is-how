@@ -1,5 +1,9 @@
 # Ingesting data to AWS IoT Analytics Using the BatchPutMessage API
 
+Architecture
+
+![IoT-Anlytics-demo](image/IoT-Anlytics-demo.png)
+
 1. Creating a channel
 ```bash
 aws iotanalytics list-channels --region us-east-1 --profile us-east-1

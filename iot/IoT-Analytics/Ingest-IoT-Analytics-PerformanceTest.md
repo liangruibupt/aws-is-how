@@ -49,9 +49,9 @@ python scripts/rtm_sim.py
 
 Using Main lambda function `IoTAnalyticsLoadTest` will currently trigger 30 the worker lambda function `IoTAnalyticsIngest` instances every 1 minute. For each invocation, the worker lambda function `IoTAnalyticsIngest` instance will ingest 3*1000 messages via `batch_put_message`
 
-| Message Size | Data Interval (seconds) | Current write | Error Rate % | Duration (mins) | IoTAnalyticsIngest execution duration |
+| Message Size | Data Interval (seconds) | Current write TPS | Error Rate % | Test Duration (mins) | IoTAnalyticsIngest execution duration |
 | --- | --- | --- | --- | --- | --- |
-| 1KB | 60 | 30 * 3000 / 60 = 1500 | 0 | 30 | ~120s for 3000 messages |
+| 1KB | 60 | 30 * 3000 / 60 = 1500 | 0 | 30 | ~120s for every 3000 messages |
 
 ## Using Athena to get the SQL query result
 1. Create tables (The iot analytics default no compression for parquet format)
@@ -165,7 +165,7 @@ pip install pyathena
 python scripts/query_athena.py
 ```
 
-| Table size (rows) | count time range | select limit | between and great than | group by | case | join | max |
+| Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2327546 | 6s | 1.28s | 5.9s | 7.47s | 7.77s | 6.27s | 6.27s | 
 | 218781 | 6s | 1.23s | 5.74s | 6.4s | 5.92s | 6.14s | 5.2s |
@@ -194,7 +194,7 @@ pip install pyathena
 python scripts/query_athena.py
 ```
 
-| Table size (rows) | count time range | select limit | between and great than | group by | case | join | max |
+| Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2327546 | 1.36s | 1.66s | 2.39s | 2.28s | 3.98s | 3.75s | 2.36s |
 | 218781 | 1.21s | 1.16s | 2.25s | 1.78s | 2.29s | 2.38s | 2.07s |
@@ -252,9 +252,9 @@ modify for i in range(30): to for i in range(90):
 
 Using Main lambda function `IoTAnalyticsLoadTest` will currently trigger 90 the worker lambda function `IoTAnalyticsIngest` instances every 1 minute. For each invocation, the worker lambda function `IoTAnalyticsIngest` instance will ingest 1000 messages via `batch_put_message`
 
-| Message Size | Data Interval (seconds) | Current write | Error Rate % | Duration (mins) | IoTAnalyticsIngest execution duration |
+| Message Size | Data Interval (seconds) | Current write TPS | Error Rate % | Test Duration (mins) | IoTAnalyticsIngest execution duration |
 | --- | --- | --- | --- | --- | --- |
-| 1KB | 60 | 90 * 1000 / 60 = 1500 | 0 | 30 | ~124s for 1000 messages |
+| 1KB | 60 | 90 * 1000 / 60 = 1500 | 0 | 30 | ~124s for every 1000 messages |
 
 
 ## Using Athena to get the SQL query result
@@ -367,7 +367,7 @@ pip install pyathena
 python scripts/query_athena.py
 ```
 
-| Table size (rows) | count time range | select limit | between and great than | group by | case | join | max |
+| Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2327546 | 6s | 1.28s | 5.9s | 7.47s | 7.77s | 6.27s | 6.27s | 
 | 218781 | 6s | 1.23s | 5.74s | 6.4s | 5.92s | 6.14s | 5.2s |
@@ -396,7 +396,7 @@ pip install pyathena
 python scripts/query_athena.py
 ```
 
-| Table size (rows) | count time range | select limit | between and great than | group by | case | join | max |
+| Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2327546 | 1.36s | 1.66s | 2.39s | 2.28s | 3.98s | 3.75s | 2.36s |
 | 218781 | 1.21s | 1.16s | 2.25s | 1.78s | 2.29s | 2.38s | 2.07s |
