@@ -264,12 +264,15 @@ SELECT * FROM "blogdb"."iotlogs" limit 10;
 SELECT * FROM "blogdb"."iotlogs" WHERE Critical = 1
 ```
 
+# Configure agent with proxy
+https://docs.aws.amazon.com/kinesis-agent-windows/latest/userguide/sink-object-declarations.html#configuring-kinesis-agent-windows-sink-proxy
+
 # Limit
 Kinesis Agent right now do not support the gz,zip compression file. Here is tracking issue. https://github.com/awslabs/amazon-kinesis-agent/issues/37
 From the source code, these files have been ignored https://github.com/awslabs/amazon-kinesis-agent/blob/master/src/com/amazon/kinesis/streaming/agent/tailing/SourceFile.java#L124 
 
-- Using the rar as package format
-- Kinesis Agent setting
+- Using the rar as package format and Kinesis Agent setting as below. However the Kinesis Agent will use the base64 encoding the stream. So you need decode the file on S3 bucket before use it.
+
 ```json
 {
   "Sources": [
@@ -300,3 +303,4 @@ From the source code, these files have been ignored https://github.com/awslabs/a
   "SelfUpdate": 0 //minutes
 }
 ```
+
