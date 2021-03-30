@@ -92,10 +92,11 @@ MSCK REPAIR TABLE rtm_rtmstore_parquet;
 select count(*) from quicksightdb.rtm_rtmstore_parquet;
 
 /* Get the total rows between time range*/
+/*20,000*/
 select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270';
-
+/*200,000*/
 select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-28 15:02:20.270' AND TIMESTAMP '2021-03-28 15:35:20.270';
-
+/*2,000,000*/
 select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-28 01:02:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270';
 
 select vin, systolic, pressurelevel from rtm_rtmstore_parquet where (event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270') limit 10;
@@ -128,10 +129,10 @@ LOCATION
   's3://ruiliang-smarthome-iot-analytics-datastore/vin_metadata/'
 TBLPROPERTIES ("skip.header.line.count"="1")
 
-SELECT vd.vin, vd.trip_id, vd.systolic, l.vin_amount vin_amount,
+SELECT vd.vin, vd.trip_id, vd.systolic,
         CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
-        FROM quicksightdb.rtm_rtmstore_parquet vd, quicksightdb.vin_metadata l
-        WHERE vd.vin = l.vin AND (vd.diastolic > 100)
+        FROM quicksightdb.rtm_rtmstore_parquet vd
+        WHERE vd.diastolic > 100
         AND (vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
 
 SELECT vd.vin, vd.trip_id, vd.systolic, l.vin_amount vin_amount,
@@ -172,7 +173,7 @@ python scripts/query_athena.py
 | 20619 | 6s | 1.08s | 5.2s | 5.6s | 5.4s | 5.75s | 4.7s | 
 
 6. Performance Tunning
-- Using `SNAPPY` compression and conbime
+- Using `SNAPPY` compression and combine the small files
 ```sql
 CREATE table new_rtmstore_parquet
 WITH (format='PARQUET',
@@ -184,6 +185,8 @@ SELECT vin, trip_id, systolic, diastolic, pressurelevel,
        temp, event_time, bms_tbc_volt, __dt
 FROM rtm_rtmstore_parquet
 WHERE cast(__dt as timestamp) < DATE ('2021-03-29');
+
+MSCK REPAIR TABLE new_rtmstore_parquet;
 ```
 
 - Run the query
@@ -260,15 +263,16 @@ Using Main lambda function `IoTAnalyticsLoadTest` will currently trigger 90 the 
 ## Using Athena to get the SQL query result
 1. Create tables (The iot analytics default no compression for parquet format)
 ```sql
-CREATE EXTERNAL TABLE `rtm_rtmstore_parquet`(
+CREATE EXTERNAL TABLE `rtm_complex_store`(
   `vin` string, 
+  `event_time` timestamp, 
   `trip_id` string, 
   `systolic` int, 
   `diastolic` int, 
   `pressurelevel` string, 
   `temp` int, 
-  `event_time` timestamp, 
-  `bms_tbc_volt` array<string>)
+  `signals` array<struct<name:string,value:float>>, 
+  `listsignals` array<struct<name:string,value:array<float>>>)
 PARTITIONED BY ( 
   `__dt` string)
 ROW FORMAT SERDE 
@@ -278,126 +282,92 @@ STORED AS INPUTFORMAT
 OUTPUTFORMAT 
   'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
 LOCATION
-  's3://ruiliang-smarthome-iot-analytics-datastore/datastore/rtmstore_parquet/'
+  's3://ruiliang-smarthome-iot-analytics-datastore/datastore/rtm_complex_store/'
 TBLPROPERTIES (
   'classification'='parquet', 
   'compressionType'='none', 
   'typeOfData'='file')
 ```
 
-- Load Partition
+2. Load Partition
 ```sql
-MSCK REPAIR TABLE rtm_rtmstore_parquet;
+MSCK REPAIR TABLE rtm_complex_store;
+```
 
-- Run the query
+3. Using `SNAPPY` compression and combine the small files
+```sql
+CREATE table new_rtm_complex_store
+WITH (format='PARQUET',
+parquet_compression='SNAPPY',
+partitioned_by=array['__dt'],
+external_location = 's3://ruiliang-smarthome-iot-analytics-datastore/datastore/new_rtm_complex_store/')
+AS
+SELECT vin, event_time, trip_id, systolic, diastolic, pressurelevel,
+       temp, signals, listsignals, __dt
+FROM rtm_complex_store
+WHERE cast(__dt as timestamp) < DATE ('2021-03-31');
+```
+
+4. Run the query
+```sql
 /* Get the total rows of table */
-select count(*) from quicksightdb.rtm_rtmstore_parquet;
+select count(*) from quicksightdb.new_rtm_complex_store;
 
 /* Get the total rows between time range*/
-select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270';
+/*60,000*/
+select count(*) from quicksightdb.new_rtm_complex_store where event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:20:37.270';
+/*600,000*/
+select count(*) from quicksightdb.new_rtm_complex_store where event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270';
+/*610,000*/
+select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 03:01:01.270';
 
-select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-28 15:02:20.270' AND TIMESTAMP '2021-03-28 15:35:20.270';
-
-select count(*) from quicksightdb.rtm_rtmstore_parquet where event_time BETWEEN TIMESTAMP '2021-03-28 01:02:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270';
-
-select vin, systolic, pressurelevel from rtm_rtmstore_parquet where (event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270') limit 10;
+select vin, systolic, pressurelevel, event_time from quicksightdb.new_rtm_complex_store where event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270' limit 10;
 
 SELECT vd.vin, vd.trip_id, vd.temp, vd.pressurelevel
-        FROM quicksightdb.rtm_rtmstore_parquet vd
+        FROM quicksightdb.new_rtm_complex_store vd
         where(vd.pressurelevel='NORMAL')
-        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
         AND vd.temp > 100
         ORDER BY vd.event_time
         Limit 100
 
 SELECT vd.vin, COUNT(DISTINCT vd.trip_id) AS total
-        FROM quicksightdb.rtm_rtmstore_parquet vd
+        FROM quicksightdb.new_rtm_complex_store vd
         WHERE (vd.pressurelevel = 'NORMAL')
-        AND (vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
-        GROUP BY vd.vin
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
+        GROUP BY vd.vin  
 
-CREATE EXTERNAL TABLE `vin_metadata`(
-  `vin` string, 
-  `vin_amount` string
-  )
-ROW FORMAT SERDE 
-  'org.apache.hadoop.hive.serde2.OpenCSVSerde' 
-WITH SERDEPROPERTIES ( 
-  'escapeChar'='\\', 
-  'quoteChar'='\"', 
-  'separatorChar'=',')
-LOCATION
-  's3://ruiliang-smarthome-iot-analytics-datastore/vin_metadata/'
-TBLPROPERTIES ("skip.header.line.count"="1")
+SELECT vd.vin, vd.trip_id, vd.systolic,
+        CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
+        FROM quicksightdb.new_rtm_complex_store vd
+        WHERE (vd.diastolic > 40)
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
 
 SELECT vd.vin, vd.trip_id, vd.systolic, l.vin_amount vin_amount,
         CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
-        FROM quicksightdb.rtm_rtmstore_parquet vd, quicksightdb.vin_metadata l
-        WHERE vd.vin = l.vin AND (vd.diastolic > 100)
-        AND (vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
-
-SELECT vd.vin, vd.trip_id, vd.systolic, l.vin_amount vin_amount,
-        CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
-        FROM quicksightdb.rtm_rtmstore_parquet vd, quicksightdb.vin_metadata l
-        WHERE vd.vin = l.vin AND (vd.diastolic > 100)
-        AND (vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
+        FROM quicksightdb.new_rtm_complex_store vd, quicksightdb.vin_metadata l
+        WHERE vd.vin = l.vin AND (vd.diastolic > 40)
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
+        limit 100
 
 SELECT vd.vin, vd.trip_id, vd.systolic, l.vin_amount vin_amount,
         CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
         FROM quicksightdb.vin_metadata l
-        LEFT JOIN quicksightdb.rtm_rtmstore_parquet vd ON vd.vin = l.vin
-        WHERE (vd.diastolic > 100)
-        AND (vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
+        LEFT JOIN quicksightdb.new_rtm_complex_store vd ON vd.vin = l.vin
+        WHERE (vd.diastolic > 40)
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
+        limit 100
 
 SELECT max(vd.systolic) AS max_systolic, vd.vin, l.vin_amount vin_amount
-        FROM quicksightdb.rtm_rtmstore_parquet vd, quicksightdb.vin_metadata l
-        WHERE vd.vin = l.vin AND (vd.diastolic > 100)
-        AND (vd.event_time BETWEEN TIMESTAMP '2021-03-28 22:59:20.270' AND TIMESTAMP '2021-03-28 23:59:20.270')
+        FROM quicksightdb.new_rtm_complex_store vd, quicksightdb.vin_metadata l
+        WHERE vd.vin = l.vin AND (vd.diastolic > 40)
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
         Group by vd.vin, vin_amount
 ```
 
-- Get the S3 object number and bucke size
-```bash
-aws s3 ls s3://ruiliang-smarthome-iot-analytics-datastore/datastore/rtmstore_parquet/ --recursive --human-readable --summarize --region us-east-1 --profile us-east-1
-```
-
-- Query the data
-```bash
-pip install pyathena
-python scripts/query_athena.py
-```
 
 | Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2327546 | 6s | 1.28s | 5.9s | 7.47s | 7.77s | 6.27s | 6.27s | 
-| 218781 | 6s | 1.23s | 5.74s | 6.4s | 5.92s | 6.14s | 5.2s |
-| 20619 | 6s | 1.08s | 5.2s | 5.6s | 5.4s | 5.75s | 4.7s | 
-
-## Performance Tunning
-- Using `SNAPPY` compression and conbime
-```sql
-CREATE table new_rtmstore_parquet
-WITH (format='PARQUET',
-parquet_compression='SNAPPY',
-partitioned_by=array['__dt'],
-external_location = 's3://ruiliang-smarthome-iot-analytics-datastore/datastore/new_rtmstore_parquet/')
-AS
-SELECT vin, trip_id, systolic, diastolic, pressurelevel,
-       temp, event_time, bms_tbc_volt, __dt
-FROM rtm_rtmstore_parquet
-WHERE cast(__dt as timestamp) < DATE ('2021-03-29');
-```
-
-- Run the query
-Modify the table to `new_rtmstore_parquet`
-
-```bash
-pip install pyathena
-python scripts/query_athena.py
-```
-
-| Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 2327546 | 1.36s | 1.66s | 2.39s | 2.28s | 3.98s | 3.75s | 2.36s |
-| 218781 | 1.21s | 1.16s | 2.25s | 1.78s | 2.29s | 2.38s | 2.07s |
-| 20619 | 1.17s | 1.12s | 2.02s | 1.74s | 2.41s | 2.3s | 1.71s |
+| 6114905 | 1.816s | 1.58s | 2.2s | 2.464s | 2.63s | 2.75s | 2.92s |
+| 643995 | 1.224s | 1.522s | 1.69s | 1.834s | 2.12s | 2.09s | 2.74s |
+| 64121 | 1.08s | 1.246s | 1.608s | 1.758s | 2.066s | 1.96s | 2.278s |

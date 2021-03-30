@@ -126,6 +126,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Use CTAS statements with Amazon Athena to reduce cost and improve performance](https://aws.amazon.com/blogs/big-data/using-ctas-statements-with-amazon-athena-to-reduce-cost-and-improve-performance/)
 
+[Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
