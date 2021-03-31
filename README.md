@@ -71,6 +71,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
 
+[Change EC2 Time-Zone](EC2/Change-TimeZone.md)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
