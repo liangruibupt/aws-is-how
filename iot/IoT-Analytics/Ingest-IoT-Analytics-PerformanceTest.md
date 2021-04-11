@@ -49,9 +49,9 @@ python scripts/rtm_sim.py
 
 Using Main lambda function `IoTAnalyticsLoadTest` will currently trigger 30 the worker lambda function `IoTAnalyticsIngest` instances every 1 minute. For each invocation, the worker lambda function `IoTAnalyticsIngest` instance will ingest 3*1000 messages via `batch_put_message`
 
-| Message Size | Data Interval (seconds) | Current write TPS | Error Rate % | Test Duration (mins) | IoTAnalyticsIngest execution duration |
+| Message Size | Data Interval (seconds) | Load Generator current write TPS | Error Rate % | Test Duration (mins) | IoTAnalyticsIngest TPS |
 | --- | --- | --- | --- | --- | --- |
-| 1KB | 60 | 30 * 3000 / 60 = 1500 | 0 | 30 | ~120s for every 3000 messages |
+| 1KB | 60 | 30 * 3000 / 60 = 1500 | 0 | 30 | 1535 |
 
 ## Using Athena to get the SQL query result
 1. Create tables (The iot analytics default no compression for parquet format)
@@ -247,17 +247,25 @@ modify for i in range(30): to for i in range(90):
 - You can monitor the ingested data from `pipeline Monitoring` section for each activity
 ![ingest-load-write](image/ingest-load-write-new.png)
 
+    We can continue increase the current ingest to 150 lambda instances with each 1000 message per second
+    ![ingest-load-write](image/ingest-load-write-150.png)
+
+
 - You can monitor the lambda failure SQS destination `rtm-sim-failure`, make sure there is no failure
 - You can monitor the lambda `IoTAnalyticsIngest` current execution
 ![ingest-load-lambda](image/ingest-load-lambda-new.png)
+
+    We can continue increase the current ingest to 150 lambda instances with each 1000 message per second
+    ![ingest-load-lambda](image/ingest-load-lambda-150.png)
 
 3. The ingest performance：
 
 Using Main lambda function `IoTAnalyticsLoadTest` will currently trigger 90 the worker lambda function `IoTAnalyticsIngest` instances every 1 minute. For each invocation, the worker lambda function `IoTAnalyticsIngest` instance will ingest 1000 messages via `batch_put_message`
 
-| Message Size | Data Interval (seconds) | Current write TPS | Error Rate % | Test Duration (mins) | IoTAnalyticsIngest execution duration |
+| Message Size | Data Interval (seconds) | Load Generator current write TPS | Error Rate % | Test Duration (mins) | IoTAnalyticsIngest TPS |
 | --- | --- | --- | --- | --- | --- |
-| 1KB | 60 | 90 * 1000 / 60 = 1500 | 0 | 30 | ~124s for every 1000 messages |
+| 9KB | 60 | 90 * 1000 / 60 = 1500 | 0 | 60 | 1535 |
+| 9KB | 60 | 150 * 1000 / 60 = 2500 | 0 | 120 | 2548 |
 
 
 ## Using Athena to get the SQL query result
@@ -306,7 +314,20 @@ SELECT vin, event_time, trip_id, systolic, diastolic, pressurelevel,
        temp, signals, listsignals, __dt
 FROM rtm_complex_store
 WHERE cast(__dt as timestamp) < DATE ('2021-03-31');
+
+/* Use INSERT INTO to Add Data */
+MSCK REPAIR TABLE rtm_complex_store;
+
+INSERT INTO new_rtm_complex_store
+SELECT vin, event_time, trip_id, systolic, diastolic, pressurelevel,
+       temp, signals, listsignals, __dt
+FROM rtm_complex_store
+WHERE cast(__dt as timestamp) > DATE ('2021-03-30');
+
+MSCK REPAIR TABLE new_rtm_complex_store;
 ```
+
+
 
 4. Run the query
 ```sql
@@ -363,11 +384,24 @@ SELECT max(vd.systolic) AS max_systolic, vd.vin, l.vin_amount vin_amount
         WHERE vd.vin = l.vin AND (vd.diastolic > 40)
         AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
         Group by vd.vin, vin_amount
+
+SELECT date_trunc('minute', vd.event_time) AS min_timestamp, AVG(vd.diastolic) AS avg_value_1min, vd.vin
+        FROM quicksightdb.new_rtm_complex_store vd
+        WHERE (vd.pressurelevel = 'NORMAL')
+        AND(vd.event_time BETWEEN TIMESTAMP '2021-03-30 00:00:01.270' AND TIMESTAMP '2021-03-30 01:27:01.270')
+        Group by 1, vd.vin limit 20
 ```
 
 
 | Table size (rows) | SQL count time window | SQL select limit 20 | SQL between and great than | SQL group by | SQL case | SQL join | SQL max |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 6114905 | 1.816s | 1.58s | 2.2s | 2.464s | 2.63s | 2.75s | 2.92s |
-| 643995 | 1.224s | 1.522s | 1.69s | 1.834s | 2.12s | 2.09s | 2.74s |
-| 64121 | 1.08s | 1.246s | 1.608s | 1.758s | 2.066s | 1.96s | 2.278s |
+| 105,292,887 | 1.74s | 1.41s | 2.52s | 2.87s | 1.576s | 2.192s | 2.98s |
+| 6,114,905 | 1.816s | 1.58s | 2.2s | 2.464s | 2.63s | 2.75s | 2.92s |
+| 643,995 | 1.224s | 1.522s | 1.69s | 1.834s | 2.12s | 2.09s | 2.74s |
+| 64,121 | 1.08s | 1.246s | 1.608s | 1.758s | 2.066s | 1.96s | 2.278s |
+
+
+# Reference
+After you run the `MSCK REPAIR TABLE`, you get the message `Partitions not in metastore: rtm_complex_store:__dt=2021-03-31 00:00:00`
+
+[MSCK REPAIR TABLE detects partitions in Athena but doesn't add them to metastore](https://aws.amazon.com/premiumsupport/knowledge-center/athena-aws-glue-msck-repair-table/)

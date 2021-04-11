@@ -152,5 +152,24 @@ rclone sync -i /home/local/directory remote_sftp:directory
 rclone copy --max-age 1h sftp:server s3:bucket
 ```
 
+# Make the rclone automatically execution
+```bash
+# create the rclone-cron
+nano rclone-cron.sh
+
+# Edit the rclone-cron.sh with below code
+#!/bin/bash
+if pidof -o %PPID -x “rclone-cron.sh”; then
+exit 1
+fi
+rclone sync …
+exit
+
+# Put the script in crontab running every 15 mins
+chmod a+x rclone-cron.sh
+crontab -e
+0/15 * * * * rclone-cron.sh >/dev/null 2>&1
+```
+
 # Reference
 [RClone S3](https://rclone.org/s3/)

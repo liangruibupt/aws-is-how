@@ -1,0 +1,907 @@
+Running query [1] : [QUERY_COUNT]
+Query progress so far: 1.1764705882352942%
+Data scanned so far is: 683.854646 MB
+Data metered so far is: 683.854646 MB
+Data: 
+Query progress so far: 72.94117647058823%
+Data scanned so far is: 6757.573157 MB
+Data metered so far is: 6757.573157 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 1.1764705882352942%
+Data scanned so far is: 683.854646 MB
+Data metered so far is: 683.854646 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 1.1764705882352942%
+Data scanned so far is: 683.854646 MB
+Data metered so far is: 683.854646 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 1.1764705882352942%
+Data scanned so far is: 683.854646 MB
+Data metered so far is: 683.854646 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 1.1764705882352942%
+Data scanned so far is: 683.854646 MB
+Data metered so far is: 683.854646 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+
+
+### QUERY_COUNT
+|Seq|spent time          |
+|1  |11.292615           |
+|2  |9.497532            |
+|3  |8.923790            |
+|4  |8.672517            |
+|5  |8.800228            |
+Average data scan for QUERY_COUNT is: 7534.646387 MB
+
+Average time for QUERY_COUNT is: 9.437336 s
+
+Running query [2] : [SELECT_LIMIT_20]
+Query progress so far: 80.0%
+Data scanned so far is: 21.929940 MB
+Data metered so far is: 21.929940 MB
+Data: 
+{['vin=vin-63720807298869', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-27327752281474', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-31712662237875', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-97886290443678', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-27327752281474', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-31712662237875', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-31712662237875', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-63720807298869', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-97886290443678', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-12965919785947', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-31712662237875', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-97886290443678', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-12965919785947', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-27327752281474', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-12965919785947', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-63720807298869', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-27327752281474', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-12965919785947', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-27327752281474', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-03 16:34:02.000000000']}
+{['vin=vin-31712662237875', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-03 16:34:02.000000000']}
+Query progress so far: 41.1764705882353%
+Data scanned so far is: 7.307391 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-15135187069322', ('temp=NULL',), 'pressureLevel=LOW', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-82344542041420', ('temp=NULL',), 'pressureLevel=NORMAL', 'time=2021-04-04 07:02:47.000000000']}
+{['vin=vin-41511623307426', ('temp=NULL',), 'pressureLevel=HIGH', 'time=2021-04-04 07:02:47.000000000']}
+Query progress so far: 25.88235294117647%
+Data scanned so far is: 1.936489 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-36081466607890', 'temp=89', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-66784097390395', 'temp=896', 'pressureLevel=LOW', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-66784097390395', 'temp=896', 'pressureLevel=LOW', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-36081466607890', 'temp=89', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-36081466607890', 'temp=89', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-36081466607890', 'temp=89', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-66784097390395', 'temp=896', 'pressureLevel=LOW', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-66784097390395', 'temp=896', 'pressureLevel=LOW', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-46947792893981', 'temp=56', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-46947792893981', 'temp=56', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-46947792893981', 'temp=56', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-13805932795138', 'temp=325', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-37626624533834', 'temp=749', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-39984277802596', 'temp=820', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-68409732477072', 'temp=898', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-37626624533834', 'temp=749', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-65554954529039', 'temp=34', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-37626624533834', 'temp=749', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-68409732477072', 'temp=898', 'pressureLevel=HIGH', 'time=2021-04-04 03:36:23.000000000']}
+{['vin=vin-13805932795138', 'temp=325', 'pressureLevel=NORMAL', 'time=2021-04-04 03:36:23.000000000']}
+Query progress so far: 48.23529411764706%
+Data scanned so far is: 10.260779 MB
+Data metered so far is: 10.260779 MB
+Data: 
+{['vin=vin-39984277802596', 'temp=820', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-39984277802596', 'temp=820', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-39984277802596', 'temp=820', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-39984277802596', 'temp=820', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-65554954529039', 'temp=34', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-47700043308425', 'temp=608', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-47700043308425', 'temp=608', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-47700043308425', 'temp=608', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-65554954529039', 'temp=34', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-47700043308425', 'temp=608', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-65554954529039', 'temp=34', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-65554954529039', 'temp=34', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-67057381921047', 'temp=399', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-67057381921047', 'temp=399', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-67057381921047', 'temp=399', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-17124735655940', 'temp=842', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-67057381921047', 'temp=399', 'pressureLevel=HIGH', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-17124735655940', 'temp=842', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-17124735655940', 'temp=842', 'pressureLevel=LOW', 'time=2021-04-04 08:08:35.000000000']}
+{['vin=vin-51945297059292', 'temp=710', 'pressureLevel=NORMAL', 'time=2021-04-04 08:08:35.000000000']}
+Query progress so far: 30.58823529411765%
+Data scanned so far is: 3.482613 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-66293318871147', 'temp=125', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-90803337601975', 'temp=336', 'pressureLevel=LOW', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-56455630520546', 'temp=902', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-38364980581545', 'temp=756', 'pressureLevel=LOW', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-38364980581545', 'temp=756', 'pressureLevel=LOW', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-38364980581545', 'temp=756', 'pressureLevel=LOW', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-66293318871147', 'temp=125', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-56455630520546', 'temp=902', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-44070259457488', 'temp=242', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-56455630520546', 'temp=902', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-90537033049620', 'temp=888', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-66293318871147', 'temp=125', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-44070259457488', 'temp=242', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-29819755447298', 'temp=65', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-29819755447298', 'temp=65', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-45628510949222', 'temp=130', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-44070259457488', 'temp=242', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-83971176485472', 'temp=725', 'pressureLevel=LOW', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-90537033049620', 'temp=888', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+{['vin=vin-90537033049620', 'temp=888', 'pressureLevel=HIGH', 'time=2021-04-03 14:34:41.000000000']}
+
+
+### SELECT_LIMIT_20
+|Seq|spent time          |
+|1  |0.580128            |
+|2  |0.312948            |
+|3  |0.185467            |
+|4  |0.188580            |
+|5  |0.189676            |
+Average data scan for SELECT_LIMIT_20 is: 8.983442 MB
+
+Average time for SELECT_LIMIT_20 is: 0.291360 s
+
+Running query [3] : [SELECT_BETWEEN_AND]
+Query progress so far: 25.35211267605634%
+Data scanned so far is: 0.000000 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-39984277802596', 'trip_id=da53f83b-0aa3-435c-840f-cdc887432ef7', 'temp=820', 'pressureLevel=HIGH']}
+{['vin=vin-47700043308425', 'trip_id=deb2dbc5-2717-4bea-a550-de4c6bea9273', 'temp=608', 'pressureLevel=LOW']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'temp=710', 'pressureLevel=NORMAL']}
+{['vin=vin-82363123021649', 'trip_id=1314bf70-465a-4ad4-95b9-a81032a17a76', 'temp=582', 'pressureLevel=LOW']}
+{['vin=vin-20700944309986', 'trip_id=c6a2f7f6-c6fc-4d13-ad7e-54e66bb8797a', 'temp=59', 'pressureLevel=NORMAL']}
+{['vin=vin-32100367562225', 'trip_id=52393cc6-e84d-4e8d-965a-0dac29ed2778', 'temp=861', 'pressureLevel=LOW']}
+{['vin=vin-68923340856875', 'trip_id=964c13af-7cc5-4fdc-986b-3cffdf083f6b', 'temp=835', 'pressureLevel=LOW']}
+{['vin=vin-38181592784106', 'trip_id=f16053ca-ed3f-418e-8aee-1dd13feea3e6', 'temp=217', 'pressureLevel=HIGH']}
+{['vin=vin-24558190944377', 'trip_id=3b1e7738-8819-4419-844a-e5942a39e475', 'temp=405', 'pressureLevel=LOW']}
+{['vin=vin-87536862345743', 'trip_id=73d78c97-25ea-48e9-97d9-8dab311fca19', 'temp=327', 'pressureLevel=HIGH']}
+{['vin=vin-25181254947632', 'trip_id=fc016183-2d9e-42cf-873b-7a10b199ba07', 'temp=843', 'pressureLevel=NORMAL']}
+{['vin=vin-95268780592169', 'trip_id=e4b34819-c83b-40d4-a084-993d5c3fee63', 'temp=601', 'pressureLevel=NORMAL']}
+{['vin=vin-26920828338467', 'trip_id=b90f076b-ba11-4d3b-a9f1-201324eb519b', 'temp=449', 'pressureLevel=HIGH']}
+{['vin=vin-91755279836846', 'trip_id=59b0d1e5-6eb5-43ea-bfd0-b87eb53db939', 'temp=29', 'pressureLevel=LOW']}
+{['vin=vin-45341622733266', 'trip_id=4d15e51f-f79b-412b-8f22-fa64830df502', 'temp=153', 'pressureLevel=HIGH']}
+{['vin=vin-41315550983025', 'trip_id=e5921172-276c-4122-9df2-d559fc119a7c', 'temp=534', 'pressureLevel=NORMAL']}
+{['vin=vin-74897780736648', 'trip_id=f9163983-7bc4-4fc6-85e9-6d4c900bd764', 'temp=366', 'pressureLevel=LOW']}
+{['vin=vin-94752761196796', 'trip_id=6d59af6a-5167-4407-9e9c-11ec0aef6ff4', 'temp=550', 'pressureLevel=NORMAL']}
+{['vin=vin-67675820510889', 'trip_id=53c22a4a-1a8b-47a9-83e4-5c13e1d2747f', 'temp=441', 'pressureLevel=NORMAL']}
+{['vin=vin-93503410301946', 'trip_id=1efe669e-06d2-4564-b162-f030a6c6013b', 'temp=338', 'pressureLevel=HIGH']}
+Query progress so far: 25.35211267605634%
+Data scanned so far is: 0.000000 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'temp=710', 'pressureLevel=NORMAL']}
+{['vin=vin-82363123021649', 'trip_id=1314bf70-465a-4ad4-95b9-a81032a17a76', 'temp=582', 'pressureLevel=LOW']}
+{['vin=vin-87313402292764', 'trip_id=461e2b2d-fe42-481d-92f0-232d154a555a', 'temp=487', 'pressureLevel=LOW']}
+{['vin=vin-28150291842084', 'trip_id=e6be616e-6e3f-4e09-ae49-a75837ce4de2', 'temp=275', 'pressureLevel=NORMAL']}
+{['vin=vin-40188860397141', 'trip_id=3867c405-291b-4a10-ba50-13d12bbb528d', 'temp=479', 'pressureLevel=HIGH']}
+{['vin=vin-68923340856875', 'trip_id=964c13af-7cc5-4fdc-986b-3cffdf083f6b', 'temp=835', 'pressureLevel=LOW']}
+{['vin=vin-51917831423053', 'trip_id=29be5a16-c58b-40df-9c0f-1fd851786f21', 'temp=210', 'pressureLevel=HIGH']}
+{['vin=vin-26920828338467', 'trip_id=b90f076b-ba11-4d3b-a9f1-201324eb519b', 'temp=449', 'pressureLevel=HIGH']}
+{['vin=vin-36114368771221', 'trip_id=5e95c8ef-124a-4613-8dcf-6f9cd3c3ceaa', 'temp=911', 'pressureLevel=HIGH']}
+{['vin=vin-45341622733266', 'trip_id=4d15e51f-f79b-412b-8f22-fa64830df502', 'temp=153', 'pressureLevel=HIGH']}
+{['vin=vin-99844075744073', 'trip_id=395bdc8b-20ea-4970-b4ed-e822acc36c48', 'temp=668', 'pressureLevel=HIGH']}
+{['vin=vin-23117792385331', 'trip_id=a8f9e531-8254-458e-bec2-15991776af94', 'temp=841', 'pressureLevel=LOW']}
+{['vin=vin-41315550983025', 'trip_id=e5921172-276c-4122-9df2-d559fc119a7c', 'temp=534', 'pressureLevel=NORMAL']}
+{['vin=vin-74897780736648', 'trip_id=f9163983-7bc4-4fc6-85e9-6d4c900bd764', 'temp=366', 'pressureLevel=LOW']}
+{['vin=vin-67675820510889', 'trip_id=53c22a4a-1a8b-47a9-83e4-5c13e1d2747f', 'temp=441', 'pressureLevel=NORMAL']}
+{['vin=vin-21325075203299', 'trip_id=1fe67749-0931-406a-9ffe-432c6e374824', 'temp=513', 'pressureLevel=HIGH']}
+{['vin=vin-89666245189533', 'trip_id=dd6b3cfe-64e3-4680-9348-f5e05eef11c6', 'temp=960', 'pressureLevel=LOW']}
+{['vin=vin-81215797227447', 'trip_id=93418bcb-3dcf-4e12-b0d0-3d792d4cbc38', 'temp=570', 'pressureLevel=NORMAL']}
+{['vin=vin-94650252507246', 'trip_id=1863ce8d-715e-4f32-9218-96098a61bbe8', 'temp=202', 'pressureLevel=LOW']}
+{['vin=vin-27026141025527', 'trip_id=3117323f-b866-43db-b176-2becdda6e60e', 'temp=316', 'pressureLevel=NORMAL']}
+Query progress so far: 25.35211267605634%
+Data scanned so far is: 0.000000 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-17124735655940', 'trip_id=74e8ad57-d20b-474b-ad58-beb46bb5c983', 'temp=842', 'pressureLevel=LOW']}
+{['vin=vin-46947792893981', 'trip_id=b1d88195-bb85-443e-8dc3-78b95313bd08', 'temp=56', 'pressureLevel=NORMAL']}
+{['vin=vin-82363123021649', 'trip_id=1314bf70-465a-4ad4-95b9-a81032a17a76', 'temp=582', 'pressureLevel=LOW']}
+{['vin=vin-70821512684608', 'trip_id=098804d9-91c5-4025-bb85-bf25794eee2e', 'temp=815', 'pressureLevel=NORMAL']}
+{['vin=vin-13805932795138', 'trip_id=ec71d74e-9c07-42e5-ae40-ce4bc5e35444', 'temp=325', 'pressureLevel=NORMAL']}
+{['vin=vin-79962644154363', 'trip_id=a338d11b-7b7c-4fcd-876b-49bae88fb685', 'temp=243', 'pressureLevel=HIGH']}
+{['vin=vin-56299898257430', 'trip_id=f844089f-4651-4937-9622-e8ad0720a3af', 'temp=958', 'pressureLevel=LOW']}
+{['vin=vin-26023841663974', 'trip_id=a5075648-e715-4aaf-8912-74a41c4e412c', 'temp=635', 'pressureLevel=HIGH']}
+{['vin=vin-27817378537667', 'trip_id=a581c990-d7a3-4016-a8c7-fb88b247617e', 'temp=624', 'pressureLevel=HIGH']}
+{['vin=vin-14983966621871', 'trip_id=ccaefd89-e62f-418c-9aa5-e0a1efb0c562', 'temp=983', 'pressureLevel=LOW']}
+{['vin=vin-41834375651575', 'trip_id=3bf3f5c1-bd61-46ed-ba1f-ba5c0103da51', 'temp=682', 'pressureLevel=LOW']}
+{['vin=vin-91036600426528', 'trip_id=6df59ed2-f61b-450d-8ddc-2069049a83c7', 'temp=728', 'pressureLevel=NORMAL']}
+{['vin=vin-28150291842084', 'trip_id=e6be616e-6e3f-4e09-ae49-a75837ce4de2', 'temp=275', 'pressureLevel=NORMAL']}
+{['vin=vin-96514426584736', 'trip_id=21e5bfc3-f723-4710-9e47-4c5c7687ec95', 'temp=182', 'pressureLevel=LOW']}
+{['vin=vin-66784097390395', 'trip_id=2d448016-b51b-48e6-9b09-78f379cea001', 'temp=896', 'pressureLevel=LOW']}
+{['vin=vin-40188860397141', 'trip_id=3867c405-291b-4a10-ba50-13d12bbb528d', 'temp=479', 'pressureLevel=HIGH']}
+{['vin=vin-75051095737046', 'trip_id=3ef1dee4-8362-4a0f-8655-d5d1372dbe86', 'temp=60', 'pressureLevel=NORMAL']}
+{['vin=vin-74896396339337', 'trip_id=24f869ca-2c7d-47c2-85be-1eec8d383bc8', 'temp=416', 'pressureLevel=NORMAL']}
+{['vin=vin-20700944309986', 'trip_id=c6a2f7f6-c6fc-4d13-ad7e-54e66bb8797a', 'temp=59', 'pressureLevel=NORMAL']}
+{['vin=vin-76186148475934', 'trip_id=78afee3f-1eb6-48ab-b4cd-fb9c9c00dd40', 'temp=691', 'pressureLevel=NORMAL']}
+Query progress so far: 25.35211267605634%
+Data scanned so far is: 0.000000 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-97886290443678', 'trip_id=de4cc072-a558-48ff-91ce-eaf2f6ad1841', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-31712662237875', 'trip_id=84121a8d-b2a7-435f-9849-d99526c21aef', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-12965919785947', 'trip_id=46f524b0-7f38-4aa8-af2b-20dcb5e64d6f', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-74582985658527', 'trip_id=c05826b5-2de9-453f-9f68-040a904b9ce6', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-75401127583362', 'trip_id=77a1e69e-2aca-4545-b966-3ca74e97c416', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-54666904742539', 'trip_id=caf3319f-b54a-4b6b-98bf-c520e4d7c781', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-26354026347408', 'trip_id=936aba25-76d5-415d-a155-c2c723c03d69', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-39198853111161', 'trip_id=bf9d836f-1ea2-4483-9afd-973babf73b15', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-57207080873989', 'trip_id=dd3abe72-5c40-4c0a-ad77-0789c74837b9', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-38425034359750', 'trip_id=42c6f061-fd35-4f69-8154-872932c428be', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-81575615658207', 'trip_id=95b46f88-7953-4f5c-b4a5-e94c936a88b0', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-57549605693523', 'trip_id=913652e3-fefa-4e8b-8d2c-7d907a2e4f75', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-61086138762674', 'trip_id=d2bc81ba-dd97-4845-8f76-335bc5d977d7', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-68624500625628', 'trip_id=46ec8b6b-3e5a-4409-85d6-0d35b1cf8089', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-82150811643809', 'trip_id=71aa27ac-a50f-4ca9-9b0a-d212b0fd9a8d', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-31894452836305', 'trip_id=95d316dd-715e-4a79-89e2-894e7ab106c1', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-21367135302083', 'trip_id=0c9aa2b0-787d-49cb-ac6f-91785c46f273', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-52065195301099', 'trip_id=c4d019a6-34a9-43ed-b6ca-08211d711e88', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-77289350616007', 'trip_id=3bc6c681-0cb1-4fac-88e6-cf218af2443a', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-69033102593108', 'trip_id=9ddeb472-e54e-48a4-80ee-9799ce9ef620', ('temp=NULL',), 'pressureLevel=LOW']}
+Query progress so far: 23.943661971830984%
+Data scanned so far is: 0.000000 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-97886290443678', 'trip_id=de4cc072-a558-48ff-91ce-eaf2f6ad1841', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-31712662237875', 'trip_id=84121a8d-b2a7-435f-9849-d99526c21aef', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-12965919785947', 'trip_id=46f524b0-7f38-4aa8-af2b-20dcb5e64d6f', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-74582985658527', 'trip_id=c05826b5-2de9-453f-9f68-040a904b9ce6', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-75401127583362', 'trip_id=77a1e69e-2aca-4545-b966-3ca74e97c416', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-54666904742539', 'trip_id=caf3319f-b54a-4b6b-98bf-c520e4d7c781', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-26354026347408', 'trip_id=936aba25-76d5-415d-a155-c2c723c03d69', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-39198853111161', 'trip_id=bf9d836f-1ea2-4483-9afd-973babf73b15', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-57207080873989', 'trip_id=dd3abe72-5c40-4c0a-ad77-0789c74837b9', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-38425034359750', 'trip_id=42c6f061-fd35-4f69-8154-872932c428be', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-81575615658207', 'trip_id=95b46f88-7953-4f5c-b4a5-e94c936a88b0', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-57549605693523', 'trip_id=913652e3-fefa-4e8b-8d2c-7d907a2e4f75', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-61086138762674', 'trip_id=d2bc81ba-dd97-4845-8f76-335bc5d977d7', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-68624500625628', 'trip_id=46ec8b6b-3e5a-4409-85d6-0d35b1cf8089', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-82150811643809', 'trip_id=71aa27ac-a50f-4ca9-9b0a-d212b0fd9a8d', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-31894452836305', 'trip_id=95d316dd-715e-4a79-89e2-894e7ab106c1', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-21367135302083', 'trip_id=0c9aa2b0-787d-49cb-ac6f-91785c46f273', ('temp=NULL',), 'pressureLevel=HIGH']}
+{['vin=vin-52065195301099', 'trip_id=c4d019a6-34a9-43ed-b6ca-08211d711e88', ('temp=NULL',), 'pressureLevel=NORMAL']}
+{['vin=vin-77289350616007', 'trip_id=3bc6c681-0cb1-4fac-88e6-cf218af2443a', ('temp=NULL',), 'pressureLevel=LOW']}
+{['vin=vin-69033102593108', 'trip_id=9ddeb472-e54e-48a4-80ee-9799ce9ef620', ('temp=NULL',), 'pressureLevel=LOW']}
+
+
+### SELECT_BETWEEN_AND
+|Seq|spent time          |
+|1  |0.658273            |
+|2  |0.286438            |
+|3  |0.279224            |
+|4  |0.249515            |
+|5  |0.257261            |
+Average data scan for SELECT_BETWEEN_AND is: 0.000000 MB
+
+Average time for SELECT_BETWEEN_AND is: 0.346142 s
+
+Running query [4] : [SELECT_GROUP_BY]
+Query progress so far: 0.2932551319648094%
+Data scanned so far is: 682.349134 MB
+Data metered so far is: 682.349134 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 2540.365278 MB
+Data metered so far is: 2540.365278 MB
+Data: 
+{['vin=vin-90146543381181', 'total=1']}
+{['vin=vin-26377943210028', 'total=1']}
+{['vin=vin-46793253402366', 'total=1']}
+{['vin=vin-50655584975727', 'total=1']}
+{['vin=vin-61639688189817', 'total=1']}
+{['vin=vin-88397358625741', 'total=1']}
+{['vin=vin-26309111064943', 'total=1']}
+{['vin=vin-53072131057444', 'total=1']}
+{['vin=vin-81708993854343', 'total=1']}
+{['vin=vin-63590192909960', 'total=1']}
+{['vin=vin-52641742554773', 'total=1']}
+{['vin=vin-33294346984399', 'total=1']}
+{['vin=vin-21923895045086', 'total=1']}
+{['vin=vin-86810103567094', 'total=1']}
+{['vin=vin-79707885492756', 'total=1']}
+{['vin=vin-17157580038808', 'total=1']}
+{['vin=vin-60034329309749', 'total=1']}
+{['vin=vin-43143032257934', 'total=1']}
+{['vin=vin-39766526043555', 'total=1']}
+{['vin=vin-39477325774017', 'total=1']}
+Query progress so far: 0.2932551319648094%
+Data scanned so far is: 682.349134 MB
+Data metered so far is: 682.349134 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 2540.365278 MB
+Data metered so far is: 2540.365278 MB
+Data: 
+{['vin=vin-81726717077447', 'total=1']}
+{['vin=vin-46583453123735', 'total=1']}
+{['vin=vin-42367441250404', 'total=1']}
+{['vin=vin-21511935642048', 'total=1']}
+{['vin=vin-87939495859526', 'total=1']}
+{['vin=vin-50279971789305', 'total=1']}
+{['vin=vin-25816473550697', 'total=1']}
+{['vin=vin-82628121506476', 'total=1']}
+{['vin=vin-37386533193544', 'total=1']}
+{['vin=vin-93160901173924', 'total=1']}
+{['vin=vin-74437599105265', 'total=1']}
+{['vin=vin-24245884335268', 'total=1']}
+{['vin=vin-83661302054058', 'total=1']}
+{['vin=vin-27623438270769', 'total=1']}
+{['vin=vin-91309904159050', 'total=1']}
+{['vin=vin-65666028040623', 'total=1']}
+{['vin=vin-41590832363033', 'total=1']}
+{['vin=vin-32381512575049', 'total=1']}
+{['vin=vin-96482714460267', 'total=1']}
+{['vin=vin-43068028887813', 'total=1']}
+Query progress so far: 0.2932551319648094%
+Data scanned so far is: 682.349134 MB
+Data metered so far is: 682.349134 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 2540.365278 MB
+Data metered so far is: 2540.365278 MB
+Data: 
+{['vin=vin-97883716607217', 'total=1']}
+{['vin=vin-54863524714210', 'total=1']}
+{['vin=vin-65610729622206', 'total=1']}
+{['vin=vin-55103378480526', 'total=1']}
+{['vin=vin-17866518200183', 'total=1']}
+{['vin=vin-36220216046713', 'total=1']}
+{['vin=vin-70074777314000', 'total=1']}
+{['vin=vin-24222713481014', 'total=1']}
+{['vin=vin-55395608383707', 'total=1']}
+{['vin=vin-52172346083569', 'total=1']}
+{['vin=vin-25298180798141', 'total=1']}
+{['vin=vin-52624448635138', 'total=1']}
+{['vin=vin-47401191754303', 'total=1']}
+{['vin=vin-61573303365733', 'total=1']}
+{['vin=vin-77546438313537', 'total=1']}
+{['vin=vin-68223067210596', 'total=1']}
+{['vin=vin-56423154924013', 'total=1']}
+{['vin=vin-52422228576553', 'total=1']}
+{['vin=vin-45463591341926', 'total=1']}
+{['vin=vin-70601051625881', 'total=1']}
+Query progress so far: 0.2932551319648094%
+Data scanned so far is: 682.349134 MB
+Data metered so far is: 682.349134 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 2540.365278 MB
+Data metered so far is: 2540.365278 MB
+Data: 
+{['vin=vin-61898384561417', 'total=1']}
+{['vin=vin-53643381357604', 'total=1']}
+{['vin=vin-65100159617854', 'total=1']}
+{['vin=vin-55166670420585', 'total=1']}
+{['vin=vin-16535642115547', 'total=1']}
+{['vin=vin-64446175694678', 'total=1']}
+{['vin=vin-51926198258961', 'total=1']}
+{['vin=vin-77179742793248', 'total=1']}
+{['vin=vin-34849109493142', 'total=1']}
+{['vin=vin-46382813600346', 'total=1']}
+{['vin=vin-47039759638047', 'total=1']}
+{['vin=vin-65371305577179', 'total=1']}
+{['vin=vin-28062271567301', 'total=1']}
+{['vin=vin-35736371569166', 'total=1']}
+{['vin=vin-32245299813557', 'total=1']}
+{['vin=vin-33232280048824', 'total=1']}
+{['vin=vin-48268804990628', 'total=1']}
+{['vin=vin-70114456437892', 'total=1']}
+{['vin=vin-54405222303708', 'total=1']}
+{['vin=vin-66512986774301', 'total=1']}
+Query progress so far: 0.2932551319648094%
+Data scanned so far is: 682.349134 MB
+Data metered so far is: 682.349134 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 2540.365278 MB
+Data metered so far is: 2540.365278 MB
+Data: 
+{['vin=vin-27710665796219', 'total=1']}
+{['vin=vin-39752981977129', 'total=1']}
+{['vin=vin-62935728739865', 'total=1']}
+{['vin=vin-98751806622023', 'total=1']}
+{['vin=vin-17755470478809', 'total=1']}
+{['vin=vin-15086685831580', 'total=1']}
+{['vin=vin-82801582657465', 'total=1']}
+{['vin=vin-88027198301475', 'total=1']}
+{['vin=vin-65482048792733', 'total=1']}
+{['vin=vin-89325201884262', 'total=1']}
+{['vin=vin-73563542597145', 'total=1']}
+{['vin=vin-92961481095999', 'total=1']}
+{['vin=vin-15725594020693', 'total=1']}
+{['vin=vin-93649443856258', 'total=1']}
+{['vin=vin-63004625392692', 'total=1']}
+{['vin=vin-63123217006041', 'total=1']}
+{['vin=vin-62178821559585', 'total=1']}
+{['vin=vin-99217883537545', 'total=1']}
+{['vin=vin-14389537895650', 'total=1']}
+{['vin=vin-19926130328831', 'total=1']}
+
+
+### SELECT_GROUP_BY
+|Seq|spent time          |
+|1  |9.507714            |
+|2  |9.266876            |
+|3  |8.864591            |
+|4  |9.222060            |
+|5  |9.377102            |
+Average data scan for SELECT_GROUP_BY is: 2540.365278 MB
+
+Average time for SELECT_GROUP_BY is: 9.247669 s
+
+Running query [5] : [SELECT_CASE]
+Query progress so far: 42.57425742574257%
+Data scanned so far is: 4.446325 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-99529336763068', 'trip_id=9d569b90-21ee-4f1e-ae8d-c562f2556b77', 'systolic=57', 'instructions=go']}
+{['vin=vin-58813472048352', 'trip_id=82f36513-be3e-4a13-ba2f-203fdc3593b3', 'systolic=62', 'instructions=go']}
+{['vin=vin-98123222946443', 'trip_id=6b9f07f0-882e-4a12-bd63-27d11f911906', 'systolic=71', 'instructions=go']}
+{['vin=vin-98123222946443', 'trip_id=6b9f07f0-882e-4a12-bd63-27d11f911906', 'systolic=71', 'instructions=go']}
+{['vin=vin-99529336763068', 'trip_id=9d569b90-21ee-4f1e-ae8d-c562f2556b77', 'systolic=57', 'instructions=go']}
+{['vin=vin-34776592631288', 'trip_id=05ec0e16-4a50-415e-b7fb-a40ee7b21ba9', 'systolic=59', 'instructions=go']}
+{['vin=vin-34776592631288', 'trip_id=05ec0e16-4a50-415e-b7fb-a40ee7b21ba9', 'systolic=59', 'instructions=go']}
+{['vin=vin-99529336763068', 'trip_id=9d569b90-21ee-4f1e-ae8d-c562f2556b77', 'systolic=57', 'instructions=go']}
+Query progress so far: 39.603960396039604%
+Data scanned so far is: 2.780695 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97019061077998', 'trip_id=93844b46-592a-48ee-9dba-ecf9261b031c', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97019061077998', 'trip_id=93844b46-592a-48ee-9dba-ecf9261b031c', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97019061077998', 'trip_id=93844b46-592a-48ee-9dba-ecf9261b031c', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97019061077998', 'trip_id=93844b46-592a-48ee-9dba-ecf9261b031c', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-85884270743728', 'trip_id=398654a7-2d9e-4d32-8c4b-7006375dac42', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97019061077998', 'trip_id=93844b46-592a-48ee-9dba-ecf9261b031c', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-85884270743728', 'trip_id=398654a7-2d9e-4d32-8c4b-7006375dac42', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-85884270743728', 'trip_id=398654a7-2d9e-4d32-8c4b-7006375dac42', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97019061077998', 'trip_id=93844b46-592a-48ee-9dba-ecf9261b031c', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-85884270743728', 'trip_id=398654a7-2d9e-4d32-8c4b-7006375dac42', ('systolic=NULL',), 'instructions=go']}
+Query progress so far: 42.57425742574257%
+Data scanned so far is: 3.924232 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-40861469607671', 'trip_id=1802b523-a885-42bc-aadb-1965a52d71b9', 'systolic=71', 'instructions=go']}
+{['vin=vin-99529336763068', 'trip_id=9d569b90-21ee-4f1e-ae8d-c562f2556b77', 'systolic=57', 'instructions=go']}
+{['vin=vin-58813472048352', 'trip_id=82f36513-be3e-4a13-ba2f-203fdc3593b3', 'systolic=62', 'instructions=go']}
+{['vin=vin-98123222946443', 'trip_id=6b9f07f0-882e-4a12-bd63-27d11f911906', 'systolic=71', 'instructions=go']}
+{['vin=vin-98123222946443', 'trip_id=6b9f07f0-882e-4a12-bd63-27d11f911906', 'systolic=71', 'instructions=go']}
+{['vin=vin-99529336763068', 'trip_id=9d569b90-21ee-4f1e-ae8d-c562f2556b77', 'systolic=57', 'instructions=go']}
+{['vin=vin-34776592631288', 'trip_id=05ec0e16-4a50-415e-b7fb-a40ee7b21ba9', 'systolic=59', 'instructions=go']}
+{['vin=vin-34776592631288', 'trip_id=05ec0e16-4a50-415e-b7fb-a40ee7b21ba9', 'systolic=59', 'instructions=go']}
+{['vin=vin-99529336763068', 'trip_id=9d569b90-21ee-4f1e-ae8d-c562f2556b77', 'systolic=57', 'instructions=go']}
+Query progress so far: 34.65346534653465%
+Data scanned so far is: 0.418362 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-65850534653893', 'trip_id=55e4eacf-0a6c-48fd-9131-5dc1afb76600', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-65850534653893', 'trip_id=55e4eacf-0a6c-48fd-9131-5dc1afb76600', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-65850534653893', 'trip_id=55e4eacf-0a6c-48fd-9131-5dc1afb76600', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-65850534653893', 'trip_id=55e4eacf-0a6c-48fd-9131-5dc1afb76600', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-33039571188800', 'trip_id=7d87a2d9-25f3-4e4d-8079-5e270e920935', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-65850534653893', 'trip_id=55e4eacf-0a6c-48fd-9131-5dc1afb76600', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-97932005834979', 'trip_id=69eb592b-ebb4-4db4-a752-2318fc3ed5cd', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-65850534653893', 'trip_id=55e4eacf-0a6c-48fd-9131-5dc1afb76600', ('systolic=NULL',), 'instructions=go']}
+Query progress so far: 46.53465346534654%
+Data scanned so far is: 5.699436 MB
+Data metered so far is: 9.536743 MB
+Data: 
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-82344542041420', 'trip_id=46bc3654-37d1-41e2-9fa1-76b79ac6cdc5', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-82344542041420', 'trip_id=46bc3654-37d1-41e2-9fa1-76b79ac6cdc5', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-82344542041420', 'trip_id=46bc3654-37d1-41e2-9fa1-76b79ac6cdc5', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-82344542041420', 'trip_id=46bc3654-37d1-41e2-9fa1-76b79ac6cdc5', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-82344542041420', 'trip_id=46bc3654-37d1-41e2-9fa1-76b79ac6cdc5', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-50471970900825', 'trip_id=819fe691-f526-4aaa-8071-98f6e673898e', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-50471970900825', 'trip_id=819fe691-f526-4aaa-8071-98f6e673898e', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-50471970900825', 'trip_id=819fe691-f526-4aaa-8071-98f6e673898e', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-50471970900825', 'trip_id=819fe691-f526-4aaa-8071-98f6e673898e', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-50471970900825', 'trip_id=819fe691-f526-4aaa-8071-98f6e673898e', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-49211169029009', 'trip_id=5791ae21-6c21-4a07-b341-ce4a3c0a9c77', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-49211169029009', 'trip_id=5791ae21-6c21-4a07-b341-ce4a3c0a9c77', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-49211169029009', 'trip_id=5791ae21-6c21-4a07-b341-ce4a3c0a9c77', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-49211169029009', 'trip_id=5791ae21-6c21-4a07-b341-ce4a3c0a9c77', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-49211169029009', 'trip_id=5791ae21-6c21-4a07-b341-ce4a3c0a9c77', ('systolic=NULL',), 'instructions=go']}
+
+
+### SELECT_CASE
+|Seq|spent time          |
+|1  |0.266557            |
+|2  |0.241786            |
+|3  |0.219601            |
+|4  |0.258191            |
+|5  |0.188936            |
+Average data scan for SELECT_CASE is: 3.453810 MB
+
+Average time for SELECT_CASE is: 0.235014 s
+
+Running query [6] : [SELECT_JOIN]
+Query progress so far: 68.50828729281768%
+Data scanned so far is: 369.871486 MB
+Data metered so far is: 369.871486 MB
+Data: 
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-37070532234608', 'trip_id=f5d70311-f015-4e1b-aec7-0f92fa5decb4', ('systolic=NULL',), 'instructions=go']}
+Query progress so far: 64.08839779005525%
+Data scanned so far is: 366.143782 MB
+Data metered so far is: 366.143782 MB
+Data: 
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-90397505529804', 'trip_id=d729ce23-856e-43dd-a5e7-e93d024a2c9f', ('systolic=NULL',), 'instructions=go']}
+Query progress so far: 67.40331491712708%
+Data scanned so far is: 368.921205 MB
+Data metered so far is: 368.921205 MB
+Data: 
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+{['vin=vin-71574003981168', 'trip_id=8b54e1bd-2457-43d3-a166-1ce62c3e4e84', 'systolic=66', 'instructions=go']}
+Query progress so far: 64.64088397790056%
+Data scanned so far is: 366.980767 MB
+Data metered so far is: 366.980767 MB
+Data: 
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+{['vin=vin-27327752281474', 'trip_id=581b0ccb-4740-425d-9fe4-cf0e27cd7ff1', ('systolic=NULL',), 'instructions=go']}
+Query progress so far: 65.19337016574586%
+Data scanned so far is: 369.095403 MB
+Data metered so far is: 369.095403 MB
+Data: 
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+{['vin=vin-51945297059292', 'trip_id=6d9c6982-82da-430a-b1f6-0032bfc53a58', 'systolic=59', 'instructions=go']}
+
+
+### SELECT_JOIN
+|Seq|spent time          |
+|1  |3.021532            |
+|2  |2.083348            |
+|3  |2.053750            |
+|4  |2.012624            |
+|5  |1.303298            |
+Average data scan for SELECT_JOIN is: 368.202528 MB
+
+Average time for SELECT_JOIN is: 2.094910 s
+
+Running query [7] : [SELECT_MAX]
+Query progress so far: 24.12060301507538%
+Data scanned so far is: 494.094878 MB
+Data metered so far is: 494.094878 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 494.917757 MB
+Data metered so far is: 494.917757 MB
+Data: 
+{['max_sys=57.0', 'vin=vin-30741465931267']}
+{['max_sys=72.0', 'vin=vin-98651458329717']}
+{['max_sys=77.0', 'vin=vin-18728492954344']}
+{['max_sys=58.0', 'vin=vin-65901047473625']}
+{['max_sys=64.0', 'vin=vin-64517182540664']}
+{['max_sys=74.0', 'vin=vin-17608367093500']}
+{['max_sys=51.0', 'vin=vin-38475236562327']}
+{['max_sys=54.0', 'vin=vin-81726717077447']}
+{['max_sys=76.0', 'vin=vin-23288289116477']}
+{['max_sys=70.0', 'vin=vin-13914069994267']}
+{['max_sys=79.0', 'vin=vin-57067702036033']}
+{['max_sys=54.0', 'vin=vin-32034600011270']}
+{['max_sys=71.0', 'vin=vin-41923787498998']}
+{['max_sys=53.0', 'vin=vin-88111816119040']}
+{['max_sys=60.0', 'vin=vin-53053647820130']}
+{['max_sys=68.0', 'vin=vin-96629258651384']}
+{['max_sys=52.0', 'vin=vin-87427458810309']}
+{['max_sys=56.0', 'vin=vin-19867874144874']}
+{['max_sys=80.0', 'vin=vin-90220986424619']}
+{['max_sys=71.0', 'vin=vin-57313008013725']}
+Query progress so far: 25.12562814070352%
+Data scanned so far is: 494.094878 MB
+Data metered so far is: 494.094878 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 494.917757 MB
+Data metered so far is: 494.917757 MB
+Data: 
+{['max_sys=62.0', 'vin=vin-85328191170043']}
+{['max_sys=75.0', 'vin=vin-12075365914672']}
+{['max_sys=80.0', 'vin=vin-70063685606474']}
+{['max_sys=59.0', 'vin=vin-70201216511669']}
+{['max_sys=63.0', 'vin=vin-27011493736062']}
+{['max_sys=61.0', 'vin=vin-89294785949241']}
+{['max_sys=64.0', 'vin=vin-88459762373483']}
+{['max_sys=69.0', 'vin=vin-96455060097135']}
+{['max_sys=64.0', 'vin=vin-49817139970768']}
+{['max_sys=76.0', 'vin=vin-98543103198928']}
+{['max_sys=62.0', 'vin=vin-99607232794605']}
+{['max_sys=70.0', 'vin=vin-51049491529195']}
+{['max_sys=61.0', 'vin=vin-69890713105024']}
+{['max_sys=70.0', 'vin=vin-95342471704820']}
+{['max_sys=75.0', 'vin=vin-21480666905992']}
+{['max_sys=75.0', 'vin=vin-65253803873775']}
+{['max_sys=63.0', 'vin=vin-40688049794796']}
+{['max_sys=78.0', 'vin=vin-53959234949268']}
+{['max_sys=75.0', 'vin=vin-74958449711042']}
+{['max_sys=66.0', 'vin=vin-62926523412780']}
+Query progress so far: 23.618090452261306%
+Data scanned so far is: 494.094878 MB
+Data metered so far is: 494.094878 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 494.917757 MB
+Data metered so far is: 494.917757 MB
+Data: 
+{['max_sys=70.0', 'vin=vin-41351579993138']}
+{['max_sys=79.0', 'vin=vin-85180294567113']}
+{['max_sys=55.0', 'vin=vin-89973055747388']}
+{['max_sys=66.0', 'vin=vin-39128594739997']}
+{['max_sys=69.0', 'vin=vin-98280793435349']}
+{['max_sys=80.0', 'vin=vin-71719960035028']}
+{['max_sys=75.0', 'vin=vin-46901655821446']}
+{['max_sys=56.0', 'vin=vin-30510452393941']}
+{['max_sys=52.0', 'vin=vin-36741349356125']}
+{['max_sys=80.0', 'vin=vin-40755053813411']}
+{['max_sys=61.0', 'vin=vin-94746332459009']}
+{['max_sys=61.0', 'vin=vin-62347637345450']}
+{['max_sys=76.0', 'vin=vin-55730923550173']}
+{['max_sys=53.0', 'vin=vin-89666299364004']}
+{['max_sys=66.0', 'vin=vin-89751482792333']}
+{['max_sys=69.0', 'vin=vin-55649546003331']}
+{['max_sys=78.0', 'vin=vin-15868284203810']}
+{['max_sys=51.0', 'vin=vin-85435575799129']}
+{['max_sys=74.0', 'vin=vin-32763727693185']}
+{['max_sys=58.0', 'vin=vin-91665287820846']}
+Query progress so far: 23.618090452261306%
+Data scanned so far is: 494.917757 MB
+Data metered so far is: 494.917757 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 494.917757 MB
+Data metered so far is: 494.917757 MB
+Data: 
+{['max_sys=57.0', 'vin=vin-30741465931267']}
+{['max_sys=72.0', 'vin=vin-98651458329717']}
+{['max_sys=77.0', 'vin=vin-18728492954344']}
+{['max_sys=58.0', 'vin=vin-65901047473625']}
+{['max_sys=64.0', 'vin=vin-64517182540664']}
+{['max_sys=74.0', 'vin=vin-17608367093500']}
+{['max_sys=51.0', 'vin=vin-38475236562327']}
+{['max_sys=54.0', 'vin=vin-81726717077447']}
+{['max_sys=76.0', 'vin=vin-23288289116477']}
+{['max_sys=70.0', 'vin=vin-13914069994267']}
+{['max_sys=79.0', 'vin=vin-57067702036033']}
+{['max_sys=54.0', 'vin=vin-32034600011270']}
+{['max_sys=71.0', 'vin=vin-41923787498998']}
+{['max_sys=53.0', 'vin=vin-88111816119040']}
+{['max_sys=60.0', 'vin=vin-53053647820130']}
+{['max_sys=68.0', 'vin=vin-96629258651384']}
+{['max_sys=52.0', 'vin=vin-87427458810309']}
+{['max_sys=56.0', 'vin=vin-19867874144874']}
+{['max_sys=80.0', 'vin=vin-90220986424619']}
+{['max_sys=71.0', 'vin=vin-57313008013725']}
+Query progress so far: 25.628140703517587%
+Data scanned so far is: 493.271896 MB
+Data metered so far is: 493.271896 MB
+Data: 
+Query progress so far: 100.0%
+Data scanned so far is: 494.917757 MB
+Data metered so far is: 494.917757 MB
+Data: 
+{['max_sys=57.0', 'vin=vin-30741465931267']}
+{['max_sys=72.0', 'vin=vin-98651458329717']}
+{['max_sys=77.0', 'vin=vin-18728492954344']}
+{['max_sys=58.0', 'vin=vin-65901047473625']}
+{['max_sys=64.0', 'vin=vin-64517182540664']}
+{['max_sys=74.0', 'vin=vin-17608367093500']}
+{['max_sys=51.0', 'vin=vin-38475236562327']}
+{['max_sys=54.0', 'vin=vin-81726717077447']}
+{['max_sys=76.0', 'vin=vin-23288289116477']}
+{['max_sys=70.0', 'vin=vin-13914069994267']}
+{['max_sys=79.0', 'vin=vin-57067702036033']}
+{['max_sys=54.0', 'vin=vin-32034600011270']}
+{['max_sys=71.0', 'vin=vin-41923787498998']}
+{['max_sys=53.0', 'vin=vin-88111816119040']}
+{['max_sys=60.0', 'vin=vin-53053647820130']}
+{['max_sys=68.0', 'vin=vin-96629258651384']}
+{['max_sys=52.0', 'vin=vin-87427458810309']}
+{['max_sys=56.0', 'vin=vin-19867874144874']}
+{['max_sys=80.0', 'vin=vin-90220986424619']}
+{['max_sys=71.0', 'vin=vin-57313008013725']}
+
+
+### SELECT_MAX
+|Seq|spent time          |
+|1  |5.936577            |
+|2  |5.714530            |
+|3  |5.954015            |
+|4  |5.606274            |
+|5  |6.107404            |
+Average data scan for SELECT_MAX is: 494.917757 MB
+
+Average time for SELECT_MAX is: 5.863760 s
+

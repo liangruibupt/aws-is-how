@@ -141,6 +141,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS IoT Analytics Workshop](https://iot-analytics.workshop.aws/)
 
+[AWS IoT Analytics Performance](iot/IoT-Analytics/Ingest-IoT-Analytics-PerformanceTest.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -241,6 +243,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
 
+[Serverless Patterns Collection](https://serverlessland.com/patterns)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
@@ -292,6 +296,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
 
 [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
+
+[Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
 
 ## Container
 

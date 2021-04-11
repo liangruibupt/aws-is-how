@@ -1,0 +1,575 @@
+Running query [1] : [QUERY_COUNT]
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+Query progress so far: 100.0%
+Data scanned so far is: 7534.646387 MB
+Data metered so far is: 7534.646387 MB
+Data: 
+{['_col0=71602075']}
+
+
+### QUERY_COUNT
+|Seq|spent time          |
+|1  |0.794511            |
+|2  |0.770185            |
+|3  |0.835685            |
+|4  |0.715006            |
+|5  |0.761032            |
+Average data scan for QUERY_COUNT is: 7534.646387 MB
+
+Average time for QUERY_COUNT is: 0.775284 s
+
+Running query [2] : [SELECT_GROUP_BY]
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=413.0', 'vin=vin-88400908091378']}
+{['max_sys=644.0', 'vin=vin-89424298895982']}
+{['max_sys=966.0', 'vin=vin-97245196842471']}
+{['max_sys=424.0', 'vin=vin-43648121955873']}
+{['max_sys=119.0', 'vin=vin-86149182154824']}
+{['max_sys=158.0', 'vin=vin-59395536331781']}
+{['max_sys=482.0', 'vin=vin-84462361443108']}
+{['max_sys=392.0', 'vin=vin-49777682612286']}
+{['max_sys=898.0', 'vin=vin-30848388561056']}
+{['max_sys=631.0', 'vin=vin-46105819027833']}
+{['max_sys=552.0', 'vin=vin-98645207155427']}
+{['max_sys=731.0', 'vin=vin-62003344730907']}
+{['max_sys=114.0', 'vin=vin-46834572563438']}
+{['max_sys=130.0', 'vin=vin-67698496108350']}
+{['max_sys=781.0', 'vin=vin-10563423082496']}
+{['max_sys=146.0', 'vin=vin-97036489763770']}
+{['max_sys=113.0', 'vin=vin-44622922226697']}
+{['max_sys=290.0', 'vin=vin-28024789922411']}
+{['max_sys=1000.0', 'vin=vin-98809264832663']}
+{['max_sys=408.0', 'vin=vin-15466086527547']}
+Query progress so far: 95.94594594594595%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=785.0', 'vin=vin-14382292878951']}
+{['max_sys=799.0', 'vin=vin-10977463904145']}
+{['max_sys=869.0', 'vin=vin-29736824698589']}
+{['max_sys=827.0', 'vin=vin-79680992144937']}
+{['max_sys=546.0', 'vin=vin-26032329568539']}
+{['max_sys=788.0', 'vin=vin-46583453123735']}
+{['max_sys=711.0', 'vin=vin-96930992477461']}
+{['max_sys=92.10127291454315', 'vin=vin-19057562582526']}
+{['max_sys=409.0', 'vin=vin-96266419466280']}
+{['max_sys=212.0', 'vin=vin-40802296074351']}
+{['max_sys=219.0', 'vin=vin-17227923411352']}
+{['max_sys=754.0', 'vin=vin-98059309070336']}
+{['max_sys=795.0', 'vin=vin-77979894272418']}
+{['max_sys=536.0', 'vin=vin-21450230858639']}
+{['max_sys=754.0', 'vin=vin-52588330650634']}
+{['max_sys=89.2426250536772', 'vin=vin-11252242026104']}
+{['max_sys=587.0', 'vin=vin-91114983254741']}
+{['max_sys=712.0', 'vin=vin-82780921674087']}
+{['max_sys=442.0', 'vin=vin-63976303510088']}
+{['max_sys=632.0', 'vin=vin-24801298408763']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=547.0', 'vin=vin-28166104943407']}
+{['max_sys=905.0', 'vin=vin-48148509560107']}
+{['max_sys=112.0', 'vin=vin-47584300412173']}
+{['max_sys=83.0', 'vin=vin-79019709425624']}
+{['max_sys=387.0', 'vin=vin-23135231684410']}
+{['max_sys=445.0', 'vin=vin-64287393375706']}
+{['max_sys=359.0', 'vin=vin-46901655821446']}
+{['max_sys=604.0', 'vin=vin-37949878617994']}
+{['max_sys=358.0', 'vin=vin-91077541212689']}
+{['max_sys=930.0', 'vin=vin-54907150740334']}
+{['max_sys=714.0', 'vin=vin-25037343574959']}
+{['max_sys=845.0', 'vin=vin-27056490449567']}
+{['max_sys=524.0', 'vin=vin-14211433746501']}
+{['max_sys=994.0', 'vin=vin-67938843907234']}
+{['max_sys=633.0', 'vin=vin-17805435411528']}
+{['max_sys=355.0', 'vin=vin-73080082314080']}
+{['max_sys=219.0', 'vin=vin-44213745316218']}
+{['max_sys=496.0', 'vin=vin-76820631601985']}
+{['max_sys=92.67604175754688', 'vin=vin-81657168812574']}
+{['max_sys=570.0', 'vin=vin-62347637345450']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=960.0', 'vin=vin-64798943256478']}
+{['max_sys=110.0', 'vin=vin-83247043831180']}
+{['max_sys=554.0', 'vin=vin-26057110783754']}
+{['max_sys=762.0', 'vin=vin-11591896145256']}
+{['max_sys=630.0', 'vin=vin-38931038053194']}
+{['max_sys=324.0', 'vin=vin-68610773098987']}
+{['max_sys=497.0', 'vin=vin-37258464333029']}
+{['max_sys=123.0', 'vin=vin-25680438145336']}
+{['max_sys=317.0', 'vin=vin-67839192087935']}
+{['max_sys=521.0', 'vin=vin-12101585058118']}
+{['max_sys=990.0', 'vin=vin-85005676277196']}
+{['max_sys=441.0', 'vin=vin-55502322813878']}
+{['max_sys=845.0', 'vin=vin-75448849601016']}
+{['max_sys=699.0', 'vin=vin-69977730870376']}
+{['max_sys=944.0', 'vin=vin-90285872661106']}
+{['max_sys=252.0', 'vin=vin-34115669663900']}
+{['max_sys=92.08320207107182', 'vin=vin-36007690222688']}
+{['max_sys=305.0', 'vin=vin-28099963390271']}
+{['max_sys=993.0', 'vin=vin-25604791010997']}
+{['max_sys=232.0', 'vin=vin-34232913256364']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=844.0', 'vin=vin-93453605771169']}
+{['max_sys=973.0', 'vin=vin-16442424731093']}
+{['max_sys=744.0', 'vin=vin-36628117613516']}
+{['max_sys=203.0', 'vin=vin-82064879804709']}
+{['max_sys=143.0', 'vin=vin-72721553365211']}
+{['max_sys=212.0', 'vin=vin-34619243484733']}
+{['max_sys=833.0', 'vin=vin-51483865175123']}
+{['max_sys=137.0', 'vin=vin-10620879306136']}
+{['max_sys=709.0', 'vin=vin-95816020677888']}
+{['max_sys=313.0', 'vin=vin-50472406723209']}
+{['max_sys=81.34729066264929', 'vin=vin-74020897084703']}
+{['max_sys=369.0', 'vin=vin-61937576890656']}
+{['max_sys=838.0', 'vin=vin-80043494263945']}
+{['max_sys=95.0029119723741', 'vin=vin-83886104772107']}
+{['max_sys=698.0', 'vin=vin-10134439034036']}
+{['max_sys=512.0', 'vin=vin-39095152406088']}
+{['max_sys=587.0', 'vin=vin-99643998407637']}
+{['max_sys=66.33640356290475', 'vin=vin-33361367340795']}
+{['max_sys=94.0201939842247', 'vin=vin-71627844449769']}
+{['max_sys=802.0', 'vin=vin-88770319952951']}
+
+
+### SELECT_GROUP_BY
+|Seq|spent time          |
+|1  |1.690653            |
+|2  |1.721573            |
+|3  |1.118354            |
+|4  |1.179698            |
+|5  |1.158116            |
+Average data scan for SELECT_GROUP_BY is: 29.095941 MB
+
+Average time for SELECT_GROUP_BY is: 1.373679 s
+
+Running query [3] : [SELECT_MAX]
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=335.0', 'vin=vin-11726844947022']}
+{['max_sys=236.0', 'vin=vin-78585052226413']}
+{['max_sys=462.0', 'vin=vin-41845159150422']}
+{['max_sys=333.0', 'vin=vin-57005851911562']}
+{['max_sys=597.0', 'vin=vin-67644827547627']}
+{['max_sys=132.0', 'vin=vin-78873862131234']}
+{['max_sys=252.0', 'vin=vin-70919765308982']}
+{['max_sys=824.0', 'vin=vin-98763290914231']}
+{['max_sys=210.0', 'vin=vin-45521723212109']}
+{['max_sys=269.0', 'vin=vin-63915628813361']}
+{['max_sys=122.0', 'vin=vin-67090296652705']}
+{['max_sys=388.0', 'vin=vin-93686823527355']}
+{['max_sys=516.0', 'vin=vin-72836089279965']}
+{['max_sys=809.0', 'vin=vin-65265891028353']}
+{['max_sys=94.59669675659553', 'vin=vin-14688148167347']}
+{['max_sys=238.0', 'vin=vin-67742507191805']}
+{['max_sys=452.0', 'vin=vin-97428427369234']}
+{['max_sys=821.0', 'vin=vin-59359559126317']}
+{['max_sys=798.0', 'vin=vin-94498084039157']}
+{['max_sys=769.0', 'vin=vin-91448524087265']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=875.0', 'vin=vin-74483138797607']}
+{['max_sys=656.0', 'vin=vin-68286287106338']}
+{['max_sys=643.0', 'vin=vin-53050796435798']}
+{['max_sys=382.0', 'vin=vin-79517600512552']}
+{['max_sys=712.0', 'vin=vin-34060530630538']}
+{['max_sys=850.0', 'vin=vin-21326476342761']}
+{['max_sys=88.45968284098304', 'vin=vin-44291624296424']}
+{['max_sys=509.0', 'vin=vin-60590203865321']}
+{['max_sys=604.0', 'vin=vin-43645535029427']}
+{['max_sys=304.0', 'vin=vin-98060321334382']}
+{['max_sys=431.0', 'vin=vin-98317053893388']}
+{['max_sys=499.0', 'vin=vin-45526773348841']}
+{['max_sys=392.0', 'vin=vin-82373373689758']}
+{['max_sys=320.0', 'vin=vin-21580072648267']}
+{['max_sys=224.0', 'vin=vin-51696904954555']}
+{['max_sys=436.0', 'vin=vin-35815661289580']}
+{['max_sys=341.0', 'vin=vin-22387804038600']}
+{['max_sys=728.0', 'vin=vin-94464572930258']}
+{['max_sys=235.0', 'vin=vin-68838549016548']}
+{['max_sys=97.90585220332923', 'vin=vin-69590719259202']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=463.0', 'vin=vin-95936257982247']}
+{['max_sys=157.0', 'vin=vin-55787432642560']}
+{['max_sys=499.0', 'vin=vin-91838022909250']}
+{['max_sys=613.0', 'vin=vin-15225946518200']}
+{['max_sys=659.0', 'vin=vin-46946056382115']}
+{['max_sys=857.0', 'vin=vin-27630650042494']}
+{['max_sys=67.0', 'vin=vin-56253740355276']}
+{['max_sys=97.06770905922482', 'vin=vin-79265369654521']}
+{['max_sys=311.0', 'vin=vin-82677513019029']}
+{['max_sys=975.0', 'vin=vin-25780177348667']}
+{['max_sys=196.0', 'vin=vin-95439989571731']}
+{['max_sys=953.0', 'vin=vin-78565804250091']}
+{['max_sys=427.0', 'vin=vin-19096018089222']}
+{['max_sys=161.0', 'vin=vin-84881605796414']}
+{['max_sys=851.0', 'vin=vin-62728809697373']}
+{['max_sys=726.0', 'vin=vin-63386385967906']}
+{['max_sys=534.0', 'vin=vin-95903856035653']}
+{['max_sys=165.0', 'vin=vin-45399145415494']}
+{['max_sys=73.15214045962992', 'vin=vin-76736203025554']}
+{['max_sys=193.0', 'vin=vin-33642409645961']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=997.0', 'vin=vin-95815139545818']}
+{['max_sys=693.0', 'vin=vin-47413982132980']}
+{['max_sys=796.0', 'vin=vin-76834575329191']}
+{['max_sys=386.0', 'vin=vin-11214056690595']}
+{['max_sys=379.0', 'vin=vin-62020069279116']}
+{['max_sys=394.0', 'vin=vin-77590995106189']}
+{['max_sys=264.0', 'vin=vin-69721067487441']}
+{['max_sys=396.0', 'vin=vin-24311624458757']}
+{['max_sys=825.0', 'vin=vin-39120334212597']}
+{['max_sys=983.0', 'vin=vin-35101339514591']}
+{['max_sys=91.68709709825991', 'vin=vin-74363531947874']}
+{['max_sys=392.0', 'vin=vin-21143116544528']}
+{['max_sys=597.0', 'vin=vin-51607668421218']}
+{['max_sys=598.0', 'vin=vin-40908765958224']}
+{['max_sys=773.0', 'vin=vin-81877866117217']}
+{['max_sys=508.0', 'vin=vin-91735495444189']}
+{['max_sys=332.0', 'vin=vin-46754801892756']}
+{['max_sys=87.87160015798422', 'vin=vin-95709536687203']}
+{['max_sys=872.0', 'vin=vin-20001054384633']}
+{['max_sys=116.0', 'vin=vin-74381671487871']}
+Query progress so far: 100.0%
+Data scanned so far is: 29.095941 MB
+Data metered so far is: 29.095941 MB
+Data: 
+{['max_sys=844.0', 'vin=vin-93453605771169']}
+{['max_sys=973.0', 'vin=vin-16442424731093']}
+{['max_sys=744.0', 'vin=vin-36628117613516']}
+{['max_sys=203.0', 'vin=vin-82064879804709']}
+{['max_sys=143.0', 'vin=vin-72721553365211']}
+{['max_sys=212.0', 'vin=vin-34619243484733']}
+{['max_sys=833.0', 'vin=vin-51483865175123']}
+{['max_sys=137.0', 'vin=vin-10620879306136']}
+{['max_sys=709.0', 'vin=vin-95816020677888']}
+{['max_sys=313.0', 'vin=vin-50472406723209']}
+{['max_sys=81.34729066264929', 'vin=vin-74020897084703']}
+{['max_sys=369.0', 'vin=vin-61937576890656']}
+{['max_sys=838.0', 'vin=vin-80043494263945']}
+{['max_sys=95.0029119723741', 'vin=vin-83886104772107']}
+{['max_sys=698.0', 'vin=vin-10134439034036']}
+{['max_sys=512.0', 'vin=vin-39095152406088']}
+{['max_sys=587.0', 'vin=vin-99643998407637']}
+{['max_sys=66.33640356290475', 'vin=vin-33361367340795']}
+{['max_sys=94.0201939842247', 'vin=vin-71627844449769']}
+{['max_sys=802.0', 'vin=vin-88770319952951']}
+
+
+### SELECT_MAX
+|Seq|spent time          |
+|1  |1.240257            |
+|2  |1.751988            |
+|3  |1.178071            |
+|4  |1.177716            |
+|5  |1.458440            |
+Average data scan for SELECT_MAX is: 29.095941 MB
+
+Average time for SELECT_MAX is: 1.361294 s
+
+Running query [4] : [SELECT_BIN]
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=150.54393941657102', 'vin=vin-61887629880622']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=84.43362727564612', 'vin=vin-90336289091251']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=68.06674676683267', 'vin=vin-13117232914859']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=96.91388720889904', 'vin=vin-23678512640811']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=103.9832009289657', 'vin=vin-54047681655255']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=134.2325542337685', 'vin=vin-99792298790977']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=44.45957205014199', 'vin=vin-93816085999449']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=137.4038414544538', 'vin=vin-61810852322096']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=53.50965774948842', 'vin=vin-39960036286120']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=57.222934703532985', 'vin=vin-26198427818271']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=62.38029602432317', 'vin=vin-73222469824611']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=92.48996429555402', 'vin=vin-91838022909250']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=104.33849212330772', 'vin=vin-15225946518200']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=127.14831296791931', 'vin=vin-48059379466933']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=96.95537794268941', 'vin=vin-10512611972155']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=145.6057618012857', 'vin=vin-36405183121669']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=73.25445270017393', 'vin=vin-54182042906113']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=132.3893180973072', 'vin=vin-50845338257219']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=103.13142495082722', 'vin=vin-55250277748042']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=88.94344944832957', 'vin=vin-95970258526895']}
+Query progress so far: 93.24324324324324%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=59.08389183678018', 'vin=vin-55787432642560']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=104.46711861032895', 'vin=vin-61479154577723']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=60.9699457159184', 'vin=vin-52111540771390']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=82.3811234344481', 'vin=vin-37307831456923']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=110.73262105870901', 'vin=vin-43592527917744']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=93.70536746183775', 'vin=vin-14282325406033']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=62.97202520915168', 'vin=vin-50521667354711']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=59.02881923381595', 'vin=vin-77338086144004']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=108.4654331860343', 'vin=vin-59156833102005']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=59.71639897600871', 'vin=vin-18437506238484']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=67.19041029027923', 'vin=vin-95407135827761']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=90.10267187946008', 'vin=vin-61838924030639']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=38.954522655600364', 'vin=vin-22973287866063']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=129.71064523604528', 'vin=vin-16271575011343']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=73.09985513250186', 'vin=vin-38077433574168']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=101.35164969561467', 'vin=vin-17890796947037']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=110.39180124435977', 'vin=vin-60318205510761']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=87.91542592865616', 'vin=vin-56221984017024']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=146.329079822819', 'vin=vin-49134392290712']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=137.87076094180307', 'vin=vin-39514761506926']}
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=47.22993167005244', 'vin=vin-47584300412173']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=119.60330348632309', 'vin=vin-14324239613826']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=84.99909261555034', 'vin=vin-34687542922187']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=101.5893470485121', 'vin=vin-17706804947019']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=57.71633309641663', 'vin=vin-10620879306136']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=49.4689587590033', 'vin=vin-98068004902903']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=87.02690085984719', 'vin=vin-19932742181523']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=127.05553557891945', 'vin=vin-40859580420689']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=36.77716531569903', 'vin=vin-33708121268114']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=127.29443240609257', 'vin=vin-30896397281770']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=71.28711954607785', 'vin=vin-50472406723209']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=63.165317416342', 'vin=vin-29263486682514']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=102.27811215398941', 'vin=vin-55164291744027']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=56.246145575657444', 'vin=vin-80272605803939']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=127.50418675460438', 'vin=vin-80043494263945']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=151.28399072909352', 'vin=vin-16396153279704']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=90.70783849073938', 'vin=vin-88800608448857']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=54.88648374591698', 'vin=vin-64535125486032']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=67.61048228814057', 'vin=vin-93768742167692']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=47.69852901110787', 'vin=vin-44682801751084']}
+Query progress so far: 80.4054054054054%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=61.50186360665457', 'vin=vin-51243273511582']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=48.98656162313934', 'vin=vin-40816969832726']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=66.77026344037813', 'vin=vin-24715004418761']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=105.01474327166875', 'vin=vin-26057110783754']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=60.7375419234613', 'vin=vin-43072544418262']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=54.09847095910804', 'vin=vin-23802236367704']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=66.1951109409307', 'vin=vin-84209030394934']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=38.387806421976286', 'vin=vin-70860101799242']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=111.87578316829809', 'vin=vin-98776815860677']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=73.99047476644557', 'vin=vin-64121359910053']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=52.889635701294935', 'vin=vin-79989861249360']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=85.16289524153667', 'vin=vin-64287393375706']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=59.93488754040383', 'vin=vin-46231500602175']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=129.73556021412247', 'vin=vin-38333859034536']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=65.92236598181168', 'vin=vin-34619243484733']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=127.89554934602108', 'vin=vin-25725922147781']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=121.88850237101845', 'vin=vin-96930992477461']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=120.01719115197348', 'vin=vin-75376389213711']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=83.92236597274822', 'vin=vin-88290745775494']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=82.38543605287614', 'vin=vin-67839192087935']}
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=114.51216349783772', 'vin=vin-85872330510030']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=90.3188447012109', 'vin=vin-16731408025373']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=87.95674116745859', 'vin=vin-26196715129482']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=98.79020082819298', 'vin=vin-86782134147523']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=47.27308217371655', 'vin=vin-61232264281029']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=105.73543566149472', 'vin=vin-28524301502276']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=105.470838046647', 'vin=vin-59248276279194']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=126.06258274772992', 'vin=vin-68657449540026']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=102.15335178633593', 'vin=vin-46946056382115']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=59.82726207180516', 'vin=vin-67801341346578']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=66.30626631716862', 'vin=vin-86763668710768']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=44.5002688815244', 'vin=vin-69421755135386']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=128.97679922282776', 'vin=vin-65485232212128']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=97.42137810772148', 'vin=vin-93370674669935']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=95.37261684252056', 'vin=vin-81540542320110']}
+{['binned_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_5mins=89.62990151361778', 'vin=vin-90518769407311']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=84.16969471121955', 'vin=vin-28941706497074']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=47.26422216401981', 'vin=vin-61623516028278']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=144.38723181040626', 'vin=vin-25872133128152']}
+{['binned_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_5mins=81.69230427818478', 'vin=vin-84175473566551']}
+
+
+### SELECT_BIN
+|Seq|spent time          |
+|1  |1.230018            |
+|2  |1.259898            |
+|3  |1.109678            |
+|4  |1.429838            |
+|5  |1.378925            |
+Average data scan for SELECT_BIN is: 53.859379 MB
+
+Average time for SELECT_BIN is: 1.281671 s
+
+Running query [5] : [SELECT_TRUNC]
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=83.1806069453983', 'vin=vin-14325795696618']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=90.87900279546828', 'vin=vin-95936257982247']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=134.02475589121823', 'vin=vin-49915888419798']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=99.3796430123335', 'vin=vin-74758813122726']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=89.58980530384746', 'vin=vin-24218699984505']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=73.66677177618779', 'vin=vin-95137950295013']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=126.75033190151859', 'vin=vin-30457470229486']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=64.5411678212817', 'vin=vin-26810231709386']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=136.14137406335337', 'vin=vin-26274998876908']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=57.5865264884568', 'vin=vin-81886539112986']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=72.25099534367739', 'vin=vin-61641117057113']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=63.28171301214307', 'vin=vin-77504118434382']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=122.90497530507453', 'vin=vin-53905007479684']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=71.91067501671483', 'vin=vin-98060321334382']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=56.56687249921025', 'vin=vin-51839355353654']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=84.85144653392531', 'vin=vin-76673442459132']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=84.27813577338955', 'vin=vin-63544787427287']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=54.64408027408005', 'vin=vin-73015126998118']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=55.74911330928338', 'vin=vin-65679877599776']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=112.33049157279997', 'vin=vin-73897686950959']}
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=61.50186360665457', 'vin=vin-51243273511582']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=48.98656162313934', 'vin=vin-40816969832726']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=66.77026344037813', 'vin=vin-24715004418761']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=105.01474327166875', 'vin=vin-26057110783754']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=60.7375419234613', 'vin=vin-43072544418262']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=54.09847095910804', 'vin=vin-23802236367704']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=66.1951109409307', 'vin=vin-84209030394934']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=38.387806421976286', 'vin=vin-70860101799242']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=111.87578316829809', 'vin=vin-98776815860677']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=73.99047476644557', 'vin=vin-64121359910053']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=52.889635701294935', 'vin=vin-79989861249360']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=85.16289524153667', 'vin=vin-64287393375706']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=59.93488754040383', 'vin=vin-46231500602175']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=129.73556021412247', 'vin=vin-38333859034536']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=65.92236598181168', 'vin=vin-34619243484733']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=127.89554934602108', 'vin=vin-25725922147781']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=121.88850237101845', 'vin=vin-96930992477461']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=120.01719115197348', 'vin=vin-75376389213711']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=83.92236597274822', 'vin=vin-88290745775494']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=82.38543605287614', 'vin=vin-67839192087935']}
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=141.4199089479826', 'vin=vin-41102039509732']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=104.44714123468025', 'vin=vin-68417703583626']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=71.21649567116607', 'vin=vin-80279126088763']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=125.93236954167705', 'vin=vin-51425133075312']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=112.80292469418971', 'vin=vin-50460664579828']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=93.16978922914673', 'vin=vin-25120125069374']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=113.5540226193385', 'vin=vin-37949878617994']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=112.40886021578297', 'vin=vin-62535295221263']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=118.99465002761997', 'vin=vin-19619883874593']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=82.83691633862458', 'vin=vin-91077541212689']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=96.11877113502445', 'vin=vin-12854634519844']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=79.14397787186235', 'vin=vin-40940964434948']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=87.35869146197594', 'vin=vin-20729410934872']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=57.472345420948656', 'vin=vin-36007690222688']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=56.82527631114151', 'vin=vin-64556307144640']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=86.50021732465481', 'vin=vin-34232913256364']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=80.5200756189885', 'vin=vin-92270277687081']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=102.89498240878467', 'vin=vin-33818440894140']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=129.78421266553894', 'vin=vin-62850610676792']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=72.03776625837209', 'vin=vin-28408153699129']}
+Query progress so far: 89.1891891891892%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=60.462434120366616', 'vin=vin-27699985647326']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=138.79923404191965', 'vin=vin-64798943256478']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=142.14374575019184', 'vin=vin-16442424731093']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=38.5800537835', 'vin=vin-42395200981503']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=95.16487649664697', 'vin=vin-56388104020071']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=123.00222002418218', 'vin=vin-11591896145256']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=73.12199248028546', 'vin=vin-90361610193406']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=91.38924806636928', 'vin=vin-80458111772060']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=88.0570507141277', 'vin=vin-83922902772941']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=78.5223611874213', 'vin=vin-94665549943070']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=64.52846381907094', 'vin=vin-54883307079889']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=106.28111198010967', 'vin=vin-54842798735973']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=72.34742723778288', 'vin=vin-54931260800120']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=66.76076133399454', 'vin=vin-67752440289279']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=107.13403142726342', 'vin=vin-98632068798932']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=56.81713249103834', 'vin=vin-44333708811095']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=111.53811775193606', 'vin=vin-93178434341935']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=147.04178908995743', 'vin=vin-85005676277196']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=99.04106162008112', 'vin=vin-29551461617216']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=128.3565238940283', 'vin=vin-75448849601016']}
+Query progress so far: 100.0%
+Data scanned so far is: 53.859379 MB
+Data metered so far is: 53.859379 MB
+Data: 
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=60.462434120366616', 'vin=vin-27699985647326']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=138.79923404191965', 'vin=vin-64798943256478']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=142.14374575019184', 'vin=vin-16442424731093']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=38.5800537835', 'vin=vin-42395200981503']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=95.16487649664697', 'vin=vin-56388104020071']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=123.00222002418218', 'vin=vin-11591896145256']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=73.12199248028546', 'vin=vin-90361610193406']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=91.38924806636928', 'vin=vin-80458111772060']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=88.0570507141277', 'vin=vin-83922902772941']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=78.5223611874213', 'vin=vin-94665549943070']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=64.52846381907094', 'vin=vin-54883307079889']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=106.28111198010967', 'vin=vin-54842798735973']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=72.34742723778288', 'vin=vin-54931260800120']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=66.76076133399454', 'vin=vin-67752440289279']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=107.13403142726342', 'vin=vin-98632068798932']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=56.81713249103834', 'vin=vin-44333708811095']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=111.53811775193606', 'vin=vin-93178434341935']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=147.04178908995743', 'vin=vin-85005676277196']}
+{['min_timestamp=2021-04-03 14:35:00.000000000', 'avg_value_1min=99.04106162008112', 'vin=vin-29551461617216']}
+{['min_timestamp=2021-04-03 14:34:00.000000000', 'avg_value_1min=128.3565238940283', 'vin=vin-75448849601016']}
+
+
+### SELECT_TRUNC
+|Seq|spent time          |
+|1  |1.228016            |
+|2  |1.510717            |
+|3  |1.218661            |
+|4  |1.591984            |
+|5  |1.249373            |
+Average data scan for SELECT_TRUNC is: 53.859379 MB
+
+Average time for SELECT_TRUNC is: 1.359750 s
+
