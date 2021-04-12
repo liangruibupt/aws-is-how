@@ -143,6 +143,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS IoT Analytics Performance](iot/IoT-Analytics/Ingest-IoT-Analytics-PerformanceTest.md)
 
+[AWS IoT Events Quick Start](iot/IoT-Events)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -358,6 +360,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
+
+[well architected labs](https://wellarchitectedlabs.com/)
 
 ## Integration
 
