@@ -16,5 +16,26 @@ Follow up [Enabling custom identity broker access to the AWS console official gu
 
 [Example using python code](scripts/customer_idp_broker.py) to construct the URL
 
+6. You can configure the SwitchRole
+- Add below permission to the original Role `SSO-ROLE-NAME` grant by AWS STS. The policy allow Role `SSO-ROLE-NAME` switch to Role `TARGET_SWITCH_ROLE_NAME`
+```json
+{
+    "Effect": "Allow",
+    "Action": "sts:AssumeRole",
+    "Resource": "arn:aws-cn:iam::ACCOUNT-ID-WITHOUT-HYPHENS:role/TARGET_SWITCH_ROLE_NAME"
+}
+```
+
+- Add the Policy to Trusted entities of Role `TARGET_SWITCH_ROLE_NAME`. The policy trust Role `SSO-ROLE-NAME` Swith to Role `TARGET_SWITCH_ROLE_NAME`
+```json
+   {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws-cn:iam::ACCOUNT-ID-WITHOUT-HYPHENS:role/SSO-ROLE-NAME"
+      },
+      "Action": "sts:AssumeRole"
+    }
+```
+
 # Reference
 [How do I assume an IAM role](https://aws.amazon.com/premiumsupport/knowledge-center/iam-assume-role-cli/)

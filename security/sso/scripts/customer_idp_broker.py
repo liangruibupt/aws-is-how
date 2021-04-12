@@ -24,7 +24,7 @@ sts_connection = boto3.client('sts')
 
 # Step 2.2 Assume Role
 assumed_role_object = sts_connection.assume_role(
-    RoleArn="arn:aws-cn:iam::ACCOUNT-ID-WITHOUT-HYPHENS:role/ROLE-NAME",
+    RoleArn="arn:aws-cn:iam::ACCOUNT-ID-WITHOUT-HYPHENS:role/SSO-ROLE-NAME",
     RoleSessionName="AssumeRoleSession",
 )
 
