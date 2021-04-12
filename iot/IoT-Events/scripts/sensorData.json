@@ -1,0 +1,11 @@
+{
+    "sensorData": {
+        "co2": 23,
+        "light": 750,
+        "temperature": 47,
+        "humidity": 90
+    },
+    "hvacData": {
+        "status": "on"
+    }
+}
