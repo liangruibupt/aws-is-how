@@ -86,4 +86,4 @@ aws logs delete-log-group --log-group-name /aws/lambda/cwsyn-* --region eu-west-
 ```
 # Reference
 
-[](https://ako.aws-management.tools/tko372759/en/cw/introduction/createeks.html)
+[Help guide](https://ako.aws-management.tools/tko372759/en/cw/introduction/createeks.html)

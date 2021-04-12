@@ -25,7 +25,7 @@ sts_connection = boto3.client('sts')
 # Step 2.2 Assume Role
 assumed_role_object = sts_connection.assume_role(
     RoleArn="arn:aws-cn:iam::ACCOUNT-ID-WITHOUT-HYPHENS:role/SSO-ROLE-NAME",
-    RoleSessionName="AssumeRoleSession",
+    RoleSessionName="userid@email.com",
 )
 
 # Step 3: Format resulting temporary credentials into JSON
