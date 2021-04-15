@@ -26,6 +26,8 @@
 
 [Amazon Personalize workshop](https://github.com/nwcd-samples/Personalize_workshop_CHN)
 
+[ML Bot Workshop](http://ml-bot.s3-website.cn-north-1.amazonaws.com.cn/)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -35,7 +37,7 @@
 
 [Networking calculator](https://netcalc.solution-architecture.aws.a2z.com/)
 
-
+[Price Calculator](https://calculator.aws/#/estimate)
 
 ## Computing
 
@@ -72,6 +74,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
 
 [Change EC2 Time-Zone](EC2/Change-TimeZone.md)
+
+[Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
 
 ## Analytics
 
@@ -174,6 +178,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
 
 [aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
+
+[Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
 
 ## Network
 
@@ -324,6 +330,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
 
 [How can I check, scale, delete, or drain my worker nodes on EKS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-node-actions/)
+
+[EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
 ## DevOps
 
