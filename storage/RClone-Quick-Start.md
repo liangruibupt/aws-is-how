@@ -65,7 +65,16 @@ storage_class> 1
 advanced config > n
 y) Yes this is OK
 ```
-- Option 2: Edit .config/rclone/rclone.conf in your home directory
+- Option 2: use a named profile:
+  - Profile files are standard files used by AWS CLI tools
+  - By default it will use the profile in your home directory (e.g. ~/.aws/credentials on unix based systems):
+  ```yaml
+  AWS_SHARED_CREDENTIALS_FILE = ~/.aws/credentials
+  AWS_PROFILE = firehose_delivery
+  ```
+
+
+- Option 3: Edit .config/rclone/rclone.conf in your home directory
 ```yaml
 [global_account_id]
 type = s3
