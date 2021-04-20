@@ -253,6 +253,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
+[AWS告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)

@@ -1,0 +1,1253 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation template to launch resources for the Amazon MQ workshop.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: General Configuration
+        Parameters:
+          - CIDR
+      - Label:
+          default: Broker Configuration
+        Parameters:
+          - AmazonMQBrokerUser
+          - AmazonMQBrokerPassword
+    ParameterLabels:
+      AmazonMQBrokerUser:
+        default: Broker Username
+      AmazonMQBrokerPassword:
+        default: Broker Password
+      
+Parameters:
+  CIDR:
+    Description: CIDR block, from which the access to the EC2 instance is allowed.
+    Type: String
+    Default: '0.0.0.0/0'
+    MinLength: 1
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
+    ConstraintDescription: The CIDR block is required!
+  AmazonMQBrokerUser:
+    Description: The user to access the Amazon MQ broker.
+    Type: String
+    Default: workshopUser
+    MinLength: 2
+    ConstraintDescription: The Amazon MQ broker user is required !
+  AmazonMQBrokerPassword:
+    Description: The password to access the Amazon MQ broker. Min 12 characters
+    Type: String
+    Default: workshopUser
+    MinLength: 12
+    ConstraintDescription: The Amazon MQ broker password is required !
+    NoEcho: true
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.42.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - VPC
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - InternetGateway
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref 'VPC'
+      InternetGatewayId: !Ref 'InternetGateway'
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'VPC'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - RouteTable
+  Route:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref 'RouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref 'InternetGateway'
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref 'VPC'
+      CidrBlock: 10.42.0.0/24
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs ''
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - PublicSubnet1
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref 'VPC'
+      CidrBlock: 10.42.1.0/24
+      AvailabilityZone: !Select
+        - '1'
+        - !GetAZs ''
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - PublicSubnet2
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref 'VPC'
+      CidrBlock: 10.42.2.0/24
+      AvailabilityZone: !Select
+        - '2'
+        - !GetAZs ''
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - PublicSubnet3
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref 'PublicSubnet1'
+      RouteTableId: !Ref 'RouteTable'
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref 'PublicSubnet2'
+      RouteTableId: !Ref 'RouteTable'
+  PublicSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref 'PublicSubnet3'
+      RouteTableId: !Ref 'RouteTable'
+  AmazonMQSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Limits security group ingress and egress traffic for the Amazon
+        MQ instance
+      VpcId: !Ref 'VPC'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8162
+          ToPort: 8162
+          CidrIp: !Ref 'CIDR'
+        - IpProtocol: tcp
+          FromPort: 61617
+          ToPort: 61617
+          CidrIp: !Ref 'CIDR'
+        - IpProtocol: tcp
+          FromPort: 5671
+          ToPort: 5671
+          CidrIp: !Ref 'CIDR'
+        - IpProtocol: tcp
+          FromPort: 61614
+          ToPort: 61614
+          CidrIp: !Ref 'CIDR'
+        - IpProtocol: tcp
+          FromPort: 8883
+          ToPort: 8883
+          CidrIp: !Ref 'CIDR'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - AmazonMQSecurityGroup
+  AmazonMQBrokerLarge:
+    Type: AWS::AmazonMQ::Broker
+    Properties:
+      BrokerName: Broker
+      EngineType: ActiveMQ
+      EngineVersion: 5.15.9
+      HostInstanceType: mq.m5.large
+      DeploymentMode: ACTIVE_STANDBY_MULTI_AZ
+      PubliclyAccessible: true
+      AutoMinorVersionUpgrade: false
+      SecurityGroups:
+        - !Ref 'AmazonMQSecurityGroup'
+      SubnetIds:
+        - !Ref 'PublicSubnet1'
+        - !Ref 'PublicSubnet2'
+      Logs:
+        Audit: true
+        General: true
+      Users:
+        - ConsoleAccess: true
+          Groups:
+            - admin
+          Username: !Ref 'AmazonMQBrokerUser'
+          Password: !Ref 'AmazonMQBrokerPassword'
+  Broker1:
+    Properties:
+      BrokerName: NoB1
+      DeploymentMode: ACTIVE_STANDBY_MULTI_AZ
+      EngineType: ACTIVEMQ
+      EngineVersion: 5.15.9
+      HostInstanceType: mq.t2.micro
+      Logs:
+        Audit: true
+        General: true
+      PubliclyAccessible: true
+      AutoMinorVersionUpgrade: false
+      SecurityGroups:
+        - !Ref 'AmazonMQSecurityGroup'
+      SubnetIds:
+        - !Ref 'PublicSubnet1'
+        - !Ref 'PublicSubnet2'
+      Users:
+        - ConsoleAccess: true
+          Groups:
+            - admin
+          Username: !Ref 'AmazonMQBrokerUser'
+          Password: !Ref 'AmazonMQBrokerPassword'
+    Type: AWS::AmazonMQ::Broker
+  Broker2:
+    Properties:
+      AutoMinorVersionUpgrade: false
+      BrokerName: NoB2
+      DeploymentMode: ACTIVE_STANDBY_MULTI_AZ
+      EngineType: ACTIVEMQ
+      EngineVersion: 5.15.9
+      HostInstanceType: mq.t2.micro
+      Logs:
+        Audit: true
+        General: true
+      PubliclyAccessible: true
+      AutoMinorVersionUpgrade: false
+      SecurityGroups:
+        - !Ref 'AmazonMQSecurityGroup'
+      SubnetIds:
+        - !Ref 'PublicSubnet2'
+        - !Ref 'PublicSubnet3'
+      Users:
+        - ConsoleAccess: true
+          Groups:
+            - admin
+          Username: !Ref 'AmazonMQBrokerUser'
+          Password: !Ref 'AmazonMQBrokerPassword'
+    Type: AWS::AmazonMQ::Broker
+  Broker3:
+    Properties:
+      AutoMinorVersionUpgrade: false
+      BrokerName: NoB3
+      DeploymentMode: ACTIVE_STANDBY_MULTI_AZ
+      EngineType: ACTIVEMQ
+      EngineVersion: 5.15.9
+      HostInstanceType: mq.t2.micro
+      Logs:
+        Audit: true
+        General: true
+      PubliclyAccessible: true
+      AutoMinorVersionUpgrade: false
+      SecurityGroups:
+        - !Ref 'AmazonMQSecurityGroup'
+      SubnetIds:
+        - !Ref 'PublicSubnet1'
+        - !Ref 'PublicSubnet3'
+      Users:
+        - ConsoleAccess: true
+          Groups:
+            - admin
+          Username: !Ref 'AmazonMQBrokerUser'
+          Password: !Ref 'AmazonMQBrokerPassword'
+    Type: AWS::AmazonMQ::Broker
+  Configuration1:
+    Properties:
+      Data:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - |-
+              <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+              <broker xmlns="http://activemq.apache.org/schema/core"
+                      schedulePeriodForDestinationPurge="10000"
+                      start="false">
+                <!--
+                A configuration contains all of the settings for your ActiveMQ broker, in XML format (similar to ActiveMQ's activemq.xml file).
+                You can create a configuration before creating any brokers. You can then apply the configuration to one or more brokers.
+
+                You can use additional attributes for the broker element above. These attributes allow you to configure broker-wide settings.
+
+                For more information, see Configuration and Amazon MQ Broker Configuration Parameters in the Amazon MQ Developer Guide:
+                https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/amazon-mq-broker-configuration-parameters.html
+                -->
+                <!--
+                Mirrored queues let you send a copy of each message to a topic with a similar name automatically.
+                For more information, see http://activemq.apache.org/mirrored-queues.html
+
+                Virtual destinations let you configure advanced routing of messages between destinations.
+                For more information, see http://activemq.apache.org/virtual-destinations.html
+                -->
+                <!--
+                <destinationInterceptors>
+                  <mirroredQueue copyMessage="true" postfix=".qmirror" prefix=""/>
+                  <virtualDestinationInterceptor>
+                    <virtualDestinations>
+                      <virtualTopic name="&gt;" prefix="VirtualTopicConsumers.*." selectorAware="false"/>
+                      <compositeQueue name="MY.QUEUE">
+                        <forwardTo>
+                          <queue physicalName="FOO"/>
+                          <topic physicalName="BAR"/>
+                        </forwardTo>
+                      </compositeQueue>
+                    </virtualDestinations>
+                  </virtualDestinationInterceptor>
+                </destinationInterceptors>
+                -->
+                <!--
+                By default, Amazon MQ optimizes for queues with fast consumers:
+                Consumers are considered fast if they are able to keep up with the rate of messages generated by producers.
+                Consumers are considered slow if a queue builds up a backlog of unacknowledged messages, potentially causing a decrease in producer throughput.
+                To instruct Amazon MQ to optimize for queues with slow consumers, set the concurrentStoreAndDispatchQueues attribute to false.
+                For more information, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/ensuring-effective-amazon-mq-performance.html
+                -->
+                <!--
+                <persistenceAdapter>
+                  <kahaDB  concurrentStoreAndDispatchQueues="false"/>
+                </persistenceAdapter>
+                -->
+                <destinationPolicy>
+                    <policyMap>
+                       <policyEntries>
+                      <!--
+                      gcInactiveDestinations is used to automatically purge inactive destinations
+                      preventing them from unnecessarily using broker resources.
+
+                      An 'inactive' destination is one that has no messages pending and no consumers connected.
+
+                      For more information, see: http://activemq.apache.org/delete-inactive-destinations.html
+                      -->
+                          <policyEntry gcInactiveDestinations="true"
+                                       inactiveTimoutBeforeGC="600000"
+                                       topic="&gt;">
+                        <!--
+                        The constantPendingMessageLimitStrategy is used to prevent
+                        slow topic consumers to block producers and affect other consumers
+                        by limiting the number of messages that are retained
+
+                        For more information, see: http://activemq.apache.org/slow-consumer-handling.html
+                        -->
+                             <pendingMessageLimitStrategy>
+                                <constantPendingMessageLimitStrategy limit="1000"/>
+                             </pendingMessageLimitStrategy>
+                          </policyEntry>
+                          <policyEntry gcInactiveDestinations="true"
+                                       inactiveTimoutBeforeGC="600000"
+                                       queue="&gt;"/>
+                          <!--
+                      Destination policies let you configure a rich set of behaviors for your queues and topics.
+                      For more information, see http://activemq.apache.org/per-destination-policies.html
+                      -->
+                          <!--
+                      <policyEntry topic="FOO.&gt;">
+                        <dispatchPolicy>
+                          <roundRobinDispatchPolicy/>
+                        </dispatchPolicy>
+                        <subscriptionRecoveryPolicy>
+                          <lastImageSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                      </policyEntry>
+                      <policyEntry advisoryForConsumed="true" tempTopic="true"/>
+                      <policyEntry advisoryForConsumed="true" tempQueue="true"/>
+                      -->
+                       </policyEntries>
+                    </policyMap>
+                </destinationPolicy>
+                <!--
+                Typically, destinations are created automatically when they are used. Amazon MQ lets you create destinations when the broker is started.
+                For more information, see http://activemq.apache.org/configure-startup-destinations.html
+                -->
+                <!--
+                <destinations>
+                  <queue physicalName="FOO.BAR"/>
+                  <topic physicalName="SOME.TOPIC"/>
+                </destinations>
+                -->
+                <!--
+                You can control advanced ActiveMQ features using plugins.
+                -->
+                <plugins>
+                  <!--
+                  The Authorization plugin allows you to control the groups of users that are allowed to perform certain operations on your destinations.
+                  For more information, see http://activemq.apache.org/security.html
+                  -->
+                  <!--
+                  <authorizationPlugin>
+                    <map>
+                      <authorizationMap>
+                        <authorizationEntries>
+                          <authorizationEntry admin="guests,users" queue="GUEST.&gt;" read="guests" write="guests,users"/>
+                          <authorizationEntry admin="guests,users" read="guests,users" topic="ActiveMQ.Advisory.&gt;" write="guests,users"/>
+                        </authorizationEntries>
+                        <tempDestinationAuthorizationEntry>
+                          <tempDestinationAuthorizationEntry admin="tempDestinationAdmins" read="tempDestinationAdmins" write="tempDestinationAdmins"/>
+                        </tempDestinationAuthorizationEntry>
+                      </authorizationMap>
+                    </map>
+                  </authorizationPlugin>
+                  -->
+                  <!--
+                  The Discarding DLQ plugin simplifies the configuration of your global dead-letter queue strategy.
+                  You can take advantage of a more granular per-destination control by using destination policies.
+                  For more information, see http://activemq.apache.org/message-redelivery-and-dlq-handling.html
+                  -->
+                  <!--
+                  <discardingDLQBrokerPlugin dropAll="true" dropTemporaryQueues="true" dropTemporaryTopics="true"/>
+                  -->
+                  <!--
+                  The Force Persistency Mode plugin can override the persistency mode set on messages.
+                  -->
+                  <!--
+                  <forcePersistencyModeBrokerPlugin persistenceFlag="true"/>
+                  -->
+                  <!--
+                  The Redelivery plugin extends the capabilities of destination policies with respect to message redelivery.
+                  For more information, see http://activemq.apache.org/message-redelivery-and-dlq-handling.html
+                  -->
+                  <!--
+                  <redeliveryPlugin fallbackToDeadLetter="true" sendToDlqIfMaxRetriesExceeded="true">
+                    <redeliveryPolicyMap>
+                      <redeliveryPolicyMap>
+                        <redeliveryPolicyEntries>
+                          <redeliveryPolicy maximumRedeliveries="4" queue="SpecialQueue" redeliveryDelay="10000"/>
+                        </redeliveryPolicyEntries>
+                        <defaultEntry>
+                          <redeliveryPolicy initialRedeliveryDelay="5000" maximumRedeliveries="4" redeliveryDelay="10000"/>
+                        </defaultEntry>
+                      </redeliveryPolicyMap>
+                    </redeliveryPolicyMap>
+                  </redeliveryPlugin>
+                  -->
+                  <!--
+                  The Statistics plugin lets you query broker or destination statistics by sending messages to the broker.
+                  For more information, see http://activemq.apache.org/statisticsplugin.html
+                  -->
+                  <!--
+                  <statisticsBrokerPlugin/>
+                  -->
+                  <!--
+                  The Timestamping plugin lets the broker use server-side time instead of client-provided time for messages.
+                  For more information, see http://activemq.apache.org/timestampplugin.html
+                  -->
+                  <!--
+                  <timeStampingBrokerPlugin ttlCeiling="86400000" zeroExpirationOverride="86400000"/>
+                  -->
+                </plugins>
+                <!--
+                Network connectors let you connect brokers into networks of brokers.
+                For more information, see Creating and Configuring an Amazon MQ Network of Brokers
+                (https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/amazon-mq-creating-configuring-network-of-brokers.html)
+                in the Amazon MQ Developer Guide and also Networks of Brokers
+                (http://activemq.apache.org/networks-of-brokers.html) in the ActiveMQ documentation.
+                -->
+                <!--
+                <networkConnectors>
+                  <networkConnector name="myNetworkConnector" userName="commonUser" uri="masterslave:(ssl://b-1a2b3c4d-1.mq.region.amazonaws.com:61617,ssl://b-1a2b3c4d-2.mq.region.amazonaws.com:61617)"/>
+                </networkConnectors>
+                -->
+                 <networkConnectors>
+                    <networkConnector conduitSubscriptions="false"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="QueueConnector_ConnectingBroker_1_To_2"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - |-
+              )"
+                       userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <topic physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="true"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="TopicConnector_ConnectingBroker_1_To_2"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <queue physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="false"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="QueueConnector_ConnectingBroker_1_To_3"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <topic physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="true"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="TopicConnector_ConnectingBroker_1_To_3"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |
+              ">
+                       <excludedDestinations>
+                          <queue physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                 </networkConnectors>
+                 <transportConnectors>
+                    <transportConnector name="openwire" rebalanceClusterClients="true" updateClusterClients="true"/>
+                 </transportConnectors>                 
+              </broker>
+      Description: Generated configuration to build a network of brokers.
+      EngineType: ACTIVEMQ
+      EngineVersion: 5.15.9
+      Name: NoB1Configuration
+    Type: AWS::AmazonMQ::Configuration
+  Configuration2:
+    Properties:
+      Data:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - |-
+              <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+              <broker xmlns="http://activemq.apache.org/schema/core"
+                      schedulePeriodForDestinationPurge="10000"
+                      start="false">
+                <!--
+                A configuration contains all of the settings for your ActiveMQ broker, in XML format (similar to ActiveMQ's activemq.xml file).
+                You can create a configuration before creating any brokers. You can then apply the configuration to one or more brokers.
+
+                You can use additional attributes for the broker element above. These attributes allow you to configure broker-wide settings.
+
+                For more information, see Configuration and Amazon MQ Broker Configuration Parameters in the Amazon MQ Developer Guide:
+                https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/amazon-mq-broker-configuration-parameters.html
+                -->
+                <!--
+                Mirrored queues let you send a copy of each message to a topic with a similar name automatically.
+                For more information, see http://activemq.apache.org/mirrored-queues.html
+
+                Virtual destinations let you configure advanced routing of messages between destinations.
+                For more information, see http://activemq.apache.org/virtual-destinations.html
+                -->
+                <!--
+                <destinationInterceptors>
+                  <mirroredQueue copyMessage="true" postfix=".qmirror" prefix=""/>
+                  <virtualDestinationInterceptor>
+                    <virtualDestinations>
+                      <virtualTopic name="&gt;" prefix="VirtualTopicConsumers.*." selectorAware="false"/>
+                      <compositeQueue name="MY.QUEUE">
+                        <forwardTo>
+                          <queue physicalName="FOO"/>
+                          <topic physicalName="BAR"/>
+                        </forwardTo>
+                      </compositeQueue>
+                    </virtualDestinations>
+                  </virtualDestinationInterceptor>
+                </destinationInterceptors>
+                -->
+                <!--
+                By default, Amazon MQ optimizes for queues with fast consumers:
+                Consumers are considered fast if they are able to keep up with the rate of messages generated by producers.
+                Consumers are considered slow if a queue builds up a backlog of unacknowledged messages, potentially causing a decrease in producer throughput.
+                To instruct Amazon MQ to optimize for queues with slow consumers, set the concurrentStoreAndDispatchQueues attribute to false.
+                For more information, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/ensuring-effective-amazon-mq-performance.html
+                -->
+                <!--
+                <persistenceAdapter>
+                  <kahaDB  concurrentStoreAndDispatchQueues="false"/>
+                </persistenceAdapter>
+                -->
+                <destinationPolicy>
+                    <policyMap>
+                       <policyEntries>
+                      <!--
+                      gcInactiveDestinations is used to automatically purge inactive destinations
+                      preventing them from unnecessarily using broker resources.
+
+                      An 'inactive' destination is one that has no messages pending and no consumers connected.
+
+                      For more information, see: http://activemq.apache.org/delete-inactive-destinations.html
+                      -->
+                          <policyEntry gcInactiveDestinations="true"
+                                       inactiveTimoutBeforeGC="600000"
+                                       topic="&gt;">
+                        <!--
+                        The constantPendingMessageLimitStrategy is used to prevent
+                        slow topic consumers to block producers and affect other consumers
+                        by limiting the number of messages that are retained
+
+                        For more information, see: http://activemq.apache.org/slow-consumer-handling.html
+                        -->
+                             <pendingMessageLimitStrategy>
+                                <constantPendingMessageLimitStrategy limit="1000"/>
+                             </pendingMessageLimitStrategy>
+                          </policyEntry>
+                          <policyEntry gcInactiveDestinations="true"
+                                       inactiveTimoutBeforeGC="600000"
+                                       queue="&gt;"/>
+                          <!--
+                      Destination policies let you configure a rich set of behaviors for your queues and topics.
+                      For more information, see http://activemq.apache.org/per-destination-policies.html
+                      -->
+                          <!--
+                      <policyEntry topic="FOO.&gt;">
+                        <dispatchPolicy>
+                          <roundRobinDispatchPolicy/>
+                        </dispatchPolicy>
+                        <subscriptionRecoveryPolicy>
+                          <lastImageSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                      </policyEntry>
+                      <policyEntry advisoryForConsumed="true" tempTopic="true"/>
+                      <policyEntry advisoryForConsumed="true" tempQueue="true"/>
+                      -->
+                       </policyEntries>
+                    </policyMap>
+                </destinationPolicy>
+                <!--
+                Typically, destinations are created automatically when they are used. Amazon MQ lets you create destinations when the broker is started.
+                For more information, see http://activemq.apache.org/configure-startup-destinations.html
+                -->
+                <!--
+                <destinations>
+                  <queue physicalName="FOO.BAR"/>
+                  <topic physicalName="SOME.TOPIC"/>
+                </destinations>
+                -->
+                <!--
+                You can control advanced ActiveMQ features using plugins.
+                -->
+                <plugins>
+                  <!--
+                  The Authorization plugin allows you to control the groups of users that are allowed to perform certain operations on your destinations.
+                  For more information, see http://activemq.apache.org/security.html
+                  -->
+                  <!--
+                  <authorizationPlugin>
+                    <map>
+                      <authorizationMap>
+                        <authorizationEntries>
+                          <authorizationEntry admin="guests,users" queue="GUEST.&gt;" read="guests" write="guests,users"/>
+                          <authorizationEntry admin="guests,users" read="guests,users" topic="ActiveMQ.Advisory.&gt;" write="guests,users"/>
+                        </authorizationEntries>
+                        <tempDestinationAuthorizationEntry>
+                          <tempDestinationAuthorizationEntry admin="tempDestinationAdmins" read="tempDestinationAdmins" write="tempDestinationAdmins"/>
+                        </tempDestinationAuthorizationEntry>
+                      </authorizationMap>
+                    </map>
+                  </authorizationPlugin>
+                  -->
+                  <!--
+                  The Discarding DLQ plugin simplifies the configuration of your global dead-letter queue strategy.
+                  You can take advantage of a more granular per-destination control by using destination policies.
+                  For more information, see http://activemq.apache.org/message-redelivery-and-dlq-handling.html
+                  -->
+                  <!--
+                  <discardingDLQBrokerPlugin dropAll="true" dropTemporaryQueues="true" dropTemporaryTopics="true"/>
+                  -->
+                  <!--
+                  The Force Persistency Mode plugin can override the persistency mode set on messages.
+                  -->
+                  <!--
+                  <forcePersistencyModeBrokerPlugin persistenceFlag="true"/>
+                  -->
+                  <!--
+                  The Redelivery plugin extends the capabilities of destination policies with respect to message redelivery.
+                  For more information, see http://activemq.apache.org/message-redelivery-and-dlq-handling.html
+                  -->
+                  <!--
+                  <redeliveryPlugin fallbackToDeadLetter="true" sendToDlqIfMaxRetriesExceeded="true">
+                    <redeliveryPolicyMap>
+                      <redeliveryPolicyMap>
+                        <redeliveryPolicyEntries>
+                          <redeliveryPolicy maximumRedeliveries="4" queue="SpecialQueue" redeliveryDelay="10000"/>
+                        </redeliveryPolicyEntries>
+                        <defaultEntry>
+                          <redeliveryPolicy initialRedeliveryDelay="5000" maximumRedeliveries="4" redeliveryDelay="10000"/>
+                        </defaultEntry>
+                      </redeliveryPolicyMap>
+                    </redeliveryPolicyMap>
+                  </redeliveryPlugin>
+                  -->
+                  <!--
+                  The Statistics plugin lets you query broker or destination statistics by sending messages to the broker.
+                  For more information, see http://activemq.apache.org/statisticsplugin.html
+                  -->
+                  <!--
+                  <statisticsBrokerPlugin/>
+                  -->
+                  <!--
+                  The Timestamping plugin lets the broker use server-side time instead of client-provided time for messages.
+                  For more information, see http://activemq.apache.org/timestampplugin.html
+                  -->
+                  <!--
+                  <timeStampingBrokerPlugin ttlCeiling="86400000" zeroExpirationOverride="86400000"/>
+                  -->
+                </plugins>
+                <!--
+                Network connectors let you connect brokers into networks of brokers.
+                For more information, see Creating and Configuring an Amazon MQ Network of Brokers
+                (https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/amazon-mq-creating-configuring-network-of-brokers.html)
+                in the Amazon MQ Developer Guide and also Networks of Brokers
+                (http://activemq.apache.org/networks-of-brokers.html) in the ActiveMQ documentation.
+                -->
+                <!--
+                <networkConnectors>
+                  <networkConnector name="myNetworkConnector" userName="commonUser" uri="masterslave:(ssl://b-1a2b3c4d-1.mq.region.amazonaws.com:61617,ssl://b-1a2b3c4d-2.mq.region.amazonaws.com:61617)"/>
+                </networkConnectors>
+                -->
+                 <networkConnectors>
+                    <networkConnector conduitSubscriptions="false"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="QueueConnector_ConnectingBroker_2_To_1"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <topic physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="true"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="TopicConnector_ConnectingBroker_2_To_1"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <queue physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="false"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="QueueConnector_ConnectingBroker_2_To_3"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <topic physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="true"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="TopicConnector_ConnectingBroker_2_To_3"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker3
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |
+              ">
+                       <excludedDestinations>
+                          <queue physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                 </networkConnectors>
+                 <transportConnectors>
+                    <transportConnector name="openwire" rebalanceClusterClients="true" updateClusterClients="true"/>
+                 </transportConnectors>
+              </broker>
+      Description: Generated configuration to build a network of brokers.
+      EngineType: ACTIVEMQ
+      EngineVersion: 5.15.9
+      Name: NoB2Configuration
+    Type: AWS::AmazonMQ::Configuration
+  Configuration3:
+    Properties:
+      Data:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - |-
+              <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+              <broker xmlns="http://activemq.apache.org/schema/core"
+                      schedulePeriodForDestinationPurge="10000"
+                      start="false">
+                <!--
+                A configuration contains all of the settings for your ActiveMQ broker, in XML format (similar to ActiveMQ's activemq.xml file).
+                You can create a configuration before creating any brokers. You can then apply the configuration to one or more brokers.
+
+                You can use additional attributes for the broker element above. These attributes allow you to configure broker-wide settings.
+
+                For more information, see Configuration and Amazon MQ Broker Configuration Parameters in the Amazon MQ Developer Guide:
+                https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/amazon-mq-broker-configuration-parameters.html
+                -->
+                <!--
+                Mirrored queues let you send a copy of each message to a topic with a similar name automatically.
+                For more information, see http://activemq.apache.org/mirrored-queues.html
+
+                Virtual destinations let you configure advanced routing of messages between destinations.
+                For more information, see http://activemq.apache.org/virtual-destinations.html
+                -->
+                <!--
+                <destinationInterceptors>
+                  <mirroredQueue copyMessage="true" postfix=".qmirror" prefix=""/>
+                  <virtualDestinationInterceptor>
+                    <virtualDestinations>
+                      <virtualTopic name="&gt;" prefix="VirtualTopicConsumers.*." selectorAware="false"/>
+                      <compositeQueue name="MY.QUEUE">
+                        <forwardTo>
+                          <queue physicalName="FOO"/>
+                          <topic physicalName="BAR"/>
+                        </forwardTo>
+                      </compositeQueue>
+                    </virtualDestinations>
+                  </virtualDestinationInterceptor>
+                </destinationInterceptors>
+                -->
+                <!--
+                By default, Amazon MQ optimizes for queues with fast consumers:
+                Consumers are considered fast if they are able to keep up with the rate of messages generated by producers.
+                Consumers are considered slow if a queue builds up a backlog of unacknowledged messages, potentially causing a decrease in producer throughput.
+                To instruct Amazon MQ to optimize for queues with slow consumers, set the concurrentStoreAndDispatchQueues attribute to false.
+                For more information, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/ensuring-effective-amazon-mq-performance.html
+                -->
+                <!--
+                <persistenceAdapter>
+                  <kahaDB  concurrentStoreAndDispatchQueues="false"/>
+                </persistenceAdapter>
+                -->
+                <destinationPolicy>
+                    <policyMap>
+                       <policyEntries>
+                      <!--
+                      gcInactiveDestinations is used to automatically purge inactive destinations
+                      preventing them from unnecessarily using broker resources.
+
+                      An 'inactive' destination is one that has no messages pending and no consumers connected.
+
+                      For more information, see: http://activemq.apache.org/delete-inactive-destinations.html
+                      -->
+                          <policyEntry gcInactiveDestinations="true"
+                                       inactiveTimoutBeforeGC="600000"
+                                       topic="&gt;">
+                        <!--
+                        The constantPendingMessageLimitStrategy is used to prevent
+                        slow topic consumers to block producers and affect other consumers
+                        by limiting the number of messages that are retained
+
+                        For more information, see: http://activemq.apache.org/slow-consumer-handling.html
+                        -->
+                             <pendingMessageLimitStrategy>
+                                <constantPendingMessageLimitStrategy limit="1000"/>
+                             </pendingMessageLimitStrategy>
+                          </policyEntry>
+                          <policyEntry gcInactiveDestinations="true"
+                                       inactiveTimoutBeforeGC="600000"
+                                       queue="&gt;"/>
+                          <!--
+                      Destination policies let you configure a rich set of behaviors for your queues and topics.
+                      For more information, see http://activemq.apache.org/per-destination-policies.html
+                      -->
+                          <!--
+                      <policyEntry topic="FOO.&gt;">
+                        <dispatchPolicy>
+                          <roundRobinDispatchPolicy/>
+                        </dispatchPolicy>
+                        <subscriptionRecoveryPolicy>
+                          <lastImageSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                      </policyEntry>
+                      <policyEntry advisoryForConsumed="true" tempTopic="true"/>
+                      <policyEntry advisoryForConsumed="true" tempQueue="true"/>
+                      -->
+                       </policyEntries>
+                    </policyMap>
+                </destinationPolicy>
+                <!--
+                Typically, destinations are created automatically when they are used. Amazon MQ lets you create destinations when the broker is started.
+                For more information, see http://activemq.apache.org/configure-startup-destinations.html
+                -->
+                <!--
+                <destinations>
+                  <queue physicalName="FOO.BAR"/>
+                  <topic physicalName="SOME.TOPIC"/>
+                </destinations>
+                -->
+                <!--
+                You can control advanced ActiveMQ features using plugins.
+                -->
+                <plugins>
+                  <!--
+                  The Authorization plugin allows you to control the groups of users that are allowed to perform certain operations on your destinations.
+                  For more information, see http://activemq.apache.org/security.html
+                  -->
+                  <!--
+                  <authorizationPlugin>
+                    <map>
+                      <authorizationMap>
+                        <authorizationEntries>
+                          <authorizationEntry admin="guests,users" queue="GUEST.&gt;" read="guests" write="guests,users"/>
+                          <authorizationEntry admin="guests,users" read="guests,users" topic="ActiveMQ.Advisory.&gt;" write="guests,users"/>
+                        </authorizationEntries>
+                        <tempDestinationAuthorizationEntry>
+                          <tempDestinationAuthorizationEntry admin="tempDestinationAdmins" read="tempDestinationAdmins" write="tempDestinationAdmins"/>
+                        </tempDestinationAuthorizationEntry>
+                      </authorizationMap>
+                    </map>
+                  </authorizationPlugin>
+                  -->
+                  <!--
+                  The Discarding DLQ plugin simplifies the configuration of your global dead-letter queue strategy.
+                  You can take advantage of a more granular per-destination control by using destination policies.
+                  For more information, see http://activemq.apache.org/message-redelivery-and-dlq-handling.html
+                  -->
+                  <!--
+                  <discardingDLQBrokerPlugin dropAll="true" dropTemporaryQueues="true" dropTemporaryTopics="true"/>
+                  -->
+                  <!--
+                  The Force Persistency Mode plugin can override the persistency mode set on messages.
+                  -->
+                  <!--
+                  <forcePersistencyModeBrokerPlugin persistenceFlag="true"/>
+                  -->
+                  <!--
+                  The Redelivery plugin extends the capabilities of destination policies with respect to message redelivery.
+                  For more information, see http://activemq.apache.org/message-redelivery-and-dlq-handling.html
+                  -->
+                  <!--
+                  <redeliveryPlugin fallbackToDeadLetter="true" sendToDlqIfMaxRetriesExceeded="true">
+                    <redeliveryPolicyMap>
+                      <redeliveryPolicyMap>
+                        <redeliveryPolicyEntries>
+                          <redeliveryPolicy maximumRedeliveries="4" queue="SpecialQueue" redeliveryDelay="10000"/>
+                        </redeliveryPolicyEntries>
+                        <defaultEntry>
+                          <redeliveryPolicy initialRedeliveryDelay="5000" maximumRedeliveries="4" redeliveryDelay="10000"/>
+                        </defaultEntry>
+                      </redeliveryPolicyMap>
+                    </redeliveryPolicyMap>
+                  </redeliveryPlugin>
+                  -->
+                  <!--
+                  The Statistics plugin lets you query broker or destination statistics by sending messages to the broker.
+                  For more information, see http://activemq.apache.org/statisticsplugin.html
+                  -->
+                  <!--
+                  <statisticsBrokerPlugin/>
+                  -->
+                  <!--
+                  The Timestamping plugin lets the broker use server-side time instead of client-provided time for messages.
+                  For more information, see http://activemq.apache.org/timestampplugin.html
+                  -->
+                  <!--
+                  <timeStampingBrokerPlugin ttlCeiling="86400000" zeroExpirationOverride="86400000"/>
+                  -->
+                </plugins>
+                <!--
+                Network connectors let you connect brokers into networks of brokers.
+                For more information, see Creating and Configuring an Amazon MQ Network of Brokers
+                (https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/amazon-mq-creating-configuring-network-of-brokers.html)
+                in the Amazon MQ Developer Guide and also Networks of Brokers
+                (http://activemq.apache.org/networks-of-brokers.html) in the ActiveMQ documentation.
+                -->
+                <!--
+                <networkConnectors>
+                  <networkConnector name="myNetworkConnector" userName="commonUser" uri="masterslave:(ssl://b-1a2b3c4d-1.mq.region.amazonaws.com:61617,ssl://b-1a2b3c4d-2.mq.region.amazonaws.com:61617)"/>
+                </networkConnectors>
+                -->
+                 <networkConnectors>
+                    <networkConnector conduitSubscriptions="false"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="QueueConnector_ConnectingBroker_3_To_1"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <topic physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="true"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="TopicConnector_ConnectingBroker_3_To_1"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker1
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <queue physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="false"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="QueueConnector_ConnectingBroker_3_To_2"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |-
+              ">
+                       <excludedDestinations>
+                          <topic physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                    <networkConnector conduitSubscriptions="true"
+                                      consumerTTL="1"
+                                      messageTTL="-1"
+                                      name="TopicConnector_ConnectingBroker_3_To_2"
+                                      uri="masterslave:(
+            - Fn::Select:
+              - 0
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - ','
+            - Fn::Select:
+              - 1
+              - Fn::GetAtt:
+                - Broker2
+                - OpenWireEndpoints
+            - |-
+              )"
+                                      userName="
+            - !Ref 'AmazonMQBrokerUser'
+            - |
+              ">
+                       <excludedDestinations>
+                          <queue physicalName="&gt;"/>
+                       </excludedDestinations>
+                    </networkConnector>
+                 </networkConnectors>
+                 <transportConnectors>
+                    <transportConnector name="openwire" rebalanceClusterClients="true" updateClusterClients="true"/>
+                 </transportConnectors>                 
+              </broker>
+      Description: Generated configuration to build a network of brokers.
+      EngineType: ACTIVEMQ
+      EngineVersion: 5.15.9
+      Name: NoB3Configuration
+    Type: AWS::AmazonMQ::Configuration
+
+  ConfigurationAssociation1:
+    Properties:
+      Broker:
+        Ref: Broker1
+      Configuration:
+        Id:
+          Ref: Configuration1
+        Revision:
+          Fn::GetAtt:
+          - Configuration1
+          - Revision
+    Type: AWS::AmazonMQ::ConfigurationAssociation
+
+  ConfigurationAssociation2:
+    Properties:
+      Broker:
+        Ref: Broker2
+      Configuration:
+        Id:
+          Ref: Configuration2
+        Revision:
+          Fn::GetAtt:
+          - Configuration2
+          - Revision
+    Type: AWS::AmazonMQ::ConfigurationAssociation
+
+  ConfigurationAssociation3:
+    Properties:
+      Broker:
+        Ref: Broker3
+      Configuration:
+        Id:
+          Ref: Configuration3
+        Revision:
+          Fn::GetAtt:
+          - Configuration3
+          - Revision
+    Type: AWS::AmazonMQ::ConfigurationAssociation
+
+  MQBrokerUserPassword:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: MQBrokerUserPassword
+      Type: String
+      Value: !Join
+        - ','
+        - - !Ref 'AmazonMQBrokerUser'
+          - !Ref 'AmazonMQBrokerPassword'
+      Description: SSM Param for broker user and password
+
