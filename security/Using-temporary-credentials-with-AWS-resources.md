@@ -54,6 +54,7 @@ aws iam get-role --role-name target-role-name --region cn-northwest-1
 ```
 
 ## Step 5: Get the target Role `target-role-name` temporary credentials via profile `sts_user`
+- Linux
 ```bash
 aws sts assume-role --role-arn arn:aws-cn:iam::123456789012:role/target-role-name --role-session-name "role-name-session1" --duration-seconds 3600 --profile sts_user > assume-role-output.txt
 
@@ -66,5 +67,26 @@ aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile target-
 aws configure set aws_session_token $AWS_SESSION_TOKEN --profile target-role-profile
 aws configure set default.region cn-northwest-1 --profile target-role-profile
 
-aws firehose --delivery-stream-name sample_firehose --record <value> --region cn-northwest-1 --profile target-role-profile
+aws firehose put-record --delivery-stream-name iot-data-collector --record '{"Data":"SGVsbG8gd29ybGQ="}' --region cn-northwest-1
+
+{
+    "RecordId": "aIDf1gD5Px8PREzf/Vh8gdYNEjkVxXyk7s3gWPrUBvzEtFL2Js0vFTIfzKB3KaoLs65lD613sQaMEWEgEYN9s309tOUwM4EnTGTrQxRylnfKf9BWClrSs5uQ/mdiHsvt7rvG5M4Oi8US73rs3nW+rEru26UfVMzI1EAXnf5Iwvg0cl2d7X84as7FttHxlQO48s9cWSOChCycHLoJusR6A683x4n//UQA",
+    "Encrypted": false
+}
+```
+
+- Windows
+```bash
+aws sts assume-role --role-arn arn:aws-cn:iam::876820548815:role/firehose_delivery_role --role-session-name "role-name-session1" --duration-seconds 3600 --profile sts_user
+
+set AWS_ACCESS_KEY_ID=Credentials.AccessKeyId
+set AWS_SECRET_ACCESS_KEY=Credentials.SecretAccessKey
+set AWS_SESSION_TOKEN=Credentials.SessionToken
+
+aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile target-role-profile
+aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile target-role-profile
+aws configure set aws_session_token $AWS_SESSION_TOKEN --profile target-role-profile
+aws configure set default.region cn-northwest-1 --profile target-role-profile
+
+aws firehose put-record --delivery-stream-name iot-data-collector --record "{\"Data\":\"SGVsbG8gd29ybGQ=\"}" --region cn-northwest-1 --profile firehose_delivery
 ```
