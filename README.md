@@ -383,6 +383,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Use the Amazon Connect to call out the mobile phone](integration/Connect/Using-Amazon-Connect-call-mobile-phone.md)
 
+[AmazonMQ-Workshop](integration/MQ/AmazonMQ-Workshop.md)
+
 ## Media
 
 [Video on Demand on AWS](media/mediaconvert)
