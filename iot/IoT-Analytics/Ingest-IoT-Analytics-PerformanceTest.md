@@ -63,8 +63,7 @@ CREATE EXTERNAL TABLE `rtm_rtmstore_parquet`(
   `diastolic` int, 
   `pressurelevel` string, 
   `temp` int, 
-  `event_time` timestamp, 
-  `bms_tbc_volt` array<string>)
+  `event_time` timestamp)
 PARTITIONED BY ( 
   `__dt` string)
 ROW FORMAT SERDE 
