@@ -17,8 +17,11 @@ import boto3  # AWS SDK for Python (Boto3) 'pip install boto3'
 # http://boto3.readthedocs.io/en/latest/reference/services/sts.html
 # http://boto3.readthedocs.io/en/latest/reference/services/sts.html#STS.Client.assume_role
 
-# Use the service role with STS permission
-sts_connection = boto3.client('sts')
+# Use the service role with STS permission, you should configure the profile which name as sts_user
+# sts_user with permission to call sts service
+session = boto3.Session(profile_name='sts_user',
+                        region_name='cn-northwest-1')
+sts_connection = session.client('sts')
 
 # Step 2.1 Sessin Revoke
 

@@ -14,7 +14,23 @@ Lets users who sign in to your organization's identity provider access the AWS M
 
 Follow up [Enabling custom identity broker access to the AWS console official guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html)
 
-[Example using python code](scripts/customer_idp_broker.py) to construct the URL
+[Example using python code](scripts/customer_idp_broker.py) to construct the URL. The python code need aws profile with permission
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole",
+                "sts:AssumeRoleWithSAML",
+                "sts:AssumeRoleWithWebIdentity"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
 
 6. You can configure the SwitchRole
 - Add below permission to the original Role `SSO-ROLE-NAME` grant by AWS STS. The policy allow Role `SSO-ROLE-NAME` switch to Role `TARGET_SWITCH_ROLE_NAME`
