@@ -207,9 +207,15 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
 
+[Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
+
 ## DNS
 
 [R53 in China region](R53/README.md)
+
+[How do I troubleshoot Route 53 geolocation routing issues](https://aws.amazon.com/premiumsupport/knowledge-center/troubleshoot-route53-geolocation/)
+
+[R53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
 
 ## Serverless
 
