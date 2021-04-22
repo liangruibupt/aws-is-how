@@ -41,7 +41,23 @@ def lambda_handler(event, context):
     print('NotebookInstanceStatus %s' % (status['NotebookInstanceStatus']))
 ```
 
+```bash
+2021-04-22T00:39:11.085+08:00   Successfully installed cycler-0.10.0 kiwisolver-1.3.1 matplotlib-3.3.4 pillow-8.2.0
+
+2021-04-22T00:39:13.086+08:00   [NbConvertApp] WARNING | Config option `kernel_spec_manager_class` not recognized by `NbConvertApp`.
+
+2021-04-22T00:39:13.086+08:00   [NbConvertApp] Converting notebook /home/ec2-user/SageMaker/notebook1.ipynb to html
+
+2021-04-22T00:39:14.086+08:00   [NbConvertApp] Executing notebook with kernel: python3
+
+2021-04-22T00:39:22.088+08:00   [NbConvertApp] Writing 344427 bytes to /home/ec2-user/SageMaker/notebook1.html
+```
+
 # Reference
 [How to Run a Sagemaker Notebook From AWS Lambdas ?](https://www.linkedin.com/pulse/how-run-sagemaker-notebook-from-aws-lambdas-saurabh-aggarwal/)
 
 [SageMaker Notebook Instance Lifecycle Config Samples](https://github.com/aws-samples/amazon-sagemaker-notebook-instance-lifecycle-config-samples)
+
+[jupyter nbconvert](https://github.com/jupyter/nbconvert)
+
+[convert-notebook](https://nbconvert.readthedocs.io/en/latest/usage.html#convert-notebook)

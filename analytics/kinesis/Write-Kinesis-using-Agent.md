@@ -197,14 +197,29 @@ PowerShell.exe -File ".\InstallKinesisAgent.ps1" -version "version"
 }
 ```
 
-3. Update the AWSKinesisTap.exe.config file in the %PROGRAMFILES%\Amazon\AWSKinesisTap directory to specify the name of the AWS profile. More details, please refer: [Sink Security Configuration](https://docs.aws.amazon.com/kinesis-agent-windows/latest/userguide/sink-object-declarations.html#configuring-kinesis-agent-windows-sink-security-configuration)
+3. Update the AWSKinesisTap.exe.config file in the `%PROGRAMFILES%\Amazon\AWSKinesisTap` directory to specify the name of the AWS profile. More details, please refer: [Sink Security Configuration](https://docs.aws.amazon.com/kinesis-agent-windows/latest/userguide/sink-object-declarations.html#configuring-kinesis-agent-windows-sink-security-configuration)
 
-```
+```xml
 <configuration>
   <appSettings>
     <add key="AWSProfileName" value="development"/>
     <add key="AWSProfilesLocation" value="C:\Users\USERNAME\.aws\credentials"/>
   </appSettings>
+</configuration>
+```
+
+4. Use the proxy
+```xml
+<configuration>
+<aws>
+<proxy
+  host="proxy"
+  port="3128" />
+</aws>
+<appSettings>
+    <add key="AWSProfileName" value="development"/>
+    <add key="AWSProfilesLocation" value="C:\Users\USERNAME\.aws\credentials"/>
+</appSettings>
 </configuration>
 ```
 

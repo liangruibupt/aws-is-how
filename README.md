@@ -134,6 +134,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
 
+[数据分析的技术源流](https://aws.amazon.com/cn/blogs/china/the-technical-origin-of-data-analysis/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 

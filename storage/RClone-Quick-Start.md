@@ -180,5 +180,32 @@ crontab -e
 0/15 * * * * rclone-cron.sh >/dev/null 2>&1
 ```
 
+- Windows Schedule Task
+```bash
+rclone sync C:\Users\Administrator\Downloads\rclone_copy china-cn-north-1://serverless-hands-on/rclone_copy/windows/
+```
+
+![schedule-task-rclone](media/schedule-task-rclone.png)
+
+![schedule-task-rclone2](media/schedule-task-rclone2.png)
+
+![schedule-task-rclone3](media/schedule-task-rclone3.png)
+
+```bash
+"C:\Program Files\Amazon\AWSCLI\aws.exe" s3 sync "C:\my_local_folder" s3://my_bucket
+
+"C:\Program Files\Amazon\AWSCLIV2\aws.exe"  s3 sync C:\Users\Administrator\Downloads\rclone_copy s3://serverless-hands-on/rclone_copy/windows_s3cli/ --region cn-northwest-1 --profile firehose_delivery
+```
+
+- PowerShell
+```bash
+echo "Start TIme: $(Get-Date)" >> test.log
+"C:\Program Files\Amazon\AWSCLI\aws.exe" s3 sync "C:\my_local_folder" s3://my_bucket
+echo "End TIme: $(Get-Date)" >> test.log
+```
+
+![schedule-task-s3sync1](media/schedule-task-s3sync1.png)
+
+
 # Reference
 [RClone S3](https://rclone.org/s3/)
