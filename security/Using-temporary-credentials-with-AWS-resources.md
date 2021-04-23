@@ -75,17 +75,21 @@ aws firehose put-record --delivery-stream-name iot-data-collector --record '{"Da
 }
 ```
 
-- Windows
+- Windows Powershell
 ```bash
 aws sts assume-role --role-arn arn:aws-cn:iam::876820548815:role/firehose_delivery_role --role-session-name "role-name-session1" --duration-seconds 3600 --profile sts_user > assume-role-output.txt
+$CONF = (Get_Conent "assume-role-output.txt") | ConvertFrom-Json
+$Access_ID = $CONF.Credentials.AccessKeyId
+$Access_KEY = $CONF.Credentials.SecretAccessKey
+$Session_ID = $CONF.Credentials.SessionToken
 
-set AWS_ACCESS_KEY_ID=$(type assume-role-output.txt | jq-win64 .Credentials.AccessKeyId | sed 's/"//g')
-set AWS_SECRET_ACCESS_KEY=$(type assume-role-output.txt | jq-win64 .Credentials.SecretAccessKey | sed 's/"//g')
-set AWS_SESSION_TOKEN=$(type assume-role-output.txt | jq-win64 .Credentials.SessionToken | sed 's/"//g')
+$env:AWS_ACCESS_KEY_ID=$Access_ID
+$env:AWS_SECRET_ACCESS_KEY=$Access_KEY
+$env:AWS_SESSION_TOKEN=$Session_ID
 
-aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile target-role-profile
-aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile target-role-profile
-aws configure set aws_session_token $AWS_SESSION_TOKEN --profile target-role-profile
+aws configure set aws_access_key_id $env:AWS_ACCESS_KEY_ID --profile target-role-profile
+aws configure set aws_secret_access_key $env:AWS_SECRET_ACCESS_KEY --profile target-role-profile
+aws configure set aws_session_token $env:AWS_SESSION_TOKEN --profile target-role-profile
 aws configure set default.region cn-northwest-1 --profile target-role-profile
 
 aws firehose put-record --delivery-stream-name iot-data-collector --record "{\"Data\":\"SGVsbG8gd29ybGQ=\"}" --region cn-northwest-1 --profile firehose_delivery

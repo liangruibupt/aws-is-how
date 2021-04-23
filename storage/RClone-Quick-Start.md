@@ -119,12 +119,12 @@ sysctl -p /etc/sysctl.conf
 4. Sync data between local file to S3
 - Linux
 ```bash
-# Copy
+# Copy - If source delete files, keep destination file
 ls /home/ec2-user/rclone_copy
 2008.csv.bz2
 rclone copy /home/ec2-user/rclone_copy china-cn-north-1://serverless-hands-on/rclone_copy/
 
-# Sync
+# Sync - Exactly match source and desitnation, if source delete files, destination files will be deleted as well.
 cp go1.13.linux-amd64.tar.gz mysql-connector-java-5.1.47.zip rclone_copy/
 rclone sync -i /home/ec2-user/rclone_copy china-cn-north-1://serverless-hands-on/rclone_copy/ --max-age 24h #Only sync last_modify_time yonger than 24h and -i is interactive, without -i will running backend
 Transferred:   	  119.075M / 119.075 MBytes, 100%, 1.484 MBytes/s, ETA 0s
