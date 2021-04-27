@@ -6,8 +6,9 @@ import time
 session = boto3.Session(profile_name='timestream-test', region_name='us-east-1')
 query_client = session.client(
     'timestream-query', endpoint_url='https://query-cell2.timestream.us-east-1.amazonaws.com')
-write_client = session.client('timestream-write', config=Config(read_timeout=20, max_pool_connections=5000,
-                                                                retries={'max_attempts': 10}))
+write_client = session.client('timestream-write',
+    endpoint_url='https://vpce-07e34b7bc5649ac7e-pp6c70im.ingest-cell2.timestream.us-east-1.vpce.amazonaws.com',
+        config=Config(read_timeout=20, max_pool_connections=5000, retries={'max_attempts': 10}))
 
 DATABASE_NAME = "kdaflink"
 TABLE_NAME = "kinesis-6yi"

@@ -77,6 +77,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
 
+[How can I set up a CloudWatch alarm to automatically recover my EC2 instance?]()
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -183,6 +185,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
 
+[Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -262,6 +266,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
 [AWS告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
+
+[利用Lambda调用smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
 
 ## Migration
 
