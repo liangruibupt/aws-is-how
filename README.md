@@ -187,6 +187,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
+[Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -215,13 +217,17 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
+[Nginx S3 Reverse Proxy](network/Nginx/Nginx-S3-Reverse-Proxy.md)
+
 ## DNS
 
-[R53 in China region](R53/README.md)
+[Route53 in China region](R53/README.md)
 
-[How do I troubleshoot Route 53 geolocation routing issues](https://aws.amazon.com/premiumsupport/knowledge-center/troubleshoot-route53-geolocation/)
+[How do I troubleshoot Route53 geolocation routing issues](https://aws.amazon.com/premiumsupport/knowledge-center/troubleshoot-route53-geolocation/)
 
-[R53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+[Route53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+[Route53 Resolver](R53/R53-Resolver.md)
 
 ## Serverless
 

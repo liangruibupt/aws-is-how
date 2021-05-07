@@ -17,7 +17,9 @@
 
 ## Lab1: Prepare
 - Global region: [Launch the CloudFormation Stack](https://github.com/aws-samples/amazon-mq-workshop/blob/master/labs/lab-setup.md)
-- China region: [set-up an Amazon MQ broker](https://github.com/aws-samples/amazon-mq-workshop/blob/master/labs/lab-1.md)
+- China region: 
+- Option 1: [Launch the CloudFormation Stack](scripts/CreateAmazonMQWorkshop.yaml)
+- Option 2: [set-up an Amazon MQ broker](https://github.com/aws-samples/amazon-mq-workshop/blob/master/labs/lab-1.md)
   - Broker name: `Broker`
   - Broker instance type: `mq.m5.large`
   - Deployment mode: `Active/standby broker for high availability` and `Durability Optimized Storage`
