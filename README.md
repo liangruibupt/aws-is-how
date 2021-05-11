@@ -138,6 +138,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [数据分析的技术源流](https://aws.amazon.com/cn/blogs/china/the-technical-origin-of-data-analysis/)
 
+[Analytics Reference Architecture](https://aws-samples.github.io/aws-analytics-reference-architecture/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
@@ -404,6 +406,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Use the Amazon Connect to call out the mobile phone](integration/Connect/Using-Amazon-Connect-call-mobile-phone.md)
 
 [AmazonMQ-Workshop](integration/MQ/AmazonMQ-Workshop.md)
+
+[Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
 
 ## Media
 
