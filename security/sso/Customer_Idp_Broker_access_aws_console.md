@@ -2,6 +2,19 @@
 
 Lets users who sign in to your organization's identity provider access the AWS Management Console, you can create a custom identity broker:
 
+## Architecture and workflow
+
+![customer-identity-broker](media/customer-identity-broker.png)
+
+1. Users login the Login Gateway Portal
+2. Login Gateway Portal Manage the Corp Role and AWS IAM Role Mapping
+3. Login Gateway Portal call AWS API to create temporary security credentials as request a sign-in token (with proper Role permission)
+4. Login Gateway Portal construct a URL for the console that includes the token.
+5. User use the URL on the user‘s behalf to access AWS
+6. User can switch Role from AWS console if user grant multiple AWS IAM Role
+
+## The [Example using python code](scripts/customer_idp_broker.py) logic:
+
 1. Verify that the user is authenticated by your identity provider in your broker application.
 
 2. Call the AWS Security Token Service (AWS STS) AssumeRole to obtain temporary security credentials for the user. 
