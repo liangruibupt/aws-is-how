@@ -28,6 +28,8 @@
 
 [ML Bot Workshop](http://ml-bot.s3-website.cn-north-1.amazonaws.com.cn/)
 
+[IP Camera AI SaaS Solution](https://www.amazonaws.cn/en/solutions/ipc-ai-saas-solution/)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -76,6 +78,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [Change EC2 Time-Zone](EC2/Change-TimeZone.md)
 
 [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
+
+[AWS Workshop - Graviton2 China](http://graviton2-workshop.s3-website.cn-northwest-1.amazonaws.com.cn/1.basics.html)
 
 [How can I set up a CloudWatch alarm to automatically recover my EC2 instance?]()
 
@@ -187,6 +191,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
 
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -273,6 +278,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [利用Lambda调用smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
 
+[Create the pandas layer for lambda ](lambda/create-pandas-layer-4-lambda.md)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
@@ -282,6 +289,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
 
 [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
+
+[Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating SQL Server to Amazon RDS using native backup and restore.md)
 
 ## Storage
 
@@ -326,6 +335,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
 
 [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
+
+[使用Amazon RDS for Oracle配合Oracle Active Data Guard建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
 
 ## Container
 
@@ -384,6 +395,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [CSV tools](https://github.com/secretGeek/AwesomeCSV)
 
 [在 AWS 中国区 EKS 上以 GitOps 方式构建 CI/CD 流水线](https://aws.amazon.com/cn/blogs/china/build-ci-cd-pipeline-in-gitops-on-aws-china-eks/)
+
+[一键部署在钉钉群里自动创建 AWS Support Case 无服务器解决方案](https://www.amazonaws.cn/en/solutions/ipc-ai-saas-solution/)
+
+[Python GUI lib](https://mp.weixin.qq.com/s/sqXCSgrMMcXCA1lxbAucsA)
 
 ## Infra as Code
 
