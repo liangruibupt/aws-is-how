@@ -290,7 +290,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
 
-[Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating SQL Server to Amazon RDS using native backup and restore.md)
+[Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
 
 ## Storage
 
