@@ -292,6 +292,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
 
+[Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
+
+[Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
+
 ## Storage
 
 [How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
@@ -423,8 +427,3 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Media
 
 [Video on Demand on AWS](media/mediaconvert)
-
-## Migration
-[Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
-
-[Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
