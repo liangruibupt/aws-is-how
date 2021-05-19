@@ -97,3 +97,5 @@ AND deviceId = '1234'
 GROUP BY deviceId, bin(time, 1m)
 ORDER BY binned_time DESC
 ```
+
+# Reference
