@@ -144,6 +144,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Analytics Reference Architecture](https://aws-samples.github.io/aws-analytics-reference-architecture/)
 
+[AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
@@ -231,6 +233,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Route53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
 
 [Route53 Resolver](R53/R53-Resolver.md)
+
+[Route53 cross-account-dns](R53/cross-account-dns.md)
 
 ## Serverless
 
