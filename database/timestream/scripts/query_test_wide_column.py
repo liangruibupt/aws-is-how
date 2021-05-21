@@ -3,114 +3,68 @@ from botocore.config import Config
 import json
 import time
 
-session = boto3.Session(profile_name='timestream-test', region_name='us-east-1')
+session = boto3.Session(region_name='us-east-1')
 query_client = session.client(
     'timestream-query', endpoint_url='https://query-cell2.timestream.us-east-1.amazonaws.com')
 write_client = session.client('timestream-write',
-        endpoint_url='https://ingest-cell2.timestream.us-east-1.amazonaws.com',
-        config=Config(read_timeout=20, max_pool_connections=5000, retries={'max_attempts': 10}))
+                              endpoint_url='https://ingest-cell2.timestream.us-east-1.amazonaws.com',
+                              config=Config(read_timeout=20, max_pool_connections=5000, retries={'max_attempts': 10}))
 
 DATABASE_NAME = "kdaflink"
 TABLE_NAME = "metrics200"
 VIN = "vin-92175368190175"
 RIGHT_TABLE_NAME = "kinesis600"
-QUERY_REPEAT = 5
+QUERY_REPEAT = 10
 
 QUERY_COUNT = f"""
     SELECT count(*) FROM "{DATABASE_NAME}"."{TABLE_NAME}"
     """
-SELECT_LIMIT_20 = f"""
-    SELECT vin, temp, pressureLevel, time FROM "{DATABASE_NAME}"."{TABLE_NAME}" limit 20
+
+QUERY_COUNT_VID = f"""
+    SELECT count(*), vin FROM "{DATABASE_NAME}"."{TABLE_NAME}" group by vin limit 100
     """
 
-SELECT_BETWEEN_AND = f"""
-    SELECT vd.vin, vd.trip_id, vd.temp, vd.pressureLevel
-        FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd 
-        where vd.time BETWEEN TIMESTAMP '2021-04-01 06:49:47.000000000' AND TIMESTAMP '2021-04-06 08:49:47.000000000'
-        AND vd.measure_name = 'powertrain_state'AND measure_value::double > 50
-        Limit 20
-    """
-
-# SELECT_GROUP_BY = f"""
-#     SELECT vd.vin, COUNT(DISTINCT vd.trip_id) AS total
-#         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-#         WHERE vd.pressureLevel = 'NORMAL'
-#         AND vd.time BETWEEN TIMESTAMP '2021-04-01 06:49:47.000000000' AND TIMESTAMP '2021-04-06 08:49:47.000000000'
-#         GROUP BY vd.vin limit 20
-#     """
 SELECT_GROUP_BY = f"""
-    SELECT max(vd.measure_value::double) as max_sys, vd.vin
+    SELECT AVG(vd.measure_value::double) as avg_sys, vd.vin
         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL' AND vd.measure_value::double > 50
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 05:54:47.000000000'
-        GROUP BY vd.vin limit 20
-    """
-
-SELECT_CASE = f"""
-    SELECT vd.vin, vd.trip_id, vd.systolic,
-        CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
-        FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL'
-        AND vd.time BETWEEN TIMESTAMP '2021-04-01 06:49:47.000000000' AND TIMESTAMP '2021-04-06 08:49:47.000000000'
-        limit 20
-    """
-
-SELECT_JOIN = f"""
-    SELECT vd.vin, vd.trip_id, vd.systolic,
-        CASE vd.pressureLevel WHEN 'High' THEN 'alert' WHEN 'Low' THEN 'caution' ELSE 'go' END as instructions 
-        FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd, "{DATABASE_NAME}"."{RIGHT_TABLE_NAME}" vl
-        WHERE vd.pressureLevel = vl.pressureLevel AND (vd.pressureLevel = 'NORMAL')
-        AND vd.time BETWEEN TIMESTAMP '2021-04-01 06:49:47.000000000' AND TIMESTAMP '2021-04-06 08:49:47.000000000'
-        Limit 20
+        where vd.vin='{VIN}'
+        GROUP BY vd.vin limit 100
     """
 
 SELECT_MAX = f"""
     SELECT max(vd.measure_value::double) as max_sys, vd.vin
         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL' AND vd.measure_value::double > 50
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 05:54:47.000000000'
-        Group by vd.vin limit 20
+        where vd.vin='{VIN}'
+        Group by vd.vin limit 100
     """
 
 SELECT_BIN = f"""
     SELECT BIN(vd.time, 1m) AS binned_timestamp, AVG(vd.measure_value::double) AS avg_value_1mins, vd.vin
         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL'
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 05:54:47.000000000'
-        Group by vd.vin, BIN(vd.time, 1m) limit 20
+        where vd.vin='{VIN}'
+        Group by vd.vin, BIN(vd.time, 1m) limit 100
 """
 
 SELECT_TRUNC = f"""
     SELECT date_trunc('minute', vd.time) AS min_timestamp, AVG(vd.measure_value::double) AS avg_value_1min, vd.vin
         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL'
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 05:54:47.000000000'
-        Group by 1, vd.vin limit 20 
+        where vd.vin='{VIN}'
+        Group by 1, vd.vin limit 100 
 """
 
 SELECT_ARBIT = f"""
     SELECT BIN(vd.time, 1m) AS binned_timestamp, arbitrary(vd.measure_value::double) AS random_value, vd.vin
         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL'
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 05:54:47.000000000'
-        Group by vd.vin, BIN(vd.time, 1m) limit 20
+        where vd.vin='{VIN}'
+        Group by vd.vin, BIN(vd.time, 1m) limit 100
 """
 
-SELECT_ARBIT = f"""
-    SELECT BIN(vd.time, 1m) AS binned_timestamp, arbitrary(vd.measure_value::double) AS random_value, vd.vin
-        FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL'
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 05:54:47.000000000'
-        Group by vd.vin, BIN(vd.time, 1m) limit 20
-"""
-
-SELECT_ARBIT = f"""
+SELECT_NTH_VALUE = f"""
     SELECT BIN(vd.time, 1m) AS binned_timestamp, vd.vin, nth_value(vd.measure_value::double, 2) over(partition by vd.vin
-		order by vd.time desc
-		rows between unbounded preceding and unbounded following)
+        order by vd.time desc
+        rows between unbounded preceding and unbounded following)
         FROM "{DATABASE_NAME}"."{TABLE_NAME}" vd
-        WHERE vd.pressureLevel = 'NORMAL'
-        AND vd.time BETWEEN TIMESTAMP '2021-04-05 05:49:47.000000000' AND TIMESTAMP '2021-04-05 06:54:47.000000000'
+        where vd.vin='{VIN}'
         limit 100
 """
 
@@ -329,12 +283,15 @@ where vd.vin='{VIN}'
 GROUP BY vd.vin , vd.time, vd.trip_id
 """
 
-# funclist = [QUERY_COUNT, SELECT_LIMIT_20, SELECT_BETWEEN_AND, SELECT_GROUP_BY, 
+# funclist = [QUERY_COUNT, SELECT_LIMIT_20, SELECT_BETWEEN_AND, SELECT_GROUP_BY,
 #             SELECT_CASE, SELECT_JOIN, SELECT_MAX]
-# joblist = ['QUERY_COUNT', 'SELECT_LIMIT_20','SELECT_BETWEEN_AND', 'SELECT_GROUP_BY', 
+# joblist = ['QUERY_COUNT', 'SELECT_LIMIT_20','SELECT_BETWEEN_AND', 'SELECT_GROUP_BY',
 #            'SELECT_CASE', 'SELECT_JOIN', 'SELECT_MAX']
-funclist = [SELECT_GROUP_BY, SELECT_MAX, SELECT_BIN, SELECT_TRUNC]
-joblist = ['SELECT_GROUP_BY', 'SELECT_MAX', 'SELECT_BIN', 'SELECT_TRUNC']
+funclist = [SELECT_WIDE_COLUMN, SELECT_GROUP_BY, SELECT_MAX,
+            SELECT_BIN, SELECT_TRUNC, SELECT_ARBIT, SELECT_NTH_VALUE]
+joblist = ['SELECT_WIDE_COLUMN', 'SELECT_GROUP_BY', 'SELECT_MAX',
+           'SELECT_BIN', 'SELECT_TRUNC', 'SELECT_ARBIT', 'SELECT_NTH_VALUE']
+
 
 class WriterExample:
     def __init__(self, client):
@@ -351,7 +308,8 @@ class WriterExample:
             print("Table doesn't exist")
         except Exception as err:
             print("Describe table failed:", err)
-    
+
+
 class QueryExample:
     def __init__(self, client):
         self.client = client
@@ -375,24 +333,21 @@ class QueryExample:
         query_status = query_result["QueryStatus"]
 
         progress_percentage = query_status["ProgressPercentage"]
-        print(f"Query progress so far: {progress_percentage}%")
+        #print(f"Query progress so far: {progress_percentage}%")
 
         bytes_scanned = float(
             query_status["CumulativeBytesScanned"])/1024/1024
-        print('Data scanned so far is: %.6f MB' %
-              (bytes_scanned))
+        #print('Data scanned so far is: %.6f MB' % (bytes_scanned))
 
         bytes_metered = float(
             query_status["CumulativeBytesMetered"])/1024/1024
-        print('Data metered so far is: %.6f MB' %
-              (bytes_metered))
+        #print('Data metered so far is: %.6f MB' % (bytes_metered))
 
         column_info = query_result['ColumnInfo']
         #print("Metadata: %s" % column_info)
         query_id = query_result["QueryId"]
         #print(f"Query id : {query_id}%")
 
-        print("Data: ")
         for row in query_result['Rows']:
             query_output = self._parse_row(column_info, row)
             #print(query_output)
@@ -459,7 +414,7 @@ class QueryExample:
     def run_all_queries(self):
         for query_id in range(len(funclist)):
             jobname = joblist[query_id]
-            print("Running query [%d] : [%s]" %
+            print("\nRunning query [%d] : [%s]" %
                   (query_id + 1, jobname))
             l1 = []
             for i in range(QUERY_REPEAT):
@@ -469,7 +424,7 @@ class QueryExample:
             r = []
             totaltime = 0
             totalscan = 0
-            print('\n\n###', jobname)
+            print('###', jobname)
             print('|Seq|%-20s|' % 'spent time')
             count = 1
             for i in l1:
@@ -482,7 +437,7 @@ class QueryExample:
                 count = count + 1
 
             print(f"Query id : {query_exec_id}%")
-            print('Average data scan for %s is: %.6f MB\n' %
+            print('Average data scan for %s is: %.6f MB' %
                   (jobname, totalscan/QUERY_REPEAT))
             print('Average time for %s is: %.6f s\n' %
                   (jobname, totaltime/QUERY_REPEAT))

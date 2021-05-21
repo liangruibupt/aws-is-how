@@ -91,6 +91,7 @@ def createRandomMetrics(dimensions, timestamp, timeUnit):
         ['LOW', 'NORMAL', 'HIGH']), "VARCHAR", timestamp, timeUnit))
 
     for measure in remainingmetrics:
+        print(measure)
         value = 100.0 * random.random()
         records.append(create_record(
             dimensions, measure, value, "DOUBLE", timestamp, timeUnit))
@@ -121,13 +122,13 @@ def send_records_to_timestream(write_client, host_scale, sleep_time, percent_lat
             data = json.dumps(metric)
             print(data)
             records.append(metric)
-            response = write_client.write_records(
-                DatabaseName=DATABASE_NAME,
-                TableName=TABLE_NAME,
-                Records=records,
-                CommonAttributes={})
-            print("wrote {} records to Timestream".format(len(records)))
-            print("response - write_records: {}".format(response))
+            # response = write_client.write_records(
+            #     DatabaseName=DATABASE_NAME,
+            #     TableName=TABLE_NAME,
+            #     Records=records,
+            #     CommonAttributes={})
+            # print("wrote {} records to Timestream".format(len(records)))
+            # print("response - write_records: {}".format(response))
 
         if sleep_time > 0:
             time.sleep(float(sleep_time))
