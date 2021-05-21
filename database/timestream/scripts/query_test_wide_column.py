@@ -7,8 +7,8 @@ session = boto3.Session(region_name='us-east-1')
 query_client = session.client(
     'timestream-query', endpoint_url='https://query-cell2.timestream.us-east-1.amazonaws.com')
 write_client = session.client('timestream-write',
-                              endpoint_url='https://ingest-cell2.timestream.us-east-1.amazonaws.com',
-                              config=Config(read_timeout=20, max_pool_connections=5000, retries={'max_attempts': 10}))
+        endpoint_url='https://ingest-cell2.timestream.us-east-1.amazonaws.com',
+        config=Config(read_timeout=20, max_pool_connections=5000, retries={'max_attempts': 10}))
 
 DATABASE_NAME = "kdaflink"
 TABLE_NAME = "metrics200"
@@ -283,14 +283,12 @@ where vd.vin='{VIN}'
 GROUP BY vd.vin , vd.time, vd.trip_id
 """
 
-# funclist = [QUERY_COUNT, SELECT_LIMIT_20, SELECT_BETWEEN_AND, SELECT_GROUP_BY,
+# funclist = [QUERY_COUNT, SELECT_LIMIT_20, SELECT_BETWEEN_AND, SELECT_GROUP_BY, 
 #             SELECT_CASE, SELECT_JOIN, SELECT_MAX]
-# joblist = ['QUERY_COUNT', 'SELECT_LIMIT_20','SELECT_BETWEEN_AND', 'SELECT_GROUP_BY',
+# joblist = ['QUERY_COUNT', 'SELECT_LIMIT_20','SELECT_BETWEEN_AND', 'SELECT_GROUP_BY', 
 #            'SELECT_CASE', 'SELECT_JOIN', 'SELECT_MAX']
-funclist = [SELECT_WIDE_COLUMN, SELECT_GROUP_BY, SELECT_MAX,
-            SELECT_BIN, SELECT_TRUNC, SELECT_ARBIT, SELECT_NTH_VALUE]
-joblist = ['SELECT_WIDE_COLUMN', 'SELECT_GROUP_BY', 'SELECT_MAX',
-           'SELECT_BIN', 'SELECT_TRUNC', 'SELECT_ARBIT', 'SELECT_NTH_VALUE']
+funclist = [SELECT_WIDE_COLUMN, SELECT_GROUP_BY, SELECT_MAX, SELECT_BIN, SELECT_TRUNC, SELECT_ARBIT, SELECT_NTH_VALUE]
+joblist = ['SELECT_WIDE_COLUMN', 'SELECT_GROUP_BY', 'SELECT_MAX', 'SELECT_BIN', 'SELECT_TRUNC', 'SELECT_ARBIT', 'SELECT_NTH_VALUE']
 
 
 class WriterExample:
@@ -308,8 +306,7 @@ class WriterExample:
             print("Table doesn't exist")
         except Exception as err:
             print("Describe table failed:", err)
-
-
+    
 class QueryExample:
     def __init__(self, client):
         self.client = client
@@ -351,7 +348,7 @@ class QueryExample:
         for row in query_result['Rows']:
             query_output = self._parse_row(column_info, row)
             #print(query_output)
-        return [bytes_scanned, query_id]
+        return [bytes_scanned,query_id]
 
     def _parse_row(self, column_info, row):
         data = row['Data']
@@ -425,18 +422,17 @@ class QueryExample:
             totaltime = 0
             totalscan = 0
             print('###', jobname)
-            print('|Seq|%-20s|' % 'spent time')
+            print('|Seq|%-20s|%-70s|%-20s|' % ('spent_time', 'query_id', 'scan_data MB'))
             count = 1
             for i in l1:
                 spenttime = i[1]-i[0]
-                print('|%-3d|%-20.6f|' % (count, spenttime))
-                totaltime += spenttime
-                scan_data = i[2]
                 query_exec_id = i[3]
+                scan_data = i[2]
+                print('|%-3d|%-20.3f|%-70s|%.3f|' % (count, spenttime, query_exec_id, scan_data))
+                totaltime += spenttime
                 totalscan += scan_data
                 count = count + 1
 
-            print(f"Query id : {query_exec_id}%")
             print('Average data scan for %s is: %.6f MB' %
                   (jobname, totalscan/QUERY_REPEAT))
             print('Average time for %s is: %.6f s\n' %
