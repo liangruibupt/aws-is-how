@@ -152,6 +152,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Harness the power of your data with AWS Analytics with Lake House](https://aws.amazon.com/cn/blogs/big-data/harness-the-power-of-your-data-with-aws-analytics/)
 
+[Data Science on AWS - Quick Start Workshop](https://github.com/data-science-on-aws/workshop)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
@@ -351,6 +353,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
 
 [使用Amazon RDS for Oracle配合Oracle Active Data Guard建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
+
+[Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
 
 ## Container
 
