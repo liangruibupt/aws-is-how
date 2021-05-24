@@ -81,7 +81,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [AWS Workshop - Graviton2 China](http://graviton2-workshop.s3-website.cn-northwest-1.amazonaws.com.cn/1.basics.html)
 
-[How can I set up a CloudWatch alarm to automatically recover my EC2 instance?]()
+[How can I set up a CloudWatch alarm to automatically recover my EC2 instance?](https://aws.amazon.com/premiumsupport/knowledge-center/automatic-recovery-ec2-cloudwatch/)
+
+[AWS Graviton2-based services](https://github.com/aws/aws-graviton-getting-started)
 
 ## Analytics
 
@@ -145,6 +147,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Analytics Reference Architecture](https://aws-samples.github.io/aws-analytics-reference-architecture/)
 
 [AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
+
+[Build a Lake House Architecture on AWS](https://aws.amazon.com/cn/blogs/big-data/build-a-lake-house-architecture-on-aws/)
+
+[Harness the power of your data with AWS Analytics with Lake House](https://aws.amazon.com/cn/blogs/big-data/harness-the-power-of-your-data-with-aws-analytics/)
 
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)

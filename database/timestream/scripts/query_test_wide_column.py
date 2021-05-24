@@ -428,7 +428,7 @@ class QueryExample:
                 spenttime = i[1]-i[0]
                 query_exec_id = i[3]
                 scan_data = i[2]
-                print('|%-3d|%-20.3f|%-70s|%.3f|' % (count, spenttime, query_exec_id, scan_data))
+                print('|%-3d|%-20.3f|%-70s|%-20.3f|' % (count, spenttime, query_exec_id, scan_data))
                 totaltime += spenttime
                 totalscan += scan_data
                 count = count + 1
@@ -444,4 +444,5 @@ write_exmaple = WriterExample(write_client)
 
 query_example = QueryExample(query_client)
 #query_example.run_query(QUERY_COUNT)
-query_example.run_all_queries()
+for i in range(30):
+    query_example.run_all_queries()
