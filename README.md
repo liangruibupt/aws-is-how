@@ -30,6 +30,8 @@
 
 [IP Camera AI SaaS Solution](https://www.amazonaws.cn/en/solutions/ipc-ai-saas-solution/)
 
+[使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -154,6 +156,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Data Science on AWS - Quick Start Workshop](https://github.com/data-science-on-aws/workshop)
 
+[How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
@@ -200,6 +204,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
 [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
+
+[How can I use permissions boundaries to limit the scope of IAM users and roles and prevent privilege escalation?](https://aws.amazon.com/premiumsupport/knowledge-center/iam-permission-boundaries/?nc1=h_ls)
+
+[Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
 
 
 ## Network
@@ -355,6 +363,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [使用Amazon RDS for Oracle配合Oracle Active Data Guard建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
 
 [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
+
+[如何将我的 DynamoDB 表从一个 AWS 账户迁移到另一个账户](https://aws.amazon.com/cn/premiumsupport/knowledge-center/dynamodb-cross-account-migration/)
 
 ## Container
 
