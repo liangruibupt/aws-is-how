@@ -32,6 +32,8 @@
 
 [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
 
+[Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -239,6 +241,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
 [Nginx S3 Reverse Proxy](network/Nginx/Nginx-S3-Reverse-Proxy.md)
+
+[网关负载均衡服务集成FortiGate安全网关扩展安全服务性能](https://aws.amazon.com/cn/blogs/china/gateway-load-balancing-services-integrate-fortigate-security-gateways/)
 
 ## DNS
 
