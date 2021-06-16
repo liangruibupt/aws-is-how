@@ -34,6 +34,8 @@
 
 [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
 
+[Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -319,6 +321,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
 
 [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
+
+[Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
+
+[Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
 
 ## Storage
 
