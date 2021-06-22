@@ -1,0 +1,53 @@
+- Action:
+    Operation: DELETE
+    Parameters:
+      sourceColumns: >-
+        ["dateChecked","death","deathIncrease","fips","hash","hospitalized","hospitalizedIncrease","negative","negativeIncrease","pending","positive","total","totalTestResults"]
+- Action:
+    Operation: REMOVE_VALUES
+    Parameters:
+      sourceColumn: state
+  ConditionExpressions:
+    - Condition: IS_NOT
+      Value: '["CA","LA","NY"]'
+      TargetColumn: state
+- Action:
+    Operation: DATE_FORMAT
+    Parameters:
+      dateTimeFormat: yyyy-mm-dd
+      functionStepType: DATE_FORMAT
+      sourceColumn: date
+      targetColumn: date_formated
+- Action:
+    Operation: CHANGE_DATA_TYPE
+    Parameters:
+      columnDataType: date
+      sourceColumn: date_formated
+- Action:
+    Operation: DELETE
+    Parameters:
+      sourceColumns: '["date"]'
+- Action:
+    Operation: DIVIDE
+    Parameters:
+      functionStepType: DIVIDE
+      sourceColumn1: positiveIncrease
+      sourceColumn2: totalTestResultsIncrease
+      targetColumn: positiveRate
+- Action:
+    Operation: MULTIPLY
+    Parameters:
+      functionStepType: MULTIPLY
+      sourceColumn1: positiveRate
+      targetColumn: positivePercentage
+      value2: '100'
+- Action:
+    Operation: DELETE
+    Parameters:
+      sourceColumns: '["totalTestResultsIncrease","positiveRate","positiveIncrease"]'
+- Action:
+    Operation: PIVOT
+    Parameters:
+      aggregateFunction: MEAN
+      sourceColumn: state
+      valueColumn: positivePercentage

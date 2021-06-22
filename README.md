@@ -162,6 +162,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
 
+[Glue Workshop](analytics/glue-workshop)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
