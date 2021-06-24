@@ -32,9 +32,9 @@
 
 [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
 
-[Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
-
-[Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
+[Invoke SageMaker Notebook via Event](ai-ml/SageMaker/Invoke_SageMaker_Notebook_via_event.md)
+ - [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
+ - [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
 
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
