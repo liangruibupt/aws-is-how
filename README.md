@@ -179,6 +179,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS IoT Events Quick Start](iot/IoT-Events)
 
+[AWS IoT Greengrass V2 Workshop](iot/IoT-Greengrass/Iot-greengrass-v2-workshop.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
