@@ -1,0 +1,40 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.example.Publisher",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "A component that publishes messages.",
+  "ComponentPublisher": "Amazon",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "accessControl": {
+        "aws.greengrass.ipc.pubsub": {
+          "com.example.Publisher:pubsub:1": {
+            "policyDescription": "Allows access to publish to all topics.",
+            "operations": [
+              "aws.greengrass#PublishToTopic"
+            ],
+            "resources": [
+              "*"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "Manifests": [
+    {
+      "Lifecycle": {
+        "Install": "pip3 install awsiotsdk numpy",
+        "Run": "python3 {artifacts:path}/example_publisher.py"
+      },
+         "Artifacts": [
+            {
+               "URI": "s3://iot-workshop-lab/ggcv2-workshop/quickstart/artifacts/com.example.Publisher/1.0.0/dummy_sensor.py"
+            },
+            {
+               "URI": "s3://iot-workshop-lab/ggcv2-workshop/quickstart/artifacts/com.example.Publisher/1.0.0/example_publisher.py"
+            }
+         ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.example.BridgeSubscriber",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "A component that subscribes to a topic",
+  "ComponentPublisher": "Amazon",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "topic": "mytopic2/test"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Install": {
+          "RequiresPrivilege": true,
+          "script": "chmod +x {artifacts:path}/mqttbridgesubscriber.sh"
+        },
+        "Run": {
+          "RequiresPrivilege": true,
+          "script": "{artifacts:path}/mqttbridgesubscriber.sh {configuration:/topic}"
+        }
+      }
+    }
+  ]
+}

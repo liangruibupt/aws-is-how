@@ -1,0 +1,22 @@
+{
+   "RecipeFormatVersion": "2020-01-25",
+   "ComponentName": "com.example.HelloWorld",
+   "ComponentVersion": "1.0.0",
+   "ComponentDescription": "My first AWS IoT Greengrass component.",
+   "ComponentPublisher": "Amazon",
+   "ComponentConfiguration": {
+      "DefaultConfiguration": {
+         "Message": "world"
+      }
+   },
+   "Manifests": [
+      {
+         "Platform": {
+            "os": "linux"
+         },
+         "Lifecycle": {
+            "Run": "python3 {artifacts:path}/hello_world.py '{configuration:/Message}'\n"
+         }
+      }
+   ]
+}

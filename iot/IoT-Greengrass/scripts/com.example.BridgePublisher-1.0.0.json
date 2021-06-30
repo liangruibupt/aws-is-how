@@ -1,0 +1,30 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.example.BridgePublisher",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "A component that publishes messages.",
+  "ComponentPublisher": "Amazon",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "topic": "mytopic1/test",
+      "message": "Hello-MQTT-Bridage-Demo"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Install": {
+          "RequiresPrivilege": true,
+          "script": "chmod +x {artifacts:path}/mqttbridgepublisher.sh"
+        },
+        "Run": {
+          "RequiresPrivilege": true,
+          "script": "chmod +x {artifacts:path}/mqttbridgepublisher.sh\nwhile true; \ndo \n {artifacts:path}/mqttbridgepublisher.sh {configuration:/topic} {configuration:/message}\n  sleep 2\ndone"
+        }
+      }
+    }
+  ]
+}

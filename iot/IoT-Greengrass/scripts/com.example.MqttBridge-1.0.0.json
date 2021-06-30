@@ -1,0 +1,39 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.example.MqttBridge",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "MQTT Bridge implementation using Mosquito Broker",
+  "ComponentPublisher": "Amazon",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "region": "cn-north-1"
+    }
+  },
+  "ComponentDependencies": {
+    "aws.greengrass.TokenExchangeService": {
+      "VersionRequirement": "^2.0.0",
+      "DependencyType": "HARD"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Install": {
+          "RequiresPrivilege": true,
+          "script": "echo 'mosquitto broker'\napt-get install -y mosquitto mosquitto-clients\necho '/etc/mosquitto/certs'\ntest ! -d /etc/mosquitto/certs && mkdir -p /etc/mosquitto/certs\necho 'rootCA'\ntest ! -e /etc/mosquitto/certs/rootCA.pem && wget https://www.amazontrust.com/repository/AmazonRootCA1.pem -O /etc/mosquitto/certs/rootCA.pem\nexit 0"
+        },
+        "Startup": {
+          "RequiresPrivilege": true,
+          "script": "export AWS_DEFAULT_REGION={configuration:/region}\nchmod +x {artifacts:path}/startup.sh\n{artifacts:path}/startup.sh\ncat {artifacts:path}/mosquitto.conf {artifacts:path}/bridge.conf > /etc/mosquitto/mosquitto.conf\nservice mosquitto start"
+        },
+        "Shutdown": {
+          "RequiresPrivilege": true,
+          "script": "service mosquitto stop\nexport AWS_DEFAULT_REGION={configuration:/region}\nchmod +x {artifacts:path}/cleanup.sh\n{artifacts:path}/cleanup.sh"
+        }
+      }
+    }
+  ]
+}
