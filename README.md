@@ -250,6 +250,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [网关负载均衡服务集成FortiGate安全网关扩展安全服务性能](https://aws.amazon.com/cn/blogs/china/gateway-load-balancing-services-integrate-fortigate-security-gateways/)
 
+[Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
+
 ## DNS
 
 [Route53 in China region](R53/README.md)
