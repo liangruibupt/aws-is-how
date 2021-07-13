@@ -99,7 +99,124 @@ rs0:PRIMARY> db.profiles.find({name: "Matt"})
 rs0:PRIMARY>
 ```
 
+## Aggregation query
+1. Count the Number of Documents in a Collection
+```bash
+db.sales.insertMany([
+  { "_id" : 1, "item" : "abc", "price" : 10, "quantity" : NumberInt("2"), "date" : ISODate("2014-03-01T08:00:00Z") },
+  { "_id" : 2, "item" : "jkl", "price" : 20, "quantity" : NumberInt("1"), "date" : ISODate("2014-03-01T09:00:00Z") },
+  { "_id" : 3, "item" : "xyz", "price" : 5, "quantity" : NumberInt( "10"), "date" : ISODate("2014-03-15T09:00:00Z") },
+  { "_id" : 4, "item" : "xyz", "price" : 5, "quantity" :  NumberInt("20") , "date" : ISODate("2014-04-04T11:21:39.736Z") },
+  { "_id" : 5, "item" : "abc", "price" : 10, "quantity" : NumberInt("10") , "date" : ISODate("2014-04-04T21:23:13.331Z") },
+  { "_id" : 6, "item" : "def", "price" : 7.5, "quantity": NumberInt("5" ) , "date" : ISODate("2015-06-04T05:08:13Z") },
+  { "_id" : 7, "item" : "def", "price" : 7.5, "quantity": NumberInt("10") , "date" : ISODate("2015-09-10T08:43:00Z") },
+  { "_id" : 8, "item" : "abc", "price" : 10, "quantity" : NumberInt("5" ) , "date" : ISODate("2016-02-06T20:20:13Z") },
+])
+
+db.sales.aggregate( [ { $group : { _id : "$item" } } ] )
+
+db.sales.aggregate( [
+  {
+    $group: {
+       _id: "$item",
+       count: { $sum: 1 }
+    }
+  }
+] )
+
+```
+
+2. Group by Item Having
+```bash
+db.sales.aggregate(
+  [
+    // First Stage
+    {
+      $group :
+        {
+          _id : "$item",
+          totalSaleAmount: { $sum: { $multiply: [ "$price", "$quantity" ] } }
+        }
+     },
+     // Second Stage
+     {
+       $match: { "totalSaleAmount": { $gte: 100 } }
+     }
+   ]
+ )
+```
+
+3. Calculate Count, Sum, and Average
+```bash
+# Group by Day of the Year
+db.sales.aggregate([
+  // First Stage
+  {
+    $match : { "date": { $gte: new ISODate("2014-01-01"), $lt: new ISODate("2015-01-01") } }
+  },
+  // Second Stage
+  {
+    $group : {
+       _id : { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+       totalSaleAmount: { $sum: { $multiply: [ "$price", "$quantity" ] } },
+       averageQuantity: { $avg: "$quantity" },
+       count: { $sum: 1 }
+    }
+  },
+  // Third Stage
+  {
+    $sort : { totalSaleAmount: -1 }
+  }
+ ])
+
+# Group by null: calculating the total sale amount, average quantity, and count of all documents in the collection
+db.sales.aggregate([
+  {
+    $group : {
+       _id : null,
+       totalSaleAmount: { $sum: { $multiply: [ "$price", "$quantity" ] } },
+       averageQuantity: { $avg: "$quantity" },
+       count: { $sum: 1 }
+    }
+  }
+ ])
+```
+
+4. Pivot Data
+```bash
+db.books.insertMany([
+  { "_id" : 8751, "title" : "The Banquet", "author" : "Dante", "copies" : 2 },
+  { "_id" : 8752, "title" : "Divine Comedy", "author" : "Dante", "copies" : 1 },
+  { "_id" : 8645, "title" : "Eclogues", "author" : "Dante", "copies" : 2 },
+  { "_id" : 7000, "title" : "The Odyssey", "author" : "Homer", "copies" : 10 },
+  { "_id" : 7020, "title" : "Iliad", "author" : "Homer", "copies" : 10 }
+])
+
+# Group title by author
+db.books.aggregate([
+   { $group : { _id : "$author", books: { $push: "$title" } } }
+ ])
+
+# Group Documents by author
+db.books.aggregate([
+   // First Stage
+   {
+     $group : { _id : "$author", books: { $push: {"title": "$title", "copies": "$copies"} } }
+   },
+   // Second Stage
+   {
+     $addFields:
+       {
+         totalCopies : { $sum: "$books.copies" }
+       }
+   }
+ ])
+```
+
+
 # Reference
 [Amazon DocumentDB Official guide](https://docs.amazonaws.cn/en_us/documentdb/latest/developerguide/get-started-guide.html)
 
 [Amazon DocumentDB Quick Start Using AWS CloudFormation](https://docs.amazonaws.cn/en_us/documentdb/latest/developerguide/quick_start_cfn.html)
+
+[group (aggregation)](https://docs.mongodb.com/manual/reference/operator/aggregation/group/)
