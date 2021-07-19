@@ -244,6 +244,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
 
+[WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
+
 [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
 [Nginx S3 Reverse Proxy](network/Nginx/Nginx-S3-Reverse-Proxy.md)
@@ -251,6 +253,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [网关负载均衡服务集成FortiGate安全网关扩展安全服务性能](https://aws.amazon.com/cn/blogs/china/gateway-load-balancing-services-integrate-fortigate-security-gateways/)
 
 [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
+
 
 ## DNS
 
@@ -359,6 +362,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [RClone Quickstart](storage/RClone-Quick-Start.md)
 
 [S3-Presign-URL](storage/S3-Presign-URL.md)
+
+[Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
 
 ## Database
 
