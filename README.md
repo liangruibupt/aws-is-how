@@ -181,6 +181,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS IoT Greengrass V2 Workshop](iot/IoT-Greengrass/Iot-greengrass-v2-workshop.md)
 
+[Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/lambda-write-postgresql/lambda-write-postgreSQL.md)
+
 ## Security
 
 [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
