@@ -25,4 +25,8 @@ pip install AWSIoTPythonSDK
 python iot_generator.py
 ```
 
+```bash
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple psycopg2
+```
+
 [How do I configure a Lambda function to connect to an RDS instance?](https://aws.amazon.com/premiumsupport/knowledge-center/connect-lambda-to-an-rds-instance/)
