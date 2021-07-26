@@ -453,6 +453,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Python GUI lib](https://mp.weixin.qq.com/s/sqXCSgrMMcXCA1lxbAucsA)
 
+[Terraform_Demo](devops/terraform/Terraform_Demo.md)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
