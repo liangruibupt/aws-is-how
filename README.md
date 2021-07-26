@@ -337,6 +337,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
 
+[Transfer Family to access EFS](https://aws.amazon.com/blogs/aws/new-aws-transfer-family-support-for-amazon-elastic-file-system/)
+
 ## Storage
 
 [How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
