@@ -73,7 +73,24 @@ aws firehose put-record --delivery-stream-name iot-data-collector --record '{"Da
     "RecordId": "aIDf1gD5Px8PREzf/Vh8gdYNEjkVxXyk7s3gWPrUBvzEtFL2Js0vFTIfzKB3KaoLs65lD613sQaMEWEgEYN9s309tOUwM4EnTGTrQxRylnfKf9BWClrSs5uQ/mdiHsvt7rvG5M4Oi8US73rs3nW+rEru26UfVMzI1EAXnf5Iwvg0cl2d7X84as7FttHxlQO48s9cWSOChCycHLoJusR6A683x4n//UQA",
     "Encrypted": false
 }
+
+aws s3 ls s3://ray-alb-accesslogs/ --profile temp-target-role-profile --region cn-northwest-1
+                           PRE AWSLogs/
+                           PRE gcr-zhy-eksworkshop/
+                           PRE ray-samplewebapp-alb/
+                           PRE s3-logs/
+                           PRE web-app-fargate-alb/
+2019-01-11 01:16:01        462 s3-logs2019-01-10-17-16-00-F72D69A1AC626EF7
+2019-01-11 01:16:14        452 s3-logs2019-01-10-17-16-13-4B944336578A4BFA
+2019-01-11 01:16:30        450 s3-logs2019-01-10-17-16-29-8B6E157F3468B9BF
+
+aws s3 ls --profile temp-target-role-profile --region cn-northwest-1
+2020-09-29 12:05:01 appconfig-configuration
+2020-09-24 23:52:53 aws-serverless-wildrydes-ray
+2020-09-24 23:52:53 aws-serverless-wildrydes-ray
 ```
+
+
 
 - Windows Powershell
 ```bash
