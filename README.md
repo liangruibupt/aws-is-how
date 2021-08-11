@@ -36,6 +36,8 @@
  - [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
  - [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
 
+[image classification using resnet](ai-ml/image-classification-resnet)
+
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -164,6 +166,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Glue Workshop](analytics/glue-workshop)
 
+[Amazon Glue ETL作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
+
 ## IOT
 [IoT-Workshop](iot/IoT-Workshop.md)
 
@@ -219,6 +223,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
 
+[AWS Security Lab](http://security.bwcx.me/)
 
 ## Network
 
@@ -418,6 +423,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [How can I check, scale, delete, or drain my worker nodes on EKS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-node-actions/)
 
 [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
+
+[Recursive Scaling Fargate with Amazon SQS](https://aws.amazon.com/blogs/architecture/design-pattern-for-highly-parallel-compute-recursive-scaling-with-amazon-sqs/)
 
 ## DevOps
 
