@@ -33,12 +33,14 @@
 [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
 
 [Invoke SageMaker Notebook via Event](ai-ml/SageMaker/Invoke_SageMaker_Notebook_via_event.md)
- - [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
- - [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
+
+- [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
+- [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
 
 [image classification using resnet](ai-ml/image-classification-resnet)
 
 ## Cost
+
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
 [Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
@@ -166,9 +168,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Glue Workshop](analytics/glue-workshop)
 
-[Amazon Glue ETL作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
+[Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
 
 ## IOT
+
 [IoT-Workshop](iot/IoT-Workshop.md)
 
 [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
@@ -202,12 +205,13 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
 
 [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
-  - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
-  - [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
-  - [Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
-  - [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
-  - [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
-  - [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
+
+- [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
+- [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
+- [Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
+- [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
+- [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
+- [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
 
 [GuardDuty Simulator](security/guard-duty/README.md)
 
@@ -257,10 +261,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Nginx S3 Reverse Proxy](network/Nginx/Nginx-S3-Reverse-Proxy.md)
 
-[网关负载均衡服务集成FortiGate安全网关扩展安全服务性能](https://aws.amazon.com/cn/blogs/china/gateway-load-balancing-services-integrate-fortigate-security-gateways/)
+[网关负载均衡服务集成 FortiGate 安全网关扩展安全服务性能](https://aws.amazon.com/cn/blogs/china/gateway-load-balancing-services-integrate-fortigate-security-gateways/)
 
 [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
-
 
 ## DNS
 
@@ -316,9 +319,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
-[AWS告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
+[AWS 告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
 
-[利用Lambda调用smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
+[利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
 
 [Create the pandas layer for lambda ](lambda/create-pandas-layer-4-lambda.md)
 
@@ -366,7 +369,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [S3 Web Explorer](storage/s3explorer)
 
-[Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-file-shares.html) You can mount an Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance that is either joined to your Active Directory or not joined. 
+[Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-file-shares.html) You can mount an Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance that is either joined to your Active Directory or not joined.
 
 [RClone Quickstart](storage/RClone-Quick-Start.md)
 
@@ -392,7 +395,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
 
-[使用Amazon RDS for Oracle配合Oracle Active Data Guard建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
+[使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
 
 [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
 
@@ -407,6 +410,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
 
 [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
+
+[ECS quick start demo workshop](https://ecs-cats-dogs.workshop.aws/en/)
 
 [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
 
@@ -425,6 +430,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
 [Recursive Scaling Fargate with Amazon SQS](https://aws.amazon.com/blogs/architecture/design-pattern-for-highly-parallel-compute-recursive-scaling-with-amazon-sqs/)
+
+[Amazon ECS firelens examples](https://github.com/aws-samples/amazon-ecs-firelens-examples)
+
+[关于Amazon EKS基于Gitlab的CICD实践](https://aws.amazon.com/cn/blogs/china/about-amazon-eks-gitlab-based-cicd-practice-one-gitlab-deployment-and-configuration/)
+
+[Amazon ECS firelens demo](container/ECS-FireLens.md)
 
 ## DevOps
 
