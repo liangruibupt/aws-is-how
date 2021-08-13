@@ -1,18 +1,18 @@
-# Use the aws-data-replication-hub to sync S3 data between Global bucket and China region bucket
+# Use the aws-data-transfer-hub to sync S3 data between Global bucket and China region bucket
 
 
-The [aws-data-replication-hub](https://github.com/awslabs/aws-data-replication-hub) is a reliable, secure, scalable AWS solution that enabled structured and unstructured data replication from different sources to AWS.
+The [aws-data-transfer-hub](https://github.com/awslabs/data-transfer-hub) is a reliable, secure, scalable AWS solution that enabled structured and unstructured data replication from different sources to AWS.
 
-- Option 1: Deploy user data-replication-hub portal and create job on the portal
-- Option 2: Just want to run data-replication-hub job (S3 sync job or ECR sync job) backend without portal support
+- Option 1: Deploy user data-transfer-hub portal and create job on the portal
+- Option 2: Just want to run data-transfer-hub job (S3 sync job or ECR sync job) backend without portal support
 - Test case: Enable the S3 SSE in both source and destination bucket to verify the replication job and read the data in destination
 
-## Option 1: Deploy user data-replication-hub portal and create job on the portal
-1. Deploy the [CloudFormation Stack](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=DataReplicationHub&templateURL=https://aws-gcr-solutions.s3.amazonaws.com/Aws-data-replication-hub/latest/AwsDataReplicationHub-cognito.template) in Global region, for example `eu-west-1 Ireland` region.
+## Option 1: Deploy user data-transfer-hub portal and create job on the portal
+1. Deploy the [CloudFormation Stack](https://www.amazonaws.cn/en/solutions/data-transfer-hub/) listed in the solution page in Global region, for example `eu-west-1 Ireland` region.
 
-Right now data-replication-hub will create new VPC to host the portal if you want to reuse existed VPC, you need directly deploy the S3 sync job or ECR sync job without Portal support.
+Right now data-transfer-hub will create new VPC to host the portal if you want to reuse existed VPC, you need directly deploy the S3 sync job or ECR sync job without Portal support.
 
-2. Login into the Data Replication Hub Portal
+2. Login into the data-transfer-hub Portal
 - Check the output of the CloudFormation stack. The `PortalUrl` is the link of the portal.
 - An email containing the temporary password will be sent to the provided email address. 
 - You will be asked to set a new password when you login the portal
@@ -20,9 +20,9 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
 
 ## Start to create your `Ningxia (cn-northwest-1)` region S3 bucket data to destination - `Ireland (eu-west-1)` region S3 bucket task.
 
-  Here I replicate source - `Ningxia (cn-northwest-1)` region S3 bucket data to destination - `Ireland (eu-west-1)` region S3 bucket as example
+  Here I replicate source - `Ningxia (cn-north-1)` region S3 bucket data to destination - `Ireland (eu-west-1)` region S3 bucket as example
 
-  For the completed user guide, please visit [User Guide](https://github.com/awslabs/aws-data-replication-hub/blob/master/docs/UserManual.md) for more information.
+  For the completed user guide, please visit [User Guide](https://github.com/awslabs/data-transfer-hub/blob/v2.0.0/docs/UserManual.md) for more information.
 
 - Configure Credentials in Systems Manager Parameter Store for China region
   - `SecureString` as type
@@ -30,23 +30,28 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
   ```json
     {
       "access_key_id": "<Your Access Key ID>",
-      "secret_access_key": "<Your Access Key Secret>",
-      "region_name": "<Your Region>"
+      "secret_access_key": "<Your Access Key Secret>"
     }
   ```
 
 - Destination Type: S3
+
 ![S3-replicate-task](media/S3-replicate-task.png)
 
 - Source
-！[S3-replicate-task-source](media/S3-replicate-task-source.png)
+
+![S3-replicate-task-source](media/S3-replicate-task-source.png)
 
 - Destination
-！[S3-replicate-task-destination](media/S3-replicate-task-destination.png)
+
+![S3-replicate-task-destination](media/S3-replicate-task-destination.png)
 
 - Check status
+
 ![S3-replicate-task-list](media/S3-replicate-task-list.png)
-    1. Source bucket data
+
+1. Source bucket data
+
     ```bash
     aws s3 ls s3://vod-mediaconvert-workshop-ray/inputs/ --region cn-northwest-1 --summarize --human-readable
     2019-10-17 00:42:07    0 Bytes 
@@ -60,7 +65,9 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
     Total Objects: 7
       Total Size: 4.5 GiB
     ```
+
   2. Destination data
+
     ```bash
     aws s3 ls s3://neptune-workshop-storage/cn-vod-inputs/inputs/ --region eu-west-1 --summarize --human-readable --profile us-east-1
     2021-02-01 13:36:03    0 Bytes
@@ -76,13 +83,14 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
    ```
 
   3. CloudWatch
-  ![S3-replicate-task-cloudwatch](media/S3-replicate-task-cloudwatch.png)
+
+![S3-replicate-task-cloudwatch](media/S3-replicate-task-cloudwatch.png)
 
 ## Start to create `Ireland (eu-west-1)` region S3 bucket data to destination - `Ningxia (cn-northwest-1)` region S3 bucket task.
 
     Here I replicate source - `Ireland (eu-west-1)` region S3 bucket data to destination - `Ningxia (cn-northwest-1)` region S3 bucket as example
 
-    For the completed user guide, please visit [User Guide](https://github.com/awslabs/aws-data-replication-hub/blob/master/docs/UserManual.md) for more information.
+    For the completed user guide, please visit [User Guide](https://github.com/awslabs/data-transfer-hub/blob/v2.0.0/docs/UserManual.md) for more information.
 
 - Configure Credentials in Systems Manager Parameter Store for China region
   - `SecureString` as type
@@ -97,13 +105,14 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
 
 - Source
 ![S3-replicate-task-global-source](media/S3-replicate-task-global-source.png)
-- Destination 
 
-    ![S3-replicate-task-global-destination](media/S3-replicate-task-global-destination.png)
+- Destination 
+![S3-replicate-task-global-destination](media/S3-replicate-task-global-destination.png)
 
 - Check status
 ![S3-replicate-task-list](media/S3-replicate-task-list.png)
-    1. Source
+
+1. Source
     ```bash
     aws s3 ls s3://neptune-workshop-storage/learning_media/ --summarize --human-readable --region eu-west-1
     2021-02-01 13:39:43    0 Bytes
@@ -118,7 +127,7 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
       Total Size: 1.4 GiB
     ```
 
-    2. Destination data
+2. Destination data
     ```bash
     aws s3 ls s3://vod-mediaconvert-workshop-ray/lreland-learning-inputs/learning_media/ --region cn-northwest-1 --summarize --human-readable
     2021-02-01 14:17:47    0 Bytes
@@ -133,7 +142,7 @@ Right now data-replication-hub will create new VPC to host the portal if you wan
       Total Size: 1.4 GiB
     ```
 
-## Option 2: Just want to run data-replication-hub job
+## Option 2: Just want to run data-transfer-hub job
 - [S3 Job](https://github.com/awslabs/amazon-s3-data-replication-hub-plugin)
 - [ECR Job](https://github.com/awslabs/amazon-ecr-data-replication-hub-plugin)
 
@@ -223,4 +232,4 @@ The CMK key policy example:
 
 4. Verify the files in destination bucket can be download and open correct
 
-Due to S3 SSE is transparent to end user, so when aws-data-replication-hub lambda to read files from source bucket, the files will be decrypted by using source account KMS CMK, and then synchronized to destination bucket. And destination bucket SSE will automatically handle the files encryption using destination account KMS CMK 
+Due to S3 SSE is transparent to end user, so when aws-data-transfer-hub lambda to read files from source bucket, the files will be decrypted by using source account KMS CMK, and then synchronized to destination bucket. And destination bucket SSE will automatically handle the files encryption using destination account KMS CMK 
