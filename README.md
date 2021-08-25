@@ -439,6 +439,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon ECS firelens demo](container/ECS-FireLens.md)
 
+[关于Amazon EKS中Service和Ingress深入分析和研究](https://aws.amazon.com/cn/blogs/china/in-depth-analysis-and-research-on-service-and-ingress-in-amazon-eks/)
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
