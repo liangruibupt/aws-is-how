@@ -170,6 +170,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
 
+[Streaming Amazon DynamoDB data into a centralized data lake](https://aws.amazon.com/id/blogs/big-data/streaming-amazon-dynamodb-data-into-a-centralized-data-lake/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
