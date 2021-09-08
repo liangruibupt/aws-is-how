@@ -62,7 +62,7 @@ def generateDimensions(scaleFactor):
             {"Name": "vin", "Value": vin},
             {"Name": "trip_id", "Value": trip_id}
         ]
-        print(dimensions)
+        #print(dimensions)
 
     return dimensions
 
@@ -91,7 +91,7 @@ def createRandomMetrics(dimensions, timestamp, timeUnit):
         ['LOW', 'NORMAL', 'HIGH']), "VARCHAR", timestamp, timeUnit))
 
     for measure in remainingmetrics:
-        print(measure)
+        #print(measure)
         value = 100.0 * random.random()
         records.append(create_record(
             dimensions, measure, value, "DOUBLE", timestamp, timeUnit))
@@ -113,8 +113,8 @@ def send_records_to_timestream(write_client, host_scale, sleep_time, percent_lat
             local_timestamp = int(time.time())
 
         all_dimensions = generateDimensions(host_scale)
-        print(all_dimensions)
-        print("Dimensions for metrics: {}".format(len(all_dimensions)))
+        #print(all_dimensions)
+        #print("Dimensions for metrics: {}".format(len(all_dimensions)))
         
         metrics = createRandomMetrics(all_dimensions,local_timestamp, "SECONDS")
         records = []
@@ -135,7 +135,7 @@ def send_records_to_timestream(write_client, host_scale, sleep_time, percent_lat
 
 
 def main(args):
-    print(args)
+    #print(args)
     host_scale = args.host_scale  # scale factor for the hosts.
     profile_name = args.profile
 

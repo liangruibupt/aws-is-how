@@ -172,6 +172,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Streaming Amazon DynamoDB data into a centralized data lake](https://aws.amazon.com/id/blogs/big-data/streaming-amazon-dynamodb-data-into-a-centralized-data-lake/)
 
+[EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
+
+[AWS Lake Formation Tag-based access control](https://aws.amazon.com/cn/blogs/big-data/easily-manage-your-data-lake-at-scale-using-tag-based-access-control-in-aws-lake-formation/)
+
+[Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -229,7 +235,11 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
 
-[AWS Security Lab](http://security.bwcx.me/)
+[AWS Security Hands on Lab](http://security.bwcx.me/)
+
+[Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
+
+[Enforce MFA authentication for IAM users](https://aws.amazon.com/premiumsupport/knowledge-center/mfa-iam-user-aws-cli/)
 
 ## Network
 
