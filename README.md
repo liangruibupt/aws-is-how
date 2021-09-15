@@ -337,6 +337,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Create the pandas layer for lambda ](lambda/create-pandas-layer-4-lambda.md)
 
+[AWS Lambda – Container Image Support](lambda/Lambda-container-image-support.md)
+
+[Lambda invoke AWS Rekgonition](lambda/scripts/call-rekgonition.py)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
