@@ -72,9 +72,9 @@ touch app.js
 5. upload the container image to ECR
     ```bash
     aws ecr create-repository --repository-name random-letter --image-scanning-configuration scanOnPush=true --profile china --region cn-north-1
-    docker tag random-letter:latest 1234567890.dkr.ecr.cn-north-1.amazonaws.com.cn/random-letter:latest
-    aws ecr get-login-password --profile china --region cn-north-1 | docker login --username AWS --password-stdin 1234567890.dkr.ecr.cn-north-1.amazonaws.com.cn
-    docker push 1234567890.dkr.ecr.cn-north-1.amazonaws.com.cn/random-letter:latest
+    docker tag random-letter:latest YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/random-letter:latest
+    aws ecr get-login-password --profile china --region cn-north-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn
+    docker push YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/random-letter:latest
     ```
 
 6. Create the Lambda Functions for container
@@ -137,9 +137,9 @@ Here use the open source implementations of the [Lambda Runtime Interface Client
 6. upload the container image to ECR
     ```bash
     aws ecr create-repository --repository-name lambda-container-custom --image-scanning-configuration scanOnPush=true --profile china --region cn-north-1
-    docker tag lambda-container-custom:latest 1234567890.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-container-custom:latest
-    aws ecr get-login-password --profile china --region cn-north-1 | docker login --username AWS --password-stdin 1234567890.dkr.ecr.cn-north-1.amazonaws.com.cn
-    docker push 1234567890.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-container-custom:latest
+    docker tag lambda-container-custom:latest YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-container-custom:latest
+    aws ecr get-login-password --profile china --region cn-north-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn
+    docker push YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-container-custom:latest
     ```
 
 7. Create the Lambda Functions for container
@@ -154,9 +154,225 @@ Here use the open source implementations of the [Lambda Runtime Interface Client
 ```bash
 mkdir lambda-container-sam && cd lambda-container-sam
 sam init
+
+Which template source would you like to use?
+        1 - AWS Quick Start Templates
+        2 - Custom Template Location
+Choice: 1
+What package type would you like to use?
+        1 - Zip (artifact is a zip uploaded to S3)
+        2 - Image (artifact is an image uploaded to an ECR image repository)
+Package type: 2
+
+Which base image would you like to use?
+        1 - amazon/nodejs14.x-base
+        2 - amazon/nodejs12.x-base
+        3 - amazon/nodejs10.x-base
+        4 - amazon/python3.8-base
+        5 - amazon/python3.7-base
+        6 - amazon/python3.6-base
+        7 - amazon/python2.7-base
+        8 - amazon/ruby2.7-base
+        9 - amazon/ruby2.5-base
+        10 - amazon/go1.x-base
+        11 - amazon/java11-base
+        12 - amazon/java8.al2-base
+        13 - amazon/java8-base
+        14 - amazon/dotnet5.0-base
+        15 - amazon/dotnetcore3.1-base
+        16 - amazon/dotnetcore2.1-base
+Base image: 2
+
+Project name [sam-app]: lambda-contaimer-sam-app
+
+Cloning app templates from https://github.com/aws/aws-sam-cli-app-templates
+
+    -----------------------
+    Generating application:
+    -----------------------
+    Name: lambda-contaimer-sam-app
+    Base Image: amazon/nodejs12.x-base
+    Dependency Manager: npm
+    Output Directory: .
+
+    Next steps can be found in the README file at ./lambda-contaimer-sam-app/README.md
+        
+
+SAM CLI update available (1.31.0); (1.19.0 installed)
+To download: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
 ```
 
-2. 
+2. Exploring the application template.yaml
+- `PackageType: Image` tells AWS SAM that this function is using container images
+- `Metadata` section that helps AWS SAM manage the container images
+```yaml
+    Properties:
+      PackageType: Image
+    ....
+    Metadata:
+      DockerTag: nodejs12.x-v1
+      DockerContext: ./hello-world
+      Dockerfile: Dockerfile
+```
+- Update the API endpoint to china region format
+```yaml
+HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com.cn/Prod/hello/"
+```
+
+3. Local development of the application
+```bash
+cd lambda-contaimer-sam-app/
+sam build
+
+sam local invoke HelloWorldFunction
+
+Invoking Container created from helloworldfunction:nodejs12.x-v1
+Building image.................
+Skip pulling image and use local one: helloworldfunction:rapid-1.19.0.
+
+START RequestId: 911022c1-737a-48d2-8ccd-35e1bdb98e9d Version: $LATEST
+END RequestId: 911022c1-737a-48d2-8ccd-35e1bdb98e9d
+REPORT RequestId: 911022c1-737a-48d2-8ccd-35e1bdb98e9d  Init Duration: 0.40 ms  Duration: 77.58 ms      Billed Duration: 100 ms Memory Size: 128 MB     Max Memory Used: 128 MB
+{"statusCode":200,"body":"{\"message\":\"hello world from lambda container sam demo\"}"}
+```
+
+OR You can also combine these commands and `add flags for cached and parallel builds`:
+
+```bash
+sam build --cached --parallel && sam local invoke HelloWorldFunction
+```
+
+4. Deploying the application
+
+There are two ways to deploy container-based Lambda functions with AWS SAM.
+- `sam deploy` command. The deploy command tags the local container image, uploads it to ECR, and then creates or updates your Lambda function. 
+- `sam package` command used in CI/CD pipelines, where the deployment process is separate from the artifact creation process.
+
+Here we use the `sam deploy`
+
+- Create the ECR repository
+```bash
+aws ecr create-repository --repository-name lambda-contaimer-sam-app --image-tag-mutability IMMUTABLE \
+--image-scanning-configuration scanOnPush=true --profile china --region cn-north-1
+
+aws ecr get-login-password --profile china --region cn-north-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn
+```
+
+- Deploy
+```bash
+sam deploy -g --profile china
+
+Configuring SAM deploy
+======================
+
+        Looking for config file [samconfig.toml] :  Not found
+
+        Setting default arguments for 'sam deploy'
+        =========================================
+        Stack Name [sam-app]: lambda-contaimer-sam-app
+        AWS Region [us-east-1]: cn-north-1
+        Image Repository for HelloWorldFunction: YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app
+          helloworldfunction:nodejs12.x-v1 to be pushed to YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app:helloworldfunction-70ec1299901b-nodejs12.x-v1
+
+        #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
+        Confirm changes before deploy [y/N]: y
+        #SAM needs permission to be able to create roles to connect to the resources in your template
+        Allow SAM CLI IAM role creation [Y/n]: y
+        HelloWorldFunction may not have authorization defined, Is this okay? [y/N]: y
+        Save arguments to configuration file [Y/n]: y
+        SAM configuration file [samconfig.toml]: 
+        SAM configuration environment [default]: 
+
+        ....
+
+        CloudFormation stack changeset
+-------------------------------------------------------------------------------------------
+Operation   LogicalResourceId     ResourceType   Replacement         
+-------------------------------------------------------------------------------------------
++ Add  HelloWorldFunctionHelloWorldPermissionProd AWS::Lambda::Permission  N/A    
++ Add  HelloWorldFunctionRole  AWS::IAM::Role   N/A   
++ Add  HelloWorldFunction AWS::Lambda::Function  N/A    
++ Add  ServerlessRestApiDeployment47a75decb5 AWS::ApiGateway::Deployment   N/A 
++ Add  ServerlessRestApiProdStage  AWS::ApiGateway::Stage   N/A  
++ Add  ServerlessRestApi  AWS::ApiGateway::RestApi     N/A 
+-------------------------------------------------------
+
+...
+Successfully created/updated stack - lambda-contaimer-sam-app in cn-north-1
+
+curl https://lk4qizrw6e.execute-api.cn-north-1.amazonaws.com.cn/Prod/hello/
+{"message":"hello world from lambda container sam demo"}
+
+```
+
+- Multiple lambda functions deployment
+```bash
+cd lambda-contaimer-sam-app
+cp -R hello-world hola-world
+cp template.yaml template.yaml.singlefunction
+modify the template.yaml to support multiple functions
+modify hola-world/app.js 
+
+aws ecr create-repository --repository-name lambda-contaimer-sam-app-multifunction --image-tag-mutability IMMUTABLE \
+--image-scanning-configuration scanOnPush=true --profile china --region cn-north-1
+
+sam build 
+
+sam deploy -g --profile china
+    Keep the same stack name, Region, and Image Repository for HelloWorldFunction.
+    Use the new repository for HolaWorldFunction.
+    For the remaining steps, use the same values from before. For Lambda functions not to have authorization defined, enter Y.
+
+Configuring SAM deploy
+======================
+
+        Looking for config file [samconfig.toml] :  Found
+        Reading default arguments  :  Success
+
+        Setting default arguments for 'sam deploy'
+        =========================================
+        Stack Name [lambda-contaimer-sam-app]: 
+        AWS Region [cn-north-1]: 
+        Image Repository for HelloWorldFunction [YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app-multifunction]: YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app
+        Image Repository for HolaWorldFunction []: YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app-multifunction
+          helloworldfunction:nodejs12.x-v1 to be pushed to YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app:helloworldfunction-70ec1299901b-nodejs12.x-v1
+          holaworldfunction:nodejs12.x-v1 to be pushed to YOUR_ACCOUNT_ID.dkr.ecr.cn-north-1.amazonaws.com.cn/lambda-contaimer-sam-app-multifunction:holaworldfunction-db1056b2d0af-nodejs12.x-v1
+
+        #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
+        Confirm changes before deploy [Y/n]: y
+        #SAM needs permission to be able to create roles to connect to the resources in your template
+        Allow SAM CLI IAM role creation [Y/n]: y
+        HelloWorldFunction may not have authorization defined, Is this okay? [y/N]: y
+        HolaWorldFunction may not have authorization defined, Is this okay? [y/N]: y
+        Save arguments to configuration file [Y/n]: y
+        SAM configuration file [samconfig.toml]:  
+        SAM configuration environment [default]: 
+
+CloudFormation stack changeset
+-------------------------------------------------------
+Operation  LogicalResourceId  ResourceType   Replacement    
+-------------------------------------------------------
++ Add   HolaWorldFunctionHolaWorldPermissionProd    AWS::Lambda::Permission     N/A      
++ Add   HolaWorldFunctionRole                       AWS::IAM::Role            N/A     
++ Add   HolaWorldFunction                      AWS::Lambda::Function   N/A  
++ Add   ServerlessRestApiDeployment4304ff0872  AWS::ApiGateway::Deployment   N/A  
+* Modify  HelloWorldFunction  AWS::Lambda::Function  False      
+* Modify  ServerlessRestApiProdStage  AWS::ApiGateway::Stage   False   
+* Modify ServerlessRestApi   AWS::ApiGateway::RestApi  False 
+- Delete ServerlessRestApiDeployment47a75decb5    AWS::ApiGateway::Deployment   N/A      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Successfully created/updated stack - lambda-contaimer-sam-app in cn-north-1
+
+curl https://lk4qizrw6e.execute-api.cn-north-1.amazonaws.com.cn/Prod/hola/ 
+{"message":"hola world from lambda container sam demo in the second lambda function"}
+
+curl https://lk4qizrw6e.execute-api.cn-north-1.amazonaws.com.cn/Prod/hello/ 
+{"message":"hello world from lambda container sam demo"}
+```
 
 # Reference
 [AWS Lambda – Container Image Support Announcement](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/)

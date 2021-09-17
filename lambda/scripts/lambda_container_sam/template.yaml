@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: demo app
+  
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      DockerTag: nodejs12.x-v1
+      DockerContext: ./hello-world
+      Dockerfile: Dockerfile
+      
+  HolaWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        HolaWorld:
+          Type: Api
+          Properties:
+            Path: /hola
+            Method: get
+    Metadata:
+      DockerTag: nodejs12.x-v1
+      DockerContext: ./hola-world
+      Dockerfile: Dockerfile
+
+Outputs:
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com.cn/Prod/hello/"
+  HolaWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hola World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com.cn/Prod/hola/"
