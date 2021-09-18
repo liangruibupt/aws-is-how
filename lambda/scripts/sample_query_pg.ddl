@@ -1,0 +1,1 @@
+INSERT INTO device_status (deviceid, critical, alertmessage, alertcount, eventtime) VALUES ('%s', %d, '%s', %d, '%s');

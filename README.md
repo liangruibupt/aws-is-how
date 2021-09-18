@@ -341,6 +341,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Lambda invoke AWS Rekgonition](lambda/scripts/call-rekgonition.py)
 
+[Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)

@@ -150,7 +150,9 @@ Here use the open source implementations of the [Lambda Runtime Interface Client
 ![lambda-container-custom-test](media/lambda-container-custom-test.png)
 
 ## Using container image support for AWS Lambda with AWS SAM
-1. Create the application
+1. Install [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+
+2. Create the application
 ```bash
 mkdir lambda-container-sam && cd lambda-container-sam
 sam init
@@ -202,7 +204,7 @@ SAM CLI update available (1.31.0); (1.19.0 installed)
 To download: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
 ```
 
-2. Exploring the application template.yaml
+3. Exploring the application template.yaml
 - `PackageType: Image` tells AWS SAM that this function is using container images
 - `Metadata` section that helps AWS SAM manage the container images
 ```yaml
@@ -221,7 +223,7 @@ HelloWorldApi:
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com.cn/Prod/hello/"
 ```
 
-3. Local development of the application
+4. Local development of the application
 ```bash
 cd lambda-contaimer-sam-app/
 sam build
@@ -244,7 +246,7 @@ OR You can also combine these commands and `add flags for cached and parallel bu
 sam build --cached --parallel && sam local invoke HelloWorldFunction
 ```
 
-4. Deploying the application
+5. Deploying the application
 
 There are two ways to deploy container-based Lambda functions with AWS SAM.
 - `sam deploy` command. The deploy command tags the local container image, uploads it to ECR, and then creates or updates your Lambda function. 
@@ -372,6 +374,22 @@ curl https://lk4qizrw6e.execute-api.cn-north-1.amazonaws.com.cn/Prod/hola/
 
 curl https://lk4qizrw6e.execute-api.cn-north-1.amazonaws.com.cn/Prod/hello/ 
 {"message":"hello world from lambda container sam demo"}
+```
+
+# Cleanup
+```bash
+sam delete --profile china
+
+aws lambda delete-function --function-name random-letter --profile china --region cn-north-1
+aws lambda delete-function --function-name lambda-container-custom --profile china --region cn-north-1
+
+aws ecr batch-delete-image --repository-name random-letter --image-ids imageTag=latest --profile china --region cn-north-1
+aws ecr delete-repository --repository-name random-letter --profile china --region cn-north-1
+
+aws ecr batch-delete-image --repository-name lambda-container-custom --image-ids imageTag=latest --profile china --region cn-north-1
+aws ecr delete-repository --repository-name lambda-container-custom --profile china --region cn-north-1
+aws ecr delete-repository --repository-name lambda-contaimer-sam-app --profile china --region cn-north-1
+aws ecr delete-repository --repository-name lambda-contaimer-sam-app-multifunction --profile china --region cn-north-1
 ```
 
 # Reference
