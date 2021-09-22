@@ -178,6 +178,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
 
+[EMR on EKS workshop](analytics/emr/emr-on-eks)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)

@@ -1,0 +1,100 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation template for EMR on EKS setup. Creates an EC2 instance that uses CDK to deploy the resources.
+
+Parameters:
+
+  EC2StartupInstanceType:
+    Description: Startup instance type
+    Type: String
+    Default: t3.medium
+    AllowedValues:
+      - t2.micro
+      - t3.micro
+      - t3.small
+      - t3.medium
+
+  EC2StartupInstanceVolumeSize:
+    Type: Number
+    Description: The Size in GB of the Startup Instance Volume
+    Default: 15
+
+  EEKeyPair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: SSH key (for access instances)
+    Default: ee-default-keypair
+
+  LatestAmiId:
+    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+Resources:
+
+  EMRWorkshopAdmin:
+    Type: AWS::IAM::Role
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: emr-eks-workshop
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+            - ssm.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Path: "/"
+
+  VPCStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: >-
+        https://aws-data-analytics-workshops.s3.amazonaws.com/emr-eks-workshop/cloudformation/eks_vpc_stack.yml
+      TimeoutInMinutes: 10
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+      - Ref: EMRWorkshopAdmin
+
+  EC2StartupInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: [ VPCStack, InstanceProfile ]
+    Properties:
+      InstanceType: !Ref EC2StartupInstanceType
+      KeyName: !Ref EEKeyPair
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+      - !GetAtt VPCStack.Outputs.SecurityGroup
+      SubnetId: !GetAtt VPCStack.Outputs.PublicSubnet1Id
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+          yum update -y
+          yum install git -y
+          touch ~/.bashrc
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm install node
+          npm install -g aws-cdk
+          git clone https://github.com/emrspecialistsamer/amazon-emr-on-eks-labs.git
+          cd amazon-emr-on-eks-labs
+          npm install --silent
+          cdk bootstrap aws://${AWS::AccountId}/${AWS::Region}
+          cdk deploy --require-approval never
+      Tags:
+        -
+          Key: Environment
+          Value: emr-eks-workshop
+
