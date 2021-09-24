@@ -23,6 +23,8 @@ This workshop help to learn how Amazon EMR on EKS works and how to run spark app
 
 # [EMR Studio with EMR on EKS](EMR_Studio.md)
 
+# [Cleanup](Cleanup.md)
+
 # Reference
 [emr-on-eks.workshop](https://emr-on-eks.workshop.aws/introduction.html)
 
