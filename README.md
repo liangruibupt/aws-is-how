@@ -180,6 +180,11 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [EMR on EKS workshop](analytics/emr/emr-on-eks)
 
+[Data Quality with Deequ]
+  - [Scala: Test data quality at scale with Deequ](https://aws.amazon.com/blogs/big-data/test-data-quality-at-scale-with-deequ/)
+  - [Python: Testing data quality at scale with PyDeequ](https://aws.amazon.com/blogs/big-data/testing-data-quality-at-scale-with-pydeequ/)
+  - [Monitor data quality in your data lake using PyDeequ and AWS Glue](https://aws.amazon.com/blogs/big-data/monitor-data-quality-in-your-data-lake-using-pydeequ-and-aws-glue/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
