@@ -61,7 +61,7 @@ CREATE TABLE direct_marketing (
 
 ```sql
 COPY direct_marketing 
-FROM 's3://ray-ai-ml-bjs/sagemaker/autopilot-dm/bank-additional/bank-additional-full.csv' 
+FROM 's3://your-bucket/sagemaker/autopilot-dm/bank-additional/bank-additional-full.csv' 
 DELIMITER ',' IGNOREHEADER 1
 IAM_ROLE 'arn:aws-cn:iam::account-id:role/rayRedshiftRole'
 REGION 'cn-north-1';
@@ -171,8 +171,8 @@ record_date date);
 
 /* Load data */
 COPY customer_activity
-FROM 's3://ray-ai-ml-bjs/redshift-ml/customer_activity/customer_activity.csv'
-IAM_ROLE 'arn:aws-cn:iam::876820548815:role/rayRedshiftRole'
+FROM 's3://your-bucket/redshift-ml/customer_activity/customer_activity.csv'
+IAM_ROLE 'arn:aws-cn:iam::account-id:role/rayRedshiftRole'
 REGION 'cn-north-1'
 DELIMITER ',' IGNOREHEADER 1;
 
@@ -197,7 +197,7 @@ FROM (SELECT state,
      )
 TARGET churn
 FUNCTION ml_fn_customer_churn_auto
-IAM_ROLE 'arn:aws-cn:iam::876820548815:role/rayRedshiftRole'
+IAM_ROLE 'arn:aws-cn:iam::account-id:role/rayRedshiftRole'
 SETTINGS (
   S3_BUCKET 'ray-ai-ml-bjs',
   max_runtime 1800
@@ -266,8 +266,8 @@ record_number int);
 
 /* load the data */
 COPY abalone_xgb 
-FROM 's3://ray-ai-ml-bjs/redshift-ml/abalone_xgb/abalone.csv' 
-IAM_ROLE 'arn:aws-cn:iam::876820548815:role/rayRedshiftRole'
+FROM 's3://your-bucket/redshift-ml/abalone_xgb/abalone.csv' 
+IAM_ROLE 'arn:aws-cn:iam::account-id:role/rayRedshiftRole'
 REGION 'cn-north-1'
 IGNOREHEADER 1 CSV;
 
@@ -292,7 +292,7 @@ FROM ( SELECT length_val,
               rings 
         FROM abalone_xgb WHERE record_number < 2500 )
 TARGET rings FUNCTION ml_fn_abalone_xgboost_multi_predict_age
-IAM_ROLE 'arn:aws-cn:iam::876820548815:role/rayRedshiftRole'
+IAM_ROLE 'arn:aws-cn:iam::account-id:role/rayRedshiftRole'
 AUTO OFF
 MODEL_TYPE XGBOOST
 OBJECTIVE 'multi:softmax'

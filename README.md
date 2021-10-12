@@ -539,3 +539,35 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Media
 
 [Video on Demand on AWS](media/mediaconvert)
+
+```sql
+CREATE TABLE new_table_parquet
+WITH (
+      format = 'Parquet',
+      write_compression = 'SNAPPY',
+      partitioned_by= array['sold_year'],
+      external_location = 's3://ray-ai-ml-bjs/bmw_pricing_challenge/join/parquet/')
+AS SELECT id,
+         maker_key,
+         model_key,
+         engine_power,
+         fuel,
+         paint_color,
+         car_type,
+         is_hybrid,
+         mileage,
+         price,
+         substr("sold_at",1,4) AS sold_year
+FROM join_result
+WHERE cast(substr("sold_at",1,4) AS bigint) >= 2010
+        AND cast(substr("sold_at",1,4) AS bigint) <= 2020
+                
+
+select * from "bmw_pricing_challenge"."new_table_parquet" limit 10;
+
+select count(*), car_type from "bmw_pricing_challenge"."new_table_parquet" where cast(sold_year AS bigint)>=2010 group by car_type;
+
+select count(*), car_type from "bmw_pricing_challenge"."new_table_parquet" where mileage > 2000 group by car_type;
+
+select max(price), car_type from "bmw_pricing_challenge"."new_table_parquet" where paint_color = 'black' group by car_type;
+```
