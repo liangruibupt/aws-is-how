@@ -254,6 +254,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Enforce MFA authentication for IAM users](https://aws.amazon.com/premiumsupport/knowledge-center/mfa-iam-user-aws-cli/)
 
+[Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
+
 ## Network
 
 [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
@@ -435,6 +437,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [如何将我的 DynamoDB 表从一个 AWS 账户迁移到另一个账户](https://aws.amazon.com/cn/premiumsupport/knowledge-center/dynamodb-cross-account-migration/)
 
 [通过 Debezium and MSK Connect 一站式解决所有数据库 CDC 问题](https://aws.amazon.com/cn/blogs/china/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
+
+[Database Caching Strategies Using Redis](database/redis/Database_Caching_Strategies_Using_Redis.md)
 
 ## Container
 
