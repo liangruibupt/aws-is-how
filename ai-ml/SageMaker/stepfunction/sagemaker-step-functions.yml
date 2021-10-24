@@ -1,0 +1,406 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+        BucketName: !Sub 'stepfunctions-${AWS::AccountId}'
+
+  lambdaModelTrain:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: S3Bucket
+    Properties:
+      FunctionName: lambdaModelTrain
+      Description: Lambda Model Train
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Code:
+        S3Bucket: mrtdomshare
+        S3Key: sagemakerworkshop-step/lambdaModelTrain.zip
+      Environment:
+        Variables:
+          bucket : !Ref S3Bucket
+          role: !GetAtt LambdaBasicExecutionRole.Arn
+
+  lambdaModelPredict:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: S3Bucket
+    Properties:
+      FunctionName: lambdaModelPredict
+      Description: Lambda Model Predict
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Timeout: 900
+      MemorySize: 1024
+      Code:
+        S3Bucket: mrtdomshare
+        S3Key: sagemakerworkshop-step/lambdaModelPredict.zip
+      Environment:
+        Variables:
+          bucket : !Ref S3Bucket
+
+  lambdaModelDeploy:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: lambdaModelDeploy
+      Description: Lambda Model Deploy
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Code:
+        S3Bucket: mrtdomshare
+        S3Key: sagemakerworkshop-step/lambdaModelDeploy.zip
+      Environment:
+        Variables:
+          role: !GetAtt LambdaBasicExecutionRole.Arn
+
+  lambdaModelAwait:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: lambdaModelAwait
+      Description: Lambda Model Await
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Code:
+        S3Bucket: mrtdomshare
+        S3Key: sagemakerworkshop-step/lambdaModelAwait.zip
+
+  lambdaRunCrawler:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: lambdaRunCrawler
+      Description: Lambda Run Crawler
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Timeout: 900
+      Code:
+        S3Bucket: mrtdomshare
+        S3Key: sagemakerworkshop-step/lambdaRunCrawler.zip
+
+  lambdaCrawlerAwait:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: lambdaCrawlerAwait
+      Description: Lambda Await Crawler
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Code:
+        S3Bucket: mrtdomshare
+        S3Key: sagemakerworkshop-step/lambdaCrawlerAwait.zip
+        
+  LambdaBasicExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - lambda.amazonaws.com
+                - sagemaker.amazonaws.com
+            Action: 'sts:AssumeRole'
+            #Condition: {}
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole'
+
+#  StepSagemakeRole:
+#    Type: 'AWS::IAM::Role'
+#    Properties:
+#      RoleName: "AmazonLabSageMakerRole"
+#      AssumeRolePolicyDocument:
+#        Statement:
+#          - Effect: Allow
+#            Principal:
+#              Service:
+#                - sagemaker.amazonaws.com
+#            Action:
+#              - 'sts:AssumeRole'
+#      Path: /
+#      ManagedPolicyArns:
+#        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+#        - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+
+#  NotebookInstance:
+#    Type: "AWS::SageMaker::NotebookInstance"
+#    Properties:
+#      InstanceType: "ml.m4.4xlarge"
+#      NotebookInstanceName: "StepFunctionsWorkshop"
+#      RoleArn: !GetAtt StepSagemakeRole.Arn
+#      VolumeSizeInGB: 10
+#      DefaultCodeRepository: https://github.com/githubmg/sagemaker-step-functions.git
+
+#Create IAM Role assumed by the crawler. For demonstration, this role is given all permissions.
+  CFNRoleCrawler:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "glue.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        -
+          PolicyName: "root"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: "*"
+                Resource: "*"
+ # Create a database to contain tables created by the crawler
+  CFNDatabaseImplementation:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: "implementationdb"
+        Description: "AWS Glue container to hold metadata tables for the crawler"
+ #Create a crawler to crawl the flights data on a public S3 bucket
+  CFNCrawlerBilling:
+    Type: AWS::Glue::Crawler
+    DependsOn: S3Bucket
+    Properties:
+      Name: "Billing"
+      Role: !GetAtt CFNRoleCrawler.Arn
+      #Classifiers: none, use the default classifier
+      Description: "AWS Glue crawler to crawl Billing data"
+      #Schedule: none, use default run-on-demand
+      DatabaseName: "implementationdb"
+      Targets:
+        S3Targets:
+          - Path: !Sub 
+            - 's3://${Bucket}/billing'
+            - { Bucket: !Ref S3Bucket }
+      #TablePrefix: !Ref CFNTablePrefixName
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "LOG"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"},\"Tables\":{\"AddOrUpdateBehavior\":\"MergeNewColumns\"}}}"
+
+  CFNCrawlerReseller:
+    Type: AWS::Glue::Crawler
+    DependsOn: S3Bucket
+    Properties:
+      Name: "Reseller"
+      Role: !GetAtt CFNRoleCrawler.Arn
+      Description: "AWS Glue crawler to crawl Reseller data"
+      DatabaseName: "implementationdb"
+      Targets:
+        S3Targets:
+          - Path: !Sub 
+            - 's3://${Bucket}/reseller'
+            - { Bucket: !Ref S3Bucket }
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "LOG"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"},\"Tables\":{\"AddOrUpdateBehavior\":\"MergeNewColumns\"}}}"
+
+  ETLandPipelineJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Command:
+        Name: "pythonshell"
+        PythonVersion: 3
+        ScriptLocation: "s3://mrtdomshare/sagemakerworkshop-step/etlandpipeline"
+      DefaultArguments:
+        "--extra-py-files": "s3://mrtdomshare/sagemakerworkshop-step/awswrangler-0.0b2-py3.6.egg"
+        #"--job-bookmark-option": "job-bookmark-enable"
+      ExecutionProperty:
+
+        MaxConcurrentRuns: 1
+      MaxCapacity: 1      
+      MaxRetries: 0
+      Name: etlandpipeline
+      Role: !GetAtt CFNRoleCrawler.Arn
+
+  RoleOnboardingInstall:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: !Sub 'states.${AWS::Region}.amazonaws.com'
+          Action: 'sts:AssumeRole'
+      Policies:
+      - PolicyName: lambda
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: "*"
+            Resource: "*"
+
+  StateMachineOnboardingInstall:
+    Type: 'AWS::StepFunctions::StateMachine'
+    Properties:
+      DefinitionString: !Sub |
+        {
+        "StartAt": "RunCrawler",
+        "States": {
+          "RunCrawler": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaRunCrawler",
+              "ResultPath": "$",
+              "Next": "WaitStatusCrawler"
+            },
+          "WaitStatusCrawler": {
+              "Type": "Wait",
+              "Seconds": 60,
+              "Next": "lambdaCrawlerAwait"
+            },
+            "lambdaCrawlerAwait": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaCrawlerAwait",
+              "ResultPath": "$",
+              "Next": "CheckCrawlerStatus"
+            },
+            "CheckCrawlerStatus": {
+                "Type": "Choice",
+                "Choices": [
+                  {
+                    "Or": [{
+                        "Variable": "$.statuscrawler",
+                        "StringEquals": "SUCCEEDED"
+                      }
+                     ],
+                    "Next": "ETL"
+                  },
+                  {
+                    "Or": [{
+                        "Variable": "$.statuscrawler",
+                        "StringEquals": "WAITING"
+                      }
+                    ],
+                    "Next": "WaitStatusCrawler"
+                  }
+                ]
+              },
+
+          "ETL": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::glue:startJobRun.sync",
+              "Parameters": {
+                "JobName": "etlandpipeline"
+              },
+              "Next": "StartTrainingJob"
+            },
+            "StartTrainingJob": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaModelTrain",
+                    "ResultPath": "$",
+                    "Next": "CheckStatusTraining"
+                  },
+                  "CheckStatusTraining": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaModelAwait",
+                    "ResultPath": "$",
+                    "Next": "CheckTrainingBranch"
+                  },
+              "CheckTrainingBranch": {
+                    "Type": "Choice",
+                    "Choices": [
+                      {
+                        "Or": [{
+                            "Variable": "$.status",
+                            "StringEquals": "Completed"
+                          }
+                         ],
+                        "Next": "StartDeployment"
+                      },
+                      {
+                        "Or": [{
+                            "Variable": "$.status",
+                            "StringEquals": "InProgress"
+                          }
+                        ],
+                        "Next": "WaitStatusTraining"
+                      }
+                    ]
+                  },
+
+                  "WaitStatusTraining": {
+                    "Type": "Wait",
+                    "Seconds": 60,
+                    "Next": "CheckStatusTraining"
+                  },
+
+                  "StartDeployment": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaModelDeploy",
+                    "Next": "CheckStatusDeployment"
+                  },
+                  "CheckStatusDeployment": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaModelAwait",
+                    "ResultPath": "$",
+                    "Next": "CheckDeploymentBranch"
+                  },
+
+                  "CheckDeploymentBranch": {
+                    "Type": "Choice",
+                    "Choices": [
+                      {
+                        "Or": [{
+                            "Variable": "$.status",
+                            "StringEquals": "Creating"
+                          }
+                         ],
+                        "Next": "WaitStatusDeployment"
+                      },
+                      {
+                        "Or": [{
+                            "Variable": "$.status",
+                            "StringEquals": "InService"
+                          }
+                        ],
+                        "Next": "StartPrediction"
+                      }
+                    ]
+                  },
+                  "WaitStatusDeployment": {
+                    "Type": "Wait",
+                    "Seconds": 60,
+                    "Next": "CheckStatusDeployment"
+                  },
+                  "StartPrediction": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:${AWS::AccountId}:function:lambdaModelPredict",
+                    "End": true
+                  }
+                }
+              }
+      RoleArn: !GetAtt 'RoleOnboardingInstall.Arn'
+
+#  Schedule:
+#    Type: AWS::Events::Rule
+#    Properties:
+#      Description: "MLcron"
+#      ScheduleExpression: "0 10 * * ? *"
+#      State: ENABLED
+#      Targets:
+#        -
+#          Id: StateMachineOnboardingInstall
+#          Arn: !GetAtt StateMachineOnboardingInstall.Arn
+
+Outputs:
+
+  S3Bucket:
+    Value: !Ref S3Bucket
+    Description: S3 Bucket for object storage
