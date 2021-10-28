@@ -452,6 +452,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Database Caching Strategies Using Redis](database/redis/Database_Caching_Strategies_Using_Redis.md)
 
+[DynamoDB labs](database/dynamodb/dynamodb-lab.md)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
