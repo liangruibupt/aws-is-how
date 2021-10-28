@@ -43,6 +43,10 @@
 
 [Amazon Redshift ML: Create, train, and deploy machine learning (ML) models using familiar SQL commands](https://aws.amazon.com/redshift/features/redshift-ml/)
 
+[CV Labeling: cvat-on-aws-china](https://github.com/aws-samples/cvat-on-aws-china)
+
+[CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
@@ -363,6 +367,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Lambda invoke AWS Rekgonition](lambda/scripts/call-rekgonition.py)
 
 [Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
+
+[Lambda OpenCV](https://github.com/awslabs/lambda-opencv)
 
 ## Migration
 
