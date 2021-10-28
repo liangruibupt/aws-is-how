@@ -1,5 +1,18 @@
 # Creation of an Amazon MSK Cluster
 
+## Architecture
+![msk-lab-architecture](media/msk-lab-architecture.png)
+
+- Broker nodes - Amazon MSK offers a 3 AZ or a 2 AZ Apacke Kafka node layout. Currently, a 1 AZ (single AZ) Amazon MSK cluster is not available.
+- ZooKeeper nodes - Amazon MSK creates the dedicated ZooKeeper nodes for each Amazon MSK cluster that is fully obfuscated and included with each cluster at no additional cost.
+- Producers, consumers, and cluster admin - Amazon MSK lets you use Apache Kafka data-plane operations to create topics and to produce and consume data. The Producers, consumers connect to Broker nodes leader while cluster admin connec to ZooKeeper nodes
+
+## VPC Prepare
+- A VPC with 1 Public subnet and 3 Private subnets and the required plumbing including a NAT Gateway.
+- A Cloud9 instance you will use as a Bastion
+- 1 EC2 Apache KafkaClientInstance - Apache Kafka Client, AWS CLI v1, AWS CLI v2 (aws2), jq, docker, an Apache Kafka Clickstream producer and schema registry service installed.
+- A security group for the Apache Kafka client instance to be given the security group for the Amazon MSK cluster.
+
 ## Create Kafka cluster
 1. Security group `kafka-sg` and ingress rule
     - Protocol: TCP Port range: 9092
@@ -9,7 +22,7 @@
 
 2. Create Kafka (MSK) cluster on Console
     - Name: MSKWorkshopCluster
-    - Apache Kafka version: 2.2.1
+    - Apache Kafka version: 2.2.1 (2.6.2 can work as well?)
     - Configuration Section
       - auto.create.topics.enable - allow topics to be created automatically by producers and consumers. 
       - delete.topic.enable - enables topic deletion on the server. 

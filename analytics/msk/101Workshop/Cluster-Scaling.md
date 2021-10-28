@@ -1,5 +1,8 @@
 # Cluster Expansion 
 
+- Add brokers to cluster and re-assign partition
+- Storage scaling
+
 ## Adding brokers to your Amazon MSK cluster
 
 After you add the brokers to your Amazon MSK cluster, you will run the partition reassignment, and it will move some of the partitions on to the new brokers so they are carrying traffic - rebalancing partitions.

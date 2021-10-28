@@ -1,0 +1,482 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Can contain only ASCII characters.
+
+Mappings:
+  RegionAMI:
+      us-east-1:
+        HVM64: ami-00dc79254d0461090
+      us-west-2:
+        HVM64: ami-0a85857bfc5345c38
+      eu-west-1:
+        HVM64: ami-040ba9174949f6de4
+      # us-east-1:
+      #   HVM64: ami-00dc79254d0461090
+      # us-west-2:
+      #   HVM64: ami-0a85857bfc5345c38
+      # eu-west-1:
+      #   HVM64: ami-040ba9174949f6de4
+
+Resources:
+  MSKVPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: "https://aws-streaming-artifacts.s3.amazonaws.com/msk-lab-resources/MSKLabs/MSKPrivateVPCOnly.yml"
+
+  KafkaClientInstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and prometheus access from BastionHostSecurityGroup
+      VpcId: !GetAtt MSKVPCStack.Outputs.VPCId
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 10.0.0.0/24
+      - IpProtocol: tcp
+        FromPort: 3500
+        ToPort: 3500
+        CidrIp: 10.0.0.0/24
+      - IpProtocol: tcp
+        FromPort: 3600
+        ToPort: 3600
+        CidrIp: 10.0.0.0/24
+      - IpProtocol: tcp
+        FromPort: 3800
+        ToPort: 3800
+        CidrIp: 10.0.0.0/24
+      - IpProtocol: tcp
+        FromPort: 3900
+        ToPort: 3900
+        CidrIp: 10.0.0.0/24
+
+  KafkaClientInstanceSecurityGroup8081:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: KafkaClientInstanceSecurityGroup
+    Properties:
+      Description: Enable access to Schema Registry inside the KafkaClientInstanceSecurityGroup
+      GroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 8081
+      ToPort: 8081
+      SourceSecurityGroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+
+  KafkaClientInstanceSecurityGroup8083:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: KafkaClientInstanceSecurityGroup
+    Properties:
+      Description: Enable access to Kafka Connect inside the KafkaClientInstanceSecurityGroup
+      GroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 8083
+      ToPort: 8083
+      SourceSecurityGroupId: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+
+  Cloud9EC2Bastion:
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties: 
+      AutomaticStopTimeMinutes: 600
+      Description: "Cloud9 EC2 environment"
+      InstanceType: m5.large
+      Name: !Sub "${AWS::StackName}-Cloud9EC2Bastion"
+      SubnetId: !GetAtt MSKVPCStack.Outputs.PublicSubnetOne
+      Tags: 
+        - Key: 'Purpose'
+          Value: 'Cloud9EC2BastionHostInstance'
+
+  KafkaClientEC2Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m5.large
+      KeyName: !Ref 'KeyName'
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      AvailabilityZone: 
+        Fn::Select:
+         - 0
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      SubnetId: !GetAtt MSKVPCStack.Outputs.PrivateSubnetMSKOne
+      SecurityGroupIds: [!GetAtt KafkaClientInstanceSecurityGroup.GroupId]
+      ImageId: !FindInMap ['RegionAMI', !Ref 'AWS::Region', 'HVM64']
+      Tags:
+        - Key: 'Name'
+          Value: !Sub ${AWS::StackName}-KafkaClientInstance1
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install python3.7 -y
+            yum install java-1.8.0-openjdk-devel -y
+            yum install nmap-ncat -y
+            yum install git -y
+            yum erase awscli -y
+            yum install jq -y
+            yum install maven -y
+            amazon-linux-extras install docker -y
+            service docker start
+            usermod -a -G docker ec2-user
+
+            cd /home/ec2-user
+            wget https://bootstrap.pypa.io/get-pip.py
+            su -c "python3.7 get-pip.py --user" -s /bin/sh ec2-user
+            su -c "/home/ec2-user/.local/bin/pip3 install boto3 --user" -s /bin/sh ec2-user
+            su -c "/home/ec2-user/.local/bin/pip3 install awscli --user" -s /bin/sh ec2-user
+            su -c "/home/ec2-user/.local/bin/pip3 install kafka-python --user" -s /bin/sh ec2-user
+
+            # install AWS CLI 2 - access with aws2
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install -b /usr/local/bin/aws2
+            su -c "ln -s /usr/local/bin/aws2/aws ~/.local/bin/aws2" -s /bin/sh ec2-user
+
+            # Create dirs, get Apache Kafka 2.3.1, 2.4.0 and unpack it
+            su -c "mkdir -p kafka231 kafka241 confluent" -s /bin/sh ec2-user
+            cd kafka231
+            su -c "wget https://archive.apache.org/dist/kafka/2.3.1/kafka_2.12-2.3.1.tgz" -s /bin/sh ec2-user
+            su -c "tar -xzf kafka_2.12-2.3.1.tgz --strip 1" -s /bin/sh ec2-user
+
+            cd /home/ec2-user
+            ln -s /home/ec2-user/kafka241 /home/ec2-user/kafka
+            cd kafka241
+            su -c "wget http://archive.apache.org/dist/kafka/2.4.1/kafka_2.12-2.4.1.tgz" -s /bin/sh ec2-user
+            su -c "tar -xzf kafka_2.12-2.4.1.tgz --strip 1" -s /bin/sh ec2-user
+
+            # Get Confluent Community and unpack it
+            cd /home/ec2-user
+            cd confluent
+            su -c "wget http://packages.confluent.io/archive/5.4/confluent-community-5.4.1-2.12.tar.gz" -s /bin/sh ec2-user
+            su -c "tar -xzf confluent-community-5.4.1-2.12.tar.gz --strip 1" -s /bin/sh ec2-user
+            
+            # Initialize the Kafka cert trust store
+            su -c 'find /usr/lib/jvm/ -name "cacerts" -exec cp {} /tmp/kafka.client.truststore.jks \;' -s /bin/sh ec2-user
+
+            # Setup prometheus agent
+            cd /home/ec2-user
+            su -c "mkdir prometheus" -s /bin/sh ec2-user
+            cd prometheus
+            su -c "wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.13.0/jmx_prometheus_javaagent-0.13.0.jar" -s /bin/sh ec2-user
+
+            # Setup Grafana
+            # cd /home/ec2-user
+            # su -c "mkdir grafana" -s /bin/sh ec2-user
+            # cd grafana
+            # su -c "wget https://dl.grafana.com/oss/release/grafana-7.0.1-1.x86_64.rpm" -s /bin/sh ec2-user
+            # yum install grafana-7.0.1-1.x86_64.rpm -y
+            # usermod -a -G grafana ec2-user
+            # systemctl status grafana-server.service
+
+            # Copy files from S3
+            cd /tmp
+            su -c "mkdir -p kafka" -s /bin/sh ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/producer.properties_msk /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/consumer.properties /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/KafkaClickstreamClient-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/KafkaClickstreamConsumer-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/CustomMM2ReplicationPolicy-1.0-SNAPSHOT.jar /home/ec2-user/confluent/share/java/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/MM2GroupOffsetSync-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/MSKLabs/schema-registry-ssl/schema-registry.properties /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/generatePropertiesFiles.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/generateStartupFile.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/AuthMSK-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/connect-distributed.properties /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/kafka-consumer-python.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/setup-env.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/GlobalSeqNo.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-msc.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-hbc.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-cpc.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-cpc-cust-repl-policy.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-msc-cust-repl-policy.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/kafka-connect.yml /home/ec2-user/prometheus" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/kafka-producer-consumer.yml /home/ec2-user/prometheus" -l ec2-user
+
+            # Setup unit in systemd for Schema Registry
+            echo -n "
+            [Unit]
+            Description=Confluent Schema Registry
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=ec2-user
+            ExecStart=/bin/sh -c '/home/ec2-user/confluent/bin/schema-registry-start /tmp/kafka/schema-registry.properties > /tmp/kafka/schema-registry.log 2>&1'
+            ExecStop=/home/ec2-user/confluent/bin/schema-registry-stop
+            Restart=on-abnormal
+
+            [Install]
+            WantedBy=multi-user.target" > /etc/systemd/system/confluent-schema-registry.service
+
+            # Setup unit in systemd for Kafka Connect
+            echo -n "
+            [Unit]
+            Description=Kafka Connect
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=ec2-user
+            Environment='KAFKA_OPTS=-javaagent:/home/ec2-user/prometheus/jmx_prometheus_javaagent-0.13.0.jar=3600:/home/ec2-user/prometheus/kafka-connect.yml'
+            ExecStart=/bin/sh -c '/home/ec2-user/confluent/bin/connect-distributed /tmp/kafka/connect-distributed.properties > /tmp/kafka/kafka-connect.log 2>&1'
+            Restart=on-abnormal
+
+            [Install]
+            WantedBy=multi-user.target" > /etc/systemd/system/kafka-connect.service
+
+            # Setup unit in systemd for Prometheus
+            # echo -n "
+            # [Unit]
+            # Description=Prometheus
+            # After=network.target
+
+            # [Service]
+            # Type=simple
+            # User=root
+            # ExecStart=/bin/sh -c '/home/ec2-user/prometheus/prometheus/prometheus --config.file=/home/ec2-user/prometheus/prometheus/prometheus.yml > /tmp/kafka/prometheus.log 2>&1'
+            # Restart=on-abnormal
+
+            # [Install]
+            # WantedBy=multi-user.target" > /etc/systemd/system/prometheus.service
+
+            #setup bash env
+            su -c "echo 'export PS1=\"KafkaClientEC2Instance1 [\u@\h \W\\]$ \"' >> /home/ec2-user/.bash_profile" -s /bin/sh ec2-user
+            su -c "echo '[ -f /tmp/kafka/setup_env ] && . /tmp/kafka/setup_env' >> /home/ec2-user/.bash_profile" -s /bin/sh ec2-user
+
+  KafkaClientEC2Instance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m5.large
+      KeyName: !Ref 'KeyName'
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      AvailabilityZone: 
+        Fn::Select:
+         - 1
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      SubnetId: !GetAtt MSKVPCStack.Outputs.PrivateSubnetMSKTwo
+      SecurityGroupIds: [!GetAtt KafkaClientInstanceSecurityGroup.GroupId]
+      ImageId: !FindInMap ['RegionAMI', !Ref 'AWS::Region', 'HVM64']
+      Tags:
+        - Key: 'Name'
+          Value: !Sub ${AWS::StackName}-KafkaClientInstance2
+      UserData: 
+        Fn::Base64: 
+          !Sub | 
+            #!/bin/bash
+            yum update -y
+            yum install python3.7 -y
+            yum install java-1.8.0-openjdk-devel -y
+            yum install nmap-ncat -y
+            yum install git -y
+            yum erase awscli -y
+            yum install jq -y
+            yum install maven -y
+            amazon-linux-extras install docker -y
+            service docker start
+            usermod -a -G docker ec2-user
+
+            cd /home/ec2-user
+            wget https://bootstrap.pypa.io/get-pip.py
+            su -c "python3.7 get-pip.py --user" -s /bin/sh ec2-user
+            su -c "/home/ec2-user/.local/bin/pip3 install boto3 --user" -s /bin/sh ec2-user
+            su -c "/home/ec2-user/.local/bin/pip3 install awscli --user" -s /bin/sh ec2-user
+            su -c "/home/ec2-user/.local/bin/pip3 install kafka-python --user" -s /bin/sh ec2-user
+
+            # install AWS CLI 2 - access with aws2
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install -b /usr/local/bin/aws2
+            su -c "ln -s /usr/local/bin/aws2/aws ~/.local/bin/aws2" -s /bin/sh ec2-user
+
+            # Create dirs, get Apache Kafka 2.3.1, 2.4.0 and unpack it
+            su -c "mkdir -p kafka231 kafka241 confluent" -s /bin/sh ec2-user
+            cd kafka231
+            su -c "wget https://archive.apache.org/dist/kafka/2.3.1/kafka_2.12-2.3.1.tgz" -s /bin/sh ec2-user
+            su -c "tar -xzf kafka_2.12-2.3.1.tgz --strip 1" -s /bin/sh ec2-user
+
+            cd /home/ec2-user
+            ln -s /home/ec2-user/kafka241 /home/ec2-user/kafka
+            cd kafka241
+            su -c "wget http://archive.apache.org/dist/kafka/2.4.1/kafka_2.12-2.4.1.tgz" -s /bin/sh ec2-user
+            su -c "tar -xzf kafka_2.12-2.4.1.tgz --strip 1" -s /bin/sh ec2-user
+
+            # Get Confluent Community and unpack it
+            cd /home/ec2-user
+            cd confluent
+            su -c "wget http://packages.confluent.io/archive/5.4/confluent-community-5.4.1-2.12.tar.gz" -s /bin/sh ec2-user
+            su -c "tar -xzf confluent-community-5.4.1-2.12.tar.gz --strip 1" -s /bin/sh ec2-user
+            
+            # Initialize the Kafka cert trust store
+            su -c 'find /usr/lib/jvm/ -name "cacerts" -exec cp {} /tmp/kafka.client.truststore.jks \;' -s /bin/sh ec2-user
+
+            # Setup prometheus agent
+            cd /home/ec2-user
+            su -c "mkdir prometheus" -s /bin/sh ec2-user
+            cd prometheus
+            su -c "wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.13.0/jmx_prometheus_javaagent-0.13.0.jar" -s /bin/sh ec2-user
+            # su -c "wget https://raw.githubusercontent.com/prometheus/jmx_exporter/master/example_configs/kafka-connect.yml" -s /bin/sh ec2-user
+
+            # # Setup Grafana
+            # cd /home/ec2-user
+            # su -c "mkdir grafana" -s /bin/sh ec2-user
+            # cd grafana
+            # su -c "wget https://dl.grafana.com/oss/release/grafana-7.0.1-1.x86_64.rpm" -s /bin/sh ec2-user
+            # yum install grafana-7.0.1-1.x86_64.rpm -y
+            # usermod -a -G grafana ec2-user
+            # systemctl status grafana-server.service
+
+            # Copy files from S3
+            cd /tmp
+            su -c "mkdir -p kafka" -s /bin/sh ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/producer.properties_msk /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/consumer.properties /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/KafkaClickstreamClient-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/KafkaClickstreamConsumer-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/CustomMM2ReplicationPolicy-1.0-SNAPSHOT.jar /home/ec2-user/confluent/share/java/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/jars/MM2GroupOffsetSync-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/MSKLabs/schema-registry-ssl/schema-registry.properties /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/generatePropertiesFiles.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/generateStartupFile.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/AuthMSK-1.0-SNAPSHOT.jar /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/connect-distributed.properties /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/kafka-consumer-python.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/setup-env.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/GlobalSeqNo.py /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-msc.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-hbc.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-cpc.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-cpc-cust-repl-policy.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/mm2-msc-cust-repl-policy.json /tmp/kafka" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/kafka-connect.yml /home/ec2-user/prometheus" -l ec2-user
+            su -c "aws s3 cp s3://aws-streaming-artifacts/msk-lab-resources/kafka-producer-consumer.yml /home/ec2-user/prometheus" -l ec2-user
+
+            # Setup unit in systemd for Schema Registry
+            echo -n "
+            [Unit]
+            Description=Confluent Schema Registry
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=ec2-user
+            ExecStart=/bin/sh -c '/home/ec2-user/confluent/bin/schema-registry-start /tmp/kafka/schema-registry.properties > /tmp/kafka/schema-registry.log 2>&1'
+            ExecStop=/home/ec2-user/confluent/bin/schema-registry-stop
+            Restart=on-abnormal
+
+            [Install]
+            WantedBy=multi-user.target" > /etc/systemd/system/confluent-schema-registry.service
+
+            # Setup unit in systemd for Kafka Connect
+            echo -n "
+            [Unit]
+            Description=Kafka Connect
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=ec2-user
+            Environment='KAFKA_OPTS=-javaagent:/home/ec2-user/prometheus/jmx_prometheus_javaagent-0.13.0.jar=3500:/home/ec2-user/prometheus/kafka-connect.yml'
+            ExecStart=/bin/sh -c '/home/ec2-user/confluent/bin/connect-distributed /tmp/kafka/connect-distributed.properties > /tmp/kafka/kafka-connect.log 2>&1'
+            Restart=on-abnormal
+
+            [Install]
+            WantedBy=multi-user.target" > /etc/systemd/system/kafka-connect.service
+
+            # Setup unit in systemd for Prometheus
+            # echo -n "
+            # [Unit]
+            # Description=Prometheus
+            # After=network.target
+
+            # [Service]
+            # Type=simple
+            # User=root
+            # ExecStart=/bin/sh -c '/home/ec2-user/prometheus/prometheus/prometheus --config.file=/home/ec2-user/prometheus/prometheus/prometheus.yml > /tmp/kafka/prometheus.log 2>&1'
+            # Restart=on-abnormal
+
+            # [Install]
+            # WantedBy=multi-user.target" > /etc/systemd/system/prometheus.service
+
+            # #setup bash env
+            su -c "echo 'export PS1=\"KafkaClientEC2Instance2 [\u@\h \W\\]$ \"' >> /home/ec2-user/.bash_profile" -s /bin/sh ec2-user
+            su -c "echo '[ -f /tmp/kafka/setup_env ] && . /tmp/kafka/setup_env' >> /home/ec2-user/.bash_profile" -s /bin/sh ec2-user
+            
+
+  EC2Role: 
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonMSKFullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AWSCertificateManagerPrivateCAFullAccess
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: !Join
+                            - '-'
+                            - - 'EC2MMMSKCFProfile'
+                              - !Ref 'AWS::StackName'
+      Roles:
+        - !Ref EC2Role
+
+Outputs:
+  VPCId: 
+    Description: The ID of the VPC created
+    Value: !GetAtt MSKVPCStack.Outputs.VPCId
+  PublicSubnetOne: 
+    Description: The name of the public subnet created
+    Value: !GetAtt MSKVPCStack.Outputs.PublicSubnetOne
+  PrivateSubnetMSKOne: 
+    Description: The ID of private subnet one created
+    Value: !GetAtt MSKVPCStack.Outputs.PrivateSubnetMSKOne
+  PrivateSubnetMSKTwo: 
+    Description: The ID of private subnet two created
+    Value: !GetAtt MSKVPCStack.Outputs.PrivateSubnetMSKTwo
+  PrivateSubnetMSKThree: 
+    Description: The ID of private subnet three created
+    Value: !GetAtt MSKVPCStack.Outputs.PrivateSubnetMSKThree
+  KafkaClientEC2Instance1PrivateDNS:
+    Description: The Public DNS for the EC2 instance1
+    Value: !GetAtt KafkaClientEC2Instance1.PrivateDnsName
+  KafkaClientEC2Instance2PrivateDNS:
+    Description: The Public DNS for the EC2 instance2
+    Value: !GetAtt KafkaClientEC2Instance2.PrivateDnsName
+  SSHKafkaClientEC2Instance1:
+    Description: SSH command for Kafka the EC2 instance1
+    Value: !Sub ssh -A ec2-user@${KafkaClientEC2Instance1.PrivateDnsName}
+    Export:
+      Name: !Sub "${AWS::StackName}-SSHKafkaClientEC2Instance1"
+  SSHKafkaClientEC2Instance2:
+    Description: SSH command for Kafka the EC2 instance2
+    Value: !Sub ssh -A ec2-user@${KafkaClientEC2Instance2.PrivateDnsName}
+    Export:
+      Name: !Sub "${AWS::StackName}-SSHKafkaClientEC2Instance2"
+  KafkaClientEC2InstanceSecurityGroupId:
+    Description: The security group id for the EC2 instance
+    Value: !GetAtt KafkaClientInstanceSecurityGroup.GroupId
+    Export:
+      Name: !Sub "${AWS::StackName}-KafkaClientEC2InstanceSecurityGroupId"
+  SchemaRegistryKafkaClientEC2Instance1Url:
+    Description: The url for the Schema Registry
+    Value: !Sub http://${KafkaClientEC2Instance1.PrivateDnsName}:8081
+    Export:
+      Name: !Sub "${AWS::StackName}-SchemaRegistryKafkaClientEC2Instance1Url"
+  SchemaRegistryKafkaClientEC2Instance2Url:
+    Description: The url for the Schema Registry
+    Value: !Sub http://${KafkaClientEC2Instance2.PrivateDnsName}:8081
+    Export:
+      Name: !Sub "${AWS::StackName}-SchemaRegistryKafkaClientEC2Instance2Url"
+  VPCStackName:
+    Description: The name of the VPC Stack
+    Value: !GetAtt MSKVPCStack.Outputs.VPCStackName
