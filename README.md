@@ -191,6 +191,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Redshift ML](analytics/redshift-ml/Readme.md)
 
+[Secure connectivity patterns to access Amazon MSK across AWS Regions](https://aws.amazon.com/blogs/big-data/secure-connectivity-patterns-to-access-amazon-msk-across-aws-regions/)
+
+[MSK Workshop](analytics/msk/101Workshop/README.md)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -291,6 +295,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [网关负载均衡服务集成 FortiGate 安全网关扩展安全服务性能](https://aws.amazon.com/cn/blogs/china/gateway-load-balancing-services-integrate-fortigate-security-gateways/)
 
 [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
+
+[Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
 
 ## DNS
 
