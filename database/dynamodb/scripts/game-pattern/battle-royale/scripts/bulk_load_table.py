@@ -2,8 +2,7 @@ import json
 
 import boto3
 
-session = boto3.Session(region_name='us-east-2')
-dynamodb = session.resource('dynamodb')
+dynamodb = boto3.client('dynamodb')
 table = dynamodb.Table('battle-royale')
 
 items = []

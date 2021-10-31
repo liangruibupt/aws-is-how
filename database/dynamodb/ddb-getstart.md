@@ -1,5 +1,8 @@
 # DynamoDB quick start
-
+- Create Table
+- Load Sample Data
+- Explore DynamoDB with the CLI: Query, Scan, update, Delete, secondary index
+- Backup
 ## Create the DynamoDB Tables
 ```bash
 aws dynamodb create-table \

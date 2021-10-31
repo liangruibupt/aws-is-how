@@ -10,6 +10,12 @@ NoSQL databases are designed for speed and scale — not flexibility. DynamoDB p
     - Avoid Too many secondary indexes: Using the index overloading to use the flexibility in your attributes to reuse a single secondary index across multiple data types in your table
 
 This lab used to learn about the access patterns in the gaming application, and learn about how to design a DynamoDB table to handle the access patterns by using secondary indexes and transactions.
+- A single-table design that combines multiple entity types in one table.
+- A composite primary key that allows for many-to-many relationships.
+- A sparse global secondary index (GSI) to filter on one of the fields.
+- DynamoDB transactions to handle complex write patterns across multiple entities.
+- An inverted index (GSI) to allow reverse lookups on the many-to-many entity.
+
 
 The scenario is online multiplayer game. During the game, you have to update a specific player’s record to indicate the amount of time the player has been playing, the number of kills they’ve recorded, or whether they won the game. Users want to see old games they’ve played, either to view the games’ winners or to watch a replay of each game’s action.
 
@@ -21,6 +27,14 @@ cd ~/environment
 mkdir ddb-game-player
 cd ddb-game-player/
 curl -sL https://s3.amazonaws.com/ddb-labs/battle-royale.tar | tar -xv
+
+export AWS_DEFAULT_REGION=us-east-2
+
+aws configure
+AWS Access Key ID [None]: 
+AWS Secret Access Key [None]: 
+Default region name [None]: us-east-2
+Default output format [None]: json
 ```
 
 ## The entity-relationship diagram
@@ -327,3 +341,91 @@ Admin:~/environment/ddb-game-player $ python application/start_game.py
 Could not start game
 ```
 
+5. View past games - find all past games for a user via `inverted index`
+
+There is a many-to-many relationship between the `Game` entity and the associated `User` entities, and the relationship is represented by a `UserGameMapping` entity
+
+With the primary key setup, you can find all the `User` entities in a `Game`. You can enable querying all `Game` entities for a `User` by using an `inverted index`. In DynamoDB, an `inverted index` is a global secondary index (GSI) that is the `inverse of your primary key`. The sort key becomes your partition key and vice versa. This pattern flips your table and allows you to query on the other side of your many-to-many relationships.
+
+Sample data
+
+```json
+{"PK": "USER#lindsay56", "SK": "#METADATA#lindsay56", "address": "8896 Johnson Alley Suite 499\nPhillipsberg, AR 08144", "birthdate": "1920-04-17", "email": "sanchezlaura@yahoo.com", "name": "Daniel Price", "username": "lindsay56"}
+{"PK": "USER#maryharris", "SK": "#METADATA#maryharris", "address": "8434 West Forge Apt. 395\nWest Brenda, HI 36952", "birthdate": "1926-03-09", "email": "charleswayne@gmail.com", "name": "Alyssa Robinson", "username": "maryharris"}
+
+{"PK": "GAME#0ab37cf1-fc60-4d93-b72b-89335f759581", "SK": "#METADATA#0ab37cf1-fc60-4d93-b72b-89335f759581", "game_id": "0ab37cf1-fc60-4d93-b72b-89335f759581", "map": "Green Grasslands", "create_time": "2019-04-16T00:41:18", "people": 34, "open_timestamp": "2019-04-16T00:41:18", "creator": "jackparks"}
+{"PK": "GAME#c9c3917e-30f3-4ba4-82c4-2e9a0e4d1cfd", "SK": "#METADATA#c9c3917e-30f3-4ba4-82c4-2e9a0e4d1cfd", "game_id": "c9c3917e-30f3-4ba4-82c4-2e9a0e4d1cfd", "map": "Dirty Desert", "create_time": "2019-04-13T14:25:57", "people": 50, "start_time": "2019-04-13T14:36:25", "creator": "gstanley"}
+
+{"PK": "GAME#3d4285f0-e52b-401a-a59b-112b38c4a26b", "SK": "USER#pboyd", "username": "pboyd", "game_id": "3d4285f0-e52b-401a-a59b-112b38c4a26b"}
+{"PK": "GAME#3d4285f0-e52b-401a-a59b-112b38c4a26b", "SK": "USER#victoriapatrick", "username": "victoriapatrick", "game_id": "3d4285f0-e52b-401a-a59b-112b38c4a26b"}
+```
+
+- Add an inverted index
+```python
+    dynamodb.update_table(
+        TableName='battle-royale',
+        AttributeDefinitions=[
+            {
+                "AttributeName": "PK",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "SK",
+                "AttributeType": "S"
+            }
+        ],
+        GlobalSecondaryIndexUpdates=[
+            {
+                "Create": {
+                    "IndexName": "InvertedIndex",
+                    "KeySchema": [
+                        {
+                            "AttributeName": "SK",
+                            "KeyType": "HASH"
+                        },
+                        {
+                            "AttributeName": "PK",
+                            "KeyType": "RANGE"
+                        }
+                    ],
+                    "Projection": {
+                        "ProjectionType": "ALL"
+                    },
+                    "ProvisionedThroughput": {
+                        "ReadCapacityUnits": 20,
+                        "WriteCapacityUnits": 20
+                    }
+                }
+            }
+        ]
+```
+
+```bash
+python scripts/add_inverted_index.py
+
+aws dynamodb describe-table --table-name battle-royale --query "Table.GlobalSecondaryIndexes[].IndexStatus"
+```
+
+- Retrieve games for a user
+```python
+    resp = dynamodb.query(
+            TableName='battle-royale',
+            IndexName='InvertedIndex',
+            KeyConditionExpression="SK = :sk",
+            ExpressionAttributeValues={
+                ":sk": { "S": "USER#{}".format(username) }
+            },
+            ScanIndexForward=True
+        )
+```
+
+```bash
+Admin:~/environment/ddb-game-player $ python application/find_games_for_user.py
+Games played by carrpatrick:
+UserGameMapping<25cec5bf-e498-483e-9a00-a5f93b9ea7c7 -- carrpatrick -- SILVER>
+UserGameMapping<c9c3917e-30f3-4ba4-82c4-2e9a0e4d1cfd -- carrpatrick>
+```
+
+### Clean up
+1. Delete the CloudFormation Stack
+2. Delete the DynamoDB table

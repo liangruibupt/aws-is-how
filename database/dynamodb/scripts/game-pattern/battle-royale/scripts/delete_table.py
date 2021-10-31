@@ -1,7 +1,6 @@
 import boto3
 
-session = boto3.Session(region_name='us-east-2')
-dynamodb = session.client('dynamodb')
+dynamodb = boto3.client('dynamodb')
 
 try:
     dynamodb.delete_table(TableName='battle-royale')

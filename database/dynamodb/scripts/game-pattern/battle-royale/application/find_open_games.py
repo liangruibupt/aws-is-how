@@ -2,8 +2,7 @@ import boto3
 
 from entities import Game
 
-session = boto3.Session(region_name='us-east-2')
-dynamodb = session.client('dynamodb')
+dynamodb = boto3.client('dynamodb')
 
 def find_open_games():
     resp = dynamodb.scan(

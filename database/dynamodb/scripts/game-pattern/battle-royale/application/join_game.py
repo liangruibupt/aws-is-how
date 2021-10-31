@@ -2,8 +2,7 @@ import boto3
 
 from entities import Game, UserGameMapping
 
-session = boto3.Session(region_name='us-east-2')
-dynamodb = session.client('dynamodb')
+dynamodb = boto3.client('dynamodb')
 
 GAME_ID = "c6f38a6a-d1c5-4bdf-8468-24692ccc4646"
 USERNAME = 'vlopez'
