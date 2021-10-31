@@ -1,9 +1,9 @@
 import json
 import time
 import urllib
-import urlparse
 import boto3
 import traceback
+from lab_config import boto_args
 from boto3.dynamodb.types import TypeDeserializer
 
 class StreamTypeDeserializer(TypeDeserializer):
@@ -16,8 +16,8 @@ def get_table_name_from_arn(arn):
     return arn.split(':')[5].split('/')[1]
 
 def _lambda_handler(event, context):
-    dynamodb = boto3.resource('dynamodb', region_name='cn-northwest-1')
-    dynamodb_table = dynamodb.Table('tlog_replica')
+    dynamodb = boto3.resource(**boto_args)
+    dynamodb_table = dynamodb.Table('logfile_replica')
 
     ddb_deserializer = StreamTypeDeserializer()
 

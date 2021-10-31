@@ -454,6 +454,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [DynamoDB labs](database/dynamodb/dynamodb-lab.md)
 
+[DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)

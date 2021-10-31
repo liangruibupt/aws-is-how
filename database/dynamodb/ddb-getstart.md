@@ -277,3 +277,185 @@ aws dynamodb update-item \
     --expression-attribute-names '{"#Color": "Color"}' \
     --return-consumed-capacity TOTAL
 ```
+
+5. Deleting Data
+
+Deletes in DynamoDB are always singleton operations. There is no single command you can run that would delete all the rows in the table
+
+```bash
+aws dynamodb delete-item \
+    --table-name Reply \
+    --key '{
+        "Id" : {"S": "Amazon DynamoDB#DynamoDB Thread 2"},
+        "ReplyDateTime" : {"S": "2021-04-27T17:47:30Z"}
+    }'
+
+aws dynamodb get-item \
+    --table-name Reply \
+    --key '{
+        "Id" : {"S": "Amazon DynamoDB#DynamoDB Thread 2"},
+        "ReplyDateTime" : {"S": "2021-04-27T17:47:30Z"}
+    }'
+# no item returned
+```
+
+6. Transactions
+
+The DynamoDB TransactWriteItems API is a synchronous write operation that groups up to 25 action requests (subject to an aggregate 4MB size limit for the transaction). These actions can target items in different tables, but not in different AWS accounts or Regions, and no two actions can target the same item. The actions are completed atomically so that either all of them succeed, or all of them fail.
+
+When executing a transaction you will specify a string to represent the ClientRequestToken (aka Idempotency Token).
+
+```bash
+aws dynamodb transact-write-items --client-request-token TRANSACTION1 --transact-items '[
+    {
+        "Put": {
+            "TableName" : "Reply",
+            "Item" : {
+                "Id" : {"S": "Amazon DynamoDB#DynamoDB Thread 2"},
+                "ReplyDateTime" : {"S": "2021-04-27T17:47:30Z"},
+                "Message" : {"S": "DynamoDB Thread 2 Reply 3 text"},
+                "PostedBy" : {"S": "User C"}
+            }
+        }
+    },
+    {
+        "Update": {
+            "TableName" : "Forum",
+            "Key" : {"Name" : {"S": "Amazon DynamoDB"}},
+            "UpdateExpression": "ADD Messages :inc",
+            "ExpressionAttributeValues" : { ":inc": {"N" : "1"} }
+        }
+    }
+]'
+
+# Check the result
+aws dynamodb get-item \
+    --table-name Forum \
+    --key '{"Name" : {"S": "Amazon DynamoDB"}}'
+
+# New transcation ID
+aws dynamodb transact-write-items --client-request-token TRANSACTION2 --transact-items '[
+    {
+        "Delete": {
+            "TableName" : "Reply",
+            "Key" : {
+                "Id" : {"S": "Amazon DynamoDB#DynamoDB Thread 2"},
+                "ReplyDateTime" : {"S": "2021-04-27T17:47:30Z"}
+            }
+        }
+    },
+    {
+        "Update": {
+            "TableName" : "Forum",
+            "Key" : {"Name" : {"S": "Amazon DynamoDB"}},
+            "UpdateExpression": "ADD Messages :inc",
+            "ExpressionAttributeValues" : { ":inc": {"N" : "-1"} }
+        }
+    }
+]'
+```
+
+7. Global Secondary Indexes
+
+If we lookout for items based on non-key attributes, there will be a full table scan and use filter conditions to find what we wanted, which would be both very slow and very expensive for systems operating at large scale.
+
+DynamoDB provides Global Secondary Indexes (GSIs) which will automatically pivot your data around different Partition and Sort Keys. Data can be re-grouped and re-sorted to allow for more access patterns to be quickly served with the Query and Scan APIs.
+
+We want to change the action find all the replies in the Reply table that were posted by User A to more efficient way
+
+```bash
+aws dynamodb scan \
+    --table-name Reply \
+    --filter-expression 'PostedBy = :user' \
+    --expression-attribute-values '{
+        ":user" : {"S": "User A"}
+    }' \
+    --return-consumed-capacity TOTAL
+
+    "Count": 3,
+    "ScannedCount": 4,
+    "ConsumedCapacity": {
+        "TableName": "Reply",
+        "CapacityUnits": 0.5
+    }
+```
+
+- Create new GSI with the PostedBy attribute as the Partition (HASH) key and ReplyDateTime as the Sort (RANGE) key
+```bash
+aws dynamodb update-table \
+    --table-name Reply \
+    --attribute-definitions AttributeName=PostedBy,AttributeType=S AttributeName=ReplyDateTime,AttributeType=S \
+    --global-secondary-index-updates '[{
+        "Create":{
+            "IndexName": "PostedBy-ReplyDateTime-gsi",
+            "KeySchema": [
+                {
+                    "AttributeName" : "PostedBy",
+                    "KeyType": "HASH"
+                },
+                {
+                    "AttributeName" : "ReplyDateTime",
+                    "KeyType" : "RANGE"
+                }
+            ],
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": 5, "WriteCapacityUnits": 5
+            },
+            "Projection": {
+                "ProjectionType": "ALL"
+            }
+        }
+    }
+]'
+```
+- Find all the Replies written by User A sorted
+```bash
+aws dynamodb query \
+    --table-name Reply \
+    --key-condition-expression 'PostedBy = :pb' \
+    --expression-attribute-values '{
+        ":pb" : {"S": "User A"}
+    }' \
+    --index-name PostedBy-ReplyDateTime-gsi \
+    --return-consumed-capacity TOTAL
+
+    "Count": 3,
+    "ScannedCount": 3,
+    "ConsumedCapacity": {
+        "TableName": "Reply",
+        "CapacityUnits": 0.5
+    }
+```
+- remove the GSI
+```bash
+aws dynamodb update-table \
+    --table-name Reply \
+    --global-secondary-index-updates '[{
+        "Delete":{
+            "IndexName": "PostedBy-ReplyDateTime-gsi"
+        }
+    }
+]'
+```
+
+## Backups
+
+Amazon DynamoDB offers two types of backup, on-demand and point-in-time recovery (PITR). 
+
+- PITR is on a rolling window. DynamoDB backs up your table data automatically with per-second granularity. The retention period is a fixed 35 days.
+- on-demand backups stay around forever (even after the table is deleted) until someone tells DynamoDB to delete the backups. 
+
+- Central Scheduled Backup
+
+Customer can use the AWS Backup aims as the single point of centralize backup management for Amazon EC2 instances, Amazon EBS volumes, Amazon RDS databases, Amazon DynamoDB tables, Amazon EFS, Amazon FSx for Lustre, Amazon FSx for Windows File Server, and AWS Storage Gateway volumes. You can schedule periodic backups of a DynamoDB table using AWS Backup.
+
+## Cleanup
+```bash
+aws dynamodb delete-table --table-name ProductCatalog
+
+aws dynamodb delete-table --table-name Forum
+
+aws dynamodb delete-table --table-name Thread
+
+aws dynamodb delete-table --table-name Reply
+```
