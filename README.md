@@ -199,6 +199,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [MSK Workshop](analytics/msk/101Workshop/README.md)
 
+[Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -455,6 +457,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [DynamoDB labs](database/dynamodb/dynamodb-lab.md)
 
 [DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
+
+[Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
 
 ## Container
 

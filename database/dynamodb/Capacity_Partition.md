@@ -1,5 +1,7 @@
 # Capacity Units and Partitioning
 
+The access spread evenly cross the space and time to achieve high scalibility
+
 ## Create Table - logfile
 1. Create table
 - Attribute: PK and GSI_1_PK

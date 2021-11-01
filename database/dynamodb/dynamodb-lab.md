@@ -22,10 +22,11 @@
 - An inverted index (GSI) to allow reverse lookups on the many-to-many entity.
 4. [Retajil Cart Design](Retail-Cart.md)
 5. [Bank Payment Design](Bank-Payment.md)
+6. [NoSQL Workbench for DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html)
 
 # Refernece
 [amazon-dynamodb-labs](https://amazon-dynamodb-labs.com/)
 
-[NoSQL Workbench for DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html)
-
 [NoSQL Design: Reference Materials](https://amazon-dynamodb-labs.com/reference-materials.html)
+
+[Amazon DynamoDB deep dive: Advanced design patterns (DAT403-R1)](https://www.youtube.com/watch?v=6yqfmXiZTlM)
