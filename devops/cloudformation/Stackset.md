@@ -117,9 +117,10 @@ aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hv
 - Leave values for `Deployment options` as-is: `Maximum concurrent accounts`: 1; `Failure tolerance`: 0; `Region concurrency`: Sequential
 - Click `Submit`
 
+3. Check the EC2, S3, VPC already created under accounts `account1,account2` and in both `cn-north-1` and `cn-northwest-1` regions
 
 ## Lab creating a StackSet to deploy stacks across multiple regions using `Service-managed permissions`
-- Console
+1. Using Console
    - using CloudFormation [SNS_Sample](devops/cloudformation/script/SNS_Sample.yaml)
    - Select `Service-managed permissions`
    - Under `Deployment targets`, 
@@ -130,12 +131,14 @@ aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hv
     - Leave values for `Deployment options` as-is: `Maximum concurrent accounts`: 1; `Failure tolerance`: 0; `Region concurrency`: Sequential
     - Click `Submit`
 
-- CLI
+2. Using CLI
 ```bash
 aws cloudformation create-stack-set \
   --stack-set-name SimpleTestTopicStackSet \
   --template-url file:///script/simple_stack_service_permission_sns.yaml
 ```
+
+3. Check the SNS already created in all accounts under OU of `AWS OU ID` and in both `cn-north-1` and `cn-northwest-1` regions
 
 ## Terraform support aws_cloudformation_stack_set
 Using the [Resource: aws_cloudformation_stack_set](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack_set)
