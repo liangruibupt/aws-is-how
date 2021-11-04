@@ -112,12 +112,19 @@ sudo systemctl restart apache2
 9. Testing the SQL Ingestion protection
  - http://[server_ip_address]/login.php
  - Change the DVWA Security level to `low`
- ![dvwa-security-setting](image/dvwa-security-setting.png)
+
+![dvwa-security-setting](image/dvwa-security-setting.png)
+
  - query the userID by input `1`
-  ![query-userid](image/query-userid.png)
+
+![query-userid](image/query-userid.png)
+
  - input the SQL Ingestion sample: `1' union select version(),database()#` or `1 ' union select user_id,password from dvwa.users where user='admin'#`
- We can see the attack result
- ![sql-injection](image/sql-injection.png)
+ 
+  We can see the attack result
+
+![sql-injection](image/sql-injection.png)
+
  - Associated Web ACL which includes `AWS-AWSManagedRulesSQLiRuleSet` with ALB
  - Re-enter the SQL Ingestion sample:
  - Page return the `403 Forbidden`

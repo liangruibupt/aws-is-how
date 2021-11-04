@@ -201,6 +201,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
 
+[MSK Connect](https://aws.amazon.com/blogs/aws/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -303,6 +305,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
 
 [Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
+
+[Transit Gateway Connect 集成FortiGate安全服务](network/tgw-workshop/TGW-Connect.md)
+
+[Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
 
 ## DNS
 
@@ -502,6 +508,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [EKS on Fargate QuickStart](container/EKSonFargate-QuickStart.md)
 
+[AWS App Mesh Workshop](https://www.appmeshworkshop.com/introduction/what_is_appmesh/)
+
+[AWS App Mesh ingress and route enhancements](https://aws.amazon.com/blogs/containers/app-mesh-ingress-route-enhancements/)
+
+[Running microservices in Amazon EKS with AWS App Mesh and Kong](https://aws.amazon.com/blogs/containers/running-microservices-in-amazon-eks-with-aws-app-mesh-and-kong/)
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
@@ -540,6 +552,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Terraform_Demo](devops/terraform/Terraform_Demo.md)
 
+
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
@@ -563,6 +577,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Media
 
 [Video on Demand on AWS](media/mediaconvert)
+
+[无服务器直播解决方案](https://www.amazonaws.cn/solutions/serverless-video-streaming/)
 
 ```sql
 CREATE TABLE new_table_parquet
