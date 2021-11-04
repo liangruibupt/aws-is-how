@@ -552,7 +552,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Terraform_Demo](devops/terraform/Terraform_Demo.md)
 
-
+[CloudFormation Stack Set](devops/cloudformation/Stackset.md)
 
 ## Infra as Code
 

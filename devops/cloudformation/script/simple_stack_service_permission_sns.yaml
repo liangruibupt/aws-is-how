@@ -1,0 +1,22 @@
+SimpleTestTopicStackSet:
+  Type: AWS::CloudFormation::StackSet
+  Properties:
+    AutoDeployment:
+      Enabled: true
+      RetainStacksOnAccountRemoval: false
+    StackSetName: SimpleTestTopicStackSet
+    PermissionModel: SERVICE_MANAGED
+    StackInstancesGroup:
+      - Regions:
+          - cn-north-1
+          - cn-northwest-1
+        DeploymentTargets:
+          OrganizationalUnitIds:
+            - ou-abc1-abc12ab1
+    TemplateBody: |
+      Resources:
+        SimpleTestTopic:
+          Type: AWS::SNS::Topic
+          Properties:
+            DisplayName: !Sub 'simple-test-topic-${AWS::Region}-${AWS::AccountId}'
+            TopicName: !Sub 'simple-test-topic-${AWS::Region}-${AWS::AccountId}'
