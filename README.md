@@ -554,6 +554,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [CloudFormation Stack Set](devops/cloudformation/Stackset.md)
 
+[Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)
