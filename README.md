@@ -203,6 +203,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [MSK Connect](https://aws.amazon.com/blogs/aws/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
 
+[Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
