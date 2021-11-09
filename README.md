@@ -59,6 +59,8 @@
 
 [Price Calculator](https://calculator.aws/#/estimate)
 
+[Price List API](cost/price-list-api.md)
+
 ## Computing
 
 [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
