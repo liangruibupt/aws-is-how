@@ -47,6 +47,8 @@
 
 [CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
 
+[Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
@@ -206,6 +208,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [MSK Connect](https://aws.amazon.com/blogs/aws/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
 
 [Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
+
+[Search DynamoDB Data with Amazon Elasticsearch Service](https://search-ddb.aesworkshops.com/01-intro.html)
 
 ## IOT
 
@@ -518,6 +522,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [AWS App Mesh ingress and route enhancements](https://aws.amazon.com/blogs/containers/app-mesh-ingress-route-enhancements/)
 
 [Running microservices in Amazon EKS with AWS App Mesh and Kong](https://aws.amazon.com/blogs/containers/running-microservices-in-amazon-eks-with-aws-app-mesh-and-kong/)
+
+[ERROR: <module/extension> must be loaded via shared_preload_libraries](https://aws.amazon.com/premiumsupport/knowledge-center/rds-postgresql-resolve-preload-error/)
 
 ## DevOps
 

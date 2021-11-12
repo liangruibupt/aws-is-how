@@ -1,0 +1,1 @@
+Running OpenCV on lambda: https://github.com/xiaotinghe/lambda-opencv, runtime is python3.9. Customer can build lambda layer or directly use the existed one: s3://xiaotih/lambda-layer/cv2-python39.zip
