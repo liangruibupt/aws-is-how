@@ -49,6 +49,8 @@
 
 [Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
 
+[Save costs by automatically shutting down idle resources within Amazon SageMaker Studio](https://aws.amazon.com/blogs/machine-learning/save-costs-by-automatically-shutting-down-idle-resources-within-amazon-sagemaker-studio/)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
