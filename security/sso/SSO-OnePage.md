@@ -14,6 +14,7 @@ There are 3 times of Single-Sign-On cases
 
 # 1. Identity Provider directly configure the Single-Sign-On with AWS console
 - Windows Active Directory and ADFS with SAML2.0 example: [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](Using-ADFS-SSO.md)
+    - [MFA support the ADFS](https://docs.microsoft.com/en-us/windows-server/identity/ad-fs/operations/configure-additional-authentication-methods-for-ad-fs)
 - Auth0 with SAML2.0 example: [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://aws.amazon.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
 - OpenID example: [Okta-OpenID-AWS-in-the-Browser](Okta-OpenID-AWS-in-the-Browser.md)
 
