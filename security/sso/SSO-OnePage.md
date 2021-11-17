@@ -22,4 +22,7 @@ There are 3 times of Single-Sign-On cases
 
 # 3. Grant the Identity Provider user permission to use the AWS API/CLI
 - [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/cn/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
+   - [PowerShell for AD FS using IWA (PowerShell 2.0)](https://aws.amazon.com/cn/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
+   - [Python for AD FS using IWA (default for AD FS 2.0)](https://aws.amazon.com/blogs/security/how-to-implement-federated-api-and-cli-access-using-saml-2-0-and-ad-fs/)
+   - [Python for AD FS using form-based authentication (default for AD FS 3.0 and 4.0)](https://aws.amazon.com/blogs/security/how-to-implement-a-general-solution-for-federated-apicli-access-using-saml-2-0/)
 - [Using temporary credentials with AWS resources](../Using-temporary-credentials-with-AWS-resources.md)

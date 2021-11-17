@@ -51,6 +51,8 @@
 
 [Save costs by automatically shutting down idle resources within Amazon SageMaker Studio](https://aws.amazon.com/blogs/machine-learning/save-costs-by-automatically-shutting-down-idle-resources-within-amazon-sagemaker-studio/)
 
+[SageMaker Neo supported devices edge devices](https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/neo-supported-devices-edge-devices.html)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
