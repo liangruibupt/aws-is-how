@@ -111,6 +111,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [AWS Graviton2-based services](https://github.com/aws/aws-graviton-getting-started)
 
+[Running CFD on AWS Parrell cluster](https://cfd-on-pcluster.workshop.aws/)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -444,6 +446,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
 
 [goofys on AWS](https://github.com/kahing/goofys)
+
+[S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3-Disable-TLS1.1-Access.md)
 
 ## Database
 
