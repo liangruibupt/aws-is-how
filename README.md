@@ -113,6 +113,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Running CFD on AWS Parrell cluster](https://cfd-on-pcluster.workshop.aws/)
 
+[Domain and Host based routing for ALB](https://aws.amazon.com/blogs/aws/new-host-based-routing-support-for-aws-application-load-balancers/)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -216,6 +218,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
 
 [Search DynamoDB Data with Amazon Elasticsearch Service](https://search-ddb.aesworkshops.com/01-intro.html)
+
+[Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
 
 ## IOT
 
@@ -574,6 +578,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [CloudFormation Stack Set](devops/cloudformation/Stackset.md)
 
 [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
+
+[AWS Well-Architected Labs](http://wa.bwcx.me/)
 
 ## Infra as Code
 
