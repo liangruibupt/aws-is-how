@@ -453,6 +453,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3-Disable-TLS1.1-Access.md)
 
+[使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
+
 ## Database
 
 [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
@@ -486,6 +488,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
 
 [Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
+
+[aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
+
+[中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
 
 ## Container
 
