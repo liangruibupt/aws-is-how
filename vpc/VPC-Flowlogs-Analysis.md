@@ -132,7 +132,7 @@ ORDER BY downloadTotal LIMIT 50;
     AND year='2019'
     AND month='02'
     AND day='19'
-    AND eventname in ('GetObject') AND requestparameters LIKE '%[ray-tools-sharing]%';
+    AND eventname in ('GetObject') AND requestparameters LIKE '%[ray-tools-sharing]%'
     group by sourceipaddress               
     ```
 - Automatically Partition Projection
