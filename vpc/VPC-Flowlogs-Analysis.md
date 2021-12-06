@@ -109,31 +109,132 @@ ORDER BY downloadTotal LIMIT 50;
 ```
 
 ### S3 CloudTrail logs
-1. [Enable the CloudTrail for S3 bucket or Object](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-cloudtrail-logging-for-s3.html)
+1. [Enable logging for objects in a bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-cloudtrail-logging-for-s3.html)
+
+- CloudTrail supports logging Amazon S3 object-level API operations such as GetObject, DeleteObject, and PutObject. These events are called data events. By default, CloudTrail trails don't log data events, but you can configure trails to log data events for S3 buckets that you specify, or to log data events for all the Amazon S3 buckets in your AWS account.
 
 2. [Identifying Amazon S3 requests using CloudTrail](https://docs.aws.amazon.com/AmazonS3/latest/userguide/cloudtrail-request-identification.html)
 
+3. Partition consideration
+
+***Note: You need run the Athena in the same region of your cloud trail S3 bucket to avoid cross region query error***
+
 - Manual Partition
     - [Manual load Partition](https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html#create-cloudtrail-table)
+    ```sql
+    CREATE DATABASE s3_cloudtrail_events_db
+
+    CREATE EXTERNAL TABLE cloudtrail_logs (
+    eventversion STRING,
+    useridentity STRUCT<
+                type:STRING,
+                principalid:STRING,
+                arn:STRING,
+                accountid:STRING,
+                invokedby:STRING,
+                accesskeyid:STRING,
+                userName:STRING,
+    sessioncontext:STRUCT<
+    attributes:STRUCT<
+                mfaauthenticated:STRING,
+                creationdate:STRING>,
+    sessionissuer:STRUCT<  
+                type:STRING,
+                principalId:STRING,
+                arn:STRING, 
+                accountId:STRING,
+                userName:STRING>>>,
+    eventtime STRING,
+    eventsource STRING,
+    eventname STRING,
+    awsregion STRING,
+    sourceipaddress STRING,
+    useragent STRING,
+    errorcode STRING,
+    errormessage STRING,
+    requestparameters STRING,
+    responseelements STRING,
+    additionaleventdata STRING,
+    requestid STRING,
+    eventid STRING,
+    resources ARRAY<STRUCT<
+                ARN:STRING,
+                accountId:STRING,
+                type:STRING>>,
+    eventtype STRING,
+    apiversion STRING,
+    readonly STRING,
+    recipientaccountid STRING,
+    serviceeventdetails STRING,
+    sharedeventid STRING,
+    vpcendpointid STRING
+    )
+    PARTITIONED BY (region string, year string, month string, day string)
+    ROW FORMAT SERDE 'com.amazon.emr.hive.serde.CloudTrailSerde'
+    STORED AS INPUTFORMAT 'com.amazon.emr.cloudtrail.CloudTrailInputFormat'
+    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+    LOCATION 's3://CloudTrail_bucket_name/AWSLogs/Account_ID/CloudTrail/';
+
+    ALTER TABLE cloudtrail_logs ADD 
+   PARTITION (region='cn-north-1',
+              year='2021',
+              month='12',
+              day='05')
+   LOCATION 's3://CloudTrail_bucket_name/AWSLogs/Account_ID/CloudTrail/cn-north-1/2021/12/05/'
+    ```
+
     - Query with partition
     ```sql
+    -- Aggegrate by useridentity.arn
     SELECT useridentity.arn,
     Count(requestid) AS RequestCount
-    FROM s3_cloudtrail_events_db.cloudtrail_myawsexamplebucket1_table_partitioned
+    FROM s3_cloudtrail_events_db.cloudtrail_logs
     WHERE eventsource='s3.amazonaws.com'
-    AND region='us-east-1'
-    AND year='2019'
-    AND month='02'
-    AND day='19'
-    Group by useridentity.arn
+    AND region='cn-north-1'
+    AND year='2021'
+    AND month='12'
+    AND day='05'
+    Group by useridentity.arn limit 20  
 
-    SELECT count(requestid), sourceipaddress FROM s3_cloudtrail_events_db.cloudtrail_myawsexamplebucket1_pp
-    WHERE eventsource='s3.amazonaws.com' AND region='us-east-1'
-    AND year='2019'
-    AND month='02'
-    AND day='19'
-    AND eventname in ('GetObject') AND requestparameters LIKE '%[ray-tools-sharing]%'
-    group by sourceipaddress               
+    -- Aggregate by sourceipaddress
+    SELECT count(requestid), sourceipaddress 
+    FROM s3_cloudtrail_events_db.cloudtrail_logs
+    WHERE eventsource='s3.amazonaws.com'
+    AND region='cn-north-1'
+    AND year='2021'
+    AND month='12'
+    AND day='05'
+    AND eventname in ('GetObject')
+    AND sourceipaddress not in ('AWS Internal', 'athena.amazonaws.com')
+    group by sourceipaddress limit 20
+
+    -- Aggregate by eventname
+    SELECT count(requestid), eventname
+    FROM s3_cloudtrail_events_db.cloudtrail_logs
+    WHERE eventsource='s3.amazonaws.com'
+    AND region='cn-north-1'
+    AND year='2021'
+    AND month='12'
+    AND day='06'
+    AND sourceipaddress not in ('AWS Internal', 'athena.amazonaws.com')
+    group by eventname limit 20 
+
+    -- Check event details
+    SELECT
+      eventTime, 
+      eventName, 
+      sourceIpAddress, 
+      json_extract_scalar(requestParameters, '$.bucketName') as bucketName, 
+      json_extract_scalar(requestParameters, '$.key') as object,
+      userIdentity.arn as userArn
+    FROM s3_cloudtrail_events_db.cloudtrail_logs
+    WHERE eventsource='s3.amazonaws.com'
+    AND region='cn-north-1'
+    AND year='2021'
+    AND month='12'
+    AND day='06'
+    AND sourceipaddress not in ('AWS Internal', 'athena.amazonaws.com')
+    limit 100 
     ```
 - Automatically Partition Projection
     - [Automatically add the partition](https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html#create-cloudtrail-table-partition-projection)
