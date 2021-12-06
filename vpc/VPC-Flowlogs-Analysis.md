@@ -113,6 +113,8 @@ ORDER BY downloadTotal LIMIT 50;
 
 - CloudTrail supports logging Amazon S3 object-level API operations such as GetObject, DeleteObject, and PutObject. These events are called data events. By default, CloudTrail trails don't log data events, but you can configure trails to log data events for S3 buckets that you specify, or to log data events for all the Amazon S3 buckets in your AWS account.
 
+![enable-objects-trails](media/enable-objects-trails.png)
+
 2. [Identifying Amazon S3 requests using CloudTrail](https://docs.aws.amazon.com/AmazonS3/latest/userguide/cloudtrail-request-identification.html)
 
 3. Partition consideration
