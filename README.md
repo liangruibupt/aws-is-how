@@ -221,6 +221,14 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
 
+[如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
+
+[使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
+
+[CDC to Redshift]
+ - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
+ - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -328,6 +336,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
 
+[How to check the Internet Traffic?](vpc/VPC-Flowlogs-Analysis.md)
 
 ## DNS
 
