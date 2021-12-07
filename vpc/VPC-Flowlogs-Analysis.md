@@ -23,13 +23,70 @@ For example: `VpcFlowLogsTotalBytesTransferred` – The 50 pairs of source and d
 
 ![flow-logs-athena-integration.png](media/flow-logs-athena-integration.png)
 
+```sql
+SELECT SUM(bytes) as totalbytes, srcaddr, dstaddr from fl06a3a4b9a351a0fd5daily2021120420211204 WHERE year='2021' AND month='12' AND day='04' GROUP BY srcaddr, dstaddr ORDER BY totalbytes LIMIT 50
+```
+
 3. Trouble shooting
 - If you find the Athena query status is `cancelled`, Please check the Athena workgroup scan limit and increase it. More infomation, please check https://docs.amazonaws.cn/athena/latest/ug/workgroups-setting-control-limits-cloudwatch.html
 
 - Patition: S3 bucket prefix need follow up the pattern `aws-region=region/year=year/month=month/day=day/`, then you can enable automatic partition and use the `msck repair table <table-name>` to automatically identify and load the partition. If you path format is `region/year/month/day/`, then you need manually load the partition via `alter table ... add partition(...) ... location ...`
+```sql
+   ALTER TABLE fl06a3a4b9a351a0fd5daily2021120420211204 ADD 
+   PARTITION (
+              year='2021',
+              month='12',
+              day='06')
+   LOCATION 's3://aws-vpc-flow-bucket/AWSLogs/AccountID/vpcflowlogs/AWSRegion/2021/12/06/'
+```
 
 - If you set the `Partition load frequency` in your VPC Flow logs athena integration, then it will follow up the frequency to load the partition
 
+- performance tuning
+1. In global region, you can store the flow logs as Parquet format when you create the flow logs [analytics with VPC Flow Logs in Apache Parquet format](https://aws.amazon.com/blogs/big-data/optimize-performance-and-reduce-costs-for-network-analytics-with-vpc-flow-logs-in-apache-parquet-format/).
+
+2. In China region, you can use glue job to convert the data to Parquet without change the table schema
+- Note， modify the script to add the `"partitionKeys": ["year", "month", "day"]`
+```python
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields3, connection_type = "s3", connection_options = {"path": "s3://aws-vpc-flow-bucket/Parquet/", "partitionKeys": ["year", "month", "day"]}, format = "parquet", transformation_ctx = "datasink4")
+```
+
+3. Create new table by using Glue Crawler or in Athena
+```sql
+CREATE EXTERNAL TABLE `flow_logs_parquet`(
+  `version` int, 
+  `account_id` string, 
+  `interface_id` string, 
+  `srcaddr` string, 
+  `dstaddr` string, 
+  `srcport` int, 
+  `dstport` int, 
+  `protocol` bigint, 
+  `packets` bigint, 
+  `bytes` bigint, 
+  `start` bigint, 
+  `end` bigint, 
+  `action` string, 
+  `log_status` string)
+PARTITIONED BY ( 
+  `year` string, 
+  `month` string, 
+  `day` string)
+ROW FORMAT SERDE 
+  'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+STORED AS INPUTFORMAT 
+  'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+OUTPUTFORMAT 
+  'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+LOCATION
+  's3://aws-vpc-flow-bucket/Parquet/'
+TBLPROPERTIES (
+  'classification'='parquet',  
+  "parquet.compress"="SNAPPY")
+
+
+MSCK REPAIR TABLE `flow_logs_parquet`;
+```
 
 ## For S3, you can analysis the S3 access logs or Cloud Trail logs
 
@@ -244,3 +301,28 @@ ORDER BY downloadTotal LIMIT 50;
     ```sql
     MSCK REPAIR TABLE `cloudtrail_logs_pp`;
     ```
+
+
+4. Using Glue to create the Parquet format
+```python
+
+import sys
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+
+args = getResolvedOptions(sys.argv, ["JOB_NAME", "glue_database", "raw_cloudtrail_table", "results_bucket", "TempDir"])
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args["JOB_NAME"], args)
+datasource0 = glueContext.create_dynamic_frame.from_catalog(database = args["glue_database"], table_name = args["raw_cloudtrail_table"], transformation_ctx = "datasource0")
+applymapping1 = ApplyMapping.apply(frame = datasource0, mappings = [("eventversion", "string", "eventversion", "string"), ("useridentity", "struct", "useridentity", "struct"), ("eventtime", "string", "eventtime", "string"), ("eventsource", "string", "eventsource", "string"), ("eventname", "string", "eventname", "string"), ("awsregion", "string", "awsregion", "string"), ("sourceipaddress", "string", "sourceipaddress", "string"), ("useragent", "string", "useragent", "string"), ("requestparameters", "struct", "requestparameters", "string"), ("responseelements", "struct", "responseelements", "string"), ("requestid", "string", "requestid", "string"), ("eventid", "string", "eventid", "string"), ("eventtype", "string", "eventtype", "string"), ("recipientaccountid", "string", "recipientaccountid", "string"), ("resources", "array", "resources", "array"), ("sharedeventid", "string", "sharedeventid", "string"), ("errorcode", "string", "errorcode", "string"), ("errormessage", "string", "errormessage", "string"), ("apiversion", "string", "apiversion", "string"), ("readonly", "boolean", "readonly", "boolean"), ("additionaleventdata", "struct", "additionaleventdata", "string"), ("vpcendpointid", "string", "vpcendpointid", "string"), ("managementevent", "boolean", "managementevent", "boolean"), ("eventcategory", "string", "eventcategory", "string"), ("serviceeventdetails", "struct", "serviceeventdetails", "struct"), ("partition_0", "string", "organization", "string"), ("partition_2", "string", "account", "string"), ("partition_4", "string", "region", "string"), ("partition_5", "string", "year", "string"), ("partition_6", "string", "month", "string"), ("partition_7", "string", "day", "string")], transformation_ctx = "applymapping1")
+resolvechoice2 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", transformation_ctx = "resolvechoice2")
+relationalized3 = resolvechoice2.relationalize("trail", args["TempDir"]).select("trail")
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = relationalized3, connection_type = "s3", connection_options = {"path": args["results_bucket"] + "/parquet", "partitionKeys": ["account", "region", "year", "month", "day"]}, format = "parquet", transformation_ctx = "datasink4")
+job.commit()
+```
