@@ -304,6 +304,7 @@ ORDER BY downloadTotal LIMIT 50;
 
 
 4. Using Glue to create the Parquet format
+- Glue job
 ```python
 
 import sys
@@ -326,3 +327,4 @@ relationalized3 = resolvechoice2.relationalize("trail", args["TempDir"]).select(
 datasink4 = glueContext.write_dynamic_frame.from_options(frame = relationalized3, connection_type = "s3", connection_options = {"path": args["results_bucket"] + "/parquet", "partitionKeys": ["account", "region", "year", "month", "day"]}, format = "parquet", transformation_ctx = "datasink4")
 job.commit()
 ```
+- Whole pipeline: https://github.com/alsmola/cloudtrail-parquet-glue
