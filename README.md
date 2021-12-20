@@ -229,6 +229,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
  - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
  - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
 
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -271,6 +272,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
 - [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
 - [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
+- [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
 
 [GuardDuty Simulator](security/guard-duty/README.md)
 
@@ -337,6 +339,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
 
 [How to check the Internet Traffic?](vpc/VPC-Flowlogs-Analysis.md)
+
+[VPC-Cross-Account-Connection](vpc/VPC-Cross-Account-Connection.md)
 
 ## DNS
 
@@ -501,6 +505,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
 
 [中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
+
+[Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
 ## Container
 
