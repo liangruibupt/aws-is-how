@@ -2,7 +2,7 @@
 
 ## Create Internal NLB route traffic to Fargate in private subnet
 
-    ![NLB-Fargate](media/NLB-Fargate.png)
+![NLB-Fargate](media/NLB-Fargate.png)
 
     SSH to jumpserver to verify the api work properly
 
@@ -19,21 +19,21 @@
 
     [Set up API Gateway private integrations guide for different scenario](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html)
 
-    ![APIGW-VPCLink-Diagram](media/APIGW-VPCLink-Diagram.png)
+![APIGW-VPCLink-Diagram](media/APIGW-VPCLink-Diagram.png)
 
 1. On API Gateway console creat the VPC link for REST APIs
 
-    ![APIGW-VPCLink](media/APIGW-VPCLink.png)
+![APIGW-VPCLink](media/APIGW-VPCLink.png)
 
 2. Choice a API to use (1) VPC Link for Integration type; (2) Choose Use Proxy Integration; (3)From the VPC Link drop-down list, select the VpcLink created in previous step.
 
-    ![APIGW-VPCLink-Proxy-Private-Integration](media/APIGW-VPCLink-Proxy-Private-Integration.png)
+![APIGW-VPCLink-Proxy-Private-Integration](media/APIGW-VPCLink-Proxy-Private-Integration.png)
 
 3. From the Actions drop-down menu, choose Deploy API
 
 4. Testing new REST API from VPC (The VPC without API GW VPC endpoint) or destop via public internet
 
-    ![APIGW-VPCLink-Regional-API](media/APIGW-VPCLink-Regional-API.png)
+![APIGW-VPCLink-Regional-API](media/APIGW-VPCLink-Regional-API.png)
 
     ```bash
     curl https://iyh6euenkb.execute-api.cn-northwest-1.amazonaws.com.cn/dev/webpage-vpc
@@ -44,11 +44,11 @@
 
     Create a REST API that is only accessible from within a VPC. [Step by Step guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-apis.html)
 
-    ![APIGW-Private-API-PrivateIntegration-Diagram](media/APIGW-Private-API-PrivateIntegration-Diagram.png)
+![APIGW-Private-API-PrivateIntegration-Diagram](media/APIGW-Private-API-PrivateIntegration-Diagram.png)
 
 1. Create an interface VPC endpoint for API Gateway execute-api
 
-    ![VPCEndpoint-APIGW](media/VPCEndpoint-APIGW.png)
+![VPCEndpoint-APIGW](media/VPCEndpoint-APIGW.png)
 
     - For Enable Private DNS Name, leave the check box selected. Private DNS is enabled by default. 
     
@@ -71,7 +71,7 @@
 
 2. Create a private API using the API Gateway console
 
-    ![APIGW-Private-API](media/APIGW-Private-API.png)
+![APIGW-Private-API](media/APIGW-Private-API.png)
 
     ```bash
     aws apigateway create-rest-api --name Fargate-webpage-private \
@@ -111,23 +111,23 @@
 
     - HTTP Integration with Proxy Mode
 
-    ![APIGW-Private-API-HTTPIntegration](media/APIGW-Private-API-HTTPIntegration.png)
+![APIGW-Private-API-HTTPIntegration](media/APIGW-Private-API-HTTPIntegration.png)
 
     - Private Integration VPCLink with Proxy Mode
     
-    ![APIGW-Private-API-PrivateIntegration](media/APIGW-Private-API-PrivateIntegration.png)
+![APIGW-Private-API-PrivateIntegration](media/APIGW-Private-API-PrivateIntegration.png)
 
     - HTTP Integration without Proxy Mode
 
-    ![APIGW-Private-API-HTTPIntegration-nonProxy](media/APIGW-Private-API-HTTPIntegration-nonProxy.png)
+![APIGW-Private-API-HTTPIntegration-nonProxy](media/APIGW-Private-API-HTTPIntegration-nonProxy.png)
 
     - Private Integration VPCLink without Proxy Mode
     
-    ![APIGW-Private-API-PrivateIntegration](media/APIGW-Private-API-PrivateIntegration-nonProxy.png)
+![APIGW-Private-API-PrivateIntegration](media/APIGW-Private-API-PrivateIntegration-nonProxy.png)
 
 5. Deploy a private API using the API Gateway console as stage set to `dev`
 
-    ![APIGW-Private-API-PrivateIntegration-Deploy](media/APIGW-Private-API-PrivateIntegration-Deploy.png)
+![APIGW-Private-API-PrivateIntegration-Deploy](media/APIGW-Private-API-PrivateIntegration-Deploy.png)
 
 6. Invoking your private API
  
@@ -173,11 +173,11 @@
 ## Invoke a Private REST API from other account VPC
 
 
-    ![APIGW-PrivateAPI-PrivateIntegration-CrossAccount](media/APIGW-PrivateAPI-PrivateIntegration-CrossAccount.png)
+![APIGW-PrivateAPI-PrivateIntegration-CrossAccount](media/APIGW-PrivateAPI-PrivateIntegration-CrossAccount.png)
 
 1. Create an interface VPC endpoint for API Gateway execute-api in 2nd account VPC
 
-    ![VPCEndpoint-APIGW-CrossAccount](media/VPCEndpoint-APIGW-CrossAccount.png)
+![VPCEndpoint-APIGW-CrossAccount](media/VPCEndpoint-APIGW-CrossAccount.png)
 
     - For Enable Private DNS Name, leave the check box selected. Private DNS is enabled by default. 
     - The security group you choose must be set to allow TCP Port 443 inbound HTTPS traffic from either an IP range in your VPC or another security group in your VPC. 
@@ -197,7 +197,7 @@
 
 2. Add new VPC endpoint to the private API
 
-    ![APIGW-PrivateAPI-CrossAccount-VPCE](media/APIGW-PrivateAPI-CrossAccount-VPCE.png)
+![APIGW-PrivateAPI-CrossAccount-VPCE](media/APIGW-PrivateAPI-CrossAccount-VPCE.png)
 
     ```bash
     aws apigateway update-rest-api --rest-api-id 3i95y1yx06 \
@@ -233,7 +233,7 @@
 
 4. Re-Deploy a private API using the API Gateway console as stage set to `dev`
 
-    ![APIGW-Private-API-PrivateIntegration-Deploy](media/APIGW-Private-API-PrivateIntegration-Deploy.png)
+![APIGW-Private-API-PrivateIntegration-Deploy](media/APIGW-Private-API-PrivateIntegration-Deploy.png)
 
 5. Invoking your private API
 
