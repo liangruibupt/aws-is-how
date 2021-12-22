@@ -410,6 +410,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Lambda OpenCV](https://github.com/awslabs/lambda-opencv)
 
+[Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
+
 ## Migration
 
 [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
