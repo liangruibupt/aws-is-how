@@ -115,6 +115,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Domain and Host based routing for ALB](https://aws.amazon.com/blogs/aws/new-host-based-routing-support-for-aws-application-load-balancers/)
 
+[Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -510,6 +512,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
+[best-practices-for-working-with-amazon-aurora-serverless](https://aws.amazon.com/blogs/database/best-practices-for-working-with-amazon-aurora-serverless/)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
@@ -560,6 +564,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [ERROR: <module/extension> must be loaded via shared_preload_libraries](https://aws.amazon.com/premiumsupport/knowledge-center/rds-postgresql-resolve-preload-error/)
 
+[How do I use multiple CIDR ranges with Amazon EKS]
+- [Check your VPC setting](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-resize)
+- [Add the additioal CIDR](https://aws.amazon.com/premiumsupport/knowledge-center/eks-multiple-cidr-ranges/)
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
@@ -603,6 +611,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
 
 [AWS Well-Architected Labs](http://wa.bwcx.me/)
+
+[SMS notification for AWS health event](https://github.com/aws/aws-health-tools/tree/master/sms-notifier)
 
 ## Infra as Code
 
