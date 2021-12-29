@@ -1,9 +1,9 @@
 # Cluster Expansion 
 
-- Add brokers to cluster and re-assign partition
+- **Add brokers to cluster and re-assign partition**
 - Storage scaling
 
-## Adding brokers to your Amazon MSK cluster
+# Adding brokers to your Amazon MSK cluster
 
 After you add the brokers to your Amazon MSK cluster, you will run the partition reassignment, and it will move some of the partitions on to the new brokers so they are carrying traffic - rebalancing partitions.
 
@@ -177,33 +177,3 @@ Topic:test10    PartitionCount:10       ReplicationFactor:3     Configs:
 - Scale in
 
 Note: UpdateBrokerCount operation: The number of broker nodes cannot be reduced.
-
-## Cluster Storage Expansion Lab
-Modify EBS storage volume per broker
-
-- While there is a default retention set for your cluster, you can also set retention on a per topic basis. 
-
-- Kafka does not handle running out of disk space well. Brokers will safely shut down and will not restart until there is enough disk space to safely start again.
-
-- Setup Cloudwatch alarms (or other monitoring) that will warn you when your cluster or brokers are getting low on disk space. A little monitoring can save you downtime.
-
-- You can only expand the disk on the brokers the same amount on every broker. If you want to add more space for one broker, you will be adding space to every node.
-
-```bash
-aws kafka describe-cluster --cluster-arn $ClusterArn --output json --region us-west-2 | jq '.ClusterInfo.BrokerNodeGroupInfo.StorageInfo'
-{
-  "EbsStorageInfo": {
-    "VolumeSize": 1000
-  }
-}
-
-CLUSTER_VERSION=$(aws kafka describe-cluster --cluster-arn $ClusterArn --output json --region us-west-2 | jq ".ClusterInfo.CurrentVersion" | tr -d \")
-echo $CLUSTER_VERSION
-
-
-ClusterOperationArn=$(aws kafka update-broker-storage --cluster-arn $ClusterArn --current-version $CLUSTER_VERSION --target-broker-ebs-volume-info '{"KafkaBrokerNodeId": "All", "VolumeSizeGB": 1050}' --region us-west-2 | jq ".ClusterOperationArn" | tr -d \")
-echo $ClusterOperationArn
-
-# Waite until OperationState=UPDATE_COMPLETE
-aws kafka describe-cluster-operation --cluster-operation-arn  $ClusterOperationArn --output json --region us-west-2 | jq ".ClusterOperationInfo | (.OperationState,.OperationType,.TargetClusterInfo)"
-```
