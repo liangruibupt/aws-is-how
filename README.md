@@ -117,6 +117,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
 
+[Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
+
+[Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
+
 ## Analytics
 
 [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -227,10 +231,13 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
 
+[Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
+
 [CDC to Redshift]
  - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
  - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
 
+[Log Hub workshop](https://log-hub.docs.solutions.gcr.aws.dev/workshop/introduction/)
 
 ## IOT
 
@@ -253,6 +260,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/lambda-write-postgresql/lambda-write-postgreSQL.md)
 
 [Building a Scalable Standardized Pipeline for Automotive OTA on AWS](https://aws.amazon.com/blogs/industries/building-a-scalable-standardized-pipeline-for-automotive-ota-on-aws/)
+
+[制造业端到端(AIOT)动手训练营](https://www.mfgee.ml/)
 
 ## Security
 
@@ -516,6 +525,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [best-practices-for-working-with-amazon-aurora-serverless](https://aws.amazon.com/blogs/database/best-practices-for-working-with-amazon-aurora-serverless/)
 
+[Secure sensitive data in Amazon Database services]
+- [Securing sensitive data in Amazon RDS](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-rds/)
+- [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
+
+[RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
+
 ## Container
 
 [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
@@ -569,6 +584,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [How do I use multiple CIDR ranges with Amazon EKS]
 - [Check your VPC setting](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-resize)
 - [Add the additioal CIDR](https://aws.amazon.com/premiumsupport/knowledge-center/eks-multiple-cidr-ranges/)
+
+[Cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/cn/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
 
 ## DevOps
 

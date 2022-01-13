@@ -6,6 +6,41 @@
 
 https://docs.amazonaws.cn/en_us/vpc/latest/userguide/working-with-flow-logs.html
 
+```sql
+CREATE EXTERNAL TABLE `fl06a3a4b9a351a0fd5daily2021120420211204`(
+  `version` int, 
+  `account_id` string, 
+  `interface_id` string, 
+  `srcaddr` string, 
+  `dstaddr` string, 
+  `srcport` int, 
+  `dstport` int, 
+  `protocol` bigint, 
+  `packets` bigint, 
+  `bytes` bigint, 
+  `start` bigint, 
+  `end` bigint, 
+  `action` string, 
+  `log_status` string)
+PARTITIONED BY ( 
+  `year` string, 
+  `month` string, 
+  `day` string)
+ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY ' ' 
+WITH SERDEPROPERTIES ( 
+  'EXTERNAL'='true', 
+  'skip.header.line.count'='1') 
+STORED AS INPUTFORMAT 
+  'org.apache.hadoop.mapred.TextInputFormat' 
+OUTPUTFORMAT 
+  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+  's3://aws-vpc-flow-bucket/AWSLogs/AccountID/vpcflowlogs/AWSRegion/'
+TBLPROPERTIES (
+)
+```
+
 
 2. Query flow logs using Amazon Athena
 
