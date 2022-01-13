@@ -3,7 +3,6 @@
 - Add brokers to cluster and re-assign partition
 - **Storage scaling**
 
-
 # MSK Cluster Storage Expansion Lab
 
 When MSK Cluster starts to retain data and you can see the data volume usage grow in CloudWatch monitoring. The storage can be scaled up in your Amazon MSK cluster to meet data growth and retention requirements.

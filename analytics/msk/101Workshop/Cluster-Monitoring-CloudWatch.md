@@ -4,7 +4,6 @@
 - **Monitor using Cloudwatch monitoring**
 
 
-
 ## Cloudwatch monitoring  
 
 - Basic/default metrics 
