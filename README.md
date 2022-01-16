@@ -633,6 +633,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [SMS notification for AWS health event](https://github.com/aws/aws-health-tools/tree/master/sms-notifier)
 
+[AWS Config for resource housekeeping and cost optimization](https://aws.amazon.com/blogs/mt/aws-config-best-practices/)
+
 ## Infra as Code
 
 [How to migrate global cloudformation to China reigon?](xaas/Global-Cloudformation-Migrate-to-China.md)

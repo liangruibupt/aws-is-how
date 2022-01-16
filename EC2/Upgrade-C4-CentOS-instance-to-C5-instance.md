@@ -221,6 +221,56 @@ nvme1n1     259:0    0  50G  0 disk
 nvme2n1     259:1    0  50G  0 disk
 ```
 
+## Trouble Shooting
+1. /dev/mapper/VG00-root does not exist
+    ```bash
+    The following error usually means the modules are missing from the initrd or initramfs image:
+    [  183.904608] dracut-initqueue[347]: Warning: dracut-initqueue timeout - starting timeout scripts
+    [  183.904769] dracut-initqueue[Warning: /dev/VG00/root does not exist
+    Warning: /dev/mapper/VG00-root does not exist
+    ```
+- Resolve the issue
+1. Confirm NVME driver is installed：
+    ```bash
+    $ modinfo nvme 
+    ```
+2. Update module dependencies：
+    ```bash
+    $ sudo depmod
+    ```
+3. Add the nvme to initramfs： 
+    ```bash
+    $ echo 'add_drivers+=" nvme "' > /etc/dracut.conf.d/nvme.conf
+    ```
+4. Check if initramfs has the NVME modules：
+    ```bash
+    $ sudo lsinitrd | grep nvme
+    ```
+    You may see similar output like below:
+    ```bash
+    # sudo lsinitrd | grep nvme
+    drwxr-xr-x   3 root     root            0 Jan 13 13:08 usr/lib/modules/3.10.0-957.el7.x86_64/kernel/drivers/nvme
+    drwxr-xr-x   2 root     root            0 Jan 13 13:08 usr/lib/modules/3.10.0-957.el7.x86_64/kernel/drivers/nvme/host
+    -rw-r--r--   1 root     root        28444 Nov  8  2018 usr/lib/modules/3.10.0-957.el7.x86_64/kernel/drivers/nvme/host/nvme-core.ko.xz
+    -rw-r--r--   1 root     root        16864 Nov  8  2018 usr/lib/modules/3.10.0-957.el7.x86_64/kernel/drivers/nvme/host/nvme.ko.xz
+    ```
+5. Backup initramfs : 
+    ```bash
+    $ cp -p /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).img.bak
+    ```
+6. Update initramfs：
+    ```bash
+    $ sudo dracut -f -v
+    ```
+7. Reconfigure the grub file：
+    ```bash
+    $ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    ```
+8. For /etc/fstasb file, we suggest you using UUID to mount the disk because C5 is nitro type instance and it uses nvme naming for the device, such as /dev/nvme0n1 for the root volume. So if you use /dev/sda1 or /dev/xvda in /etc/fstab file, the system cannot identify them and the instance will fail to boot. You can use command ```blkid``` to check the UUID of all the volumes.
+
+9. Once the above steps are executed, you can stop the instance and change to C5 type.
+
+
 ## Reference
 [Change the instance type](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html)
 
@@ -229,3 +279,5 @@ nvme2n1     259:1    0  50G  0 disk
 [How do I enable and configure enhanced networking on my EC2 instances?](https://aws.amazon.com/cn/premiumsupport/knowledge-center/enable-configure-enhanced-networking/)
 
 [nvme-ebs-volumes](https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html)
+
+[Amazon EBS and NVMe on Linux instances](https://docs.amazonaws.cn/en_us/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#identify-nvme-ebs-device)
