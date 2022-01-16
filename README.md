@@ -655,6 +655,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
 
+[Amazon Simple Email Service SES Usaga](integration/SES/SES-Usage.md)
+
 ## Media
 
 [Video on Demand on AWS](media/mediaconvert)

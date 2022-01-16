@@ -1,0 +1,5 @@
+1. [Moving out of the Amazon SES sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
+2. [Using the Amazon SES API to send email](https://docs.aws.amazon.com/ses/latest/dg/send-email-api.html)
+- Demo code [ses_sentmail](ses_sentmail.py)
+3. [Using the Amazon SES SMTP interface to send email](https://docs.aws.amazon.com/ses/latest/dg/send-email-smtp.html)
+- Demo code [ses_smtp_sentmail](ses_smtp_sentmail.py)
