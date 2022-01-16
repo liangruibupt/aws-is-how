@@ -145,3 +145,10 @@ LIMIT 10;
   ORDER BY bill_billing_period_start_date, reservation_unused_recurring_fee desc
   LIMIT 20
 ```
+
+15. Show the details of product or service usage
+```sql
+Select round(sum("line_item_unblended_cost"),2) as cost, line_item_usage_type from "costmaster"."china_cur_ray"
+Where line_item_product_code='AWSConfig'
+group by line_item_usage_type;
+```
