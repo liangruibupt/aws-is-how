@@ -239,6 +239,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Log Hub workshop](https://log-hub.docs.solutions.gcr.aws.dev/workshop/introduction/)
 
+[Simple FAQ Bot](analytics/faq-bot/README.md)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
