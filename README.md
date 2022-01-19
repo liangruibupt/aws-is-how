@@ -241,6 +241,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Simple FAQ Bot](analytics/faq-bot/README.md)
 
+[Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
