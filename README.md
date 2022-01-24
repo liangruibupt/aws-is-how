@@ -53,6 +53,8 @@
 
 [SageMaker Neo supported devices edge devices](https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/neo-supported-devices-edge-devices.html)
 
+[Amazon Personalize Get Start](https://github.com/aws-samples/amazon-personalize-samples/tree/master/getting_started)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
@@ -66,6 +68,7 @@
 [Price Calculator](https://calculator.aws/#/estimate)
 
 [Price List API](cost/price-list-api.md)
+
 
 ## Computing
 
@@ -666,3 +669,5 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Video on Demand on AWS](media/mediaconvert)
 
 [无服务器直播解决方案](https://www.amazonaws.cn/solutions/serverless-video-streaming/)
+
+[Open source web conferencing solution - Jitsi](https://aws.amazon.com/cn/blogs/opensource/getting-started-with-jitsi-an-open-source-web-conferencing-solution/)
