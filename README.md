@@ -246,6 +246,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
 
+[Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -537,6 +539,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
 
 [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
+
+[How to Migrate from Amazon RDS Aurora or MySQL to Amazon Aurora Serverless](https://medium.com/@souri29/how-to-migrate-from-amazon-rds-aurora-or-mysql-to-amazon-aurora-serverless-55f9a4a74078)
 
 ## Container
 
