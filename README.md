@@ -492,6 +492,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
 
+[Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
+
+[EFS Web Browser for list files and directory](https://aws.amazon.com/cn/blogs/china/building-a-serviceless-efs-file-browser/)
+
+[Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
+
 ## Database
 
 [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
