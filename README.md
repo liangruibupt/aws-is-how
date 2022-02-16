@@ -55,6 +55,8 @@
 
 [Amazon Personalize Get Start](https://github.com/aws-samples/amazon-personalize-samples/tree/master/getting_started)
 
+[AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
@@ -247,6 +249,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
 
 [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
+
+[Hadoop high availability features of HDFS NameNode and YARN ResourceManager in an Amazon EMR cluster](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-ha-applications.html)
+
+[Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
 ## IOT
 
@@ -547,6 +553,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
 
 [How to Migrate from Amazon RDS Aurora or MySQL to Amazon Aurora Serverless](https://medium.com/@souri29/how-to-migrate-from-amazon-rds-aurora-or-mysql-to-amazon-aurora-serverless-55f9a4a74078)
+
+[MySQL validate_password plugin](database/rds/mysql/mysql_password_validation.md)
+
+[Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/cn/blogs/database/amazon-rds-under-the-hood-multi-az/)
 
 ## Container
 
