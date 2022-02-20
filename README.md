@@ -254,6 +254,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
+[Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -381,6 +382,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Route53 Resolver](R53/R53-Resolver.md)
 
 [Route53 cross-account-dns](R53/cross-account-dns.md)
+
+[How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
 
 ## Serverless
 

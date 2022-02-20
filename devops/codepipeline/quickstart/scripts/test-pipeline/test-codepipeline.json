@@ -1,0 +1,155 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+      "LambdaCodePipeline": {
+        "Type": "AWS::CodePipeline::Pipeline",
+        "Properties": {
+          "ArtifactStore": {
+            "Type": "S3",
+            "Location": "codefamily-sample"
+          },
+          "Name": "HelloWorldCodePipeline",
+          "RoleArn": "arn:aws-cn:iam::876820548815:role/CodePipelineRole",
+          "Stages": [
+            {
+              "Name": "Source",
+              "Actions": [
+                {
+                  "Name": "Source",
+                  "ActionTypeId": {
+                    "Category": "Source",
+                    "Owner": "AWS",
+                    "Provider": "S3",
+                    "Version": "1"
+                  },
+                  "Configuration": {
+                    "PollForSourceChanges": "false",
+                    "S3Bucket": "codefamily-sample",
+                    "S3ObjectKey": "codecommit/builds//hello-world.zip"
+                  },
+                  "OutputArtifacts": [
+                    {
+                        "Name": "SourceArtifact"
+                    }
+                  ]              
+                }
+              ]
+            }, 
+            {
+              "Name": "Build",
+              "Actions": [
+                  {
+                      "Name": "Build",
+                      "ActionTypeId": {
+                          "Category": "Build",
+                          "Owner": "AWS",
+                          "Provider": "CodeBuild",
+                          "Version": "1"
+                      },
+                      "RunOrder": 1,
+                      "Configuration": {
+                          "BatchEnabled": "false",
+                          "ProjectName": { "Fn::GetAtt" : [ "HelloWorldCodeBuild" ,"Arn" ] }                                            
+                      },
+                      "OutputArtifacts": [
+                          {
+                              "Name": "BuildArtifact"
+                          }
+                      ],
+                      "InputArtifacts": [
+                          {
+                              "Name": "SourceArtifact"
+                          }
+                      ],
+                      "Namespace": "BuildVariables"
+                  }
+              ]           
+            },       
+            {
+              "Name": "Deploy",
+              "Actions": [
+                {
+                  "Name": "create-changeset",
+                  "ActionTypeId": {
+                    "Category": "Deploy",
+                    "Owner": "AWS",
+                    "Provider": "CloudFormation",
+                    "Version": "1"
+                  },
+                  "RunOrder": 1,
+                  "Configuration": {
+                    "ActionMode": "CHANGE_SET_REPLACE",
+                    "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                    "ChangeSetName": "HelloWorld-changeset",
+                    "RoleArn": "arn:aws-cn:iam::876820548815:role/HelloWorldCloudFormationRole",
+                    "StackName": "HelloWorld",
+                    "TemplatePath": "BuildArtifact::outputtemplate.yml"
+                  },
+                  "OutputArtifacts": [],
+                  "InputArtifacts": [
+                    {
+                      "Name": "BuildArtifact"
+                    }
+                  ],
+                  "Namespace": "DeployVariables"
+                },
+                {
+                  "Name": "execute-changeset",
+                  "ActionTypeId": {
+                    "Category": "Deploy",
+                    "Owner": "AWS",
+                    "Provider": "CloudFormation",
+                    "Version": "1"
+                  },
+                  "RunOrder": 2,
+                  "Configuration": {
+                    "ActionMode": "CHANGE_SET_EXECUTE",
+                    "ChangeSetName": "HelloWorld-changeset",
+                    "StackName": "HelloWorld"
+                  },
+                  "OutputArtifacts": [],
+                  "InputArtifacts": [
+                    {
+                      "Name": "BuildArtifact"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "HelloWorldCodeBuild": {
+        "Type" : "AWS::CodeBuild::Project",
+        "Properties" : {
+            "Name": "NodeJSBuild",
+            "Source": {
+                "Type": "CODEPIPELINE"               
+            },
+            "Artifacts": {
+                "Type": "CODEPIPELINE",
+                "Name": "HelloWorldCodePipeline"                
+            },
+            "Environment": {
+                "Type": "LINUX_CONTAINER",
+                "Image": "aws/codebuild/standard:4.0",
+                "ComputeType": "BUILD_GENERAL1_SMALL",
+                "ImagePullCredentialsType": "CODEBUILD"
+            },
+            "ServiceRole": "arn:aws:iam::account-id:role/CodeBuildRole",
+            "TimeoutInMinutes": 60,
+            "QueuedTimeoutInMinutes": 480,
+            "Tags": [],
+            "LogsConfig": {
+                "CloudWatchLogs": {
+                    "Status": "ENABLED"
+                },
+                "S3Logs": {
+                    "Status": "DISABLED",
+                    "EncryptionDisabled": false
+                }
+            }        
+        }
+      }
+    }
+  }
