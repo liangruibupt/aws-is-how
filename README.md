@@ -371,6 +371,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [VPC-Cross-Account-Connection](vpc/VPC-Cross-Account-Connection.md)
 
+[Current limits of AWS network load balancers](https://ably.com/blog/limits-aws-network-load-balancers)
+
 ## DNS
 
 [Route53 in China region](R53/README.md)
@@ -507,6 +509,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
 
+[Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
+
+[S3 inventory usage](storage/s3-inventory.md)
+
 ## Database
 
 [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
@@ -560,6 +566,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [MySQL validate_password plugin](database/rds/mysql/mysql_password_validation.md)
 
 [Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/cn/blogs/database/amazon-rds-under-the-hood-multi-az/)
+
+[如何使用 Amazon RDS for PostgreSQL 启用查询日志记录 query logging？](https://aws.amazon.com/cn/premiumsupport/knowledge-center/rds-postgresql-query-logging/)
 
 ## Container
 
