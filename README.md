@@ -599,6 +599,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Recursive Scaling Fargate with Amazon SQS](https://aws.amazon.com/blogs/architecture/design-pattern-for-highly-parallel-compute-recursive-scaling-with-amazon-sqs/)
 
+[aws-fargate-fast-autoscaler](aws-samples/aws-fargate-fast-autoscaler)
+
 [Amazon ECS firelens examples](https://github.com/aws-samples/amazon-ecs-firelens-examples)
 
 [关于Amazon EKS基于Gitlab的CICD实践](https://aws.amazon.com/cn/blogs/china/about-amazon-eks-gitlab-based-cicd-practice-one-gitlab-deployment-and-configuration/)
@@ -672,6 +674,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [SMS notification for AWS health event](https://github.com/aws/aws-health-tools/tree/master/sms-notifier)
 
 [AWS Config for resource housekeeping and cost optimization](https://aws.amazon.com/blogs/mt/aws-config-best-practices/)
+
+[API Gateway for API design patterns](https://aws.amazon.com/cn/blogs/compute/architecting-multiple-microservices-behind-a-single-domain-with-amazon-api-gateway/)
 
 ## Infra as Code
 
