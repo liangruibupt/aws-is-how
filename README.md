@@ -627,6 +627,16 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/cn/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
 
+[EKS Managed Group]
+- [Overview](https://aws.amazon.com/blogs/containers/eks-managed-node-groups/)
+- [Quotas](https://docs.aws.amazon.com/eks/latest/userguide/service-quotas.html)
+- [Official doc](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html)
+- [Cluster autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html#cluster-autoscaler)
+Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are compatible with the Cluster Autoscaler. You can deploy the Cluster Autoscaler to your Amazon EKS cluster and configure it to modify your Amazon EC2 Auto Scaling groups.
+- [Vertical Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/vertical-pod-autoscaler.html)
+- [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
+
+
 ## DevOps
 
 [CodeCommit](devops/codecommit/getstart-codecommit.md) and [CodeCommit setup](devops/codecommit/codecommit-setup.md)
