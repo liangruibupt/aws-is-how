@@ -71,6 +71,8 @@
 
 [Price List API](cost/price-list-api.md)
 
+[Understanding AWS Direct Connect multi-account pricing](https://aws.amazon.com/blogs/networking-and-content-delivery/understanding-aws-direct-connect-multi-account-pricing/)
+
 
 ## Computing
 
@@ -636,6 +638,10 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 - [Vertical Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/vertical-pod-autoscaler.html)
 - [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
 
+[EKS and CloudMap]
+- [Introducing AWS Cloud Map MCS Controller for K8s](https://aws.amazon.com/blogs/opensource/introducing-the-aws-cloud-map-multicluster-service-controller-for-k8s-for-kubernetes-multicluster-service-discovery/)
+- [Cross Amazon EKS cluster App Mesh using AWS Cloud Map](https://aws.amazon.com/cn/blogs/containers/cross-amazon-eks-cluster-app-mesh-using-aws-cloud-map/)
+- [Cloud Map for serverless applications](https://aws.amazon.com/blogs/opensource/aws-cloud-map-service-discovery-serverless-applications/)
 
 ## DevOps
 
@@ -716,3 +722,6 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 [无服务器直播解决方案](https://www.amazonaws.cn/solutions/serverless-video-streaming/)
 
 [Open source web conferencing solution - Jitsi](https://aws.amazon.com/cn/blogs/opensource/getting-started-with-jitsi-an-open-source-web-conferencing-solution/)
+
+## Mobile
+[Tutorial: Intro to React – React](https://reactjs.org/tutorial/tutorial.html)
