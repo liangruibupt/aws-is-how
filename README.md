@@ -214,9 +214,16 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [EMR on EKS workshop](analytics/emr/emr-on-eks)
 
 [Data Quality with Deequ]
+  - [AWS Lab deequ](https://github.com/awslabs/deequ)
   - [Scala: Test data quality at scale with Deequ](https://aws.amazon.com/blogs/big-data/test-data-quality-at-scale-with-deequ/)
   - [Python: Testing data quality at scale with PyDeequ](https://aws.amazon.com/blogs/big-data/testing-data-quality-at-scale-with-pydeequ/)
   - [Monitor data quality in your data lake using PyDeequ and AWS Glue](https://aws.amazon.com/blogs/big-data/monitor-data-quality-in-your-data-lake-using-pydeequ-and-aws-glue/)
+  - [Building a serverless data quality and analysis framework with Deequ and AWS Glue](https://aws.amazon.com/blogs/big-data/building-a-serverless-data-quality-and-analysis-framework-with-deequ-and-aws-glue/)
+
+[Data Quality with Great Expectations]
+  - [Great Expectations Github](https://github.com/great-expectations/great_expectations)
+  - [Great Expectations Home page](https://greatexpectations.io/expectations/)
+  - [Expectations List](https://greatexpectations.io/expectations)
 
 [Redshift ML](analytics/redshift-ml/Readme.md)
 
