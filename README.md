@@ -224,6 +224,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   - [Great Expectations Github](https://github.com/great-expectations/great_expectations)
   - [Great Expectations Home page](https://greatexpectations.io/expectations/)
   - [Expectations List](https://greatexpectations.io/expectations)
+  - [Provide data reliability in Amazon Redshift at scale using Great Expectations library](https://aws.amazon.com/blogs/big-data/provide-data-reliability-in-amazon-redshift-at-scale-using-great-expectations-library/)
+  - [Monitoring Data Quality in a Data Lake Using Great Expectations and Allure-Built Serverless](https://towardsdatascience.com/monitoring-data-quality-in-a-data-lake-using-great-expectations-and-allure-built-serverless-47fa1791af6a)
 
 [Redshift ML](analytics/redshift-ml/Readme.md)
 
@@ -259,11 +261,14 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
 
+[Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
+
 [Hadoop high availability features of HDFS NameNode and YARN ResourceManager in an Amazon EMR cluster](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-ha-applications.html)
 
 [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
 [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
+
 ## IOT
 
 [IoT-Workshop](iot/IoT-Workshop.md)
@@ -699,6 +704,13 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 [AWS Config for resource housekeeping and cost optimization](https://aws.amazon.com/blogs/mt/aws-config-best-practices/)
 
 [API Gateway for API design patterns](https://aws.amazon.com/cn/blogs/compute/architecting-multiple-microservices-behind-a-single-domain-with-amazon-api-gateway/)
+
+[Automatically create a set of CloudWatch alarms with tagging](https://github.com/aws-samples/amazon-cloudwatch-auto-alarms)
+
+[Add alarms-in-batches for ec2 on cloudwatch](https://aws.amazon.com/cn/blogs/china/add-alarms-in-batches-for-ec2-on-cloudwatch/)
+
+[Grafana AWS CloudWatch data source](https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/#using-the-metric-query-option?pg=blog)
+
 
 ## Infra as Code
 
