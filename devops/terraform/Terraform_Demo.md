@@ -75,3 +75,5 @@ resource "aws_s3_bucket" "s3_bucket" {
 - https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 
 - https://learn.hashicorp.com/collections/terraform/aws-get-started
+
+- https://aws.amazon.com/cn/blogs/china/aws-china-region-guide-series-terraform1/

@@ -57,6 +57,8 @@
 
 [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
 
+[Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
+
 ## Cost
 
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
@@ -72,6 +74,14 @@
 [Price List API](cost/price-list-api.md)
 
 [Understanding AWS Direct Connect multi-account pricing](https://aws.amazon.com/blogs/networking-and-content-delivery/understanding-aws-direct-connect-multi-account-pricing/)
+
+[Tagging when instance created]
+  - [Automatically Tag AWS EC2 Instances and Volumes](https://www.doit-intl.com/automatically-tag-aws-ec2-instances-and-volumes/) [Similar solution](https://medium.com/awsblogs/tag-ec2-instance-with-the-user-who-created-it-99ddedb223a8)
+  - [S3 Object Tagging 以及怎么管理Tagging](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-tagging.html)
+  - [用S3 Batch Operation 批量对已有对象打标签](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
+  - [写程序基于我们的SDK去打Tag](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging-managing.html)
+  - [基于S3 upload Event 触发lambda去对新的对象打标签](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObjectTagging-property)
+
 
 
 ## Computing
@@ -268,6 +278,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
 [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
+
+[Kafka connection issue troubleshooting](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
 ## IOT
 
@@ -582,6 +594,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/cn/blogs/database/amazon-rds-under-the-hood-multi-az/)
 
 [如何使用 Amazon RDS for PostgreSQL 启用查询日志记录 query logging？](https://aws.amazon.com/cn/premiumsupport/knowledge-center/rds-postgresql-query-logging/)
+
+[RDS mysql max connections](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-max-connections/)
 
 ## Container
 
