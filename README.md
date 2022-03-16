@@ -723,7 +723,12 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 
 [Add alarms-in-batches for ec2 on cloudwatch](https://aws.amazon.com/cn/blogs/china/add-alarms-in-batches-for-ec2-on-cloudwatch/)
 
-[Grafana AWS CloudWatch data source](https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/#using-the-metric-query-option?pg=blog)
+[Monitor using Prometheus and Grafana](https://www.eksworkshop.com/intermediate/240_monitoring/) Here is how to deploy Grafana on EKS
+
+[Datadog integration with AWS China](https://docs.datadoghq.com/integrations/amazon_web_services/?tab=accesskeysgovcloudorchinaonly)
+[Grafana and CloudWatch integration]
+  - [Grafana AWS CloudWatch data source](https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/)
+  - [Grafana cloudwatch plugin](https://grafana.com/grafana/plugins/cloudwatch/)
 
 
 ## Infra as Code
