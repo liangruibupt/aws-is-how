@@ -2,6 +2,8 @@
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
+## [AWS Skill builder](https://explore.skillbuilder.aws/learn/course/11458/play/42651/play-cloud-quest-cloud-practitioner)
+
 ## AI/ML
 
 [SageMaker-Workshop](ai-ml/SageMaker/SageMaker-Workshop.md)
@@ -82,7 +84,9 @@
   - [写程序基于我们的SDK去打Tag](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging-managing.html)
   - [基于S3 upload Event 触发lambda去对新的对象打标签](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObjectTagging-property)
 
+[How to calculate data transfor cost on AWS](https://github.com/weiping-bj/Data-Transfer-Cost-on-AWS)
 
+[Customer Carbon Footprint Tool](https://aws.amazon.com/cn/blogs/china/new-customer-carbon-footprint-tool/)
 
 ## Computing
 
@@ -137,6 +141,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
 
 [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
+
+[How to get the IP address under my account](EC2/Get-all-IP.md)
+
+[Session-manager QuickStart](EC2/Session-manager.md)
 
 ## Analytics
 
@@ -280,6 +288,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
 
 [Kafka connection issue troubleshooting](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
+
+[使用Fluent Bit与Amazon OpenSearch Service构建日志系统](https://aws.amazon.com/cn/blogs/china/build-a-logging-system-with-fluent-bit-and-amazon-opensearch-service/)
+
+[MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
 ## IOT
 
@@ -719,9 +731,10 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 
 [API Gateway for API design patterns](https://aws.amazon.com/cn/blogs/compute/architecting-multiple-microservices-behind-a-single-domain-with-amazon-api-gateway/)
 
-[Automatically create a set of CloudWatch alarms with tagging](https://github.com/aws-samples/amazon-cloudwatch-auto-alarms)
-
 [Add alarms-in-batches for ec2 on cloudwatch](https://aws.amazon.com/cn/blogs/china/add-alarms-in-batches-for-ec2-on-cloudwatch/)
+  - [Use tags to create and maintain Amazon CloudWatch alarms for Amazon EC2 instances](https://aws.amazon.com/blogs/mt/use-tags-to-create-and-maintain-amazon-cloudwatch-alarms-for-amazon-ec2-instances-part-1/)
+  - [Automatically create a set of CloudWatch alarms with tagging](https://github.com/aws-samples/amazon-cloudwatch-auto-alarms)
+  - [监控告警一点通：在CloudWatch上为 EC2批量添加告警](https://aws.amazon.com/cn/blogs/china/add-alarms-in-batches-for-ec2-on-cloudwatch/)
 
 [Monitor using Prometheus and Grafana](https://www.eksworkshop.com/intermediate/240_monitoring/) Here is how to deploy Grafana on EKS
 
@@ -729,7 +742,6 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 [Grafana and CloudWatch integration]
   - [Grafana AWS CloudWatch data source](https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/)
   - [Grafana cloudwatch plugin](https://grafana.com/grafana/plugins/cloudwatch/)
-
 
 ## Infra as Code
 
@@ -748,6 +760,14 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 [Use the Amazon Connect to call out the mobile phone](integration/Connect/Using-Amazon-Connect-call-mobile-phone.md)
 
 [AmazonMQ-Workshop](integration/MQ/AmazonMQ-Workshop.md)
+  - [Automate RabbitMQ configuration in Amazon MQ](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/automate-rabbitmq-configuration-in-amazon-mq.html)
+  - consumer_timeout Amazon RabbitMQ 不支持修改
+  - [Jenkins 与 RabbitMQ集成]
+      - [Jenkins 与 RabbitMQ集成 一](https://www.jianshu.com/p/c8582ea94783)
+      - [Jenkins 与 RabbitMQ集成 二](https://www.jianshu.com/p/3fb98aaf9af2)
+      - [Jenkins plugin to connect RabbitMQ then consume messages in queue](https://github.com/jenkinsci/rabbitmq-consumer-plugin)
+      - [RabbitMQ Jenkins build trigger](https://plugins.jenkins.io/rabbitmq-build-trigger)
+
 
 [Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
 
