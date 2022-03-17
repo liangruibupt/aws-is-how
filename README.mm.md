@@ -6,87 +6,106 @@
 
 ## AI/ML
 
-[SageMaker-Workshop](ai-ml/SageMaker/SageMaker-Workshop.md)
+### SageMaker
 
-[A gallery of interesting Jupyter Notebooks](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
+- [SageMaker-Workshop](ai-ml/SageMaker/SageMaker-Workshop.md)
 
-[Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
+- [Install External Libraries and Kernels in SageMaker Notebook Instances](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-add-external.html)
 
-[NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
+- [CloudFormation to launch SageMaker Notebook on Glue Dev Endpoint](https://github.com/aws-samples/aws-glue-samples/blob/master/utilities/sagemaker_notebook_automation/glue_sagemaker_notebook_cn.yaml)
 
-[Use AWS SageMaker BlazingText to process un-balance data for text multiple classification](https://amazonaws-china.com/cn/blogs/china/use-aws-sagemaker-blazingtext-to-multi-classify-unbalanced-text/) [The git repo](https://github.com/zhangbeibei/sagemaker-unbalanced-text-multiclassification)
+- [Invoke SageMaker Notebook via Event](ai-ml/SageMaker/Invoke_SageMaker_Notebook_via_event.md)
+  - [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
+  - [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
 
-[Set up a Jupyter Notebook Server on deep learning AMI](https://docs.aws.amazon.com/dlami/latest/devguide/setup-jupyter.html)
+- [SageMaker input mode: pipe mode and file mode](https://aws.amazon.com/blogs/machine-learning/using-pipe-input-mode-for-amazon-sagemaker-algorithms/)
 
-[Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
+- [Save costs by automatically shutting down idle resources within Amazon SageMaker Studio](https://aws.amazon.com/blogs/machine-learning/save-costs-by-automatically-shutting-down-idle-resources-within-amazon-sagemaker-studio/)
 
-[Install External Libraries and Kernels in Notebook Instances](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-add-external.html)
+- [SageMaker Neo supported devices edge devices](https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/neo-supported-devices-edge-devices.html)
 
-[CloudFormation to launch SageMaker Notebook on Glue Dev Endpoint](https://github.com/aws-samples/aws-glue-samples/blob/master/utilities/sagemaker_notebook_automation/glue_sagemaker_notebook_cn.yaml)
+### Jupyter Notebooks
 
-[SageMaker End-to-End Demo- Fraud Detection for Auto Claims](https://aws.amazon.com/blogs/machine-learning/architect-and-build-the-full-machine-learning-lifecycle-with-amazon-sagemaker/) and [github repo](https://github.com/aws/amazon-sagemaker-examples/tree/master/end_to_end)
+- [A gallery of interesting Jupyter Notebooks](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
 
-[Amazon Personalize workshop](https://github.com/nwcd-samples/Personalize_workshop_CHN)
+- [Set up a Jupyter Notebook Server on deep learning AMI](https://docs.aws.amazon.com/dlami/latest/devguide/setup-jupyter.html)
 
-[ML Bot Workshop](http://ml-bot.s3-website.cn-north-1.amazonaws.com.cn/)
+### Compute vision
 
-[IP Camera AI SaaS Solution](https://www.amazonaws.cn/en/solutions/ipc-ai-saas-solution/)
+- [Use SageMaker for Automotive Image Classification](ai-ml/auto-image-classification/UseSageMaker4AutoImageClassification.md)
 
-[使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
+- [ML Bot Workshop](http://ml-bot.s3-website.cn-north-1.amazonaws.com.cn/)
 
-[Invoke SageMaker Notebook via Event](ai-ml/SageMaker/Invoke_SageMaker_Notebook_via_event.md)
+- [IP Camera AI SaaS Solution](https://www.amazonaws.cn/en/solutions/ipc-ai-saas-solution/)
 
-- [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
-- [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
+- [image classification using resnet](ai-ml/image-classification-resnet)
 
-[image classification using resnet](ai-ml/image-classification-resnet)
+- [Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
 
-[SageMaker input mode: pipe mode and file mode](https://aws.amazon.com/blogs/machine-learning/using-pipe-input-mode-for-amazon-sagemaker-algorithms/)
+### NLP
 
-[Amazon Redshift ML: Create, train, and deploy machine learning (ML) models using familiar SQL commands](https://aws.amazon.com/redshift/features/redshift-ml/)
+- [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
 
-[CV Labeling: cvat-on-aws-china](https://github.com/aws-samples/cvat-on-aws-china)
+- [Use AWS SageMaker BlazingText to process un-balance data for text multiple classification](https://amazonaws-china.com/cn/blogs/china/use-aws-sagemaker-blazingtext-to-multi-classify-unbalanced-text/) [The git repo](https://github.com/zhangbeibei/sagemaker-unbalanced-text-multiclassification)
 
-[CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
+- [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
 
-[Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
+- [Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
 
-[Save costs by automatically shutting down idle resources within Amazon SageMaker Studio](https://aws.amazon.com/blogs/machine-learning/save-costs-by-automatically-shutting-down-idle-resources-within-amazon-sagemaker-studio/)
+### Forecasting
 
-[SageMaker Neo supported devices edge devices](https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/neo-supported-devices-edge-devices.html)
+- [Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
 
-[Amazon Personalize Get Start](https://github.com/aws-samples/amazon-personalize-samples/tree/master/getting_started)
+### Fraud Detection
+- [SageMaker End-to-End Demo- Fraud Detection for Auto Claims](https://aws.amazon.com/blogs/machine-learning/architect-and-build-the-full-machine-learning-lifecycle-with-amazon-sagemaker/) and [github repo](https://github.com/aws/amazon-sagemaker-examples/tree/master/end_to_end)
 
-[AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
+### Recommandation
+- [Amazon Personalize workshop](https://github.com/nwcd-samples/Personalize_workshop_CHN)
 
-[Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
+- [Amazon Personalize Get Start](https://github.com/aws-samples/amazon-personalize-samples/tree/master/getting_started)
+
+### Labeling
+- [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
+
+- [CV Labeling]
+  - [cvat-on-aws-china](https://github.com/aws-samples/cvat-on-aws-china)
+  - [CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
+
+### Federated ML
+- [Amazon Redshift ML: Create, train, and deploy machine learning (ML) models using familiar SQL commands](https://aws.amazon.com/redshift/features/redshift-ml/)
+
+### ML Hardware 
+- [Hands-on Deep Learning Inference with Amazon EC2 Inf1 Instance](https://catalog.us-east-1.prod.workshops.aws/workshops/bcd3db22-8501-4888-a078-45a70034f802/en-US)
 
 ## Cost
+### Cost Explorer
+- [Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
 
-[AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
+- [Cost and Usage Report analysis](cost/analysis-cost-usage-report.md)
 
-[Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
+- [Price Calculator](https://calculator.aws/#/estimate)
 
-[Cost and Usage Report analysis](cost/analysis-cost-usage-report.md)
+- [Price List API](cost/price-list-api.md)
 
-[Networking calculator](https://netcalc.solution-architecture.aws.a2z.com/)
+### Network cost
+- [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
-[Price Calculator](https://calculator.aws/#/estimate)
+- [Networking calculator](https://netcalc.solution-architecture.aws.a2z.com/)
 
-[Price List API](cost/price-list-api.md)
+- [How to calculate data transfor cost on AWS](https://github.com/weiping-bj/Data-Transfer-Cost-on-AWS)
 
-[Understanding AWS Direct Connect multi-account pricing](https://aws.amazon.com/blogs/networking-and-content-delivery/understanding-aws-direct-connect-multi-account-pricing/)
+- [Understanding AWS Direct Connect multi-account pricing](https://aws.amazon.com/blogs/networking-and-content-delivery/understanding-aws-direct-connect-multi-account-pricing/)
 
-[Tagging when instance created]
-  - [Automatically Tag AWS EC2 Instances and Volumes](https://www.doit-intl.com/automatically-tag-aws-ec2-instances-and-volumes/) [Similar solution](https://medium.com/awsblogs/tag-ec2-instance-with-the-user-who-created-it-99ddedb223a8)
-  - [S3 Object Tagging 以及怎么管理Tagging](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-tagging.html)
-  - [用S3 Batch Operation 批量对已有对象打标签](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
-  - [写程序基于我们的SDK去打Tag](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging-managing.html)
-  - [基于S3 upload Event 触发lambda去对新的对象打标签](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObjectTagging-property)
+### Tagging
+- [Tagging when instance created]
+    - [Automatically Tag AWS EC2 Instances and Volumes](https://www.doit-intl.com/automatically-tag-aws-ec2-instances-and-volumes/) [Similar solution](https://medium.com/awsblogs/tag-ec2-instance-with-the-user-who-created-it-99ddedb223a8)
+    - [S3 Object Tagging 以及怎么管理Tagging](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-tagging.html)
+    - [用S3 Batch Operation 批量对已有对象打标签](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
+    - [写程序基于我们的SDK去打Tag](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging-managing.html)
+    - [基于S3 upload Event 触发lambda去对新的对象打标签](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObjectTagging-property)
 
-[How to calculate data transfor cost on AWS](https://github.com/weiping-bj/Data-Transfer-Cost-on-AWS)
-
-[Customer Carbon Footprint Tool](https://aws.amazon.com/cn/blogs/china/new-customer-carbon-footprint-tool/)
+### Sustainablity
+- [Customer Carbon Footprint Tool](https://aws.amazon.com/cn/blogs/china/new-customer-carbon-footprint-tool/)
 
 ## Computing
 
@@ -292,6 +311,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [使用Fluent Bit与Amazon OpenSearch Service构建日志系统](https://aws.amazon.com/cn/blogs/china/build-a-logging-system-with-fluent-bit-and-amazon-opensearch-service/)
 
 [MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
+
+[ClickHouse and S3]
+  - [Integrating ClickHouse and S3 Compatible Storage](https://dzone.com/articles/clickhouse-s3-compatible-object-storage)
+  - [ClickHouse S3 table function](https://clickhouse.com/docs/en/sql-reference/table-functions/s3/)
 
 ## IOT
 
@@ -772,6 +795,8 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 [Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
 
 [Amazon Simple Email Service SES Usaga](integration/SES/SES-Usage.md)
+
+[Automotive Call Center Services Solution Using Amazon Connect](https://aws.amazon.com/blogs/industries/automotive-call-center-services-solution-using-amazon-connect-by-wirelesscar/)
 
 ## Media
 
