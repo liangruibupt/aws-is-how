@@ -3,6 +3,8 @@
 
 The [aws-data-transfer-hub](https://github.com/awslabs/data-transfer-hub) is a reliable, secure, scalable AWS solution that enabled structured and unstructured data replication from different sources to AWS.
 
+CHeck the release note： https://awslabs.github.io/data-transfer-hub/zh/revisions/
+
 - Option 1: Deploy user data-transfer-hub portal and create job on the portal
 - Option 2: Just want to run data-transfer-hub job (S3 sync job or ECR sync job) backend without portal support
 - Test case: Enable the S3 SSE in both source and destination bucket to verify the replication job and read the data in destination

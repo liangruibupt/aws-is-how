@@ -87,6 +87,9 @@
 
 - [Price List API](cost/price-list-api.md)
 
+- [Get the spot instance price](EC2/How-to-Get-Spot-Price.md)
+
+
 ### Network cost
 - [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -95,6 +98,8 @@
 - [How to calculate data transfor cost on AWS](https://github.com/weiping-bj/Data-Transfer-Cost-on-AWS)
 
 - [Understanding AWS Direct Connect multi-account pricing](https://aws.amazon.com/blogs/networking-and-content-delivery/understanding-aws-direct-connect-multi-account-pricing/)
+
+- [Data transfer costs for common architectures](https://aws.amazon.com/cn/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/)
 
 ### Tagging
 - [Tagging when instance created]
@@ -108,20 +113,50 @@
 - [Customer Carbon Footprint Tool](https://aws.amazon.com/cn/blogs/china/new-customer-carbon-footprint-tool/)
 
 ## Computing
+### EC2
 
-[Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
+- [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
 
-[How to connect to Windows EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
+- [How to connect to Windows EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
 
-[How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
+- [How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
 
-[How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
+- [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
 
-[Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
+- [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
 
-[ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+- [EC2 network performance](EC2/EC2_Networking_performance.md)
 
-[Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
+- [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
+
+- [What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
+
+- [How to get the IP address under my account](EC2/Get-all-IP.md)
+
+- [How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
+
+- [Change EC2 Time-Zone](EC2/Change-TimeZone.md)
+
+- [How can I set up a CloudWatch alarm to automatically recover my EC2 instance?](https://aws.amazon.com/premiumsupport/knowledge-center/automatic-recovery-ec2-cloudwatch/)
+
+- [Graviton]
+  - [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
+  - [AWS Workshop - Graviton2 China](http://graviton2-workshop.s3-website.cn-northwest-1.amazonaws.com.cn/1.basics.html)
+  - [AWS Graviton2-based services](https://github.com/aws/aws-graviton-getting-started)
+
+- [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
+
+- [Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
+
+- [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
+
+### Load Balancer
+- [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+
+- [Domain and Host based routing for ALB](https://aws.amazon.com/blogs/aws/new-host-based-routing-support-for-aws-application-load-balancers/)
+
+### System Manager
+- [Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
 
 ```
 aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions --output json --profile us-east-1 --region us-east-1 | jq '.Parameters[].Name'
@@ -129,41 +164,13 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions --output json --profile us-east-1 --region us-east-1 | jq '.Parameters[].Name' | wc -l
 ```
 
-[Get the spot instance price](EC2/How-to-Get-Spot-Price.md)
+- [ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
 
-[Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
+- [Session-manager QuickStart](EC2/Session-manager.md)
 
-[What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
+### HPC
+- [Running CFD on AWS Parrell cluster](https://cfd-on-pcluster.workshop.aws/)
 
-[Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
-
-[How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
-
-[ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
-
-[Change EC2 Time-Zone](EC2/Change-TimeZone.md)
-
-[Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
-
-[AWS Workshop - Graviton2 China](http://graviton2-workshop.s3-website.cn-northwest-1.amazonaws.com.cn/1.basics.html)
-
-[How can I set up a CloudWatch alarm to automatically recover my EC2 instance?](https://aws.amazon.com/premiumsupport/knowledge-center/automatic-recovery-ec2-cloudwatch/)
-
-[AWS Graviton2-based services](https://github.com/aws/aws-graviton-getting-started)
-
-[Running CFD on AWS Parrell cluster](https://cfd-on-pcluster.workshop.aws/)
-
-[Domain and Host based routing for ALB](https://aws.amazon.com/blogs/aws/new-host-based-routing-support-for-aws-application-load-balancers/)
-
-[Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
-
-[Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
-
-[Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
-
-[How to get the IP address under my account](EC2/Get-all-IP.md)
-
-[Session-manager QuickStart](EC2/Session-manager.md)
 
 ## Analytics
 
@@ -434,6 +441,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Current limits of AWS network load balancers](https://ably.com/blog/limits-aws-network-load-balancers)
 
+[Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+
 ## DNS
 
 [Route53 in China region](R53/README.md)
@@ -508,65 +517,82 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## Migration
 
-[How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
+### Active Directory
+- [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
 
-[How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
+### Database
+- [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
 
-[aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
+- [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
 
-[DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
+- [Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
 
-[Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
+- [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
 
+- [Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
+
+- [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
+
+### DMS
+- [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
+
+### Cross Cloud Migration
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
 
-[Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
+### File
+- [Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
 
-[Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
+- [Transfer Family to access EFS](https://aws.amazon.com/blogs/aws/new-aws-transfer-family-support-for-amazon-elastic-file-system/)
 
-[Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
-
-[Transfer Family to access EFS](https://aws.amazon.com/blogs/aws/new-aws-transfer-family-support-for-amazon-elastic-file-system/)
 
 ## Storage
 
-[How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
+### S3 cross region or cross cloud OSS
+- [How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
 
-[Cross region S3 file download and upload](storage/crr-s3-download-upload.py)
+- [Cross region S3 file download and upload](storage/crr-s3-download-upload.py)
 
-[S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
+- [S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
 
-[s3-benchmark-testing](https://github.com/liangruibupt/s3-benchmark-testing)
+- [s3-benchmark-testing](https://github.com/liangruibupt/s3-benchmark-testing)
 
-[How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
+- [Cross cloud OSS sync to S3](storage/aws-data-replication-hub.md)
 
-[EBS benchmark testing](https://github.com/liangruibupt/ebs-benchmark-testing)
+- [RClone Quickstart](storage/RClone-Quick-Start.md)
 
-[storage-gateway-demo and performance testing](https://github.com/liangruibupt/storage-gateway-demo)
+- [Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
 
-[EFS Workshop for GCR](https://github.com/liangruibupt/amazon-efs-workshop)
+### S3
+- [S3 Web Explorer](storage/s3explorer)
 
-[Amazon FSx for Lustre or Amazon FSx for Windows File Server Workshop](storage/FSx/README.md)
+- [S3-Presign-URL](storage/S3-Presign-URL.md)
 
-[S3 Web Explorer](storage/s3explorer)
+- [Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
 
-[Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-file-shares.html) You can mount an Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance that is either joined to your Active Directory or not joined.
+- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3-Disable-TLS1.1-Access.md)
 
-[RClone Quickstart](storage/RClone-Quick-Start.md)
+- [使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
 
-[S3-Presign-URL](storage/S3-Presign-URL.md)
+### EBS
+- [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
-[Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
+- [EBS benchmark testing](https://github.com/liangruibupt/ebs-benchmark-testing)
 
-[goofys on AWS](https://github.com/kahing/goofys)
+### Storage Gatewway
+- [storage-gateway-demo and performance testing](https://github.com/liangruibupt/storage-gateway-demo)
 
-[S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3-Disable-TLS1.1-Access.md)
+### EFS and FSx or other shared file system
+- [EFS Workshop for GCR](https://github.com/liangruibupt/amazon-efs-workshop)
 
-[使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
+- [Amazon FSx for Lustre or Amazon FSx for Windows File Server Workshop](storage/FSx/README.md)
 
-[Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
+- [Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-file-shares.html) You can mount an Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance that is either joined to your Active Directory or not joined.
 
-[EFS Web Browser for list files and directory](https://aws.amazon.com/cn/blogs/china/building-a-serviceless-efs-file-browser/)
+- [goofys on AWS](https://github.com/kahing/goofys)
+
+
+
+- [EFS Web Browser for list files and directory](https://aws.amazon.com/cn/blogs/china/building-a-serviceless-efs-file-browser/)
 
 [Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
 
