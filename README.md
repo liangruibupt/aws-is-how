@@ -601,62 +601,69 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [S3 inventory usage](storage/s3-inventory.md)
 
 ## Database
+### RDS
+- [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
 
-[Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
+- [AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
 
-[Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
-[Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
+### Graph Database
+- [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
-[AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
+- [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
 
-[How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
+- [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
 
-[Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
+- [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
 
-[MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
+- [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
 
-[Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
+- [通过 Debezium and MSK Connect 一站式解决所有数据库 CDC 问题](https://aws.amazon.com/cn/blogs/china/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
 
-[使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
+- [Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
 
-[Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
+- [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
-[如何将我的 DynamoDB 表从一个 AWS 账户迁移到另一个账户](https://aws.amazon.com/cn/premiumsupport/knowledge-center/dynamodb-cross-account-migration/)
+- [best-practices-for-working-with-amazon-aurora-serverless](https://aws.amazon.com/blogs/database/best-practices-for-working-with-amazon-aurora-serverless/)
 
-[通过 Debezium and MSK Connect 一站式解决所有数据库 CDC 问题](https://aws.amazon.com/cn/blogs/china/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
-
-[Database Caching Strategies Using Redis](database/redis/Database_Caching_Strategies_Using_Redis.md)
-
-[DynamoDB labs](database/dynamodb/dynamodb-lab.md)
-
-[DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
-
-[Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
-
-[aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
-
-[中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
-
-[Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
-
-[best-practices-for-working-with-amazon-aurora-serverless](https://aws.amazon.com/blogs/database/best-practices-for-working-with-amazon-aurora-serverless/)
-
-[Secure sensitive data in Amazon Database services]
 - [Securing sensitive data in Amazon RDS](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-rds/)
+
+- [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
+
+- [How to Migrate from Amazon RDS Aurora or MySQL to Amazon Aurora Serverless](https://medium.com/@souri29/how-to-migrate-from-amazon-rds-aurora-or-mysql-to-amazon-aurora-serverless-55f9a4a74078)
+
+- [MySQL validate_password plugin](database/rds/mysql/mysql_password_validation.md)
+
+- [Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/cn/blogs/database/amazon-rds-under-the-hood-multi-az/)
+
+- [如何使用 Amazon RDS for PostgreSQL 启用查询日志记录 query logging？](https://aws.amazon.com/cn/premiumsupport/knowledge-center/rds-postgresql-query-logging/)
+
+- [RDS mysql max connections](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-max-connections/)
+
+- [Encrypt the Unencrypted RDS](database/rds/PostgreSQL/unencrypted_db_to_encrypted.md)
+
+### ElastiCache
+- [Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
+
+- [Database Caching Strategies Using Redis](database/redis/Database_Caching_Strategies_Using_Redis.md)
+
+### Key-Value and Document
+- [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
+
+- [如何将我的 DynamoDB 表从一个 AWS 账户迁移到另一个账户](https://aws.amazon.com/cn/premiumsupport/knowledge-center/dynamodb-cross-account-migration/)
+
+- [DynamoDB labs](database/dynamodb/dynamodb-lab.md)
+
+- [DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
+
+- [中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
+
+- [aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
+
 - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
 
-[RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
-
-[How to Migrate from Amazon RDS Aurora or MySQL to Amazon Aurora Serverless](https://medium.com/@souri29/how-to-migrate-from-amazon-rds-aurora-or-mysql-to-amazon-aurora-serverless-55f9a4a74078)
-
-[MySQL validate_password plugin](database/rds/mysql/mysql_password_validation.md)
-
-[Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/cn/blogs/database/amazon-rds-under-the-hood-multi-az/)
-
-[如何使用 Amazon RDS for PostgreSQL 启用查询日志记录 query logging？](https://aws.amazon.com/cn/premiumsupport/knowledge-center/rds-postgresql-query-logging/)
-
-[RDS mysql max connections](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-max-connections/)
+### Time series
+- [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
 
 ## Container
 
