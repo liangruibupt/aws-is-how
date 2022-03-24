@@ -74,6 +74,11 @@
 ### Federated ML
 - [Amazon Redshift ML: Create, train, and deploy machine learning (ML) models using familiar SQL commands](https://aws.amazon.com/redshift/features/redshift-ml/)
 
+### Prediction Maintenance
+[Using AWS IoT and Amazon SageMaker to do IoT Devices Predictive Maintenance](iot/IOT-SageMaker-Predictive-Maintenance/README.md)
+
+[IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
+
 ### ML Hardware 
 - [Hands-on Deep Learning Inference with Amazon EC2 Inf1 Instance](https://catalog.us-east-1.prod.workshops.aws/workshops/bcd3db22-8501-4888-a078-45a70034f802/en-US)
 
@@ -171,349 +176,388 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### HPC
 - [Running CFD on AWS Parrell cluster](https://cfd-on-pcluster.workshop.aws/)
 
+- [AWS Batch Getting Start demo](analytics/batch-get-start)
+
 
 ## Analytics
+### High Level Data Engineering and Data Analytics
+- [AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
 
-[Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
+- [数据分析的技术源流](https://aws.amazon.com/cn/blogs/china/the-technical-origin-of-data-analysis/)
 
-[How-to-do-Virtulization-DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
+- [Analytics Reference Architecture](https://aws-samples.github.io/aws-analytics-reference-architecture/)
 
-[Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
+- [Data Science on AWS - Quick Start Workshop](https://github.com/data-science-on-aws/workshop)
 
-[Automate athena query by lambda and step function](analytics/athena-automate)
+- [Build a Lake House Architecture on AWS](https://aws.amazon.com/cn/blogs/big-data/build-a-lake-house-architecture-on-aws/)
 
-[Automate Redshift ETL](analytics/lambda-redshift)
+- [Harness the power of your data with AWS Analytics with Lake House](https://aws.amazon.com/cn/blogs/big-data/harness-the-power-of-your-data-with-aws-analytics/)
 
-[AWS Batch Getting Start demo](analytics/batch-get-start)
+- [Serverless Data Lake Workshop](https://serverless-data-lake-immersionday.workshop.aws/en/introduction.html)
 
-[AWS EMR Workshop](analytics/emr/101Workshop)
+- [Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
 
-[AWS Kinesis Workshop](analytics/kinesis/101Workshop)
+### Data integration service: Glue
+- [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
 
-[Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
+- [Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
 
-[Amazon Elasticsearch Service Workshop](https://www.aesworkshops.com/)
+- [Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
 
-[Elasticsearch Service Snapshot Lifecycle](analytics/elasticsearch-lifecycle)
+- [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
 
-[Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
+- [Glue Workshop](analytics/glue-workshop)
 
-[SAML Authentication for Kibana](analytics/saml-kibana)
+- [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
 
-[How to use the Athena to create the complex embeded table and query the table](analytics/athena-complex-table/Athena-complex-table-creation.md)
+- [Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
 
-[Split and search comma separated column in Athena](analytics/athena-complex-table/Split-search-comma-seprated-column.md)
+- [如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
 
-[AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
+- [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
 
-[Amazon Athena Workshop](analytics/athena-workshop/Athena-workshop.md)
+- [Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
 
-[Serverless Data Lake Workshop](https://serverless-data-lake-immersionday.workshop.aws/en/introduction.html)
+- [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
 
-[Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
 
-[EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
+### Analysis: EMR
+- [AWS EMR Workshop](analytics/emr/101Workshop)
+
+- [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
 Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
 
-[Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
+- [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
 
-[Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
+- [How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
 
-[Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
+- [Streaming Amazon DynamoDB data into a centralized data lake](https://aws.amazon.com/id/blogs/big-data/streaming-amazon-dynamodb-data-into-a-centralized-data-lake/)
 
-[Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
+- [EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
 
-[Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/cn/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
+- [EMR on EKS workshop](analytics/emr/emr-on-eks)
 
-[Use CTAS statements with Amazon Athena to reduce cost and improve performance](https://aws.amazon.com/blogs/big-data/using-ctas-statements-with-amazon-athena-to-reduce-cost-and-improve-performance/)
+- [Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
 
-[Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
+- [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
 
-[数据分析的技术源流](https://aws.amazon.com/cn/blogs/china/the-technical-origin-of-data-analysis/)
+- [Hadoop high availability features of HDFS NameNode and YARN ResourceManager in an Amazon EMR cluster](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-ha-applications.html)
 
-[Analytics Reference Architecture](https://aws-samples.github.io/aws-analytics-reference-architecture/)
+- [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
 
-[AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
+### Stream - Kinesis
+- [How to do analysis and virtulization DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
 
-[Build a Lake House Architecture on AWS](https://aws.amazon.com/cn/blogs/big-data/build-a-lake-house-architecture-on-aws/)
+- [AWS Kinesis Workshop](analytics/kinesis/101Workshop)
 
-[Harness the power of your data with AWS Analytics with Lake House](https://aws.amazon.com/cn/blogs/big-data/harness-the-power-of-your-data-with-aws-analytics/)
+### Stream - Kafka
+- [AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
 
-[Data Science on AWS - Quick Start Workshop](https://github.com/data-science-on-aws/workshop)
+- [Secure connectivity patterns to access Amazon MSK across AWS Regions](https://aws.amazon.com/blogs/big-data/secure-connectivity-patterns-to-access-amazon-msk-across-aws-regions/)
 
-[How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
+- [MSK Workshop](analytics/msk/101Workshop/README.md)
 
-[Glue Workshop](analytics/glue-workshop)
+- [MSK Connect](https://aws.amazon.com/blogs/aws/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
 
-[Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
+- [MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
-[Streaming Amazon DynamoDB data into a centralized data lake](https://aws.amazon.com/id/blogs/big-data/streaming-amazon-dynamodb-data-into-a-centralized-data-lake/)
+- [Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
 
-[EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
+- [Kafka connection issue troubleshooting](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
-[AWS Lake Formation Tag-based access control](https://aws.amazon.com/cn/blogs/big-data/easily-manage-your-data-lake-at-scale-using-tag-based-access-control-in-aws-lake-formation/)
+### Ad-hoc and Interactive query: Athena
+- [Automate athena query by lambda and step function](analytics/athena-automate)
 
-[Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
+- [How to use the Athena to create the complex embeded table and query the table](analytics/athena-complex-table/Athena-complex-table-creation.md)
 
-[EMR on EKS workshop](analytics/emr/emr-on-eks)
+- [Split and search comma separated column in Athena](analytics/athena-complex-table/Split-search-comma-seprated-column.md)
 
-[Data Quality with Deequ]
-  - [AWS Lab deequ](https://github.com/awslabs/deequ)
-  - [Scala: Test data quality at scale with Deequ](https://aws.amazon.com/blogs/big-data/test-data-quality-at-scale-with-deequ/)
-  - [Python: Testing data quality at scale with PyDeequ](https://aws.amazon.com/blogs/big-data/testing-data-quality-at-scale-with-pydeequ/)
-  - [Monitor data quality in your data lake using PyDeequ and AWS Glue](https://aws.amazon.com/blogs/big-data/monitor-data-quality-in-your-data-lake-using-pydeequ-and-aws-glue/)
-  - [Building a serverless data quality and analysis framework with Deequ and AWS Glue](https://aws.amazon.com/blogs/big-data/building-a-serverless-data-quality-and-analysis-framework-with-deequ-and-aws-glue/)
+- [Amazon Athena Workshop](analytics/athena-workshop/Athena-workshop.md)
 
-[Data Quality with Great Expectations]
-  - [Great Expectations Github](https://github.com/great-expectations/great_expectations)
-  - [Great Expectations Home page](https://greatexpectations.io/expectations/)
-  - [Expectations List](https://greatexpectations.io/expectations)
-  - [Provide data reliability in Amazon Redshift at scale using Great Expectations library](https://aws.amazon.com/blogs/big-data/provide-data-reliability-in-amazon-redshift-at-scale-using-great-expectations-library/)
-  - [Monitoring Data Quality in a Data Lake Using Great Expectations and Allure-Built Serverless](https://towardsdatascience.com/monitoring-data-quality-in-a-data-lake-using-great-expectations-and-allure-built-serverless-47fa1791af6a)
+- [Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/cn/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
 
-[Redshift ML](analytics/redshift-ml/Readme.md)
+- [Use CTAS statements with Amazon Athena to reduce cost and improve performance](https://aws.amazon.com/blogs/big-data/using-ctas-statements-with-amazon-athena-to-reduce-cost-and-improve-performance/)
 
-[Secure connectivity patterns to access Amazon MSK across AWS Regions](https://aws.amazon.com/blogs/big-data/secure-connectivity-patterns-to-access-amazon-msk-across-aws-regions/)
+- [Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
 
-[MSK Workshop](analytics/msk/101Workshop/README.md)
+### Data Warehouse: Redshfit
+- [Automate Redshift ETL](analytics/lambda-redshift)
 
-[Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
+- [Redshift ML](analytics/redshift-ml/Readme.md)
 
-[MSK Connect](https://aws.amazon.com/blogs/aws/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
+- [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
 
-[Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
+- [CDC to Redshift]
+    - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
+    - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
 
-[Search DynamoDB Data with Amazon Elasticsearch Service](https://search-ddb.aesworkshops.com/01-intro.html)
+- [ClickHouse and S3]
+    - [Integrating ClickHouse and S3 Compatible Storage](https://dzone.com/articles/clickhouse-s3-compatible-object-storage)
+    - [ClickHouse S3 table function](https://clickhouse.com/docs/en/sql-reference/table-functions/s3/)
 
-[Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
+### Search and analytics: Elasticsearch Service
+- [Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
 
-[如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
+- [Amazon Elasticsearch Service Workshop](https://www.aesworkshops.com/)
 
-[使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
+- [Elasticsearch Service Snapshot Lifecycle](analytics/elasticsearch-lifecycle)
 
-[Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
+- [SAML Authentication for Kibana](analytics/saml-kibana)
 
-[CDC to Redshift]
- - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
- - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
+- [Search DynamoDB Data with Amazon Elasticsearch Service](https://search-ddb.aesworkshops.com/01-intro.html)
 
-[Log Hub workshop](https://log-hub.docs.solutions.gcr.aws.dev/workshop/introduction/)
+- [Log Hub workshop](https://log-hub.docs.solutions.gcr.aws.dev/workshop/introduction/)
 
-[Simple FAQ Bot](analytics/faq-bot/README.md)
+- [使用Fluent Bit与Amazon OpenSearch Service构建日志系统](https://aws.amazon.com/cn/blogs/china/build-a-logging-system-with-fluent-bit-and-amazon-opensearch-service/)
 
-[Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
+- [Simple FAQ Bot](analytics/faq-bot/README.md)
 
-[Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
+### Governance
+- [Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
 
-[Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
+- [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
 
-[Hadoop high availability features of HDFS NameNode and YARN ResourceManager in an Amazon EMR cluster](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-ha-applications.html)
+- [AWS Lake Formation Tag-based access control](https://aws.amazon.com/cn/blogs/big-data/easily-manage-your-data-lake-at-scale-using-tag-based-access-control-in-aws-lake-formation/)
 
-[Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
+- [Data Quality with Deequ]
+    - [AWS Lab deequ](https://github.com/awslabs/deequ)
+    - [Scala: Test data quality at scale with Deequ](https://aws.amazon.com/blogs/big-data/test-data-quality-at-scale-with-deequ/)
+    - [Python: Testing data quality at scale with PyDeequ](https://aws.amazon.com/blogs/big-data/testing-data-quality-at-scale-with-pydeequ/)
+    - [Monitor data quality in your data lake using PyDeequ and AWS Glue](https://aws.amazon.com/blogs/big-data/monitor-data-quality-in-your-data-lake-using-pydeequ-and-aws-glue/)
+    - [Building a serverless data quality and analysis framework with Deequ and AWS Glue](https://aws.amazon.com/blogs/big-data/building-a-serverless-data-quality-and-analysis-framework-with-deequ-and-aws-glue/)
 
-[Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
+- [Data Quality with Great Expectations]
+    - [Great Expectations Github](https://github.com/great-expectations/great_expectations)
+    - [Great Expectations Home page](https://greatexpectations.io/expectations/)
+    - [Expectations List](https://greatexpectations.io/expectations)
+    - [Provide data reliability in Amazon Redshift at scale using Great Expectations library](https://aws.amazon.com/blogs/big-data/provide-data-reliability-in-amazon-redshift-at-scale-using-great-expectations-library/)
+    - [Monitoring Data Quality in a Data Lake Using Great Expectations and Allure-Built Serverless](https://towardsdatascience.com/monitoring-data-quality-in-a-data-lake-using-great-expectations-and-allure-built-serverless-47fa1791af6a)
 
-[Kafka connection issue troubleshooting](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
+### BI
+- [Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
 
-[使用Fluent Bit与Amazon OpenSearch Service构建日志系统](https://aws.amazon.com/cn/blogs/china/build-a-logging-system-with-fluent-bit-and-amazon-opensearch-service/)
+- [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
-[MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
-
-[ClickHouse and S3]
-  - [Integrating ClickHouse and S3 Compatible Storage](https://dzone.com/articles/clickhouse-s3-compatible-object-storage)
-  - [ClickHouse S3 table function](https://clickhouse.com/docs/en/sql-reference/table-functions/s3/)
+### EMR
+- [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md)
 
 ## IOT
+### IoT Core
+- [IoT-Workshop](iot/IoT-Workshop.md)
 
-[IoT-Workshop](iot/IoT-Workshop.md)
+- [AWS IoT Events Quick Start](iot/IoT-Events)
 
-[IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
+- [Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/lambda-write-postgresql/lambda-write-postgreSQL.md)
 
-[Using AWS IoT and Amazon SageMaker to do IoT Devices Predictive Maintenance](iot/IOT-SageMaker-Predictive-Maintenance/README.md)
+### IoT Timeseries
+- [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
 
-[AWS IoT SiteWise Workshop](https://iot-sitewise.workshop.aws/)
+### OEE
+- [AWS IoT SiteWise Workshop](https://iot-sitewise.workshop.aws/)
 
-[AWS IoT Analytics Workshop](https://iot-analytics.workshop.aws/)
+### IoT anaytics
+- [AWS IoT Analytics Workshop](https://iot-analytics.workshop.aws/)
 
-[AWS IoT Analytics Performance](iot/IoT-Analytics/Ingest-IoT-Analytics-PerformanceTest.md)
+- [AWS IoT Analytics Performance](iot/IoT-Analytics/Ingest-IoT-Analytics-PerformanceTest.md)
 
-[AWS IoT Events Quick Start](iot/IoT-Events)
+- [Using AWS IoT and Amazon SageMaker to do IoT Devices Predictive Maintenance](iot/IOT-SageMaker-Predictive-Maintenance/README.md)
 
-[AWS IoT Greengrass V2 Workshop](iot/IoT-Greengrass/Iot-greengrass-v2-workshop.md)
+- [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
 
-[Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/lambda-write-postgresql/lambda-write-postgreSQL.md)
+### Edge
+- [AWS IoT Greengrass V2 Workshop](iot/IoT-Greengrass/Iot-greengrass-v2-workshop.md)
 
-[Building a Scalable Standardized Pipeline for Automotive OTA on AWS](https://aws.amazon.com/blogs/industries/building-a-scalable-standardized-pipeline-for-automotive-ota-on-aws/)
+### OTA
+- [Building a Scalable Standardized Pipeline for Automotive OTA on AWS](https://aws.amazon.com/blogs/industries/building-a-scalable-standardized-pipeline-for-automotive-ota-on-aws/)
 
-[制造业端到端(AIOT)动手训练营](https://www.mfgee.ml/)
+### AIOT
+- [制造业端到端(AIOT)动手训练营](https://www.mfgee.ml/)
 
 ## Security
 
-[Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
+- [AWS Security Hands on Lab](http://security.bwcx.me/)
 
-[Secret Manager quick start demo](security/secret-mgr/README.md)
+### Encryption - KMS
+- [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
 
-[Upload-SSL-Certificate](security/Upload-SSL-Certificate.md)
+### Credential - Secret Manager
+- [Secret Manager quick start demo](security/secret-mgr/README.md)
 
-[How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
+- [Upload-SSL-Certificate](security/Upload-SSL-Certificate.md)
 
-[Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
+- [Create certificate using openssl](security/acm/create-certificate-openssl.md)
 
-[How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
+- [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
-[Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
+### Asset Management and Compliance
+- [How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
 
-- [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
-- [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
-- [Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
-- [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
-- [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
-- [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
-- [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
+### AuthN and AuthZ
+- [Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
 
-[GuardDuty Simulator](security/guard-duty/README.md)
+- [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
+    - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
+    - [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
+    - [Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
+    - [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
+    - [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
+    - [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
+    - [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
+    - [Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
 
-[Create certificate using openssl](security/acm/create-certificate-openssl.md)
+### Sentitive Data
+- [How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
 
-[aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
+### Threat detection - GuardDuty
+- [GuardDuty Simulator](security/guard-duty/README.md)
 
-[Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
+### WAF
+- [aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
 
-[Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
+- [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
 
-[How can I use permissions boundaries to limit the scope of IAM users and roles and prevent privilege escalation?](https://aws.amazon.com/premiumsupport/knowledge-center/iam-permission-boundaries/?nc1=h_ls)
+- [WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
 
-[Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+### Permission - IAM Policy, S3 Policy, RAM Policy
+- [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
 
-[AWS Security Hands on Lab](http://security.bwcx.me/)
+- [How can I use permissions boundaries to limit the scope of IAM users and roles and prevent privilege escalation?](https://aws.amazon.com/premiumsupport/knowledge-center/iam-permission-boundaries/?nc1=h_ls)
 
-[Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
+- [Enforce MFA authentication for IAM users](https://aws.amazon.com/premiumsupport/knowledge-center/mfa-iam-user-aws-cli/)
 
-[Enforce MFA authentication for IAM users](https://aws.amazon.com/premiumsupport/knowledge-center/mfa-iam-user-aws-cli/)
+### Multi accounts structure
+- [Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
 
-[Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
+- [Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
+
 
 ## Network
+### VPC
+- [How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
 
-[How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
+### Keep private - VPC Endpoint and PrivateLink
+- [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
 
-[Why can’t I connect to an S3 bucket using a gateway VPC endpoint?](https://amazonaws-china.com/premiumsupport/knowledge-center/connect-s3-vpc-endpoint/)
+- [Why can’t I connect to an S3 bucket using a gateway VPC endpoint?](https://amazonaws-china.com/premiumsupport/knowledge-center/connect-s3-vpc-endpoint/)
 
-[The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/SSM-VPC-Endpoint-In-China-Region.md)
+- [The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/SSM-VPC-Endpoint-In-China-Region.md)
 
-[How I can setup transparent proxy - squid](network/squid/Squid-proxy.md)
+- [Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
-[SFTP on AWS](network/SFTPOnAWS.md)
+### NAT and proxy
+- [How I can setup transparent proxy - squid](network/squid/Squid-proxy.md)
 
-[NLB-TLS-Termination + Access log](network/nlb/NLB-TLS-Termination.md)
+- [Nginx S3 Reverse Proxy](network/Nginx/Nginx-S3-Reverse-Proxy.md)
 
-[Direct Connect Cheat sheet](network/direct-connect/)
+### Load balancers 
+- [NLB-TLS-Termination + Access log](network/nlb/NLB-TLS-Termination.md)
 
-[Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
+- [Current limits of AWS network load balancers](https://ably.com/blog/limits-aws-network-load-balancers)
 
-[Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
+### Leasing Line - Direct Connect 
+- [Direct Connect Cheat sheet](network/direct-connect/)
 
-[TGW cross account sharing and inter-connection testing](network/tgw-workshop)
+- [Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
 
-[Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
+- [Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
 
-[AWS WAF-Workshop](security/waf/WAF-Workshop.md)
+### Cross board transfer
+- [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
 
-[WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
+### Cross accounts and Cross VPCs - TGW
+- [TGW cross account sharing and inter-connection testing](network/tgw-workshop)
 
-[Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
+- [VPC-Cross-Account-Connection](vpc/VPC-Cross-Account-Connection.md)
 
-[Nginx S3 Reverse Proxy](network/Nginx/Nginx-S3-Reverse-Proxy.md)
+### Acceleration network
+- [Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
 
-[GWLB Example](network/GWLB/GWLB_Example.md)
+- [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
-[Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
+- [Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
 
-[Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
+### Edge
+- [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
 
-[Transit Gateway Connect 集成FortiGate安全服务](network/tgw-workshop/TGW-Connect.md)
+### Network Secuirty
+- [GWLB Example](network/GWLB/GWLB_Example.md)
 
-[Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
+- [Transit Gateway Connect 集成FortiGate安全服务](network/tgw-workshop/TGW-Connect.md)
 
-[How to check the Internet Traffic?](vpc/VPC-Flowlogs-Analysis.md)
-
-[VPC-Cross-Account-Connection](vpc/VPC-Cross-Account-Connection.md)
-
-[Current limits of AWS network load balancers](https://ably.com/blog/limits-aws-network-load-balancers)
-
-[Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+- [How to check the Internet Traffic with VPC Flow?](vpc/VPC-Flowlogs-Analysis.md)
 
 ## DNS
+### Route 53
+- [Route53 in China region](R53/README.md)
 
-[Route53 in China region](R53/README.md)
+- [How do I troubleshoot Route53 geolocation routing issues](https://aws.amazon.com/premiumsupport/knowledge-center/troubleshoot-route53-geolocation/)
 
-[How do I troubleshoot Route53 geolocation routing issues](https://aws.amazon.com/premiumsupport/knowledge-center/troubleshoot-route53-geolocation/)
+- [Route53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
 
-[Route53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+- [Route53 Resolver](R53/R53-Resolver.md)
 
-[Route53 Resolver](R53/R53-Resolver.md)
-
-[Route53 cross-account-dns](R53/cross-account-dns.md)
-
-[How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
+- [Route53 cross-account-dns](R53/cross-account-dns.md)
 
 ## Serverless
+### Serverless Workshop
+- [AWS Serverless Day](https://serverlessday.cbuilder.tech/index.html)
 
-[AWS Serverless Day](https://serverlessday.cbuilder.tech/index.html)
+- [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
-[Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
+### Function as Service - Lambda
+- [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
 
-[hello-cdk](https://github.com/liangruibupt/hello-cdk)
+- [Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
 
-[Build and deploy a serverless application with the SAM CLI in China reigon](https://github.com/liangruibupt/hell-world-sam)
+- [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
 
-[SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
+- [How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
 
-[Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
+- [How to get the lambda public IP address](lambda/lambda-access-internet.py)
 
-[AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+- [How to retrieve the System Manager Parameter Store from lambda](lambda/lambda-ssm-variables.py)
 
-[How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
+- [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
 
-[How to get the lambda public IP address](lambda/lambda-access-internet.py)
+- [Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
 
-[How to retrieve the System Manager Parameter Store](lambda/lambda-ssm-variables.py)
+- [Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
 
-[How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
+- [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
 
-[AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region)
+- [AWS 告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
 
-[Serverless CI/CD based on Jenkins](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
+- [利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
 
-[Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
+- [Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
 
-[Chalice - A framework for writing serverless applications](https://aws.github.io/chalice/)
+- [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
 
-[Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
+### Build the serverless - SAM, Chalice, Serverless framwork, CDK
+- [hello-cdk](https://github.com/liangruibupt/hello-cdk)
 
-[AppSync-Workshop](database/appsync/AppSync-Workshop.md)
+- [Build and deploy a serverless application with the SAM CLI in China reigon](https://github.com/liangruibupt/hell-world-sam)
 
-[Lambda CICD with Jenkins and CodeBuild and CodeDeploy](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
+- [SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
 
-[Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
+- [AWS Serverless Workshop](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region)
 
-[Serverless Patterns Collection](https://serverlessland.com/patterns)
+- [Chalice - A framework for writing serverless applications](https://aws.github.io/chalice/)
 
-[AWS 告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
+### Serverless CICD
+- [Serverless CI/CD based on Jenkins](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
 
-[利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
+- [Lambda CICD with Jenkins and CodeBuild and CodeDeploy](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
 
-[Create the pandas layer for lambda ](lambda/create-pandas-layer-4-lambda.md)
+### Serverless with AI/ML
+- [Create the pandas layer for lambda ](lambda/create-pandas-layer-4-lambda.md)
 
-[AWS Lambda – Container Image Support](lambda/Lambda-container-image-support.md)
+- [AWS Lambda – Container Image Support](lambda/Lambda-container-image-support.md)
 
-[Lambda invoke AWS Rekgonition](lambda/scripts/call-rekgonition.py)
+- [Lambda invoke AWS Rekgonition](lambda/scripts/call-rekgonition.py)
 
-[Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
+- [Lambda OpenCV](https://github.com/awslabs/lambda-opencv)
 
-[Lambda OpenCV](https://github.com/awslabs/lambda-opencv)
-
-[Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
 
 ## Migration
 
@@ -544,6 +588,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Transfer Family to access EFS](https://aws.amazon.com/blogs/aws/new-aws-transfer-family-support-for-amazon-elastic-file-system/)
 
+- [SFTP on AWS](network/SFTPOnAWS.md)
 
 ## Storage
 
@@ -589,7 +634,6 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-file-shares.html) You can mount an Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance that is either joined to your Active Directory or not joined.
 
 - [goofys on AWS](https://github.com/kahing/goofys)
-
 
 
 - [EFS Web Browser for list files and directory](https://aws.amazon.com/cn/blogs/china/building-a-serviceless-efs-file-browser/)
@@ -807,6 +851,7 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 
 ## Integration
 
+
 [How to build Amazon SNS HTTP Subscription?](integration/SNS/SNS-HTTP-Subscription.md)
 
 [SQS quick start demo for Standard Queue and JMS](integration/SQS)
@@ -832,12 +877,17 @@ Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are co
 [Automotive Call Center Services Solution Using Amazon Connect](https://aws.amazon.com/blogs/industries/automotive-call-center-services-solution-using-amazon-connect-by-wirelesscar/)
 
 ## Media
+### Video on Demand
+- [Video on Demand on AWS](media/mediaconvert)
 
-[Video on Demand on AWS](media/mediaconvert)
+### Video Streaming
+- [无服务器直播解决方案](https://www.amazonaws.cn/solutions/serverless-video-streaming/)
 
-[无服务器直播解决方案](https://www.amazonaws.cn/solutions/serverless-video-streaming/)
-
-[Open source web conferencing solution - Jitsi](https://aws.amazon.com/cn/blogs/opensource/getting-started-with-jitsi-an-open-source-web-conferencing-solution/)
+- [Open source web conferencing solution - Jitsi](https://aws.amazon.com/cn/blogs/opensource/getting-started-with-jitsi-an-open-source-web-conferencing-solution/)
 
 ## Mobile
-[Tutorial: Intro to React – React](https://reactjs.org/tutorial/tutorial.html)
+### Moible app development
+- [Tutorial: Intro to React – React](https://reactjs.org/tutorial/tutorial.html)
+
+### GraphQL - AppSync
+- [AppSync-Workshop](database/appsync/AppSync-Workshop.md)
