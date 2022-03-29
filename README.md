@@ -454,12 +454,14 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Current limits of AWS network load balancers](https://ably.com/blog/limits-aws-network-load-balancers)
 
-### Leasing Line - Direct Connect 
+### Cross data center and cloud Leasing Line - Direct Connect and VPN
 - [Direct Connect Cheat sheet](network/direct-connect/)
 
 - [Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
 
 - [Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
+
+- [Connect alibaba cloud to aws via vpn](https://www.alibabacloud.com/blog/connect-alibaba-cloud-to-aws-via-vpn-gateway_593915)
 
 ### Cross board transfer
 - [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
@@ -577,13 +579,13 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
 
-### DMS
+### Data migration tool - DMS
 - [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
 
 ### Cross Cloud Migration
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
 
-### File
+### File migration
 - [Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
 
 - [Transfer Family to access EFS](https://aws.amazon.com/blogs/aws/new-aws-transfer-family-support-for-amazon-elastic-file-system/)
@@ -618,6 +620,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
 
+- [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
+
+- [S3 inventory usage](storage/s3-inventory.md)
+
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
@@ -635,14 +641,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [goofys on AWS](https://github.com/kahing/goofys)
 
-
 - [EFS Web Browser for list files and directory](https://aws.amazon.com/cn/blogs/china/building-a-serviceless-efs-file-browser/)
 
-[Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
+- [Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
 
-[Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
-
-[S3 inventory usage](storage/s3-inventory.md)
 
 ## Database
 ### RDS
@@ -650,23 +652,22 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
 
-
-### Graph Database
-- [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
-
-- [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
-
+### RDS Cross region, cross account and data replication
 - [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
-
-- [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
-
-- [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
 
 - [通过 Debezium and MSK Connect 一站式解决所有数据库 CDC 问题](https://aws.amazon.com/cn/blogs/china/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
 
+- [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
+
+### RDS HA/DR
+- [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
+
+### RDS upgrade
+- [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
+
+### RDS Security
 - [Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
 
-- [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
 - [best-practices-for-working-with-amazon-aurora-serverless](https://aws.amazon.com/blogs/database/best-practices-for-working-with-amazon-aurora-serverless/)
 
@@ -677,6 +678,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [How to Migrate from Amazon RDS Aurora or MySQL to Amazon Aurora Serverless](https://medium.com/@souri29/how-to-migrate-from-amazon-rds-aurora-or-mysql-to-amazon-aurora-serverless-55f9a4a74078)
 
 - [MySQL validate_password plugin](database/rds/mysql/mysql_password_validation.md)
+
+### Graph Database
+- [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
+
+- [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
+
 
 - [Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/cn/blogs/database/amazon-rds-under-the-hood-multi-az/)
 
