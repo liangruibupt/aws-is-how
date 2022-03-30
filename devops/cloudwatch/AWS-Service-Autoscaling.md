@@ -54,12 +54,24 @@
     - 1 GB per hour for Amazon Elastic Compute Cloud (EC2) instances, containers, and IP addresses as targets, and 0.4 GB per hour for Lambda functions as targets.
     - 1,000 rule evaluations per second
 
-6. API Gateway
+7. API Gateway
+   
+Base on Amazon API Gateway FAQ [How do APIs scale?](https://aws.amazon.com/api-gateway/faqs/#Throttling_and_Caching) Amazon API Gateway will automatically scale to handle the amount of traffic your API receives. Amazon API Gateway does not arbitrarily limit or throttle invocations to your backend operations and all requests that are not intercepted by throttling and caching settings in the Amazon API Gateway console are sent to your backend operations. 
+[Throttle quota per account, per Region across HTTP APIs, REST APIs, WebSocket APIs, and WebSocket callback APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html) is 10,000 requests per second (RPS) with an additional burst capacity provided by the token bucket algorithm, using a maximum bucket capacity of 5,000 requests.
 
-7. Lambda
+8. Lambda
 
-8. S3
+[Base on lambda document](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html), the default concurrent executions quota is 1,000 and Can be increased up to Tens of thousands. [For an initial burst of traffic, your functions' cumulative concurrency in a Region can reach an initial level of between 500 and 3000, which varies per Region. ](https://docs.aws.amazon.com/lambda/latest/dg/invocation-scaling.html). To enable your function to scale without fluctuations in latency, use [provisioned concurrency](https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html). Lambda also integrates with [Application Auto Scaling, allowing you to manage provisioned concurrency on a schedule or based on utilization](https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html). 
 
-9. EFS
+9. S3
 
-10. EBS
+Your applications can easily achieve thousands of transactions per second in request performance when uploading and retrieving storage from Amazon S3. Amazon S3 automatically scales to high request rates. For example, your application can achieve at least 3,500 PUT/COPY/POST/DELETE or 5,500 GET/HEAD requests per second per prefix in a bucket. There are no limits to the number of prefixes in a bucket. You can increase your read or write performance by using parallelization. For example, if you create 10 prefixes in an Amazon S3 bucket to parallelize reads, you could scale your read performance to 55,000 read requests per second. Similarly, you can scale write operations by writing to multiple prefixes. Suggest read [Best practices design patterns: optimizing Amazon S3 performance](https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html)
+
+10. EFS
+
+Amazon EFS delivers more than 10 gibibytes per second (GiBps) of throughput over 500,000 IOPS, and sub-millisecond or low single digit millisecond latencies. Suggest read [Amazon EFS performance document](https://docs.aws.amazon.com/efs/latest/ug/performance.html) and [Amazon EFS performance tips](https://docs.aws.amazon.com/efs/latest/ug/performance-tips.html)
+
+11. EBS
+12. 
+Several factors, including I/O characteristics and the configuration of your instances and volumes, can affect the performance of Amazon EBS. Customers who follow the [guidance on our Amazon EBS and Amazon EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSPerformance.html) typically achieve good performance out of the box. You can use the [With Amazon EBS, you can use any of the standard RAID configurations](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/raid-config.html) and run [EBS benchmark](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/benchmark_procedures.html) 
+
