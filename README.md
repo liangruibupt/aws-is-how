@@ -274,6 +274,7 @@
   - [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
   - [AWS Workshop - Graviton2 China](http://graviton2-workshop.s3-website.cn-northwest-1.amazonaws.com.cn/1.basics.html)
   - [AWS Graviton2-based services](https://github.com/aws/aws-graviton-getting-started)
+  - [GRAVITON2 电商独立站](https://graviton2.awspsa.com/)
 
 - [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
 
@@ -778,6 +779,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### RDS
 #### RDS usage
 - [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
+- [Proxy for PostgreSQL](database/rds/proxysql/proxy-for-postgeSQL.md)
 
 - [AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
 
