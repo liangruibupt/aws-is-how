@@ -1,5 +1,5 @@
 # aws-is-how
-[toc- [aws-is-how](#aws-is-how)
+- [aws-is-how](#aws-is-how)
   - [常见故障排除及支持手册](#常见故障排除及支持手册)
   - [AWS Skill builder](#aws-skill-builder)
   - [AI/ML](#aiml)
@@ -124,7 +124,7 @@
     - [Video Streaming](#video-streaming)
   - [Mobile](#mobile)
     - [Moible app development](#moible-app-development)
-    - [GraphQL - AppSync](#graphql---appsync)]
+    - [GraphQL - AppSync](#graphql---appsync)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -502,6 +502,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Security
 
 - [AWS Security Hands on Lab](http://security.bwcx.me/)
+- [Public Access Consideration](security/Public_Access_Consideration.md)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -933,6 +934,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
 
 - [AWS Well-Architected Labs](http://wa.bwcx.me/)
+
+- [AWS Services Autoscaling](devops/cloudwatch/AWS-Service-Autoscaling.md)
 
 ### CI/CD
 - [CodeCommit](devops/codecommit/getstart-codecommit.md) and - [CodeCommit setup](devops/codecommit/codecommit-setup.md)
