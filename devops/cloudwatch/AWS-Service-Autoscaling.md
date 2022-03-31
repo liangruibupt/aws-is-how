@@ -9,7 +9,7 @@
 - Amazon DynamoDB throughput capacity
 - [Aurora replicas for Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Integrating.AutoScaling.html)
 
-3. Using [Application Auto Scaling API](https://docs.aws.amazon.com/zh_cn/autoscaling/application/APIReference/Welcome.html)
+3. Using [Application Auto Scaling API](https://docs.aws.amazon.com/zh_cn/autoscaling/application/APIReference/Welcome.html). The services support for Application Auto Scaling can be find in https://docs.aws.amazon.com/autoscaling/application/userguide/integrated-services-list.html
 - Amazon AppStream 2.0 fleets (not avaiable for China regions)
 - Amazon Aurora Replicas
 - Amazon Comprehend document classification and entity recognizer endpoints (not avaiable for China regions)
@@ -25,11 +25,11 @@
 - Spot Fleets (Amazon EC2)
 - Custom resources provided by your own applications or services, for example, [Kinesis Data Analytics Auto-scaling](https://github.com/walkingerica/awscn-kda-flink-auto-scaling)
 
-4. [Amazon ElastiCache for Redis now supports auto scaling](https://aws.amazon.com/about-aws/whats-new/2021/08/amazon-elasticache-redis/)
+1. [Amazon ElastiCache for Redis now supports auto scaling](https://aws.amazon.com/about-aws/whats-new/2021/08/amazon-elasticache-redis/)
 
-5. [Amazon RDS now supports Storage Auto Scaling](https://aws.amazon.com/about-aws/whats-new/2019/06/rds-storage-auto-scaling/)
+2. [Amazon RDS now supports Storage Auto Scaling](https://aws.amazon.com/about-aws/whats-new/2019/06/rds-storage-auto-scaling/)
 
-6. Load Balancer
+3. Load Balancer
 
 - [Network Load Balancer](https://www.amazonaws.cn/en/elasticloadbalancing/pricing/?trk=pricing-pd) is evaludate by Network Load Balancer Capacity Units (NLCU) can [effortless Scaling to Millions of Requests per Second](https://aws.amazon.com/blogs/aws/new-network-load-balancer-effortless-scaling-to-millions-of-requests-per-second/). 
   - For Transmission Control Protocol (TCP) traffic, an NLCU contains:
@@ -72,6 +72,6 @@ Your applications can easily achieve thousands of transactions per second in req
 Amazon EFS delivers more than 10 gibibytes per second (GiBps) of throughput over 500,000 IOPS, and sub-millisecond or low single digit millisecond latencies. Suggest read [Amazon EFS performance document](https://docs.aws.amazon.com/efs/latest/ug/performance.html) and [Amazon EFS performance tips](https://docs.aws.amazon.com/efs/latest/ug/performance-tips.html)
 
 11. EBS
-12. 
+
 Several factors, including I/O characteristics and the configuration of your instances and volumes, can affect the performance of Amazon EBS. Customers who follow the [guidance on our Amazon EBS and Amazon EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSPerformance.html) typically achieve good performance out of the box. You can use the [With Amazon EBS, you can use any of the standard RAID configurations](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/raid-config.html) and run [EBS benchmark](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/benchmark_procedures.html) 
 
