@@ -57,3 +57,7 @@
     - With Multi-AZ deployment, Amazon RDS automatically provisions and maintains a synchronous “standby” replica in a different Availability Zone.
     - During certain types of planned maintenance, or in the unlikely event of DB instance failure or Availability Zone failure, Amazon RDS will automatically failover to the standby so that you can resume database writes and reads as soon as the standby is promoted.
     - In a multi-master cluster, all DB instances can perform write operations. A multi-master cluster can help to avoid an outage when a writer instance becomes unavailable
+
+10. How to stanardize Amazon RDS configuration?
+    - Using Infra as Code - Terraform / CloudFormation to deploy Amazon RDS instance with your company standards such as enable Multi-AZ deployment for production evironment; enable backup for production evironment; enable audit and encryption at rest / in-transit; enable performance insights and slow query logs etc
+    - Build the self-service with GUI based portal for developer to provision Amazon RDS instance with your company standards
