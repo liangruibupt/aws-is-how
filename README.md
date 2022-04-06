@@ -790,8 +790,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### RDS
 #### RDS usage
 - [RDS common questions](database/rds/RDS_common_questions.md)
-- 
+
 - [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
+  
 - [Proxy for PostgreSQL](database/rds/proxysql/proxy-for-postgeSQL.md)
 
 - [AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
