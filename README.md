@@ -3,6 +3,7 @@
   - [常见故障排除及支持手册](#常见故障排除及支持手册)
   - [AWS Skill builder](#aws-skill-builder)
   - [AI/ML](#aiml)
+    - [ML Study](#ml-study)
     - [SageMaker](#sagemaker)
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
@@ -93,6 +94,7 @@
       - [RDS HA/DR](#rds-hadr)
       - [RDS upgrade](#rds-upgrade)
       - [RDS Security](#rds-security)
+      - [RDS Performance](#rds-performance)
     - [Graph Database](#graph-database)
     - [ElastiCache](#elasticache)
     - [Key-Value and Document](#key-value-and-document)
@@ -131,6 +133,9 @@
 ## [AWS Skill builder](https://explore.skillbuilder.aws/learn/course/11458/play/42651/play-cloud-quest-cloud-practitioner)
 
 ## AI/ML
+
+### ML Study
+[ML入门的知识，以及ML项目中的一些经验总结分享](https://github.com/yuhuiaws/ML-study)
 
 ### SageMaker
 
@@ -466,7 +471,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### EMR
 - [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md)
-
+- [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
+  
 ## IOT
 ### IoT Core
 - [IoT-Workshop](iot/IoT-Workshop.md)
@@ -503,6 +509,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [AWS Security Hands on Lab](http://security.bwcx.me/)
 - [Public Access Consideration](security/Public_Access_Consideration.md)
+- [Curated list of links, references, books videos, tutorials, Exploit, CTFs, Hacking Practices etc. which are related to AWS Security](https://github.com/jassics/awesome-aws-security)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -711,6 +718,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### Data migration tool - DMS
 - [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
+- [AWS Database Migration Workshop scenario based](https://catalog.us-east-1.prod.workshops.aws/workshops/77bdff4f-2d9e-4d68-99ba-248ea95b3aca/en-US/)
 
 ### Cross Cloud Migration
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
@@ -753,6 +761,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
 
 - [S3 inventory usage](storage/s3-inventory.md)
+
+- [How Trend Micro uses Amazon S3 Object Lambda to help keep sensitive data secure](https://aws.amazon.com/cn/blogs/storage/how-trend-micro-uses-amazon-s3-object-lambda-to-help-keep-sensitive-data-secure/)
 
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
@@ -819,6 +829,14 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [MySQL validate_password plugin](database/rds/mysql/mysql_password_validation.md)
 
 - [Encrypt the Unencrypted RDS](database/rds/PostgreSQL/unencrypted_db_to_encrypted.md)
+
+#### RDS Performance
+- [Amazon Aurora Performance Assessment](https://d1.awsstatic.com/product-marketing/Aurora/RDS_Aurora_Performance_Assessment_Benchmarking_v1-2.pdf)
+  
+- [Automate benchmark tests for Amazon Aurora PostgreSQL](https://aws.amazon.com/blogs/database/automate-benchmark-tests-for-amazon-aurora-postgresql/)
+
+- [benchmarking-read-write-speed-on-amazon-aurora-classic-rds-and-local-disk](https://medium.datadriveninvestor.com/benchmarking-read-write-speed-on-amazon-aurora-classic-rds-and-local-disk-29500d9210da)
+  
 
 ### Graph Database
 - [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
