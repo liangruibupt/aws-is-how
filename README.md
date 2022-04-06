@@ -789,6 +789,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Database
 ### RDS
 #### RDS usage
+- [RDS common questions](database/rds/RDS_common_questions.md)
+- 
 - [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
 - [Proxy for PostgreSQL](database/rds/proxysql/proxy-for-postgeSQL.md)
 
