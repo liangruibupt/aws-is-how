@@ -529,6 +529,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### AuthN and AuthZ
 - [Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
 
+- [Cognito User Pool alternative solution - Authing demo](https://github.com/aws-samples/aws-authing-demo)
+  
 - [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
     - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
     - [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
@@ -668,6 +670,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
 
 - [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
+
+- [lambda sent email]
+  - [Using Amazon SES](lambda/scripts/lambda_ses.py)
+  - [Using SendCloud](lambda/scripts/lambda_ses_sendcloud.py)
 
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
