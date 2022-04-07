@@ -411,6 +411,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
 
+- [Using athena partition projection or glue partition indexes to improve athena query performance](https://aws.amazon.com/cn/blogs/china/amazon-athena-partition-projection-and-glue-partition-indexes-performance-comparison/)
+
 ### Data Warehouse: Redshfit
 - [Automate Redshift ETL](analytics/lambda-redshift)
 
@@ -816,6 +818,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
+- [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copy-and-replication.md)
 #### RDS HA/DR
 - [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
 
