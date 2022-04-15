@@ -8,6 +8,7 @@
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
     - [NLP](#nlp)
+    - [Translate, Text to speech, Speeck to Text](#translate-text-to-speech-speeck-to-text)
     - [Forecasting](#forecasting)
     - [Fraud Detection](#fraud-detection)
     - [Recommandation](#recommandation)
@@ -183,6 +184,9 @@
 
 - [Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
 
+### Translate, Text to speech, Speeck to Text
+- [使用 Amazon Translate 自动翻译PPT](https://aws.amazon.com/cn/blogs/china/translating-presentation-files-with-amazon-translate/)
+
 ### Forecasting
 
 - [Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
@@ -310,7 +314,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [AWS Batch Getting Start demo](analytics/batch-get-start)
 
-
+- [Orchestrating high performance computing with AWS Step Functions and AWS Batch](https://aws.amazon.com/cn/blogs/compute/orchestrating-high-performance-computing-with-aws-step-functions-and-aws-batch/)
+  
 ## Analytics
 ### High Level Data Engineering and Data Analytics
 - [AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
@@ -428,6 +433,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
     - [Integrating ClickHouse and S3 Compatible Storage](https://dzone.com/articles/clickhouse-s3-compatible-object-storage)
     - [ClickHouse S3 table function](https://clickhouse.com/docs/en/sql-reference/table-functions/s3/)
 
+- [Scheduling SQL queries on your Amazon Redshift](https://aws.amazon.com/blogs/big-data/scheduling-sql-queries-on-your-amazon-redshift-data-warehouse/)
+
 ### Search and analytics: Elasticsearch Service
 - [Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
 
@@ -465,6 +472,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
     - [Expectations List](https://greatexpectations.io/expectations)
     - [Provide data reliability in Amazon Redshift at scale using Great Expectations library](https://aws.amazon.com/blogs/big-data/provide-data-reliability-in-amazon-redshift-at-scale-using-great-expectations-library/)
     - [Monitoring Data Quality in a Data Lake Using Great Expectations and Allure-Built Serverless](https://towardsdatascience.com/monitoring-data-quality-in-a-data-lake-using-great-expectations-and-allure-built-serverless-47fa1791af6a)
+
+- [Data Lineage](analytics/governance/Data_Lineage.md)
 
 ### BI
 - [Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
@@ -637,6 +646,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Route53 Resolver](R53/R53-Resolver.md)
 
 - [Route53 cross-account-dns](R53/cross-account-dns.md)
+
+- [Simplify DNS management in a multi-account environment with Route 53 Resolver](https://aws.amazon.com/blogs/security/simplify-dns-management-in-a-multiaccount-environment-with-route-53-resolver/)
 
 ## Serverless
 ### Serverless Workshop
@@ -872,6 +883,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
 
+- [DynamoDB_Pagenation](database/dynamodb/DynamoDB_Pagenation.md)
+
 #### MongoDB and DocumentDB
 - [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
 
@@ -916,6 +929,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are compatible with the Cluster Autoscaler. You can deploy the Cluster Autoscaler to your Amazon EKS cluster and configure it to modify your Amazon EC2 Auto Scaling groups.
   - [Vertical Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/vertical-pod-autoscaler.html)
   - [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
+
+- [DataDog for EKS control plane monitoring](https://docs.datadoghq.com/agent/kubernetes/control_plane/?tab=helm#EKS)
 
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
@@ -992,6 +1007,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Accessing the AWS Health API](devops/personal-health-dashboard/Accessing-the-AWS-Health-API.md)
 
 - [一键部署在钉钉群里自动创建 AWS Support Case 无服务器解决方案](https://www.amazonaws.cn/en/solutions/ipc-ai-saas-solution/)
+  - [Event Bridge rule to capture EC2 status change & AWS health event in different AWS region](https://github.com/Chris-wa-He/AWS-crossRegion-eventBridge)
+
 
 - [SMS notification for AWS health event](https://github.com/aws/aws-health-tools/tree/master/sms-notifier)
 
@@ -999,6 +1016,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   - [Use tags to create and maintain Amazon CloudWatch alarms for Amazon EC2 instances](https://aws.amazon.com/blogs/mt/use-tags-to-create-and-maintain-amazon-cloudwatch-alarms-for-amazon-ec2-instances-part-1/)
   - [Automatically create a set of CloudWatch alarms with tagging](https://github.com/aws-samples/amazon-cloudwatch-auto-alarms)
   - [监控告警一点通：在CloudWatch上为 EC2批量添加告警](https://aws.amazon.com/cn/blogs/china/add-alarms-in-batches-for-ec2-on-cloudwatch/)
+  - [企业微信、钉钉接收 Amazon CloudWatch 告警](https://aws.amazon.com/cn/blogs/china/enterprise-wechat-and-dingtalk-receiving-amazon-cloudwatch-alarms/)
+    - [一键部署企业微信，钉钉，飞书，Slack 告警](https://github.com/Chris-wa-He/AWS-Lambda-notifier)
 
 - [Monitor using Prometheus and Grafana](https://www.eksworkshop.com/intermediate/240_monitoring/) Here is how to deploy Grafana on EKS
 
@@ -1011,6 +1030,12 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [How to send CloudWatch logs to S3](devops/cloudwatch/How-to-send-logs-to-S3.md)
 
 - [Central Logging on AWS](analytics/central-logging)
+
+- [How to stream logs from CloudWatch logs to Splunk](devops/cloudwatch/CloudWatch-logs-to-splunk.md)
+
+- [Log Hub]
+  - [Log Hub for EKS](https://aws.amazon.com/cn/blogs/china/use-the-log-hub-solution-to-collect-logs-in-an-amazon-eks-cluster-environment/)
+  - [Log Hub for WAF](https://aws.amazon.com/cn/blogs/china/aws-waf-deployment-guide-4-using-the-log-hub-automatic-deployment-solution-for-waf-security-operations/)
 
 ### Change configuration 
 - [AWS AppConfig Workshop](devops/appconfig)
