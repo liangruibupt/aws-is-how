@@ -396,12 +396,15 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [MSK Workshop](analytics/msk/101Workshop/README.md)
 
 - [MSK Connect](https://aws.amazon.com/blogs/aws/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
+  - [Run Kafka Connect as Fargate Docker containers and deploy MirrorMaker configuration files](https://github.com/aws-samples/kafka-connect-mm2)
+  - [MirrorMaker deployment](https://github.com/apache/kafka/blob/trunk/connect/mirror/README.md)
 
 - [MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
 - [Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
 
 - [Kafka connection issue troubleshooting](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
+
 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
@@ -411,6 +414,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Split and search comma separated column in Athena](analytics/athena-complex-table/Split-search-comma-seprated-column.md)
 
 - [Amazon Athena Workshop](analytics/athena-workshop/Athena-workshop.md)
+  - [Athena_access_control](analytics/athena-workshop/Athena_access_control.md)
 
 - [Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/cn/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
 
@@ -824,6 +828,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [rds-postgresql ERROR: <module/extension> must be loaded via shared_preload_libraries](https://aws.amazon.com/premiumsupport/knowledge-center/rds-postgresql-resolve-preload-error/)
 
+- [MySQL 手工分库分表]
+  - [Amazon Aurora的读写能力扩展之ShardingSphere-Proxy篇](https://aws.amazon.com/cn/blogs/china/make-further-progress-shardingsphere-proxy-chapter-of-amazon-auroras-reading-and-writing-ability-expansion/)
+  - [拓展 Aurora的读写能力之Gaea篇](https://aws.amazon.com/cn/blogs/china/make-further-progress-gaea-chapter-on-expanding-auroras-reading-and-writing-ability/)
+
 #### RDS Cross region, cross account and data replication
 - [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
 
@@ -872,6 +880,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
 
 - [Database Caching Strategies Using Redis](database/redis/Database_Caching_Strategies_Using_Redis.md)
+
+- [使用Redisson连接Amazon ElastiCache for redis 集群](https://aws.amazon.com/cn/blogs/china/connecting-amazon-elasticache-for-redis-cluster-using-redisson/?nc1=h_ls)
+
+- [ElastiCache for Redis 慢日志可视化平台](https://aws.amazon.com/cn/blogs/china/build-elasticache-for-redis-slow-log-visualization-platform/)
 
 ### Key-Value and Document
 #### DynamoDB
@@ -933,6 +945,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   - [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
 
 - [DataDog for EKS control plane monitoring](https://docs.datadoghq.com/agent/kubernetes/control_plane/?tab=helm#EKS)
+
+- [Exclusive Node from EKS ELB](container/Exclusive_Node_from_ELB.md)
 
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
@@ -1044,6 +1058,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [AWS Config for resource housekeeping and cost optimization](https://aws.amazon.com/blogs/mt/aws-config-best-practices/)
 
+- [Community Config Rules](https://github.com/awslabs/aws-config-rules)
+  - [AWS Config related blogs](https://aws.amazon.com/blogs/security/tag/aws-config/)
 ### Developer
 - [CSV tools](https://github.com/secretGeek/AwesomeCSV)
 
