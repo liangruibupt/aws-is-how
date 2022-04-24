@@ -1,13 +1,18 @@
 # How to check the Internet Traffic?
 - [How to check the Internet Traffic?](#how-to-check-the-internet-traffic)
   - [For NAT Gateway, EC2 and Load Balancer, you can analysis the VPC flow logs](#for-nat-gateway-ec2-and-load-balancer-you-can-analysis-the-vpc-flow-logs)
+    - [Create the flow log](#create-the-flow-log)
+    - [Query flow logs using Amazon Athena](#query-flow-logs-using-amazon-athena)
+    - [Trouble shooting](#trouble-shooting)
+    - [performance tuning](#performance-tuning)
+      - [Parquet format](#parquet-format)
   - [For S3, you can analysis the S3 access logs or Cloud Trail logs](#for-s3-you-can-analysis-the-s3-access-logs-or-cloud-trail-logs)
     - [S3 access logs](#s3-access-logs)
     - [S3 CloudTrail logs](#s3-cloudtrail-logs)
 
 ## For NAT Gateway, EC2 and Load Balancer, you can analysis the VPC flow logs
 
-1. Create the flow log
+### Create the flow log
 
 https://docs.amazonaws.cn/en_us/vpc/latest/userguide/working-with-flow-logs.html
 
@@ -47,7 +52,7 @@ TBLPROPERTIES (
 ```
 
 
-2. Query flow logs using Amazon Athena
+### Query flow logs using Amazon Athena
 
 https://docs.amazonaws.cn/en_us/vpc/latest/userguide/flow-logs-athena.html
 
@@ -67,7 +72,7 @@ For example: `VpcFlowLogsTotalBytesTransferred` – The 50 pairs of source and d
 SELECT SUM(bytes) as totalbytes, srcaddr, dstaddr from fl06a3a4b9a351a0fd5daily2021120420211204 WHERE year='2021' AND month='12' AND day='04' GROUP BY srcaddr, dstaddr ORDER BY totalbytes LIMIT 50
 ```
 
-1. Trouble shooting
+### Trouble shooting
 - If you find the Athena query status is `cancelled`, Please check the Athena workgroup scan limit and increase it. More infomation, please check https://docs.amazonaws.cn/athena/latest/ug/workgroups-setting-control-limits-cloudwatch.html
 
 - Patition: S3 bucket prefix need follow up the pattern `aws-region=region/year=year/month=month/day=day/`, then you can enable automatic partition and use the `msck repair table <table-name>` to automatically identify and load the partition. If you path format is `region/year/month/day/`, then you need manually load the partition via `alter table ... add partition(...) ... location ...`
@@ -82,16 +87,12 @@ SELECT SUM(bytes) as totalbytes, srcaddr, dstaddr from fl06a3a4b9a351a0fd5daily2
 
 - If you set the `Partition load frequency` in your VPC Flow logs athena integration, then it will follow up the frequency to load the partition
 
-- performance tuning
+### performance tuning
+####  Parquet format
 1. In global region, you can store the flow logs as Parquet format when you create the flow logs [analytics with VPC Flow Logs in Apache Parquet format](https://aws.amazon.com/blogs/big-data/optimize-performance-and-reduce-costs-for-network-analytics-with-vpc-flow-logs-in-apache-parquet-format/).
 
-2. In China region, you can use glue job to convert the data to Parquet without change the table schema
-- Note， modify the script to add the `"partitionKeys": ["year", "month", "day"]`
-```python
-datasink4 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields3, connection_type = "s3", connection_options = {"path": "s3://aws-vpc-flow-bucket/Parquet/", "partitionKeys": ["year", "month", "day"]}, format = "parquet", transformation_ctx = "datasink4")
-```
-
-3. Create new table by using Glue Crawler or in Athena
+2. In China region, you can create new table by using Glue Crawler or directly in Athena
+[Reference](https://docs.aws.amazon.com/athena/latest/ug/vpc-flow-logs.html) `Creating Tables for Flow Logs in Apache Parquet Format`
 ```sql
 CREATE EXTERNAL TABLE `flow_logs_parquet`(
   `version` int, 
@@ -122,10 +123,30 @@ LOCATION
   's3://aws-vpc-flow-bucket/Parquet/'
 TBLPROPERTIES (
   'classification'='parquet',  
-  "parquet.compress"="SNAPPY")
+  'compressionType'='SNAPPY',
+  'EXTERNAL'='true', 
+  'skip.header.line.count'='1')
 
 
 MSCK REPAIR TABLE `flow_logs_parquet`;
+```
+
+2. In China region, you can use the [Athena CTAS](https://docs.aws.amazon.com/zh_cn/athena/latest/ug/ctas-examples.html) to convert existed table to Parquet format
+```sql
+CREATE TABLE flow_logs_parquet_ctas_table
+WITH (
+      external_location = 's3://aws-vpc-flow-bucket/parquet_ctas/',
+      format = 'Parquet',
+      write_compression = 'SNAPPY',
+      partitioned_by = ARRAY['year','month','day'])
+AS SELECT *
+FROM old_vpc_no_parquet_table;
+```
+   
+3. In China region, you can use glue job to convert the data to Parquet without change the table schema
+- Note， modify the script to add the `"partitionKeys": ["year", "month", "day"]`
+```python
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields3, connection_type = "s3", connection_options = {"path": "s3://aws-vpc-flow-bucket/Parquet/", "partitionKeys": ["year", "month", "day"]}, format = "parquet", transformation_ctx = "datasink4")
 ```
 
 ## For S3, you can analysis the S3 access logs or Cloud Trail logs
