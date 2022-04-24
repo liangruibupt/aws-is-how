@@ -1,4 +1,9 @@
 # How to check the Internet Traffic?
+- [How to check the Internet Traffic?](#how-to-check-the-internet-traffic)
+  - [For NAT Gateway, EC2 and Load Balancer, you can analysis the VPC flow logs](#for-nat-gateway-ec2-and-load-balancer-you-can-analysis-the-vpc-flow-logs)
+  - [For S3, you can analysis the S3 access logs or Cloud Trail logs](#for-s3-you-can-analysis-the-s3-access-logs-or-cloud-trail-logs)
+    - [S3 access logs](#s3-access-logs)
+    - [S3 CloudTrail logs](#s3-cloudtrail-logs)
 
 ## For NAT Gateway, EC2 and Load Balancer, you can analysis the VPC flow logs
 
@@ -56,13 +61,13 @@ https://docs.amazonaws.cn/en_us/vpc/latest/userguide/flow-logs-athena.html
 
 For example: `VpcFlowLogsTotalBytesTransferred` – The 50 pairs of source and destination IP addresses with the most bytes recorded.
 
-![flow-logs-athena-integration.png](media/flow-logs-athena-integration.png)
+![predefine-flow-logs-query](media/predefine-flow-logs-query.png)
 
 ```sql
 SELECT SUM(bytes) as totalbytes, srcaddr, dstaddr from fl06a3a4b9a351a0fd5daily2021120420211204 WHERE year='2021' AND month='12' AND day='04' GROUP BY srcaddr, dstaddr ORDER BY totalbytes LIMIT 50
 ```
 
-3. Trouble shooting
+1. Trouble shooting
 - If you find the Athena query status is `cancelled`, Please check the Athena workgroup scan limit and increase it. More infomation, please check https://docs.amazonaws.cn/athena/latest/ug/workgroups-setting-control-limits-cloudwatch.html
 
 - Patition: S3 bucket prefix need follow up the pattern `aws-region=region/year=year/month=month/day=day/`, then you can enable automatic partition and use the `msck repair table <table-name>` to automatically identify and load the partition. If you path format is `region/year/month/day/`, then you need manually load the partition via `alter table ... add partition(...) ... location ...`
