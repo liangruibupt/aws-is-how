@@ -9,6 +9,7 @@
   - The AWSQuicksightAthenaAccess should be assigned to IAM users who use Amazon Quicksight to access Athena.
   - Custom IAM policies 
 - Amazon S3 locations where the underlying data to query is stored. 
+  - [S3 Replication Adds Support for Multiple Destination Buckets](https://aws.amazon.com/blogs/aws/new-amazon-s3-replication-adds-support-for-multiple-destination-buckets/)
 - Metadata and resources that you store in the AWS Glue Data Catalog, such as databases and tables, including additional actions for encrypted metadata. 
 - Athena API actions. 
 
@@ -39,3 +40,8 @@ Use workgroups to separate users, teams, applications, or workloads, to set limi
   - Select the Override Client-Side Settings, if you force queries use the workgroup settings and ignore the client-side settings
 - [Before you can run queries, you must specify to Athena which workgroup to use. You must have permissions to the workgroup](https://docs.aws.amazon.com/athena/latest/ug/workgroups-create-update-delete.html#specify-wkgroup-to-athena-in-which-to-run-queries)
 
+
+### Query example
+- [Athena_boto3_python_query](analytics/athena-workshop/script/Athena_boto3_python_query.py)
+- [Athena_pyathena_query](iot/IoT-Analytics/scripts/query_athena.py)
+- [Athena_pyathenajdbc_query](analytics/athena-workshop/script/Athena_pyathena_python_query.py)

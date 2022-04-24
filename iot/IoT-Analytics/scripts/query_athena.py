@@ -1,10 +1,11 @@
+# Using PyAthena https://github.com/laughingman7743/PyAthena/
 from pyathena import connect
 from pyathena.pandas.cursor import PandasCursor
 import boto3
 
 # Use the pyathena libary: https://pypi.org/project/pyathena/
 
-cursor = connect(profile_name="us-east-1", 
+cursor = connect(profile_name="YOUR_PROFILE_NAME", 
                 s3_staging_dir="s3://aws-athena-query-results-710299592439-us-east-1/pyathena/stage/",
                 region_name="us-east-1",
                  cursor_class=PandasCursor).cursor()
