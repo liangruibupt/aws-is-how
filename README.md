@@ -410,6 +410,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
+  - [Automate run Athena_name_query and prepared_statement](analytics/athena-automate/Athena_name_query_prepared_statement.md)
 
 - [How to use the Athena to create the complex embeded table and query the table](analytics/athena-complex-table/Athena-complex-table-creation.md)
 
@@ -572,6 +573,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
 
 - [WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
+
+- [使用 Amazon WAF 进行 Captcha人机验证](https://aws.amazon.com/cn/blogs/china/use-amazon-waf-for-captcha-man-machine-verification/)
 
 ### Permission - IAM Policy, S3 Policy, RAM Policy
 - [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
