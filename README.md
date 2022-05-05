@@ -128,6 +128,8 @@
   - [Mobile](#mobile)
     - [Moible app development](#moible-app-development)
     - [GraphQL - AppSync](#graphql---appsync)
+  - [Business continuity](#business-continuity)
+    - [Backup](#backup)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -443,6 +445,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
     - [ClickHouse S3 table function](https://clickhouse.com/docs/en/sql-reference/table-functions/s3/)
 
 - [Scheduling SQL queries on your Amazon Redshift](https://aws.amazon.com/blogs/big-data/scheduling-sql-queries-on-your-amazon-redshift-data-warehouse/)
+
+- [Streaming datawarehouse]
+  - [Real-time analytics with Amazon Redshift streaming ingestion](https://aws.amazon.com/cn/blogs/big-data/real-time-analytics-with-amazon-redshift-streaming-ingestion/)
+  - [Streaming ingestion official doc](https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-streaming-ingestion.html)
 
 ### Search and analytics: Elasticsearch Service
 - [Loading Streaming Data into Amazon Elasticsearch Service](analytics/es-lambda)
@@ -1119,3 +1125,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### GraphQL - AppSync
 - [AppSync-Workshop](database/appsync/AppSync-Workshop.md)
+
+## Business continuity
+### Backup
+- [Backup FAQ](dr_ha/backup/Backup_FAQ.md)
+  
