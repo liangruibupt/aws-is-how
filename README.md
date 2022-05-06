@@ -874,6 +874,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Encrypt the Unencrypted RDS](database/rds/PostgreSQL/unencrypted_db_to_encrypted.md)
 
+- [Disable_RDS_encryption](database/rds/Disable_RDS_encryption.md)
+  
 #### RDS Performance
 - [Amazon Aurora Performance Assessment](https://d1.awsstatic.com/product-marketing/Aurora/RDS_Aurora_Performance_Assessment_Benchmarking_v1-2.pdf)
   
@@ -958,6 +960,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [DataDog for EKS control plane monitoring](https://docs.datadoghq.com/agent/kubernetes/control_plane/?tab=helm#EKS)
 
 - [Exclusive Node from EKS ELB](container/Exclusive_Node_from_ELB.md)
+
+- [ Securing Kubernetes with Private CA](container/EKS-Certification.md)
 
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
