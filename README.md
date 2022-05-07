@@ -300,6 +300,8 @@
 
 - [Domain and Host based routing for ALB](https://aws.amazon.com/blogs/aws/new-host-based-routing-support-for-aws-application-load-balancers/)
 
+- [ALB Redirect Domain](EC2/ALB_Redirect_Domain.md)
+
 ### System Manager
 - [Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
 
