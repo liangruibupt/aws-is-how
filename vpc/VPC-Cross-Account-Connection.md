@@ -39,7 +39,8 @@ Cloud to Cloud connection (you can treat BBA as other Cloud as well to extend th
 | ---- | ---- | ---- | ----|
 | Direction | Two-way | One-way | Two-way  |
 | Pre-requisites | No-overlapping CIDR block between VPCs | Network load balancer | No-overlapping CIDR block between VPCs. Shared transit gateway through Resource Access Manager.  |
-|  Maximum throughput | No limit, but up to 50 peering per VPC	10 Gbps (40 Gbps burst); up to 50 interface endpoints and GWLB endpoint | 50 Gbps burst per VPC; up to 5 TGW per account and per VPC  |
+|  Maximum throughput | No limit, but up to 50 peering per VPC	10 Gbps (40 Gbps burst); up to 50 interface endpoints and GWLB endpoint | 50 Gbps burst per VPC; up to 5 TGW per account and per VPC  | 5000 Attachments per transit gateway, Maximum bandwidth per VPC, AWS Direct Connect gateway, or peered transit gateway connection 50Gbps
+| Integration | Can not Transitive peering | VPC interface endpoint can over DX/VPN | TGW integrated with VPN via TGW Connect and integrated with DX with TGW DXGateway Attachment
 | Cost | No hourly cost; Same region cross-AZ data transfer costs | Hourly cost; Data transfer cost; Network load balancer cost | Hourly cost per attachment; Data transfer cost  |
 
 

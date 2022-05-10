@@ -302,6 +302,8 @@
 
 - [ALB Redirect Domain](EC2/ALB_Redirect_Domain.md)
 
+- [Hostname-as-Target for Network Load Balancers](https://aws.amazon.com/blogs/networking-and-content-delivery/hostname-as-target-for-network-load-balancers/)
+
 ### System Manager
 - [Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
 
@@ -712,6 +714,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [API Gateway for API design patterns](https://aws.amazon.com/cn/blogs/compute/architecting-multiple-microservices-behind-a-single-domain-with-amazon-api-gateway/)
 
+- [Understanding VPC links in Amazon API Gateway private integrations](https://aws.amazon.com/blogs/compute/understanding-vpc-links-in-amazon-api-gateway-private-integrations/)
+
 ### Step function
 - [Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
 
@@ -899,6 +903,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [使用Redisson连接Amazon ElastiCache for redis 集群](https://aws.amazon.com/cn/blogs/china/connecting-amazon-elasticache-for-redis-cluster-using-redisson/?nc1=h_ls)
 
 - [ElastiCache for Redis 慢日志可视化平台](https://aws.amazon.com/cn/blogs/china/build-elasticache-for-redis-slow-log-visualization-platform/)
+
+- [RedisInsight 官方可视化工具](https://mp.weixin.qq.com/s/DSRCdzFpzNoBSbp2pvm1SA)
 
 ### Key-Value and Document
 #### DynamoDB
