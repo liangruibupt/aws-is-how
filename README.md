@@ -473,6 +473,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Simple FAQ Bot](analytics/faq-bot/README.md)
 
+- [OpenSearch cross cluster replication](https://aws.amazon.com/cn/blogs/china/no-subscription-fee-teach-you-how-to-use-cross-cluster-replication-in-amazon-opensearch-service/)
+  
 ### Governance
 - [Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
 
