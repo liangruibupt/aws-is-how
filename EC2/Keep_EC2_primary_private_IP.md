@@ -20,7 +20,7 @@ Guide: https://aws.amazon.com/premiumsupport/knowledge-center/custom-private-pri
 **Note**: 请先在测试环境进行测试之后在应用到生产环境
   
 ## Demo for Solution 2
-1. Launch a new EC2 Amazon Linux2 instance and connect to Instance
+1. Launch a new EC2 Amazon Linux2 instance c5.large and connect to Instance
 2. Install nginx
 ```bash
 sh-4.2$ which nginx
