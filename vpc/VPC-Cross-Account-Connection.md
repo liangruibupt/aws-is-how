@@ -1,7 +1,7 @@
 # VPC Cross account connection
 
 Here we only discuss using VPC technology to do cross account connection. Using Direct Connect, SD-WAN, VPN connection can be other options, but out-of-scope this document.
-Cloud to Cloud connection (you can treat BBA as other Cloud as well to extend the inside Cloud connection)
+Cloud to Cloud connection (you can treat different legal entity as other Cloud as well to extend the inside Cloud connection)
 1.	Direct connect – Regular connection (owned by customer) and hosted connection (Owned by Direct connect provider, customer accept the VIF assigned by provider) + Transit Gateway GW Direct connect attachment
 2.	SD-WAN – SD-WAN application installed on EC2 + Transit Gateway Connect
 3.	IPSec VPN over Internect – VPN application installed on EC2 + Transit Gateway Connect 

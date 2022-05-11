@@ -294,6 +294,8 @@
 - [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
   
 - [How to share the EC2 AMI](EC2/How-to-share-ami.md)
+
+- [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
