@@ -296,6 +296,8 @@
 - [How to share the EC2 AMI](EC2/How-to-share-ami.md)
 
 - [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
+
+- [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
@@ -473,7 +475,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Simple FAQ Bot](analytics/faq-bot/README.md)
 
-- [OpenSearch cross cluster replication](https://aws.amazon.com/cn/blogs/china/no-subscription-fee-teach-you-how-to-use-cross-cluster-replication-in-amazon-opensearch-service/)
+- [OpenSearch cross cluster replication - DR or HA](https://aws.amazon.com/cn/blogs/china/no-subscription-fee-teach-you-how-to-use-cross-cluster-replication-in-amazon-opensearch-service/)
   
 ### Governance
 - [Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
@@ -541,7 +543,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## Security
 
-- [AWS Security Hands on Lab](http://security.bwcx.me/)
+- [AWS Security Hands on Lab - URL need whitelist](http://security.bwcx.me/)
+- [AWS Security Hands on Lab2](https://seclab.cloudguru.run/1.introduction/)
 - [Public Access Consideration](security/Public_Access_Consideration.md)
 - [Curated list of links, references, books videos, tutorials, Exploit, CTFs, Hacking Practices etc. which are related to AWS Security](https://github.com/jassics/awesome-aws-security)
 
@@ -556,6 +559,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Create certificate using openssl](security/acm/create-certificate-openssl.md)
 
 - [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
+
+- [Cross-Accounts-Secrets](security/secret-mgr/Cross-Accounts-Secrets.md )
 
 ### Asset Management and Compliance
 - [How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
@@ -672,8 +677,6 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Route53 cross-account-dns](R53/cross-account-dns.md)
 
-- [Simplify DNS management in a multi-account environment with Route 53 Resolver](https://aws.amazon.com/blogs/security/simplify-dns-management-in-a-multiaccount-environment-with-route-53-resolver/)
-
 ## Serverless
 ### Serverless Workshop
 - [AWS Serverless Day](https://serverlessday.cbuilder.tech/index.html)
@@ -779,36 +782,38 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Storage
 
 ### S3 cross region or cross cloud OSS
-- [How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
+- [How to sync S3 bucket data between global region and China region](storage/S3/Sync-Global-S3bucket-2-China.md)
 
-- [Cross region S3 file download and upload](storage/crr-s3-download-upload.py)
+- [Cross region S3 file download and upload](storage/S3/crr-s3-download-upload.py)
 
 - [S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
 
 - [s3-benchmark-testing](https://github.com/liangruibupt/s3-benchmark-testing)
 
-- [Cross cloud OSS sync to S3](storage/aws-data-replication-hub.md)
+- [Cross cloud OSS sync to S3](storage/S3/aws-data-replication-hub.md)
 
-- [RClone Quickstart](storage/RClone-Quick-Start.md)
+- [RClone Quickstart](storage/S3/RClone-Quick-Start.md)
 
 - [Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
 
 ### S3
-- [S3 Web Explorer](storage/s3explorer)
+- [S3 Web Explorer](storage/S3/s3explorer)
 
-- [S3-Presign-URL](storage/S3-Presign-URL.md)
+- [S3-Presign-URL](storage/S3/S3-Presign-URL.md)
 
 - [Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
 
-- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3-Disable-TLS1.1-Access.md)
+- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3/S3-Disable-TLS1.1-Access.md)
 
 - [使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
 
 - [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
 
-- [S3 inventory usage](storage/s3-inventory.md)
+- [S3 inventory usage](storage/S3/s3-inventory.md)
 
 - [How Trend Micro uses Amazon S3 Object Lambda to help keep sensitive data secure](https://aws.amazon.com/cn/blogs/storage/how-trend-micro-uses-amazon-s3-object-lambda-to-help-keep-sensitive-data-secure/)
+
+- [Using S3 Intelligent-Tiering](storage/S3/S3_Intelligent-Tiering.md)
 
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
