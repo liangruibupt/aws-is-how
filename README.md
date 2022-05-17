@@ -300,6 +300,8 @@
 - [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
 
 - [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
+
+- [Check if a reboot is required after installing Linux updates](ec2/Does_instance_need_restart_for_upgrade.md)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
