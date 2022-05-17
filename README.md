@@ -176,6 +176,8 @@
 
 - [Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
 
+- [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
+
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -928,6 +930,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
 
 - [DynamoDB_Pagenation](database/dynamodb/DynamoDB_Pagenation.md)
+
+- [DynamoDB table initial migration from global to China](https://github.com/yizhizoe/dynamodb-init-migration)
 
 #### MongoDB and DocumentDB
 - [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
