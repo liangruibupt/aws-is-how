@@ -49,6 +49,7 @@
   - [Security](#security)
     - [Encryption - KMS](#encryption---kms)
     - [Credential - Secret Manager](#credential---secret-manager)
+    - [Certificate - Certificate Manager](#certificate---certificate-manager)
     - [Asset Management and Compliance](#asset-management-and-compliance)
     - [AuthN and AuthZ](#authn-and-authz)
     - [Sentitive Data](#sentitive-data)
@@ -558,13 +559,18 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### Credential - Secret Manager
 - [Secret Manager quick start demo](security/secret-mgr/README.md)
 
-- [Upload-SSL-Certificate](security/Upload-SSL-Certificate.md)
+- [Cross-Accounts-Secrets](security/secret-mgr/Cross-Accounts-Secrets.md)
+- 
+### Certificate - Certificate Manager
+- [Upload-SSL-Certificate](security/acm/Upload-SSL-Certificate.md)
 
 - [Create certificate using openssl](security/acm/create-certificate-openssl.md)
 
 - [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
-- [Cross-Accounts-Secrets](security/secret-mgr/Cross-Accounts-Secrets.md )
+- [Validate the ACM certificate]
+  - [Switch acm certificate validation](https://aws.amazon.com/cn/premiumsupport/knowledge-center/switch-acm-certificate/)
+  - [Troubleshooting acm certificate email validation](https://aws.amazon.com/premiumsupport/knowledge-center/acm-email-validation-custom/?nc1=h_ls)
 
 ### Asset Management and Compliance
 - [How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
@@ -1041,7 +1047,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Codebuild Get Start](devops/codebuild/codebuild-get-start.md)
 
-- [CodePiple Workshop](devops/codepipeline)
+- [CodePiple Workshop](devops/codepipeline/README.md)
 
 #### Serverless CICD
 - [Serverless CI/CD based on Jenkins](https://github.com/aws-samples/aws-serverless-workshop-greater-china-region/tree/master/Lab8B-CICD-Jenkins)
