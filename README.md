@@ -445,6 +445,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Using athena partition projection or glue partition indexes to improve athena query performance](https://aws.amazon.com/cn/blogs/china/amazon-athena-partition-projection-and-glue-partition-indexes-performance-comparison/)
 
+- [How to get results from Athena for the past 7 days](analytics/athena-workshop/How_to_query_past_7_days_result.md)
+
 ### Data Warehouse: Redshfit
 - [Automate Redshift ETL](analytics/lambda-redshift)
 
