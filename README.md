@@ -964,10 +964,11 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
 
 - [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
+  - [EKS in Beijing 3 AZ](container/EKS in Beijing 3 AZ.md)
 
 - [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
 
-- [Windows pod in EKS](container/Windows-pod-EKS.md)
+- [Windows pod in EKS](container/EKS_in_Beijing_3AZ.md)
 
 - [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
 

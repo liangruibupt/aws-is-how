@@ -104,3 +104,8 @@ https://aws.amazon.com/blogs/storage/point-in-time-recovery-and-continuous-backu
 - 使用AWS Backup备份或恢复某种资源发现抱错时，除了查看Job的日志、CloudTrail，还可以查询响应资源的文档，如RDS文档。
 https://docs.aws.amazon.com/aws-backup/latest/devguide/working-with-supported-services.html
 - 一般来说，RDS不允许maintenance window或automatic backup window前一小时内进行备份，但如果使用AWS Backup则无需担心，因为AWS Backup会智能安排备份窗口。
+
+## Q: 如何进行跨多个 AWS 账户管理 AWS Backup 资源
+A: 
+- Global region: You can use the cross-account management feature in AWS Backup to manage and monitor your backup, restore, and copy jobs across AWS accounts that you configure with AWS Organizations. https://docs.aws.amazon.com/aws-backup/latest/devguide/manage-cross-account.html
+- China region: Setup the PassRole and AssumeRole based on this document: https://docs.aws.amazon.com/aws-backup/latest/devguide/iam-service-roles.html
