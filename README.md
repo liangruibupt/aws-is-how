@@ -57,6 +57,7 @@
     - [WAF](#waf)
     - [Permission - IAM Policy, S3 Policy, RAM Policy](#permission---iam-policy-s3-policy-ram-policy)
     - [Multi accounts structure](#multi-accounts-structure)
+    - [SIEM and SOC](#siem-and-soc)
   - [Network](#network)
     - [VPC](#vpc)
     - [Keep private - VPC Endpoint and PrivateLink](#keep-private---vpc-endpoint-and-privatelink)
@@ -622,6 +623,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
 
+### SIEM and SOC
+- [Security Hub quick start](security/security-hub/securityhub_customer_findings.md)
+- [Customer security findings for security hub](security/security-hub/securityhub_customer_findings.md)
 
 ## Network
 ### VPC
@@ -735,6 +739,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [lambda sent email]
   - [Using Amazon SES](lambda/scripts/lambda_ses.py)
   - [Using SendCloud](lambda/scripts/lambda_ses_sendcloud.py)
+
+- [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
 
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
