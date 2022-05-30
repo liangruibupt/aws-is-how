@@ -132,6 +132,8 @@
     - [GraphQL - AppSync](#graphql---appsync)
   - [Business continuity](#business-continuity)
     - [Backup](#backup)
+  - [Game](#game)
+    - [GameLift](#gamelift)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -1180,3 +1182,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### Backup
 - [Backup FAQ](dr_ha/backup/Backup_FAQ.md)
   
+
+## Game
+### GameLift
+- [unreal engine game server]
+  - [Add Amazon GameLift to an unreal engine game server project - Amazon GameLift](https://docs.aws.amazon.com/gamelift/latest/developerguide/integration-engines-setup-unreal.html)
+  - [Host Unreal Engine UE Game on GameLift](https://aws.amazon.com/blogs/gametech/amazon-gamelift-integration-with-unreal-engine-new-youtube-video-series-launch/)
