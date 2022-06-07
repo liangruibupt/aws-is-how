@@ -94,7 +94,6 @@
     - [RDS](#rds)
       - [RDS usage](#rds-usage)
       - [RDS Cross region, cross account and data replication](#rds-cross-region-cross-account-and-data-replication)
-      - [RDS HA/DR](#rds-hadr)
       - [RDS upgrade](#rds-upgrade)
       - [RDS Security](#rds-security)
       - [RDS Performance](#rds-performance)
@@ -132,6 +131,8 @@
     - [GraphQL - AppSync](#graphql---appsync)
   - [Business continuity](#business-continuity)
     - [Backup](#backup)
+    - [DR](#dr)
+      - [RDS HA/DR](#rds-hadr)
   - [Game](#game)
     - [GameLift](#gamelift)
 
@@ -691,6 +692,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [How to check the Internet Traffic with VPC Flow?](vpc/VPC-Flowlogs-Analysis.md)
 
+- [Traffic Mirror]
+  - [Using VPC Traffic Mirroring to monitor and secure your VPC](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/using-vpc-traffic-mirroring-to-monitor-and-secure-your-aws-infrastructure/)
+  - [借助 VPC Traffic Mirroring 构建网络入侵检测系统](https://aws.amazon.com/cn/blogs/china/using-vpc-traffic-mirroring-to-construct-network-intrusion-detection-system-update/)
+
 ## DNS
 ### Route 53
 - [Route53 in China region](R53/README.md)
@@ -894,12 +899,6 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
 - [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copy-and-replication.md)
-#### RDS HA/DR
-- [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
-
-- [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
-
-- [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
 
 #### RDS upgrade
 - [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
@@ -1181,6 +1180,16 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Business continuity
 ### Backup
 - [Backup FAQ](dr_ha/backup/Backup_FAQ.md)
+
+### DR
+[Understand resiliency patterns and trade-offs to architect efficiently in the cloud](https://aws.amazon.com/cn/blogs/architecture/understand-resiliency-patterns-and-trade-offs-to-architect-efficiently-in-the-cloud/)
+
+#### RDS HA/DR
+- [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
+
+- [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
+
+- [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
   
 
 ## Game
