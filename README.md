@@ -1135,6 +1135,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [CloudFormation Stack Set](devops/cloudformation/Stackset.md)
 
+- [AWS Cloud Control API QuickStart](xaas/CloudControlAPI.md)
+
 ## Integration
 ### Quque, notification
 - [How to build Amazon SNS HTTP Subscription?](integration/SNS/SNS-HTTP-Subscription.md)
