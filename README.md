@@ -660,6 +660,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Direct Connect Cheat sheet](network/direct-connect/)
 
 - [Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
+  - [DX_Ping_check](network/direct-connect/DX_Ping_check.md)
 
 - [Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
 
