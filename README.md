@@ -200,6 +200,8 @@
 
 - [Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
 
+- [GluonTS for time series data](https://github.com/whn09/gluonts_sagemaker)
+
 ### Fraud Detection
 - [SageMaker End-to-End Demo- Fraud Detection for Auto Claims](https://aws.amazon.com/blogs/machine-learning/architect-and-build-the-full-machine-learning-lifecycle-with-amazon-sagemaker/) and [github repo](https://github.com/aws/amazon-sagemaker-examples/tree/master/end_to_end)
 
@@ -874,6 +876,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ## Database
 ### RDS
 #### RDS usage
+- [Amazon Aurora MySQL Database Quick Start Reference Deployment](https://aws-quickstart.github.io/quickstart-amazon-aurora-mysql/)
+  
 - [RDS common questions](database/rds/RDS_common_questions.md)
 
 - [Use Proxysql for RDS for MySQL or Aurora databases connection pool and Read/Write Split](database/rds/proxysql/serverless-proxysql.md)
