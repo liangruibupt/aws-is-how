@@ -135,6 +135,8 @@
       - [RDS HA/DR](#rds-hadr)
   - [Game](#game)
     - [GameLift](#gamelift)
+  - [SAP](#sap)
+    - [HA/DR](#hadr)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -253,12 +255,14 @@
 - [Data transfer costs for common architectures](https://aws.amazon.com/cn/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/)
 
 ### Tagging
-- [Tagging when instance created]
+- [Tagging when instance and object created]
     - [Automatically Tag AWS EC2 Instances and Volumes](https://www.doit-intl.com/automatically-tag-aws-ec2-instances-and-volumes/) [Similar solution](https://medium.com/awsblogs/tag-ec2-instance-with-the-user-who-created-it-99ddedb223a8)
     - [S3 Object Tagging 以及怎么管理Tagging](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-tagging.html)
     - [用S3 Batch Operation 批量对已有对象打标签](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
     - [写程序基于我们的SDK去打Tag](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging-managing.html)
     - [基于S3 upload Event 触发lambda去对新的对象打标签](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObjectTagging-property)
+
+- [Tagging AWS resources](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 
 ### Sustainablity
 - [Customer Carbon Footprint Tool](https://aws.amazon.com/cn/blogs/china/new-customer-carbon-footprint-tool/)
@@ -334,6 +338,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
 
 - [Session-manager QuickStart](EC2/Session-manager.md)
+
+- [Manage private EC2 instances without internet access](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/?nc1=h_ls)
 
 ### HPC
 - [Running CFD on AWS Parrell cluster](https://cfd-on-pcluster.workshop.aws/)
@@ -524,6 +530,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### EMR
 - [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md)
 - [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
+- [EMR_On_Graviton2](analytics/emr/101Workshop/EMR_On_Graviton2.md)
   
 ## IOT
 ### IoT Core
@@ -752,6 +759,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
 
+- [使用 Lambda 函数URL + CloudFront 实现S3镜像回源](https://mp.weixin.qq.com/s/mzRuFciCJXOfQpN-WV9IyA)
+
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
 
@@ -800,6 +809,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
 
 - [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
+
+- [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
 
 ### Data migration tool - DMS
 - [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
@@ -904,6 +915,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
 - [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copy-and-replication.md)
+
+- [QuickStart RDS PostgreSQL](database/rds/PostgreSQL/QuickStart_PostgreSQL.md)
 
 #### RDS upgrade
 - [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
@@ -1204,3 +1217,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [unreal engine game server]
   - [Add Amazon GameLift to an unreal engine game server project - Amazon GameLift](https://docs.aws.amazon.com/gamelift/latest/developerguide/integration-engines-setup-unreal.html)
   - [Host Unreal Engine UE Game on GameLift](https://aws.amazon.com/blogs/gametech/amazon-gamelift-integration-with-unreal-engine-new-youtube-video-series-launch/)
+
+
+## SAP
+### HA/DR
+-[SAP云上自适应跨可用区高可用方案](https://aws.amazon.com/cn/blogs/china/adaptive-high-availability-solution-across-availability-zones-on-sap-cloud/)
