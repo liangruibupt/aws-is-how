@@ -4,6 +4,8 @@
 
 [aws-data-transfer-hub](aws-data-replication-hub.md)
 
+[s3_split_combine with DTH](s3_split_combine_DTH.md)
+
 # Option 2: Directly copy using aws S3 CLI
 
 [Directly-copy-using-aws-S3-CLI](Directly-copy-using-aws-S3-CLI.md)
