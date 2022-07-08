@@ -9,8 +9,9 @@
     - [Create cluster by using eksctl](#create-cluster-by-using-eksctl)
     - [Create Fargate Profile](#create-fargate-profile)
     - [Deploy micro-services to EKS on Fargate](#deploy-micro-services-to-eks-on-fargate)
-  - [Clean up](#clean-up-1)
+  - [Clean up Fargate Profile and EKS cluster](#clean-up-fargate-profile-and-eks-cluster)
   - [Reference](#reference)
+- [How to schedule pods on Fargate?](#how-to-schedule-pods-on-fargate)
   
 ## Prerequest
 1. Install and update the `eksctl` and `kubectl`
@@ -149,7 +150,7 @@ Fargate profiles are immutable. However, you can create a new updated profile to
 To make everything to run on Fargate, including the CoreDNS pods, you can add a second Fargate profile for everything in the kube-system namespace. 
 
 ```bash
-aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.json --region us-east-2
+aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.json --region cn-north-1
 ```
 
 ### Deploy micro-services to EKS on Fargate
@@ -160,6 +161,8 @@ aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.
 
     - It satisfies Kubernetes Ingress resources by provisioning Application Load Balancers.
     - It satisfies Kubernetes Service resources by provisioning Network Load Balancers.
+    - https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+    - China region ECR endpoint: https://docs.amazonaws.cn/en_us/eks/latest/userguide/aws-load-balancer-controller.html
 
 
   - Create IAM OIDC provider
@@ -177,13 +180,14 @@ aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.
 
     ```bash
     ## Download the https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+    curl -o iam_policy_cn.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.2/docs/install/iam_policy_cn.json
 
     ## Modify the iam_policy.json from arn:aws: to arn:aws-cn: China regions
 
     ## Create the policy
     aws iam create-policy \
         --policy-name AWSLoadBalancerControllerIAMPolicy \
-        --policy-document iam_policy.json --region cn-north-1
+        --policy-document file://iam_policy_cn.json --region cn-north-1
     ```
 
    - Create a IAM role and ServiceAccount for the Load Balancer controller
@@ -208,6 +212,10 @@ aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.
       ```bash
       helm repo add eks https://aws.github.io/eks-charts
 
+      export VPC_ID=$(aws eks describe-cluster --name eks-demo-newsblog \
+                      --query "cluster.resourcesVpcConfig.vpcId" --region cn-north-1 \
+                      --output text)
+
       helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
       -n kube-system \
       --set clusterName=eks-demo-newsblog  \
@@ -216,12 +224,11 @@ aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.
       --set enableShield=false \
       --set enableWaf=false \
       --set enableWafv2=false \
-      --set region=cn-north-1
+      --set region=cn-north-1 \
+      --set vpcId=${VPC_ID} \
+      --set image.repository=918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/amazon/aws-load-balancer-controller
 
-      ## Or you sepecified image tag and VPC ID
-      export VPC_ID=$(aws eks describe-cluster --name eks-demo-newsblog \
-                      --query "cluster.resourcesVpcConfig.vpcId" --region cn-north-1 \
-                      --output text)
+      ## Or you sepecified image tag
       helm upgrade -i aws-load-balancer-controller \
           eks/aws-load-balancer-controller \
           -n kube-system \
@@ -233,11 +240,27 @@ aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.
           --set enableWafv2=false \
           --set image.tag=v2.2.0 \
           --set region=cn-north-1 \
+          --set image.repository=918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/amazon/aws-load-balancer-controller \
           --set vpcId=${VPC_ID}
       ```
 
    - Check deployment status
       ```bash
+      kubectl logs -n kube-system deployment.apps/aws-load-balancer-controller
+      #Found 3 pods, using pod/aws-load-balancer-controller-c87f497fd-jsxd8
+      # {"level":"info","ts":1656428069.897279,"msg":"version","GitVersion":"v2.4.2","GitCommit":"77370be7f8e13787a3ec0cfa99de1647010f1055","BuildDate":"2022-05-24T22:33:27+0000"}
+      # {"level":"info","ts":1656428069.9297903,"logger":"controller-runtime.metrics","msg":"metrics server is #starting to listen","addr":":8080"}
+      # {"level":"info","ts":1656428069.932433,"logger":"setup","msg":"adding health check for controller"}
+      # {"level":"info","ts":1656428069.9325693,"logger":"controller-runtime.webhook","msg":"registering webhook","path":"/mutate-v1-pod"}
+      # {"level":"info","ts":1656428069.9331062,"logger":"controller-runtime.webhook","msg":"registering webhook","path":"/mutate-elbv2-k8s-aws-v1beta1-targetgroupbinding"}
+      # {"level":"info","ts":1656428069.9332075,"logger":"controller-runtime.webhook","msg":"registering webhook","path":"/validate-elbv2-k8s-aws-v1beta1-targetgroupbinding"}
+      # {"level":"info","ts":1656428069.9333005,"logger":"controller-runtime.webhook","msg":"registering webhook","path":"/validate-networking-v1-ingress"}
+      # {"level":"info","ts":1656428069.9333832,"logger":"setup","msg":"starting podInfo repo"}
+
+      kubectl get deployment -n kube-system aws-load-balancer-controller
+      #NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+      #aws-load-balancer-controller   2/2     2            2           4m57s
+
       kubectl -n kube-system rollout status deployment aws-load-balancer-controller
       #deployment "aws-load-balancer-controller" successfully rolled out
       ```
@@ -246,31 +269,31 @@ aws eks create-fargate-profile --cli-input-json file://demo-kube-system-profile.
    - Deploy micro services
       ```bash
       kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/examples/2048/2048_full.yaml
-      #ingress.networking.k8s.io/ingress-2048 created
+      # namespace/game-2048 created
+      # deployment.apps/deployment-2048 created
+      # service/service-2048 created
+      # ingress.networking.k8s.io/ingress-2048 created
 
       kubectl -n game-2048 rollout status deployment deployment-2048
       #deployment "deployment-2048" successfully rolled out
 
       kubectl get nodes
       NAME                                                    STATUS   ROLES    AGE     VERSION
-      fargate-ip-192-168-101-43.us-east-2.compute.internal    Ready    <none>   4m16s   v1.20.7-eks-135321
-      fargate-ip-192-168-125-69.us-east-2.compute.internal    Ready    <none>   34s     v1.20.7-eks-135321
-      fargate-ip-192-168-134-243.us-east-2.compute.internal   Ready    <none>   32s     v1.20.7-eks-135321
-      fargate-ip-192-168-136-46.us-east-2.compute.internal    Ready    <none>   11h     v1.20.7-eks-135321
-      fargate-ip-192-168-144-230.us-east-2.compute.internal   Ready    <none>   35s     v1.20.7-eks-135321
-      fargate-ip-192-168-146-246.us-east-2.compute.internal   Ready    <none>   61m     v1.20.7-eks-135321
-      fargate-ip-192-168-155-30.us-east-2.compute.internal    Ready    <none>   38s     v1.20.7-eks-135321
-      fargate-ip-192-168-177-42.us-east-2.compute.internal    Ready    <none>   35s     v1.20.7-eks-135321
-      fargate-ip-192-168-180-14.us-east-2.compute.internal    Ready    <none>   11h     v1.20.7-eks-135321
-      fargate-ip-192-168-187-38.us-east-2.compute.internal    Ready    <none>   4m18s   v1.20.7-eks-135321
+      fargate-ip-192-168-117-109.cn-north-1.compute.internal   Ready    <none>   3m58s   v1.22.6-eks-14c7a48
+      fargate-ip-192-168-124-67.cn-north-1.compute.internal    Ready    <none>   3m57s   v1.22.6-eks-14c7a48
+      fargate-ip-192-168-64-191.cn-north-1.compute.internal    Ready    <none>   3m58s   v1.22.6-eks-14c7a48
+      fargate-ip-192-168-66-50.cn-north-1.compute.internal     Ready    <none>   3m57s   v1.22.6-eks-14c7a48
+      fargate-ip-192-168-82-62.cn-north-1.compute.internal     Ready    <none>   3m59s   v1.22.6-eks-14c7a48
+      ip-192-168-19-36.cn-north-1.compute.internal             Ready    <none>   28h     v1.22.9-eks-810597c
+      ip-192-168-33-208.cn-north-1.compute.internal            Ready    <none>   28h     v1.22.9-eks-810597c
       ```
 
 3. Check the ingress
-```bash
-kubectl get ingress/ingress-2048 -n game-2048
-NAME           CLASS    HOSTS   ADDRESS                                                                  PORTS   AGE
-ingress-2048   <none>   *       k8s-game2048-ingress2-c7afa8ebfe-692664347.us-east-2.elb.amazonaws.com   80      106s
-```
+    ```bash
+    kubectl get ingress/ingress-2048 -n game-2048
+    # NAME           CLASS   HOSTS   ADDRESS                                                                       PORTS   AGE
+    # ingress-2048   alb     *       k8s-game2048-ingress2-c7afa8ebfe-1472691782.cn-north-1.elb.amazonaws.com.cn   80      42m
+    ```
 
 Navigate to the EC2 console -> Load Balancers. Check the details of the ALB instance and targat group. 
 
@@ -283,7 +306,7 @@ The request routing from an AWS Application Load Balancer to Pods on EC2 worker 
 The request routing from an AWS Application Load Balancer to Fargate Pods in IP mode
 ![fargate-eks-request-route2](media/fargate-eks-request-route2.png)
 
-Access the 2048 game
+4. Access the 2048 game
 
 ```bash
 export FARGATE_GAME_2048=$(kubectl get ingress/ingress-2048 -n game-2048 -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
@@ -299,30 +322,31 @@ kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-bal
 helm uninstall aws-load-balancer-controller -n kube-system
 
 eksctl delete iamserviceaccount \
-    --cluster eks-demo-newsblog --region us-east-2 \
+    --cluster eks-demo-newsblog --region cn-north-1 \
     --name aws-load-balancer-controller \
     --namespace kube-system \
     --wait
 
 aws iam delete-policy \
-    --policy-arn arn:aws:iam::${ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
-    --region us-east-2
+    --policy-arn arn:aws-cn:iam::${ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
+    --region cn-north-1
 
 
 kubectl delete -k github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master
-
-eksctl delete fargateprofile \
-  --name game-2048 \
-  --cluster eks-demo-newsblog --region us-east-2
 ```
 
-## Clean up
+## Clean up Fargate Profile and EKS cluster
 ```bash
-eksctl delete fargateprofile --name demo-default \
-  --cluster eks-demo-newsblog --region us-east-2
+eksctl delete fargateprofile \
+  --name game-2048 \
+  --cluster eks-demo-newsblog --region cn-north-1
 
-eksctl delete cluster --name eks-demo-newsblog --region us-east-2
+eksctl delete cluster --name eks-demo-newsblog --region cn-north-1
 ```
 
 ## Reference
 [Amazon EKS on AWS Fargate Announcement](https://aws.amazon.com/blogs/aws/amazon-eks-on-aws-fargate-now-generally-available/)
+
+# How to schedule pods on Fargate?
+
+The Fargate profile allows an administrator to declare which pods run on Fargate. This declaration is done through the profile’s selectors. Each profile can have up to five selectors that contain a namespace and optional labels. You must define a namespace for every selector. The label field consists of multiple optional key-value pairs. Pods that match a selector (by matching a namespace for the selector and all of the labels specified in the selector) are scheduled on Fargate. If a namespace selector is defined without any labels, Amazon EKS attempts to schedule all pods that run in that namespace onto Fargate using the profile. If a to-be-scheduled pod matches any of the selectors in the Fargate profile, then that pod is scheduled on Fargate.
