@@ -10,12 +10,12 @@ import boto3
 import pickle
 import io
 from io import StringIO
-import awswrangler
+import awswrangler as wr
 
 
-df_r = awswrangler.athena.read( "implementationdb", "select * from reseller" )
-df = awswrangler.athena.read( "implementationdb", "select * from billing" )
-bucket = 'blackb-mggaska-implementation'
+df_r = wr.athena.read_sql_query("select * from reseller", database="implementationdb")
+df =  wr.athena.read_sql_query("select * from billing",database="implementationdb")
+bucket = 'ray-glue-streaming'
 df['date'] = pd.to_datetime(df['date'])
 
 
@@ -44,6 +44,7 @@ min_date = max_date - pd.to_timedelta(120, unit='d')
 
 df = df[df['date'] > min_date]
 
+#---FUNCTIONS-------------------------------
 def completeItem(dfItem):
     min_date = dfItem['date'].min()
     max_date = dfItem['date'].max()
@@ -71,6 +72,7 @@ def completeItem(dfItem):
             counter = 0
     dfItemNew['days_without_purchase'] = pd.Series(resp)
     return dfItemNew
+#--------------------------------------------------
 
 i = 0
 dfCompletedList = []
@@ -82,99 +84,64 @@ for nid,item in df.groupby('id_reseller'):
 
 
 df = pd.concat(dfCompletedList).copy()
+df['weekday']  = df['date'].dt.day_name()
 del dfCompletedList
-df['weekday']  = df['date'].dt.weekday_name
-
 
 # ### Compute next bill
-
-# In[11]:
-
-
 df['next_bill'] = df.replace(0,np.nan).groupby('id_reseller')['bill'].fillna(method='bfill')
 
 
 # ## Compute last bill
-
-# In[12]:
-
-
 df['last_bill'] = df.replace(0,np.nan).groupby('id_reseller')['bill'].fillna(method='ffill').copy()
 different_zero = df['last_bill'].shift(1)
 df.loc[df['bill'] != 0,'last_bill'] = np.nan
 df['last_bill'] = df['last_bill'].fillna(different_zero)
 
-
-# In[13]:
-
-
+# ## Merge Bill and Reseller bill
 df = df.merge(df_r,how='inner',on='id_reseller')
 
-
-# In[14]:
-
-
+# ## Drop the na value
 df = df.dropna()
 
 
 # ## Deal with categorical variables
 #
-# To deal with categorical variables (reseller's cluster and reseller's zone), we will use a combination of sklearn's Label Encoder, a preprocessing module that transforms strings in numeric lables, and One Hot Encoder, that takes this numerical variables and creates dummy (0/1 state) variables.
+# To deal with categorical variables (reseller's cluster and reseller's zone), 
+# we will use a combination of sklearn's Label Encoder, a preprocessing module that transforms strings in numeric lables, 
+# and One Hot Encoder, that takes this numerical variables and creates dummy (0/1 state) variables.
 #
-# This modules are python objects that keep in their internal variables the information necessary to transform new data.  So, in the Glue ETL we are going to store this objects in pkl format
+# This modules are python objects that keep in their internal variables the information necessary to transform new data.  
+# So, in the Glue ETL we are going to store this objects in pkl format
 #
-
-# In[17]:
-
-
 le_cluster = LabelEncoder()
 ohe_cluster = OneHotEncoder(handle_unknown='ignore')
 df_cluster = pd.DataFrame(ohe_cluster.fit_transform(le_cluster.fit_transform(df['cluster'].fillna('')).reshape(-1, 1)).todense())
 df_cluster = df_cluster.add_prefix('cluster_')
-
-
-# In[18]:
-
 
 le_zone = LabelEncoder()
 ohe_zone = OneHotEncoder(handle_unknown='ignore')
 df_zone = pd.DataFrame(ohe_zone.fit_transform(le_zone.fit_transform(df['zone'].fillna('')).reshape(-1, 1)).todense())
 df_zone = df_zone.add_prefix('zone_')
 
-
-# In[19]:
-
-
 le_weekday = LabelEncoder()
 ohe_weekday = OneHotEncoder(handle_unknown='ignore')
 df_weekday = pd.DataFrame(ohe_weekday.fit_transform(le_weekday.fit_transform(df['weekday']).reshape(-1, 1)).todense())
 df_weekday = df_weekday.add_prefix('weekday_')
 
-
-# In[20]:
-
-
+# Upload to S3
 client = boto3.client('s3')
-client.put_object(Body=pickle.dumps(le_cluster), Bucket=bucket, Key='preprocessing/le_cluster.pkl');
-
-
-# In[21]:
-
-
-client.put_object(Body=pickle.dumps(ohe_cluster), Bucket=bucket, Key='preprocessing/ohe_cluster.pkl')
-client.put_object(Body=pickle.dumps(le_zone), Bucket=bucket, Key='preprocessing/le_zone.pkl')
-client.put_object(Body=pickle.dumps(ohe_zone), Bucket=bucket, Key='preprocessing/ohe_zone.pkl')
-client.put_object(Body=pickle.dumps(le_weekday), Bucket=bucket, Key='preprocessing/le_weekday.pkl')
-client.put_object(Body=pickle.dumps(ohe_weekday), Bucket=bucket, Key='preprocessing/ohe_weekday.pkl');
+client.put_object(Body=pickle.dumps(le_cluster), Bucket=bucket, Key='glue_python_module/preprocessing/le_cluster.pkl');
+client.put_object(Body=pickle.dumps(ohe_cluster), Bucket=bucket, Key='glue_python_module/preprocessing/ohe_cluster.pkl')
+client.put_object(Body=pickle.dumps(le_zone), Bucket=bucket, Key='glue_python_module/preprocessing/le_zone.pkl')
+client.put_object(Body=pickle.dumps(ohe_zone), Bucket=bucket, Key='glue_python_module/preprocessing/ohe_zone.pkl')
+client.put_object(Body=pickle.dumps(le_weekday), Bucket=bucket, Key='glue_python_module/preprocessing/le_weekday.pkl')
+client.put_object(Body=pickle.dumps(ohe_weekday), Bucket=bucket, Key='glue_python_module/preprocessing/ohe_weekday.pkl');
 
 
 # ## Write to S3 resulting ETL
 #
-# Now we have to write to S3 all the relevant columns. We will perform a train/validation split of the customers so we can train on a group and get relevant metrics on the other.
-
-# In[29]:
-
-
+# Now we have to write to S3 all the relevant columns. 
+# We will perform a train/validation split of the customers so we can train on a group and get relevant metrics on the other.
 df = df[['next_bill', 'bill', 'date', 'id_reseller', 'mean-last-30', 'mean-last-7',
        'std-last-30', 'days_without_purchase', 'weekday',
        'last_bill', 'zone', 'cluster']]
@@ -193,15 +160,14 @@ df_train.drop(['date','id_reseller','bill','zone','cluster','weekday'],axis=1,in
 df_validation.drop(['date','id_reseller','bill','zone','cluster','weekday'],axis=1,inplace=True)
 
 
-write_dataframe_to_csv_on_s3(df_validation, bucket, 'validation/validation.csv')
-write_dataframe_to_csv_on_s3(df_train, bucket, 'train/train.csv')
+write_dataframe_to_csv_on_s3(df_validation, bucket, 'glue_python_module/validation/validation.csv')
+write_dataframe_to_csv_on_s3(df_train, bucket, 'glue_python_module/train/train.csv')
 
 #####
 # Preprocessing Pipeline
 #####
-
-df_r = awswrangler.athena.read( "implementationdb", "select * from reseller" )
-df = awswrangler.athena.read( "implementationdb", "select * from billing" )
+df_r = wr.athena.read_sql_query("select * from reseller", database="implementationdb")
+df = wr.athena.read_sql_query("select * from billing", database="implementationdb")
 df['date'] = pd.to_datetime(df['date'])
 
 max_date = df['date'].max()
@@ -225,7 +191,7 @@ del dfCompleted
 del dfCompletedList
 
 def complete_info(group):
-    weekday = (max_date + pd.Timedelta(days=1)).weekday_name
+    weekday = (max_date + pd.Timedelta(days=1)).day_name()
     mean_last_30 = group['bill'].replace(0,np.nan).mean()
     std_last_30 = group['bill'].replace(0,np.nan).std()
     date_last_bill = group[group['bill'] != 0]['date'].max()
@@ -237,7 +203,7 @@ def complete_info(group):
            'std-last-30':std_last_30,'mean-last-7':mean_last_7,'last_bill':last_bill,
            'id_reseller':group['id_reseller'].max(), 'days_without_purchase':days_without_purchase}
 
-
+# ## Prepare feature
 features = []
 for index,group in df.groupby('id_reseller'):
     features.append(complete_info(group))
@@ -261,8 +227,8 @@ df_weekday = pd.DataFrame(
 )
 df_weekday = df_weekday.add_prefix('weekday_')
 
+# ## Predict
 df_to_predict = pd.concat([df_features,df_cluster,df_zone,df_weekday],axis=1)
-
 df_to_predict_feats = df_to_predict[['mean-last-30', 'mean-last-7', 'std-last-30',
        'days_without_purchase', 'last_bill', 'cluster_0', 'cluster_1',
        'cluster_2', 'cluster_3', 'cluster_4', 'zone_0', 'zone_1', 'zone_2',
@@ -277,6 +243,6 @@ df_to_predict_feats = df_to_predict[['mean-last-30', 'mean-last-7', 'std-last-30
        'weekday_0', 'weekday_1', 'weekday_2', 'weekday_3', 'weekday_4',
        'weekday_5', 'weekday_6']]
 
-write_dataframe_to_csv_on_s3(df_to_predict_feats,bucket,'to_predict.csv')
-write_dataframe_to_csv_on_s3(df_to_predict[['id_reseller']],bucket,'id_reseller_to_predict.csv')
+write_dataframe_to_csv_on_s3(df_to_predict_feats,bucket,'glue_python_module/predict/to_predict.csv')
+write_dataframe_to_csv_on_s3(df_to_predict[['id_reseller']],bucket,'glue_python_module/predict/id_reseller_to_predict.csv')
 
