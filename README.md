@@ -376,6 +376,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
 
 - [Glue Workshop](analytics/glue-workshop)
+  - [Building Python modules for Spark ETL workloads using AWS Glue](analytics/glue-workshop/Glue_with_python_module.md)
 
 - [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
 
