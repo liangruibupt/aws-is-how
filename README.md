@@ -1222,4 +1222,5 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## SAP
 ### HA/DR
--[SAP云上自适应跨可用区高可用方案](https://aws.amazon.com/cn/blogs/china/adaptive-high-availability-solution-across-availability-zones-on-sap-cloud/)
+- [SAP云上自适应跨可用区高可用方案](https://aws.amazon.com/cn/blogs/china/adaptive-high-availability-solution-across-availability-zones-on-sap-cloud/)
+- [基于CloudEndure的新一代云上一键灾备解决方案与最佳实践](https://aws.amazon.com/cn/blogs/china/one-click-cloud-preparedness-solutions-and-best-practices-based-on-cloudendure/)
