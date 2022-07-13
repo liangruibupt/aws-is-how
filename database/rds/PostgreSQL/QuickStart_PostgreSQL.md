@@ -1,5 +1,6 @@
 ## Create the RDS PostgreSQL database and table
 ```bash
+# On Baston machine
 aws rds create-db-instance \
     --db-instance-identifier database-1 --db-instance-class db.m5.xlarge \
     --engine postgres \
@@ -7,11 +8,17 @@ aws rds create-db-instance \
     --engine-version 13.4 \
     --db-subnet-group-name default-vpc-086f9e6ad85f4649f \
     --vpc-security-group-ids sg-02205c5739ad8feec \
-    --master-user-password
+    --allocated-storage 20 \
+    --master-username postgres \
+    --master-user-password <Your_password>
+
+aws rds describe-db-instances --db-instance-identifier database-1 | jq .DBInstances[0].DBInstanceStatus
 
 sudo amazon-linux-extras install postgresql13
 
-psql --host=DB_instance_endpoint --port=port --username=postgres --password --dbname=postgres
+aws rds describe-db-instances --db-instance-identifier database-1 | jq .DBInstances[0].Endpoint
+
+psql --host=DB_instance_endpoint --port=port --username=postgres --dbname=postgres --password
 
 ```
 
@@ -39,7 +46,9 @@ select * from dummy_table;
 aws rds create-db-snapshot --db-instance-identifier database-1 --db-snapshot-identifier postgre1304-snapshot
 
 # Get the snapshot-identifier
+aws rds describe-db-snapshots --db-instance-identifier database-1 | jq .DBSnapshots[0].Status
 aws rds describe-db-snapshots --db-instance-identifier database-1 | jq .DBSnapshots[0].DBSnapshotArn
+
 
 # Use the restore-db-cluster-from-snapshot command to start the migration. 
 aws rds restore-db-cluster-from-snapshot \
@@ -51,7 +60,7 @@ aws rds restore-db-cluster-from-snapshot \
     --vpc-security-group-ids sg-02205c5739ad8feec
 
 # Check status
-aws rds describe-db-clusters --db-cluster-identifier mypg-aurora1304 | jq .DBCluster.Status
+aws rds describe-db-clusters --db-cluster-identifier mypg-aurora1304 | jq .DBClusters[0].Status
 
 # When the DB cluster becomes "available", you use create-db-instance command to populate the Aurora PostgreSQL DB cluster with the DB instance based on your Amazon RDS DB snapshot.
 aws rds create-db-instance \
@@ -60,4 +69,19 @@ aws rds create-db-instance \
     --engine aurora-postgresql
 
 aws rds describe-db-instances --db-instance-identifier mypg-aurora | jq .DBInstances[0].DBInstanceStatus
+aws rds describe-db-instances --db-instance-identifier database-1 | jq .DBInstances[0].Endpoint
+```
+
+## Validation
+```sql
+aws rds describe-db-instances --db-instance-identifier database-1 | jq .DBInstances[0].Endpoint
+
+psql --host=DB_instance_endpoint --port=port --username=postgres --dbname=postgres --password
+
+\l
+\dt
+
+select * from dummy_table;
+
+\q
 ```
