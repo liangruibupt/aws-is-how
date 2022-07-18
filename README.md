@@ -82,6 +82,7 @@
     - [Active Directory](#active-directory)
     - [Database](#database)
     - [Data migration tool - DMS](#data-migration-tool---dms)
+    - [Data migration tool - 3rd party tool](#data-migration-tool---3rd-party-tool)
     - [Cross Cloud Migration](#cross-cloud-migration)
     - [File migration](#file-migration)
   - [Storage](#storage)
@@ -818,6 +819,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### Data migration tool - DMS
 - [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
 - [AWS Database Migration Workshop scenario based](https://catalog.us-east-1.prod.workshops.aws/workshops/77bdff4f-2d9e-4d68-99ba-248ea95b3aca/en-US/)
+
+### Data migration tool - 3rd party tool
+- [Migration-Data-From-AliCloud](migration/DataMigration/Migration-Data-From-AliCloud.md)
+- [XData])migration/DataMigration/XData.md
 
 ### Cross Cloud Migration
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
