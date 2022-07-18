@@ -93,7 +93,7 @@
   - [Database](#database-1)
     - [RDS](#rds)
       - [RDS usage](#rds-usage)
-      - [RDS Cross region, cross account and data replication](#rds-cross-region-cross-account-and-data-replication)
+      - [RDS Cross region, cross account, data replication and backup](#rds-cross-region-cross-account-data-replication-and-backup)
       - [RDS upgrade](#rds-upgrade)
       - [RDS Security](#rds-security)
       - [RDS Performance](#rds-performance)
@@ -910,7 +910,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   - [Amazon Aurora的读写能力扩展之ShardingSphere-Proxy篇](https://aws.amazon.com/cn/blogs/china/make-further-progress-shardingsphere-proxy-chapter-of-amazon-auroras-reading-and-writing-ability-expansion/)
   - [拓展 Aurora的读写能力之Gaea篇](https://aws.amazon.com/cn/blogs/china/make-further-progress-gaea-chapter-on-expanding-auroras-reading-and-writing-ability/)
 
-#### RDS Cross region, cross account and data replication
+#### RDS Cross region, cross account, data replication and backup
 - [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
 
 - [通过 Debezium and MSK Connect 一站式解决所有数据库 CDC 问题](https://aws.amazon.com/cn/blogs/china/introducing-amazon-msk-connect-stream-data-to-and-from-your-apache-kafka-clusters-using-managed-connectors/)
@@ -919,7 +919,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copy-and-replication.md)
 
-- [QuickStart RDS PostgreSQL](database/rds/PostgreSQL/QuickStart_PostgreSQL.md)
+- [QuickStart RDS PostgreSQL and backup](database/rds/PostgreSQL/QuickStart_PostgreSQL.md)
+
+- [How-to-achive-postgreSQL-Table](database/rds/PostgreSQL/How-to-achive-postgreSQL-Table.md)
 
 #### RDS upgrade
 - [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
