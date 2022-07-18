@@ -384,8 +384,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
 
-- [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
-
 - [Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
 
 - [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
@@ -466,6 +464,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Redshift ML](analytics/redshift-ml/Readme.md)
 
 - [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
+
+- [Redshift performance]
+  - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
+  - [Cloud DataWarehouse Benchmark](https://github.com/awslabs/amazon-redshift-utils/tree/master/src/CloudDataWarehouseBenchmark/Cloud-DWB-Derived-from-TPCDS)
 
 - [CDC to Redshift]
     - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
@@ -1122,6 +1124,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Grafana and CloudWatch integration]
   - [Grafana AWS CloudWatch data source](https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/)
   - [Grafana cloudwatch plugin](https://grafana.com/grafana/plugins/cloudwatch/)
+
+[Quota Monitor on AWS](https://aws.amazon.com/solutions/implementations/quota-monitor/)
 
 ### Logging
 - [How to send CloudWatch logs to S3](devops/cloudwatch/How-to-send-logs-to-S3.md)

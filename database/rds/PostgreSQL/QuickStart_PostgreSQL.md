@@ -74,7 +74,7 @@ aws rds describe-db-instances --db-instance-identifier database-1 | jq .DBInstan
 
 ## Validation
 ```sql
-aws rds describe-db-instances --db-instance-identifier database-1 | jq .DBInstances[0].Endpoint
+aws rds describe-db-instances --db-instance-identifier mypg-aurora | jq .DBInstances[0].Endpoint
 
 psql --host=DB_instance_endpoint --port=port --username=postgres --dbname=postgres --password
 
@@ -84,4 +84,15 @@ psql --host=DB_instance_endpoint --port=port --username=postgres --dbname=postgr
 select * from dummy_table;
 
 \q
+```
+
+## Cleanup
+```bash
+aws rds delete-db-instance --db-instance-identifier mypg-aurora --skip-final-snapshot \
+--delete-automated-backups
+
+aws rds delete-db-instance --db-instance-identifier database-1 --skip-final-snapshot \
+--delete-automated-backups
+
+aws rds delete-db-cluster --db-cluster-identifier mypg-aurora1304 --skip-final-snapshot
 ```
