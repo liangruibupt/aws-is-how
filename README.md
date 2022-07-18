@@ -531,6 +531,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
+- [Integrate Power BI with Amazon Redshift for insights and analytics](https://aws.amazon.com/blogs/big-data/integrate-power-bi-with-amazon-redshift-for-insights-and-analytics/)
+  
 ### EMR
 - [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md)
 - [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
