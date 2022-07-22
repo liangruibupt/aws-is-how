@@ -327,6 +327,8 @@
 
 - [Hostname-as-Target for Network Load Balancers](https://aws.amazon.com/blogs/networking-and-content-delivery/hostname-as-target-for-network-load-balancers/)
 
+- [alb troubleshoot 502 errors](https://aws.amazon.com/premiumsupport/knowledge-center/elb-alb-troubleshoot-502-errors/)
+
 ### System Manager
 - [Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
 
@@ -366,6 +368,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Serverless Data Lake Workshop](https://serverless-data-lake-immersionday.workshop.aws/en/introduction.html)
 
 - [Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
+
+- [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
+
+- [Develop and deploy a customized workflow using Autonomous Driving Data Framework (ADDF) on AWS](https://aws.amazon.com/blogs/industries/develop-and-deploy-a-customized-workflow-using-autonomous-driving-data-framework-addf-on-aws/)
 
 ### Data integration service: Glue
 - [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -576,6 +582,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [AWS Security Hands on Lab2](https://seclab.cloudguru.run/1.introduction/)
 - [Public Access Consideration](security/Public_Access_Consideration.md)
 - [Curated list of links, references, books videos, tutorials, Exploit, CTFs, Hacking Practices etc. which are related to AWS Security](https://github.com/jassics/awesome-aws-security)
+- [An AWS Pentesting tool that lets you use one-liner commands to backdoor an AWS account's resources](https://endgame.readthedocs.io/en/latest/)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -731,41 +738,36 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
 ### Function as Service - Lambda
-- [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
+- Lambda integration
+  - [Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
+  - [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
+  - [Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
+  - [Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
+  - [AWS 告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
+  - [Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
+  - Lambda sent email
+    - [Using Amazon SES](lambda/scripts/lambda_ses.py)
+    - [Using SendCloud](lambda/scripts/lambda_ses_sendcloud.py)
+    - [利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
+  - [使用 Lambda 函数URL + CloudFront 实现S3镜像回源](https://mp.weixin.qq.com/s/mzRuFciCJXOfQpN-WV9IyA)
 
-- [Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
 
-- [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+- Lambda usage
+  - [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
+  - [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+  - [How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
+  - [How to get the lambda public IP address](lambda/lambda-access-internet.py)
+  - [How to retrieve the System Manager Parameter Store from lambda](lambda/lambda-ssm-variables.py)
+  - [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
+  - [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
 
-- [How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
+- Lambda cost
+  - [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
+  - [Optimizing your AWS Lambda costs – Part 1](https://aws.amazon.com/blogs/compute/optimizing-your-aws-lambda-costs-part-1/)
+  - [Optimizing your AWS Lambda costs – Part 2](https://aws.amazon.com/cn/blogs/compute/optimizing-your-aws-lambda-costs-part-2/)
 
-- [How to get the lambda public IP address](lambda/lambda-access-internet.py)
-
-- [How to retrieve the System Manager Parameter Store from lambda](lambda/lambda-ssm-variables.py)
-
-- [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
-
-- [Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
-
-- [Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
-
-- [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
-
-- [AWS 告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
-
-- [利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
-
-- [Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
-
-- [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
-
-- [lambda sent email]
-  - [Using Amazon SES](lambda/scripts/lambda_ses.py)
-  - [Using SendCloud](lambda/scripts/lambda_ses_sendcloud.py)
-
-- [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
-
-- [使用 Lambda 函数URL + CloudFront 实现S3镜像回源](https://mp.weixin.qq.com/s/mzRuFciCJXOfQpN-WV9IyA)
+- Lambda performance
+  - [Understanding AWS Lambda scaling and throughput](https://aws.amazon.com/cn/blogs/compute/understanding-aws-lambda-scaling-and-throughput/)
 
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
@@ -1154,6 +1156,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Community Config Rules](https://github.com/awslabs/aws-config-rules)
   - [AWS Config related blogs](https://aws.amazon.com/blogs/security/tag/aws-config/)
+
+- [Create a Lambda Function for a Cross-Account Config Rule](security/aws-config/Cross-Account-Lambda-Config-Rule.md)
+  
 ### Developer
 - [CSV tools](https://github.com/secretGeek/AwesomeCSV)
 
