@@ -12,11 +12,11 @@ With appropriate authorization, you can create a Config rule in one account that
 ### Create a Lambda function for a cross-account Config rule in the admin-account.
 [Follow up the guide](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_develop-rules_getting-started.html) to create the sample Custom Lambda Rules that evaluates whether each of your EC2 instances is the t2.micro type.
 
-1. to Creating an AWS Lambda Function for a Custom Config Rule `arn:aws-cn:lambda:cn-north-1:admin-account:function:InstanceTypeCheck`
+1. Creating an AWS Lambda Function for a Custom Config Rule `arn:aws-cn:lambda:cn-north-1:admin-account:function:InstanceTypeCheck`
 
 The [lambda function sample code](scripts/cross-account-lambda-config.js) can be referred
 
-1. lambda executionRole
+2. lambda executionRole
 `arn:aws-cn:iam::admin-account:role/service-role/LambdaConfigTriggerRole`
 
 3. Creating a Custom Lambda Rule `InstanceTypesAreT2micro` to Evaluate Amazon EC2 Instances 
