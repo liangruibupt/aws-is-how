@@ -643,6 +643,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Enforce MFA authentication for IAM users](https://aws.amazon.com/premiumsupport/knowledge-center/mfa-iam-user-aws-cli/)
 
+- [How can I use IAM roles to restrict API calls from specific IP addresses](https://aws.amazon.com/premiumsupport/knowledge-center/iam-restrict-calls-ip-addresses/)
+
 ### Multi accounts structure
 - [Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
 
@@ -995,6 +997,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
 
+- [利用ChangeStream实现Amazon DocumentDB表级别容灾复制](https://mp.weixin.qq.com/s/B7UjLi7vAa8f8yzaAq71CQ)
+
 ### Time series
 - [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
 
@@ -1158,6 +1162,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   - [AWS Config related blogs](https://aws.amazon.com/blogs/security/tag/aws-config/)
 
 - [Create a Lambda Function for a Cross-Account Config Rule](security/aws-config/Cross-Account-Lambda-Config-Rule.md)
+
+- [How-to-get-public-resources](security/aws-config/How-to-get-public-resources.md)
   
 ### Developer
 - [CSV tools](https://github.com/secretGeek/AwesomeCSV)
