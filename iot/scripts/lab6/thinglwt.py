@@ -15,7 +15,7 @@ def json_encode(string):
         return json.dumps(string)
 
 #Creating last will message and encoding
-lastWill = "Help I have disconnected"
+lastWill = {'key1': "Help I have disconnected", 'key2': "This last will test", 'key3': "Test Message"}
 lastWill = json_encode(lastWill)
 
 mqttc = AWSIoTMQTTClient("1234")

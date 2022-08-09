@@ -17,14 +17,14 @@ MOTOR_STATUS = "OFF"
 #Make sure your certificate names match what you downloaded from AWS IoT
 
 #Note we will use the Shadow Client here, rather than the regular AWSIoTMQTTClient.
-mqttShadowClient = AWSIoTMQTTShadowClient("ratchet")
+mqttShadowClient = AWSIoTMQTTShadowClient("rayratchet")
 
 #Use the endpoint from the settings page in the IoT console
 mqttShadowClient.configureEndpoint("data.iot.us-west-2.amazonaws.com",8883)
 mqttShadowClient.configureCredentials("./rootCA.pem","./ratchet/ratchet.private.key","./ratchet/ratchet.cert.pem")
 
 #Set up the Shadow handlers
-shadowClient=mqttShadowClient.createShadowHandlerWithName("ratchet",True)
+shadowClient=mqttShadowClient.createShadowHandlerWithName("rayratchet",True)
 
 #We can retrieve the underlying MQTT connection from the Shadow client to make regular MQTT publish/subscribe
 mqttClient = mqttShadowClient.getMQTTConnection()
