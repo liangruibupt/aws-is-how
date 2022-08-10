@@ -1088,11 +1088,15 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [How to make the Trust Advisor Check automatically](devops/trust-advisor)
 
-- [well architected labs](https://wellarchitectedlabs.com/)
+[AWS Well-Architected]
+  - [AWS Well-Architected labs](https://wellarchitectedlabs.com/)
+  - [AWS Well-Architected Labs in Chinese](http://wa.bwcx.me/)
 
-- [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
 
-- [AWS Well-Architected Labs](http://wa.bwcx.me/)
+[Organizing Your AWS Environment Using Multiple Accounts]
+  - [Organizing Your AWS Environment Using Multiple Accounts Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html)
+  - [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
+
 
 - [AWS Services Autoscaling](devops/cloudwatch/AWS-Service-Autoscaling.md)
 
