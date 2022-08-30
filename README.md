@@ -79,6 +79,7 @@
     - [Build the serverless - SAM, Chalice, Serverless framwork, CDK](#build-the-serverless---sam-chalice-serverless-framwork-cdk)
     - [Serverless with AI/ML](#serverless-with-aiml)
   - [Migration](#migration)
+    - [Journey to Adopt Cloud-Native Architecture](#journey-to-adopt-cloud-native-architecture)
     - [Active Directory](#active-directory)
     - [Database](#database)
     - [Data migration tool - DMS](#data-migration-tool---dms)
@@ -138,6 +139,8 @@
     - [GameLift](#gamelift)
   - [SAP](#sap)
     - [HA/DR](#hadr)
+  - [Office and business application](#office-and-business-application)
+    - [Workspaces - VDI](#workspaces---vdi)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -329,6 +332,8 @@
 
 - [alb troubleshoot 502 errors](https://aws.amazon.com/premiumsupport/knowledge-center/elb-alb-troubleshoot-502-errors/)
 
+- [Redirect HTTP requests to HTTPS using an Application Load Balancer](https://aws.amazon.com/premiumsupport/knowledge-center/elb-redirect-http-to-https-using-alb/)
+
 ### System Manager
 - [Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
 
@@ -350,6 +355,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Batch Getting Start demo](analytics/batch-get-start)
 
 - [Orchestrating high performance computing with AWS Step Functions and AWS Batch](https://aws.amazon.com/cn/blogs/compute/orchestrating-high-performance-computing-with-aws-step-functions-and-aws-batch/)
+
+- [NICE DCV]
+  - [NICE DCV Guide](https://docs.aws.amazon.com/dcv/latest/adminguide/what-is-dcv.html)
+  - [NICE DCV Connection Gateway - enables users to access a fleet of NICE DCV servers through a single access point to a LAN or VPC](https://docs.aws.amazon.com/dcv/latest/gw-admin/what-is-gw.html)
+  - [NICE DCV Session Manager - the Agents, a Broker and API that makes it easy to build front-end applications that programmatically create and manage the lifecycle of NICE DCV sessions across a fleet of NICE DCV servers](https://docs.aws.amazon.com/dcv/latest/sm-admin/what-is-sm.html)
   
 ## Analytics
 ### High Level Data Engineering and Data Analytics
@@ -420,6 +430,10 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
 
 - [Spark 小文件合并功能在 AWS S3 上的应用与实践](https://aws.amazon.com/cn/blogs/china/application-and-practice-of-spark-small-file-merging-function-on-aws-s3/)
+
+- [Enable federated governance using Trino and Apache Ranger on Amazon EMR](https://aws.amazon.com/blogs/big-data/enable-federated-governance-using-trino-and-apache-ranger-on-amazon-emr/)
+
+- [Amazon EMR实战心得浅谈](https://aws.amazon.com/cn/blogs/china/brief-introduction-to-emr-practical-experience/)
 
 ### Stream - Kinesis
 - [How to do analysis and virtulization DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
@@ -690,6 +704,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Connect alibaba cloud to aws via vpn](https://www.alibabacloud.com/blog/connect-alibaba-cloud-to-aws-via-vpn-gateway_593915)
 
+- [How to achieve active-active/active-passive Direct Connect connection](network/direct-connect/How-to-do-DX-Loadbalance.md)
+
 ### Cross board transfer
 - [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
 
@@ -706,6 +722,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
 
 - [Optimizing performance for users in China with Amazon Route 53 and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/optimizing-performance-for-users-in-china-with-amazon-route-53-and-amazon-cloudfront/)
+
+- [CloudFront support HTTP/3](https://aws.amazon.com/blogs/aws/new-http-3-support-for-amazon-cloudfront/)
 
 ### Edge
 - [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
@@ -739,6 +757,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
+- [Serverless coffee workshop](https://workshop.serverlesscoffee.com/0-introduction.html)
+
 ### Function as Service - Lambda
 - Lambda integration
   - [Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
@@ -770,6 +790,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - Lambda performance
   - [Understanding AWS Lambda scaling and throughput](https://aws.amazon.com/cn/blogs/compute/understanding-aws-lambda-scaling-and-throughput/)
+  - [Lambda provisioned capacity autoscaling的实践](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/springboot/template.yaml)
 
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
@@ -803,6 +824,14 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 
 ## Migration
+
+### Journey to Adopt Cloud-Native Architecture
+- [#1 – Preparing your Applications for Hypergrowth](https://aws.amazon.com/blogs/architecture/journey-to-adopt-cloud-native-architecture-series-1-preparing-your-applications-for-hypergrowth/)
+- [#2 – Maximizing System Throughput](https://aws.amazon.com/blogs/architecture/journey-to-adopt-cloud-native-architecture-series-2-maximizing-system-throughput/)
+- [#3 – Improved Resilience and Standardized Observability](https://aws.amazon.com/blogs/architecture/journey-to-adopt-cloud-native-architecture-series-3-improved-resilience-and-standardized-observability/)
+- [#4 – Governing Security at Scale and IAM Baselining](https://aws.amazon.com/blogs/architecture/journey-to-adopt-cloud-native-architecture-series-4-governing-security-at-scale-and-iam-baselining/)
+- [#5 – Enhancing Threat Detection, Data Protection, and Incident Response](https://aws.amazon.com/blogs/architecture/journey-to-adopt-cloud-native-architecture-series-5-enhancing-threat-detection-data-protection-and-incident-response/)
+
 
 ### Active Directory
 - [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
@@ -876,6 +905,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [Using S3 Intelligent-Tiering](storage/S3/S3_Intelligent-Tiering.md)
 
+- [How to Check S3 object integrity](storage/S3/check-integrity-of-s3-object.md)
+
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
@@ -883,6 +914,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### Storage Gatewway
 - [storage-gateway-demo and performance testing](https://github.com/liangruibupt/storage-gateway-demo)
+- [How can I troubleshoot an S3AccessDenied error from my file gateway](https://aws.amazon.com/premiumsupport/knowledge-center/file-gateway-troubleshoot-s3accessdenied/)
+- [How can I set up a private network connection between a file gateway and Amazon S3](https://aws.amazon.com/premiumsupport/knowledge-center/storage-gateway-file-gateway-private-s3/)
+- [Resolve an internal error when activating my Storage Gateway](https://aws.amazon.com/premiumsupport/knowledge-center/storage-gateway-resolve-internal-error/)
 
 ### EFS and FSx or other shared file system
 - [EFS Workshop for GCR](https://github.com/liangruibupt/amazon-efs-workshop)
@@ -896,6 +930,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [EFS Web Browser for list files and directory](https://aws.amazon.com/cn/blogs/china/building-a-serviceless-efs-file-browser/)
 
 - [Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
+
+- [基于AWS DataSync 迁移 NetApp NAS上云](https://aws.amazon.com/cn/blogs/china/migrating-netapp-nas-to-cloud-based-on-aws-datasync/)
 
 
 ## Database
@@ -1252,3 +1288,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 ### HA/DR
 - [SAP云上自适应跨可用区高可用方案](https://aws.amazon.com/cn/blogs/china/adaptive-high-availability-solution-across-availability-zones-on-sap-cloud/)
 - [基于CloudEndure的新一代云上一键灾备解决方案与最佳实践](https://aws.amazon.com/cn/blogs/china/one-click-cloud-preparedness-solutions-and-best-practices-based-on-cloudendure/)
+
+## Office and business application
+### Workspaces - VDI
+- [How to Enable Multi-Factor Authentication for AWS Services by Using AWS Microsoft AD and On-Premises Credentials](https://aws.amazon.com/blogs/security/how-to-enable-multi-factor-authentication-for-amazon-workspaces-and-amazon-quicksight-by-using-microsoft-ad-and-on-premises-credentials/)
