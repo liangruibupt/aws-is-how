@@ -600,6 +600,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
+- [Using-SM-Key-Algorithm-in-China](security/kms/Using-SM-Key-Algorithm-in-China.md)
 
 ### Credential - Secret Manager
 - [Secret Manager quick start demo](security/secret-mgr/README.md)
