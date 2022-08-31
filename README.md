@@ -467,13 +467,13 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Amazon Athena Workshop](analytics/athena-workshop/Athena-workshop.md)
   - [Athena_access_control](analytics/athena-workshop/Athena_access_control.md)
 
-- [Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/cn/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
+- [Athena Perfomrance]
+  - [Top 10 Performance Tuning Tips for Amazon Athena](https://aws.amazon.com/cn/blogs/big-data/top-10-performance-tuning-tips-for-amazon-athena/)
+  - [Using athena partition projection or glue partition indexes to improve athena query performance](https://aws.amazon.com/cn/blogs/china/amazon-athena-partition-projection-and-glue-partition-indexes-performance-comparison/)
 
 - [Use CTAS statements with Amazon Athena to reduce cost and improve performance](https://aws.amazon.com/blogs/big-data/using-ctas-statements-with-amazon-athena-to-reduce-cost-and-improve-performance/)
 
 - [Athena adds cost details to query execution plans](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-athena-cost-details-query-execution-plans/)
-
-- [Using athena partition projection or glue partition indexes to improve athena query performance](https://aws.amazon.com/cn/blogs/china/amazon-athena-partition-projection-and-glue-partition-indexes-performance-comparison/)
 
 - [How to get results from Athena for the past 7 days](analytics/athena-workshop/How_to_query_past_7_days_result.md)
 
