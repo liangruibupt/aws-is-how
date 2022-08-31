@@ -451,11 +451,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   - [Run Kafka Connect as Fargate Docker containers and deploy MirrorMaker configuration files](https://github.com/aws-samples/kafka-connect-mm2)
   - [MirrorMaker deployment](https://github.com/apache/kafka/blob/trunk/connect/mirror/README.md)
 
-- [MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
+- [Kafka/MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
 - [Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
-
-- [Kafka connection issue troubleshooting](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
 
 
 ### Ad-hoc and Interactive query: Athena
