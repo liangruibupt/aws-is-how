@@ -384,26 +384,28 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Develop and deploy a customized workflow using Autonomous Driving Data Framework (ADDF) on AWS](https://aws.amazon.com/blogs/industries/develop-and-deploy-a-customized-workflow-using-autonomous-driving-data-framework-addf-on-aws/)
 
 ### Data integration service: Glue
-- [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
-
-- [Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
-
-- [Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
-
-- [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
+- [ETL]
+  - [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
+  - [Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
+  - [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
+  - [Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
+  
+- [Glue Crawler]
+  - [Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
 
 - [Glue Workshop](analytics/glue-workshop)
   - [Building Python modules for Spark ETL workloads using AWS Glue](analytics/glue-workshop/Glue_with_python_module.md)
 
-- [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
+- [Workflow]
+  - [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
+  - [Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
 
-- [Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
+- [Catalogs]
+  - [如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
+  - [Replication utility for AWS Glue Data Catalog](https://github.com/aws-samples/aws-glue-data-catalog-replication-utility)
 
-- [如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
-
-- [Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
-
-- [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
+- [Delta Lake]
+  - [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
 
 ### Analysis: EMR
 - [AWS EMR Workshop](analytics/emr/101Workshop)
