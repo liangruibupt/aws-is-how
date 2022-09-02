@@ -1274,9 +1274,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 [Understand resiliency patterns and trade-offs to architect efficiently in the cloud](https://aws.amazon.com/cn/blogs/architecture/understand-resiliency-patterns-and-trade-offs-to-architect-efficiently-in-the-cloud/)
 
 #### RDS HA/DR
-- [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
-
 - [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
+
+- - [使用 Amazon RDS for Oracle 配合 Oracle Active Data Guard 建立托管的灾难恢复与只读副本](https://aws.amazon.com/cn/blogs/china/managed-disaster-recovery-and-managed-reader-farm-with-amazon-rds/)
 
 - [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
   
