@@ -909,6 +909,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 - [How to Check S3 object integrity](storage/S3/check-integrity-of-s3-object.md)
 
+- [通过 STS Session Tags 来对 AWS 资源进行更灵活的权限控制](https://aws.amazon.com/cn/blogs/china/use-sts-session-tags-to-perform-more-flexible-permission-control-on-aws-resources/)
+
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
