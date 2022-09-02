@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello world Demo!</title>
+        <link rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+        <h1>Hello world! This is a static website hosted by Amazon S3 and managed by AWS CodePipeline.</h1>
+        <!-- public object url -->
+        <img src="https://ray-website-cloudfront-20190409.s3.cn-north-1.amazonaws.com.cn/images/world.jpg"/>
+        <!-- pre-sign-url of private object -->
+        <img src="https://ray-website-cloudfront-20190409.s3.cn-north-1.amazonaws.com.cn/images/awsimage1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOMS7DGDKGS3JXXPA%2F20220902%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20220902T050738Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ff780ada6f44740a08e56c9ff60c9a8fecf1dda7287ff456028a2ba8e8498765"/>
+        <div align="center">
+          <p>Learn more:</p> 
+          <p><a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/">CodePipeline User Guide</a></p>
+          <p><a href="https://docs.aws.amazon.com/codecommit/latest/userguide/">CodeCommit User Guide</a></p>
+          <p><a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/">CodeDeploy User Guide</a></p>
+        </div>
+    </body>
+</html>

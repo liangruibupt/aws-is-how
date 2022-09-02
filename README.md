@@ -891,6 +891,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [S3 Web Explorer](storage/S3/s3explorer)
 
 - [S3-Presign-URL](storage/S3/S3-Presign-URL.md)
+  - [Embeded the image in html with S3-Presign-URL](storage/S3/scripts/s3_image_display.html)
 
 - [Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
 
