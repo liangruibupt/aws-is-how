@@ -399,6 +399,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Workflow]
   - [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
   - [Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
+  - [Deploy an AWS Glue job with an AWS CodePipeline CI/CD pipeline](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/deploy-an-aws-glue-job-with-an-aws-codepipeline-ci-cd-pipeline.htmlhttps://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/deploy-an-aws-glue-job-with-an-aws-codepipeline-ci-cd-pipeline.html)
+  - [How to unit test and deploy AWS Glue jobs using AWS CodePipeline](https://aws.amazon.com/blogs/devops/how-to-unit-test-and-deploy-aws-glue-jobs-using-aws-codepipeline/)
 
 - [Catalogs]
   - [如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
@@ -994,6 +996,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
   
 #### RDS Performance
 - [Amazon Aurora Performance Assessment](https://d1.awsstatic.com/product-marketing/Aurora/RDS_Aurora_Performance_Assessment_Benchmarking_v1-2.pdf)
+  - [Managing performance and scaling for Amazon Aurora MySQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Performance.html)
+  - [Managing performance and scaling for Amazon Aurora PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Managing.html)
+  - ["Too Many Connections" error when connecting to my Amazon Aurora MySQL instance](https://aws.amazon.com/premiumsupport/knowledge-center/aurora-mysql-max-connection-errors/)
   
 - [Automate benchmark tests for Amazon Aurora PostgreSQL](https://aws.amazon.com/blogs/database/automate-benchmark-tests-for-amazon-aurora-postgresql/)
 
@@ -1258,6 +1263,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [无服务器直播解决方案](https://www.amazonaws.cn/solutions/serverless-video-streaming/)
 
 - [Open source web conferencing solution - Jitsi](https://aws.amazon.com/cn/blogs/opensource/getting-started-with-jitsi-an-open-source-web-conferencing-solution/)
+
+- [Unreal Engine 像素流送在g4dn上实现容器化部署实践](https://aws.amazon.com/cn/blogs/china/practice-of-container-deployment-of-unreal-engine-pixel-streaming-on-g4dn-i/)
 
 ## Mobile
 ### Moible app development
