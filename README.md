@@ -30,6 +30,7 @@
     - [High Level Data Engineering and Data Analytics](#high-level-data-engineering-and-data-analytics)
     - [Data integration service: Glue](#data-integration-service-glue)
     - [Analysis: EMR](#analysis-emr)
+    - [Stream - Flink and Spark Streaming](#stream---flink-and-spark-streaming)
     - [Stream - Kinesis](#stream---kinesis)
     - [Stream - Kafka](#stream---kafka)
     - [Ad-hoc and Interactive query: Athena](#ad-hoc-and-interactive-query-athena)
@@ -37,7 +38,6 @@
     - [Search and analytics: Elasticsearch Service](#search-and-analytics-elasticsearch-service)
     - [Governance](#governance)
     - [BI](#bi)
-    - [EMR](#emr)
   - [IOT](#iot)
     - [IoT Core](#iot-core)
     - [IoT Timeseries](#iot-timeseries)
@@ -320,6 +320,9 @@
 - [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
 
 - [Check if a reboot is required after installing Linux updates](ec2/Does_instance_need_restart_for_upgrade.md)
+
+- [EC2 detected degradation]
+  - [How to handle EC2 detected degradation](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-degraded-hardware/)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
@@ -412,32 +415,39 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Analysis: EMR
 - [AWS EMR Workshop](analytics/emr/101Workshop)
 
-- [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
-Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
+- [Develop Code]
+  - [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
+  Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
+  - [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
+  - [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
+  
+- [Workflow]
+  - [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
 
-- [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
+- [Install and Delopyment]
+  - [How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
+  - [EMR_On_Graviton2](analytics/emr/101Workshop/EMR_On_Graviton2.md)
+  - [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md) 
+  
+- [EMR on Kubernetes]
+  - [EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
+  - [EMR on EKS workshop](analytics/emr/emr-on-eks)
 
-- [How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
+- [Performance and HA]
+  - [Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
+  - [Hadoop high availability features of HDFS NameNode and YARN ResourceManager in an Amazon EMR cluster](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-ha-applications.html)
+  - [Spark 小文件合并功能在 AWS S3 上的应用与实践](https://aws.amazon.com/cn/blogs/china/application-and-practice-of-spark-small-file-merging-function-on-aws-s3/)
+  - [Amazon EMR实战心得浅谈](https://aws.amazon.com/cn/blogs/china/brief-introduction-to-emr-practical-experience/)
+  
+- [Security]
+  - [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
+  - [Enable federated governance using Trino and Apache Ranger on Amazon EMR](https://aws.amazon.com/blogs/big-data/enable-federated-governance-using-trino-and-apache-ranger-on-amazon-emr/)
 
-- [Streaming Amazon DynamoDB data into a centralized data lake](https://aws.amazon.com/id/blogs/big-data/streaming-amazon-dynamodb-data-into-a-centralized-data-lake/)
 
-- [EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
+### Stream - Flink and Spark Streaming
+- [Flink on EMR]
+  - [可持续性最佳架构实践—基于Spot的Flink作业集群部署与优化](https://aws.amazon.com/cn/blogs/china/flink-on-eks-reuse-recycle/)
 
-- [EMR on EKS workshop](analytics/emr/emr-on-eks)
-
-- [Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
-
-- [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
-
-- [Hadoop high availability features of HDFS NameNode and YARN ResourceManager in an Amazon EMR cluster](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-ha-applications.html)
-
-- [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
-
-- [Spark 小文件合并功能在 AWS S3 上的应用与实践](https://aws.amazon.com/cn/blogs/china/application-and-practice-of-spark-small-file-merging-function-on-aws-s3/)
-
-- [Enable federated governance using Trino and Apache Ranger on Amazon EMR](https://aws.amazon.com/blogs/big-data/enable-federated-governance-using-trino-and-apache-ranger-on-amazon-emr/)
-
-- [Amazon EMR实战心得浅谈](https://aws.amazon.com/cn/blogs/china/brief-introduction-to-emr-practical-experience/)
 
 ### Stream - Kinesis
 - [How to do analysis and virtulization DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
@@ -554,11 +564,6 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
 - [Integrate Power BI with Amazon Redshift for insights and analytics](https://aws.amazon.com/blogs/big-data/integrate-power-bi-with-amazon-redshift-for-insights-and-analytics/)
-  
-### EMR
-- [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md)
-- [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
-- [EMR_On_Graviton2](analytics/emr/101Workshop/EMR_On_Graviton2.md)
   
 ## IOT
 ### IoT Core
@@ -761,6 +766,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [Serverless Patterns Collection](https://serverlessland.com/patterns)
 
 - [Serverless coffee workshop](https://workshop.serverlesscoffee.com/0-introduction.html)
+
+- [AWS Serverless SaaS Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/b0c6ad36-0a4b-45d8-856b-8a64f0ac76bb/en-US)
 
 ### Function as Service - Lambda
 - Lambda integration
@@ -1023,19 +1030,21 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ### Key-Value and Document
 #### DynamoDB
-- [如何将我的 DynamoDB 表从一个 AWS 账户迁移到另一个账户](https://aws.amazon.com/cn/premiumsupport/knowledge-center/dynamodb-cross-account-migration/)
-
 - [DynamoDB labs](database/dynamodb/dynamodb-lab.md)
+  
+- [Migration and Replication]
+  - [如何将我的 DynamoDB 表从一个 AWS 账户迁移到另一个账户](https://aws.amazon.com/cn/premiumsupport/knowledge-center/dynamodb-cross-account-migration/)
+  - [Streaming Amazon DynamoDB data into a centralized data lake](https://aws.amazon.com/id/blogs/big-data/streaming-amazon-dynamodb-data-into-a-centralized-data-lake/)
+  - [中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
+  - [aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
+  - [DynamoDB table initial migration from global to China](https://github.com/yizhizoe/dynamodb-init-migration)
 
-- [中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
 
-- [aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
+- [Security]
+  - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
 
-- [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
-
-- [DynamoDB_Pagenation](database/dynamodb/DynamoDB_Pagenation.md)
-
-- [DynamoDB table initial migration from global to China](https://github.com/yizhizoe/dynamodb-init-migration)
+- [Performance]
+  - [DynamoDB_Pagenation](database/dynamodb/DynamoDB_Pagenation.md)
 
 #### MongoDB and DocumentDB
 - [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
@@ -1043,6 +1052,8 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 - [DocumentDB performance benchmark](https://www.mongodb.com/atlas-vs-amazon-documentdb/performance)
 
 - [利用ChangeStream实现Amazon DocumentDB表级别容灾复制](https://mp.weixin.qq.com/s/B7UjLi7vAa8f8yzaAq71CQ)
+
+- [Amazon DocumentDB（兼容 MongoDB）增加了对跨区域快照复制的支持](https://aws.amazon.com/cn/about-aws/whats-new/2020/07/amazon-documentdb-support-cross-region-snapshot-copy/)
 
 ### Time series
 - [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
