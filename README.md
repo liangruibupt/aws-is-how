@@ -154,6 +154,7 @@
 ### SageMaker
 
 - [SageMaker-Workshop](ai-ml/SageMaker/SageMaker-Workshop.md)
+- [SageMaker Learning Series](ai-ml/SageMaker/SageMaker-Learning.md)
 
 - [Install External Libraries and Kernels in SageMaker Notebook Instances](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-add-external.html)
 
