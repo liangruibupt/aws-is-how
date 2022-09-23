@@ -498,6 +498,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
 
+- [Usage]
+  - [Cross-Account Data Sharing for Amazon Redshift](https://aws.amazon.com/blogs/aws/cross-account-data-sharing-for-amazon-redshift/)
+  
 - [Redshift performance]
   - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
   - [Cloud DataWarehouse Benchmark](https://github.com/awslabs/amazon-redshift-utils/tree/master/src/CloudDataWarehouseBenchmark/Cloud-DWB-Derived-from-TPCDS)
@@ -643,6 +646,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
     - [Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
 
+- [Automatically rotate IAM user access keys at scale](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/automatically-rotate-iam-user-access-keys-at-scale-with-aws-organizations-and-aws-secrets-manager.html)
+  
 ### Sentitive Data
 - [How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
 
@@ -1119,6 +1124,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [firelens examples](https://github.com/aws-samples/amazon-ecs-firelens-examples)
     - [firelens demo](container/ECS-FireLens.md)
 
+- [amazon-ecr-cross-region-replication](https://github.com/aws-samples/amazon-ecr-cross-region-replication)
+  
 ### Fargate
 - [Recursive Scaling Fargate with Amazon SQS](https://aws.amazon.com/blogs/architecture/design-pattern-for-highly-parallel-compute-recursive-scaling-with-amazon-sqs/)
 

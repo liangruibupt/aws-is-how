@@ -10,3 +10,4 @@
 - push Docker images to China
 Push Docker images to China – Push to China region ECR? Where you execute the docker push command: you local desktop or Frankfurt region?
 Is possible Run Dockerfile within China region and build image within China region?
+- [amazon-ecr-cross-region-replication](https://github.com/aws-samples/amazon-ecr-cross-region-replication)
