@@ -107,9 +107,14 @@
     - [Time series](#time-series)
   - [Container](#container)
     - [EKS](#eks)
+      - [EKS networking](#eks-networking)
+      - [EKS practice](#eks-practice)
+      - [Data On EKS](#data-on-eks)
+      - [DevOps on EKS](#devops-on-eks)
     - [ECS](#ecs)
     - [Fargate](#fargate)
     - [Istio, Envoy, App Mesh, Service discovery](#istio-envoy-app-mesh-service-discovery)
+    - [ECR](#ecr)
   - [DevOps](#devops)
     - [Management](#management)
     - [CI/CD](#cicd)
@@ -141,6 +146,7 @@
     - [HA/DR](#hadr)
   - [Office and business application](#office-and-business-application)
     - [Workspaces - VDI](#workspaces---vdi)
+  - [Metaverse](#metaverse)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -415,6 +421,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Analysis: EMR
 - [AWS EMR Workshop](analytics/emr/101Workshop)
+- [aws-emr-best-practices](https://aws.github.io/aws-emr-best-practices/)
 
 - [Develop Code]
   - [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
@@ -966,7 +973,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [AWS Bookstore Demo App - Purpose-built databases enable you to create scalable, high-performing, and functional backend infrastructures to power your applications](https://github.com/aws-samples/aws-bookstore-demo-app)
 
-- [如何使用 Amazon RDS for PostgreSQL 启用查询日志记录 query logging？](https://aws.amazon.com/cn/premiumsupport/knowledge-center/rds-postgresql-query-logging/)
+- [PostgreSQL Logging]
+  - [如何使用 Amazon RDS for PostgreSQL 启用查询日志记录 query logging？](https://aws.amazon.com/cn/premiumsupport/knowledge-center/rds-postgresql-query-logging/)
+  - [Working with RDS and Aurora PostgreSQL logs: Part 1](https://aws.amazon.com/blogs/database/working-with-rds-and-aurora-postgresql-logs-part-1/)
+  - [Working with RDS and Aurora PostgreSQL logs: Part 2](https://aws.amazon.com/blogs/database/working-with-rds-and-aurora-postgresql-logs-part-2/)
 
 - [RDS mysql max connections](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-max-connections/)
 
@@ -994,6 +1004,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [How to Migrate from Amazon RDS Aurora or MySQL to Amazon Aurora Serverless](https://medium.com/@souri29/how-to-migrate-from-amazon-rds-aurora-or-mysql-to-amazon-aurora-serverless-55f9a4a74078)
 
+- [Aurora MySQL 5.6 upgrade blog](https://aws.amazon.com/blogs/database/upgrade-amazon-aurora-mysql-compatible-edition-version-1-with-mysql-5-6-compatibility/)
+- [Minimum downtime Aurora MySQL5.6 upgrade using clone](https://aws.amazon.com/blogs/database/performing-major-version-upgrades-for-amazon-aurora-mysql-with-minimum-downtime/)
+
 #### RDS Security
 - [Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
 
@@ -1006,6 +1019,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Encrypt the Unencrypted RDS](database/rds/PostgreSQL/unencrypted_db_to_encrypted.md)
 
 - [Disable_RDS_encryption](database/rds/Disable_RDS_encryption.md)
+
+- [RDS MySQL and Aurora MySQL Audit logs](https://aws.amazon.com/cn/blogs/database/configuring-an-audit-log-to-capture-database-activities-for-amazon-rds-for-mysql-and-amazon-aurora-with-mysql-compatibility/)
+
+- [RDS PostgreSQL and Aurora PostgreSQL Audit](https://aws.amazon.com/premiumsupport/knowledge-center/rds-postgresql-pgaudit/) 
+  - [pgaudit extention](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/UserGuide/Appendix.PostgreSQL.CommonDBATasks.Extensions.html#Appendix.PostgreSQL.CommonDBATasks.pgaudit)
   
 #### RDS Performance
 - [Amazon Aurora Performance Assessment](https://d1.awsstatic.com/product-marketing/Aurora/RDS_Aurora_Performance_Assessment_Benchmarking_v1-2.pdf)
@@ -1022,6 +1040,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
 - [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
+
+- [利用Neptune图数据库构建工厂知识图谱实践](https://aws.amazon.com/cn/blogs/china/the-practice-of-using-neptune-graph-database-to-construct-plant-knowledge-map/)
 
 ### ElastiCache
 - [Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
@@ -1066,6 +1086,18 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ## Container
 ### EKS
+#### EKS networking
+- [关于Amazon EKS中Service和Ingress深入分析和研究](https://aws.amazon.com/cn/blogs/china/in-depth-analysis-and-research-on-service-and-ingress-in-amazon-eks/)
+
+- [一文看懂 Amazon EKS 中的网络规划](https://aws.amazon.com/cn/blogs/china/understand-the-network-planning-in-amazon-eks-in-one-article/)
+  
+- [How do I use multiple CIDR ranges with Amazon EKS]
+    - [Check your VPC setting](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-resize)
+    - [Add the additioal CIDR](https://aws.amazon.com/premiumsupport/knowledge-center/eks-multiple-cidr-ranges/)
+
+- [Cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/cn/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
+
+#### EKS practice
 - [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
 
 - [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
@@ -1073,25 +1105,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
 
-- [Windows pod in EKS](container/EKS_in_Beijing_3AZ.md)
-
-- [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
-
-- [How can I check, scale, delete, or drain my worker nodes on EKS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-node-actions/)
-
 - [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
-- [关于Amazon EKS基于Gitlab的CICD实践](https://aws.amazon.com/cn/blogs/china/about-amazon-eks-gitlab-based-cicd-practice-one-gitlab-deployment-and-configuration/)
-
-- [关于Amazon EKS中Service和Ingress深入分析和研究](https://aws.amazon.com/cn/blogs/china/in-depth-analysis-and-research-on-service-and-ingress-in-amazon-eks/)
-
-- [一文看懂 Amazon EKS 中的网络规划](https://aws.amazon.com/cn/blogs/china/understand-the-network-planning-in-amazon-eks-in-one-article/)
-
-- [How do I use multiple CIDR ranges with Amazon EKS]
-    - [Check your VPC setting](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-resize)
-    - [Add the additioal CIDR](https://aws.amazon.com/premiumsupport/knowledge-center/eks-multiple-cidr-ranges/)
-
-- [Cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/cn/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
+- [Windows pod in EKS](container/Windows-pod-EKS.md)
 
 - [EKS Managed Group]
   - [Overview](https://aws.amazon.com/blogs/containers/eks-managed-node-groups/)
@@ -1101,6 +1117,16 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are compatible with the Cluster Autoscaler. You can deploy the Cluster Autoscaler to your Amazon EKS cluster and configure it to modify your Amazon EC2 Auto Scaling groups.
   - [Vertical Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/vertical-pod-autoscaler.html)
   - [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
+  
+#### Data On EKS
+- [data-on-eks](https://awslabs.github.io/data-on-eks/)
+
+#### DevOps on EKS
+- [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
+
+- [How can I check, scale, delete, or drain my worker nodes on EKS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-node-actions/)
+
+- [关于Amazon EKS基于Gitlab的CICD实践](https://aws.amazon.com/cn/blogs/china/about-amazon-eks-gitlab-based-cicd-practice-one-gitlab-deployment-and-configuration/)
 
 - [DataDog for EKS control plane monitoring](https://docs.datadoghq.com/agent/kubernetes/control_plane/?tab=helm#EKS)
 
@@ -1146,6 +1172,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Cross Amazon EKS cluster App Mesh using AWS Cloud Map](https://aws.amazon.com/cn/blogs/containers/cross-amazon-eks-cluster-app-mesh-using-aws-cloud-map/)
     - [Cloud Map for serverless applications](https://aws.amazon.com/blogs/opensource/aws-cloud-map-service-discovery-serverless-applications/)
 
+### ECR
+- [ecr-cross-region-replication](https://github.com/aws-samples/amazon-ecr-cross-region-replication)
+
+- [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
+- 
 ## DevOps
 ### Management
 - [AWS Management Tool stack workshop](https://workshop.aws-management.tools/)
@@ -1200,6 +1231,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [监控告警一点通：在CloudWatch上为 EC2批量添加告警](https://aws.amazon.com/cn/blogs/china/add-alarms-in-batches-for-ec2-on-cloudwatch/)
   - [企业微信、钉钉接收 Amazon CloudWatch 告警](https://aws.amazon.com/cn/blogs/china/enterprise-wechat-and-dingtalk-receiving-amazon-cloudwatch-alarms/)
     - [一键部署企业微信，钉钉，飞书，Slack 告警](https://github.com/Chris-wa-He/AWS-Lambda-notifier)
+    - [一键部署Telegram 告警](https://github.com/Chris-wa-He/AWS-Lambda-notifier/tree/Telegram-notifier)
 
 - [Monitor using Prometheus and Grafana](https://www.eksworkshop.com/intermediate/240_monitoring/) Here is how to deploy Grafana on EKS
 
@@ -1297,7 +1329,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Backup FAQ](dr_ha/backup/Backup_FAQ.md)
 
 ### DR
-[Understand resiliency patterns and trade-offs to architect efficiently in the cloud](https://aws.amazon.com/cn/blogs/architecture/understand-resiliency-patterns-and-trade-offs-to-architect-efficiently-in-the-cloud/)
+- [Understand resiliency patterns and trade-offs to architect efficiently in the cloud](https://aws.amazon.com/cn/blogs/architecture/understand-resiliency-patterns-and-trade-offs-to-architect-efficiently-in-the-cloud/)
+
+- [Building a disaster recovery site on AWS for workloads on Google Cloud]
+  - [Part 1](https://aws.amazon.com/blogs/storage/building-a-disaster-recovery-site-on-aws-for-workloads-on-google-cloud-part-1/)
+  - [Part 2](https://aws.amazon.com/blogs/storage/building-a-disaster-recovery-site-on-aws-for-workloads-on-google-cloud-part-2/)
 
 #### RDS HA/DR
 - [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
@@ -1322,3 +1358,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Office and business application
 ### Workspaces - VDI
 - [How to Enable Multi-Factor Authentication for AWS Services by Using AWS Microsoft AD and On-Premises Credentials](https://aws.amazon.com/blogs/security/how-to-enable-multi-factor-authentication-for-amazon-workspaces-and-amazon-quicksight-by-using-microsoft-ad-and-on-premises-credentials/)
+
+
+## Metaverse
+- [possibilities-of-healthcare-in-the-metaverse](https://www.forbes.com/sites/bernardmarr/2022/02/23/the-amazing-possibilities-of-healthcare-in-the-metaverse/?sh=25555f319e5c)
+- [life-sciences-in-the-metaverse](https://www.jdsupra.com/legalnews/life-sciences-in-the-metaverse-a-new-7682087/)
