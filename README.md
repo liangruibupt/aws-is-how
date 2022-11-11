@@ -140,6 +140,7 @@
     - [Backup](#backup)
     - [DR](#dr)
       - [RDS HA/DR](#rds-hadr)
+    - [Resilience](#resilience)
   - [Game](#game)
     - [GameLift](#gamelift)
   - [SAP](#sap)
@@ -477,6 +478,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
 
+-[THe tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
@@ -805,6 +807,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [How to retrieve the System Manager Parameter Store from lambda](lambda/lambda-ssm-variables.py)
   - [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
   - [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
+  - [Disney use the open source and serverless](https://aws.amazon.com/cn/blogs/opensource/improving-developer-productivity-at-disney-with-serverless-and-open-source/)
 
 - Lambda cost
   - [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
@@ -821,6 +824,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [API Gateway for API design patterns](https://aws.amazon.com/cn/blogs/compute/architecting-multiple-microservices-behind-a-single-domain-with-amazon-api-gateway/)
 
 - [Understanding VPC links in Amazon API Gateway private integrations](https://aws.amazon.com/blogs/compute/understanding-vpc-links-in-amazon-api-gateway-private-integrations/)
+
+- [API Gateway private customer domain](https://github.com/aws-samples/serverless-samples/blob/main/apigw-private-custom-domain-name/README.md)
 
 ### Step function
 - [Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
@@ -993,7 +998,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
-- [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copy-and-replication.md)
+- [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copky-and-replication.md)
 
 - [QuickStart RDS PostgreSQL and backup](database/rds/PostgreSQL/QuickStart_PostgreSQL.md)
 
@@ -1191,6 +1196,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [Organizing Your AWS Environment Using Multiple Accounts]
   - [Organizing Your AWS Environment Using Multiple Accounts Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html)
   - [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
+  - [Landing Zone plus - Cloud Foundations](https://aws.amazon.com/cn/blogs/china/fast-build-a-secure-compliant-and-well-architected-multi-account-organization-in-cloud-environment/)
 
 
 - [AWS Services Autoscaling](devops/cloudwatch/AWS-Service-Autoscaling.md)
@@ -1342,6 +1348,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [RDS MySQL Automated frequency backup](https://aws.amazon.com/premiumsupport/knowledge-center/rds-mysql-automated-backups/)
   
+### Resilience
+- [Verify the resilience of your workloads using Chaos Engineering](https://aws.amazon.com/cn/blogs/architecture/verify-the-resilience-of-your-workloads-using-chaos-engineering/)
 
 ## Game
 ### GameLift
