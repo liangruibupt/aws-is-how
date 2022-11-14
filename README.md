@@ -655,6 +655,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
     - [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
     - [Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
+    - [Keycloak with Okta OpenID Connect Provider](https://ultimatesecurity.pro/post/okta-oidc/)
 
 - [Automatically rotate IAM user access keys at scale](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/automatically-rotate-iam-user-access-keys-at-scale-with-aws-organizations-and-aws-secrets-manager.html)
   
