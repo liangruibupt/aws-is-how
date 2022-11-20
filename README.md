@@ -254,6 +254,8 @@
 
 - [Get the spot instance price](EC2/How-to-Get-Spot-Price.md)
 
+- [Cloud Intelligence Dashboards](https://cudos.workshop.aws/)
+(https://github.com/aws-samples/aws-cudos-framework-deployment)
 
 ### Network cost
 - [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
