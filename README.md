@@ -416,6 +416,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Catalogs]
   - [如何提供对 AWS Glue 数据目录中资源的跨账户访问权限](https://aws.amazon.com/cn/premiumsupport/knowledge-center/glue-data-catalog-cross-account-access/?nc1=h_ls)
   - [Replication utility for AWS Glue Data Catalog](https://github.com/aws-samples/aws-glue-data-catalog-replication-utility)
+  - [Open Source Data Catalog](https://datahubproject.io) (https://github.com/bluishglc/serverless-datalake-example)
 
 - [Delta Lake]
   - [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
@@ -462,6 +463,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [How to do analysis and virtulization DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
 
 - [AWS Kinesis Workshop](analytics/kinesis/101Workshop)
+
+- [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
 
 ### Stream - Kafka
 - [AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
@@ -549,11 +552,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [OpenSearch cross cluster replication - DR or HA](https://aws.amazon.com/cn/blogs/china/no-subscription-fee-teach-you-how-to-use-cross-cluster-replication-in-amazon-opensearch-service/)
   
 ### Governance
-- [Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
-
-- [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
-
-- [AWS Lake Formation Tag-based access control](https://aws.amazon.com/cn/blogs/big-data/easily-manage-your-data-lake-at-scale-using-tag-based-access-control-in-aws-lake-formation/)
+- [Lake Formation]
+  - [Lake Formation Workshop](analytics/lakeformation/lakeformation-workshop.md)
+  - [AWS Lake Formation Tag-based access control](https://aws.amazon.com/cn/blogs/big-data/easily-manage-your-data-lake-at-scale-using-tag-based-access-control-in-aws-lake-formation/)
+  - [Athena Support Lake Formation fine-grained-access-control](https://aws.amazon.com/cn/about-aws/whats-new/2022/11/amazon-athena-support-lake-formation-fine-grained-access-control/)
 
 - [Data Quality with Deequ]
     - [AWS Lab deequ](https://github.com/awslabs/deequ)
@@ -621,6 +623,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
 - [Using-SM-Key-Algorithm-in-China](security/kms/Using-SM-Key-Algorithm-in-China.md)
+- [Demystifying KMS keys operations, bring your own key (BYOK), custom key store, and ciphertext portability](https://aws.amazon.com/blogs/security/demystifying-kms-keys-operations-bring-your-own-key-byok-custom-key-store-and-ciphertext-portability/)
+- [bring your own key to AWS KMS](https://aws.amazon.com/blogs/security/how-to-byok-bring-your-own-key-to-aws-kms-for-less-than-15-00-a-year-using-aws-cloudhsm/)
+- [Multi-Region keys in AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html)
 
 ### Credential - Secret Manager
 - [Secret Manager quick start demo](security/secret-mgr/README.md)
@@ -964,6 +969,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Global Region Simple File Manager for Amazon EFS](https://aws.amazon.com/solutions/implementations/simple-file-manager-for-amazon-efs/)
 
 - [基于AWS DataSync 迁移 NetApp NAS上云](https://aws.amazon.com/cn/blogs/china/migrating-netapp-nas-to-cloud-based-on-aws-datasync/)
+
+- [Deploying IPFS Cluster using AWS Fargate and Amazon EFS One Zone](https://aws.amazon.com/cn/blogs/containers/deploying-ipfs-cluster-using-aws-fargate-and-amazon-efs-one-zone/)
 
 
 ## Database
