@@ -38,6 +38,7 @@
     - [Search and analytics: Elasticsearch Service](#search-and-analytics-elasticsearch-service)
     - [Governance](#governance)
     - [BI](#bi)
+    - [Delta Lake](#delta-lake)
   - [IOT](#iot)
     - [IoT Core](#iot-core)
     - [IoT Timeseries](#iot-timeseries)
@@ -521,7 +522,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Cloud DataWarehouse Benchmark](https://github.com/awslabs/amazon-redshift-utils/tree/master/src/CloudDataWarehouseBenchmark/Cloud-DWB-Derived-from-TPCDS)
 
 - [CDC to Redshift]
-    - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
     - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
 
 - [ClickHouse and S3]
@@ -581,6 +581,13 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
 - [Integrate Power BI with Amazon Redshift for insights and analytics](https://aws.amazon.com/blogs/big-data/integrate-power-bi-with-amazon-redshift-for-insights-and-analytics/)
+
+### Delta Lake
+-[DataBricks]
+  - [Migrating Transactional Data to a Delta Lake using AWS DMS](https://databricks.com/blog/2019/07/15/migrating-transactional-data-to-a-delta-lake-using-aws-dms.html)
+  
+- [Hudi]
+  - [How EMR Hudi works](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hudi-how-it-works.html)
   
 ## IOT
 ### IoT Core
