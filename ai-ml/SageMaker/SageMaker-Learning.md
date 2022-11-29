@@ -12,3 +12,5 @@
 
 - [篇五：基于 Amazon SageMaker Canvas 无代码构建分类模型](https://aws.amazon.com/cn/blogs/china/build-a-classification-model-without-code-based-on-amazon-sagemaker-canvas/)
 在本篇文章中，我们将介绍如何无需写代码即可构建机器学习应用，Amazon SageMaker Canvas提供无代码、可视化的工作环境，即使没有机器学习背景知识，也可以基于自己业务需要构建机器学习模型
+
+- [Amazon SageMaker机器学习推理综述](https://aws.amazon.com/cn/blogs/china/amazon-sagemaker-machine-learning-inference-overview/)
