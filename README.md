@@ -1108,6 +1108,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ## Container
 ### EKS
+[Serverless or Kubernetes on AWS](https://aws.amazon.com/architecture/serverless/serverless-or-kubernetes/)
 #### EKS networking
 - [关于Amazon EKS中Service和Ingress深入分析和研究](https://aws.amazon.com/cn/blogs/china/in-depth-analysis-and-research-on-service-and-ingress-in-amazon-eks/)
 
