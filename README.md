@@ -198,6 +198,11 @@
 
 - [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
 
+- [一文读懂AIGC](c)
+  - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
+  - “对抗生成网络”GAN（Generative Adverserial Network）
+  - Diffusion模型
+
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -484,7 +489,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
 
--[THe tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
+- [THe tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
+
+- [Kafka UI](https://github.com/provectus/kafka-ui)
 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
@@ -823,6 +830,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
   - [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
   - [Disney use the open source and serverless](https://aws.amazon.com/cn/blogs/opensource/improving-developer-productivity-at-disney-with-serverless-and-open-source/)
+  - [Liftshift web app to serverless - part1](https://aws.amazon.com/blogs/compute/lifting-and-shifting-a-web-application-to-aws-serverless-part-1/)
+  - [Liftshift web app to serverless - part2](https://aws.amazon.com/blogs/compute/lifting-and-shifting-a-web-application-to-aws-serverless-part-2/)
 
 - Lambda cost
   - [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
@@ -880,19 +889,20 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
 
 ### Database
+- [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
+  
 - [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
 
-- [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
 
 - [Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
-
 - [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
+- [适用于Babelfish为目标的SQL Server数据迁移方法](https://aws.amazon.com/cn/blogs/china/all-colors-are-always-spring-sql-server-data-migration-method-for-babelfish/)
 
 - [Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
-
-- [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
-
 - [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
+  
+
+
 
 ### Data migration tool - DMS
 - [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
@@ -901,6 +911,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Data migration tool - 3rd party tool
 - [Migration-Data-From-AliCloud](migration/DataMigration/Migration-Data-From-AliCloud.md)
 - [XData])migration/DataMigration/XData.md
+- [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
 
 ### Cross Cloud Migration
 [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
@@ -1021,6 +1032,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [How-to-achive-postgreSQL-Table](database/rds/PostgreSQL/How-to-achive-postgreSQL-Table.md)
 
+- [Amazon Aurora 故障恢复之降低DNS切换对应用影响篇](https://aws.amazon.com/cn/blogs/china/be-vigilant-in-times-of-peace-amazon-aurora-fault-recovery-reduces-the-impact-of-dns-switching-on-applications/)
+- [Amazon Aurora 故障恢复不同JDBC Driver下的时延分析](https://aws.amazon.com/cn/blogs/china/be-vigilant-in-times-of-safety-amazon-aurora-fault-recovery-delay-analysis-under-different-jdbc-drivers/)
+
 #### RDS upgrade
 - [Achieving minimum downtime for major version upgrades in Amazon RDS PostgreSQL](database/rds/PostgreSQL/Achieving-minimum-downtime-for-major-version-RDS-PostgeSQL-upgrades.md)
 
@@ -1086,7 +1100,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [中国区与 Global 区域 DynamoDB 表双向同步](https://aws.amazon.com/cn/blogs/china/one-bridge-fly-north-south-china-and-global-area-dynamodb-table-two-way-synchronization1/)
   - [aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
   - [DynamoDB table initial migration from global to China](https://github.com/yizhizoe/dynamodb-init-migration)
-
+  - [使用 Lambda 订阅Amazon DynamoDB 变更数据，并传输到Amazon OpenSearch，实现全文检索](https://aws.amazon.com/cn/blogs/china/use-lambda-to-subscribe-to-amazon-dynamodb-change-data-and-transmit-it-to-amazon-opensearch/)
 
 - [Security]
   - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
@@ -1102,6 +1116,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [利用ChangeStream实现Amazon DocumentDB表级别容灾复制](https://mp.weixin.qq.com/s/B7UjLi7vAa8f8yzaAq71CQ)
 
 - [Amazon DocumentDB（兼容 MongoDB）增加了对跨区域快照复制的支持](https://aws.amazon.com/cn/about-aws/whats-new/2020/07/amazon-documentdb-support-cross-region-snapshot-copy/)
+
+- [带您玩转云原生文档数据库DocumentDB的地理空间](https://aws.amazon.com/cn/blogs/china/take-you-hand-in-hand-to-play-the-geographic-space-of-the-cloud-native-document-database-documentdb/)
 
 ### Time series
 - [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
@@ -1127,6 +1143,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [EKS in Beijing 3 AZ](container/EKS_in_Beijing_3AZ.md)
 
 - [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
+  - [EKS Multi-Tatent](https://aws.amazon.com/cn/blogs/china/computing-resources-of-eks-multi-tenant-management/)
 
 - [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
@@ -1344,6 +1361,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Mobile
 ### Moible app development
 - [Tutorial: Intro to React – React](https://reactjs.org/tutorial/tutorial.html)
+- [amplify in China](https://aws.amazon.com/cn/blogs/china/experience-in-using-amplify-developing-offline-applications-on-aws-in-china/)
 
 ### GraphQL - AppSync
 - [AppSync-Workshop](database/appsync/AppSync-Workshop.md)
