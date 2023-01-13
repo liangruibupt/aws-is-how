@@ -677,6 +677,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
     - [Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
     - [Keycloak with Okta OpenID Connect Provider](https://ultimatesecurity.pro/post/okta-oidc/)
+    - [Managing temporary elevated access just-in-time access to your AWS environment](https://aws.amazon.com/cn/blogs/security/managing-temporary-elevated-access-to-your-aws-environment/)
 
 - [Automatically rotate IAM user access keys at scale](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/automatically-rotate-iam-user-access-keys-at-scale-with-aws-organizations-and-aws-secrets-manager.html)
   
