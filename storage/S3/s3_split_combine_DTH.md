@@ -352,7 +352,7 @@ aws s3api head-object --bucket ${DESTINATION_BUCKET} --key ${FILE_NAME} --checks
 
 ### Testing 100GB files
 
-1. Creat Original Files: 00GB (20MB part_size)
+1. Creat Original Files: 100GB (20MB part_size)
 ```bash
 dd if=/dev/zero of=100G.img bs=1 count=0 seek=100G
 aws configure set default.s3.multipart_threshold 20MB
