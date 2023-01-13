@@ -10,11 +10,11 @@
     - [Run combine](#run-combine)
     - [Check the md5sum and eTag](#check-the-md5sum-and-etag)
   - [Work with Data Transfer Hub](#work-with-data-transfer-hub)
-    - [PART_SIZE consideration](#part_size-consideration)
+    - [PART\_SIZE consideration](#part_size-consideration)
     - [Testing 50GB](#testing-50gb)
     - [Testing 100GB files](#testing-100gb-files)
     - [Testing 40MB files](#testing-40mb-files)
-    - [Failed case 1:](#failed-case-1)
+    - [Failed cases:](#failed-cases)
 
 ## Prepare environment
 1. Copy the s3-largefile-tool to EC2 or Cloud9
@@ -628,10 +628,11 @@ MD5 (irland/40M.dmg) = ec8bb3b24d5b0f1b5bdf8c8f0f541ee6
 
 
 
-### Failed case 1:
+### Failed cases:
 Original Files are 50GB (16MB part_size) and 100GB (16MB part_size)
-实验1 采用PART_SIZE_IN_MB=16 和 最原始大文件采用PART_SIZE_IN_MB一致都是16MB
-拆分
+
+1. 实验1 采用PART_SIZE_IN_MB=16 和 最原始大文件采用PART_SIZE_IN_MB一致都是16MB 拆分
+```
 export FILE_NAME=file_split_test_50/50G.img
 export REGION=eu-west-1
 export SOURCE_BUCKET=ray-cross-region-sync-eu-west-1
@@ -678,8 +679,11 @@ I0701 16:00:59.093875    7242 main.go:54] “result: succeeded”
 
 检查Etag/md5sum
 aws s3api head-object --bucket ${COMBINE_TARGET_BUCKET_NAME} --key ${FILE_NAME} --checksum-mode ENABLED --region=${REGION}
+```
 
-实验2 采用最小默认参数，不输入其他参数
+2. 实验2 采用最小默认参数，不输入其他参数
+
+```
 拆分
 export FILE_NAME=file_split_test/100G.img
 export REGION=eu-west-1
@@ -743,8 +747,10 @@ I0701 16:49:21.043356    7520 main.go:54] "result: succeeded"
 
 检查Etag/md5sum
 aws s3api head-object --bucket ${COMBINE_TARGET_BUCKET_NAME} --key ${FILE_NAME} --checksum-mode ENABLED --region=${REGION}
+```
 
-实验3 采用PART_SIZE_IN_MB=8 防止被DTH 修改Part=5MB
+3. 实验3 采用PART_SIZE_IN_MB=8 防止被DTH 修改Part=5MB
+```
 拆分
 export FILE_NAME=file_split_test_50/50G.img
 export REGION=eu-west-1
@@ -797,3 +803,4 @@ I0702 04:02:36.329732   17730 main.go:54] "result: succeeded"
 
 检查Etag/md5sum
 aws s3api head-object --bucket ${COMBINE_TARGET_BUCKET_NAME} --key ${FILE_NAME} --checksum-mode ENABLED --region=${REGION}
+```

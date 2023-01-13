@@ -260,7 +260,7 @@
 
 - [Get the spot instance price](EC2/How-to-Get-Spot-Price.md)
 
-- [Cloud Intelligence Dashboards](https://cudos.workshop.aws/)
+- [Cloud Intelligence Dashboards](https://www.wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/)
 (https://github.com/aws-samples/aws-cudos-framework-deployment)
 
 ### Network cost
