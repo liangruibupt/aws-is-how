@@ -72,6 +72,7 @@
     - [Network Secuirty](#network-secuirty)
   - [DNS](#dns)
     - [Route 53](#route-53)
+    - [HTTPDNS](#httpdns)
   - [Serverless](#serverless)
     - [Serverless Workshop](#serverless-workshop)
     - [Function as Service - Lambda](#function-as-service---lambda)
@@ -465,6 +466,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Stream - Flink and Spark Streaming
 - [Flink on EMR]
   - [可持续性最佳架构实践—基于Spot的Flink作业集群部署与优化](https://aws.amazon.com/cn/blogs/china/flink-on-eks-reuse-recycle/)
+- [基于 Hudi + Flink多流拼接（大宽表）最佳实践](https://mp.weixin.qq.com/s/Kn-amxHSsyl7gPEdZpkpUw)
 
 
 ### Stream - Kinesis
@@ -796,6 +798,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Route53 Resolver](R53/R53-Resolver.md)
 
 - [Route53 cross-account-dns](R53/cross-account-dns.md)
+
+### HTTPDNS
+[DNS hijacked using http dns bypass](https://zhuanlan.zhihu.com/p/380524458?utm_medium=social&utm_oi=713845518471532544&utm_psn=1604820811101130752&utm_source=wechat_session)
 
 ## Serverless
 ### Serverless Workshop
@@ -1187,6 +1192,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [How can I a ECS service serve traffic from multiple port?](container/ECS-Dynamic-Port-Mapping.md)
 
 - [How to launch tomcat server on ECS](container/tomcat)
+
+- [graceful-shutdowns-with-ecs](https://aws.amazon.com/blogs/containers/graceful-shutdowns-with-ecs/)
 
 - [Amazon ECS firelens]
     - [firelens examples](https://github.com/aws-samples/amazon-ecs-firelens-examples)
