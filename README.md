@@ -150,6 +150,7 @@
   - [Office and business application](#office-and-business-application)
     - [Workspaces - VDI](#workspaces---vdi)
   - [Metaverse](#metaverse)
+  - [Automotive](#automotive)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -213,6 +214,8 @@
 - [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
 
 - [Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
+
+- [ChatGPT](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
 
 ### Translate, Text to speech, Speeck to Text
 - [使用 Amazon Translate 自动翻译PPT](https://aws.amazon.com/cn/blogs/china/translating-presentation-files-with-amazon-translate/)
@@ -807,6 +810,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Serverless Day](https://serverlessday.cbuilder.tech/index.html)
 
 - [Serverless Patterns Collection](https://serverlessland.com/patterns)
+- [Serverless code repo Collection](https://serverlessland.com/repos)
 
 - [Serverless coffee workshop](https://workshop.serverlesscoffee.com/0-introduction.html)
 
@@ -1415,3 +1419,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Metaverse
 - [possibilities-of-healthcare-in-the-metaverse](https://www.forbes.com/sites/bernardmarr/2022/02/23/the-amazing-possibilities-of-healthcare-in-the-metaverse/?sh=25555f319e5c)
 - [life-sciences-in-the-metaverse](https://www.jdsupra.com/legalnews/life-sciences-in-the-metaverse-a-new-7682087/)
+
+
+## Automotive
+- [soafee aws iotfleetwise demo](https://github.com/aws-samples/demo-soafee-aws-iotfleetwise)
+- [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
