@@ -765,6 +765,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [VPC-Cross-Account-Connection](vpc/VPC-Cross-Account-Connection.md)
 
+- [Building a Solution for China Cross-Border VPC Connection](https://aws.amazon.com/cn/blogs/apn/building-a-solution-for-china-cross-border-vpc-connection/)
+
 ### Acceleration network
 - [Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
 
@@ -1287,6 +1289,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [一键部署Telegram 告警](https://github.com/Chris-wa-He/AWS-Lambda-notifier/tree/Telegram-notifier)
 
 - [Monitor using Prometheus and Grafana](https://www.eksworkshop.com/intermediate/240_monitoring/) Here is how to deploy Grafana on EKS
+- [Set up cross-region metrics collection for Amazon Managed Service for Prometheus workspaces](https://aws.amazon.com/blogs/opensource/set-up-cross-region-metrics-collection-for-amazon-managed-service-for-prometheus-workspaces/)
 
 - [Datadog integration with AWS China](https://docs.datadoghq.com/integrations/amazon_web_services/?tab=accesskeysgovcloudorchinaonly)
 - [Grafana and CloudWatch integration]
