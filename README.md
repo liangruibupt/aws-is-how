@@ -1102,6 +1102,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [RedisInsight 官方可视化工具](https://mp.weixin.qq.com/s/DSRCdzFpzNoBSbp2pvm1SA)
 
+- [Amazon ElastiCache for Redis 分层存储](https://mp.weixin.qq.com/s/k4yYb5DtVNIB3DY4iwaZkg)
+
 ### Key-Value and Document
 #### DynamoDB
 - [DynamoDB labs](database/dynamodb/dynamodb-lab.md)
@@ -1290,6 +1292,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Monitor using Prometheus and Grafana](https://www.eksworkshop.com/intermediate/240_monitoring/) Here is how to deploy Grafana on EKS
 - [Set up cross-region metrics collection for Amazon Managed Service for Prometheus workspaces](https://aws.amazon.com/blogs/opensource/set-up-cross-region-metrics-collection-for-amazon-managed-service-for-prometheus-workspaces/)
+- [Create cross-account, custom Amazon Managed Grafana dashboards for Amazon Redshift](https://aws.amazon.com/blogs/big-data/create-cross-account-custom-amazon-managed-grafana-dashboards-for-amazon-redshift/)
 
 - [Datadog integration with AWS China](https://docs.datadoghq.com/integrations/amazon_web_services/?tab=accesskeysgovcloudorchinaonly)
 - [Grafana and CloudWatch integration]
