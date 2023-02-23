@@ -387,6 +387,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Analytics
 ### High Level Data Engineering and Data Analytics
 - [AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
+  - [Chinese version](https://catalog.us-east-1.prod.workshops.aws/workshops/976050cc-0606-4b23-b49f-ca7b8ac4b153/zh-CN/100-introduction)
 
 - [数据分析的技术源流](https://aws.amazon.com/cn/blogs/china/the-technical-origin-of-data-analysis/)
 
@@ -1248,6 +1249,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Organizing Your AWS Environment Using Multiple Accounts Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html)
   - [Landing Zone example](https://github.com/clouddrove/cloudformation-aws-landing-zone)
   - [Landing Zone plus - Cloud Foundations](https://aws.amazon.com/cn/blogs/china/fast-build-a-secure-compliant-and-well-architected-multi-account-organization-in-cloud-environment/)
+  - [ Deploy a multi-account cloud foundation to support highly-regulated workloads and complex compliance requirements](https://github.com/awslabs/landing-zone-accelerator-on-aws)
 
 
 - [AWS Services Autoscaling](devops/cloudwatch/AWS-Service-Autoscaling.md)
