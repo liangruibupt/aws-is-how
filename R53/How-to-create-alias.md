@@ -63,3 +63,6 @@ aws route53 list-resource-record-sets --hosted-zone-id  Z08202231ZEUWA2PZ7ZBZ --
 
 aws route53 list-resource-record-sets --hosted-zone-id Z0807456FWSN21W2TRAZ --endpoint-url https://route53.amazonaws.com.cn --region cn-northwest-1 --profile cn-north-1
 ```
+
+Beijing：Z3N456W6CBMXJZ
+Ningxia：Z1HSIYANU8ZW46

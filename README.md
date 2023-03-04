@@ -321,10 +321,11 @@
 - [Graviton]
   - [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
   - [AWS Workshop - Graviton2 China](http://graviton2-workshop.s3-website.cn-northwest-1.amazonaws.com.cn/1.basics.html)
+  - [porting-advisor-for-graviton](https://github.com/aws/porting-advisor-for-graviton)
+    - [sample blog](https://aws.amazon.com/cn/blogs/compute/using-porting-advisor-for-graviton/)
   - [AWS Graviton2-based services](https://github.com/aws/aws-graviton-getting-started)
   - [3rd party](https://github.com/aws/aws-graviton-getting-started/blob/main/isv.md)
   - [container](https://github.com/aws/aws-graviton-getting-started/blob/main/containers.md)
- 
   - [GRAVITON2 电商独立站](https://graviton2.awspsa.com/)
 
 - [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
