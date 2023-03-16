@@ -200,10 +200,14 @@
 
 - [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
 
-- [一文读懂AIGC](c)
+- [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
   - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
   - “对抗生成网络”GAN（Generative Adverserial Network）
   - Diffusion模型
+- [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
+- [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) on g4dn.xlarge with Ubuntu 22.04 LTS. Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
+  - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
+  - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
 
 ### NLP
 
@@ -414,6 +418,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Glue ETL for kinesis / Kafka and RDS MySQL](https://github.com/liangruibupt/glue-streaming-etl-demo)
   - [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
   - [Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
+  - [Best practices to scale Apache Spark jobs and partition data with AWS Glue](https://aws.amazon.com/blogs/big-data/best-practices-to-scale-apache-spark-jobs-and-partition-data-with-aws-glue/)
   
 - [Glue Crawler]
   - [Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
