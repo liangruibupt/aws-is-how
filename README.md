@@ -7,6 +7,7 @@
     - [SageMaker](#sagemaker)
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
+    - [ChatGPT and AIGC](#chatgpt-and-aigc)
     - [NLP](#nlp)
     - [Translate, Text to speech, Speeck to Text](#translate-text-to-speech-speeck-to-text)
     - [Forecasting](#forecasting)
@@ -200,10 +201,12 @@
 
 - [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
 
+### ChatGPT and AIGC
 - [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
   - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
   - “对抗生成网络”GAN（Generative Adverserial Network）
   - Diffusion模型
+- [ChatGPT](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
 - [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
 - [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) on g4dn.xlarge with Ubuntu 22.04 LTS. Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
   - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
@@ -218,8 +221,6 @@
 - [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
 
 - [Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
-
-- [ChatGPT](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
 
 ### Translate, Text to speech, Speeck to Text
 - [使用 Amazon Translate 自动翻译PPT](https://aws.amazon.com/cn/blogs/china/translating-presentation-files-with-amazon-translate/)
@@ -919,6 +920,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
 - [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
+- [rds-for-postgresql v.s aurora-postgresql](https://aws.amazon.com/blogs/database/is-amazon-rds-for-postgresql-or-amazon-aurora-postgresql-a-better-choice-for-me/)
   
 
 
@@ -1194,7 +1196,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Exclusive Node from EKS ELB](container/Exclusive_Node_from_ELB.md)
 
-- [ Securing Kubernetes with Private CA](container/EKS-Certification.md)
+- [Securing Kubernetes with Private CA](container/EKS-Certification.md)
+
+- [Public container images mirror to China ECR solution](https://github.com/aws-samples/amazon-ecr-replication-for-pub-container-images)
 
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
@@ -1403,6 +1407,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Building a disaster recovery site on AWS for workloads on Google Cloud]
   - [Part 1](https://aws.amazon.com/blogs/storage/building-a-disaster-recovery-site-on-aws-for-workloads-on-google-cloud-part-1/)
   - [Part 2](https://aws.amazon.com/blogs/storage/building-a-disaster-recovery-site-on-aws-for-workloads-on-google-cloud-part-2/)
+
+- [resiliency-analyser](https://github.com/aws-samples/resiliency-analyser)
 
 #### RDS HA/DR
 - [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
