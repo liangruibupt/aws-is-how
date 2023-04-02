@@ -207,10 +207,14 @@
   - “对抗生成网络”GAN（Generative Adverserial Network）
   - Diffusion模型
 - [ChatGPT](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
-- [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
-- [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) on g4dn.xlarge with Ubuntu 22.04 LTS. Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
-  - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
-  - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
+- [AIGC workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/1ac668b1-dbd3-4b45-bf0a-5bc36138fcf1/zh-CN/1-introduction)
+  - [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
+  - [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) on 
+    - g4dn.xlarge with Ubuntu 22.04 LTS. 
+    - Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. 
+    - Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
+    - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
+    - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
 
 ### NLP
 
@@ -332,6 +336,7 @@
   - [3rd party](https://github.com/aws/aws-graviton-getting-started/blob/main/isv.md)
   - [container](https://github.com/aws/aws-graviton-getting-started/blob/main/containers.md)
   - [GRAVITON2 电商独立站](https://graviton2.awspsa.com/)
+  - [Porting Advisor for Graviton](https://github.com/aws/porting-advisor-for-graviton)
 
 - [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
 
@@ -349,6 +354,8 @@
 
 - [EC2 detected degradation]
   - [How to handle EC2 detected degradation](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-degraded-hardware/)
+
+- [Amazon EC2 針對 Windows Server 2012/R2 EOL](https://aws.amazon.com/tw/events/taiwan/techblogs/Amazon-EC2-end-of-support-guidelines-for-Windows-server/)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
@@ -1143,6 +1150,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Amazon DocumentDB（兼容 MongoDB）增加了对跨区域快照复制的支持](https://aws.amazon.com/cn/about-aws/whats-new/2020/07/amazon-documentdb-support-cross-region-snapshot-copy/)
 
 - [带您玩转云原生文档数据库DocumentDB的地理空间](https://aws.amazon.com/cn/blogs/china/take-you-hand-in-hand-to-play-the-geographic-space-of-the-cloud-native-document-database-documentdb/)
+
+- [Run full text search queries on Amazon DocumentDB](https://aws.amazon.com/blogs/database/run-full-text-search-queries-on-amazon-documentdb-data-with-amazon-elasticsearch-service/)
 
 ### Time series
 - [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
