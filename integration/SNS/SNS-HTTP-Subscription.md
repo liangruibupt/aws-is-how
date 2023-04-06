@@ -30,7 +30,7 @@ npm install yargs
 ```
 
 ## SNS 控制脚本
-[参考脚本sns-manager.js实现](integration/script/sns-manager.js)
+[参考脚本sns-manager.js实现](script/sns-manager.js)
 
 ```bash
 # 
@@ -45,7 +45,7 @@ node sns-manager.js publishMessage arn:aws-cn:sns:cn-northwest-1:{your-account-i
 如果您想通过 HTTP 接收Amazon SNS通知，则需要通知目标 HTTP URL。
 订阅时，通知数据将被发布到改HTTP URL，因此需要一个 HTTP服务 接收 POST 请求。该服务在EC2上运行。
 
-[参考 HTTP Server app.js 实现](integration/script/app.js)
+[参考 HTTP Server app.js 实现](script/app.js)
 
 ### 场景1：EC2 公网访问
 1. 配置好 aws configure - 这里以cn-northwest-1为例
