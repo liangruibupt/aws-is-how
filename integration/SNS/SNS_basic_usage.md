@@ -2,9 +2,18 @@
 
 ## Overview
 
-Shows how to use the AWS SDK for Python (Boto3) to work with Amazon Simple Notification Service (Amazon SNS).
+Shows how to use the AWS SDK for Python (Boto3) to work with Amazon Simple Notification Service (Amazon SNS) for below actions:
 
-Amazon SNS is a web service that enables applications, end-users, and devices to instantly send and receive notifications from the cloud.
+- Create a topic (CreateTopic)
+- Delete a subscription (Unsubscribe)
+- Delete a topic (DeleteTopic)
+- List the subscribers of a topic (ListSubscriptions)
+- List topics (ListTopics)
+- Publish an SMS text message (Publish)
+- Publish to a topic with subscribed email destination (Publish)
+- Set a filter policy (SetSubscriptionAttributes)
+- Subscribe an email address to a topic (Subscribe)
+
 
 ## Install the packages required by these examples 
 1. Read the [requirements.txt](script/requirements.txt)

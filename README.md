@@ -1367,6 +1367,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Integration
 ### Quque, notification
 - [How to build Amazon SNS HTTP Subscription?](integration/SNS/SNS-HTTP-Subscription.md)
+- [SNS Basic Example](integration/SNS/SNS_basic_usage.md)
 
 - [SQS quick start demo for Standard Queue and JMS](integration/SQS)
 
