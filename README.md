@@ -200,6 +200,7 @@
 - [Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
 
 - [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
+- [Scale YOLOv5 inference with Amazon SageMaker endpoints and AWS Lambda](https://aws.amazon.com/blogs/machine-learning/scale-yolov5-inference-with-amazon-sagemaker-endpoints-and-aws-lambda/)
 
 ### ChatGPT and AIGC
 - [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
@@ -215,7 +216,7 @@
     - Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
     - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
     - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
-
+  - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -567,6 +568,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Amazon Elasticsearch Service Workshop](https://www.aesworkshops.com/)
 
 - [Elasticsearch Service Snapshot Lifecycle](analytics/elasticsearch-lifecycle)
+- [Automating Index State Management for Amazon OpenSearch Service](https://aws.amazon.com/blogs/big-data/automating-index-state-management-for-amazon-opensearch-service/)
 
 - [SAML Authentication for Kibana](analytics/saml-kibana)
 
