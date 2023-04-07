@@ -14,6 +14,7 @@ Shows how to use the AWS SDK for Python (Boto3) to work with Amazon Simple Notif
 - Set a filter policy (SetSubscriptionAttributes)
 - Subscribe an email address to a topic (Subscribe)
 
+The client can be same or different AWS regions (e.g. us-east-1 and eu-central-1) or AWS partitions (e.g. China and Global)
 
 ## Install the packages required by these examples 
 1. Read the [requirements.txt](script/requirements.txt)
