@@ -5,7 +5,7 @@ import datetime
 import json
 import logging
 
-logging.basicConfig(filename='example.log', evel=logging.DEBUG)
+logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
 s3_client_cn = boto3.client(
     's3',
@@ -13,8 +13,8 @@ s3_client_cn = boto3.client(
 )
 
 SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN', default=None)
-S3_BUCKET_NAME_CN = os.environ['S3_BUCKET_NAME_CN']
-S3_KEY_NAME_CN = os.environ['S3_KEY_NAME_CN']
+S3_BUCKET_NAME_CN = os.environ.get('S3_BUCKET_NAME_CN', default=None)
+S3_KEY_NAME_CN = os.environ.get('S3_KEY_NAME_CN', default=None)
 
 sns_client_cn = boto3.client(
     'sns',
@@ -59,8 +59,9 @@ def lambda_handler(event, context):
     s3_key_name = event.get('s3_key_name', S3_KEY_NAME_CN)
     now = datetime.datetime.now()
     try:
+        response = s3_client_cn.list_objects_v2(Bucket=s3_bucket_name)
         #response = s3_client_cn.upload_file(file_path, s3_bucket_name, s3_key_name)
-        response = s3_client_cn.put_object(Body=file_path, Bucket=s3_bucket_name, Key=s3_key_name, ContentMD5='thisisinvalidvalue5555===')
+        #response = s3_client_cn.put_object(Body=file_path, Bucket=s3_bucket_name, Key=s3_key_name, ContentMD5='thisisinvalidvalue5555===')
     except ClientError as e:
         message = "Failed to upload s3 bucket, check the stack trace below." + \
             json.dumps(e.response['Error'])
