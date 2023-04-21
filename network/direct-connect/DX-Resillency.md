@@ -58,3 +58,7 @@ Two common patterns:
 - Transit Virtual Interfaces (TransitVIF) and DXGW. 
 
 https://aws.amazon.com/blogs/networking-and-content-delivery/creating-active-passive-bgp-connections-over-aws-direct-connect/
+
+
+## AWS DX – DXGW with AWS Transit Gateway, Multi-Regions
+https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/aws-dx-dxgw-with-aws-transit-gateway-multi-regions-and-aws-public-peering.html 
