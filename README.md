@@ -217,6 +217,7 @@
     - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
     - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
   - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
+  - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -276,7 +277,8 @@
 
 - [Cloud Intelligence Dashboards](https://www.wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/)
 (https://github.com/aws-samples/aws-cudos-framework-deployment)
-
+- [Cloud Intelligence Dashboards in China](https://aws.amazon.com/cn/blogs/china/visualizing-cloud-resource-costs-and-usage-based-on-grafana/)
+- 
 ### Network cost
 - [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
@@ -513,6 +515,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [THe tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
 
 - [Kafka UI](https://github.com/provectus/kafka-ui)
+- [msk-reliability-best-practice](https://aws.amazon.com/cn/blogs/china/msk-reliability-best-practice/)
 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
@@ -923,7 +926,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   
 - [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
 
-
 - [Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
 - [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
 - [适用于Babelfish为目标的SQL Server数据迁移方法](https://aws.amazon.com/cn/blogs/china/all-colors-are-always-spring-sql-server-data-migration-method-for-babelfish/)
@@ -932,8 +934,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
 - [rds-for-postgresql v.s aurora-postgresql](https://aws.amazon.com/blogs/database/is-amazon-rds-for-postgresql-or-amazon-aurora-postgresql-a-better-choice-for-me/)
   
-
-
+- [Bytebase 为 Amazon Aurora MySQL 设置数据库变更管理](https://mp.weixin.qq.com/s/6InIjVCojuVdQc5j4OyBJg)
+- [Aurora launches instances in at least 3 AZ even if less are specified](https://github.com/hashicorp/terraform-provider-aws/issues/1111#)
 
 ### Data migration tool - DMS
 - [DMS Workshop](https://dms-immersionday.workshop.aws/en/intro.html)
@@ -1140,6 +1142,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Performance]
   - [DynamoDB_Pagenation](database/dynamodb/DynamoDB_Pagenation.md)
+  - [Understanding Amazon DynamoDB latency](https://aws.amazon.com/cn/blogs/database/understanding-amazon-dynamodb-latency/)
 
 #### MongoDB and DocumentDB
 - [Get-Start-DocumentDB](database/documentdb/Get-Start-DocumentDB.md)
@@ -1163,6 +1166,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [Serverless or Kubernetes on AWS](https://aws.amazon.com/architecture/serverless/serverless-or-kubernetes/)
 #### EKS networking
 - [关于Amazon EKS中Service和Ingress深入分析和研究](https://aws.amazon.com/cn/blogs/china/in-depth-analysis-and-research-on-service-and-ingress-in-amazon-eks/)
+- [Exposing Kubernetes Applications via service and ingress resource](https://aws.amazon.com/blogs/containers/exposing-kubernetes-applications-part-3-nginx-ingress-controller/)
+- [How do I expose the Kubernetes services running on my Amazon EKS cluster](https://repost.aws/knowledge-center/eks-kubernetes-services-cluster)
+- [Network load balancing on Amazon EKS instance and ip type](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html)
 
 - [一文看懂 Amazon EKS 中的网络规划](https://aws.amazon.com/cn/blogs/china/understand-the-network-planning-in-amazon-eks-in-one-article/)
   
@@ -1432,6 +1438,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   
 ### Resilience
 - [Verify the resilience of your workloads using Chaos Engineering](https://aws.amazon.com/cn/blogs/architecture/verify-the-resilience-of-your-workloads-using-chaos-engineering/)
+- 
 
 ## Game
 ### GameLift
