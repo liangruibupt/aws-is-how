@@ -517,6 +517,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Kafka UI](https://github.com/provectus/kafka-ui)
 - [msk-reliability-best-practice](https://aws.amazon.com/cn/blogs/china/msk-reliability-best-practice/)
 
+- [exposing kafka public](https://dvirgiln.github.io/exposing-kafka-throw-different-aws-vpcs/)
+- 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
   - [Automate run Athena_name_query and prepared_statement](analytics/athena-automate/Athena_name_query_prepared_statement.md)
@@ -628,6 +630,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS IoT Events Quick Start](iot/IoT-Events)
 
 - [Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/lambda-write-postgresql/lambda-write-postgreSQL.md)
+
+- [IoT DR solution](https://aws.amazon.com/solutions/implementations/disaster-recovery-for-aws-iot/)
 
 ### IoT Timeseries
 - [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
@@ -1217,6 +1221,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Securing Kubernetes with Private CA](container/EKS-Certification.md)
 
 - [Public container images mirror to China ECR solution](https://github.com/aws-samples/amazon-ecr-replication-for-pub-container-images)
+- [Global to China 跨国企业 Kubernetes 应用跨境复制和部署方案](https://aws.amazon.com/cn/blogs/china/global-to-china-multinational-enterprise-kubernetes-application-cross-border-replication-and-deployment-solution/)
 
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
