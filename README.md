@@ -518,6 +518,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [msk-reliability-best-practice](https://aws.amazon.com/cn/blogs/china/msk-reliability-best-practice/)
 
 - [exposing kafka public](https://dvirgiln.github.io/exposing-kafka-throw-different-aws-vpcs/)
+- [Connect to Amazon MSK Serverless from your on-premises network](https://aws.amazon.com/blogs/big-data/connect-to-amazon-msk-serverless-from-your-on-premises-network/)
 - 
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
