@@ -218,6 +218,8 @@
     - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
   - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
   - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
+  - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
+  - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -496,7 +498,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Kinesis Workshop](analytics/kinesis/101Workshop)
 
 - [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
-
+- 
+- [lambda as a consumer for kinesis](https://aws.amazon.com/blogs/compute/using-aws-lambda-as-a-consumer-for-amazon-kinesis)
+- 
 ### Stream - Kafka
 - [AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
 
