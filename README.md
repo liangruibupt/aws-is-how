@@ -1238,6 +1238,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Public container images mirror to China ECR solution](https://github.com/aws-samples/amazon-ecr-replication-for-pub-container-images)
 - [Global to China 跨国企业 Kubernetes 应用跨境复制和部署方案](https://aws.amazon.com/cn/blogs/china/global-to-china-multinational-enterprise-kubernetes-application-cross-border-replication-and-deployment-solution/)
 
+- ### EKS Performance
+- [Karpenter]
+  - [Karpenter 实践：一种多 EKS 集群下的 Spot 实例中断事件处理总线设计](https://aws.amazon.com/cn/blogs/china/karpenter-practice-multi-eks-cluster-spot-instance-interrupts-event-processing-bus/)
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
 
