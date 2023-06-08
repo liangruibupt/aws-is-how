@@ -736,6 +736,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [使用 Amazon WAF 进行 Captcha人机验证](https://aws.amazon.com/cn/blogs/china/use-amazon-waf-for-captcha-man-machine-verification/)
 
+- [WAF的托管规则说明](security/waf/WAF的托管规则说明.md)
+
 ### Permission - IAM Policy, S3 Policy, RAM Policy
 - [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
 
