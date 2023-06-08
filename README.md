@@ -502,9 +502,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Kinesis Workshop](analytics/kinesis/101Workshop)
 
 - [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
-- 
+
 - [lambda as a consumer for kinesis](https://aws.amazon.com/blogs/compute/using-aws-lambda-as-a-consumer-for-amazon-kinesis)
-- 
+  
 ### Stream - Kafka
 - [AWS Streaming Data Solution for Amazon MSK](https://aws.amazon.com/solutions/implementations/aws-streaming-data-solution-for-amazon-msk/)
 
@@ -1152,6 +1152,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [aws-dynamodb-cross-region-replication](https://github.com/aws-samples/aws-dynamodb-cross-region-replication)
   - [DynamoDB table initial migration from global to China](https://github.com/yizhizoe/dynamodb-init-migration)
   - [使用 Lambda 订阅Amazon DynamoDB 变更数据，并传输到Amazon OpenSearch，实现全文检索](https://aws.amazon.com/cn/blogs/china/use-lambda-to-subscribe-to-amazon-dynamodb-change-data-and-transmit-it-to-amazon-opensearch/)
+  - [Understanding Amazon DynamoDB latency](https://aws.amazon.com/cn/blogs/database/understanding-amazon-dynamodb-latency/)
 
 - [Security]
   - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
@@ -1484,3 +1485,4 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Automotive
 - [soafee aws iotfleetwise demo](https://github.com/aws-samples/demo-soafee-aws-iotfleetwise)
 - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
+- [在AWS上构建基于SOAFEE的云原生软件定义汽车实践](https://aws.amazon.com/cn/blogs/china/build-cloud-native-software-based-on-soafee-on-aws-to-define-automobile-practice/)
