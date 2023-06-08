@@ -427,9 +427,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Serverless Data Lake Framework WORKSHOP](https://sdlf.workshop.aws/en/)
 
-- [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
-
-- [Develop and deploy a customized workflow using Autonomous Driving Data Framework (ADDF) on AWS](https://aws.amazon.com/blogs/industries/develop-and-deploy-a-customized-workflow-using-autonomous-driving-data-framework-addf-on-aws/)
+- [敦煌网集团大数据上云实践](https://aws.amazon.com/cn/blogs/china/dhgate-group-big-data-cloud-practice/)
 
 ### Data integration service: Glue
 - [ETL]
@@ -1493,3 +1491,5 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [soafee aws iotfleetwise demo](https://github.com/aws-samples/demo-soafee-aws-iotfleetwise)
 - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
 - [在AWS上构建基于SOAFEE的云原生软件定义汽车实践](https://aws.amazon.com/cn/blogs/china/build-cloud-native-software-based-on-soafee-on-aws-to-define-automobile-practice/)
+- [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
+- [Develop and deploy a customized workflow using Autonomous Driving Data Framework (ADDF) on AWS](https://aws.amazon.com/blogs/industries/develop-and-deploy-a-customized-workflow-using-autonomous-driving-data-framework-addf-on-aws/)
