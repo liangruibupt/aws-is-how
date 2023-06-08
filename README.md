@@ -365,6 +365,8 @@
   - [How to handle EC2 detected degradation](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-degraded-hardware/)
 
 - [Amazon EC2 針對 Windows Server 2012/R2 EOL](https://aws.amazon.com/tw/events/taiwan/techblogs/Amazon-EC2-end-of-support-guidelines-for-Windows-server/)
+- [Nitro]
+  -[在 AWS Nitro Enclaves 中运行传统 Web 应用迁移实践](https://aws.amazon.com/cn/blogs/china/running-traditional-web-application-migration-practices-in-aws-nitro-enclaves/)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
@@ -1241,6 +1243,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - ### EKS Performance
 - [Karpenter]
   - [Karpenter 实践：一种多 EKS 集群下的 Spot 实例中断事件处理总线设计](https://aws.amazon.com/cn/blogs/china/karpenter-practice-multi-eks-cluster-spot-instance-interrupts-event-processing-bus/)
+  - [Karpenter 实践：使用 Spot 实例进行成本优化](https://aws.amazon.com/cn/blogs/china/kubernetes-node-elastic-scaling-open-source-component-karpenter-practice-cost-optimization-using-spot-instance/)
+  - [Karpenter 实践：部署GPU推理应用](https://aws.amazon.com/cn/blogs/china/kubernetes-node-elastic-scaling-open-source-component-karpenter-practice-deploying-gpu-inference-applications/)
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
 
