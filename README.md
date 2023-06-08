@@ -8,6 +8,7 @@
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
     - [ChatGPT and AIGC](#chatgpt-and-aigc)
+    - [Knowledge Base](#knowledge-base)
     - [NLP](#nlp)
     - [Translate, Text to speech, Speeck to Text](#translate-text-to-speech-speeck-to-text)
     - [Forecasting](#forecasting)
@@ -224,7 +225,12 @@
   - [AIGC 助力电商虚拟试穿新体验](https://aws.amazon.com/cn/blogs/china/e-commerce-virtual-try-on-new-experience-based-on-aigc/)
 - [Vector database]
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
-  - [基于Amazon Open Search+大语言模型的智能问答系统](https://catalog.us-east-1.prod.workshops.aws/workshops/158a2497-7cbe-4ba4-8bee-2307cb01c08a)
+- [LLM]
+  - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
+  
+### Knowledge Base
+- [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
+- [基于Amazon Open Search+大语言模型的智能问答系统](https://catalog.us-east-1.prod.workshops.aws/workshops/158a2497-7cbe-4ba4-8bee-2307cb01c08a)
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -552,14 +558,12 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [How to get results from Athena for the past 7 days](analytics/athena-workshop/How_to_query_past_7_days_result.md)
 
 ### Data Warehouse: Redshfit
-- [Automate Redshift ETL](analytics/lambda-redshift)
-
-- [Redshift ML](analytics/redshift-ml/Readme.md)
-
-- [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
-
 - [Usage]
   - [Cross-Account Data Sharing for Amazon Redshift](https://aws.amazon.com/blogs/aws/cross-account-data-sharing-for-amazon-redshift/)
+  - [redshift one page](https://github.com/aws/awesome-redshift)
+  - [Automate Redshift ETL](analytics/lambda-redshift)
+  - [Redshift ML](analytics/redshift-ml/Readme.md)
+  - [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
   
 - [Redshift performance]
   - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
