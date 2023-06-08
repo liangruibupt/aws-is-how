@@ -219,7 +219,9 @@
   - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
   - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
   - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
+- Vector database
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
+  - [基于Amazon Open Search+大语言模型的智能问答系统](https://catalog.us-east-1.prod.workshops.aws/workshops/158a2497-7cbe-4ba4-8bee-2307cb01c08a)
 ### NLP
 
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -513,6 +515,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [MirrorMaker deployment](https://github.com/apache/kafka/blob/trunk/connect/mirror/README.md)
 
 - [Kafka/MSK Cluster connection issue](https://aws.amazon.com/premiumsupport/knowledge-center/msk-cluster-connection-issues/)
+- [MSK now offers multi-VPC private connectivity and cross-account access](https://aws.amazon.com/blogs/big-data/connect-kafka-client-applications-securely-to-your-amazon-msk-cluster-from-different-vpcs-and-aws-accounts/)
 
 - [Create a low-latency source-to-data lake pipeline using Amazon MSK Connect, Apache Flink, and Apache Hudi](https://aws.amazon.com/blogs/big-data/create-a-low-latency-source-to-data-lake-pipeline-using-amazon-msk-connect-apache-flink-and-apache-hudi/)
 
@@ -1186,6 +1189,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Add the additioal CIDR](https://aws.amazon.com/premiumsupport/knowledge-center/eks-multiple-cidr-ranges/)
 
 - [Cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/cn/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
+
+- [mutual TLS authentication for EKS Application](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/configure-mutual-tls-authentication-for-applications-running-on-amazon-eks.html)
 
 #### EKS practice
 - [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
