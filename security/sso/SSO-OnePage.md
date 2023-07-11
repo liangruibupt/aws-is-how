@@ -18,6 +18,7 @@ There are 3 times of Single-Sign-On cases
 - Auth0 with SAML2.0 example: [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://aws.amazon.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
 - OpenID example: [Okta-OpenID-AWS-in-the-Browser](Okta-OpenID-AWS-in-the-Browser.md)
 - [Okta - AWS China multi-account console integration](Okta-multiple-accounts-integration.md)
+- [Using global region SSO service to federate China region console](https://aws.amazon.com/cn/blogs/china/use-amazon-cloud-technology-single-sign-on-service-for-amazon-cloud-technology-china/)
 
 # 2. Gateway portal (custom identity broker) to do Single-Sign-On
 - [Enabling custom identity broker access to the AWS console](Customer_Idp_Broker_access_aws_console.md)

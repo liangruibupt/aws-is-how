@@ -230,6 +230,8 @@
   - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
   - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
   - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+  - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
+  - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   
 ### Knowledge Base
 - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
@@ -504,15 +506,13 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Flink on EMR]
   - [可持续性最佳架构实践—基于Spot的Flink作业集群部署与优化](https://aws.amazon.com/cn/blogs/china/flink-on-eks-reuse-recycle/)
 - [基于 Hudi + Flink多流拼接（大宽表）最佳实践](https://mp.weixin.qq.com/s/Kn-amxHSsyl7gPEdZpkpUw)
+- [ClickStream workshop](https://catalog.workshops.aws/clickstream/en-US)
 
 
 ### Stream - Kinesis
 - [How to do analysis and virtulization DynamoDB](analytics/How-to-do-Virtulization-DynamoDB.md)
-
 - [AWS Kinesis Workshop](analytics/kinesis/101Workshop)
-
 - [Sending Data to an Amazon Kinesis Data Firehose Delivery Stream](analytics/kinesis/Write-Kinesis-using-Agent.md)
-
 - [lambda as a consumer for kinesis](https://aws.amazon.com/blogs/compute/using-aws-lambda-as-a-consumer-for-amazon-kinesis)
   
 ### Stream - Kafka
@@ -708,6 +708,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Asset Management and Compliance
 - [How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
+- [select * from cloud](https://steampipe.io/)
 
 ### AuthN and AuthZ
 - [Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
@@ -725,6 +726,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
     - [Keycloak with Okta OpenID Connect Provider](https://ultimatesecurity.pro/post/okta-oidc/)
     - [Managing temporary elevated access just-in-time access to your AWS environment](https://aws.amazon.com/cn/blogs/security/managing-temporary-elevated-access-to-your-aws-environment/)
+    - [Using global region SSO service to federate China region console](https://aws.amazon.com/cn/blogs/china/use-amazon-cloud-technology-single-sign-on-service-for-amazon-cloud-technology-china/)
 
 - [Automatically rotate IAM user access keys at scale](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/automatically-rotate-iam-user-access-keys-at-scale-with-aws-organizations-and-aws-secrets-manager.html)
   
