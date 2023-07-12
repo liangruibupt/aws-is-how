@@ -1164,6 +1164,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [DynamoDB table initial migration from global to China](https://github.com/yizhizoe/dynamodb-init-migration)
   - [使用 Lambda 订阅Amazon DynamoDB 变更数据，并传输到Amazon OpenSearch，实现全文检索](https://aws.amazon.com/cn/blogs/china/use-lambda-to-subscribe-to-amazon-dynamodb-change-data-and-transmit-it-to-amazon-opensearch/)
   - [Understanding Amazon DynamoDB latency](https://aws.amazon.com/cn/blogs/database/understanding-amazon-dynamodb-latency/)
+  - [大规模 DynamoDB 表数据跨账号迁移指南](https://aws.amazon.com/cn/blogs/china/large-scale-dynamodb-table-data-cross-account-migration-guide/)
 
 - [Security]
   - [Securing sensitive data in Amazon DynamoDB](https://aws.amazon.com/blogs/database/applying-best-practices-for-securing-sensitive-data-in-amazon-dynamodb/)
