@@ -507,6 +507,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [可持续性最佳架构实践—基于Spot的Flink作业集群部署与优化](https://aws.amazon.com/cn/blogs/china/flink-on-eks-reuse-recycle/)
 - [基于 Hudi + Flink多流拼接（大宽表）最佳实践](https://mp.weixin.qq.com/s/Kn-amxHSsyl7gPEdZpkpUw)
 - [ClickStream workshop](https://catalog.workshops.aws/clickstream/en-US)
+- [Clickstream Analytics on AWS](https://docs.aws.amazon.com/solutions/latest/clickstream-analytics-on-aws/solution-overview.html)
 
 
 ### Stream - Kinesis
