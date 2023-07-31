@@ -223,6 +223,7 @@
 - [Industry focus]
   - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
   - [AIGC 助力电商虚拟试穿新体验](https://aws.amazon.com/cn/blogs/china/e-commerce-virtual-try-on-new-experience-based-on-aigc/)
+  - [Towards General Purpose Virtual Try-on](https://github.com/xiezhy6/GP-VTON)
 - [Vector database]
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
 - [LLM]
@@ -231,6 +232,7 @@
   - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
   - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
+  - [基于智能搜索和大模型打造企业下一代知识库 之 制造/金融/教育/医疗行业实战场景](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-four/)
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   
 ### Knowledge Base
@@ -567,6 +569,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Automate Redshift ETL](analytics/lambda-redshift)
   - [Redshift ML](analytics/redshift-ml/Readme.md)
   - [Create-Redshift-ReadOnly-User](analytics/redshift-ml/Create-ReadOnly-User.md)
+  - [Glue Studio supports Redshift Serverless](https://aws.amazon.com/about-aws/whats-new/2023/07/aws-glue-studio-amazon-redshift-serverless/)
+  - [Redshift auto mounting Glue Catalog](https://aws.amazon.com/about-aws/whats-new/2023/07/amazon-redshift-automatic-mounting-aws-glue-data-catalog/)
+  - [Iceberg table support on Redshift](https://aws.amazon.com/about-aws/whats-new/2023/07/amazon-redshift-querying-apache-iceberg-tables/)
   
 - [Redshift performance]
   - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
@@ -759,6 +764,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Multi accounts structure
 - [Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+- [Moving an memeber accounts to another organization](https://aws.amazon.com/cn/blogs/mt/aws-organizations-moving-an-organization-member-account-to-another-organization-part-1/)
 
 - [Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
 
@@ -1131,7 +1137,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Automate benchmark tests for Amazon Aurora PostgreSQL](https://aws.amazon.com/blogs/database/automate-benchmark-tests-for-amazon-aurora-postgresql/)
 
 - [benchmarking-read-write-speed-on-amazon-aurora-classic-rds-and-local-disk](https://medium.datadriveninvestor.com/benchmarking-read-write-speed-on-amazon-aurora-classic-rds-and-local-disk-29500d9210da)
-  
+
+-[Amazon Aurora 压力测试](https://aws.amazon.com/cn/blogs/china/aurora-test/)
 
 ### Graph Database
 - [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
