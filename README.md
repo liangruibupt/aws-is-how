@@ -231,9 +231,12 @@
   - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
   - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
   - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+  - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
+- [Smart Search]
+  - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
   - [基于智能搜索和大模型打造企业下一代知识库 之 制造/金融/教育/医疗行业实战场景](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-four/)
-  - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
+
   
 ### Knowledge Base
 - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
@@ -720,6 +723,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
 
 - [Cognito User Pool alternative solution - Authing demo](https://github.com/aws-samples/aws-authing-demo)
+- [Cognito with WeChat integration](https://aws.amazon.com/cn/blogs/china/amazon-cognito-wechat-deployment-1/)
   
 - [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
     - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
@@ -1139,6 +1143,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [benchmarking-read-write-speed-on-amazon-aurora-classic-rds-and-local-disk](https://medium.datadriveninvestor.com/benchmarking-read-write-speed-on-amazon-aurora-classic-rds-and-local-disk-29500d9210da)
 
 -[Amazon Aurora 压力测试](https://aws.amazon.com/cn/blogs/china/aurora-test/)
+
+- [Aurora MySQL enhanced binlog to reduces the performance overhead of enabling binlog down to 13%](https://aws.amazon.com/blogs/database/introducing-amazon-aurora-mysql-enhanced-binary-log-binlog/)
 
 ### Graph Database
 - [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
