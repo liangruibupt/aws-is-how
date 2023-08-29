@@ -514,6 +514,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [基于 Hudi + Flink多流拼接（大宽表）最佳实践](https://mp.weixin.qq.com/s/Kn-amxHSsyl7gPEdZpkpUw)
 - [ClickStream workshop](https://catalog.workshops.aws/clickstream/en-US)
 - [Clickstream Analytics on AWS](https://docs.aws.amazon.com/solutions/latest/clickstream-analytics-on-aws/solution-overview.html)
+- [多库多表场景下使用Amazon EMR CDC实时入湖](https://aws.amazon.com/cn/blogs/china/best-practice-of-using-amazon-emr-cdc-to-enter-the-lake-in-real-time-in-a-multi-database-multi-table-scenario/)
 
 
 ### Stream - Kinesis
@@ -804,16 +805,17 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Current limits of AWS network load balancers](https://ably.com/blog/limits-aws-network-load-balancers)
 
 ### Cross data center and cloud Leasing Line - Direct Connect and VPN
-- [Direct Connect Cheat sheet](network/direct-connect/)
-
 - [Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
   - [DX_Ping_check](network/direct-connect/DX_Ping_check.md)
 
+- [DX-Resillency](network/direct-connect/DX-Resillency.md)
+  - [How to achieve active-active/active-passive Direct Connect connection](network/direct-connect/How-to-do-DX-Loadbalance.md)
+  
 - [Amazon Direct Connect inter-region routing for public access resources](https://www.amazonaws.cn/en/new/2021/amazon-direct-connect-inter-region-routing-amazon-web-services-china-regions/)
 
 - [Connect alibaba cloud to aws via vpn](https://www.alibabacloud.com/blog/connect-alibaba-cloud-to-aws-via-vpn-gateway_593915)
 
-- [How to achieve active-active/active-passive Direct Connect connection](network/direct-connect/How-to-do-DX-Loadbalance.md)
+- [AWS Direct Connect SiteLink: send data from one Direct Connect location to another, bypassing AWS Regions](https://aws.amazon.com/blogs/networking-and-content-delivery/introducing-aws-direct-connect-sitelink/)
 
 ### Cross board transfer
 - [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
