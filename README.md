@@ -833,6 +833,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
 - [Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
+  - [create-ssl-with-cloudfront](https://www.amazonaws.cn/en/getting-started/tutorials/create-ssl-with-cloudfront/)
 
 - [Optimizing performance for users in China with Amazon Route 53 and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/optimizing-performance-for-users-in-china-with-amazon-route-53-and-amazon-cloudfront/)
 
