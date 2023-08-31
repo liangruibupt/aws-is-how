@@ -373,6 +373,8 @@
   
 - [How to share the EC2 AMI](EC2/How-to-share-ami.md)
 
+- [Copy AMI from global to China](https://github.com/zhiyanliu/aws-cp-ww-ami-to-cn)
+
 - [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
 
 - [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
