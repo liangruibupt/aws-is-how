@@ -61,6 +61,7 @@
     - [Permission - IAM Policy, S3 Policy, RAM Policy](#permission---iam-policy-s3-policy-ram-policy)
     - [Multi accounts structure](#multi-accounts-structure)
     - [SIEM and SOC](#siem-and-soc)
+    - [Vulnerability Assessment - Inspector and Alternative](#vulnerability-assessment---inspector-and-alternative)
   - [Network](#network)
     - [VPC](#vpc)
     - [Keep private - VPC Endpoint and PrivateLink](#keep-private---vpc-endpoint-and-privatelink)
@@ -202,6 +203,7 @@
 
 - [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
 - [Scale YOLOv5 inference with Amazon SageMaker endpoints and AWS Lambda](https://aws.amazon.com/blogs/machine-learning/scale-yolov5-inference-with-amazon-sagemaker-endpoints-and-aws-lambda/)
+- [PaddleOCR的轻量级车牌识别](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/applications/%E8%BD%BB%E9%87%8F%E7%BA%A7%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB.md)
 
 ### ChatGPT and AIGC
 - [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
@@ -779,6 +781,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### SIEM and SOC
 - [Security Hub quick start](security/security-hub/securityhub_customer_findings.md)
 - [Customer security findings for security hub](security/security-hub/securityhub_customer_findings.md)
+
+### Vulnerability Assessment - Inspector and Alternative
+- [Inspector alternantive in China region - tenable nessus](https://zh-cn.tenable.com/products/nessus)
 
 ## Network
 ### VPC
