@@ -242,6 +242,8 @@
   - [基于智能搜索和大模型打造企业下一代知识库 之 制造/金融/教育/医疗行业实战场景](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-four/)
 - [Promote Engineering]
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
+- [Text2SQL]
+  - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   
 ### Knowledge Base
 - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
@@ -333,30 +335,31 @@
 
 ## Computing
 ### EC2
+- [Linux Daily usage]
+  - [How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
+  - [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
+  - [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
 
-- [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
 
-- [How to connect to Windows EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
+- [Performance]
+  - [4 vCPU 实例达成 100 万 JSON API 请求/秒的优化实践](https://aws.amazon.com/cn/blogs/china/optimization-practice-of-achieving-1-million-json-api-requests-second-with-4-vcpu-instances/)
+  
 
-- [How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
+- [Windows Daily usage]
+  - [How to connect to Windows EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
+  - [Amazon EC2 針對 Windows Server 2012/R2 EOL](https://aws.amazon.com/tw/events/taiwan/techblogs/Amazon-EC2-end-of-support-guidelines-for-Windows-server/)
 
-- [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
 
-- [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
+- [GPU Daily usage]
+  - [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
+  - [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
 
-- [EC2 network performance](EC2/EC2_Networking_performance.md)
-
-- [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
-
-- [What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
-
-- [How to get the IP address under my account](EC2/Get-all-IP.md)
-
-- [How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
-
-- [Change EC2 Time-Zone](EC2/Change-TimeZone.md)
-
-- [How can I set up a CloudWatch alarm to automatically recover my EC2 instance?](https://aws.amazon.com/premiumsupport/knowledge-center/automatic-recovery-ec2-cloudwatch/)
+- [Network of EC2]
+  - [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
+  - [EC2 network performance](EC2/EC2_Networking_performance.md)
+  - [How to get the IP address under my account](EC2/Get-all-IP.md)
+  - [How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
+  - [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
 
 - [Graviton]
   - [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
@@ -369,28 +372,20 @@
   - [GRAVITON2 电商独立站](https://graviton2.awspsa.com/)
   - [Porting Advisor for Graviton](https://github.com/aws/porting-advisor-for-graviton)
 
-- [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
-
-- [Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
-
-- [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
-  
-- [How to share the EC2 AMI](EC2/How-to-share-ami.md)
-
-- [Copy AMI from global to China](https://github.com/zhiyanliu/aws-cp-ww-ami-to-cn)
-
-- [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
-
-- [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
-
-- [Check if a reboot is required after installing Linux updates](ec2/Does_instance_need_restart_for_upgrade.md)
-
-- [EC2 detected degradation]
+- [Operation]
+  - [What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
+  - [Change EC2 Time-Zone](EC2/Change-TimeZone.md)
+  - [How can I set up a CloudWatch alarm to automatically recover my EC2 instance?](https://aws.amazon.com/premiumsupport/knowledge-center/automatic-recovery-ec2-cloudwatch/)
+  - [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
+  - [Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
+  - [How to share the EC2 AMI](EC2/How-to-share-ami.md)
+  - [Copy AMI from global to China](https://github.com/zhiyanliu/aws-cp-ww-ami-to-cn)
   - [How to handle EC2 detected degradation](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-degraded-hardware/)
+  - [Check if a reboot is required after installing Linux updates](ec2/Does_instance_need_restart_for_upgrade.md)
 
-- [Amazon EC2 針對 Windows Server 2012/R2 EOL](https://aws.amazon.com/tw/events/taiwan/techblogs/Amazon-EC2-end-of-support-guidelines-for-Windows-server/)
 - [Nitro]
   -[在 AWS Nitro Enclaves 中运行传统 Web 应用迁移实践](https://aws.amazon.com/cn/blogs/china/running-traditional-web-application-migration-practices-in-aws-nitro-enclaves/)
+  - [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
@@ -431,7 +426,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [NICE DCV Guide](https://docs.aws.amazon.com/dcv/latest/adminguide/what-is-dcv.html)
   - [NICE DCV Connection Gateway - enables users to access a fleet of NICE DCV servers through a single access point to a LAN or VPC](https://docs.aws.amazon.com/dcv/latest/gw-admin/what-is-gw.html)
   - [NICE DCV Session Manager - the Agents, a Broker and API that makes it easy to build front-end applications that programmatically create and manage the lifecycle of NICE DCV sessions across a fleet of NICE DCV servers](https://docs.aws.amazon.com/dcv/latest/sm-admin/what-is-sm.html)
-  
+
+- SOCA
+  - [SOCA 帮助半导体企业快速启动 EDA 云上部署](https://aws.amazon.com/cn/blogs/china/scaling-eda-workloads-using-scale-out-computing-on-aws/)
 ## Analytics
 ### High Level Data Engineering and Data Analytics
 - [AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
@@ -453,6 +450,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [敦煌网集团大数据上云实践](https://aws.amazon.com/cn/blogs/china/dhgate-group-big-data-cloud-practice/)
 
+- [解密数据编织的核心技术 – 数据虚拟化 - Data Virtualization](https://aws.amazon.com/cn/blogs/china/demystifying-the-core-technology-of-data-weaving-data-virtualization/)
 ### Data integration service: Glue
 - [ETL]
   - [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -719,6 +717,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
+- [3rd party PCA](https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/security-encrypting-data-in-transit/topics/cm-security-use-case-1.html)
+
 - [Validate the ACM certificate]
   - [Switch acm certificate validation](https://aws.amazon.com/cn/premiumsupport/knowledge-center/switch-acm-certificate/)
   - [Troubleshooting acm certificate email validation](https://aws.amazon.com/premiumsupport/knowledge-center/acm-email-validation-custom/?nc1=h_ls)
@@ -747,6 +747,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Using global region SSO service to federate China region console](https://aws.amazon.com/cn/blogs/china/use-amazon-cloud-technology-single-sign-on-service-for-amazon-cloud-technology-china/)
 
 - [Automatically rotate IAM user access keys at scale](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/automatically-rotate-iam-user-access-keys-at-scale-with-aws-organizations-and-aws-secrets-manager.html)
+  
+- [利用IAM Roles Anywhere 授权云外设备访问AWS资源](https://aws.amazon.com/cn/blogs/china/use-amazon-cloud-technology-iam-roles-anywhere-to-authorize-off-cloud-devices-to-access-aws-resources/)
   
 ### Sentitive Data
 - [How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
@@ -826,6 +828,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [AWS Direct Connect SiteLink: send data from one Direct Connect location to another, bypassing AWS Regions](https://aws.amazon.com/blogs/networking-and-content-delivery/introducing-aws-direct-connect-sitelink/)
 
+- [AWS Site-to-Site VPN Private IP VPNs]([AWS Site-to-Site VPN Private IP VPNs](https://aws.amazon.com/blogs/networking-and-content-delivery/introducing-aws-site-to-site-vpn-private-ip-vpns/))
 ### Cross board transfer
 - [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
 
@@ -842,7 +845,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
 - [Enable the HTTPS access for CloudFront](network/edge/CloudFront_HTTPS_Access.md)
-  - [create-ssl-with-cloudfront](https://www.amazonaws.cn/en/getting-started/tutorials/create-ssl-with-cloudfront/)
+  - [create-ssl-with-cloudfront - China CloudFront SSL Plugin](https://www.amazonaws.cn/en/getting-started/tutorials/create-ssl-with-cloudfront/)
 
 - [Optimizing performance for users in China with Amazon Route 53 and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/optimizing-performance-for-users-in-china-with-amazon-route-53-and-amazon-cloudfront/)
 
@@ -1492,6 +1495,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Part 2](https://aws.amazon.com/blogs/storage/building-a-disaster-recovery-site-on-aws-for-workloads-on-google-cloud-part-2/)
 
 - [resiliency-analyser](https://github.com/aws-samples/resiliency-analyser)
+- [ec2-reachability](http://ec2-reachability.amazonaws.com/)
 
 #### RDS HA/DR
 - [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
