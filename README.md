@@ -208,12 +208,15 @@
 - [新希望-构建云上智慧牧场](https://aws.amazon.com/cn/blogs/china/smart-ranch-with-aws/)
 
 ### ChatGPT and AIGC
-- [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
-  - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
-  - “对抗生成网络”GAN（Generative Adverserial Network）
-  - Diffusion模型
-- [ChatGPT Overview](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
-- [AIGC workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/1ac668b1-dbd3-4b45-bf0a-5bc36138fcf1/zh-CN/1-introduction)
+- [GenAI Overview]
+  - [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
+    - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
+    - “对抗生成网络”GAN（Generative Adverserial Network）
+    - Diffusion模型
+  - [ChatGPT Overview](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
+  - [AIGC workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/1ac668b1-dbd3-4b45-bf0a-5bc36138fcf1/zh-CN/1-introduction)
+  - [三类场景赋能行业创新](https://mp.weixin.qq.com/s/iOsMwS_nysHn6O3F0_Vnbg)
+  - [A guide to making your AI vision a reality](https://aws.amazon.com/cn/blogs/enterprise-strategy/a-guide-to-making-your-ai-vision-a-reality/)
 - [Stable Diffsusion]
   - [stable-diffusion-webui self hosted on g4dn.xlarge with Ubuntu 22.04 LTS](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
     - Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. 
@@ -250,6 +253,7 @@
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
 - [LLM API]
   - [Reduce container startup time on Amazon EKS with Bottlerocket data volume](https://aws.amazon.com/cn/blogs/containers/reduce-container-startup-time-on-amazon-eks-with-bottlerocket-data-volume/)
+  - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
   
 ### Knowledge Base
 - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
@@ -1228,6 +1232,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [带您玩转云原生文档数据库DocumentDB的地理空间](https://aws.amazon.com/cn/blogs/china/take-you-hand-in-hand-to-play-the-geographic-space-of-the-cloud-native-document-database-documentdb/)
 
 - [Run full text search queries on Amazon DocumentDB](https://aws.amazon.com/blogs/database/run-full-text-search-queries-on-amazon-documentdb-data-with-amazon-elasticsearch-service/)
+
+- [AWS 云上 MongoDB/DocumentDB 数据定期归档](https://aws.amazon.com/cn/blogs/china/regular-archiving-of-mongodb-documentdb-data-on-aws/)
 
 ### Time series
 - [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
