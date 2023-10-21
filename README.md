@@ -248,6 +248,8 @@
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
 - [Text2SQL]
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
+- [LLM API]
+  - [Reduce container startup time on Amazon EKS with Bottlerocket data volume](https://aws.amazon.com/cn/blogs/containers/reduce-container-startup-time-on-amazon-eks-with-bottlerocket-data-volume/)
   
 ### Knowledge Base
 - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
@@ -872,6 +874,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Traffic Mirror]
   - [Using VPC Traffic Mirroring to monitor and secure your VPC](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/using-vpc-traffic-mirroring-to-monitor-and-secure-your-aws-infrastructure/)
   - [借助 VPC Traffic Mirroring 构建网络入侵检测系统](https://aws.amazon.com/cn/blogs/china/using-vpc-traffic-mirroring-to-construct-network-intrusion-detection-system-update/)
+  - [VPC traffic mirror 集成FortiGate安全分析](https://aws.amazon.com/cn/blogs/china/aws-traffic-mirroring-service-integration-fortigate-security-analysis/)
+  - [使用 GWLB 和 FortiGate 作为流量镜像的替代方案](https://aws.amazon.com/cn/blogs/china/using-gwlb-and-fortigate-as-an-alternative-to-traffic-mirroring/)
 
 ## DNS
 ### Route 53
