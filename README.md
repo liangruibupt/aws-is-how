@@ -2,6 +2,7 @@
 - [aws-is-how](#aws-is-how)
   - [常见故障排除及支持手册](#常见故障排除及支持手册)
   - [AWS Skill builder](#aws-skill-builder)
+  - [freeCodeCamp](#freecodecamp)
   - [AI/ML](#aiml)
     - [ML Study](#ml-study)
     - [SageMaker](#sagemaker)
@@ -160,6 +161,8 @@
 
 ## [AWS Skill builder](https://explore.skillbuilder.aws/learn/course/11458/play/42651/play-cloud-quest-cloud-practitioner)
 
+## [freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp)
+
 ## AI/ML
 
 ### ML Study
@@ -224,6 +227,7 @@
     - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
     - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
   - [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
+  - [Stabule Diffusion on EKS](https://aws.amazon.com/cn/blogs/china/stable-diffusion-image-generation-solution-based-on-amazon-eks/)
   - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
   - [Stable Diffusion Extention hosting on AWS](https://awslabs.github.io/stable-diffusion-aws-extension/zh/architecture-overview/architecture-details/)
   - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
