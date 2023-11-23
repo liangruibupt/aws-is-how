@@ -209,6 +209,7 @@
 - [Scale YOLOv5 inference with Amazon SageMaker endpoints and AWS Lambda](https://aws.amazon.com/blogs/machine-learning/scale-yolov5-inference-with-amazon-sagemaker-endpoints-and-aws-lambda/)
 - [PaddleOCR的轻量级车牌识别](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/applications/%E8%BD%BB%E9%87%8F%E7%BA%A7%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB.md)
 - [新希望-构建云上智慧牧场](https://aws.amazon.com/cn/blogs/china/smart-ranch-with-aws/)
+- [Bedrock 大语言模型加速 OCR 场景精准提取](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-large-language-model-accelerates-accurate-extraction-of-ocr-scenes/)
 
 ### ChatGPT and AIGC
 - [GenAI Overview]
@@ -246,6 +247,7 @@
   - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
   - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
+  - [基于亚马逊云科技 AI 服务打造多模态智能化内容审核](https://aws.amazon.com/cn/blogs/china/multi-modal-intelligent-content-review-based-on-aws-ai-services/)
 - [RAG]
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -799,7 +801,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Multi accounts structure
 - [Accessing and administering the member accounts in your organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
-- [Moving an memeber accounts to another organization](https://aws.amazon.com/cn/blogs/mt/aws-organizations-moving-an-organization-member-account-to-another-organization-part-1/)
+- [Moving an memeber accounts to another organization-Part1](https://aws.amazon.com/cn/blogs/mt/aws-organizations-moving-an-organization-member-account-to-another-organization-part-1/)
+- [Moving an memeber accounts to another organization-Part2](https://aws.amazon.com/cn/blogs/mt/aws-organizations-moving-an-organization-member-account-to-another-organization-part-2/)
+- [Moving an memeber accounts to another organization-Part13](https://aws.amazon.com/cn/blogs/mt/aws-organizations-moving-an-organization-member-account-to-another-organization-part-3/)
 
 - [Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
 
@@ -1136,7 +1140,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Cross vpc access RDS MySQL via VPC endpoint](database/rds/mysql/cross-vpc-access-mysql-via-endpoint.md)
 
-- [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copky-and-replication.md)
+- [DB Snapshot cross region copy and backup cross region replication](database/rds/Cross-region-copy-and-replication.md)
 
 - [QuickStart RDS PostgreSQL and backup](database/rds/PostgreSQL/QuickStart_PostgreSQL.md)
 
