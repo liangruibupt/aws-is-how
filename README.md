@@ -830,6 +830,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
+- [Cross region VPC endpoint access](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-access-to-vpc-private-endpoints.html#cross-region-endpoint-access)
+- [How do I configure cross-Region Amazon VPC interface endpoints to access AWS PrivateLink resources?](https://repost.aws/knowledge-center/vpc-endpoints-cross-region-aws-services)
+
 ### NAT and proxy
 - [How I can setup transparent proxy - squid](network/squid/Squid-proxy.md)
 
@@ -1077,6 +1080,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [通过 STS Session Tags 来对 AWS 资源进行更灵活的权限控制 - 但是需要一个认证机制去确保userid可信的](https://aws.amazon.com/cn/blogs/china/use-sts-session-tags-to-perform-more-flexible-permission-control-on-aws-resources/)
 
 - [将Amazon EC2到Amazon S3的数据传输推向100Gbps线速](https://aws.amazon.com/cn/blogs/china/pushing-the-data-transfer-from-amazon-ec2-to-amazon-s3-to-100gbps-line-speed/)
+- [如何在短时间里遍历 Amazon S3 亿级对象桶（原理篇）](https://aws.amazon.com/cn/blogs/china/how-to-traverse-amazon-s3-billion-object-buckets-in-a-short-time-principle/)
 
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
@@ -1527,6 +1531,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [ec2-reachability](http://ec2-reachability.amazonaws.com/)
 
 - [Reducing the Scope of Impact with Cell-Based Architecture](https://docs.aws.amazon.com/wellarchitected/latest/reducing-scope-of-impact-with-cell-based-architecture/reducing-scope-of-impact-with-cell-based-architecture.html)
+- [依托亚马逊云科技构建韧性应用](https://aws.amazon.com/cn/blogs/china/build-resilient-applications-with-aws/)
 
 #### RDS HA/DR
 - [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
