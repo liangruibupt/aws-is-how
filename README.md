@@ -259,6 +259,7 @@
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
 - [Text2SQL]
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
+  - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
 - [LLM API]
   - [Reduce container startup time on Amazon EKS with Bottlerocket data volume](https://aws.amazon.com/cn/blogs/containers/reduce-container-startup-time-on-amazon-eks-with-bottlerocket-data-volume/)
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
@@ -1318,6 +1319,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Karpenter 实践：一种多 EKS 集群下的 Spot 实例中断事件处理总线设计](https://aws.amazon.com/cn/blogs/china/karpenter-practice-multi-eks-cluster-spot-instance-interrupts-event-processing-bus/)
   - [Karpenter 实践：使用 Spot 实例进行成本优化](https://aws.amazon.com/cn/blogs/china/kubernetes-node-elastic-scaling-open-source-component-karpenter-practice-cost-optimization-using-spot-instance/)
   - [Karpenter 实践：部署GPU推理应用](https://aws.amazon.com/cn/blogs/china/kubernetes-node-elastic-scaling-open-source-component-karpenter-practice-deploying-gpu-inference-applications/)
+  - [EKS with KEDA HPA & Karpenter cluster autoscaler](https://github.com/aws-samples/amazon-eks-scaling-with-keda-and-karpenter)
 ### ECS
 - [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
 
