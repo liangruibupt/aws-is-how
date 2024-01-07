@@ -248,6 +248,9 @@
   - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   - [基于亚马逊云科技 AI 服务打造多模态智能化内容审核](https://aws.amazon.com/cn/blogs/china/multi-modal-intelligent-content-review-based-on-aws-ai-services/)
+  - [Reduce container startup time on Amazon EKS with Bottlerocket data volume](https://aws.amazon.com/cn/blogs/containers/reduce-container-startup-time-on-amazon-eks-with-bottlerocket-data-volume/)
+  - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
+  - [使用 Amazon SageMaker 和 Bedrock 构建营销场景端到端应用](https://aws.amazon.com/cn/blogs/china/build-end-to-end-applications-for-marketing-scenarios-using-amazon-sagemaker-and-bedrock/)
 - [RAG]
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -260,9 +263,6 @@
 - [Text2SQL]
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
-- [LLM API]
-  - [Reduce container startup time on Amazon EKS with Bottlerocket data volume](https://aws.amazon.com/cn/blogs/containers/reduce-container-startup-time-on-amazon-eks-with-bottlerocket-data-volume/)
-  - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
   
 ### Knowledge Base
 - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
@@ -1313,6 +1313,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Public container images mirror to China ECR solution](https://github.com/aws-samples/amazon-ecr-replication-for-pub-container-images)
 - [Global to China 跨国企业 Kubernetes 应用跨境复制和部署方案](https://aws.amazon.com/cn/blogs/china/global-to-china-multinational-enterprise-kubernetes-application-cross-border-replication-and-deployment-solution/)
+- [Application first delivery on Kubernetes with Open Application Model](https://aws.amazon.com/blogs/containers/application-first-delivery-on-kubernetes-with-open-application-model/)
 
 - ### EKS Performance
 - [Karpenter]
