@@ -210,6 +210,7 @@
 - [PaddleOCR的轻量级车牌识别](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/applications/%E8%BD%BB%E9%87%8F%E7%BA%A7%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB.md)
 - [新希望-构建云上智慧牧场](https://aws.amazon.com/cn/blogs/china/smart-ranch-with-aws/)
 - [Bedrock 大语言模型加速 OCR 场景精准提取](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-large-language-model-accelerates-accurate-extraction-of-ocr-scenes/)
+- [How to improve user engagement with real-time AR effects using BytePlus Effects and Amazon IVS](https://aws.amazon.com/cn/blogs/media/how-to-improve-user-engagement-with-real-time-ar-effects-using-byteplus-effects-and-amazon-ivs/)
 
 ### ChatGPT and AIGC
 - [GenAI Overview]
@@ -251,6 +252,7 @@
   - [Reduce container startup time on Amazon EKS with Bottlerocket data volume](https://aws.amazon.com/cn/blogs/containers/reduce-container-startup-time-on-amazon-eks-with-bottlerocket-data-volume/)
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
   - [使用 Amazon SageMaker 和 Bedrock 构建营销场景端到端应用](https://aws.amazon.com/cn/blogs/china/build-end-to-end-applications-for-marketing-scenarios-using-amazon-sagemaker-and-bedrock/)
+  - [构建端到端生成式 AI 应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
 - [RAG]
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -616,6 +618,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [ClickHouse and S3]
     - [Integrating ClickHouse and S3 Compatible Storage](https://dzone.com/articles/clickhouse-s3-compatible-object-storage)
     - [ClickHouse S3 table function](https://clickhouse.com/docs/en/sql-reference/table-functions/s3/)
+    - [ClickHouse Cloud & Amazon S3 Express One Zone: Making a blazing fast analytical database even faster](https://aws.amazon.com/cn/blogs/storage/clickhouse-cloud-amazon-s3-express-one-zone-making-a-blazing-fast-analytical-database-even-faster/)
+    - [字节跳动 ByteHouse 云原生之路 – 计算存储分离与性能优化](https://aws.amazon.com/cn/blogs/china/bytehouse-road-to-cloud-native-separation-of-computing-and-storage-and-performance-optimization/)
 
 - [Scheduling SQL queries on your Amazon Redshift](https://aws.amazon.com/blogs/big-data/scheduling-sql-queries-on-your-amazon-redshift-data-warehouse/)
 
@@ -870,6 +874,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Acceleration network
 - [Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
+- [Measuring AWS Global Accelerator performance and analyzing results](https://aws.amazon.com/blogs/networking-and-content-delivery/measuring-aws-global-accelerator-performance-and-analyzing-results/)
 
 - [Amazon CloudFront Extensions](https://awslabs.github.io/aws-cloudfront-extensions/)
 
