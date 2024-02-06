@@ -211,6 +211,7 @@
 - [新希望-构建云上智慧牧场](https://aws.amazon.com/cn/blogs/china/smart-ranch-with-aws/)
 - [Bedrock 大语言模型加速 OCR 场景精准提取](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-large-language-model-accelerates-accurate-extraction-of-ocr-scenes/)
 - [How to improve user engagement with real-time AR effects using BytePlus Effects and Amazon IVS](https://aws.amazon.com/cn/blogs/media/how-to-improve-user-engagement-with-real-time-ar-effects-using-byteplus-effects-and-amazon-ivs/)
+- [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 
 ### ChatGPT and AIGC
 - [GenAI Overview]
@@ -1205,6 +1206,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
 
 - [利用Neptune图数据库构建工厂知识图谱实践](https://aws.amazon.com/cn/blogs/china/the-practice-of-using-neptune-graph-database-to-construct-plant-knowledge-map/)
+- [Diagram-as-code using generative AI to build a data model for Amazon Neptune](https://aws.amazon.com/blogs/database/diagram-as-code-using-generative-ai-to-build-a-data-model-for-amazon-neptune/)
 
 ### ElastiCache
 - [Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
