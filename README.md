@@ -212,6 +212,7 @@
 - [Bedrock 大语言模型加速 OCR 场景精准提取](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-large-language-model-accelerates-accurate-extraction-of-ocr-scenes/)
 - [How to improve user engagement with real-time AR effects using BytePlus Effects and Amazon IVS](https://aws.amazon.com/cn/blogs/media/how-to-improve-user-engagement-with-real-time-ar-effects-using-byteplus-effects-and-amazon-ivs/)
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
+- [PaddleOCR on SageMaker](https://aws.amazon.com/cn/blogs/machine-learning/onboard-paddleocr-with-amazon-sagemaker-projects-for-mlops-to-perform-optical-character-recognition-on-identity-documents/)
 
 ### ChatGPT and AIGC
 - [GenAI Overview]
@@ -219,6 +220,7 @@
     - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
     - “对抗生成网络”GAN（Generative Adverserial Network）
     - Diffusion模型
+  - [Token, Embeding, Self-Attention, Transformer, Vector, Encoding output 101](https://baoyu.io/pages/ft/generative-ai)
   - [ChatGPT Overview](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
   - [AIGC workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/1ac668b1-dbd3-4b45-bf0a-5bc36138fcf1/zh-CN/1-introduction)
   - [三类场景赋能行业创新](https://mp.weixin.qq.com/s/iOsMwS_nysHn6O3F0_Vnbg)
@@ -254,7 +256,7 @@
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
   - [使用 Amazon SageMaker 和 Bedrock 构建营销场景端到端应用](https://aws.amazon.com/cn/blogs/china/build-end-to-end-applications-for-marketing-scenarios-using-amazon-sagemaker-and-bedrock/)
   - [构建端到端生成式 AI 应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
-- [RAG]
+- [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
   - [基于智能搜索和大模型打造企业下一代知识库 之 制造/金融/教育/医疗行业实战场景](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-four/)
@@ -477,7 +479,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [敦煌网集团大数据上云实践](https://aws.amazon.com/cn/blogs/china/dhgate-group-big-data-cloud-practice/)
 
-- [解密数据编织的核心技术 – 数据虚拟化 - Data Virtualization](https://aws.amazon.com/cn/blogs/china/demystifying-the-core-technology-of-data-weaving-data-virtualization/)
+- [解密Data Fabric的核心技术 – 数据虚拟化 - Data Virtualization](https://aws.amazon.com/cn/blogs/china/demystifying-the-core-technology-of-data-weaving-data-virtualization/)
+  - [Data Fabric and Data Mesh 区别](https://zhuanlan.zhihu.com/p/608431096)
+  
 ### Data integration service: Glue
 - [ETL]
   - [Quick demo for Glue ETL + Athena + Superset BI](https://github.com/liangruibupt/covid_19_report_end2end_analytics)
@@ -887,11 +891,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Optimizing performance for users in China with Amazon Route 53 and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/optimizing-performance-for-users-in-china-with-amazon-route-53-and-amazon-cloudfront/)
 
-- [CloudFront support HTTP/3](https://aws.amazon.com/blogs/aws/new-http-3-support-for-amazon-cloudfront/)
-
 ### Edge
 - [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
 
+- [CloudFront support HTTP/3](https://aws.amazon.com/blogs/aws/new-http-3-support-for-amazon-cloudfront/)
+  
 ### Network Secuirty
 - [GWLB Example](network/GWLB/GWLB_Example.md)
 
@@ -1580,11 +1584,21 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 
 ## Automotive
-- [soafee aws iotfleetwise demo](https://github.com/aws-samples/demo-soafee-aws-iotfleetwise)
-- [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
-- [在AWS上构建基于SOAFEE的云原生软件定义汽车实践](https://aws.amazon.com/cn/blogs/china/build-cloud-native-software-based-on-soafee-on-aws-to-define-automobile-practice/)
-- [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
-- [Develop and deploy a customized workflow using Autonomous Driving Data Framework (ADDF) on AWS](https://aws.amazon.com/blogs/industries/develop-and-deploy-a-customized-workflow-using-autonomous-driving-data-framework-addf-on-aws/)
-- [A Cloud-Native Environment for Distributed Automotive Software Development](https://aws.amazon.com/cn/blogs/industries/a-cloud-native-environment-for-distributed-automotive-software-development/)
-- [Simulating Automotive E/E Architectures in AWS – Part 1: Accelerating the V-Model](https://aws.amazon.com/blogs/industries/simulating-automotive-e-e-architectures-in-aws-part-1-accelerating-the-v-model/)
-- [Automotive Demo Lab](https://w.amazon.com/bin/view/AWS_WWSO/IST/Innovation_Prototyping_Lab_SJC25/about/demonstrators)
+- [Software Define Vechile - SDV]
+  - [soafee aws iotfleetwise demo](https://github.com/aws-samples/demo-soafee-aws-iotfleetwise)
+  - [在AWS上构建基于SOAFEE的云原生软件定义汽车实践](https://aws.amazon.com/cn/blogs/china/build-cloud-native-software-based-on-soafee-on-aws-to-define-automobile-practice/)
+  - [A Cloud-Native Environment for Distributed Automotive Software Development](https://aws.amazon.com/cn/blogs/industries/a-cloud-native-environment-for-distributed-automotive-software-development/)
+  - [Simulating Automotive E/E Architectures in AWS – Part 1: Accelerating the V-Model](https://aws.amazon.com/blogs/industries/simulating-automotive-e-e-architectures-in-aws-part-1-accelerating-the-v-model/)
+  - [Automotive Demo Lab](https://w.amazon.com/bin/view/AWS_WWSO/IST/Innovation_Prototyping_Lab_SJC25/about/demonstrators)
+  
+- [Autonomous Driving]
+  - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
+  - [Develop and deploy a customized workflow using Autonomous Driving Data Framework (ADDF) on AWS](https://aws.amazon.com/blogs/industries/develop-and-deploy-a-customized-workflow-using-autonomous-driving-data-framework-addf-on-aws/)
+  - [详解智能驾驶的功能与场景体系](https://mp.weixin.qq.com/s/GRB0YT1WDUuLL4b6Tfslrw)
+  - [Deploy and Visualize ROS Bag Data on AWS](https://aws.amazon.com/blogs/architecture/field-notes-deploy-and-visualize-ros-bag-data-on-aws-using-rviz-and-webviz-for-autonomous-driving/)
+    - [Scene Intelligence with Rosbag on AWS](https://aws.amazon.com/solutions/implementations/scene-intelligence-with-rosbag-on-aws/)
+    - [Autonomous Driving Data Service with Rosbag on EKS](https://github.com/aws-samples/amazon-eks-autonomous-driving-data-service)
+
+- [Vechile Data Plantform - VDP]
+  - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
+
