@@ -9,10 +9,8 @@
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
     - [ChatGPT and AIGC](#chatgpt-and-aigc)
-    - [Knowledge Base](#knowledge-base)
-    - [Chatbot](#chatbot)
     - [NLP](#nlp)
-    - [Translate, Text to speech, Speeck to Text](#translate-text-to-speech-speeck-to-text)
+    - [Translate and Audio](#translate-and-audio)
     - [Forecasting](#forecasting)
     - [Fraud Detection](#fraud-detection)
     - [Recommandation](#recommandation)
@@ -225,26 +223,30 @@
   - [AIGC workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/1ac668b1-dbd3-4b45-bf0a-5bc36138fcf1/zh-CN/1-introduction)
   - [三类场景赋能行业创新](https://mp.weixin.qq.com/s/iOsMwS_nysHn6O3F0_Vnbg)
   - [A guide to making your AI vision a reality](https://aws.amazon.com/cn/blogs/enterprise-strategy/a-guide-to-making-your-ai-vision-a-reality/)
+  
 - [Stable Diffsusion]
   - [stable-diffusion-webui self hosted on g4dn.xlarge with Ubuntu 22.04 LTS](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
     - Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. 
     - Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
     - [Install Nvida Cuda](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
     - [create-your-own-stable-diffusion-ui-on-aws](https://towardsdatascience.com/create-your-own-stable-diffusion-ui-on-aws-in-minutes-35480dfcde6a)
-  - [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
-  - [Stabule Diffusion on EKS](https://aws.amazon.com/cn/blogs/china/stable-diffusion-image-generation-solution-based-on-amazon-eks/)
-  - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
-  - [Stable Diffusion Extention hosting on AWS](https://awslabs.github.io/stable-diffusion-aws-extension/zh/architecture-overview/architecture-details/)
-  - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
-  - [Stable Diffusion on Amazon SageMaker Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/d9ca179a-3a36-4822-9f80-0b3ffcc26f37/en-US)
+    - [sagemaker-stablediffusion-quick-kit](https://github.com/aws-samples/sagemaker-stablediffusion-quick-kit)
+    - [Stabule Diffusion on EKS](https://aws.amazon.com/cn/blogs/china/stable-diffusion-image-generation-solution-based-on-amazon-eks/)
+    - [Stable Diffusion Quick Kit 动手实践 – 基础篇](https://aws.amazon.com/cn/blogs/china/stable-diffusion-quick-kit-hands-on-practice-basics/)
+    - [Stable Diffusion Extention hosting on AWS](https://awslabs.github.io/stable-diffusion-aws-extension/zh/architecture-overview/architecture-details/)
+    - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
+    - [Stable Diffusion on Amazon SageMaker Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/d9ca179a-3a36-4822-9f80-0b3ffcc26f37/en-US)
+  
 - [Industry focus]
   - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
   - [AIGC 助力电商虚拟试穿新体验](https://aws.amazon.com/cn/blogs/china/e-commerce-virtual-try-on-new-experience-based-on-aigc/)
   - [Towards General Purpose Virtual Try-on](https://github.com/xiezhy6/GP-VTON)
   - [SageMaker LMI+Streaming 构建 端到端GenAI Text2Image应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
+  - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
   
 - [Vector database]
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
+  
 - [LLM]
   - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
@@ -256,6 +258,7 @@
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
   - [使用 Amazon SageMaker 和 Bedrock 构建营销场景端到端应用](https://aws.amazon.com/cn/blogs/china/build-end-to-end-applications-for-marketing-scenarios-using-amazon-sagemaker-and-bedrock/)
   - [构建端到端生成式 AI 应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
+  
 - [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -263,37 +266,33 @@
   - [基于 RDS 和 Confluence 数据源构建端到端的RAG](https://aws.amazon.com/cn/blogs/china/build-an-end-to-end-rag-application-based-on-rds-and-confluence-data-sources/)
   - [基于大语言模型和推荐系统构建电商智能导购机器人](https://aws.amazon.com/cn/blogs/china/build-an-e-commerce-intelligent-shopping-guide-robot-based-on-large-language-model-and-recommendation-system/)
   - [基于大语言模型知识问答应用落地实践 – 知识召回调优](https://aws.amazon.com/cn/blogs/china/practice-of-knowledge-question-answering-application-based-on-llm-knowledge-base-construction-part-4/)
-- [Promote Engineering]
+  - [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
+  - [基于Amazon Open Search+大语言模型的智能问答系统](https://catalog.us-east-1.prod.workshops.aws/workshops/158a2497-7cbe-4ba4-8bee-2307cb01c08a)
+  - [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
+  - [Building a serverless document chat with AWS Lambda and Amazon Bedrock](https://aws.amazon.com/cn/blogs/compute/building-a-serverless-document-chat-with-aws-lambda-and-amazon-bedrock/)
+  - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
+  - [GenAI Data Foundation Workshop - Healthcare RAG chatbot](https://catalog.us-east-1.prod.workshops.aws/workshops/973a358a-1e5c-44ed-8589-4e480f597c77/en-US)
+  
+- [Promote-Engineering]
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
+  
 - [Text2SQL]
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
   
-### Knowledge Base
-- [基于LLM 和 Amazon Opensearch 或 Amazon Kendra 打造企业私有知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-one/)
-- [基于Amazon Open Search+大语言模型的智能问答系统](https://catalog.us-east-1.prod.workshops.aws/workshops/158a2497-7cbe-4ba4-8bee-2307cb01c08a)
+- [Video and Audio]
+  - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
 
-### Chatbot
-- [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
-- [Building a serverless document chat with AWS Lambda and Amazon Bedrock](https://aws.amazon.com/cn/blogs/compute/building-a-serverless-document-chat-with-aws-lambda-and-amazon-bedrock/)
-- [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
-- [GenAI Data Foundation Workshop - Healthcare RAG chatbot](https://catalog.us-east-1.prod.workshops.aws/workshops/973a358a-1e5c-44ed-8589-4e480f597c77/en-US)
-  
 ### NLP
-
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
-
 - [Use AWS SageMaker BlazingText to process un-balance data for text multiple classification](https://amazonaws-china.com/cn/blogs/china/use-aws-sagemaker-blazingtext-to-multi-classify-unbalanced-text/) [The git repo](https://github.com/zhangbeibei/sagemaker-unbalanced-text-multiclassification)
-
 - [Chinese-BERT](https://github.com/ymcui/Chinese-BERT-wwm)
 
-### Translate, Text to speech, Speeck to Text
+### Translate and Audio
 - [使用 Amazon Translate 自动翻译PPT](https://aws.amazon.com/cn/blogs/china/translating-presentation-files-with-amazon-translate/)
 
 ### Forecasting
-
 - [Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
-
 - [GluonTS for time series data](https://github.com/whn09/gluonts_sagemaker)
 
 ### Fraud Detection
@@ -306,7 +305,6 @@
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
-
 - [CV Labeling]
   - [cvat-on-aws-china](https://github.com/aws-samples/cvat-on-aws-china)
   - [CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
