@@ -223,6 +223,7 @@
   - [AIGC workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/1ac668b1-dbd3-4b45-bf0a-5bc36138fcf1/zh-CN/1-introduction)
   - [三类场景赋能行业创新](https://mp.weixin.qq.com/s/iOsMwS_nysHn6O3F0_Vnbg)
   - [A guide to making your AI vision a reality](https://aws.amazon.com/cn/blogs/enterprise-strategy/a-guide-to-making-your-ai-vision-a-reality/)
+  - [understand The tokenize](https://huggingface.co/spaces/Xenova/the-tokenizer-playground)
   
 - [Stable Diffsusion]
   - [stable-diffusion-webui self hosted on g4dn.xlarge with Ubuntu 22.04 LTS](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
@@ -261,7 +262,11 @@
   - [构建端到端生成式 AI 应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
   - [Amazon Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US)
   - [Amazon Bedrock Claude3 Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/en-US)
-  
+  - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
+  - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
+  - [使用 Amazon Bedrock，Claude3 和 CrewAI 构建应用商城用户评论分析工具](https://aws.amazon.com/cn/blogs/china/build-an-app-store-user-review-analysis-tool-using-amazon-bedrock-claude3-and-crewai/)
+  - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)
+
 - [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索的大语言模型增强方案2](https://catalog.us-east-1.prod.workshops.aws/workshops/3973557a-0853-41f6-9678-00ae171ba1f6/zh-CN/03cdkinstall/30preinstall)
@@ -684,6 +689,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### BI
 - [Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
+  - [Configure ADFS Identity Federation with Amazon QuickSight](https://aws.amazon.com/blogs/business-intelligence/configure-adfs-identity-federation-with-amazon-quicksight/)
+  - [Enabling Amazon QuickSight federation with Azure AD](https://aws.amazon.com/blogs/big-data/enabling-amazon-quicksight-federation-with-azure-ad/)
+  - [Manage users and group memberships on Amazon QuickSight using SCIM events generated in IAM Identity Center with Azure AD](https://aws.amazon.com/blogs/business-intelligence/manage-users-and-group-memberships-on-amazon-quicksight-using-scim-events-generated-in-iam-identity-center-with-azure-ad/)
+  - [AWS Managed Microsoft AD to authenticate users in QuickSight](https://repost.aws/knowledge-center/quicksight-authenticate-active-directory)
 
 - [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
@@ -738,6 +747,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Curated list of links, references, books videos, tutorials, Exploit, CTFs, Hacking Practices etc. which are related to AWS Security](https://github.com/jassics/awesome-aws-security)
 - [An AWS Pentesting tool that lets you use one-liner commands to backdoor an AWS account's resources](https://endgame.readthedocs.io/en/latest/)
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
+- [BMW automation compliance-at-scale](https://aws.amazon.com/blogs/mt/how-bmw-group-uses-automation-to-achieve-end-to-end-compliance-at-scale-on-aws/)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -1610,6 +1620,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Deploy and Visualize ROS Bag Data on AWS](https://aws.amazon.com/blogs/architecture/field-notes-deploy-and-visualize-ros-bag-data-on-aws-using-rviz-and-webviz-for-autonomous-driving/)
     - [Scene Intelligence with Rosbag on AWS](https://aws.amazon.com/solutions/implementations/scene-intelligence-with-rosbag-on-aws/)
     - [Autonomous Driving Data Service with Rosbag on EKS](https://github.com/aws-samples/amazon-eks-autonomous-driving-data-service)
+  - [在中国区部署 SIMPHERA Architecture](https://aws.amazon.com/cn/blogs/china/deploying-simphera-architecture-in-china/)
 
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
