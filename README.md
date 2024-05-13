@@ -874,6 +874,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Cross data center and cloud Leasing Line - Direct Connect and VPN
 - [Direct Connect Monitoring](network/direct-connect/DX-Monitoring.md)
   - [DX_Ping_check](network/direct-connect/DX_Ping_check.md)
+  - [How can I get notifications for Direct Connect scheduled maintenance or events?](https://repost.aws/knowledge-center/get-direct-connect-notifications)
 
 - [DX-Resillency](network/direct-connect/DX-Resillency.md)
   - [How to achieve active-active/active-passive Direct Connect connection](network/direct-connect/How-to-do-DX-Loadbalance.md)
