@@ -289,8 +289,8 @@ EOF
 1. Create Variant stores
 
     ```
-    REFERENCE_STORE_ID=8482682129
-    REFERENCE_ID=9173354078
+    REFERENCE_STORE_ID=<Replace me>
+    REFERENCE_ID=<Replace me>
     REFERENCE_ARN=$(aws omics get-reference-metadata \
         --reference-store-id ${REFERENCE_STORE_ID} \
         --id ${REFERENCE_ID} \
@@ -394,6 +394,71 @@ Notebook
 
     ```
 
+## Clean up environment
+1. Deleting a variant or annotation store 
+```
+variant_store_id=$(aws omics get-variant-store --name sample_variant_store --query 'id' --output text --region $AWS_REGION)
+echo variant_store_id = $variant_store_id
+aws omics delete-variant-store --name sample_variant_store --region $AWS_REGION
+
+aws omics delete-annotation-store --name ${ANNOTATION_STORE_NAME} --region $AWS_REGION
+```
+2. Delete workflow
+```
+run_id=$(aws omics list-runs --name run-one --output text --query 'items[0].id' --region $AWS_REGION)
+echo run_id = $run_id
+aws omics delete-run --id $run_id --region $AWS_REGION
+
+run_id=$(aws omics list-runs --name run-gatk --output text --query 'items[0].id' --region $AWS_REGION)
+echo run_id = $run_id
+aws omics delete-run --id $run_id --region $AWS_REGION
+
+run_id=$(aws omics list-runs --output text --query 'items[0].id' --region $AWS_REGION)
+echo run_id = $run_id
+aws omics delete-run --id $run_id --region $AWS_REGION
+
+workflows_id=$(aws omics list-workflows --output text --query 'items[0].id' --region $AWS_REGION)
+echo workflows_id = $workflows_id
+aws omics delete-workflow --id $workflows_id --region $AWS_REGION
+
+workflows_id=$(aws omics list-workflows --output text --query 'items[0].id' --region $AWS_REGION)
+echo workflows_id = $workflows_id
+aws omics delete-workflow --id $workflows_id --region $AWS_REGION
+```
+3. Delete read set, Sequence Store
+```
+SEQUENCE_STORE_ID=$(aws omics list-sequence-stores --output text --query 'sequenceStores[0].id' --region $AWS_REGION) 
+echo SEQUENCE_STORE_ID = $SEQUENCE_STORE_ID
+
+readset_id=$(aws omics list-read-sets --sequence-store-id $SEQUENCE_STORE_ID --output text --query 'readSets[0].id' --region $AWS_REGION)
+echo readset_id = $readset_id
+readset_ids=$readset_id
+
+readset_id=$(aws omics list-read-sets --sequence-store-id $SEQUENCE_STORE_ID --output text --query 'readSets[1].id' --region $AWS_REGION)
+echo readset_id = $readset_id
+
+readset_ids+=" $readset_id"
+echo readset_ids = $readset_ids
+
+aws omics batch-delete-read-set \
+    --sequence-store-id $SEQUENCE_STORE_ID --ids $readset_ids --region $AWS_REGION
+
+aws omics delete-sequence-store --id $SEQUENCE_STORE_ID --region $AWS_REGION
+
+```
+4. Delete Refrence and Reference Store
+```
+REFERENCE_STORE_ID=$(aws omics list-reference-stores --output text --query 'referenceStores[0].id' --region $AWS_REGION)
+REFERENCE_ID=$(aws omics list-references --reference-store-id $REFERENCE_STORE_ID --output text --query 'references[0].id' --region $AWS_REGION)
+echo REFERENCE_ID = $REFERENCE_ID
+aws omics delete-reference  --id $REFERENCE_ID --reference-store-id $REFERENCE_STORE_ID --region $AWS_REGION
+
+REFERENCE_ID=$(aws omics list-references --reference-store-id $REFERENCE_STORE_ID --output text --query 'references[0].id' --region $AWS_REGION)
+echo REFERENCE_ID = $REFERENCE_ID
+aws omics delete-reference  --id $REFERENCE_ID --reference-store-id $REFERENCE_STORE_ID --region $AWS_REGION
+
+aws omics delete-reference-store --id $REFERENCE_STORE_ID --region $AWS_REGION
+```
 ## Proper noun
 1. VCF - Variant Call Format. The Variant Call Format is a standard text file format used in bioinformatics for storing gene sequence variations. 
 2. gVCF - Genomic VCF. The basic format specification is the same as for a regular VCF, but a Genomic VCF contains extra information.
