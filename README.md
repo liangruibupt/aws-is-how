@@ -154,6 +154,7 @@
     - [Workspaces - VDI](#workspaces---vdi)
   - [Metaverse](#metaverse)
   - [Automotive](#automotive)
+  - [HealthCare and Life Science](#healthcare-and-life-science)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
 
@@ -1626,3 +1627,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
 
+
+## HealthCare and Life Science
+  - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
