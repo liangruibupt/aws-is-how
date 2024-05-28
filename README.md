@@ -1630,3 +1630,5 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ## HealthCare and Life Science
   - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
+  - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
+  - [基于Alphafold2一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
