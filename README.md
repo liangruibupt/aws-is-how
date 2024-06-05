@@ -1305,6 +1305,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [How do I use multiple CIDR ranges with Amazon EKS]
     - [Check your VPC setting](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-resize)
     - [Add the additioal CIDR](https://aws.amazon.com/premiumsupport/knowledge-center/eks-multiple-cidr-ranges/)
+    - [Amazon EKS now supports additional VPC CIDR blocks](https://aws.amazon.com/about-aws/whats-new/2018/10/amazon-eks-now-supports-additional-vpc-cidr-blocks/)
+    - [EKS custom-networking optimizaiton](https://aws.github.io/aws-eks-best-practices/networking/ip-optimization-strategies/custom-networking.gif)
+    - [EKS custom-networking](https://aws.github.io/aws-eks-best-practices/networking/custom-networking/)
 
 - [Cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/cn/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
 
@@ -1626,9 +1629,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
+  - [Advanced Vechile Data Plantform - VDP with Kafka, Redshift, Flink](https://aws.amazon.com/cn/blogs/china/build-a-reliable-data-governance-model-based-on-aws-data-analysis-services/)
 
 
 ## HealthCare and Life Science
   - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
   - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
-  - [基于Alphafold2一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
+  - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
