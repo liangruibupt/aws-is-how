@@ -846,7 +846,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Network
 ### VPC
 - [How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
-
+- [How do I troubleshoot network performance issues between EC2 and on-premises host over the internet gateway](https://aws.amazon.com/premiumsupport/knowledge-center/network-issue-vpc-onprem-ig/)
 - [How do I modify the IPv4 CIDR block of my Amazon VPC](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-ip-address-range/)
   - [How can I modify the CIDR block on my VPC to accommodate more hosts](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-modify-cidr-more-hosts/)
 
