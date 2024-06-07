@@ -298,6 +298,11 @@
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
   - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
+
+- [Agent and workflow]
+  - [stable-diffusion-comfyui](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
+  - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
+  - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
   
 ### NLP
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -1618,6 +1623,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [A Cloud-Native Environment for Distributed Automotive Software Development](https://aws.amazon.com/cn/blogs/industries/a-cloud-native-environment-for-distributed-automotive-software-development/)
   - [Simulating Automotive E/E Architectures in AWS – Part 1: Accelerating the V-Model](https://aws.amazon.com/blogs/industries/simulating-automotive-e-e-architectures-in-aws-part-1-accelerating-the-v-model/)
   - [Automotive Demo Lab](https://w.amazon.com/bin/view/AWS_WWSO/IST/Innovation_Prototyping_Lab_SJC25/about/demonstrators)
+  - [揭秘安卓 AOSP 系统构建提速 50%](https://developer.volcengine.com/articles/7343872243241320475)
   
 - [Autonomous Driving]
   - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
