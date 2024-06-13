@@ -1513,6 +1513,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Create a Lambda Function for a Cross-Account Config Rule](security/aws-config/Cross-Account-Lambda-Config-Rule.md)
 
 - [How-to-get-public-resources](security/aws-config/How-to-get-public-resources.md)
+
+- [Collecting AWS networking information in large multi-account environments](https://aws.amazon.com/blogs/networking-and-content-delivery/collecting-aws-networking-information-in-large-multi-account-environments/)
+- [Find Public IPs of Resources – Use AWS Config for Vulnerability Assessment](https://aws.amazon.com/blogs/architecture/find-public-ips-of-resources-use-aws-config-for-vulnerability-assessment/)
   
 ### Developer
 - [CSV tools](https://github.com/secretGeek/AwesomeCSV)
