@@ -63,6 +63,7 @@
     - [SIEM and SOC](#siem-and-soc)
     - [Vulnerability Assessment - Inspector and Alternative](#vulnerability-assessment---inspector-and-alternative)
   - [Network](#network)
+    - [Test Performance/Latency](#test-performancelatency)
     - [VPC](#vpc)
     - [Keep private - VPC Endpoint and PrivateLink](#keep-private---vpc-endpoint-and-privatelink)
     - [NAT and proxy](#nat-and-proxy)
@@ -294,15 +295,19 @@
 - [Video and Audio]
   - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
+  - [Large Language and Vision Assistant](https://llava-vl.github.io/)
 
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
   - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
 
 - [Agent and workflow]
-  - [stable-diffusion-comfyui](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
+  - [基于 Amazon EKS 的 Stable Diffusion ComfyUI 部署方案](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
   - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
+    - [使用 Dify 集成 Bedrock Claude3 开启生成式 AI 之旅](https://aws.amazon.com/cn/blogs/china/get-started-with-generative-ai-by-integrating-bedrock-claude3-with-dify/)
+    - [Dify workshop](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
+  - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
   
 ### NLP
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -850,6 +855,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Inspector alternantive in China region - tenable nessus](https://zh-cn.tenable.com/products/nessus)
 
 ## Network
+### Test Performance/Latency
+- [测region之间延迟](https://www.cloudping.co/grid)
+- [测当前环境到各region的延迟](https://www.cloudping.info/)
+- [测全球主要城市到指定ip的延迟](https://tools.ipip.net/traceroute.php)
+  
 ### VPC
 - [How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
 - [How do I troubleshoot network performance issues between EC2 and on-premises host over the internet gateway](https://aws.amazon.com/premiumsupport/knowledge-center/network-issue-vpc-onprem-ig/)
@@ -1640,6 +1650,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 
 ## HealthCare and Life Science
+  - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
   - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
-  - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
+    - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
   - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
+  - [High-throughput Modeling & Screening]
+    - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
