@@ -291,11 +291,13 @@
 - [Text2SQL]
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
+  - [Generative BI using RAG on AWS](https://github.com/aws-samples/generative-bi-using-rag)
   
 - [Video and Audio]
   - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
   - [Large Language and Vision Assistant](https://llava-vl.github.io/)
+  - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
 
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -308,6 +310,7 @@
     - [使用 Dify 集成 Bedrock Claude3 开启生成式 AI 之旅](https://aws.amazon.com/cn/blogs/china/get-started-with-generative-ai-by-integrating-bedrock-claude3-with-dify/)
     - [Dify workshop](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
   - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
+  - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
   
 ### NLP
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -552,9 +555,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [EMR_On_Graviton2](analytics/emr/101Workshop/EMR_On_Graviton2.md)
   - [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md) 
   
-- [EMR on Kubernetes]
+- [EMR on EKS]
   - [EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
   - [EMR on EKS workshop](analytics/emr/emr-on-eks)
+  - [Mobileye: Spark on EKS migration](https://aws.amazon.com/cn/blogs/containers/mobileye-revolutionizing-hd-map-creation-for-autonomous-vehicles-with-spark-on-amazon-eks/)
 
 - [Performance and HA]
   - [Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
