@@ -32,6 +32,7 @@
     - [High Level Data Engineering and Data Analytics](#high-level-data-engineering-and-data-analytics)
     - [Data integration service: Glue](#data-integration-service-glue)
     - [Analysis: EMR](#analysis-emr)
+    - [Data On EKS](#data-on-eks)
     - [Stream - Flink and Spark Streaming](#stream---flink-and-spark-streaming)
     - [Stream - Kinesis](#stream---kinesis)
     - [Stream - Kafka](#stream---kafka)
@@ -115,7 +116,6 @@
     - [EKS](#eks)
       - [EKS networking](#eks-networking)
       - [EKS practice](#eks-practice)
-      - [Data On EKS](#data-on-eks)
       - [DevOps on EKS](#devops-on-eks)
     - [ECS](#ecs)
     - [Fargate](#fargate)
@@ -268,6 +268,10 @@
   - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
   - [使用 Amazon Bedrock，Claude3 和 CrewAI 构建应用商城用户评论分析工具](https://aws.amazon.com/cn/blogs/china/build-an-app-store-user-review-analysis-tool-using-amazon-bedrock-claude3-and-crewai/)
   - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)
+  - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
+  - [open_artifacts_for_bedrock hands on](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
+  - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
+  - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
 
 - [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
@@ -508,6 +512,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [解密Data Fabric的核心技术 – 数据虚拟化 - Data Virtualization](https://aws.amazon.com/cn/blogs/china/demystifying-the-core-technology-of-data-weaving-data-virtualization/)
   - [Data Fabric and Data Mesh 区别](https://zhuanlan.zhihu.com/p/608431096)
+- [Volkswagen streamlined access to data across multiple data lakes using Amazon DataZone](https://aws.amazon.com/blogs/big-data/how-volkswagen-streamlined-access-to-data-across-multiple-data-lakes-using-amazon-datazone-part-1/)
   
 ### Data integration service: Glue
 - [ETL]
@@ -544,21 +549,14 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Develop Code]
   - [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
   Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
-  - [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
   - [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
   
 - [Workflow]
-  - [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
 
 - [Install and Delopyment]
   - [How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
   - [EMR_On_Graviton2](analytics/emr/101Workshop/EMR_On_Graviton2.md)
   - [Why use the Glue Catalog v.s other external metastore for Hive](analytics/glue-workshop/Glue-Catalog-FAQ.md) 
-  
-- [EMR on EKS]
-  - [EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
-  - [EMR on EKS workshop](analytics/emr/emr-on-eks)
-  - [Mobileye: Spark on EKS migration](https://aws.amazon.com/cn/blogs/containers/mobileye-revolutionizing-hd-map-creation-for-autonomous-vehicles-with-spark-on-amazon-eks/)
 
 - [Performance and HA]
   - [Resolve s3 503 slowdown throttling](https://aws.amazon.com/premiumsupport/knowledge-center/s3-resolve-503-slowdown-throttling/)
@@ -570,6 +568,14 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Introducing Amazon EMR integration with Apache Ranger](https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-integration-with-apache-ranger/)
   - [Enable federated governance using Trino and Apache Ranger on Amazon EMR](https://aws.amazon.com/blogs/big-data/enable-federated-governance-using-trino-and-apache-ranger-on-amazon-emr/)
 
+### Data On EKS
+  - [EMR on EKS Best Practice Guide](https://aws.github.io/aws-emr-containers-best-practices/)
+  - [EMR on EKS workshop](analytics/emr/emr-on-eks)
+  - [Mobileye: Spark on EKS migration](https://aws.amazon.com/cn/blogs/containers/mobileye-revolutionizing-hd-map-creation-for-autonomous-vehicles-with-spark-on-amazon-eks/)
+  - [Tool to convert spark-submit to StartJobRun EMR on EKS API](analytics/emr/emr-on-eks/Convert-API-Tools.md)
+  - [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
+  - [data-on-eks](https://awslabs.github.io/data-on-eks/)
+  - [EMR on EKS 与 Apache Kyuubi 的数据驱动之旅](https://aws.amazon.com/cn/blogs/china/a-data-driven-journey-with-emr-on-eks-and-apache-kyuubi/)
 
 ### Stream - Flink and Spark Streaming
 - [Flink on EMR]
@@ -709,6 +715,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Enabling Amazon QuickSight federation with Azure AD](https://aws.amazon.com/blogs/big-data/enabling-amazon-quicksight-federation-with-azure-ad/)
   - [Manage users and group memberships on Amazon QuickSight using SCIM events generated in IAM Identity Center with Azure AD](https://aws.amazon.com/blogs/business-intelligence/manage-users-and-group-memberships-on-amazon-quicksight-using-scim-events-generated-in-iam-identity-center-with-azure-ad/)
   - [AWS Managed Microsoft AD to authenticate users in QuickSight](https://repost.aws/knowledge-center/quicksight-authenticate-active-directory)
+  - [QuickSight deployment models for cross-account and cross-Region access to Redshift and RDS](https://aws.amazon.com/cn/blogs/big-data/amazon-quicksight-deployment-models-for-cross-account-and-cross-region-access-to-amazon-redshift-and-amazon-rds/)
 
 - [Athena integrated with PowerBI Desktop and PowerBI Service](https://docs.aws.amazon.com/athena/latest/ug/connect-with-odbc-and-power-bi.html)
 
@@ -1012,6 +1019,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - Lambda performance
   - [Understanding AWS Lambda scaling and throughput](https://aws.amazon.com/cn/blogs/compute/understanding-aws-lambda-scaling-and-throughput/)
   - [Lambda provisioned capacity autoscaling的实践](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/springboot/template.yaml)
+  - [Simplifying serverless best practices with Lambda Powertools](https://aws.amazon.com/cn/blogs/opensource/simplifying-serverless-best-practices-with-lambda-powertools/)
 
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
@@ -1085,7 +1093,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
 
 ### Cross Cloud Migration
-[Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
+- [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
+- [Assess secure Windows Servers for TCO analysis using Migration Evaluator](https://aws.amazon.com/blogs/mt/assess-secure-windows-servers-for-tco-analysis-using-migration-evaluator/)
 
 ### File migration
 - [Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
@@ -1217,7 +1226,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Aurora MySQL 5.6 upgrade blog](https://aws.amazon.com/blogs/database/upgrade-amazon-aurora-mysql-compatible-edition-version-1-with-mysql-5-6-compatibility/)
 - [Minimum downtime Aurora MySQL5.6 upgrade using clone](https://aws.amazon.com/blogs/database/performing-major-version-upgrades-for-amazon-aurora-mysql-with-minimum-downtime/)
-
+- [Moving to Graviton2 for Amazon RDS and Amazon Aurora databases](https://aws.amazon.com/blogs/database/key-considerations-in-moving-to-graviton2-for-amazon-rds-and-amazon-aurora-databases/)
 #### RDS Security
 - [Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
 
@@ -1354,9 +1363,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   Managed node groups are managed using Amazon EC2 Auto Scaling groups, and are compatible with the Cluster Autoscaler. You can deploy the Cluster Autoscaler to your Amazon EKS cluster and configure it to modify your Amazon EC2 Auto Scaling groups.
   - [Vertical Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/vertical-pod-autoscaler.html)
   - [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
-  
-#### Data On EKS
-- [data-on-eks](https://awslabs.github.io/data-on-eks/)
 
 #### DevOps on EKS
 - [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
