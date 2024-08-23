@@ -269,9 +269,10 @@
   - [使用 Amazon Bedrock，Claude3 和 CrewAI 构建应用商城用户评论分析工具](https://aws.amazon.com/cn/blogs/china/build-an-app-store-user-review-analysis-tool-using-amazon-bedrock-claude3-and-crewai/)
   - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)
   - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
-  - [open_artifacts_for_bedrock hands on](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
+  - [Claude Artifacts workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
   - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
   - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
+  - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
 
 - [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
@@ -285,9 +286,8 @@
   - [基于Amazon Open Search+大语言模型的智能问答系统](https://catalog.us-east-1.prod.workshops.aws/workshops/158a2497-7cbe-4ba4-8bee-2307cb01c08a)
   - [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
   - [Building a serverless document chat with AWS Lambda and Amazon Bedrock](https://aws.amazon.com/cn/blogs/compute/building-a-serverless-document-chat-with-aws-lambda-and-amazon-bedrock/)
-  - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
   - [GenAI Data Foundation Workshop - Healthcare RAG chatbot](https://catalog.us-east-1.prod.workshops.aws/workshops/973a358a-1e5c-44ed-8589-4e480f597c77/en-US)
-  - [使用 Bedrock Agent 实现发票 Agent](https://catalog.us-east-1.prod.workshops.aws/workshops/180cd73a-ccaf-4ade-9e5d-cf964c637638/zh-CN/0-0-introduction)
+  - [RAGChecker for RAG health check](https://github.com/amazon-science/RAGChecker)
   
 - [Promote-Engineering]
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
@@ -615,6 +615,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Performance & Cost]
   - [THe tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
+  - [Safely remove Kafka brokers from Amazon MSK provisioned clusters](https://aws.amazon.com/blogs/big-data/safely-remove-kafka-brokers-from-amazon-msk-provisioned-clusters/)
   
 ### Ad-hoc and Interactive query: Athena
 - [Automate athena query by lambda and step function](analytics/athena-automate)
@@ -792,6 +793,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
 - [3rd party PCA](https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/security-encrypting-data-in-transit/topics/cm-security-use-case-1.html)
+- [How to build a CA hierarchy across multiple AWS accounts and Regions for global organization](https://aws.amazon.com/blogs/security/how-to-build-a-ca-hierarchy-across-multiple-aws-accounts-and-regions-for-global-organization/)
 
 - [Validate the ACM certificate]
   - [Switch acm certificate validation](https://aws.amazon.com/cn/premiumsupport/knowledge-center/switch-acm-certificate/)
@@ -1414,6 +1416,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [aws-fargate-fast-autoscaler](aws-samples/aws-fargate-fast-autoscaler)
 
 - [EKS on Fargate QuickStart](container/EKSonFargate-QuickStart.md)
+
+- [Run Selenium tests at scale using AWS Fargate](https://aws.amazon.com/cn/blogs/opensource/run-selenium-tests-at-scale-using-aws-fargate/)
 
 ### Istio, Envoy, App Mesh, Service discovery
 - [AWS App Mesh Workshop](https://www.appmeshworkshop.com/introduction/what_is_appmesh/)
