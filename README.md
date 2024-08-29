@@ -273,6 +273,7 @@
   - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
   - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
   - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
+  - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
 
 - [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
@@ -836,12 +837,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
 
 - [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
-
 - [WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
-
 - [使用 Amazon WAF 进行 Captcha人机验证](https://aws.amazon.com/cn/blogs/china/use-amazon-waf-for-captcha-man-machine-verification/)
-
 - [WAF的托管规则说明](security/waf/WAF的托管规则说明.md)
+- [中国区抗DDoS方案](https://www.nwcdcloud.cn/articledetail.aspx?id=63)
 
 ### Permission - IAM Policy, S3 Policy, RAM Policy
 - [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
@@ -1660,6 +1659,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Scene Intelligence with Rosbag on AWS](https://aws.amazon.com/solutions/implementations/scene-intelligence-with-rosbag-on-aws/)
     - [Autonomous Driving Data Service with Rosbag on EKS](https://github.com/aws-samples/amazon-eks-autonomous-driving-data-service)
   - [在中国区部署 SIMPHERA Architecture](https://aws.amazon.com/cn/blogs/china/deploying-simphera-architecture-in-china/)
+  - [理想汽车过去一年发表的16篇智驾及AI应用相关论文](https://mp.weixin.qq.com/s/3rkJpmbOsknIrgl6dKlwJw)
 
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
