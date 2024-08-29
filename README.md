@@ -649,6 +649,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Glue Studio supports Redshift Serverless](https://aws.amazon.com/about-aws/whats-new/2023/07/aws-glue-studio-amazon-redshift-serverless/)
   - [Redshift auto mounting Glue Catalog](https://aws.amazon.com/about-aws/whats-new/2023/07/amazon-redshift-automatic-mounting-aws-glue-data-catalog/)
   - [Iceberg table support on Redshift](https://aws.amazon.com/about-aws/whats-new/2023/07/amazon-redshift-querying-apache-iceberg-tables/)
+  - [Zero-ETL 在支付业务离线数据上的实践](https://aws.amazon.com/cn/blogs/china/zero-etl-practice-on-offline-payment-business-data/)
   
 - [Redshift performance]
   - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
