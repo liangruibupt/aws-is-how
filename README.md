@@ -3,6 +3,7 @@
   - [常见故障排除及支持手册](#常见故障排除及支持手册)
   - [AWS Skill builder](#aws-skill-builder)
   - [freeCodeCamp](#freecodecamp)
+  - [Architecture Design](#architecture-design)
   - [AI/ML](#aiml)
     - [ML Study](#ml-study)
     - [SageMaker](#sagemaker)
@@ -163,6 +164,9 @@
 
 ## [freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp)
 
+## Architecture Design
+- [Building hexagonal architectures on AWS](https://docs.aws.amazon.com/prescriptive-guidance/latest/hexagonal-architectures/welcome.html)
+  
 ## AI/ML
 
 ### ML Study
@@ -274,6 +278,7 @@
   - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
   - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
+  - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
 
 - [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
@@ -303,6 +308,7 @@
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
   - [Large Language and Vision Assistant](https://llava-vl.github.io/)
   - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
+  - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN)
 
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -316,6 +322,7 @@
     - [Dify workshop](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
   - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
   - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
+  - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
   
 ### NLP
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -774,6 +781,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [An AWS Pentesting tool that lets you use one-liner commands to backdoor an AWS account's resources](https://endgame.readthedocs.io/en/latest/)
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
 - [BMW automation compliance-at-scale](https://aws.amazon.com/blogs/mt/how-bmw-group-uses-automation-to-achieve-end-to-end-compliance-at-scale-on-aws/)
+- [Automated Security Response on AWS](https://aws.amazon.com/solutions/implementations/automated-security-response-on-aws/)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
@@ -868,6 +876,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Inspector alternantive in China region - tenable nessus](https://zh-cn.tenable.com/products/nessus)
 
 ## Network
+- [Growing AWS internet peering with 400 GbE](https://aws.amazon.com/blogs/networking-and-content-delivery/growing-aws-internet-peering-with-400-gbe/)
 ### Test Performance/Latency
 - [测region之间延迟](https://www.cloudping.co/grid)
 - [测当前环境到各region的延迟](https://www.cloudping.info/)
@@ -1665,7 +1674,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
   - [Advanced Vechile Data Plantform - VDP with Kafka, Redshift, Flink](https://aws.amazon.com/cn/blogs/china/build-a-reliable-data-governance-model-based-on-aws-data-analysis-services/)
-
 
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
