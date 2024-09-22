@@ -1660,6 +1660,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Simulating Automotive E/E Architectures in AWS – Part 1: Accelerating the V-Model](https://aws.amazon.com/blogs/industries/simulating-automotive-e-e-architectures-in-aws-part-1-accelerating-the-v-model/)
   - [Automotive Demo Lab](https://w.amazon.com/bin/view/AWS_WWSO/IST/Innovation_Prototyping_Lab_SJC25/about/demonstrators)
   - [揭秘安卓 AOSP 系统构建提速 50%](https://developer.volcengine.com/articles/7343872243241320475)
+  - [车载以太网为什么要用SOME/IP？](https://mp.weixin.qq.com/s/m6kEXCkWpHnKq4hU51kNqQ)
   
 - [Autonomous Driving]
   - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
@@ -1674,6 +1675,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
   - [Advanced Vechile Data Plantform - VDP with Kafka, Redshift, Flink](https://aws.amazon.com/cn/blogs/china/build-a-reliable-data-governance-model-based-on-aws-data-analysis-services/)
+
+- [Connected Mobility Services - CMS]
+  - [一图读懂强制性国家标准GB 44495—2024《汽车整车信息安全技术要求》](https://www.miit.gov.cn/jgsj/zbys/qcgy/art/2024/art_f54547486cf94a34934802668e8f5e3f.html)
 
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
