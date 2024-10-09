@@ -3,3 +3,4 @@
 - Demo code [ses_sentmail](ses_sentmail.py)
 3. [Using the Amazon SES SMTP interface to send email](https://docs.aws.amazon.com/ses/latest/dg/send-email-smtp.html)
 - Demo code [ses_smtp_sentmail](ses_smtp_sentmail.py)
+- [How to Set Up SPF and DKIM for Amazon SES](https://dmarcly.com/blog/how-to-set-up-spf-and-dkim-for-amazon-ses)

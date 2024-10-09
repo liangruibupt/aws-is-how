@@ -1132,7 +1132,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
 
 ### S3
-- [S3 Web Explorer](storage/S3/s3explorer)
+- [S3 Web Explorer](storage/S3/s3explorer/README.md)
 
 - [S3-Presign-URL](storage/S3/S3-Presign-URL.md)
   - [Embeded the image in html with S3-Presign-URL](storage/S3/scripts/s3_image_display.html)
@@ -1238,6 +1238,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Aurora MySQL 5.6 upgrade blog](https://aws.amazon.com/blogs/database/upgrade-amazon-aurora-mysql-compatible-edition-version-1-with-mysql-5-6-compatibility/)
 - [Minimum downtime Aurora MySQL5.6 upgrade using clone](https://aws.amazon.com/blogs/database/performing-major-version-upgrades-for-amazon-aurora-mysql-with-minimum-downtime/)
 - [Moving to Graviton2 for Amazon RDS and Amazon Aurora databases](https://aws.amazon.com/blogs/database/key-considerations-in-moving-to-graviton2-for-amazon-rds-and-amazon-aurora-databases/)
+- [Amazon RDS 多可用区集群结合 Amazon RDS Proxy 实现小版本升级秒级切换 ](https://aws.amazon.com/cn/blogs/china/amazon-rds-multi-az-clusters-combined-with-amazon-rds-proxy-enable-minor-version-upgrades-in-seconds/)
 #### RDS Security
 - [Managing postgresql users and roles](https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/)
 
