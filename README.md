@@ -296,7 +296,8 @@
   - [RAGChecker for RAG health check](https://github.com/amazon-science/RAGChecker)
   - [基于 AWS 服务实现具备专词映射能力的大语言模型翻译](https://aws.amazon.com/cn/blogs/china/implementing-llm-translation-with-word-mapping-capabilities-based-on-aws-services/)
   - [Implementing advanced prompt engineering with Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/)
-  - [Evaluating prompts at scale with Prompt Management and Prompt Flows for Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/evaluating-prompts-at-scale-with-prompt-management-and-prompt-flows-for-amazon-bedrock/ )
+  - [Evaluating prompts at scale with Prompt Management and Prompt Flows for Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/evaluating-prompts-at-scale-with-prompt-management-and-prompt-flows-for-amazon-bedrock/)
+  - [Enhance performance of generative language models with self-consistency prompting](https://aws.amazon.com/blogs/machine-learning/enhance-performance-of-generative-language-models-with-self-consistency-prompting-on-amazon-bedrock/)
   
 - [Promote-Engineering]
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
