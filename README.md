@@ -935,6 +935,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Cross board transfer
 - [Cross region EC2 to EC2 transfering speed testing](network/Cross-region-EC2-connection-benchmark.md)
+- [cross-border-data-synchronization with data transfer hub](https://aws.amazon.com/cn/blogs/china/best-practices-for-cross-border-data-synchronization-in-dth/)
 
 ### Cross accounts and Cross VPCs - TGW
 - [TGW cross account sharing and inter-connection testing](network/tgw-workshop)
