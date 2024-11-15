@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>吃豆人</title>
+    <style>
+        canvas { 
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 游戏配置
+        const CELL_SIZE = 30; // 每个格子的大小
+        const PACMAN_SIZE = 25; // 吃豆人大小
+        const GHOST_SIZE = 25; // 幽灵大小
+        const DOT_SIZE = 6; // 豆子大小
+
+        // 地图数据 (0:路径, 1:墙, 2:豆子)
+        let map = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,2,2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,2,2,1],
+            [1,2,1,1,1,2,1,2,1,1,1,1,2,1,2,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,2,1,1,1,2,2,1,1,1,2,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,2,1,2,1,1,1,1,2,1,2,1,1,1,2,1],
+            [1,2,2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,2,2,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        // 游戏状态
+        let score = 0;
+        let gameOver = false;
+
+        // 吃豆人
+        let pacman = {
+            x: CELL_SIZE * 1.5,
+            y: CELL_SIZE * 1.5,
+            direction: 0,
+            speed: 5,
+            mouthOpen: 0,
+            mouthSpeed: 0.15
+        };
+
+        // 幽灵
+        let ghost = {
+            x: CELL_SIZE * 18.5,
+            y: CELL_SIZE * 1.5,
+            direction: 0,
+            speed: 4
+        };
+
+        // 键盘控制
+        let keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // 游戏主循环
+        function gameLoop() {
+            if(!gameOver) {
+                update();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // 更新游戏状态
+        function update() {
+            // 吃豆人移动控制
+            let newX = pacman.x;
+            let newY = pacman.y;
+            
+            if(keys['ArrowLeft']) pacman.direction = Math.PI;
+            if(keys['ArrowRight']) pacman.direction = 0;
+            if(keys['ArrowUp']) pacman.direction = -Math.PI/2;
+            if(keys['ArrowDown']) pacman.direction = Math.PI/2;
+
+            newX += Math.cos(pacman.direction) * pacman.speed;
+            newY += Math.sin(pacman.direction) * pacman.speed;
+
+            // 碰撞检测
+            let cellX = Math.floor(newX / CELL_SIZE);
+            let cellY = Math.floor(newY / CELL_SIZE);
+
+            if(map[cellY] && map[cellY][cellX] !== 1) {
+                pacman.x = newX;
+                pacman.y = newY;
+
+                // 吃豆子
+                if(map[cellY][cellX] === 2) {
+                    map[cellY][cellX] = 0;
+                    score += 10;
+                }
+            }
+
+            // 幽灵移动
+            if(Math.random() < 0.02) {
+                ghost.direction = Math.floor(Math.random() * 4) * Math.PI/2;
+            }
+            
+            let newGhostX = ghost.x + Math.cos(ghost.direction) * ghost.speed;
+            let newGhostY = ghost.y + Math.sin(ghost.direction) * ghost.speed;
+            
+            let ghostCellX = Math.floor(newGhostX / CELL_SIZE);
+            let ghostCellY = Math.floor(newGhostY / CELL_SIZE);
+
+            if(map[ghostCellY] && map[ghostCellY][ghostCellX] !== 1) {
+                ghost.x = newGhostX;
+                ghost.y = newGhostY;
+            } else {
+                ghost.direction = Math.floor(Math.random() * 4) * Math.PI/2;
+            }
+
+            // 检测幽灵碰撞
+            let dx = pacman.x - ghost.x;
+            let dy = pacman.y - ghost.y;
+            let distance = Math.sqrt(dx*dx + dy*dy);
+            
+            if(distance < PACMAN_SIZE) {
+                gameOver = true;
+                alert('游戏结束! 得分: ' + score);
+            }
+
+            // 更新吃豆人嘴巴动画
+            pacman.mouthOpen += pacman.mouthSpeed;
+            if(pacman.mouthOpen > 0.5 || pacman.mouthOpen < 0) {
+                pacman.mouthSpeed = -pacman.mouthSpeed;
+            }
+        }
+
+        // 绘制游戏画面
+        function draw() {
+            // 清空画布
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制地图
+            for(let y = 0; y < map.length; y++) {
+                for(let x = 0; x < map[y].length; x++) {
+                    if(map[y][x] === 1) {
+                        ctx.fillStyle = 'blue';
+                        ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    } else if(map[y][x] === 2) {
+                        ctx.fillStyle = 'white';
+                        ctx.beginPath();
+                        ctx.arc(x * CELL_SIZE + CELL_SIZE/2, y * CELL_SIZE + CELL_SIZE/2, 
+                               DOT_SIZE, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            // 绘制吃豆人
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath();
+            ctx.moveTo(pacman.x, pacman.y);
+            ctx.arc(pacman.x, pacman.y, PACMAN_SIZE, 
+                   pacman.direction + pacman.mouthOpen, 
+                   pacman.direction + 2*Math.PI - pacman.mouthOpen);
+            ctx.lineTo(pacman.x, pacman.y);
+            ctx.fill();
+
+            // 绘制幽灵
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(ghost.x, ghost.y, GHOST_SIZE, 0, Math.PI, true);
+            ctx.lineTo(ghost.x - GHOST_SIZE, ghost.y + GHOST_SIZE);
+            for(let i = 0; i < 3; i++) {
+                ctx.quadraticCurveTo(
+                    ghost.x - GHOST_SIZE + (GHOST_SIZE*2/3)*(i+0.5), 
+                    ghost.y + GHOST_SIZE - 5,
+                    ghost.x - GHOST_SIZE + (GHOST_SIZE*2/3)*(i+1), 
+                    ghost.y + GHOST_SIZE
+                );
+            }
+            ctx.fill();
+
+            // 绘制分数
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText('得分: ' + score, 10, 30);
+        }
+
+        // 开始游戏
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -280,7 +280,11 @@
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
 
-- [RAG - retrieval-augmented generation. It solves inherent knowledge limitations of FMs by integrating with data that are not part of the model’s training] 
+- [RLHF]
+  - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
+  - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
+
+- [RAG - retrieval-augmented generation]
   - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [基于智能搜索的大语言模型增强方案2](https://catalog.us-east-1.prod.workshops.aws/workshops/3973557a-0853-41f6-9678-00ae171ba1f6/zh-CN/03cdkinstall/30preinstall)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -324,7 +328,8 @@
   - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
     - [使用 Dify 集成 Bedrock Claude3 开启生成式 AI 之旅](https://aws.amazon.com/cn/blogs/china/get-started-with-generative-ai-by-integrating-bedrock-claude3-with-dify/)
-    - [Dify workshop](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
+    - [Claude for BRClient and Dify: Prompt, RAG, and Agent](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
+    - [Rapidly Build GenAI Apps with Dify](https://catalog.us-east-1.prod.workshops.aws/workshops/2c19fcb1-1f1c-4f52-b759-0ca4d2ae2522/zh-CN/introduction)
   - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
   - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
   - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
@@ -855,6 +860,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [使用 Amazon WAF 进行 Captcha人机验证](https://aws.amazon.com/cn/blogs/china/use-amazon-waf-for-captcha-man-machine-verification/)
 - [WAF的托管规则说明](security/waf/WAF的托管规则说明.md)
 - [中国区抗DDoS方案](https://www.nwcdcloud.cn/articledetail.aspx?id=63)
+- [Strengthen Your Web Application Defenses with AWS WAF](https://catalog.us-east-1.prod.workshops.aws/workshops/81e94a4b-b47f-4acc-a284-914c4514d50f/zh-CN)
 
 ### Permission - IAM Policy, S3 Policy, RAM Policy
 - [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
@@ -956,6 +962,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Optimizing performance for users in China with Amazon Route 53 and Amazon CloudFront](https://aws.amazon.com/blogs/networking-and-content-delivery/optimizing-performance-for-users-in-china-with-amazon-route-53-and-amazon-cloudfront/)
 
+- [使用 Amazon CloudFront + Amazon S3 + AWS Lambda@Edge 动态调用业务接口生成图片](https://aws.amazon.com/cn/blogs/china/use-amazon-cloudfront-amazon-s3-aws-lambda-edge-to-dynamically-call-business-interfaces-to-generate-images/)
+
 ### Edge
 - [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
 
@@ -999,6 +1007,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Serverless coffee workshop](https://workshop.serverlesscoffee.com/0-introduction.html)
 
 - [AWS Serverless SaaS Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/b0c6ad36-0a4b-45d8-856b-8a64f0ac76bb/en-US)
+
+- [Lambda 10 Years](https://www.allthingsdistributed.com/2024/11/aws-lambda-turns-10-a-rare-look-at-the-doc-that-started-it.html)
 
 ### Function as Service - Lambda
 - Lambda integration
