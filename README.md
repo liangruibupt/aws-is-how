@@ -279,7 +279,8 @@
   - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
-
+  - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
+  
 - [RLHF]
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
   - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
@@ -507,6 +508,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - SOCA
   - [SOCA 帮助半导体企业快速启动 EDA 云上部署](https://aws.amazon.com/cn/blogs/china/scaling-eda-workloads-using-scale-out-computing-on-aws/)
+  - [Research and Engineering Studio on AWS](https://aws.amazon.com/blogs/hpc/new-research-and-engineering-studio-on-aws/)
 ## Analytics
 ### High Level Data Engineering and Data Analytics
 - [AWS Data Engineering Day Workshop](https://aws-dataengineering-day.workshop.aws/100-introduction.html)
@@ -632,7 +634,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [MSK 可靠性最佳实践 msk-reliability-best-practice](https://aws.amazon.com/cn/blogs/china/msk-reliability-best-practice/)
 
 - [Performance & Cost]
-  - [THe tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
+  - [The tiered storage for Amazon MSK](https://aws.amazon.com/cn/blogs/big-data/retain-more-for-less-with-tiered-storage-for-amazon-msk/)
   - [Safely remove Kafka brokers from Amazon MSK provisioned clusters](https://aws.amazon.com/blogs/big-data/safely-remove-kafka-brokers-from-amazon-msk-provisioned-clusters/)
   
 ### Ad-hoc and Interactive query: Athena
@@ -671,6 +673,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Redshift performance]
   - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
   - [Cloud DataWarehouse Benchmark](https://github.com/awslabs/amazon-redshift-utils/tree/master/src/CloudDataWarehouseBenchmark/Cloud-DWB-Derived-from-TPCDS)
+  - [Redshift 高并发分析查询最佳实践与解决方案](https://aws.amazon.com/cn/blogs/china/best-practices-and-solutions-for-high-concurrency-analytical-queries-in-the-serverless-architecture/)
 
 - [CDC to Redshift]
     - [CDC from On-Premises SQL Server to Amazon Redshift](https://aws.amazon.com/cn/blogs/apn/change-data-capture-from-on-premises-sql-server-to-amazon-redshift-target/)
@@ -1048,6 +1051,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Lambda provisioned capacity autoscaling的实践](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/springboot/template.yaml)
   - [Simplifying serverless best practices with Lambda Powertools](https://aws.amazon.com/cn/blogs/opensource/simplifying-serverless-best-practices-with-lambda-powertools/)
 
+- [lambda Web adapter](https://github.com/awslabs/aws-lambda-web-adapter)
+  - [Using response streaming with AWS Lambda Web Adapter to optimize performance](https://aws.amazon.com/blogs/compute/using-response-streaming-with-aws-lambda-web-adapter-to-optimize-performance/)
+  
 ### API Gateway
 - [Build Private API with API Gateway and integrate with VPC resource via API Gateway private integration](devops/apigw/APIGW-PrivateAPI-PrivateIntegration.md)
 
@@ -1129,6 +1135,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Transfer Family to access EFS](https://aws.amazon.com/blogs/aws/new-aws-transfer-family-support-for-amazon-elastic-file-system/)
 
 - [SFTP on AWS](network/SFTPOnAWS.md)
+- [What type of endpoint is appropriate for my Transfer Family server](https://repost.aws/knowledge-center/aws-sftp-endpoint-type)
 
 ## Storage
 
@@ -1203,7 +1210,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Deploying IPFS Cluster using AWS Fargate and Amazon EFS One Zone](https://aws.amazon.com/cn/blogs/containers/deploying-ipfs-cluster-using-aws-fargate-and-amazon-efs-one-zone/)
 
-
+- [FSX Security Scan](https://aws.amazon.com/blogs/storage/securing-your-amazon-fsx-for-ontap-windows-share-smb-against-viruses/)
+  
 ## Database
 ### RDS
 #### RDS usage
@@ -1382,6 +1390,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
 - [Windows pod in EKS](container/Windows-pod-EKS.md)
+
+- [Cell-Based Architecture for Amazon EKS](https://aws.amazon.com/solutions/guidance/cell-based-architecture-for-amazon-eks/)
 
 - [EKS Managed Group]
   - [Overview](https://aws.amazon.com/blogs/containers/eks-managed-node-groups/)
@@ -1706,3 +1716,4 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
   - [High-throughput Modeling & Screening]
     - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
+    - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
