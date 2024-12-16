@@ -1181,7 +1181,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [将Amazon EC2到Amazon S3的数据传输推向100Gbps线速](https://aws.amazon.com/cn/blogs/china/pushing-the-data-transfer-from-amazon-ec2-to-amazon-s3-to-100gbps-line-speed/)
 - [如何在短时间里遍历 Amazon S3 亿级对象桶（原理篇）](https://aws.amazon.com/cn/blogs/china/how-to-traverse-amazon-s3-billion-object-buckets-in-a-short-time-principle/)
 - [Hosting Internal HTTPS Static Websites with ALB, S3, and PrivateLink](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/hosting-internal-https-static-websites-with-alb-s3-and-privatelink/)
-- 
+- [2024 reInvent S3 udpate](https://www.youtube.com/watch?v=pbsIVmWqr2M)
+- [S3 support the dedicated local zone](https://aws.amazon.com/about-aws/whats-new/2024/12/amazon-s3-storage-classes-dedicated-local-zones/)
+  
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
