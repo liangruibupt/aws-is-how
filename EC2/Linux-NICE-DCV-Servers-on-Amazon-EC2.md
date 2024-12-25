@@ -220,7 +220,7 @@ sudo passwd ec2-user
 sudo dcv create-session --type=console --owner ec2-user --name "my graphics session" my-session
 
 # Example 2 - Virtual Session (Linux NICE DCV servers only)
-sudo dcv create-session --owner ec2-user --user ec2-user my-session
+sudo dcv create-session --owner ubuntu --user ubuntu my-session
 
 # Example 3 - Virtual Session (Linux NICE DCV servers only)
 sudo dcv create-session my-session

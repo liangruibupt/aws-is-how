@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function Dashboard() {
+            const platforms = [
+                {
+                    name: "JD.com",
+                    gmv: 1250000,
+                    orders: 52000,
+                    topCategories: ["Electronics", "Fashion", "Home"],
+                    storeRank: 1,
+                    growth: 15.5
+                },
+                {
+                    name: "Taobao",
+                    gmv: 980000,
+                    orders: 48000,
+                    topCategories: ["Fashion", "Beauty", "Accessories"],
+                    storeRank: 2,
+                    growth: 12.8
+                },
+                {
+                    name: "VIP.com",
+                    gmv: 650000,
+                    orders: 35000,
+                    topCategories: ["Luxury", "Fashion", "Beauty"],
+                    storeRank: 3,
+                    growth: 18.2
+                }
+            ];
+
+            return (
+                <div className="min-h-screen bg-gray-100 p-8">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-800">Sales Dashboard</h1>
+                        <p className="text-gray-600">Platform Performance Overview</p>
+                    </div>
+
+                    {/* Summary Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        {platforms.map((platform) => (
+                            <div key={platform.name} className="bg-white rounded-lg shadow-md p-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-semibold text-gray-800">{platform.name}</h2>
+                                    <span className={`px-2 py-1 rounded-full text-sm ${
+                                        platform.growth >= 15 ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                                    }`}>
+                                        +{platform.growth}%
+                                    </span>
+                                </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <p className="text-gray-600">GMV</p>
+                                        <p className="text-2xl font-bold">${(platform.gmv).toLocaleString()}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-600">Orders</p>
+                                        <p className="text-2xl font-bold">{platform.orders.toLocaleString()}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-600">Store Rank</p>
+                                        <p className="text-2xl font-bold">#{platform.storeRank}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Detailed Statistics */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h2 className="text-xl font-semibold mb-4">Platform Details</h2>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full table-auto">
+                                <thead>
+                                    <tr className="bg-gray-50">
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Top Categories</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GMV</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {platforms.map((platform) => (
+                                        <tr key={platform.name}>
+                                            <td className="px-6 py-4 whitespace-nowrap">{platform.name}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="flex gap-2">
+                                                    {platform.topCategories.map((category) => (
+                                                        <span key={category} className="px-2 py-1 bg-gray-100 rounded-full text-sm">
+                                                            {category}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">${platform.gmv.toLocaleString()}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{platform.orders.toLocaleString()}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className={`px-2 py-1 rounded-full ${
+                                                    platform.growth >= 15 ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                                                }`}>
+                                                    +{platform.growth}%
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<Dashboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>

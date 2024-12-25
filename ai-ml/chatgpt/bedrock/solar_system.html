@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar System Simulation</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script>
+        let scene, camera, renderer, world;
+        const bodies = [];
+        const orbitTraces = [];
+        const tracePoints = {};
+
+        function init() {
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 100, 0);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Physics world setup
+            world = new CANNON.World();
+            world.gravity.set(0, 0, 0);
+
+            // Create sun
+            createSun();
+
+            // Create planets
+            createPlanets();
+
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            animate();
+        }
+
+        function createSun() {
+            const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
+            const sunMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                emissive: 0xffff00
+            });
+            const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+            scene.add(sunMesh);
+
+            // Add point light at sun's position
+            const sunLight = new THREE.PointLight(0xffffff, 2, 100);
+            scene.add(sunLight);
+
+            const sunBody = new CANNON.Body({
+                mass: 1000,
+                position: new CANNON.Vec3(0, 0, 0),
+                shape: new CANNON.Sphere(5)
+            });
+            world.addBody(sunBody);
+            bodies.push({ mesh: sunMesh, body: sunBody });
+        }
+
+        function createPlanets() {
+            const planetColors = [0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0x00ffff];
+            const planetDistances = [15, 25, 35, 45, 55];
+            
+            planetDistances.forEach((distance, index) => {
+                const planetGeometry = new THREE.SphereGeometry(1, 32, 32);
+                const planetMaterial = new THREE.MeshStandardMaterial({
+                    color: planetColors[index],
+                    metalness: Math.random(),
+                    roughness: Math.random()
+                });
+                const planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
+                scene.add(planetMesh);
+
+                // Create orbit trace
+                const orbitGeometry = new THREE.BufferGeometry();
+                const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x444444 });
+                const orbitPoints = [];
+                const segments = 64;
+                for (let i = 0; i <= segments; i++) {
+                    const theta = (i / segments) * Math.PI * 2;
+                    orbitPoints.push(distance * Math.cos(theta), 0, distance * Math.sin(theta));
+                }
+                orbitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(orbitPoints, 3));
+                const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
+                scene.add(orbitLine);
+                orbitTraces.push(orbitLine);
+
+                // Initial position and velocity for orbital motion
+                const angle = Math.random() * Math.PI * 2;
+                const x = distance * Math.cos(angle);
+                const z = distance * Math.sin(angle);
+                const velocity = Math.sqrt(1000 / distance) * 0.3; // Orbital velocity
+
+                const planetBody = new CANNON.Body({
+                    mass: 1,
+                    position: new CANNON.Vec3(x, 0, z),
+                    velocity: new CANNON.Vec3(-velocity * Math.sin(angle), 0, velocity * Math.cos(angle)),
+                    shape: new CANNON.Sphere(1)
+                });
+
+                world.addBody(planetBody);
+                bodies.push({ mesh: planetMesh, body: planetBody });
+                tracePoints[planetBody.id] = [];
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update physics
+            world.step(1/60);
+
+            // Update meshes
+            bodies.forEach(obj => {
+                obj.mesh.position.copy(obj.body.position);
+                obj.mesh.quaternion.copy(obj.body.quaternion);
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        init();
+    </script>
+</body>
+</html>

@@ -190,7 +190,8 @@
 - [Save costs by automatically shutting down idle resources within Amazon SageMaker Studio](https://aws.amazon.com/blogs/machine-learning/save-costs-by-automatically-shutting-down-idle-resources-within-amazon-sagemaker-studio/)
 
 - [SageMaker Neo supported devices edge devices](https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/neo-supported-devices-edge-devices.html)
-
+- [Amazon SageMaker HyperPod introduces Amazon EKS support](https://aws.amazon.com/blogs/aws/amazon-sagemaker-hyperpod-introduces-amazon-eks-support/)
+- [Amazon EKS support in Amazon SageMaker HyperPod](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-eks-support-in-amazon-sagemaker-hyperpod/)
 ### Jupyter Notebooks
 
 - [A gallery of interesting Jupyter Notebooks](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
@@ -231,7 +232,7 @@
   - [A guide to making your AI vision a reality](https://aws.amazon.com/cn/blogs/enterprise-strategy/a-guide-to-making-your-ai-vision-a-reality/)
   - [understand The tokenize](https://huggingface.co/spaces/Xenova/the-tokenizer-playground)
   
-- [Stable Diffsusion]
+- [Image]
   - [stable-diffusion-webui self hosted on g4dn.xlarge with Ubuntu 22.04 LTS](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
     - Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. 
     - Run `ssh -L 7862:localhost:7862 ubuntu@xxxx.xxx.xx.xxx` or `bash stable-diffusion-webui/webui.sh --share`
@@ -244,6 +245,7 @@
     - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
     - [Stable Diffusion on Amazon SageMaker Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/d9ca179a-3a36-4822-9f80-0b3ffcc26f37/en-US)
     - [inpaint-images-with-stable-diffusion-using-amazon-sagemaker-jumpstart](https://aws.amazon.com/blogs/machine-learning/inpaint-images-with-stable-diffusion-using-amazon-sagemaker-jumpstart/)
+  - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
   
 - [Industry focus]
   - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
@@ -280,6 +282,7 @@
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
+  - [如何基于 Amazon Bedrock 构建电商评论分析（VOC）系统](https://aws.amazon.com/cn/blogs/china/how-to-build-an-e-commerce-review-analysis-voc-system-based-on-amazon-bedrock/)
   
 - [RLHF]
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
@@ -303,6 +306,7 @@
   - [Implementing advanced prompt engineering with Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/)
   - [Evaluating prompts at scale with Prompt Management and Prompt Flows for Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/evaluating-prompts-at-scale-with-prompt-management-and-prompt-flows-for-amazon-bedrock/)
   - [Enhance performance of generative language models with self-consistency prompting](https://aws.amazon.com/blogs/machine-learning/enhance-performance-of-generative-language-models-with-self-consistency-prompting-on-amazon-bedrock/)
+  - [New APIs in Amazon Bedrock to enhance RAG applications](https://aws.amazon.com/blogs/aws/new-apis-in-amazon-bedrock-to-enhance-rag-applications-now-available/)
   
 - [Promote-Engineering]
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
@@ -319,6 +323,8 @@
   - [Large Language and Vision Assistant](https://llava-vl.github.io/)
   - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
   - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN)
+  - [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
+  - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
 
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -1714,6 +1720,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Connected Mobility Services - CMS]
   - [一图读懂强制性国家标准GB 44495—2024《汽车整车信息安全技术要求》](https://www.miit.gov.cn/jgsj/zbys/qcgy/art/2024/art_f54547486cf94a34934802668e8f5e3f.html)
+  - [Designing Next Generation Vehicle Communication with AWS IoT Core and MQTT](https://docs.aws.amazon.com/whitepapers/latest/designing-next-generation-vehicle-communication-aws-iot/designing-next-generation-vehicle-communication-aws-iot.html)
 
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
