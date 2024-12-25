@@ -426,9 +426,10 @@ def main():
     negative_prompt = "blurry, low quality, distorted, deformed"
     #invoke_stable_diffusion(None, prompt, negative_prompt, output_filename="sd_generated_image")
 
-    
+    # Need the english prompt
     input_prompt = "A Christmas tree made of colorful clouds in the sky, hanging with Christmas decorations, floating in the air"
-    invoke_stable_diffusion(None, input_prompt, negative_prompt, output_filename="sd_generated_image")
+    #invoke_stable_diffusion(None, input_prompt, negative_prompt, output_filename="sd_generated_image")
+    # Nova Canvas can support Chinese prompt
     input_prompt = "天空中彩色的云朵组成的圣诞树，挂着圣诞装饰，漂浮在空中"
     #generate_image(None, prompt=input_prompt, num_images=1, base_filename="canvas_generated_image")
     #processs_prompt(None, input_prompt, mode='text2image', num_variations=1, output_filename="canvas_generated_image2")
