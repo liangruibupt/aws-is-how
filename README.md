@@ -349,6 +349,7 @@
 
 ### Translate and Audio
 - [使用 Amazon Translate 自动翻译PPT](https://aws.amazon.com/cn/blogs/china/translating-presentation-files-with-amazon-translate/)
+- [pptx-translator - Python script that translates pptx files using Amazon Translate service.](https://github.com/aws-samples/pptx-translator)
 
 ### Forecasting
 - [Forecasting scalar (one-dimensional) time series data](ai-ml/prediction/README.md)
@@ -757,6 +758,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   
 - [Hudi]
   - [How EMR Hudi works](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hudi-how-it-works.html)
+
+- [Iceberg]
+  - [自建iceberg上的数据迁移至S3 tables里的工具](https://github.com/aws-samples/apache-iceberg-tables-migration-tool/ )
   
 ## IOT
 ### IoT Core
