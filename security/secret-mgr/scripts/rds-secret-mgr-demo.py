@@ -281,7 +281,7 @@ def main():
             print ("secret %s " % (secret) )
         else:
             secret = base64.b64decode(get_secret_value_response['SecretBinary'])
-            print ("decoded_binary_secret %s " % (secret) )
+            #print ("decoded_binary_secret %s " % (secret) )
 
     # 获取数据库连接
     secret_json = json.loads(secret)
