@@ -51,7 +51,7 @@ def lambda_handler():
         # Depending on whether the secret is a string or binary, one of these fields will be populated.
         if 'SecretString' in get_secret_value_response:
             secret = get_secret_value_response['SecretString']
-            print ("secret %s " % (secret) )
+            # print ("secret %s " % (secret) )
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
             # print ("decoded_binary_secret %s " % (decoded_binary_secret) )
