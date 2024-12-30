@@ -98,7 +98,7 @@ def lambda_handler(event, context):
         credential_value = get_secret()
         credential_json = json.loads(credential_value)
     
-        print('credential_value: {}'.format(credential_json))
+        # print('credential_value: {}'.format(credential_json))
         sendcloud_apiUser=credential_json['SENDCLOUD_API_USERID'],
         apiUser_apiKey=credential_json['SENDCLOUD_API_KEY'],
 

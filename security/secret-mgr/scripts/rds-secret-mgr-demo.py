@@ -251,7 +251,7 @@ def main():
         get_secret_value_response = client.get_secret_value(
             SecretId=describe_secret_response['ARN']
         )
-        print ("get_secret_value_response %s" % (get_secret_value_response) )
+        # print ("get_secret_value_response %s" % (get_secret_value_response) )
     except ClientError as e:
         if e.response['Error']['Code'] == 'DecryptionFailureException':
             # Secrets Manager can't decrypt the protected secret text using the provided KMS key.

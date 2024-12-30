@@ -31,8 +31,8 @@ def lambda_handler(event, context):
         get_secret_value_response = secretsmanager_client.get_secret_value(
             SecretId=describe_secret_response['ARN']
         )
-        logger.info("get_secret_value_response %s" %
-                    (get_secret_value_response))
+        # logger.info("get_secret_value_response %s" %
+        #             (get_secret_value_response))
     except ClientError as e:
         logger.error(e.response['Error'])
         raise e

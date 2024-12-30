@@ -101,7 +101,7 @@ def lambda_handler(event, context):
         credential_value = get_secret()
         credential_json = json.loads(credential_value)
     
-        print('credential_value: {}'.format(credential_json))
+        # print('credential_value: {}'.format(credential_json))
         ses_client_glb = boto3.client(
             'ses',
             aws_access_key_id=credential_json['AWS_ACCESS_KEY_ID_GLB'],
