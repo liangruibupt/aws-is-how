@@ -254,6 +254,8 @@
   - [SageMaker LMI+Streaming 构建 端到端GenAI Text2Image应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
   - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
   - [使用 Bedrock Agent 实现发票查询知识库和开发票](https://catalog.us-east-1.prod.workshops.aws/workshops/180cd73a-ccaf-4ade-9e5d-cf964c637638/zh-CN/0-0-introduction)
+  - [Amazon Nova 助力功夫源：提升金融数据分析效率，推动量化投资普惠化](https://aws.amazon.com/cn/blogs/china/amazon-nova-helps-kungfu-trader-unlock-intelligent-quantitative-analysis/)
+
 - [Vector database]
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
   
