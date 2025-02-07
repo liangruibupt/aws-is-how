@@ -9,7 +9,7 @@
     - [SageMaker](#sagemaker)
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
-    - [ChatGPT and AIGC](#chatgpt-and-aigc)
+    - [LLM and GenAI](#llm-and-genai)
     - [NLP](#nlp)
     - [Translate and Audio](#translate-and-audio)
     - [Forecasting](#forecasting)
@@ -219,7 +219,7 @@
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [PaddleOCR on SageMaker](https://aws.amazon.com/cn/blogs/machine-learning/onboard-paddleocr-with-amazon-sagemaker-projects-for-mlops-to-perform-optical-character-recognition-on-identity-documents/)
 
-### ChatGPT and AIGC
+### LLM and GenAI
 - [GenAI Overview]
   - [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
     - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
@@ -285,7 +285,12 @@
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
   - [如何基于 Amazon Bedrock 构建电商评论分析（VOC）系统](https://aws.amazon.com/cn/blogs/china/how-to-build-an-e-commerce-review-analysis-voc-system-based-on-amazon-bedrock/)
-  
+  - [Amazon Nova Multimodal understanding workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/012d9c20-25dc-4065-bdb6-50e935e8bd9f/en-US/030-hands-on-labs)
+  - [用 Amazon Bedrock 与 Nova 大模型构建客户之声解决方案](https://catalog.us-east-1.prod.workshops.aws/workshops/78722bc1-1f91-4d05-9baa-048131428116/en-US)
+  - [Amazon Nova Canvas and Amazon Nova Reel Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/66a0984a-ad2b-481f-a1cf-e7896ea9595b/en-US)
+  - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
+    - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
+
 - [RLHF]
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
   - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
@@ -331,6 +336,7 @@
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
   - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
+  - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
 
 - [Agent and workflow]
   - [基于 Amazon EKS 的 Stable Diffusion ComfyUI 部署方案](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
@@ -343,6 +349,7 @@
   - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
   - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
   - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
+  - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
   
 ### NLP
 - [NLP and Text Classification by using blazing text](ai-ml/classification/toutiao-text-classfication-dataset-master)
@@ -1730,9 +1737,18 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
-  - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
-    - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
-  - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
+    
   - [High-throughput Modeling & Screening]
-    - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
-    - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
+    - [Protein Folding and Design]
+      - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
+      - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
+    - [Drug Discovery Workflows]
+      - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
+      - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
+      - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
+  - [Data Analysis]
+    - [R&D data lake]
+      - [Build a genomics data lake on AWS using Amazon EMR](https://aws.amazon.com/cn/blogs/industries/build-a-genomics-data-lake-on-aws-using-amazon-emr-part-1/)
+    - [Commerical Data lake]
+  - [GenAI in biomedical research]
+    - [Empowering biomedical discovery with AI agents](https://www.cell.com/cell/fulltext/S0092-8674(24)01070-5)
