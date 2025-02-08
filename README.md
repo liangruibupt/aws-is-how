@@ -301,6 +301,7 @@
   - [Deepseek]
     - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
+    - [轻松部署DeepSeek-R1 671B动态量化模型](https://github.com/aws-samples/llm_deploy_gcr/blob/main/sagemaker/DeepSeek-R1-671b_dynamic-quants/deploy_and_test.ipynb)
   - [China LLM]
     - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
     - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
