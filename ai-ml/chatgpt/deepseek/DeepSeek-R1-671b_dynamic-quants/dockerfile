@@ -1,0 +1,30 @@
+FROM ghcr.io/ggerganov/llama.cpp:server-cuda
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制当前目录下的内容到容器内的/app
+COPY app/ /app
+
+# 修改restapi
+RUN apt-get update \
+&&  apt-get install -y python3 python3-pip \
+&&  curl -L -O "https://github.com/peak/s5cmd/releases/download/v2.2.2/s5cmd_2.2.2_Linux-64bit.tar.gz" \
+&&  tar zxvf s5cmd_2.2.2_Linux-64bit.tar.gz \
+&&  rm s5cmd_2.2.2_Linux-64bit.tar.gz \
+&&  mv s5cmd /usr/bin/s5cmd \
+&&  pip3 install aiohttp --no-cache-dir \
+&&  rm -rf /var/lib/apt/lists/* ./mount-s3.deb \
+&&  chmod +x /app/serve
+
+# 让端口8080在容器外可用
+EXPOSE 8080
+
+# 定义环境变量
+ENV PATH="/app:${PATH}"
+ENV PATH="/app:${PATH}"
+ENV LD_LIBRARY_PATH="/app:${LD_LIBRARY_PATH}"
+
+# 运行serve
+ENTRYPOINT []
+CMD ["serve"]
