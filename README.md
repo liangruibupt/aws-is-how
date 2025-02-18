@@ -240,7 +240,9 @@
     - [基于 Amazon EKS 的 Stable Diffusion ComfyUI 部署方案](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
   - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
   - [SageMaker LMI+Streaming 构建 端到端GenAI Text2Image应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
-  
+  - [Luma Ray2]
+    - [Luma Ray2的ComfyUI node集成](https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock)
+
 - [Scenario based]
   - [Chatbot]
     - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)
@@ -303,7 +305,11 @@
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
     - [轻松部署DeepSeek-R1 671B动态量化模型](https://github.com/aws-samples/llm_deploy_gcr/blob/main/sagemaker/DeepSeek-R1-671b_dynamic-quants/deploy_and_test.ipynb)
     - [Graviton4 Run Deepseek](https://community.aws/content/2rhRJI6cxBa1Ib5f3TjsfPadpXs/deploying-deepseek-r1-distill-llama-70b-for-batch-inference-on-aws-graviton4)
-  - [China LLM]
+    - [Build agentic AI solutions with DeepSeek-R1, CrewAI, and Amazon SageMaker AI](https://aws.amazon.com/cn/blogs/machine-learning/build-agentic-ai-solutions-with-deepseek-r1-crewai-and-amazon-sagemaker-ai/)
+    - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（一）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2/)
+    - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（二）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2-part-two/)
+  
+  - [China otherLLM]
     - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
     - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
     - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
@@ -361,6 +367,7 @@
   - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
 
 - [Agent and workflow]
+  - [Flexible and powerful framework for managing multiple AI - Multi-Agent-Orchestrator](https://github.com/awslabs/multi-agent-orchestrator)
   - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
