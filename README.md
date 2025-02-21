@@ -308,7 +308,7 @@
     - [Build agentic AI solutions with DeepSeek-R1, CrewAI, and Amazon SageMaker AI](https://aws.amazon.com/cn/blogs/machine-learning/build-agentic-ai-solutions-with-deepseek-r1-crewai-and-amazon-sagemaker-ai/)
     - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（一）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2/)
     - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（二）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2-part-two/)
-  
+    - [本地 671B DeepSeek-Coder-V3/R1: 仅使用 14GB 显存和 382GB 内存运行其 Q4_K_M 版本](https://github.com/kvcache-ai/ktransformers/blob/main/doc/zh/DeepseekR1_V3_tutorial_zh.md)
   - [China otherLLM]
     - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
     - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
@@ -326,6 +326,7 @@
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
+  - [Bedrock 多模型接入 – Bedrock Connector 部署与使用指南](https://aws.amazon.com/cn/blogs/china/bedrock-multi-model-access-bedrock-connector-deployment-and-usage-guide/)
 
 - [RLHF]
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
@@ -375,6 +376,7 @@
     - [Claude for BRClient and Dify: Prompt, RAG, and Agent](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
     - [Rapidly Build GenAI Apps with Dify](https://catalog.us-east-1.prod.workshops.aws/workshops/2c19fcb1-1f1c-4f52-b759-0ca4d2ae2522/zh-CN/introduction)
     - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
+    - [Dify deployment on serverless](https://github.com/aws-samples/sample-serverless-dify-stack)
   - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
   - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
   - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
