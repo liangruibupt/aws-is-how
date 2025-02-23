@@ -309,11 +309,14 @@
     - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（一）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2/)
     - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（二）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2-part-two/)
     - [本地 671B DeepSeek-Coder-V3/R1: 仅使用 14GB 显存和 382GB 内存运行其 Q4_K_M 版本](https://github.com/kvcache-ai/ktransformers/blob/main/doc/zh/DeepseekR1_V3_tutorial_zh.md)
+    - [Hosting DeepSeek-R1 on Amazon EKS](https://github.com/aws-samples/deepseek-using-vllm-on-eks)
   - [China otherLLM]
     - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
     - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
     - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
+  - [vllm and ollma]
+    - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
   
 - [Bedrock practice]  
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
