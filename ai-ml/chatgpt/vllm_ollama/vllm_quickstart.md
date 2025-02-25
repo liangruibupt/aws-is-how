@@ -220,3 +220,22 @@ Access to model mistralai/Mixtral-8x7B-Instruct-v0.1 is restricted. You must hav
             "temperature": 0.7
         }'
     ```
+
+## Open WebUI
+Chatting with DeepSeek under Linux by Command Line is not very friendly. We can install Open WebUI as a web interface. 
+
+1. Install Open WebUI on the same g6e.12xlarge.
+```bash
+# install Conda
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm ~/miniconda3/miniconda.sh
+~/miniconda3/bin/conda init bash
+
+# Install Open WebUI
+source ~/.bashrc
+pip install open-webui
+open-webui serve
+```
+2. Access http://localhost:8080 or http://IP:8080
