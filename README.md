@@ -317,6 +317,7 @@
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   - [vllm and ollma]
     - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
+    - [lightweight tool designed to simplify models deployment](https://github.com/aws-samples/easy-model-deployer)
   
 - [Bedrock practice]  
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
@@ -365,6 +366,8 @@
   - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN)
   - [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
   - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
+  - [华宝新能 GenAI 实践](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
+  - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
 
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -1737,6 +1740,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Autonomous Driving Data Service with Rosbag on EKS](https://github.com/aws-samples/amazon-eks-autonomous-driving-data-service)
   - [在中国区部署 SIMPHERA Architecture](https://aws.amazon.com/cn/blogs/china/deploying-simphera-architecture-in-china/)
   - [理想汽车过去一年发表的16篇智驾及AI应用相关论文](https://mp.weixin.qq.com/s/3rkJpmbOsknIrgl6dKlwJw)
+  - [Accelerating AI/ML development at BMW Group with Amazon SageMaker Studio](https://aws.amazon.com/cn/blogs/machine-learning/accelerating-ai-ml-development-at-bmw-group-with-amazon-sagemaker-studio/)
 
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
