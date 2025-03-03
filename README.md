@@ -368,6 +368,8 @@
   - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
   - [华宝新能 GenAI 实践](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
   - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
+  - [Content Moderation]
+    - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
 
 - [Code Generation]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -1137,16 +1139,16 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
   
 - [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
+  - [Bytebase 为 Amazon Aurora MySQL 设置数据库变更管理](https://mp.weixin.qq.com/s/6InIjVCojuVdQc5j4OyBJg)
 
 - [Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
-- [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
-- [适用于Babelfish为目标的SQL Server数据迁移方法](https://aws.amazon.com/cn/blogs/china/all-colors-are-always-spring-sql-server-data-migration-method-for-babelfish/)
+  - [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
+  - [适用于Babelfish为目标的SQL Server数据迁移方法](https://aws.amazon.com/cn/blogs/china/all-colors-are-always-spring-sql-server-data-migration-method-for-babelfish/)
 
 - [Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
-- [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
-- [rds-for-postgresql v.s aurora-postgresql](https://aws.amazon.com/blogs/database/is-amazon-rds-for-postgresql-or-amazon-aurora-postgresql-a-better-choice-for-me/)
+  - [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
+  - [rds-for-postgresql v.s aurora-postgresql](https://aws.amazon.com/blogs/database/is-amazon-rds-for-postgresql-or-amazon-aurora-postgresql-a-better-choice-for-me/)
   
-- [Bytebase 为 Amazon Aurora MySQL 设置数据库变更管理](https://mp.weixin.qq.com/s/6InIjVCojuVdQc5j4OyBJg)
 - [Aurora launches instances in at least 3 AZ even if less are specified](https://github.com/hashicorp/terraform-provider-aws/issues/1111#)
 
 ### Data migration tool - DMS
@@ -1157,6 +1159,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Migration-Data-From-AliCloud](migration/DataMigration/Migration-Data-From-AliCloud.md)
 - [XData])migration/DataMigration/XData.md
 - [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
+- [使用 RisingWave 实现 MSK，Kinesis，RDS MySQL 实时数据同步](https://aws.amazon.com/cn/blogs/china/real-time-data-synchronization-of-msk-kinesis-rds-and-mysql-using-risingwave/)
 
 ### Cross Cloud Migration
 - [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
