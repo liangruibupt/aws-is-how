@@ -239,3 +239,8 @@ pip install open-webui
 open-webui serve
 ```
 2. Access http://localhost:8080 or http://IP:8080
+
+## Qwen QwQ-32B
+```bash
+vllm serve Qwen/QwQ-32B  --port 8000 --host 0.0.0.0 --tensor-parallel-size 4 --max-model-len 46448
+```
