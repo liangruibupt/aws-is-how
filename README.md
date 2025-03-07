@@ -351,6 +351,9 @@
   - [RAGChecker for RAG health check](https://github.com/amazon-science/RAGChecker)
   - [New APIs in Amazon Bedrock to enhance RAG applications](https://aws.amazon.com/blogs/aws/new-apis-in-amazon-bedrock-to-enhance-rag-applications-now-available/)
   
+- [Deep Research]
+  - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
+  
 - [Text2SQL]
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
@@ -371,13 +374,15 @@
   - [Content Moderation]
     - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
 
-- [Code Generation]
+- [Code Assistant]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
   - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
   - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
+  - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
 
 - [Agent and workflow]
   - [Flexible and powerful framework for managing multiple AI - Multi-Agent-Orchestrator](https://github.com/awslabs/multi-agent-orchestrator)
+    - [Design multi-agent orchestration with reasoning](https://aws.amazon.com/cn/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/)
   - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
@@ -391,6 +396,10 @@
   - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
   - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
   - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
+  - [MCP](https://github.com/modelcontextprotocol/servers)
+    - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
+
+
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
