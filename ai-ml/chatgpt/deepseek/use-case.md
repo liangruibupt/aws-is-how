@@ -75,7 +75,18 @@ List all the narrative tagged [CNR] and contains BJS or ZHY. Output as below for
 Prompt:
 
 阅读这篇论文，按照下面格式进行总结
-<研究背景/context> ：背景信息，我为什么要做这个研究
-<研究需求/goals> ：研究主题，研究目标，需要注意的地方；这个研究是什么，关注什么；
+<研究背景/context>: 背景信息，我为什么要做这个研究
+<研究需求/goals>: 研究主题，研究目标，需要注意的地方；这个研究是什么，关注什么；
+<功能实现与技术细节/Implementation>: 实现方法和实现细节是什么？
+<性能评估与优势/Compare>: 对比与现有方法的优势和劣势
+<应用场景/cases>: 这个技术或者方案可以主要应用与什么领域？
 <通用要求/requirements> ：1、使用英文搜索，只采纳英文资料（因为互联网上英文资料在数量和质量上都是最好的），用中文撰写报告。2、解读要细致，至少 2000 字
+
+Read this paper and summarize it in the following format
+<Research context>: Background information, why I did this research
+<Research goals>: research topic, research goals, areas that need attention; what is this research and what is the focus?
+<Technical Details/Implementation>: What are the technical details and implementation method?
+<Performance Evaluation>: Advantages and Disadvantages of Comparing with Existing Methods
+<Use scenarios>: What fields can this technology or solution be mainly applied to? What are typical use cases?
+<General requirements>: 1. Use English search, only English materials are accepted, and write reports in Chinese. 2. Interpretation should be meticulous, at least 2000 words
 ```
