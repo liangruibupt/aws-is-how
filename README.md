@@ -1769,6 +1769,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Protein Folding and Design]
       - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
       - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
+      - [ESM3 - flagship multimodal protein generative model; ESM C - best protein representation learning model](https://github.com/evolutionaryscale/esm)
     - [Drug Discovery Workflows]
       - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
       - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
