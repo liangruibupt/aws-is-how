@@ -199,14 +199,6 @@ Access to model mistralai/Mixtral-8x7B-Instruct-v0.1 is restricted. You must hav
         "temperature": 0.7 
         }'
 
-    curl http://localhost:8000/v1/chat/completions \
-        -H "Content-Type: application/json" \
-        -d '{
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-            "messages": [{"role": "user", "content": "Please reason step by step, and put your final answer within \boxed{}. 用 4、1、9 组成的三位数造减法塔，最后一层的算式是什么?"} ],
-            "temperature": 0.7
-        }'
-
     ```
 2. multi GPU on Single Node
     ```bash
@@ -241,6 +233,126 @@ open-webui serve
 2. Access http://localhost:8080 or http://IP:8080
 
 ## Qwen QwQ-32B
+1. Host Qwen/QwQ-32B
 ```bash
+source myenv/bin/activate
+CUDA_VISIBLE_DEVICES=0,1,2,3
+python -c 'import torch; print(torch.cuda.current_device())'
 vllm serve Qwen/QwQ-32B  --port 8000 --host 0.0.0.0 --tensor-parallel-size 4 --max-model-len 46448
+```
+
+2. Testing
+```bash
+    curl http://localhost:8000/v1/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "Qwen/QwQ-32B",
+            "temperature": 0.6,
+            "top_k": 40,
+            "top_p": 0.95,
+            "prompt": "San Francisco is a"
+        }'
+
+    curl http://localhost:8000/v1/chat/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "Qwen/QwQ-32B",
+            "temperature": 0.6,
+            "top_k": 40,
+            "top_p": 0.95,
+            "messages": [{"role": "user", "content": "我要玩24点游戏，我手里的牌是5、5、7、9，穷举所有的可能性"}],
+            "stream": true
+        }'
+
+    curl http://localhost:8000/v1/chat/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "Qwen/QwQ-32B",
+            "temperature": 0.6,
+            "top_k": 40,
+            "top_p": 0.95,
+            "messages": [{"role": "user", "content": "Please reason step by step, and put your final answer within \boxed{}. AI是否取代人类？AI和人类如何共处？"} ]
+        }'
+```
+
+3. testing with python
+```python
+from openai import OpenAI
+# Set OpenAI's API key and API base to use vLLM's API server.
+openai_api_key = "EMPTY"
+openai_api_base = "http://localhost:8000/v1"
+client = OpenAI(
+    api_key=openai_api_key,
+    base_url=openai_api_base,
+)
+
+def process_response(chat_response, is_answering):
+    reasoning_content = ""
+    content = ""
+
+    print("\n" + "=" * 20 + "reasoning content" + "=" * 20 + "\n")
+    for chunk in chat_response:
+    # If chunk.choices is empty, print usage
+        if not chunk.choices:
+            print("\nUsage:")
+            print(chunk.usage)
+        else:
+            delta = chunk.choices[0].delta
+        # Print reasoning content
+            if hasattr(delta, 'reasoning_content') and delta.reasoning_content is not None:
+                print(delta.reasoning_content, end='', flush=True)
+                reasoning_content += delta.reasoning_content
+            else:
+                if delta.content != "" and is_answering is False:
+                    print("\n" + "=" * 20 + "content" + "=" * 20 + "\n")
+                    is_answering = True
+            # Print content
+                print(delta.content, end='', flush=True)
+                content += delta.content
+
+is_answering = False
+chat_response = client.chat.completions.create(
+    model="Qwen/QwQ-32B",
+    temperature=0.6,
+    top_p=0.95,
+    stream=True,
+    messages=[
+        {"role": "user", "content": "Which is larger, 9.9 or 9.11?"}
+    ]
+)
+
+process_response(chat_response, is_answering)
+
+chat_response = client.chat.completions.create(
+    model="Qwen/QwQ-32B",
+    temperature=0.6,
+    top_p=0.95,
+    stream=True,
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Create a Flappy Bird game in Python. You must include these things:\n 1. You must pygame.\n 2. The background color should be randomly chosen and is a light shade. Start with a light blue color.\nPressing SPACE multiple times will accelerate the bird.\n 4. The bird's shape should be randomly chosen as a squacircle or triangle. The color should be randomly chosen as a dark color.\n 5. Place on the bottom some land coloreddark brown or yellow chosen randomly.\n 6. Make a score shown on the top right side. Increment if you pass pipes and dohit them.\n 7. Make randomly spaced pipes with enough space. Color them randomly as dark green or light brown or a dgray shade.\n 8. When you lose, show the best score. Make the text inside the screen. Pressing q or Esc will quit game. Restarting is pressing SPACE again.\n The final game should be inside a markdown section in Python. Check your cfor errors and fix them before the final markdown section."}
+    ]
+)
+
+process_response(chat_response, is_answering)
+
+```   
+
+
+4. Performance Testing with [evalscope](https://evalscope.readthedocs.io/en/latest/get_started/installation.html)
+```bash
+pip install gradio
+pip install evalscope
+pip install evalscope[perf] -U
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 evalscope perf \
+ --parallel 1 \
+ --model Qwen/QwQ-32B \
+ --log-every-n-query 1 \
+ --connect-timeout 60000 \
+ --read-timeout 60000\
+ --max-tokens 2048 \
+ --min-tokens 2048 \
+ --api local_vllm \
+ --dataset speed_benchmark
 ```
