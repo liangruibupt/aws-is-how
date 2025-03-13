@@ -13,6 +13,7 @@
     - [Labeling](#labeling)
     - [Federated ML](#federated-ml)
     - [ML Hardware](#ml-hardware)
+    - [Robotics](#robotics)
   - [Cost](#cost)
     - [Cost Explorer](#cost-explorer)
     - [Network cost](#network-cost)
@@ -261,6 +262,7 @@
     - [使用 Bedrock Agent 实现发票查询知识库和开发票](https://catalog.us-east-1.prod.workshops.aws/workshops/180cd73a-ccaf-4ade-9e5d-cf964c637638/zh-CN/0-0-introduction)
     - [Amazon Nova 助力功夫源：提升金融数据分析效率，推动量化投资普惠化](https://aws.amazon.com/cn/blogs/china/amazon-nova-helps-kungfu-trader-unlock-intelligent-quantitative-analysis/)
     - [Bedrock 大语言模型加速 OCR 场景精准提取](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-large-language-model-accelerates-accurate-extraction-of-ocr-scenes/)
+    - [Large Language and Vision Assistant](https://llava-vl.github.io/)
   - [VOC]
     - [使用 Amazon Bedrock，Claude3 和 CrewAI 构建应用商城用户评论分析工具](https://aws.amazon.com/cn/blogs/china/build-an-app-store-user-review-analysis-tool-using-amazon-bedrock-claude3-and-crewai/)
     - [如何基于 Amazon Bedrock 构建电商评论分析（VOC）系统](https://aws.amazon.com/cn/blogs/china/how-to-build-an-e-commerce-review-analysis-voc-system-based-on-amazon-bedrock/)
@@ -286,6 +288,8 @@
   - [Prediction Maintenance]
     - [Using AWS IoT and Amazon SageMaker to do IoT Devices Predictive Maintenance](iot/IOT-SageMaker-Predictive-Maintenance/README.md)
     - [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
+  - [Contact Center]
+    - [华宝新能 GenAI 实践](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
 - [Vector database]
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
   
@@ -362,15 +366,15 @@
 - [Multi-model]
   - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
   - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
-  - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
-  - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
-  - [Large Language and Vision Assistant](https://llava-vl.github.io/)
-  - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
-  - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN)
-  - [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
-  - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
-  - [华宝新能 GenAI 实践](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
-  - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
+  - [Video]
+    - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
+    - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
+    - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
+  - [Audio]
+    - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
+    - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
+    - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN)
+    - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)  
   - [Content Moderation]
     - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
 
@@ -391,6 +395,7 @@
     - [Rapidly Build GenAI Apps with Dify](https://catalog.us-east-1.prod.workshops.aws/workshops/2c19fcb1-1f1c-4f52-b759-0ca4d2ae2522/zh-CN/introduction)
     - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
     - [Dify deployment on serverless](https://github.com/aws-samples/sample-serverless-dify-stack)
+    - [硅基流动+DeepSeek+Dify全栈开发实战](https://catalog.us-east-1.prod.workshops.aws/workshops/87e070e2-5621-4c94-9285-529514ec4454/en-US)
   - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
   - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
   - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
@@ -398,7 +403,6 @@
   - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
-
 
 
 ### Labeling
@@ -412,6 +416,9 @@
 
 ### ML Hardware 
 - [Hands-on Deep Learning Inference with Amazon EC2 Inf1 Instance](https://catalog.us-east-1.prod.workshops.aws/workshops/bcd3db22-8501-4888-a078-45a70034f802/en-US)
+
+### Robotics
+- [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
 
 ## Cost
 ### Cost Explorer
@@ -1742,6 +1749,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Automotive Demo Lab](https://w.amazon.com/bin/view/AWS_WWSO/IST/Innovation_Prototyping_Lab_SJC25/about/demonstrators)
   - [揭秘安卓 AOSP 系统构建提速 50%](https://developer.volcengine.com/articles/7343872243241320475)
   - [车载以太网为什么要用SOME/IP？](https://mp.weixin.qq.com/s/m6kEXCkWpHnKq4hU51kNqQ)
+  - [How BMW uses AWS to scale and automate SDV with virtual ECUs](https://aws.amazon.com/blogs/industries/how-bmw-uses-aws-to-scale-and-automate-sdv-with-virtual-ecus/)
   
 - [Autonomous Driving]
   - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
