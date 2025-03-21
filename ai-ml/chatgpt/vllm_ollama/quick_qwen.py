@@ -1,5 +1,17 @@
 from openai import OpenAI
 
+# Configuration (better to use environment variables)
+# Set OpenAI's API key and API base to use vLLM's API server.
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "EMPTY")
+OPENAI_API_BASE = os.getenv("OPENAI_API_BASE", "http://localhost:8000/v1")
+
+def initialize_client() -> OpenAI:
+    """Initialize and return the OpenAI client."""
+    return OpenAI(
+        api_key=OPENAI_API_KEY,
+        base_url=OPENAI_API_BASE,
+    )
+
 def process_response(chat_response, is_answering):
     reasoning_content = ""
     content = ""
@@ -24,54 +36,77 @@ def process_response(chat_response, is_answering):
                 print(delta.content, end='', flush=True)
                 content += delta.content
 
-# Set OpenAI's API key and API base to use vLLM's API server.
-openai_api_key = "EMPTY"
-openai_api_base = "http://localhost:8000/v1"
 
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-)
+def make_chat_request(client, model, messages, 
+                     stream: bool = False, temperature: float = 0.7, top_p: float = 1.0):
+    try:
+        return client.chat.completions.create(
+            model=model,
+            messages=messages,
+            stream=stream,
+            temperature=temperature,
+            top_p=top_p
+        )
+    except Exception as e:
+        print(f"Error making API request: {e}")
+        return None
 
-chat_response = client.chat.completions.create(
-    model="Qwen/Qwen2.5-1.5B-Instruct",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Tell me a joke."},
-    ]
-)
-print("Chat response:", chat_response)
+def main():
+    client = initialize_client()
 
-chat_response = client.chat.completions.create(
-    model="Qwen/Qwen2.5-1.5B-Instruct",
-    messages=[
-        {"role": "user", "content": "Who won the world series in 2020?"}
-    ]
-)
-print("Chat response:", chat_response)
+    # Example 1: Simple joke request
 
-is_answering = False
-chat_response = client.chat.completions.create(
-    model="Qwen/QwQ-32B",
-    temperature=0.6,
-    top_p=0.95,
-    stream=True,
-    messages=[
-        {"role": "user", "content": "Which is larger, 9.9 or 9.11?"}
-    ]
-)
+    chat_response = make_chat_request(
+        client,
+        model="Qwen/Qwen2.5-1.5B-Instruct",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Tell me a joke."},
+        ]
+    )
+    print("Chat response:", chat_response)
 
-process_response(chat_response, is_answering)
+    # Example 2: World series question
+    chat_response = make_chat_request(
+        client,
+        model="Qwen/Qwen2.5-1.5B-Instruct",
+        messages=[
+            {"role": "user", "content": "Who won the world series in 2020?"},
+        ]
+    )
+    print("Chat response:", chat_response)
 
-chat_response = client.chat.completions.create(
-    model="Qwen/QwQ-32B",
-    temperature=0.6,
-    top_p=0.95,
-    stream=True,
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Create a Flappy Bird game in Python. You must include these things:\n 1. You must pygame.\n 2. The background color should be randomly chosen and is a light shade. Start with a light blue color.\nPressing SPACE multiple times will accelerate the bird.\n 4. The bird's shape should be randomly chosen as a squacircle or triangle. The color should be randomly chosen as a dark color.\n 5. Place on the bottom some land coloreddark brown or yellow chosen randomly.\n 6. Make a score shown on the top right side. Increment if you pass pipes and dohit them.\n 7. Make randomly spaced pipes with enough space. Color them randomly as dark green or light brown or a dgray shade.\n 8. When you lose, show the best score. Make the text inside the screen. Pressing q or Esc will quit game. Restarting is pressing SPACE again.\n The final game should be inside a markdown section in Python. Check your cfor errors and fix them before the final markdown section."}
-    ]
-)
+    # Example 3: Streaming comparison question
+    is_answering = False
 
-process_response(chat_response, is_answering)
+    chat_response = make_chat_request(
+        client,
+        model="Qwen/QwQ-32B",
+        messages=[
+            {"role": "user", "content": "Which is larger, 9.9 or 9.11?"}
+        ],
+        temperature=0.6,
+        top_p=0.95,
+        stream=True
+    )
+    if chat_response:
+        process_response(chat_response, is_answering)
+
+    # Example 4: Streaming complex game creation
+
+    chat_response = make_chat_request(
+        client,
+        model="Qwen/QwQ-32B",
+        temperature=0.6,
+        top_p=0.95,
+        stream=True,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Create a Flappy Bird game in Python. You must include these things:\n 1. You must pygame.\n 2. The background color should be randomly chosen and is a light shade. Start with a light blue color.\nPressing SPACE multiple times will accelerate the bird.\n 4. The bird's shape should be randomly chosen as a squacircle or triangle. The color should be randomly chosen as a dark color.\n 5. Place on the bottom some land coloreddark brown or yellow chosen randomly.\n 6. Make a score shown on the top right side. Increment if you pass pipes and dohit them.\n 7. Make randomly spaced pipes with enough space. Color them randomly as dark green or light brown or a dgray shade.\n 8. When you lose, show the best score. Make the text inside the screen. Pressing q or Esc will quit game. Restarting is pressing SPACE again.\n The final game should be inside a markdown section in Python. Check your cfor errors and fix them before the final markdown section."}
+        ]
+    )
+    if chat_response:
+        process_response(chat_response, is_answering)
+
+if __name__ == "__main__":
+    main()

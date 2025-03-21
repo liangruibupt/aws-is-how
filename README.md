@@ -373,7 +373,7 @@
   - [Audio]
     - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
     - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
-    - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN)
+    - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN) and [Amazon Bedrock的实时语音解决方案](https://aws.amazon.com/cn/blogs/china/building-an-end-to-end-real-time-voice-assistant-on-amazon-bedrock/)
     - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)  
   - [Content Moderation]
     - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
@@ -1160,6 +1160,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Migrating SQL Server to Amazon RDS using native backup and restore](database/rds/sqlserver/Migrating-SQL-Server-to-Amazon-RDS-using-native-backup-and-restore.md)
   - [Microsoft SQL Server to Amazon S3](https://dms-immersionday.workshop.aws/en/sqlserver-s3.html)
   - [适用于Babelfish为目标的SQL Server数据迁移方法](https://aws.amazon.com/cn/blogs/china/all-colors-are-always-spring-sql-server-data-migration-method-for-babelfish/)
+  - [Deploy multi-Region Amazon RDS for SQL Server using cross-Region read replicas with a disaster recovery](https://aws.amazon.com/blogs/database/deploy-multi-region-amazon-rds-for-sql-server-using-cross-region-read-replicas-with-a-disaster-recovery-blueprint-part-1/)
 
 - [Best practices for migrating PostgreSQL databases to Amazon RDS and Amazon Aurora](https://aws.amazon.com/blogs/database/best-practices-for-migrating-postgresql-databases-to-amazon-rds-and-amazon-aurora/)
   - [Migrating data to Amazon Aurora with PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Migrating.html)
@@ -1750,6 +1751,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [揭秘安卓 AOSP 系统构建提速 50%](https://developer.volcengine.com/articles/7343872243241320475)
   - [车载以太网为什么要用SOME/IP？](https://mp.weixin.qq.com/s/m6kEXCkWpHnKq4hU51kNqQ)
   - [How BMW uses AWS to scale and automate SDV with virtual ECUs](https://aws.amazon.com/blogs/industries/how-bmw-uses-aws-to-scale-and-automate-sdv-with-virtual-ecus/)
+  - [The AWS Architecture Behind BMW Operating System 9: How the Cloud Supports the Latest in Customized In-Car Connectivity](https://aws.amazon.com/solutions/case-studies/bmw-software-defined-vehicles/)
   
 - [Autonomous Driving]
   - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
@@ -1769,6 +1771,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Connected Mobility Services - CMS]
   - [一图读懂强制性国家标准GB 44495—2024《汽车整车信息安全技术要求》](https://www.miit.gov.cn/jgsj/zbys/qcgy/art/2024/art_f54547486cf94a34934802668e8f5e3f.html)
   - [Designing Next Generation Vehicle Communication with AWS IoT Core and MQTT](https://docs.aws.amazon.com/whitepapers/latest/designing-next-generation-vehicle-communication-aws-iot/designing-next-generation-vehicle-communication-aws-iot.html)
+  - [GSMA’s SAS-SM](https://aws.amazon.com/blogs/industries/implementing-a-gsma-compliant-remote-sim-provisioning-workload-on-aws/)
+  - [Small Language Model on vehicle](https://aws.amazon.com/blogs/industries/software-defined-vehicles-genai-iot-the-path-to-ai-defined-vehicles/)
 
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
