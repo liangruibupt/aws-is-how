@@ -403,6 +403,9 @@
   - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
+    - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
+    - [MCP to Lambda](https://github.com/danilop/MCP2Lambda)
+    - [MCP on Amazon Bedrock](https://github.com/aws-samples/demo_mcp_on_amazon_bedrock)
 
 
 ### Labeling
@@ -416,6 +419,7 @@
 
 ### ML Hardware 
 - [Hands-on Deep Learning Inference with Amazon EC2 Inf1 Instance](https://catalog.us-east-1.prod.workshops.aws/workshops/bcd3db22-8501-4888-a078-45a70034f802/en-US)
+- [NVIDIA Dynamo is a high-throughput low-latency inference framework](https://github.com/ai-dynamo/dynamo)
 
 ### Robotics
 - [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
@@ -1018,6 +1022,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [使用 Amazon CloudFront + Amazon S3 + AWS Lambda@Edge 动态调用业务接口生成图片](https://aws.amazon.com/cn/blogs/china/use-amazon-cloudfront-amazon-s3-aws-lambda-edge-to-dynamically-call-business-interfaces-to-generate-images/)
 
+- [Using CloudFront Origin Shield to protect your origin in a multi-CDN deployment](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/using-cloudfront-origin-shield-to-protect-your-origin-in-a-multi-cdn-deployment/)
+  
 ### Edge
 - [Protecting workloads on AWS from the Instance to the Edge](https://protecting-workloads.awssecworkshops.com/workshop/)
 
