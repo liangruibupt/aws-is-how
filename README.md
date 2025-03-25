@@ -405,7 +405,7 @@
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
     - [MCP to Lambda](https://github.com/danilop/MCP2Lambda)
-    - [MCP on Amazon Bedrock](https://github.com/aws-samples/demo_mcp_on_amazon_bedrock)
+    - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
 
 
 ### Labeling
