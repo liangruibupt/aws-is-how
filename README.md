@@ -250,8 +250,9 @@
     - [使用 Amazon SageMaker + Amazon Bedrock 构建全语音智能问答助手](https://aws.amazon.com/cn/blogs/china/building-a-fully-voice-enabled-intelligent-question-answering-assistant-using-amazon-sagemaker-and-amazon-bedrock/)
     - [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
     - [Building a serverless document chat with AWS Lambda and Amazon Bedrock](https://aws.amazon.com/cn/blogs/compute/building-a-serverless-document-chat-with-aws-lambda-and-amazon-bedrock/)
-  - [Content generation]
+  - [Image generation]
     - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
+    - [Nova AI生成图片 Prompt](https://mp.weixin.qq.com/s/avxar5vm0ShNj_7bjoacgQ)
   - [Digital human and Role play]
     - [AIGC 助力电商虚拟试穿新体验](https://aws.amazon.com/cn/blogs/china/e-commerce-virtual-try-on-new-experience-based-on-aigc/)
     - [Towards General Purpose Virtual Try-on](https://github.com/xiezhy6/GP-VTON)
