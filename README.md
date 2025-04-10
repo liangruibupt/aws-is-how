@@ -89,6 +89,7 @@
     - [Data migration tool - 3rd party tool](#data-migration-tool---3rd-party-tool)
     - [Cross Cloud Migration](#cross-cloud-migration)
     - [File migration](#file-migration)
+    - [VMware migration](#vmware-migration)
   - [Storage](#storage)
     - [S3 cross region or cross cloud OSS](#s3-cross-region-or-cross-cloud-oss)
     - [S3](#s3)
@@ -337,6 +338,9 @@
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
   - [Bedrock 多模型接入 – Bedrock Connector 部署与使用指南](https://aws.amazon.com/cn/blogs/china/bedrock-multi-model-access-bedrock-connector-deployment-and-usage-guide/)
     - [Bedrock Connector github repo](https://github.com/aws-samples/sample-connector-for-bedrock?tab=readme-ov-file)
+  - [Prompt Caching]
+    - [Getting started with Bedrock prompt_caching](https://github.com/aws-samples/amazon-bedrock-samples/blob/main/introduction-to-bedrock/prompt-caching/getting_started_with_prompt_caching.ipynb))
+    - [Prompt caching on amazon bedrock](https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/)
 
 - [RLHF]
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
@@ -393,6 +397,7 @@
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
     - [使用 Dify 集成 Bedrock Claude3 开启生成式 AI 之旅](https://aws.amazon.com/cn/blogs/china/get-started-with-generative-ai-by-integrating-bedrock-claude3-with-dify/)
     - [Claude for BRClient and Dify: Prompt, RAG, and Agent](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
+    - [BRConnector Lab](https://catalog.us-east-1.prod.workshops.aws/workshops/6c6208fc-2412-489d-9df5-49432ea76993/zh-CN)
     - [Rapidly Build GenAI Apps with Dify](https://catalog.us-east-1.prod.workshops.aws/workshops/2c19fcb1-1f1c-4f52-b759-0ca4d2ae2522/zh-CN/introduction)
     - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
     - [Dify deployment on serverless](https://github.com/aws-samples/sample-serverless-dify-stack)
@@ -1197,6 +1202,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [SFTP on AWS](network/SFTPOnAWS.md)
 - [What type of endpoint is appropriate for my Transfer Family server](https://repost.aws/knowledge-center/aws-sftp-endpoint-type)
 
+### VMware migration
+[Accelerating Migration Evaluator discovery for VMware environment](https://aws.amazon.com/cn/blogs/migration-and-modernization/accelerating-migration-evaluator-discovery-for-vmware-environment/)
+
 ## Storage
 
 ### S3 cross region or cross cloud OSS
@@ -1759,6 +1767,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [车载以太网为什么要用SOME/IP？](https://mp.weixin.qq.com/s/m6kEXCkWpHnKq4hU51kNqQ)
   - [How BMW uses AWS to scale and automate SDV with virtual ECUs](https://aws.amazon.com/blogs/industries/how-bmw-uses-aws-to-scale-and-automate-sdv-with-virtual-ecus/)
   - [The AWS Architecture Behind BMW Operating System 9: How the Cloud Supports the Latest in Customized In-Car Connectivity](https://aws.amazon.com/solutions/case-studies/bmw-software-defined-vehicles/)
+  - [AWS and Qualcomm Software-Defined Vehicle demonstrator for Cloud-Native Snapdragon Digital Chassis development](https://aws.amazon.com/cn/blogs/industries/aws-and-qualcomm-software-defined-vehicle-demonstrator-for-cloud-native-snapdragon-digital-chassis-development/)
   
 - [Autonomous Driving]
   - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
@@ -1799,3 +1808,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Commerical Data lake]
   - [GenAI in biomedical research]
     - [Empowering biomedical discovery with AI agents](https://www.cell.com/cell/fulltext/S0092-8674(24)01070-5)
+  - [LS and HC Compliance]
+    - [Open source PACS (picture archiving and communication system) solution - part1](https://aws.amazon.com/cn/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-1/)
+    - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)
