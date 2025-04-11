@@ -1,5 +1,8 @@
 # SageMaker Workshop
 
+## Next generation Amazon SageMaker Workshop
+1. [Unified Studio](https://catalog.us-east-1.prod.workshops.aws/workshops/06dbe60c-3a94-463e-8ac2-18c7f85788d4/en-US)
+   
 ## Immersion Day Workshop
 1. [Lab- Notebook Instances and Feature Engineering](https://sagemaker-immersionday.workshop.aws/lab1.html)
 
