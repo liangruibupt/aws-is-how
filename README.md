@@ -1789,6 +1789,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Designing Next Generation Vehicle Communication with AWS IoT Core and MQTT](https://docs.aws.amazon.com/whitepapers/latest/designing-next-generation-vehicle-communication-aws-iot/designing-next-generation-vehicle-communication-aws-iot.html)
   - [GSMA’s SAS-SM](https://aws.amazon.com/blogs/industries/implementing-a-gsma-compliant-remote-sim-provisioning-workload-on-aws/)
   - [Small Language Model on vehicle](https://aws.amazon.com/blogs/industries/software-defined-vehicles-genai-iot-the-path-to-ai-defined-vehicles/)
+  - [AutoMQ integraion with S3 Tables and Iceberg](https://github.com/AutoMQ/automq/wiki/Introducing-AutoMQ-Table-Topic:-Seamless-Integration-with-S3-Tables-and-Iceberg)
 
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
