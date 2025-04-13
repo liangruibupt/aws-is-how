@@ -90,3 +90,13 @@ Read this paper and summarize it in the following format
 <Use scenarios>: What fields can this technology or solution be mainly applied to? What are typical use cases?
 <General requirements>: 1. Use English search, only English materials are accepted, and write reports in Chinese. 2. Interpretation should be meticulous, at least 2000 words
 ```
+
+5. 竞对分析
+```
+Prompt:
+对比一下 
+1. Azure 中国北部2 和 AWS 中国北京区域 V100 GPU 的价格。
+2. 对比Azure 中国北部3 和 AWS 中国宁夏区域 T4 GPU 的价格。
+3. 对比Azure 中国北部2 A10 GPU 和 AWS 中国北京区域 A10G GPU 的价格。
+4. 对比Azure 中国北部3 A10 GPU 和 AWS 中国宁夏区域 A10G GPU 的价格。
+```
