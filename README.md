@@ -258,6 +258,7 @@
     - [AIGC 助力电商虚拟试穿新体验](https://aws.amazon.com/cn/blogs/china/e-commerce-virtual-try-on-new-experience-based-on-aigc/)
     - [Towards General Purpose Virtual Try-on](https://github.com/xiezhy6/GP-VTON)
     - [How to improve user engagement with real-time AR effects using BytePlus Effects and Amazon IVS](https://aws.amazon.com/cn/blogs/media/how-to-improve-user-engagement-with-real-time-ar-effects-using-byteplus-effects-and-amazon-ivs/)
+    - [硅基数字人HeyGem.ai模型](https://github.com/GuijiAI/HeyGem.ai)
   - [Industry video handling]
     - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
   - [OCR]
@@ -291,7 +292,7 @@
     - [Using AWS IoT and Amazon SageMaker to do IoT Devices Predictive Maintenance](iot/IOT-SageMaker-Predictive-Maintenance/README.md)
     - [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
   - [Contact Center]
-    - [华宝新能 GenAI 实践](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
+    - [华宝新能 拓展 GenAI 在客户服务领域的新场景](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
 - [Vector database]
   - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
   
@@ -376,6 +377,7 @@
     - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
     - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
     - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
+    - [利用 Amazon Bedrock Data Automation（BDA）对视频数据进行自动化处理与检索](https://aws.amazon.com/cn/blogs/china/automating-video-data-processing-and-retrieval-using-amazon-bedrock-data-automation/)
   - [Audio]
     - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
     - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
@@ -411,8 +413,9 @@
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
-    - [MCP to Lambda](https://github.com/danilop/MCP2Lambda)
+    - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
     - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
+    - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
 
 
 ### Labeling
@@ -475,6 +478,7 @@
 ### EC2
 - [Linux Daily usage]
   - [How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
+    - [install GUI (graphical desktop) on Amazon EC2 instances running Ubuntu Linux](https://repost.aws/articles/ARJtZxRiOURwWI2qSWjl4AaQ/how-do-i-install-gui-graphical-desktop-on-amazon-ec2-instances-running-ubuntu-linux)
   - [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
   - [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
 
@@ -655,6 +659,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Orchestrate an Amazon EMR on Amazon EKS Spark job with AWS Step Functions](https://aws.amazon.com/cn/blogs/big-data/orchestrate-an-amazon-emr-on-amazon-eks-spark-job-with-aws-step-functions/)
   - [data-on-eks](https://awslabs.github.io/data-on-eks/)
   - [EMR on EKS 与 Apache Kyuubi 的数据驱动之旅](https://aws.amazon.com/cn/blogs/china/a-data-driven-journey-with-emr-on-eks-and-apache-kyuubi/)
+  - [Spark on EKS workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/9ae0382f-c40a-44d4-a604-e1b378866323/en-US)
 
 ### Stream - Flink and Spark Streaming
 - [Flink on EMR]
