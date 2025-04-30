@@ -391,6 +391,7 @@
   - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
   - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
   - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
+  - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
 
 - [Agent and workflow]
   - [Flexible and powerful framework for managing multiple AI - Multi-Agent-Orchestrator](https://github.com/awslabs/multi-agent-orchestrator)
@@ -416,6 +417,7 @@
     - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
     - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
     - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
+    - [Playwright MCP Server on Fargate](https://www.notion.so/Playwright-MCP-Server-AWS-Fargate-EKS-1de408b04809808c8604f56fef3cf565?pvs=4)
 
 
 ### Labeling
@@ -1463,6 +1465,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
   - [EKS Multi-Tatent](https://aws.amazon.com/cn/blogs/china/computing-resources-of-eks-multi-tenant-management/)
+  - [Generative AI on EKS using NVIDIA GPU workshop](https://catalog.workshops.aws/genai-on-eks/en-US)
 
 - [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
