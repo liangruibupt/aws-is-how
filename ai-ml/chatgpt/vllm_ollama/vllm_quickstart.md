@@ -236,7 +236,7 @@ open-webui serve
 1. Host Qwen/QwQ-32B
 ```bash
 source myenv/bin/activate
-CUDA_VISIBLE_DEVICES=0,1,2,3
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 python -c 'import torch; print(torch.cuda.current_device())'
 vllm serve Qwen/QwQ-32B  --port 8000 --host 0.0.0.0 --tensor-parallel-size 4 --max-model-len 46448
 ```
@@ -355,4 +355,51 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 evalscope perf \
  --min-tokens 2048 \
  --api local_vllm \
  --dataset speed_benchmark
+```
+
+
+## Qwen3
+1. Host Qwen3
+```bash
+source myenv/bin/activate
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+python -c 'import torch; print(torch.cuda.current_device())'
+pip install --upgrade transformers
+pip install --upgrade setuptools
+pip install --upgrade vllm
+vllm serve Qwen/Qwen3-30B-A3B --enable-reasoning --reasoning-parser deepseek_r1 --port 8000 --host 0.0.0.0 --tensor-parallel-size 4 --max-model-len 32768
+```
+
+2. Testing
+```bash
+    curl http://localhost:8000/v1/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "Qwen/Qwen3-30B-A3B",
+            "temperature": 0.6,
+            "top_k": 40,
+            "top_p": 0.95,
+            "prompt": "San Francisco is a"
+        }'
+
+    curl http://localhost:8000/v1/chat/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "Qwen/Qwen3-30B-A3B",
+            "temperature": 0.6,
+            "top_k": 40,
+            "top_p": 0.95,
+            "messages": [{"role": "user", "content": "我要玩24点游戏，我手里的牌是5、5、7、9，穷举所有的可能性"}],
+            "stream": true
+        }'
+
+    curl http://localhost:8000/v1/chat/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "Qwen/Qwen3-30B-A3B",
+            "temperature": 0.6,
+            "top_k": 40,
+            "top_p": 0.95,
+            "messages": [{"role": "user", "content": "Please reason step by step, and put your final answer within \boxed{}. AI是否取代人类？AI和人类如何共处？"} ]
+        }'
 ```
