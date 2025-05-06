@@ -403,3 +403,20 @@ vllm serve Qwen/Qwen3-30B-A3B --enable-reasoning --reasoning-parser deepseek_r1 
             "messages": [{"role": "user", "content": "Please reason step by step, and put your final answer within \boxed{}. AI是否取代人类？AI和人类如何共处？"} ]
         }'
 ```
+
+## Clean up
+```bash
+rm -rf ~/.cache/huggingface/hub/models--<org>--<model_name>
+```
+
+## Generative AI on EKS using NVIDIA GPU workshop
+[Workshop link](https://catalog.workshops.aws/genai-on-eks/en-US)
+
+### Architecture
+![LLM on EKS with Ray Server + vLLM](LLMonEKSwithRay.png)
+
+1. vLLM  is one of several popular, open-source LLM models inference and serving engines. vLLM can provide up to 24x higher throughput compared to standard PyTorch implementations and it can support continuous batching for optimal GPU utilization and reduce GPU memory usage by up to 60% with dynamic memory allocation for KV cache. It provides OpenAI-compatible API server for easy integration, distributed inference with tensor parallelism and built-in streaming responses and request scheduling
+
+2. While Ray can be deployed directly on Kubernetes and KubeRay Operator provides significant advantages for production environments: (1) Zero-downtime upgrades for model updates (2) High availability through external Redis for Global Control Service (3) Automated cluster lifecycle management (4) Native Kubernetes integration with custom resources (5) Simplified scaling and monitoring
+
+3. Observability Stack with Prometheus, Grafana, NVIDIA DCGM Monitoring Dashboard and Ray Monitoring. It also provides the vLLM Model Monitoring with vLLM-specific metrics collection, track token generation and latency metrics, monitor inference queue and processing times, monitor worker node health, analyze task scheduling efficiency
