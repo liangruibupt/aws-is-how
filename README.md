@@ -419,6 +419,9 @@
     - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
     - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
     - [Playwright MCP Server on Fargate](https://www.notion.so/Playwright-MCP-Server-AWS-Fargate-EKS-1de408b04809808c8604f56fef3cf565?pvs=4)
+    - [基于MCP构建端到端的AI-Agent应用工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
+  - [E2B]
+    - [e2b-dev Github](https://github.com/e2b-dev/E2B)
 
 
 ### Labeling
@@ -1823,6 +1826,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Commerical Data lake]
   - [GenAI in biomedical research]
     - [Empowering biomedical discovery with AI agents](https://www.cell.com/cell/fulltext/S0092-8674(24)01070-5)
+    - [Healthcare and Life Sciences Agent Catalog](http://hcls-agents-catalog-ui-app-blue-1955574525.us-west-2.elb.amazonaws.com/)
   - [LS and HC Compliance]
     - [Open source PACS (picture archiving and communication system) solution - part1](https://aws.amazon.com/cn/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-1/)
     - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)
