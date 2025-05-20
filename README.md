@@ -162,6 +162,7 @@
 
 ## Architecture Design
 - [Building hexagonal architectures on AWS](https://docs.aws.amazon.com/prescriptive-guidance/latest/hexagonal-architectures/welcome.html)
+- [Service Screener is a tool that runs automated checks on AWS environments and provides recommendations based on AWS and community best practices](https://github.com/aws-samples/service-screener-v2)
   
 ## AI/ML
 
@@ -309,6 +310,7 @@
     - [Amazon Nova Canvas and Amazon Nova Reel Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/66a0984a-ad2b-481f-a1cf-e7896ea9595b/en-US)
     - [Nova Sonic Speech-to-Speech Model Samples](https://github.com/aws-samples/amazon-nova-samples/tree/main/speech-to-speech)
     - [nova-sonic Web Demo](https://nova-sonic.teague.live/login)
+    - [Amazon Nova Sonic (speech-to-speech) Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/5238419f-1337-4e0f-8cd7-02239486c40d/en-US)
   - [Deepseek]
     - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
@@ -393,6 +395,9 @@
   - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
   - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
   - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
+  - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
+  - [云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
+  - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
 
 - [Agent and workflow]
   - [Flexible and powerful framework for managing multiple AI - Multi-Agent-Orchestrator](https://github.com/awslabs/multi-agent-orchestrator)
@@ -422,7 +427,8 @@
     - [基于MCP构建端到端的AI-Agent应用工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
   - [E2B]
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
-
+  - [Agent to Agent]
+    - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
@@ -1470,7 +1476,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
   - [EKS Multi-Tatent](https://aws.amazon.com/cn/blogs/china/computing-resources-of-eks-multi-tenant-management/)
-  - [Generative AI on EKS using NVIDIA GPU workshop](https://catalog.workshops.aws/genai-on-eks/en-US)
+  - [GenAI on EKS using NVIDIA GPU workshop](https://catalog.workshops.aws/genai-on-eks/en-US)
 
 - [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
