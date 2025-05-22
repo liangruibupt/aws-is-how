@@ -1830,9 +1830,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [R&D data lake]
       - [Build a genomics data lake on AWS using Amazon EMR](https://aws.amazon.com/cn/blogs/industries/build-a-genomics-data-lake-on-aws-using-amazon-emr-part-1/)
     - [Commerical Data lake]
-  - [GenAI in biomedical research]
+  - [GenAI in Life Sciences]
     - [Empowering biomedical discovery with AI agents](https://www.cell.com/cell/fulltext/S0092-8674(24)01070-5)
     - [Healthcare and Life Sciences Agent Catalog](http://hcls-agents-catalog-ui-app-blue-1955574525.us-west-2.elb.amazonaws.com/)
+    - [Life Sciences Innovation with Agentic AI](https://aws.amazon.com/blogs/industries/accelerating-life-sciences-innovation-with-agentic-ai-on-aws/)
   - [LS and HC Compliance]
     - [Open source PACS (picture archiving and communication system) solution - part1](https://aws.amazon.com/cn/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-1/)
     - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)
