@@ -389,7 +389,7 @@
   - [Content Moderation]
     - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
 
-- [Code Assistant]
+- [Software Develop Lifecycle]
   - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
   - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
   - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
@@ -398,6 +398,7 @@
   - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
   - [云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
   - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
+  - [The open source AIOps and Alert platform](https://www.keephq.dev/)
 
 - [Agent and workflow]
   - [Flexible and powerful framework for managing multiple AI - Multi-Agent-Orchestrator](https://github.com/awslabs/multi-agent-orchestrator)
