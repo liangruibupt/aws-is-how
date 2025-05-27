@@ -174,12 +174,42 @@
     ```
     
     ```bash
-    bash stop_all.sh
     bash start_all.sh
     ```
 
 2. ChatBot UI
-- 浏览器访问 http://localhost:{CHATBOT_SERVICE_PORT}
+- 遵循[按照步骤](https://github.com/aws-samples/demo_mcp_on_amazon_bedrock/blob/main/react_ui/README.md) 安装 Next.js UI
+  这里采用了使用Node.js直接部署（开发模式）
+  ```bash
+  # Node.js 22.x 或更高版本, 安装参考：https://nodejs.org/en/download
+  # Verify the Node.js version:
+  node -v # Should print > "v22.14.0".
+  # Verify npm version:
+  npm -v # Should print > "10.9.2".
+
+  #1. 进入react_ui 安装依赖
+  cd demo_mcp_on_amazon_bedrock/react_ui
+  npm install
+
+  #2. 安装pm2工具
+  sudo npm -g install pm2
+
+  #3. 创建环境变量
+  cp .env.example .env.local
+
+  #4. 编辑.env.local文件
+  NEXT_PUBLIC_API_KEY=mcp_demo_123456
+  SERVER_MCP_BASE_URL=http://localhost:7002
+  NEXT_PUBLIC_MCP_BASE_URL=/api
+  NEXT_PUBLIC_API_BASE_URL=https://localhost:7002 
+
+  #5. 启动 Chatbot 开发模式
+  npm run dev
+  ```
+
+- 浏览器访问 http://localhost:3000/chat
+
+3. 测试
 - 测试提问：由于已内置了文件系统操作、SQLite 数据库等 MCP Server，可以尝试连续提问以下问题进行体验
     ```
     1. list all of files in the allowed directory
@@ -193,7 +223,11 @@
     ```
 
 - 创建 Web Search 供应商 [Exa](https://exa.ai/) MCP Server， 你需要申请Exa API的 API Key
-   ```json
+  ```bash
+  sudo npm install -g exa-mcp-server
+  ```
+
+  ```json
     {
       "mcpServers": {
         "exa": {
@@ -205,7 +239,7 @@
         }
       }
     }
-   ```
+  ```
 
 - 创建 Web Browser MCP Server
     ```json
@@ -217,7 +251,7 @@
     }
     ```
 
-3. 测试 Deep Research 和 网页生成
+4. 测试 Deep Research 和 网页生成
 - 第一次运行可能需要额外安装一些软件，请跟进tool call 返回的信息提示安装即可
 ```
 Error executing tool search_google: BrowserType.launch: Host system is missing dependencies to run browsers. Please install them with the following command:
@@ -253,7 +287,16 @@ scp -i ~/.ssh/mykey.pem ubuntu@{ec2_ip}:/home/ubuntu/demo_mcp_on_amazon_bedrock/
 ```
 1. use search tool and sequential thinking to make comparison report between different agents frameworks such as autogen, langgraph, aws multi agents orchestrator
 2. use sequential thinking and search tool to make me a travel plan to visit shanghai between 3/1/2025 to 3/5/2025. I will departure from Beijing
-3. 搜索对比火山引擎，阿里百炼，硅基流动上的对外提供的deepseek r1 满血版的API 性能对比, 包括推理速度，TTFT， 最大context长度等。使用sequential thinking 工具
+3. 搜索对比火山引擎，阿里百炼，硅基流动上的对外提供的deepseek r1 满血版的API 性能对比, 包括推理速度，TTFT， 最大context长度等。通过一个网页展示，对比结果为一个表格，并且高亮每个指标中最佳的提供商
+```
+
+5. 清理环境
+```bash
+# Stop Servers
+bash stop_all.sh
+
+# exist python virtual environment
+deactivate
 ```
 
 ## Trouble Shooting
