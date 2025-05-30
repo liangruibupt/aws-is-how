@@ -218,6 +218,7 @@
   - [三类场景赋能行业创新](https://mp.weixin.qq.com/s/iOsMwS_nysHn6O3F0_Vnbg)
   - [A guide to making your AI vision a reality](https://aws.amazon.com/cn/blogs/enterprise-strategy/a-guide-to-making-your-ai-vision-a-reality/)
   - [understand The tokenize](https://huggingface.co/spaces/Xenova/the-tokenizer-playground)
+  - [图解AI三大核心技术：RAG、大模型、智能体](https://mp.weixin.qq.com/s/pe2Rn6O_1KyqfFbCtMpqiw)
 
 - [Promote-Engineering]
   - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
@@ -352,8 +353,8 @@
   - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
 
 - [RAG - retrieval-augmented generation]
-  - [基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
-  - [基于智能搜索的大语言模型增强方案2](https://catalog.us-east-1.prod.workshops.aws/workshops/3973557a-0853-41f6-9678-00ae171ba1f6/zh-CN/03cdkinstall/30preinstall)
+  - [Smart Search 基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
+  - [Smart Search V2 基于智能搜索的大语言模型增强方案2](https://catalog.us-east-1.prod.workshops.aws/workshops/3973557a-0853-41f6-9678-00ae171ba1f6/zh-CN/03cdkinstall/30preinstall)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
   - [基于智能搜索和大模型打造企业下一代知识库 之 制造/金融/教育/医疗行业实战场景](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-four/)
   - [基于 RDS 和 Confluence 数据源构建端到端的RAG](https://aws.amazon.com/cn/blogs/china/build-an-end-to-end-rag-application-based-on-rds-and-confluence-data-sources/)
@@ -364,6 +365,7 @@
   - [GenAI Data Foundation Workshop - Healthcare RAG chatbot](https://catalog.us-east-1.prod.workshops.aws/workshops/973a358a-1e5c-44ed-8589-4e480f597c77/en-US)
   - [RAGChecker for RAG health check](https://github.com/amazon-science/RAGChecker)
   - [New APIs in Amazon Bedrock to enhance RAG applications](https://aws.amazon.com/blogs/aws/new-apis-in-amazon-bedrock-to-enhance-rag-applications-now-available/)
+  - [RAG 挑战赛冠军方案解析：从数据解析到多路由器检索的工程实践](https://mp.weixin.qq.com/s/VPidqY02ngsrnXhpOol3_A)
   
 - [Deep Research]
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
@@ -421,17 +423,27 @@
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
-    - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
-    - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
-    - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
-    - [Playwright MCP Server on Fargate](https://www.notion.so/Playwright-MCP-Server-AWS-Fargate-EKS-1de408b04809808c8604f56fef3cf565?pvs=4)
-    - [基于MCP构建端到端的AI-Agent应用工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
+    - [MCP Server hosting]
+      - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
+      - [Introducing AWS Serverless MCP Server blog](https://aws.amazon.com/cn/blogs/compute/introducing-aws-serverless-mcp-server-ai-powered-development-for-modern-applications/)
+      - [Playwright MCP Server on Fargate](https://www.notion.so/Playwright-MCP-Server-AWS-Fargate-EKS-1de408b04809808c8604f56fef3cf565?pvs=4)
+      - [Automating AI-assisted container deployments with the Amazon ECS MCP Server](https://aws.amazon.com/cn/blogs/containers/automating-ai-assisted-container-deployments-with-amazon-ecs-mcp-server/)
+      - [Accelerating application development with the Amazon EKS MCP server](https://aws.amazon.com/blogs/containers/accelerating-application-development-with-the-amazon-eks-model-context-protocol-server/)
+    - [MCP Demo]
+      - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
+      - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
+      - [基于MCP构建端到端的AI-Agent应用工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
+    - [Use Case]
+      - [从零构建 MCP 架构下的 Agentic RAG 系统](https://mp.weixin.qq.com/s/11jlAQkL008Tuq_vEyjjTg)
   - [E2B]
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
+    - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
   - [Agent protocal]
     - [Agent to Agent - A2A]
     - [Strands Agents]
       - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
+      - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
+      - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
@@ -648,6 +660,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [EMR Notebooks and SageMaker](https://emr-etl.workshop.aws/emr_notebooks_sagemaker.html)
   Use EMR notebooks to prepare data for machine learning and call SageMaker from the notebook to train and deploy a machine learning model.
   - [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
+  - [如何优雅地提交一个 Amazon EMR Serverless 作业？](https://aws.amazon.com/cn/blogs/china/best-practice-how-to-gracefully-submit-an-amazon-emr-serverless-job/)
+  - [如何在 Amazon EMR Serverless 上执行纯 SQL 文件？](https://aws.amazon.com/cn/blogs/china/how-to-execute-plain-sql-files-on-amazon-emr-serverless-solution/)
   
 - [Workflow]
 
@@ -1829,6 +1843,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
       - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
       - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
       - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
+    - [Statistical Compute Environment using R]
+      - [Deploying a Statistical Compute Environment using R on Amazon EKS](https://aws.amazon.com/blogs/industries/deploying-a-statistical-compute-environment-using-r-on-amazon-eks/)
   - [Data Analysis]
     - [R&D data lake]
       - [Build a genomics data lake on AWS using Amazon EMR](https://aws.amazon.com/cn/blogs/industries/build-a-genomics-data-lake-on-aws-using-amazon-emr-part-1/)
