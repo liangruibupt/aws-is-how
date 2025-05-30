@@ -84,3 +84,7 @@ Amazon SageMaker Operators for Kubernetes make it easier for developers and data
 Amazon SageMaker Components for Kubeflow Pipelines let you create and monitor training, tuning, endpoint deployment, and batch transform jobs in Amazon SageMaker. By running Kubeflow Pipeline jobs on Amazon SageMaker, you move data processing and training jobs from the Kubernetes cluster to Amazon SageMaker’s machine learning-optimized managed service.
 
 [Use the SageMaker components for Kubeflow Pipelines to train, tune, and deploy a machine learning model, and get both batch and real-time inferences from the deployed model.](https://www.getstartedonsagemaker.com/workshop-k8s-pipeline/)
+
+## Next Generation SageMaker Workshop
+- [Next Generation SageMaker Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/06dbe60c-3a94-463e-8ac2-18c7f85788d4/en-US)
+- [Amazon SageMaker Unified Studio Use Case Driven Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/7ac12eb2-6e1a-4939-a640-cdb5470fcb8e/en-US/1-introduction/use-case-intro)
