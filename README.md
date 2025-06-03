@@ -345,6 +345,7 @@
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
   - [Bedrock 多模型接入 – Bedrock Connector 部署与使用指南](https://aws.amazon.com/cn/blogs/china/bedrock-multi-model-access-bedrock-connector-deployment-and-usage-guide/)
     - [Bedrock Connector github repo](https://github.com/aws-samples/sample-connector-for-bedrock?tab=readme-ov-file)
+    - [Customize Bedrock endpoint with VPC Interface Endpoint for L4 layer proxy](https://github.com/AutoJunjie/customize-bedrock-endpoint)
   - [Prompt Caching]
     - [Getting started with Bedrock prompt_caching](https://github.com/aws-samples/amazon-bedrock-samples/blob/main/introduction-to-bedrock/prompt-caching/getting_started_with_prompt_caching.ipynb))
     - [Prompt caching on amazon bedrock](https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/)
@@ -367,6 +368,8 @@
   - [RAGChecker for RAG health check](https://github.com/amazon-science/RAGChecker)
   - [New APIs in Amazon Bedrock to enhance RAG applications](https://aws.amazon.com/blogs/aws/new-apis-in-amazon-bedrock-to-enhance-rag-applications-now-available/)
   - [RAG 挑战赛冠军方案解析：从数据解析到多路由器检索的工程实践](https://mp.weixin.qq.com/s/VPidqY02ngsrnXhpOol3_A)
+  - [Build a RAG based question answer solution using Amazon Bedrock Knowledge Base, vector engine for Amazon OpenSearch Service Serverless and LangChain](https://github.com/aws-samples/bedrock-kb-rag-workshop/blob/main/blog_post.md)
+  - [Create an agentic RAG application with LlamaIndex, and Mistral in Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/create-an-agentic-rag-application-for-advanced-knowledge-discovery-with-llamaindex-and-mistral-in-amazon-bedrock/)
   
 - [Deep Research]
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
@@ -1231,6 +1234,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Cross Cloud Migration
 - [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
 - [Assess secure Windows Servers for TCO analysis using Migration Evaluator](https://aws.amazon.com/blogs/mt/assess-secure-windows-servers-for-tco-analysis-using-migration-evaluator/)
+- [Resource Discovery for Azure](https://github.com/awslabs/resource-discovery-for-azure)
 
 ### File migration
 - [Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
