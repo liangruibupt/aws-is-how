@@ -340,6 +340,7 @@
   - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
   - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
+  - [Why Claude 4 API Hits Rate Limits: Token Burndown Explained](https://community.aws/content/2xVZmCM5E7XXw0yqTEGgXYxRowk/bedrock-claude-4-burndown-rates)
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
   - [Bedrock 多模型接入 – Bedrock Connector 部署与使用指南](https://aws.amazon.com/cn/blogs/china/bedrock-multi-model-access-bedrock-connector-deployment-and-usage-guide/)
@@ -461,6 +462,7 @@
 
 ### Robotics
 - [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
+- [NVIDIA Isaac Lab on AWS](https://catalog.us-east-1.prod.workshops.aws/workshops/075ce3fe-6888-4ea9-986e-5bdd1b767ef7/en-US)
 
 ## Cost
 ### Cost Explorer
