@@ -428,6 +428,7 @@
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
+      - [使用 Amazon Lambda 快速部署 Streamable HTTP Github MCP Server](https://aws.amazon.com/cn/blogs/china/deploy-streamable-http-github-mcp-server-using-amazon-lambda/  l)
     - [MCP Server hosting]
       - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
       - [Introducing AWS Serverless MCP Server blog](https://aws.amazon.com/cn/blogs/compute/introducing-aws-serverless-mcp-server-ai-powered-development-for-modern-applications/)
