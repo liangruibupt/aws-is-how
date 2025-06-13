@@ -934,6 +934,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Cognito User Pool alternative solution - Authing demo](https://github.com/aws-samples/aws-authing-demo)
 - [Cognito with WeChat integration](https://aws.amazon.com/cn/blogs/china/amazon-cognito-wechat-deployment-1/)
+- [integrate Amazon SES with an Amazon Cognito user pool](https://repost.aws/knowledge-center/cognito-user-pool-ses-integration)
   
 - [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
     - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
@@ -1392,6 +1393,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Disable_RDS_encryption](database/rds/Disable_RDS_encryption.md)
 
 - [RDS MySQL and Aurora MySQL Audit logs](https://aws.amazon.com/cn/blogs/database/configuring-an-audit-log-to-capture-database-activities-for-amazon-rds-for-mysql-and-amazon-aurora-with-mysql-compatibility/)
+
+- [Connect to an Amazon RDS or Amazon Aurora instance using a federated user with AWS IAM Identity Center and IAM database authentication](https://aws.amazon.com/blogs/database/connect-to-an-amazon-rds-or-amazon-aurora-instance-using-a-federated-user-with-aws-iam-identity-center-and-iam-database-authentication/)
 
 - [RDS PostgreSQL and Aurora PostgreSQL Audit](https://aws.amazon.com/premiumsupport/knowledge-center/rds-postgresql-pgaudit/) 
   - [pgaudit extention](https://docs.amazonaws.cn/en_us/AmazonRDS/latest/UserGuide/Appendix.PostgreSQL.CommonDBATasks.Extensions.html#Appendix.PostgreSQL.CommonDBATasks.pgaudit)
