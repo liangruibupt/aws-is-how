@@ -70,6 +70,11 @@ List all the narrative tagged [CNR] and contains BJS or ZHY. Output as below for
 <Workloads>:
 <MRR and ARR>:
 <Summary>:
+
+
+Read the quip <URL>, summary the <AWS Region Names> <Industry Name> migration items,  catelog results as Migration Driver, then industry, <customer name><description>. Save result to migration_insights.md under current folder.
+
+Read the quip <URL>, summary the <Industry Name> items under "Customer Highlights" section, catelog results as Tag, then industry, <customer name><description>. Exclude items under "Business Trends and Top Things Having Impact". Save result to highlight_insights.md under current folder.
 ```
 
 4. 阅读研究报告
