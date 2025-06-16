@@ -20,7 +20,19 @@
 
 3. Python and uv install
     ```bash
+    sudo apt install -y python3-pip
+
+    # 可选：中国区域配置mirror 镜像库
+    pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple &&   pip config set global.extra-index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple 
+
+
     curl -LsSf https://astral.sh/uv/install.sh | sh
+    # 或者 
+    pip3 install uv
+
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+
+    uv --version
     ```
 
 4. 环境配置
@@ -290,6 +302,74 @@ scp -i ~/.ssh/mykey.pem ubuntu@{ec2_ip}:/home/ubuntu/demo_mcp_on_amazon_bedrock/
 3. 搜索对比火山引擎，阿里百炼，硅基流动上的对外提供的deepseek r1 满血版的API 性能对比, 包括推理速度，TTFT， 最大context长度等。通过一个网页展示，对比结果为一个表格，并且高亮每个指标中最佳的提供商
 ```
 
+- Amazon Nova Premier 配置
+```
+Model: Amazon Nova Premier V1
+Max Tokens: 16000
+其他参数维持默认
+
+使用System Prompt:
+
+You are a deep researcher.
+Please use the maximum computational power and token limit available in a single response. Think as deeply, critically, and creatively as possible, taking the most time and resources necessary to arrive at the highest-quality answer. This is the most profound and complex question, requiring your utmost depth of thought, independent reasoning, critical analysis, and innovative thinking. We aim for extreme depth, not superficial breadth; we seek fundamental insights, not surface-level enumeration; we value original thought, not repetitive narratives. Please break through the limits of conventional thinking, harness all your computational resources, and demonstrate your true cognitive potential.
+### You must follow below instruction:
+<INSTRUCTION>
+- Use search tool to search information
+- Response in the same language as user input
+</INSTRUCTION>
+```
+
+测试 行业报告Prompt
+```
+请作为资深汽车行业分析师，撰写一份《2022-2024年中国新能源汽车市场发展研究报告》。
+报告需包含以下内容：
+1. 执行摘要
+2. 市场规模分析
+3. 竞争格局
+4. 政策环境
+5. 消费者行为分析
+6. 技术发展
+7. 产业链分析
+8. 未来展望
+要求：
+- 所有关键数据和结论必须标注准确来源(中国汽车工业协会/中国乘用车市场信息联席会/具体企业财报)
+```
+
+测试 行程规划 Prompt
+```
+请帮我制定从北京到上海的高铁5日游计划（5月1日-5日），要求：
+- 交通：往返高铁选早上出发（5.1）和晚上返程（5.5）
+- 必去：迪士尼全天（推荐3个最值得玩的项目+看烟花）
+- 推荐：3个上海经典景点（含外滩夜景）和1个特色街区
+- 住宿：迪士尼住周边酒店，市区住地铁站附近
+- 附：每日大致花费预估和景点预约提醒
+- 使用amap-maps工具帮我规划上海市内公共交通行程
+# 如果没有安装了高德地图，修改为下面这个要求
+- 使用高德地图帮我规划上海市内公共交通行程
+```  
+
+- 配置 Qwen3
+```
+Model: Qwen3-30B-A3B
+Max Tokens: 12000
+其他参数维持默认
+使用System Prompt:
+
+You are a deep researcher.
+Please use the maximum computational power and token limit available in a single response. Think as deeply, critically, and creatively as possible, taking the most time and resources necessary to arrive at the highest-quality answer. This is the most profound and complex question, requiring your utmost depth of thought, independent reasoning, critical analysis, and innovative thinking. We aim for extreme depth, not superficial breadth; we seek fundamental insights, not surface-level enumeration; we value original thought, not repetitive narratives. Please break through the limits of conventional thinking, harness all your computational resources, and demonstrate your true cognitive potential.
+### You must follow below instruction:
+<INSTRUCTION>
+- Use search tool to search information
+- Response in the same language as user input
+</INSTRUCTION>
+```
+
+-
+
+
+
+
+
 5. 清理环境
 ```bash
 # Stop Servers
@@ -297,6 +377,259 @@ bash stop_all.sh
 
 # exist python virtual environment
 deactivate
+```
+
+
+## 进阶部分
+### computer use
+我们采用 docker 部署前端 react-ui，然后使用MCP连接ubuntu virtual desktop作为computer use sandbox使用
+1. 环境准备 - docker 部署前端 react-ui
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo systemctl enable docker && sudo systemctl start docker && sudo usermod -aG docker $USER
+sudo chmod 666 /var/run/docker.sock
+
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.35.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# 可选：中国区域配置 mirror镜像
+sudo vim /etc/docker/daemon.json
+{
+"registry-mirrors":["https://mirror-docker.bosicloud.com"],
+"insecure-registries":["mirror-docker.bosicloud.com"]
+}
+docker info | grep mirror
+```
+
+2. 前端部署
+```bash
+cd react_ui
+cat << EOF > .env.local
+NEXT_PUBLIC_API_KEY=123456
+SERVER_MCP_BASE_URL=http://localhost:7002
+NEXT_PUBLIC_MCP_BASE_URL=/api
+EOF
+
+docker-compose up -d --build
+```
+
+3. 浏览器访问 http://<Server_IP>:3000/chat. docker部署，常见命令
+```bash
+  source .venv/bin/activate
+
+  # 查看容器日志
+  docker logs -f mcp-bedrock-ui
+
+  # 重启容器
+  docker-compose restart
+
+  # 停止容器
+  docker-compose down
+
+  # 重新构建并启动（代码更新后）
+  docker-compose up -d --build
+
+  # 查看 docker 进程
+  docker ps
+```
+
+3. 配置 Remote Compute Use MCP Server
+```bash
+cd ~
+git clone https://github.com/aws-samples/aws-mcp-servers-samples.git
+cd aws-mcp-servers-samples/remote_computer_use/docker
+docker-compose up -d
+
+# 等待出现如下输出
+[+] Running 2/2
+✔ Network docker_default        Created                                                                                         0.0s 
+✔ Container ubuntu-vnc-desktop  Started 
+```
+  
+4. 添加 MCP Server: computer_use
+- Claude Sonnet 3.7 配置
+```json
+{
+  "mcpServers": {
+    "computer_use": {
+      "command": "uv",
+      "env": {
+        "VNC_HOST":"127.0.0.1",
+        "VNC_PORT":"5901",
+        "VNC_USERNAME":"vnc_user",
+        "VNC_PASSWORD":"12345670",
+        "PEM_FILE":"",
+        "SSH_PORT":"2222",
+        "DISPLAY_NUM":"1",
+        "WIDTH":"1024",
+        "HEIGHT":"768"
+      },
+      "args": [
+        "--directory",
+        "/home/ubuntu/aws-mcp-servers-samples/remote_computer_use",
+        "run",
+        "server_claude.py"
+      ]
+    }
+  }
+}
+```
+
+- Nova Premier 配置
+```json
+{
+  "mcpServers": {
+    "computer_use": {
+      "command": "uv",
+      "env": {
+        "VNC_HOST":"127.0.0.1",
+        "VNC_PORT":"5901",
+        "VNC_USERNAME":"vnc_user",
+        "VNC_PASSWORD":"12345670",
+        "PEM_FILE":"",
+        "SSH_PORT":"2222",
+        "DISPLAY_NUM":"1",
+        "WIDTH":"1024",
+        "HEIGHT":"768",
+        "NOVA":"1"
+      },
+      "args": [
+        "--directory",
+        "/home/ubuntu/aws-mcp-servers-samples/remote_computer_use",
+        "run",
+        "server_claude.py"
+      ]
+    }
+  }
+}
+```
+
+5. 安装 HTML Rendering MCP Server
+此MCP server 用于将Agent生成的html或者markdown内容渲染成Web Page，并且可以通过浏览器直接访问。
+```bash
+cd ~
+cd aws-mcp-servers-samples/html_render_service/web
+docker-compose up -d
+
+#验证是否成功安装
+curl http://127.0.0.1:5006/
+{
+  "message": "ok"
+}
+```
+
+- 添加 MCP Server: html_render_service
+```json
+{
+  "mcpServers": 
+  { 
+    "html_render_service": 
+    { 
+      "command": "uv", 
+      "args": [
+        "--directory","/home/ubuntu/aws-mcp-servers-samples/html_render_service/src",
+        "run",
+        "server.py"]
+    } 
+  }
+}
+```
+
+6. 使用vnc桌面客户端连接到远程桌面
+可以直接用系统自带的finder->go->server连接： VNC链接：vnc://{ec2服务器public ip}:5901
+用户名:vnc_user
+密码: 12345670
+成功访问远程桌面之后 找到"applications" -> "Internet" -> "Firefox"，把"Firefox"图标拖拽到桌面上
+
+7. 测试配置
+```
+You are an expert research assistant with deep analytical skills. When presented with a task, follow this structured approach:
+
+you have capability:
+<SYSTEM_CAPABILITY>
+* You are utilising an Ubuntu virtual machine using Linux architecture with internet access.
+* You can feel free to install Ubuntu applications with your bash tool. Use curl instead of wget.
+* When viewing a page it can be helpful to zoom out so that you can see everything on the page.  Either that, or make sure you scroll down to see everything before deciding something isn't available.
+* When using your computer function calls, they take a while to run and send back to you.  Where possible/feasible, try to chain multiple of these calls all into one function calls request.
+* When using web browser, mouse double click to launch the application
+</SYSTEM_CAPABILITY>
+
+<IMPORTANT>
+* Don't assume an application's coordinates are on the screen unless you saw the screenshot. To open an application, please take screenshot first and then find out the coordinates of the application icon. 
+* When using Firefox, if a startup wizard or Firefox Privacy Notice appears, IGNORE IT.  Do not even click "skip this step".  Instead, click on the address bar where it says "Search or enter address", and enter the appropriate search term or URL there. Maximize the Firefox browser window to get wider vision.
+* If the item you are looking at is a pdf, if after taking a single screenshot of the pdf it seems that you want to read the entire document instead of trying to continue to read the pdf from your screenshots + navigation, determine the URL, use curl to download the pdf, install and use pdftotext to convert it to a text file, and then read that text file directly with your StrReplaceEditTool.
+* After each step, take a screenshot and carefully evaluate if you have achieved the right outcome. Explicitly show your thinking: "I have evaluated step X..." If not correct, try again. Only when you confirm a step was executed correctly should you move on to the next one.
+</IMPORTANT>
+```
+
+8. 测试 Prompt
+- 利用 compute use 进行 web 搜索，记得不要勾选 exa_search MCP Server
+```
+帮我总结下今天Amazon最新的deals里关于耳机的商品，列出一个top 3清单。
+请使用工具获取最新的数据和信息，并制作成精美的图文并茂的HTML文件格式，并使用html render service上传html。
+```
+
+- 勾选 html render service
+```
+请作为资深汽车行业分析师，撰写一份《2022-2024年中国新能源汽车市场发展研究报告》。要求：
+1. 关键结论需标注数据来源（中汽协/乘联会/企业财报）
+请使用工具获取最新的数据和信息，网页搜索使用 www.bing.com。制作成精美的图文并茂的HTML文件格式，并使用html render service上传html。
+```
+
+- 勾选amap-maps工具帮我规划上海市内公共交通行程
+```
+请帮我制定从北京到上海的高铁5日游计划（5月1日-5日），要求：
+- 交通：往返高铁选早上出发（5.1）和晚上返程（5.5）
+- 必去：迪士尼全天（推荐3个最值得玩的项目+看烟花）
+- 推荐：3个上海经典景点（含外滩夜景）和1个特色街区
+- 住宿：迪士尼住周边酒店，市区住地铁站附近
+- 附：每日大致花费预估和景点预约提醒
+- 使用amap-maps工具帮我规划上海市内公共交通行程
+需要制作成精美的 HTML，并使用html render service上传html
+```
+
+```
+# 如果没有安装了高德地图，修改为下面这个要求
+
+请帮我制定从北京到上海的高铁5日游计划（5月1日-5日），要求：
+- 交通：往返高铁选早上出发（5.1）和晚上返程（5.5）
+- 必去：迪士尼全天（推荐3个最值得玩的项目+看烟花）
+- 推荐：3个上海经典景点（含外滩夜景）和1个特色街区
+- 住宿：迪士尼住周边酒店，市区住地铁站附近
+- 附：每日大致花费预估和景点预约提醒
+
+网页搜索使用 www.bing.com，高铁信息通过www.12306.cn进行查询，使用高德地图帮我规划上海市内公共交通行程，需要制作成精美的 HTML，并使用html render service上传html
+```
+
+### MCP结合数据库应用 实现智能问数
+参考link： https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/2-lab-1/2-5-database
+
+
+### 清理环境
+```bash
+cd ~/demo_mcp_on_amazon_bedrock
+
+# Stop Servers
+bash stop_all.sh
+
+# exist python virtual environment
+deactivate
+
+# 停止 docker
+docker-compose down
+
+cd ~/aws-mcp-servers-samples/html_render_service/web
+docker-compose down
+
+cd ~/aws-mcp-servers-samples/remote_computer_use/docker
+docker-compose down
+
+docker ps
+
+# Stop EC2 instance
+aws ec2 stop-instances --instance-ids i-0ba800546dc0acc5b --region us-west-2 --profile global_ruiliang
 ```
 
 ## Trouble Shooting
