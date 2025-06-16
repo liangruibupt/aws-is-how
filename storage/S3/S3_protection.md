@@ -1,0 +1,3 @@
+- GuardDuty S3 Protection - https://docs.aws.amazon.com/guardduty/latest/ug/s3-protection.html
+- GuardDuty Malware Protection for S3 in global region - https://docs.aws.amazon.com/guardduty/latest/ug/gdu-malware-protection-s3.html
+- Open Source tool: https://aws.amazon.com/cn/blogs/china/use-aws-lambda-integration-clamav-for-virus-scanning/
