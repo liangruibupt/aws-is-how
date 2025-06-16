@@ -1,3 +1,5 @@
 - GuardDuty S3 Protection - https://docs.aws.amazon.com/guardduty/latest/ug/s3-protection.html
 - GuardDuty Malware Protection for S3 in global region - https://docs.aws.amazon.com/guardduty/latest/ug/gdu-malware-protection-s3.html
 - Open Source tool: https://aws.amazon.com/cn/blogs/china/use-aws-lambda-integration-clamav-for-virus-scanning/
+  - 这个是开源病毒库
+  - 更新病毒库默认8小时更新一次，有时候会因为网络问题走公网被block，block后可能过8小时重试就好了
