@@ -425,6 +425,7 @@
   - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
   - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
   - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
+  - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
@@ -439,6 +440,7 @@
       - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
       - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
       - [基于MCP构建端到端的AI-Agent应用工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
+        - [A sample MCP server for understanding cloud spend](https://github.com/aws-samples/sample-cloud-spend-mcp-server)
     - [Use Case]
       - [从零构建 MCP 架构下的 Agentic RAG 系统](https://mp.weixin.qq.com/s/11jlAQkL008Tuq_vEyjjTg)
   - [E2B]
@@ -1296,6 +1298,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Hosting Internal HTTPS Static Websites with ALB, S3, and PrivateLink](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/hosting-internal-https-static-websites-with-alb-s3-and-privatelink/)
 - [2024 reInvent S3 udpate](https://www.youtube.com/watch?v=pbsIVmWqr2M)
 - [S3 support the dedicated local zone](https://aws.amazon.com/about-aws/whats-new/2024/12/amazon-s3-storage-classes-dedicated-local-zones/)
+- [S3 Protection](storage/S3/S3_protection.md)
   
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
