@@ -1836,6 +1836,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Designing Next Generation Vehicle Communication with AWS IoT Core and MQTT](https://docs.aws.amazon.com/whitepapers/latest/designing-next-generation-vehicle-communication-aws-iot/designing-next-generation-vehicle-communication-aws-iot.html)
   - [GSMA’s SAS-SM](https://aws.amazon.com/blogs/industries/implementing-a-gsma-compliant-remote-sim-provisioning-workload-on-aws/)
   - [AutoMQ integraion with S3 Tables and Iceberg](https://github.com/AutoMQ/automq/wiki/Introducing-AutoMQ-Table-Topic:-Seamless-Integration-with-S3-Tables-and-Iceberg)
+  - [BMW Connected Drive Migration Case](https://aws.amazon.com/solutions/case-studies/bmw-group-migration/)
 
 - [Smart Cockpit]
   - [Building the Future of In-Vehicle Experiences with AWS Generative AI Solutions: A Strategic Overview](https://aws.amazon.com/blogs/industries/building-the-future-of-in-vehicle-experiences-with-aws-generative-ai-solutions/)

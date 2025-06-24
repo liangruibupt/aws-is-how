@@ -119,3 +119,15 @@ A young Asian woman with fair skin and delicate facial features walks slowly alo
 中文对照：
 一位皮肤白皙、五官清秀的亚洲年轻女性，缓缓走在中国故宫的殿外红墙旁。她身穿一条淡杏色无袖夏日长裙，裙摆自然摆动，剪裁清爽柔和。头发随意扎起，眼神平静微笑，直视镜头。摄影师采用斜角拍摄，红墙延伸至画面深处。横构图，人物位于左侧三分之一。8K 超写实画质，晨光斜洒，墙体与人物光影层次分明。
 ```
+
+7. Excel 分析
+```
+这个 Excel 文件的Summary Sheet 包含了 AUTO, ISV, LS_HC, ME_AD 四个行业的 Top 50 account 的 EC2 mix % rate 以及 Windows instance % rate。
+第一步帮我分别总结 Summary Sheet 中每个行业的 All_Services_Rev 大于 100,000 的 account。第二步这些 account 中 EC2 mix rate 大于 30%的 account，按照All_Services_Rev 从高到低排序，取前 10 名。第三步在第二步的基础上，在过滤掉 Windows instance rate 大于 20%的 account。按照行业分开统计，用 table 方式输出 | account | Industry | All_Services_Rev | EC2 mix rate | Windows instance rate |
+
+这个 Excel 文件的Summary Sheet 包含了 AUTO, ISV, LS_HC, ME_AD 四个行业的 Top 50 account 的 EC2 mix % rate 以及 Windows instance % rate。
+帮我分别总结 Summary Sheet 中每个行业的All_Services_Rev 大于 100,000 的 account，在这些account 中 EC2 mix rate 大于 30%的 account，按照All_Services_Rev 从高到低排序，取前 10 名。以及Windows instance rate 大于 20%的 account，按照从高到低排序，取前 10 名。按照行业分开统计，用 table 方式输出 | account | Industry |  All_Services_Rev | Rate |
+
+这个 Excel 文件的Summary Sheet 包含了 AUTO, ISV, LS_HC, ME_AD 四个行业的 Top 50 account 的 EC2 mix % rate 以及 Windows instance % rate。
+第一步帮我分别总结 Summary Sheet 中每个行业的 All_Services_Rev 大于 100,000 的 account。第二步这些 account 中 Windows instance rate 大于 20%的 account。按照All_Services_Rev 从高到低排序。 按照行业分开统计，用 table 方式输出 | account | Industry | All_Services_Rev | Windows instance rate |
+```
