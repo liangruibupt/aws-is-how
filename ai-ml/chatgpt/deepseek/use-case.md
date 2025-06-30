@@ -75,6 +75,10 @@ List all the narrative tagged [CNR] and contains BJS or ZHY. Output as below for
 Read the quip <URL>, summary the <AWS Region Names> <Industry Name> migration items,  catelog results as Migration Driver, then industry, <customer name><description>. Save result to migration_insights.md under current folder.
 
 Read the quip <URL>, summary the <Industry Name> items under "Customer Highlights" section, catelog results as Tag, then industry, <customer name><description>. Exclude items under "Business Trends and Top Things Having Impact". Save result to highlight_insights.md under current folder.
+
+Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Security Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to migration_insights.md under current folder.
+
+Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'MIH Opp', 'HPC Opp', 'CO Opp', 'Security Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to xxx_insights.md under current folder.
 ```
 
 4. 阅读研究报告
@@ -130,4 +134,10 @@ A young Asian woman with fair skin and delicate facial features walks slowly alo
 
 这个 Excel 文件的Summary Sheet 包含了 AUTO, ISV, LS_HC, ME_AD 四个行业的 Top 50 account 的 EC2 mix % rate 以及 Windows instance % rate。
 第一步帮我分别总结 Summary Sheet 中每个行业的 All_Services_Rev 大于 100,000 的 account。第二步这些 account 中 Windows instance rate 大于 20%的 account。按照All_Services_Rev 从高到低排序。 按照行业分开统计，用 table 方式输出 | account | Industry | All_Services_Rev | Windows instance rate |
+```
+
+8. Email handing
+```
+I need write a email draft to remind SA Org leadership notifing each team the China Region KPI, do not send email, just put the email in my draft folder
+
 ```
