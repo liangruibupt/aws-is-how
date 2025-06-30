@@ -440,6 +440,7 @@
       - [MCP on Amazon Bedrock](ai-ml/chatgpt/claude/mcp/demo_mcp_on_amazon_bedrock.md)
       - [sample-agentic-ai-web](https://github.com/aws-samples/sample-agentic-ai-web)
       - [基于MCP构建端到端的AI-Agent应用工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
+      - [基于MCP构建端到端的AI-Agent应用工作坊 - Bendrock Agents and Strands Agents](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN)
         - [A sample MCP server for understanding cloud spend](https://github.com/aws-samples/sample-cloud-spend-mcp-server)
     - [Use Case]
       - [从零构建 MCP 架构下的 Agentic RAG 系统](https://mp.weixin.qq.com/s/11jlAQkL008Tuq_vEyjjTg)
