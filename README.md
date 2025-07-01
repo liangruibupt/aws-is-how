@@ -452,10 +452,12 @@
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
   - [Agent protocal]
     - [Agent to Agent - A2A]
-    - [Strands Agents]
+    - [Strands Agents](https://strandsagents.com/0.1.x/)
       - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
       - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
       - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
+      - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
+
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
