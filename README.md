@@ -1177,6 +1177,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [API Gateway private customer domain](https://github.com/aws-samples/serverless-samples/blob/main/apigw-private-custom-domain-name/README.md)
 
+- [API Gateway Security Workshop](https://catalog.workshops.aws/apigw-security/en-US)
+
 ### Step function
 - [Configure Step Functions state machine as a target of Event](integration/EventBridge/Event-Trigger-StepFunction.md)
 
