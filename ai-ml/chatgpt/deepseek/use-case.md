@@ -72,13 +72,18 @@ List all the narrative tagged [CNR] and contains BJS or ZHY. Output as below for
 <Summary>:
 
 
-Read the quip <URL>, summary the <AWS Region Names> <Industry Name> migration items,  catelog results as Migration Driver, then industry, <customer name><description>. Save result to migration_insights.md under current folder.
+Read the quip <URL>, summary the migration items, catelog results as Migration Driver, then industry, <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
+Migration Driver list: 1. Compliance & Security, 2. Functionality and Performance Advantage, 3. Resilience, 4. Data & AI Agility, 5. Business Community Strength, 6. Cost Optimization by Tech driven, 7. CSP region EOL or IDC retirement, 8. Tech stack consistency for simplified operation, 9. Modernization
 
-Read the quip <URL>, summary the <Industry Name> items under "Customer Highlights" section, catelog results as Tag, then industry, <customer name><description>. Exclude items under "Business Trends and Top Things Having Impact". Save result to highlight_insights.md under current folder.
+Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Security Opp', 'Analytics Opp', 'CO Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
+Here is the output example: ExampleCompany(XL) launched self-developed CMS platform test env (including TSP, SoC, PKI, OTA, etc.) in FRA with $20K MRR. SA is working on AWS security services integration (WAF, GuardDuty, Security Hub) to enhance platform security. SA Yang.
 
-Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Security Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to migration_insights.md under current folder.
 
-Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'MIH Opp', 'HPC Opp', 'CO Opp', 'Security Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to xxx_insights.md under current folder.
+Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'MIH Opp', 'HPC Opp', 'CO Opp', 'Security Opp', 'Analytics Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder.
+Here is the output example: MyCompany(L) deployed self-developed ERP system in Frankfurt region for its global business expansion with $70K ARR. SA Alex.
+
+Read the quip <URL>, Please summary items tagged '[CNR', 'BJS', 'ZHY', 'C2C,', '[C2C', 'G2C,', '[G2C', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to cnr_insights.md under current folder.
+Here is the output example: NewCompany(C2C, L, ISV) migrated their CI/CD system from Azure China to AWS ZHY with $5K MRR, implementing Spot instances within EKS to achieve 50% cost savings compared to Azure. 
 ```
 
 4. 阅读研究报告
@@ -138,6 +143,12 @@ A young Asian woman with fair skin and delicate facial features walks slowly alo
 
 8. Email handing
 ```
-I need write a email draft to remind SA Org leadership notifing each team the China Region KPI, do not send email, just put the email in my draft folder
+I need write a email draft to remind SA mgr to notify each team China Region KPI, do not send email, just put the email in my draft folder
 
+```
+
+9. 用 Q CLI 进行 AWS 文档查询
+```
+# 安装 Amazon Document MCP Server 
+AWS中国区域的专线流量价格是每 GB 多少钱? 注意AWS中国区域价格计算器的地址：https://calculator.amazonaws.cn/ 和中国区文档地址 https://www.amazonaws.cn/?nc1=h_ls
 ```
