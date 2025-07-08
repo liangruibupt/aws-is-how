@@ -442,7 +442,8 @@
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
       - [使用 Amazon Lambda 快速部署 Streamable HTTP Github MCP Server](https://aws.amazon.com/cn/blogs/china/deploy-streamable-http-github-mcp-server-using-amazon-lambda/  l)
     - [MCP Server hosting]
-      - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
+      - [GCR MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
+      - [GCR Sample MCP Servers](https://github.com/aws-samples/aws-mcp-servers-samples)
       - [AWS MCP Server List](https://github.com/awslabs/mcp/)
       - [Introducing AWS Serverless MCP Server blog](https://aws.amazon.com/cn/blogs/compute/introducing-aws-serverless-mcp-server-ai-powered-development-for-modern-applications/)
       - [Playwright MCP Server on Fargate](https://www.notion.so/Playwright-MCP-Server-AWS-Fargate-EKS-1de408b04809808c8604f56fef3cf565?pvs=4)
@@ -466,6 +467,7 @@
       - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
       - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
       - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
+      - [Strands Agent Example](https://github.com/aws-samples/sample_agentic_ai_strands)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
