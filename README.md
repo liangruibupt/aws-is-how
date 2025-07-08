@@ -397,22 +397,29 @@
     - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
 
 - [Software Develop Lifecycle]
-  - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
-  - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
-  - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
-  - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
-  - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
-  - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
-  - [云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
-  - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
-  - [The open source AIOps and Alert platform](https://www.keephq.dev/)
-  - [Prompt Driven Development Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/2a43bf02-09e5-4cb0-9b86-dd61fd285808/zh-CN)
+  - [Amazon Q Developer]
+    - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
+    - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
+    - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
+    - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
+    - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
+    - [Prompt Driven Development Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/2a43bf02-09e5-4cb0-9b86-dd61fd285808/zh-CN)
+  - [Claude Code]
+    - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
+    - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
+  - [GenDev for RE]
+    - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
+    - [The open source AIOps and Alert platform](https://www.keephq.dev/)
+    - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
+  - [SDE Agent and Dev Agent]
+    - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
+    - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
 
 - [Agent and workflow]
-  - [Flexible and powerful framework for managing multiple AI - Multi-Agent-Orchestrator](https://github.com/awslabs/multi-agent-orchestrator)
+  - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
     - [Design multi-agent orchestration with reasoning](https://aws.amazon.com/cn/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/)
-  - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
-  - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
+  - [LangChain and LangGraph]
+    - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
     - [使用 Dify 集成 Bedrock Claude3 开启生成式 AI 之旅](https://aws.amazon.com/cn/blogs/china/get-started-with-generative-ai-by-integrating-bedrock-claude3-with-dify/)
     - [Claude for BRClient and Dify: Prompt, RAG, and Agent](https://studio.us-east-1.prod.workshops.aws/workshops/public/6204b3c5-2adb-45fc-8d55-b7db668f274e)
@@ -421,20 +428,22 @@
     - [基于 Amazon EKS 部署高可用 Dify](https://aws.amazon.com/cn/blogs/china/deploying-high-availability-dify-based-on-amazon-eks/)
     - [Dify deployment on serverless](https://github.com/aws-samples/sample-serverless-dify-stack)
     - [硅基流动+DeepSeek+Dify全栈开发实战](https://catalog.us-east-1.prod.workshops.aws/workshops/87e070e2-5621-4c94-9285-529514ec4454/en-US)
-  - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
-  - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
-  - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
-  - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
-  - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
-  - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
-  - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
-  - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
+  - [Other Agent tools]
+    - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
+    - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
+  - [Computer use and brower use]
+    - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
+  - [Amazon Bedrock Agents]
+    - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
+    - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
+    - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
       - [使用 Amazon Lambda 快速部署 Streamable HTTP Github MCP Server](https://aws.amazon.com/cn/blogs/china/deploy-streamable-http-github-mcp-server-using-amazon-lambda/  l)
     - [MCP Server hosting]
       - [MCP on Serverless](https://github.com/aws-samples/sample-serverless-mcp-server)
+      - [AWS MCP Server List](https://github.com/awslabs/mcp/)
       - [Introducing AWS Serverless MCP Server blog](https://aws.amazon.com/cn/blogs/compute/introducing-aws-serverless-mcp-server-ai-powered-development-for-modern-applications/)
       - [Playwright MCP Server on Fargate](https://www.notion.so/Playwright-MCP-Server-AWS-Fargate-EKS-1de408b04809808c8604f56fef3cf565?pvs=4)
       - [Automating AI-assisted container deployments with the Amazon ECS MCP Server](https://aws.amazon.com/cn/blogs/containers/automating-ai-assisted-container-deployments-with-amazon-ecs-mcp-server/)
@@ -450,14 +459,13 @@
   - [E2B]
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
-  - [Agent protocal]
-    - [Agent to Agent - A2A]
-    - [Strands Agents](https://strandsagents.com/0.1.x/)
+  - [Agent to Agent - A2A]
+    - [A2A protocol](https://a2aprotocol.ai/)
+  - [Strands Agents](https://strandsagents.com/0.1.x/)
       - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
       - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
       - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
       - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
-
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
