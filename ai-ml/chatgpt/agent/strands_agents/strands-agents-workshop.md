@@ -121,8 +121,8 @@ API_KEY=123456
 ddb_table=mcp_user_config_table
 
 #使用vim 打开.env文件编辑： ⚠️如果在x86服务器做编译，可以设置PLATFORM=linux/amd64，否则跨平台编译速度慢好几倍
+#⚠️注意⚠️ mem0只在CDK部署有，本地开发模式下面，一般是禁用。因为CDK 部署会创建 Aurora PostgreSQL Serverless 数据库，但是本地环境不会进行创建，需要手工创建，并且设置若干环境变量POSTGRESQL_HOST 环境变量，才能生效，具体参考 sample_agentic_ai_strands/src/custom_tools/mem0_memory.py
 ENABLE_MEM0=true
-
 # 如果使用海外区
 LLM_MODEL=anthropic.claude-3-7-sonnet-20250219-v1:0
 EMBEDDING_MODEL=amazon.titan-embed-text-v2:0
