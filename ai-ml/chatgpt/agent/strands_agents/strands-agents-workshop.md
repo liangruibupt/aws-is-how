@@ -40,16 +40,17 @@ bash cdk-build-and-deploy.sh
 cdk deploy McpEcsFargateStack
 ```
 - MCP Server 的修改: MCP Server 可以直接在界面上添加，会保存到dynamodb里
+  
 - China Region
-```json
-// 中国区安装需要设置docker 镜像源
-// 使用 sudo vim /etc/docker/daemon.json,添加代理
+  ```json
+  // 中国区安装需要设置docker 镜像源
+  // 使用 sudo vim /etc/docker/daemon.json,添加代理
 
-{
-"registry-mirrors":["https://mirror-docker.bosicloud.com"],
-"insecure-registries":["mirror-docker.bosicloud.com"]
-}
-```
+  {
+  "registry-mirrors":["https://mirror-docker.bosicloud.com"],
+  "insecure-registries":["mirror-docker.bosicloud.com"]
+  }
+  ```
 
 - 完全删除所有创建的资源：
 ```bash
@@ -308,9 +309,12 @@ python strands_agent_test/similarity_search_demo.py
   }
 }
 ```
-```json
-我需要画一幅关于厄尔尼诺的图片,这里是提示词"Educational diagram showing El Niño formation mechanism in the Pacific Ocean, with labeled arrows showing wind patterns, ocean currents, and temperature changes. Show normal conditions on top and El Niño conditions on bottom. Include thermocline changes, warm water pool movement, and atmospheric circulation. Scientific style with clear labels in English language. Make sure the text is clear and readable".
-```
+
+测试：
+
+  ```json
+  我需要画一幅关于厄尔尼诺的图片,这里是提示词: "Educational diagram showing El Niño formation mechanism in the Pacific Ocean, with labeled arrows showing wind patterns, ocean currents, and temperature changes. Show normal conditions on top and El Niño conditions on bottom. Include thermocline changes, warm water pool movement, and atmospheric circulation. Scientific style with clear labels in English language. Make sure the text is clear and readable".
+  ```
 
 ### 修改 MCP Server 配置
 
