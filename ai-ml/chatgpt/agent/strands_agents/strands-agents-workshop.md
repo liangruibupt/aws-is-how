@@ -10,7 +10,21 @@
 2. 绘制图片 MCP Server 使用了MiniMax-AI，注意需要充值才能让 API Key 正确工作。并且替换其他工具，需要修改 System Prompt `使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入`
 
 3. 用户提示词中，为了保证图片，动画视频等可以被加载可以采用
-```
+```bash
+# System Prompt
+你是一位深度研究助手，请在单次回复中使用可用的最大计算能力，尽可能深入、批判性和创造性地思考，花费必要的时间和资源来得出最高质量的答案。
+在收到工具结果后，仔细反思其质量并在继续之前确定最佳下一步。使用你的思考基于这些新信息进行规划和迭代，然后采取最佳的下一步行动。
+## 你必须遵循以下指令:
+– 每次先使用mem0_memory工具查看是否有与当前问题相关的历史记忆，如果有，提取记忆用于当前任务的内容生成。
+– 请使用time 工具确定你现在的真实时间.
+– 如果引用了其他网站的图片，确保图片真实存在，并且可以访问。
+– 如果用户要求编写动画，请使用Canvas js编写，嵌入到HTML代码文件中。
+– 生成代码文件请直接上传到s3，并返回访问链接给用户
+– 使用text_similarity_search工具去检索厄尔尼诺相关的知识
+– 如有需要，也可以使用Web search去检索更多外部信息
+– 使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入
+
+# User Prompt
 你是一名大学地理教师，请为大学生设计一堂关于厄尔尼诺现象的互动课程，需要：1. 搜索最新气候数据和相关新闻事件；2. 搜索教学资源和真实图片，确保图片可以被加载；3. 使用工具绘制课程中的需要的演示插图；4. 生成完整课程方案，包括教学目标、活动设计、教学资源和评估方法；5. 设计一个展示厄尔尼诺现象的酷炫动画并和搜索到的相关信息一起集成到HTML课件中，确保动画视频可以被打开和加载。
 ```
 
@@ -63,19 +77,28 @@ aws logs delete-log-group --log-group-name "/ecs/mcp-app-backend"
 注意：某些资源（如 DynamoDB 表）可能有删除保护，需要手动确认删除。
 ```
 
-7. System Prompt
-```
-你是一位深度研究助手，请在单次回复中使用可用的最大计算能力，尽可能深入、批判性和创造性地思考，花费必要的时间和资源来得出最高质量的答案。
+7. 更多测试场景
+```bash
+# System Prompt
+你是一位旅游规划助手，请在单次回复中使用可用的最大计算能力，尽可能深入和创造性地思考，花费必要的时间和资源来制定出客户定制化的旅游计划
 在收到工具结果后，仔细反思其质量并在继续之前确定最佳下一步。使用你的思考基于这些新信息进行规划和迭代，然后采取最佳的下一步行动。
 ## 你必须遵循以下指令:
 – 每次先使用mem0_memory工具查看是否有与当前问题相关的历史记忆，如果有，提取记忆用于当前任务的内容生成。
 – 请使用time 工具确定你现在的真实时间.
-– 如果引用了其他网站的图片，确保图片真实存在，并且可以访问。
 – 如果用户要求编写动画，请使用Canvas js编写，嵌入到HTML代码文件中。
+- 使用html render 制作精美的 HTML 文件
 – 生成代码文件请直接上传到s3，并返回访问链接给用户
-– 使用text_similarity_search工具去检索厄尔尼诺相关的知识
 – 如有需要，也可以使用Web search去检索更多外部信息
-– 使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入
+– 如果引用了其他网站的图片和视频，确保图片和视频真实存在，并且可以访问。
+
+# User Prompt
+请帮我制定从北京到上海的高铁5日游计划，2025年5月1日-5日，要求：
+- 交通：往返高铁选早上出发（5.1）和晚上返程（5.5）
+- 必去：迪士尼全天（推荐3个最值得玩的项目+看烟花）
+- 推荐：3个上海经典景点（含外滩夜景）和1个特色街区
+- 住宿：迪士尼住周边酒店，市区住地铁站附近
+- 附：每日大致花费预估和景点预约提醒
+需要制作成精美的 HTML
 ```
 
 ## 本地开发环境安装
@@ -166,6 +189,22 @@ docker-compose up -d --build
     }
 }
 ```
+
+- exa_search
+```json
+{
+  "mcpServers": {
+    "exa-search": {
+      "command": "npx",
+      "args": ["-y","exa-mcp-server"],
+      "env": {
+        "EXA_API_KEY": "<替换成您自己申请的api key>"
+      }
+    }
+  }
+}
+```
+
 - HTML RENDER
 ```bash
 git clone https://github.com/aws-samples/aws-mcp-servers-samples.git
@@ -187,11 +226,78 @@ curl http://127.0.0.1:5006/
 }
 ```
 
+- S3-Upload
+```bash
+cd aws-mcp-servers-samples/s3_upload_server
+uv sync
+```
+```json
+{
+"mcpServers": {
+    "s3-upload": {
+        "command": "uv",
+        "args": [
+        "--directory", "/home/ubuntu/aws-mcp-servers-samples/s3_upload_server",
+        "run", "src/server.py"
+        ],
+        "env": {
+            "AWS_REGION":"us-west-2",
+            "AWS_ACCESS_KEY_ID":"AWS_ACCESS_KEY_ID",
+            "AWS_SECRET_ACCESS_KEY":"AWS_SECRET_ACCESS_KEY",
+            "EXPIRE_HOURS":"168"
+            }
+        }   
+    }
+}
+```
+
+- OpenSearch向量知识库 Retrieve (可选)
+```bash
+cd aws-mcp-servers-samples/aos-mcp-serverless
+bash aos_serverless_mcp_setup.sh --McpAuthToken xxxx --OpenSearchUsername xxxx --OpenSearchPassword xxxx --EmbeddingApiToken xxxx
+
+# Testing
+export API_ENDPOINT=https://xxxxx/Prod/mcp
+export AUTH_TOKEN=xxxx
+    
+python strands_agent_test/similarity_search_demo.py
+```
+
+注意关于参数 - EmbeddingApiToken
+```
+嵌入 API 令牌（需要从嵌入服务提供商获取），如果不用 中国区域 Silicon Flow BGE-M3 Embedding API，用 Bedrock 自带的 Embedding model，那么这里是不是填写Bedrock API keys就可以？代码会采用哪个Bedrock 上的Embedding model模型呢？
+```
+
+- MiniMax-AI draw picture
+```json
+{
+  "mcpServers": {
+    "MiniMax": {
+      "command": "uvx",
+      "args": [
+        "minimax-mcp",
+        "-y"
+      ],
+      "env": {
+        "MINIMAX_API_KEY":"更改成实际账号key",
+        "MINIMAX_MCP_BASE_PATH": "/app",
+        "MINIMAX_API_HOST": "https://api.minimax.chat",
+        "MINIMAX_API_RESOURCE_MODE": ""
+      }
+    }
+  }
+}
+```
+
 ## 清理
 ```bash
-# HTML RENDER
+# HTML RENDER MCP
 cd aws-mcp-servers-samples/html_render_service/web
 docker-compose down
+
+# AOS MCP
+cd aws-mcp-servers-samples/aos-mcp-serverless
+bash cleanup_aos_mcp.sh
 
 # Frontend
 cd sample_agentic_ai_strands/react_ui
