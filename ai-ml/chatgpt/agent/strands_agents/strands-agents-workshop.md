@@ -9,7 +9,7 @@
 
 2. 绘制图片 MCP Server 使用了MiniMax-AI，注意需要充值才能让 API Key 正确工作。并且替换其他工具，需要修改 System Prompt `使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入`
 
-3. 用户提示词中，为了保证图片，动画视频等可以被加载可以采用
+3. 用户提示词中，为了保证图片，动画视频等可以被加载可以修改提示词
 ```bash
 # System Prompt
 你是一位深度研究助手，请在单次回复中使用可用的最大计算能力，尽可能深入、批判性和创造性地思考，花费必要的时间和资源来得出最高质量的答案。
@@ -19,21 +19,17 @@
 – 请使用time 工具确定你现在的真实时间.
 – 如果引用了其他网站的图片，确保图片真实存在，并且可以访问。
 – 如果用户要求编写动画，请使用Canvas js编写，嵌入到HTML代码文件中。
-– 生成代码文件请直接上传到s3，并返回访问链接给用户
+– 可以使用s3-upload 进行文件上传，生成代码文件请直接上传到s3，并返回访问链接给用户
 – 使用text_similarity_search工具去检索厄尔尼诺相关的知识
 – 如有需要，也可以使用Web search去检索更多外部信息
 – 使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入
+- 使用html render 制作精美的 HTML 文件
 
 # User Prompt
 你是一名大学地理教师，请为大学生设计一堂关于厄尔尼诺现象的互动课程，需要：1. 搜索最新气候数据和相关新闻事件；2. 搜索教学资源和真实图片，确保图片可以被加载；3. 使用工具绘制课程中的需要的演示插图；4. 生成完整课程方案，包括教学目标、活动设计、教学资源和评估方法；5. 设计一个展示厄尔尼诺现象的酷炫动画并和搜索到的相关信息一起集成到HTML课件中，确保动画视频可以被打开和加载。
 ```
 
-4.  知识库 MCP Server Retrieve: 用于从OpenSearch向量知识库中检索知识。
-- Demo方案提供的MCP Server, 参考 [sample mcp servers guidance](https://github.com/aws-samples/aws-mcp-servers-samples) 进行安装。 
-- 目前有一个 issue [aos_serverless_mcp_setup.sh failed with Cannot find module '../lib/aos-public-setup-stack'](https://github.com/aws-samples/aws-mcp-servers-samples/issues/97)。  
-- EmbeddingApiToken: 嵌入 API 令牌（需要从嵌入服务提供商获取），如果不用 中国区域 Silicon Flow BGE-M3 Embedding API，用 Bedrock 自带的 Embedding model，那么这里是不是填写Bedrock API keys就可以，但是代码会采用哪个Bedrock Embedding model模型呢？
-
-5. 生产环境 CDK 部署
+## 生产环境 CDK 部署
 - **代码修改之后，或者.env 修改，需要重新部署**
 ```bash
 # 例如，修改了ENABLE_MEM0=false 为 ENABLE_MEM0=true
@@ -54,15 +50,8 @@ cdk deploy McpEcsFargateStack
 "insecure-registries":["mirror-docker.bosicloud.com"]
 }
 ```
-- .env 的配置不要忽略
-```bash
-# 其他配置
-CLIENT_TYPE=strands
-MAX_TURNS=200
-INACTIVE_TIME=1440
-```
 
-6. 完全删除所有创建的资源：
+- 完全删除所有创建的资源：
 ```bash
 # 删除 CDK Stack
 cdk destroy
@@ -178,8 +167,8 @@ docker-compose down
 docker-compose up -d --build
 ```
 
-7. 添加 MCP Servers
-- time
+## 添加 MCP Servers
+### time
 ```json
 {
     "mcpServers": 
@@ -190,7 +179,7 @@ docker-compose up -d --build
 }
 ```
 
-- exa_search
+### exa_search
 ```json
 {
   "mcpServers": {
@@ -205,7 +194,7 @@ docker-compose up -d --build
 }
 ```
 
-- HTML RENDER
+### HTML RENDER
 ```bash
 git clone https://github.com/aws-samples/aws-mcp-servers-samples.git
 cd aws-mcp-servers-samples/html_render_service/web
@@ -226,7 +215,7 @@ curl http://127.0.0.1:5006/
 }
 ```
 
-- S3-Upload
+### S3-Upload
 ```bash
 cd aws-mcp-servers-samples/s3_upload_server
 uv sync
@@ -251,7 +240,11 @@ uv sync
 }
 ```
 
-- OpenSearch向量知识库 Retrieve (可选)
+### OpenSearch向量知识库 Retrieve (可选)
+
+1. Demo方案提供的MCP Server, 参考 [sample mcp servers guidance](https://github.com/aws-samples/aws-mcp-servers-samples) 进行安装。 
+2. 目前有一个 issue [aos_serverless_mcp_setup.sh failed with Cannot find module '../lib/aos-public-setup-stack'](https://github.com/aws-samples/aws-mcp-servers-samples/issues/97)。  
+
 ```bash
 cd aws-mcp-servers-samples/aos-mcp-serverless
 bash aos_serverless_mcp_setup.sh --McpAuthToken xxxx --OpenSearchUsername xxxx --OpenSearchPassword xxxx --EmbeddingApiToken xxxx
@@ -263,12 +256,17 @@ export AUTH_TOKEN=xxxx
 python strands_agent_test/similarity_search_demo.py
 ```
 
-注意关于参数 - EmbeddingApiToken
+3. 注意关于参数 - EmbeddingApiToken
 ```
 嵌入 API 令牌（需要从嵌入服务提供商获取），如果不用 中国区域 Silicon Flow BGE-M3 Embedding API，用 Bedrock 自带的 Embedding model，那么这里是不是填写Bedrock API keys就可以？代码会采用哪个Bedrock 上的Embedding model模型呢？
 ```
 
-- MiniMax-AI draw picture
+### MiniMax-AI draw picture
+
+[参考的MiniMax Image Generation and Minimax MCP 文档](https://www.minimax.io/platform/document/wUkQTKNUuC8mJttAvXqCxG3D?key=67b7148bb74bdd7459f7b6ad#TefbP0tsj45CmK3zNUEdMAx5)
+
+**注意： Warning**: The API key needs to match the host. If an error "API Error: invalid api key" occurs, please check your api host: Global Host：https://api.minimax.io； Mainland Host：https://api.minimaxi.com
+
 ```json
 {
   "mcpServers": {
@@ -280,16 +278,45 @@ python strands_agent_test/similarity_search_demo.py
       ],
       "env": {
         "MINIMAX_API_KEY":"更改成实际账号key",
-        "MINIMAX_MCP_BASE_PATH": "/app",
-        "MINIMAX_API_HOST": "https://api.minimax.chat",
-        "MINIMAX_API_RESOURCE_MODE": ""
+        "MINIMAX_MCP_BASE_PATH": "/home/ubuntu/sample_agentic_ai_strands/tmp",
+        "MINIMAX_API_HOST": "https://api.minimax.io",
+        "MINIMAX_API_RESOURCE_MODE": "url"
       }
     }
   }
 }
 ```
 
-## 清理
+### Amazon Nova Canvas
+
+[Seamless AI Image Generation with Nova Canvas & MCP](https://community.aws/content/2w2d61S13rTkNsIBaXB6aBfsDRo/seamless-ai-image-generation-with-nova-canvas-mcp?lang=en)
+
+```json
+{
+  "mcpServers": {
+    "awslabs.nova-canvas-mcp-server": {
+      "command": "uvx",
+      "args": ["awslabs.nova-canvas-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "bedrock_demo",
+        "AWS_REGION": "us-east-1",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+```json
+我需要画一幅关于厄尔尼诺的图片,这里是提示词"Educational diagram showing El Niño formation mechanism in the Pacific Ocean, with labeled arrows showing wind patterns, ocean currents, and temperature changes. Show normal conditions on top and El Niño conditions on bottom. Include thermocline changes, warm water pool movement, and atmospheric circulation. Scientific style with clear labels in English language. Make sure the text is clear and readable".
+```
+
+### 修改 MCP Server 配置
+
+修改 MCP Server 的配置，比如之前的 API Key 填错了之类的。当前 MCP 配置没有保存在 mcp.json 中，而是在 DynamoDB mcp_user_config_table ，因此需要直接修改 mcp_user_config_table table 对应user id 对应的 items
+
+## 清理本地开发环境
 ```bash
 # HTML RENDER MCP
 cd aws-mcp-servers-samples/html_render_service/web
@@ -308,4 +335,5 @@ cd sample_agentic_ai_strands/
 bash stop_all.sh
 
 # Delete DynamoDB table mcp_user_config_table
+aws dynamodb delete-table --table-name mcp_user_config_table
 ```
