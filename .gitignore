@@ -3,3 +3,6 @@
 # Strands Agents temporary state files
 ai-ml/chatgpt/agent/strands_agents/repl_state/
 repl_state/
+.DS_Store
+.DS_Store?
+**/.DS_Store
