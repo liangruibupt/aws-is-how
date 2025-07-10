@@ -317,6 +317,34 @@ python strands_agent_test/similarity_search_demo.py
   我需要画一幅关于厄尔尼诺的图片,这里是提示词: "Educational diagram showing El Niño formation mechanism in the Pacific Ocean, with labeled arrows showing wind patterns, ocean currents, and temperature changes. Show normal conditions on top and El Niño conditions on bottom. Include thermocline changes, warm water pool movement, and atmospheric circulation. Scientific style with clear labels in English language. Make sure the text is clear and readable".
   ```
 
+### Amazon Location Services MCP
+- [aws-location-mcp-server](https://github.com/awslabs/mcp/tree/main/src/aws-location-mcp-server)
+  ```json
+  {
+    "mcpServers": {
+      "awslabs.aws-location-mcp-server": {
+          "command": "uvx",
+          "args": ["awslabs.aws-location-mcp-server@latest"],
+          "env": {
+            "AWS_PROFILE": "your-aws-profile",
+            "AWS_REGION": "us-east-1",
+            "FASTMCP_LOG_LEVEL": "ERROR"
+          },
+          "disabled": false,
+          "autoApprove": []
+      }
+    }
+  }   
+  ```
+- Testing: 
+```bash
+# 欧美地区回答率和正确率较高
+Find me the location of the largest zoo in Seattle.
+Find the largest shopping mall in New York City.
+# 中国地区回答率较差
+Find the top view restaurant in Shanghai.
+```
+
 ### 修改 MCP Server 配置
 
 修改 MCP Server 的配置，比如之前的 API Key 填错了之类的。当前 MCP 配置没有保存在 mcp.json 中，而是在 DynamoDB mcp_user_config_table ，因此需要直接修改 mcp_user_config_table table 对应user id 对应的 items
