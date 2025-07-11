@@ -5,6 +5,7 @@ from strands_tools import mem0_memory, use_llm
 import asyncio
 import logging
 import boto3
+import pprint
 
 # Define a custom tool as a Python function using the @tool decorator
 @tool
@@ -116,6 +117,18 @@ memory_agent = Agent(
     callback_handler=None  # Disable default callback handler
 )
 
+# Monitoring the agent usage
+def monitoring_demo(message):
+    simple_agent = Agent(
+        model=bedrock_model,
+        tools=[calculator, current_time, python_repl, letter_counter, shell],
+        system_prompt="You are a helpful assistant that provides clear and informative responses.",
+        callback_handler=None
+    )
+
+    result = simple_agent(message)
+    pprint.pprint(result.metrics.get_summary())
+    pprint.pprint(result.metrics.accumulated_usage)
 
 if __name__ == "__main__":
     # Ask the agent a question that uses the available tools
@@ -135,14 +148,17 @@ if __name__ == "__main__":
     """
 
     # Print all response
-    #agent(message)
+    # agent(message)
+    # print("\n" + "-"*80 + "\n")
 
     # Print only the last response
     # result = agent(message)
     # print(result.message)
+    # print("\n" + "-"*80 + "\n")
 
     # Stream the response
     # asyncio.run(process_streaming_response(message))
+    # print("\n" + "-"*80 + "\n")
     
     # check if response from memory tool
     # asyncio.run(process_streaming_response("What is the time right now? \
@@ -155,16 +171,20 @@ if __name__ == "__main__":
     # export AWS_SESSION_TOKEN=...
 
     # Store a fact
-    memory_agent("I live in San Francisco.", user_id=USER_ID)
+    # memory_agent("I live in San Francisco.", user_id=USER_ID)
+    # print("\n" + "-"*80 + "\n")
 
     # Ask a follow-up that uses memory
-    memory_agent("What's the weather like today?", user_id=USER_ID)
+    # memory_agent("What's the weather like today?", user_id=USER_ID)
+    # print("\n" + "-"*80 + "\n")
 
     # Ask another contextual question
-    memory_agent("What about tomorrow?", user_id=USER_ID)
+    # memory_agent("What about tomorrow?", user_id=USER_ID)
+    # print("\n" + "-"*80 + "\n")
 
     # Check what the agent remembers
-    memory_agent("What do you remember about me?", user_id=USER_ID)
+    # memory_agent("What do you remember about me?", user_id=USER_ID)
+    # print("\n" + "-"*80 + "\n")
     
     ## sample output
 # ╭────────────────── Memory for user current_user ──────────────────╮
@@ -205,3 +225,6 @@ if __name__ == "__main__":
 # │ │              │                                                    │              │              │              │ }             │ │
 # │ └──────────────┴────────────────────────────────────────────────────┴──────────────┴──────────────┴──────────────┴───────────────┘ │
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+    monitoring_demo(message)
+    print("\n" + "-"*80 + "\n")
