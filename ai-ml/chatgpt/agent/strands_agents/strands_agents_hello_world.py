@@ -1,6 +1,7 @@
 from strands import Agent, tool
 from strands_tools import calculator, current_time, python_repl, shell
 from strands.models import BedrockModel
+from strands_tools import mem0_memory, use_llm
 import asyncio
 import logging
 import boto3
@@ -56,8 +57,14 @@ bedrock_model = BedrockModel(
 #               tools=[calculator, current_time, python_repl, letter_counter, shell],
 #               callback_handler=callback_handler)
 
+# Create an agent without the callback handler
+# agent = Agent(model=bedrock_model, 
+#               tools=[calculator, current_time, python_repl, letter_counter, shell],
+#               callback_handler=None  # Disable default callback handler
+#               )
+
 agent = Agent(model=bedrock_model, 
-              tools=[calculator, current_time, python_repl, letter_counter, shell],
+              tools=[calculator, current_time, python_repl, letter_counter, shell, mem0_memory],
               callback_handler=None  # Disable default callback handler
               )
 
@@ -77,25 +84,124 @@ async def process_streaming_response(query):
             # Print tool usage information
             print(f"\n[Tool use delta for: {event['current_tool_use']['name']}]")
 
-# Ask the agent a question that uses the available tools
-message = """
-I have 6 requests:
 
-1. What is the time right now?
-2. Calculate 3111696 / 74088
-3. What is the square root of 1764?
-4. Tell me how many letter R's are in the word "strawberry" 🍓
-5. What operating system am I using?
-6. Output a script that does what we just spoke about!
-   Use your python tools to confirm that the script works before outputting it
-"""
+# Create a memory-enabled Strands agent
+# Please run `pip install mem0ai` to use the mem0_memory tool
+# Create an agent with Memory， This mem0_memory tool is for short-term memory
 
-# Print all response
-#agent(message)
+MEMORY_SYSTEM_PROMPT = "You are a helpful assistant that remembers user preferences."
 
-# Print only the last response
-# result = agent(message)
-# print(result.message)
+# MEMORY_SYSTEM_PROMPT = f"""You are a personal assistant that maintains context by remembering user previous interaction.
+# Capabilities:
+# - Store new information using mem0_memory tool (action="store")
+# - Retrieve relevant memories (action="retrieve")
+# - List all memories (action="list")
+# - Remove existing memories using memory IDs (action="delete")
+# - Retrieve specific memories by memory ID (action="get")
+# - Provide personalized responses
 
-# Stream the response
-asyncio.run(process_streaming_response(message))
+# Key Rules:
+# - Always include user_id in tool calls
+# - Be conversational and natural in responses
+# - Format output clearly
+# - Acknowledge stored information
+# - Only share relevant information
+# - Politely indicate when information is unavailable
+# """
+
+memory_agent = Agent(
+    model=bedrock_model,
+    system_prompt=MEMORY_SYSTEM_PROMPT,
+    tools=[mem0_memory, current_time, use_llm],
+    callback_handler=None  # Disable default callback handler
+)
+
+
+if __name__ == "__main__":
+    # Ask the agent a question that uses the available tools
+    # Define user identity
+    USER_ID = "mem0_user"
+
+    message = """
+    I have 6 requests:
+
+    1. What is the time right now?
+    2. Calculate 3111696 / 74088
+    3. What is the square root of 1764?
+    4. Tell me how many letter R's are in the word "strawberry" 🍓
+    5. What operating system am I using?
+    6. Output a script that does what we just spoke about!
+    Use your python tools to confirm that the script works before outputting it
+    """
+
+    # Print all response
+    #agent(message)
+
+    # Print only the last response
+    # result = agent(message)
+    # print(result.message)
+
+    # Stream the response
+    # asyncio.run(process_streaming_response(message))
+    
+    # check if response from memory tool
+    # asyncio.run(process_streaming_response("What is the time right now? \
+    #                                     Then Tell me how many letter R's are in the word 'strawberry'? \
+    #                                     Finally, What operating system am I using?"))
+    
+    # Test the memory-enabled agent, you need first run `aws sts get-session-token --duration-seconds 86400 --profile global_ruiliang`
+    # export AWS_ACCESS_KEY_ID=...
+    # export AWS_SECRET_ACCESS_KEY=...
+    # export AWS_SESSION_TOKEN=...
+
+    # Store a fact
+    memory_agent("I live in San Francisco.", user_id=USER_ID)
+
+    # Ask a follow-up that uses memory
+    memory_agent("What's the weather like today?", user_id=USER_ID)
+
+    # Ask another contextual question
+    memory_agent("What about tomorrow?", user_id=USER_ID)
+
+    # Check what the agent remembers
+    memory_agent("What do you remember about me?", user_id=USER_ID)
+    
+    ## sample output
+# ╭────────────────── Memory for user current_user ──────────────────╮
+# │ User lives in San Francisco.                                     │
+# ╰──────────────────────────────────────────────────────────────────╯
+# ╭───────────────────────── Memory Stored ──────────────────────────╮
+# │                          Memory Stored                           │
+# │ ┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ │
+# │ ┃ Operat… ┃ Content                                            ┃ │
+# │ ┡━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩ │
+# │ │ ADD     │ Lives in San Francisco                             │ │
+# │ └─────────┴────────────────────────────────────────────────────┘ │
+# ╰──────────────────────────────────────────────────────────────────╯
+# ╭────────────────────────────────────────────────────────── Memories List ───────────────────────────────────────────────────────────╮
+# │                                                              Memories                                                              │
+# │ ┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┓ │
+# │ ┃ ID                ┃ Memory                                             ┃ Created At         ┃ User ID      ┃ Metadata          ┃ │
+# │ ┡━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━┩ │
+# │ │ c901c88e-2da5-48… │ Lives in San Francisco                             │ 2025-07-09T22:47:… │ current_user │ {                 │ │
+# │ │                   │                                                    │                    │              │   "location":     │ │
+# │ │                   │                                                    │                    │              │ "San Francisco",  │ │
+# │ │                   │                                                    │                    │              │   "type":         │ │
+# │ │                   │                                                    │                    │              │ "user_location"   │ │
+# │ │                   │                                                    │                    │              │ }                 │ │
+# │ └───────────────────┴────────────────────────────────────────────────────┴────────────────────┴──────────────┴───────────────────┘ │
+# ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+# ╭────────────────────────────────────────────────────────── Search Results ──────────────────────────────────────────────────────────╮
+# │                                                           Search Results                                                           │
+# │ ┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓ │
+# │ ┃ ID           ┃ Memory                                             ┃ Relevance    ┃ Created At   ┃ User ID      ┃ Metadata      ┃ │
+# │ ┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩ │
+# │ │ c901c88e-2d… │ Lives in San Francisco                             │ 1.822979569… │ 2025-07-09T… │ current_user │ {             │ │
+# │ │              │                                                    │              │              │              │   "location": │ │
+# │ │              │                                                    │              │              │              │ "San          │ │
+# │ │              │                                                    │              │              │              │ Francisco",   │ │
+# │ │              │                                                    │              │              │              │   "type":     │ │
+# │ │              │                                                    │              │              │              │ "user_locati… │ │
+# │ │              │                                                    │              │              │              │ }             │ │
+# │ └──────────────┴────────────────────────────────────────────────────┴──────────────┴──────────────┴──────────────┴───────────────┘ │
+# ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

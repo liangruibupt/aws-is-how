@@ -345,6 +345,39 @@ Find the largest shopping mall in New York City.
 Find the top view restaurant in Shanghai.
 ```
 
+### 高德 MCP
+
+- 申请高德开放平台 API Key，以及[参考文档进行 MCP Server 配置](https://lbs.amap.com/api/mcp-server/summary)
+- mcp 配置
+```json
+//Streamable HTTP 方式接入 MCP 服务
+{
+  "mcpServers": {
+    "amap-maps-streamableHTTP": {
+      "url": "https://mcp.amap.com/mcp?key=您在高德官网上申请的key"
+    }
+  }
+}
+
+//SSE 方式接入 MCP 服务
+{
+  "mcpServers": {
+    "amap-amap-sse": {
+      "url": "https://mcp.amap.com/sse?key=您在高德官网上申请的key"
+    }
+  }
+}
+```
+- 测试
+```bash
+你是一名旅游行程规划助手，我五一计划去昆明游玩4天的旅行攻略。
+帮我制作旅行攻略，考虑出行时间和路线，以及天气状况路线规划。需要覆盖昆明著名旅游景点，包括城市打卡点和风景名胜。
+制作网页地图自定义绘制旅游路线和位置。
+网页使用简约美观页面风格，景区图片以卡片展示。
+同一天行程景区之间我想打车前往。
+行程规划结果生成文件名 kmTravel.html。
+```
+
 ### 修改 MCP Server 配置
 
 修改 MCP Server 的配置，比如之前的 API Key 填错了之类的。当前 MCP 配置没有保存在 mcp.json 中，而是在 DynamoDB mcp_user_config_table ，因此需要直接修改 mcp_user_config_table table 对应user id 对应的 items
