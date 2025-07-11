@@ -468,6 +468,7 @@
       - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
       - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
       - [Strands Agent Example](https://github.com/aws-samples/sample_agentic_ai_strands)
+      - [agenticai-memory-patterns-with-strands-sdk](https://builder.aws.com/content/2z6ITJXONL0Lu9nrkWopb3mLIQU/agenticai-memory-patterns-with-strands-sdk)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
