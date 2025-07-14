@@ -349,23 +349,37 @@ Find the top view restaurant in Shanghai.
 
 - 申请高德开放平台 API Key，以及[参考文档进行 MCP Server 配置](https://lbs.amap.com/api/mcp-server/summary)
 - mcp 配置
+```bash
+npx -y @amap/amap-maps-mcp-server
+```
 ```json
-//Streamable HTTP 方式接入 MCP 服务
 {
-  "mcpServers": {
-    "amap-maps-streamableHTTP": {
-      "url": "https://mcp.amap.com/mcp?key=您在高德官网上申请的key"
+    "mcpServers": {
+        "amap-maps": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@amap/amap-maps-mcp-server"
+            ],
+            "env": {
+                "AMAP_MAPS_API_KEY": ""
+            }
+        }
     }
-  }
 }
 
-//SSE 方式接入 MCP 服务
 {
-  "mcpServers": {
-    "amap-amap-sse": {
-      "url": "https://mcp.amap.com/sse?key=您在高德官网上申请的key"
+    "mcpServers": {
+        "amap-maps": {
+            "command": "uvx",
+            "args": [
+                "amap-mcp"
+            ],
+            "env": {
+                "AMAP_KEY": ""
+            }
+        }
     }
-  }
 }
 ```
 - 测试

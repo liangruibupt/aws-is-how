@@ -75,7 +75,7 @@ List all the narrative tagged [CNR] and contains BJS or ZHY. Output as below for
 Read the quip <URL>, summary the migration items, catelog results as Migration Driver, then industry, <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
 Migration Driver list: 1. Compliance & Security, 2. Functionality and Performance Advantage, 3. Resilience, 4. Data & AI Agility, 5. Business Community Strength, 6. Cost Optimization by Tech driven, 7. CSP region EOL or IDC retirement, 8. Tech stack consistency for simplified operation, 9. Modernization
 
-Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Security Opp', 'Analytics Opp', 'CO Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
+Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Compliance & Security Opp', 'Analytics Opp', 'CO Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
 Here is the output example: ExampleCompany(XL) launched self-developed CMS platform test env (including TSP, SoC, PKI, OTA, etc.) in FRA with $20K MRR. SA is working on AWS security services integration (WAF, GuardDuty, Security Hub) to enhance platform security. SA Yang.
 
 
