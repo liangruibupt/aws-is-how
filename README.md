@@ -1797,7 +1797,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   
 ### Resilience
 - [Verify the resilience of your workloads using Chaos Engineering](https://aws.amazon.com/cn/blogs/architecture/verify-the-resilience-of-your-workloads-using-chaos-engineering/)
-- 
+- [用Q CLI进行智能韧性测试](https://aws.amazon.com/cn/blogs/china/conducting-intelligent-chaos-engineering-experiments-with-the-amazon-q-developer-cli/)
+  - [Beyond Traditional Resilience: Revolutionizing Resilience Testing with Amazon Q](https://catalog.us-east-1.prod.workshops.aws/workshops/1d64fc33-a113-4cfa-9348-92c777506647/en-US)
 
 ## Game
 ### GameLift
