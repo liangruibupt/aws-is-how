@@ -75,15 +75,21 @@ List all the narrative tagged [CNR] and contains BJS or ZHY. Output as below for
 Read the quip <URL>, summary the migration items, catelog results as Migration Driver, then industry, <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
 Migration Driver list: 1. Compliance & Security, 2. Functionality and Performance Advantage, 3. Resilience, 4. Data & AI Agility, 5. Business Community Strength, 6. Cost Optimization by Tech driven, 7. CSP region EOL or IDC retirement, 8. Tech stack consistency for simplified operation, 9. Modernization
 
-Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Compliance & Security Opp', 'Analytics Opp', 'CO Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to migration_insights.md under current folder.
-Here is the output example: ExampleCompany(XL) launched self-developed CMS platform test env (including TSP, SoC, PKI, OTA, etc.) in FRA with $20K MRR. SA is working on AWS security services integration (WAF, GuardDuty, Security Hub) to enhance platform security. SA Yang.
 
+Read the quip <URL>, Please summary items tagged '[CNR', 'BJS', 'ZHY', 'C2C,', '[C2C', 'G2C,', '[G2C', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to cnr_insights.md under current folder.
+Here is the output example: NewCompany(C2C, L, ISV) migrated their CI/CD system from Azure China to AWS ZHY with $5K MRR, implementing Spot instances within EKS to achieve 50% cost savings compared to Azure. 
+
+帮我构建一个计划,保存到quip_plan.md 到 ~/Downloads/mac_sync/。计划内容：
+- 第一步读取 quip <URL>, 先提取 2025 年 6月的内容
+- 第二步分析新的 quip, 提取打了'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Compliance & Security Opp', 'Analytics Opp', 'CO Opp'的内容。
+- 第三步把结果按照指定格式<customer name><description><AWS Region Names><ARR or MRR><SA Name> 创建。这里有一个输出参考案例: ExampleCompany(XL) launched self-developed CMS platform test env (including TSP, SoC, PKI, OTA, etc.) in FRA with $20K MRR. SA is working on AWS security services integration (WAF, GuardDuty, Security Hub) to enhance platform security. SA Yang.
+- 第四步，把第二步的结果保存到 ~/Downloads/mac_sync/migration_insights.md，一个条目一行.
+
+然后按照quip_plan.md 一步一步执行。
 
 Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'MIH Opp', 'HPC Opp', 'CO Opp', 'Security Opp', 'Analytics Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder.
 Here is the output example: MyCompany(L) deployed self-developed ERP system in Frankfurt region for its global business expansion with $70K ARR. SA Alex.
 
-Read the quip <URL>, Please summary items tagged '[CNR', 'BJS', 'ZHY', 'C2C,', '[C2C', 'G2C,', '[G2C', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to cnr_insights.md under current folder.
-Here is the output example: NewCompany(C2C, L, ISV) migrated their CI/CD system from Azure China to AWS ZHY with $5K MRR, implementing Spot instances within EKS to achieve 50% cost savings compared to Azure. 
 ```
 
 4. 阅读研究报告
