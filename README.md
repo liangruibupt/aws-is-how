@@ -344,6 +344,7 @@
   - [Why Claude 4 API Hits Rate Limits: Token Burndown Explained](https://community.aws/content/2xVZmCM5E7XXw0yqTEGgXYxRowk/bedrock-claude-4-burndown-rates)
   - [Use AWS PrivateLink to set up private access to Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/use-aws-privatelink-to-set-up-private-access-to-amazon-bedrock/)
   - [基于 Amazon SageMaker 和 LLaMA-Factory 打造一站式无代码模型微调部署平台 Model Hub](https://aws.amazon.com/cn/blogs/china/a-one-stop-code-free-model-fine-tuning-deployment-platform-based-on-sagemaker-and-llama-factory/)
+  - [Bedrock API Key](ai-ml/chatgpt/bedrock/bedrock_APIKey_demo.py)
   - [Bedrock 多模型接入 – Bedrock Connector 部署与使用指南](https://aws.amazon.com/cn/blogs/china/bedrock-multi-model-access-bedrock-connector-deployment-and-usage-guide/)
     - [Bedrock Connector github repo](https://github.com/aws-samples/sample-connector-for-bedrock?tab=readme-ov-file)
     - [Customize Bedrock endpoint with VPC Interface Endpoint for L4 layer proxy](https://github.com/AutoJunjie/customize-bedrock-endpoint)
@@ -418,6 +419,8 @@
 - [Agent and workflow]
   - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
     - [Design multi-agent orchestration with reasoning](https://aws.amazon.com/cn/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/)
+  - [AWS announces new innovations for building AI agents at AWS Summit New York 2025](https://www.aboutamazon.com/news/aws/aws-summit-agentic-ai-innovations-2025?utm_source=internalcomms&utm_medium=atoz)
+    - [Enabling customers to deliver production-ready AI agents at scale](https://aws.amazon.com/blogs/machine-learning/enabling-customers-to-deliver-production-ready-ai-agents-at-scale/)
   - [LangChain and LangGraph]
     - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
@@ -435,6 +438,7 @@
     - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
   - [Amazon Bedrock Agents]
     - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
+      - [Bedrock Agent hands on](ai-ml/chatgpt/agent/bedrock_agents)
     - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
     - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
   - [MCP](https://github.com/modelcontextprotocol/servers)
@@ -462,13 +466,18 @@
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
   - [Agent to Agent - A2A]
     - [A2A protocol](https://a2aprotocol.ai/)
-  - [Strands Agents](https://strandsagents.com/0.1.x/)
+  - [Strands Agents](https://strandsagents.com/)
+      - [Strands Agent Hands On](ai-ml/chatgpt/agent/strands_agents)
       - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
       - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
       - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
       - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
       - [Strands Agent Example](https://github.com/aws-samples/sample_agentic_ai_strands)
       - [agenticai-memory-patterns-with-strands-sdk](https://builder.aws.com/content/2z6ITJXONL0Lu9nrkWopb3mLIQU/agenticai-memory-patterns-with-strands-sdk)
+      - [Strands Agents SDK 1.0](https://aws.amazon.com/blogs/opensource/introducing-strands-agents-1-0-production-ready-multi-agent-orchestration-made-simple/)
+  - [Bedrock AgentCore]
+    - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
+    - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
