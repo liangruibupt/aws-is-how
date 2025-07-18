@@ -5,12 +5,17 @@
 - [中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
 
 ## 注意事项
-1. 配置在EC2上的 IAM Profile 需要有 ECS, ECR, IAM, S3, Bedrock, CloudFromation, Secrets Manager, System Manager, DynamoDB 的权限，否则运行
+1. Install package
+```bash
+source venv/bin/activate
+pip install --upgrade strands-agents strands-agents-tools strands-agents-builder
+```  
+2. 配置在EC2上的 IAM Profile 需要有 ECS, ECR, IAM, S3, Bedrock, CloudFromation, Secrets Manager, System Manager, DynamoDB 的权限，否则运行
 `bash cdk-build-and-deploy.sh` 会报告Permission Error
 
-2. 绘制图片 MCP Server 使用了MiniMax-AI，注意需要充值才能让 API Key 正确工作。并且替换其他工具，需要修改 System Prompt `使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入`
+1. 绘制图片 MCP Server 使用了MiniMax-AI，注意需要充值才能让 API Key 正确工作。并且替换其他工具，需要修改 System Prompt `使用minimax绘图工具会返回一个公开访问的URL，在HTML用可以直接嵌入`
 
-3. 用户提示词中，为了保证图片，动画视频等可以被加载可以修改提示词
+2. 用户提示词中，为了保证图片，动画视频等可以被加载可以修改提示词
 ```bash
 # System Prompt
 你是一位深度研究助手，请在单次回复中使用可用的最大计算能力，尽可能深入、批判性和创造性地思考，花费必要的时间和资源来得出最高质量的答案。

@@ -28,8 +28,18 @@
 # ```
 
 from strands import Agent, tool
-from strands_tools import calculator
+from strands_tools import calculator, http_request, calculator, file_write, python_repl, journal, handoff_to_user
 from strands_tools import swarm, agent_graph, workflow
+from strands.models import BedrockModel
+from strands.tools.mcp import MCPClient
+import boto3
+
+session = boto3.Session(profile_name="global_ruiliang", region_name='us-west-2')
+bedrock_model = BedrockModel(
+    model_id="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+    boto_session=session,
+    temperature=0.3,
+)
 
 # Worker Agent A: Data Processor
 @tool
@@ -258,6 +268,46 @@ def multi_agent_sme_system():
     solution = solve_complex_problem(complex_problem, sme_orchestrator)
     print(solution)
 
+# Convert the agents into tools
+@tool
+def research_analyst(query: str) -> str:
+    research_analyst_agent = Agent(
+        model=bedrock_model,
+        system_prompt="You are a research specialist who gathers and analyzes information about local startup markets",
+        tools=[http_request, calculator, file_write, python_repl]
+    )
+    response = research_analyst_agent(query)
+    return str(response)
+
+@tool
+def travel_advisor(query: str) -> str:
+    aws_location_client = MCPClient(
+        lambda: stdio_client(StdioServerParameters(command="uvx", args=["awslabs.aws-location-mcp-server@latest"]))
+    )
+    travel_advisor_agent = Agent(
+        model=bedrock_model,
+        tools=[aws_location_client, http_request, journal, handoff_to_user],
+        system_prompt="""
+        You are a travel expert who helps with trip planning and destination advice. 
+        - You can use the aws_location_client tool for place search and geographical coordinates. 
+        - Ask them questions with the handoff_to_user tool when you need more information."""
+    )
+    response = travel_advisor_agent(query)
+    return str(response)
+
+def agents_as_tools_pattern():
+    # Orchestrator naturally delegates to specialists
+    executive_assistant = Agent( 
+        model=bedrock_model,
+        tools=[research_analyst, travel_advisor] 
+    )
+    user_query="""
+    I have a business meeting in Portland city in Oregon, United States next week. 
+    Suggest a nice place to stay near the local startup scene, and suggest 2 startups to visit.
+    """
+    result = executive_assistant(user_query)
+    print(result)
+
 if __name__ == "__main__":
     # supervisor_pattern()
     # print("\n" + "-"*80 + "\n")
@@ -269,9 +319,11 @@ if __name__ == "__main__":
     # print("\n" + "-"*80 + "\n")
     
     # workflow_pattern()
+    # print("\n" + "-"*80 + "\n")
+    
+    # multi_agent_sme_system()
+    # print("Multi-agent patterns executed successfully.")
+    
     print("\n" + "-"*80 + "\n")
-    
-    multi_agent_sme_system()
-    
-    print("Multi-agent patterns executed successfully.")
-    
+    agents_as_tools_pattern()
+    print("agents_as_tools patterns executed successfully.")
