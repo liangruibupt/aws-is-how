@@ -29,6 +29,11 @@ toolbox list
 toolbox registry add s3://amzn-mcp-prod-registry-bucket-us-west-2/tools.json
 toolbox install amzn-mcp
 
+toolbox update --check
+
+toolbox update amzn-mcp
+
+# toolbox uninstall amzn-mcp
 ```
 
 ## Quip API Token configuration
