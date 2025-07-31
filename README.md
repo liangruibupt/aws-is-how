@@ -1720,6 +1720,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [CSV tools](https://github.com/secretGeek/AwesomeCSV)
 
 - [Python GUI lib](https://mp.weixin.qq.com/s/sqXCSgrMMcXCA1lxbAucsA)
+- [VSCode Web](https://code.visualstudio.com/docs/setup/vscode-web)
+- [打造云端 IDE：VSCode Server 在 AWS 上的一键部署指南 | Amazon Web Services](https://aws.amazon.com/cn/blogs/china/building-a-cloud-ide-a-one-click-deployment-guide-for-vscode-server-on-aws/)
 
 ### Infra as Code
 
