@@ -339,6 +339,7 @@
   - [Amazon Bedrock Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a4bdb007-5600-4368-81c5-ff5b4154f518/en-US)
   - [Amazon Bedrock Development Workshop - GCR](https://catalog.us-east-1.prod.workshops.aws/workshops/5501fb48-e04b-476d-89b0-43a7ecaf1595/en-US)
   - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
+  - [GenAI Serverless ImmersionDay](https://immersionday.com/genai-serverless)
   - [streaming response from Amazon Bedrock with FastAPI on AWS Lambda](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/fastapi-response-streaming/README.md)
   - [为生成式 AI 产品打造持续的卓越用户体验——跨区域高可用弹性解决方案](https://aws.amazon.com/cn/blogs/china/creating-a-consistently-great-user-experience-for-generative-ai-products/)
   - [Why Claude 4 API Hits Rate Limits: Token Burndown Explained](https://community.aws/content/2xVZmCM5E7XXw0yqTEGgXYxRowk/bedrock-claude-4-burndown-rates)
@@ -699,6 +700,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [如何在 Amazon EMR Serverless 上执行纯 SQL 文件？](https://aws.amazon.com/cn/blogs/china/how-to-execute-plain-sql-files-on-amazon-emr-serverless-solution/)
   
 - [Workflow]
+  - [Apache DolphinScheduler 进行数据任务调度](https://aws.amazon.com/cn/blogs/china/data-task-scheduling-using-apache-dolphinscheduler-on-aws/)
+  - [AWS 部署无服务器 DolphinScheduler](https://aws.amazon.com/cn/blogs/china/aws-deployment-serverless-dolphinscheduler/)
+  - [Using Amazon EMR Serverless, Athena, and Dolphin Scheduler to build an on-cloud and off-cloud data synchronization solution](https://medium.com/@ApacheDolphinScheduler/using-amazon-emr-serverless-athena-and-dolphin-scheduler-to-build-an-on-cloud-and-off-cloud-data-5964031503ee)
 
 - [Install and Delopyment]
   - [How can I permanently install a Spark or Scala-based library on an Amazon EMR cluster](https://aws.amazon.com/premiumsupport/knowledge-center/emr-permanently-install-library/)
@@ -1259,7 +1263,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Data migration tool - 3rd party tool
 - [Migration-Data-From-AliCloud](migration/DataMigration/Migration-Data-From-AliCloud.md)
-- [XData])migration/DataMigration/XData.md
+- [XData](migration/DataMigration/XData.md)
 - [Flink CDC Database Data](https://segmentfault.com/a/1190000041009658/en)
 - [使用 RisingWave 实现 MSK，Kinesis，RDS MySQL 实时数据同步](https://aws.amazon.com/cn/blogs/china/real-time-data-synchronization-of-msk-kinesis-rds-and-mysql-using-risingwave/)
 
@@ -1798,6 +1802,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Reducing the Scope of Impact with Cell-Based Architecture](https://docs.aws.amazon.com/wellarchitected/latest/reducing-scope-of-impact-with-cell-based-architecture/reducing-scope-of-impact-with-cell-based-architecture.html)
 - [依托亚马逊云科技构建韧性应用](https://aws.amazon.com/cn/blogs/china/build-resilient-applications-with-aws/)
+- [基于 Amazon Q Developer CLI 进行智能混沌工程实验](https://aws.amazon.com/cn/blogs/china/conducting-intelligent-chaos-engineering-experiments-with-the-amazon-q-developer-cli/)
 
 #### RDS HA/DR
 - [Amazon RDS Under the Hood: Multi-AZ](database/rds/mysql/Amazon-RDS-Multi-AZ-Under-the-Hood.md)
