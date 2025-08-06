@@ -1,6 +1,19 @@
 # vllm Quickstart
 The quickstart is based on [official vllm guide]([https://](https://docs.vllm.ai/en/latest/getting_started/quickstart.html)) and modify with deploy [Qwen2.5-72B-Instruct](https://huggingface.co/Qwen/Qwen2.5-72B-Instruct) and Single-Node Multi-GPU (tensor parallel inference) on AWS g6e.12xlarge (4 L40s Nvida L40S Tensor Core GPUs, 192GiB GPU Memory, 3800GB nvme instance store SSD)
 
+- [vllm Quickstart](#vllm-quickstart)
+  - [Installation](#installation)
+  - [Offline\_Batched\_Inference](#offline_batched_inference)
+  - [OpenAI\_Compatible\_Server](#openai_compatible_server)
+  - [Run\_Deepseek\_R1](#run_deepseek_r1)
+  - [Open\_WebUI](#open_webui)
+  - [Qwen QwQ-32B](#qwen-qwq-32b)
+  - [Qwen3](#qwen3)
+  - [Generative\_AI\_on\_EKS\_using\_NVIDIA\_GPU\_workshop](#generative_ai_on_eks_using_nvidia_gpu_workshop)
+    - [Architecture](#architecture)
+  - [OpenAI\_gpt\_oss\_20b\_gpt\_oss\_120b](#openai_gpt_oss_20b_gpt_oss_120b)
+  - [Clean up](#clean-up)
+
 ## Installation
 1. Launch a EC2 g6e.12xlarge instance with AMI `Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.6.0 (Ubuntu 22.04)`
 2. install vllm
@@ -60,7 +73,7 @@ python -c "import torch; print(torch.version.cuda)"
 python -c 'import torch; print(torch.cuda.is_available())'
 ```
 
-## Offline Batched Inference
+## Offline_Batched_Inference
 1. quick test based on [offline_inference basic guide](https://github.com/vllm-project/vllm/blob/main/examples/offline_inference/basic/README.md)
     ```
     git clone https://github.com/vllm-project/vllm.git
@@ -128,7 +141,7 @@ Access to model mistralai/Mixtral-8x7B-Instruct-v0.1 is restricted. You must hav
     YOUR_ACCESS_TOKEN
     ```
 
-## OpenAI-Compatible Server
+## OpenAI_Compatible_Server
 1. start hosting
     ```bash
     vllm serve Qwen/Qwen2.5-1.5B-Instruct
@@ -177,7 +190,7 @@ Access to model mistralai/Mixtral-8x7B-Instruct-v0.1 is restricted. You must hav
     ```
 
 
-## Run Deepseek-R1
+## Run_Deepseek_R1
 1. Single GPU hosting
     ```bash
     vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-7B  --max-model-len 32768
@@ -213,7 +226,7 @@ Access to model mistralai/Mixtral-8x7B-Instruct-v0.1 is restricted. You must hav
         }'
     ```
 
-## Open WebUI
+## Open_WebUI
 Chatting with DeepSeek under Linux by Command Line is not very friendly. We can install Open WebUI as a web interface. 
 
 1. Install Open WebUI on the same g6e.12xlarge.
@@ -404,12 +417,7 @@ vllm serve Qwen/Qwen3-30B-A3B --enable-reasoning --reasoning-parser deepseek_r1 
         }'
 ```
 
-## Clean up
-```bash
-rm -rf ~/.cache/huggingface/hub/models--<org>--<model_name>
-```
-
-## Generative AI on EKS using NVIDIA GPU workshop
+## Generative_AI_on_EKS_using_NVIDIA_GPU_workshop
 [Workshop link](https://catalog.workshops.aws/genai-on-eks/en-US)
 
 ### Architecture
@@ -420,3 +428,230 @@ rm -rf ~/.cache/huggingface/hub/models--<org>--<model_name>
 2. While Ray can be deployed directly on Kubernetes and KubeRay Operator provides significant advantages for production environments: (1) Zero-downtime upgrades for model updates (2) High availability through external Redis for Global Control Service (3) Automated cluster lifecycle management (4) Native Kubernetes integration with custom resources (5) Simplified scaling and monitoring
 
 3. Observability Stack with Prometheus, Grafana, NVIDIA DCGM Monitoring Dashboard and Ray Monitoring. It also provides the vLLM Model Monitoring with vLLM-specific metrics collection, track token generation and latency metrics, monitor inference queue and processing times, monitor worker node health, analyze task scheduling efficiency
+
+
+## OpenAI_gpt_oss_20b_gpt_oss_120b
+1. Host [gpt-oss-20b](https://huggingface.co/openai/gpt-oss-20b) and [gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b) on G5.2xlarge (1 NVIDIA A10G Tensor Core GPU, 32 GPU Memeory) instance with OS AMI 'Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.7 (Ubuntu 22.04)'
+
+```bash
+nvidia-smi
+
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.172.08             Driver Version: 570.172.08     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |
+|  0%   30C    P8              9W /  300W |       0MiB /  23028MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+nvcc --version
+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2025 NVIDIA Corporation
+Built on Fri_Feb_21_20:23:50_PST_2025
+Cuda compilation tools, release 12.8, V12.8.93
+Build cuda_12.8.r12.8/compiler.35583870_0
+
+# setup python environment
+
+Ppython3 --versionython 3.10.12
+# Because gpt-oss==0.1.0 requires Python >=3.12, <3.13 and vllm==0.10.1+gptoss depends on gpt-oss==0.1.0
+# need install Python 3.12
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.12 -y
+
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 2
+sudo update-alternatives --config python3
+python3 --version
+
+# setup the virtual environment
+sudo apt install python3-venv -y --only-upgrade
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.local/bin/env
+
+python3.12 -m venv myenv
+source myenv/bin/activate
+python --version
+
+uv pip install -U transformers kernels torch setuptools
+python -c 'import torch; print(torch.cuda.current_device())'
+
+uv pip install --pre vllm==0.10.1+gptoss \
+    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
+    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
+    --index-strategy unsafe-best-match
+
+vllm serve openai/gpt-oss-20b
+
+Report error assert self.vllm_flash_attn_version == 3, (
+(EngineCore_0 pid=4124) ERROR 08-06 01:53:31 [core.py:718]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore_0 pid=4124) ERROR 08-06 01:53:31 [core.py:718] AssertionError: Sinks are only supported in FlashAttention 3
+google了一下，类似这个问题，从官方文档看，offical支持上面GPU 跑vLLM
+https://github.com/vllm-project/vllm/issues/22279
+https://docs.vllm.ai/projects/recipes/en/latest/OpenAI/GPT-OSS.html 
+
+In vLLM, you can run it on NVIDIA H100, H200, B200 as well as MI300x, MI325x, MI355x and Radeon AI PRO R9700.
+```
+
+2. Host [gpt-oss-20b](https://huggingface.co/openai/gpt-oss-20b) and [gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b) on G6e.12xlarge (4 NVIDIA L40S Tensor Core GPU, 192 GPU Memeory) instance with OS AMI 'Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.7 (Ubuntu 22.04)'
+
+```bash
+uv pip install --pre vllm==0.10.1+gptoss \
+    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
+    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
+    --index-strategy unsafe-best-match
+
+vllm serve openai/gpt-oss-20b --tensor-parallel-size 4 --async-scheduling --port 8000 --host 0.0.0.0
+
+# Same error as G5
+(VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559]     assert self.vllm_flash_attn_version == 3, (
+(VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559] AssertionError: Sinks are only supported in FlashAttention 3
+```
+
+3. Host [gpt-oss-20b](https://huggingface.co/openai/gpt-oss-20b) and [gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b) on p5.48xlarge (8 NVIDIA H100 Tensor Core GPU, 640 GPU Memeory) instance with OS AMI 'Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.7 (Ubuntu 22.04)'
+
+```bash
+nvidia-smi
+Wed Aug  6 02:43:14 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.172.08             Driver Version: 570.172.08     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:53:00.0 Off |                    0 |
+| N/A   31C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:64:00.0 Off |                    0 |
+| N/A   32C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:75:00.0 Off |                    0 |
+| N/A   30C    P0             66W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:86:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA H100 80GB HBM3          On  |   00000000:97:00.0 Off |                    0 |
+| N/A   35C    P0            119W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA H100 80GB HBM3          On  |   00000000:A8:00.0 Off |                    0 |
+| N/A   33C    P0            119W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA H100 80GB HBM3          On  |   00000000:B9:00.0 Off |                    0 |
+| N/A   34C    P0            123W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA H100 80GB HBM3          On  |   00000000:CA:00.0 Off |                    0 |
+| N/A   31C    P0            115W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+nvcc --version
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2025 NVIDIA Corporation
+Built on Fri_Feb_21_20:23:50_PST_2025
+Cuda compilation tools, release 12.8, V12.8.93
+Build cuda_12.8.r12.8/compiler.35583870_0
+
+python3 --version
+Python 3.10.12
+# Because gpt-oss==0.1.0 requires Python >=3.12, <3.13 and vllm==0.10.1+gptoss depends on gpt-oss==0.1.0
+# need install Python 3.12
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.12 -y
+
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 2
+sudo update-alternatives --config python3
+python3 --version
+
+# setup the virtual environment
+sudo apt install python3-venv -y --only-upgrade
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.local/bin/env
+
+python3.12 -m venv myenv
+source myenv/bin/activate
+python --version
+
+uv pip install --pre vllm==0.10.1+gptoss \
+    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
+    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
+    --index-strategy unsafe-best-match
+
+# H100 & H200¶
+# openai/gpt-oss-20b should run in single GPU
+vllm serve openai/gpt-oss-20b --async-scheduling --port 8000 --host 0.0.0.0
+
+# gpt-oss-120b will fit in a single H100/H200, but scaling it to higher TP sizes can help with throughput
+vllm serve openai/gpt-oss-120b --tensor-parallel-size 8 --async-scheduling --port 8000 --host 0.0.0.0
+```
+
+4. Testing
+```bash
+    curl http://localhost:8000/v1/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "openai/gpt-oss-20b",
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "prompt": "San Francisco is a"
+        }'
+
+    curl http://localhost:8000/v1/chat/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "openai/gpt-oss-120b",
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "messages": [{"role": "user", "content": "我要玩24点游戏，我手里的牌是5、5、7、9，穷举所有的可能性。总结你的答案，一次性输出"}],
+            "stream": true
+        }'
+
+    curl http://localhost:8000/v1/chat/completions \
+        -H "Content-Type: application/json" \
+        -d '{
+            "model": "openai/gpt-oss-120b",
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "messages": [{"role": "user", "content": "Please reason step by step, and put your final answer within \boxed{}. AI是否取代人类？AI和人类如何共处？"} ]
+        }'
+```
+
+## Clean up
+```bash
+rm -rf ~/.cache/huggingface/hub/models--<org>--<model_name>
+```

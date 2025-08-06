@@ -76,7 +76,7 @@ Read the quip <URL>, summary the migration items, catelog results as Migration D
 Migration Driver list: 1. Compliance & Security, 2. Functionality and Performance Advantage, 3. Resilience, 4. Data & AI Agility, 5. Business Community Strength, 6. Cost Optimization by Tech driven, 7. CSP region EOL or IDC retirement, 8. Tech stack consistency for simplified operation, 9. Modernization
 
 
-Read the quip <URL>, Please summary items tagged '[CNR', 'BJS', 'ZHY', 'C2C,', '[C2C', 'G2C,', '[G2C', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR>. Save result to cnr_insights.md under current folder.
+Read the quip <URL>, Please summary items tagged '[CNR', 'BJS', 'ZHY', 'C2C,', '[C2C', 'G2C,', '[G2C', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Owner>. Save result to cnr_insights.md under current folder.
 Here is the output example: NewCompany(C2C, L, ISV) migrated their CI/CD system from Azure China to AWS ZHY with $5K MRR, implementing Spot instances within EKS to achieve 50% cost savings compared to Azure. 
 
 阅读 quip link <Quip URL>, 
