@@ -251,6 +251,19 @@
         }
       }
     }
+
+    {
+      "mcpServers": {
+        "exa": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "mcp-remote",
+            "https://mcp.exa.ai/mcp?exaApiKey=<替换注册号的-exa-api-key>"
+          ]
+        }
+      }
+    }
   ```
 
 - 创建 Web Browser MCP Server
