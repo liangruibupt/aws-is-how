@@ -431,6 +431,8 @@ vllm serve Qwen/Qwen3-30B-A3B --enable-reasoning --reasoning-parser deepseek_r1 
 
 
 ## OpenAI_gpt_oss_20b_gpt_oss_120b
+The doc link: https://amzn-chn.feishu.cn/wiki/Wf0EwSxb2ixczxkbDyjclv07nvg
+
 1. Host [gpt-oss-20b](https://huggingface.co/openai/gpt-oss-20b) and [gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b) on G5.2xlarge (1 NVIDIA A10G Tensor Core GPU, 32 GPU Memeory) instance with OS AMI 'Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.7 (Ubuntu 22.04)'
 
 ```bash
@@ -519,9 +521,9 @@ uv pip install --pre vllm==0.10.1+gptoss \
 vllm serve openai/gpt-oss-20b --tensor-parallel-size 4 --async-scheduling --port 8000 --host 0.0.0.0
 
 # Same error as G5
-(VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559]     assert self.vllm_flash_attn_version == 3, (
+rker TP2 pid=4268) ERROR 08-06 02:11:23 [(VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559]     assert self.vllm_flash_attn_version == 3, (
 (VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(VllmWorker TP2 pid=4268) ERROR 08-06 02:11:23 [multiproc_executor.py:559] AssertionError: Sinks are only supported in FlashAttention 3
+(VllmWomultiproc_executor.py:559] AssertionError: Sinks are only supported in FlashAttention 3
 ```
 
 3. Host [gpt-oss-20b](https://huggingface.co/openai/gpt-oss-20b) and [gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b) on p5.48xlarge (8 NVIDIA H100 Tensor Core GPU, 640 GPU Memeory) instance with OS AMI 'Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.7 (Ubuntu 22.04)'
