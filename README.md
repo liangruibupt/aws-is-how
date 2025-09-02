@@ -443,13 +443,16 @@
   - [Computer use and brower use]
     - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
   - [Amazon Bedrock Agents]
-    - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
-      - [Bedrock Agent hands on](ai-ml/chatgpt/agent/bedrock_agents)
-    - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
-    - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
     - [基于MCP构建端到端的AI-Agent应用工作坊 - Bendrock Agents, Strands Agents, AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
+      - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
+      - [Bedrock Agent hands on](ai-ml/chatgpt/agent/bedrock_agents)
+      - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
+      - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
+    - [Bedrock AgentCore]
+      - [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
+      - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
+      - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
       - [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
-    - [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
