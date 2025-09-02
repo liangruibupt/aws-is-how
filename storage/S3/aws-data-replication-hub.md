@@ -1,5 +1,11 @@
 # Use the aws-data-transfer-hub to sync S3 data between Global bucket and China region bucket
 
+- [Use the aws-data-transfer-hub to sync S3 data between Global bucket and China region bucket](#use-the-aws-data-transfer-hub-to-sync-s3-data-between-global-bucket-and-china-region-bucket)
+  - [Option 1: Deploy user data-transfer-hub portal and create job on the portal](#option-1-deploy-user-data-transfer-hub-portal-and-create-job-on-the-portal)
+  - [Start to create your `Ningxia (cn-northwest-1)` region S3 bucket data to destination - `Ireland (eu-west-1)` region S3 bucket task.](#start-to-create-your-ningxia-cn-northwest-1-region-s3-bucket-data-to-destination---ireland-eu-west-1-region-s3-bucket-task)
+  - [Option 2: Just want to run data-transfer-hub job](#option-2-just-want-to-run-data-transfer-hub-job)
+  - [Test case: Enable the S3 SSE in both source and destination bucket to verify the replication job and read the data in destination](#test-case-enable-the-s3-sse-in-both-source-and-destination-bucket-to-verify-the-replication-job-and-read-the-data-in-destination)
+
 
 The [aws-data-transfer-hub](https://github.com/awslabs/data-transfer-hub) is a reliable, secure, scalable AWS solution that enabled structured and unstructured data replication from different sources to AWS.
 
