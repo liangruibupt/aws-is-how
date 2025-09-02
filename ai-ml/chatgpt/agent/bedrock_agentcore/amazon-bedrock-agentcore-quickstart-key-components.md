@@ -37,3 +37,9 @@ cd sample-strands-in-5-minutes/bedrock-agentcore-integration/workshop/cn
 
 ### Run the samples
 1. Run the Notebook: ai-ml/chatgpt/agent/bedrock_agentcore/01-agentcore-code-interpreter.ipynb
+```
+在 Strands Agent 中使用自定义 AgentCore Code Interpreter 这一步可能会导致代码运行失败，是因为可能pip install之后，没有再次执行代码，所以可以添加一条提示词：Then retry execute code again after you install package successfully.
+然后再次执行这个 block
+```
+
+2. 
