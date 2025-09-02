@@ -1,7 +1,7 @@
 # Strands Agents workshop
 
 - [实验地址](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/30-lab-3)
-- [Github - sample_agentic_ai_strands](https://github.com/aws-samples/sample_agentic_ai_strands)
+- [Github - sample_agentic_ai_strands - 包括 Bedrock Agent, Strands Agent, Bedrock AgentCore](https://github.com/aws-samples/sample_agentic_ai_strands)
 - [中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
 
 ## 注意事项
