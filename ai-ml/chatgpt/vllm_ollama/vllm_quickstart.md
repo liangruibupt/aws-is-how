@@ -12,6 +12,7 @@ The quickstart is based on [official vllm guide]([https://](https://docs.vllm.ai
   - [Generative\_AI\_on\_EKS\_using\_NVIDIA\_GPU\_workshop](#generative_ai_on_eks_using_nvidia_gpu_workshop)
     - [Architecture](#architecture)
   - [OpenAI\_gpt\_oss\_20b\_gpt\_oss\_120b](#openai_gpt_oss_20b_gpt_oss_120b)
+  - [MiniCPM](#minicpm)
   - [Clean up](#clean-up)
 
 ## Installation
@@ -653,7 +654,19 @@ vllm serve openai/gpt-oss-120b --tensor-parallel-size 8 --async-scheduling --por
         }'
 ```
 
+## MiniCPM
+
+https://huggingface.co/openbmb/MiniCPM-V-4_5
+
+```
+git clone https://github.com/tc-mb/vllm.git
+cd vllm
+git checkout Support-MiniCPM-V-4.5
+VLLM_USE_PRECOMPILED=1 pip install --editable .
+```
+
 ## Clean up
 ```bash
 rm -rf ~/.cache/huggingface/hub/models--<org>--<model_name>
 ```
+
