@@ -13,7 +13,7 @@
 https://docs.docker.com/desktop/setup/install/mac-install/
 
 # 配置Pyhton 环境
-uv venv --python 3.11
+uv venv --python 3.13
 source .venv/bin/activate
 uv pip install --upgrade strands-agents strands-agents-tools boto3 bedrock-agentcore bedrock-agentcore-starter-toolkit ddgs mcp playwright
 
