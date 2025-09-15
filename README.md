@@ -875,6 +875,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Monitoring Data Quality in a Data Lake Using Great Expectations and Allure-Built Serverless](https://towardsdatascience.com/monitoring-data-quality-in-a-data-lake-using-great-expectations-and-allure-built-serverless-47fa1791af6a)
 
 - [Data Lineage](analytics/governance/Data_Lineage.md)
+  - [Data Lakehouse数据血缘分析Agent](Agenthttps://github.com/aws-samples/sample-of-lakehouse-data-lineage-with-aws-strands-agents-and-mcp)
 
 ### BI
 - [Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)
