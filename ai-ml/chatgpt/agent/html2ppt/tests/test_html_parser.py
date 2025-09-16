@@ -131,9 +131,28 @@ class TestHTMLParser(unittest.TestCase):
         soup = BeautifulSoup(html, 'lxml')
         p_tag = soup.find('p')
         
-        text = self.parser._extract_text_content(p_tag)
-        self.assertIn('粗体', text)
-        self.assertIn('斜体', text)
+        formatted_text = self.parser._extract_text_content(p_tag)
+        
+        # Check if we got formatted text (list) or plain text (string)
+        if isinstance(formatted_text, list):
+            # New formatted text structure
+            text_parts = [part['text'] for part in formatted_text]
+            full_text = ''.join(text_parts)
+            self.assertIn('粗体', full_text)
+            self.assertIn('斜体', full_text)
+            
+            # Check formatting
+            bold_part = next((part for part in formatted_text if part['text'] == '粗体'), None)
+            self.assertIsNotNone(bold_part)
+            self.assertTrue(bold_part['bold'])
+            
+            italic_part = next((part for part in formatted_text if part['text'] == '斜体'), None)
+            self.assertIsNotNone(italic_part)
+            self.assertTrue(italic_part['italic'])
+        else:
+            # Fallback to old plain text structure
+            self.assertIn('粗体', formatted_text)
+            self.assertIn('斜体', formatted_text)
     
     def test_get_element_styles(self):
         """测试样式提取"""

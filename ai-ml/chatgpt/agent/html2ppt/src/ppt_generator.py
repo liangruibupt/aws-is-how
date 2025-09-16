@@ -37,12 +37,43 @@ class PPTGenerator:
         self.style_mapper = StyleMapper(config)
         self.template_manager = TemplateManager(config)
         
+        # 动态字体大小配置
+        self.font_sizes = self._calculate_adaptive_font_sizes()
+        
         # 统计信息
         self.stats = {
             'slides': 0,
             'images': 0,
             'text_blocks': 0,
             'tables': 0
+        }
+    
+    def _calculate_adaptive_font_sizes(self):
+        """根据幻灯片尺寸计算自适应字体大小"""
+        slide_width = self.layout_config.get('slide_width', 10)  # inches
+        slide_height = self.layout_config.get('slide_height', 7.5)  # inches
+        
+        # 使用更合理的字体大小计算，避免文字超出幻灯片边界
+        # 基于标准演示文稿的最佳实践
+        slide_diagonal = (slide_width ** 2 + slide_height ** 2) ** 0.5
+        
+        # 基础字体大小：使用更保守的计算方式，确保文字适合幻灯片
+        # 标准10x7.5英寸幻灯片的基础字体大小应该在18-24pt之间
+        base_size = max(18, min(24, int(slide_diagonal * 1.8)))
+        
+        # 优化的字体大小层次，确保内容不会超出边界
+        return {
+            'title': base_size + 12,      # 30-36pt (大标题)
+            'h1': base_size + 8,          # 26-32pt (主标题)
+            'h2': base_size + 6,          # 24-30pt (副标题)
+            'h3': base_size + 4,          # 22-28pt (三级标题)
+            'h4': base_size + 2,          # 20-26pt (四级标题)
+            'h5': base_size,              # 18-24pt (五级标题)
+            'h6': base_size - 2,          # 16-22pt (六级标题)
+            'body': base_size,            # 18-24pt (正文)
+            'list': base_size,            # 18-24pt (列表)
+            'code': base_size - 4,        # 14-20pt (代码)
+            'caption': base_size - 6      # 12-18pt (说明文字)
         }
     
     def set_template(self, template_path):
@@ -127,6 +158,45 @@ class PPTGenerator:
         
         return slide_plan
     
+    def _calculate_optimal_font_size(self, formatted_text_parts, font_size_key='body'):
+        """计算最优字体大小，防止文字超出幻灯片边界"""
+        if not formatted_text_parts:
+            return self.font_sizes[font_size_key]
+        
+        # 计算文本总长度
+        total_text_length = sum(len(part.get('text', '')) for part in formatted_text_parts)
+        
+        # 获取基础字体大小
+        base_size = self.font_sizes[font_size_key]
+        
+        # 根据文本长度和类型调整字体大小
+        if font_size_key == 'title':
+            # 标题字体大小调整更保守
+            if total_text_length > 50:
+                return max(base_size - 8, 24)
+            elif total_text_length > 30:
+                return max(base_size - 4, 28)
+            else:
+                return base_size
+        elif font_size_key.startswith('h'):
+            # 标题字体大小调整
+            if total_text_length > 80:
+                return max(base_size - 6, 16)
+            elif total_text_length > 50:
+                return max(base_size - 3, 18)
+            else:
+                return base_size
+        else:
+            # 正文字体大小调整
+            if total_text_length > 300:  # 很长文本
+                return max(base_size - 6, 12)  # 大幅减小字体
+            elif total_text_length > 200:  # 长文本
+                return max(base_size - 4, 14)  # 减小字体
+            elif total_text_length > 100:  # 中等长度文本
+                return max(base_size - 2, 16)  # 稍微减小字体
+            else:
+                return base_size  # 短文本使用标准字体大小
+    
     def _create_slide(self, slide_info, analyzed_content):
         """创建单张幻灯片"""
         slide_type = slide_info.get('type', 'content')
@@ -185,11 +255,12 @@ class PPTGenerator:
         text_frame = textbox.text_frame
         text_frame.text = subtitle
         
-        # 设置副标题样式
+        # 设置副标题样式，使用优化的字体大小
         paragraph = text_frame.paragraphs[0]
         paragraph.alignment = PP_ALIGN.CENTER
+        optimal_size = self._calculate_optimal_font_size([{'text': subtitle}], 'body')
         for run in paragraph.runs:
-            run.font.size = Pt(18)
+            run.font.size = Pt(optimal_size)
             run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_2
     
     def _create_content_slide(self, slide_info, analyzed_content):
@@ -324,23 +395,43 @@ class PPTGenerator:
                 continue
             
             if item_type in ['ul', 'ol']:
-                # 处理列表 - 使用PowerPoint内置的项目符号
+                # 处理列表 - 区分有序和无序列表
                 items = item.get('items', [])
                 for j, list_item in enumerate(items):
                     list_text = list_item.get('text', '').strip()
-                    if list_text:
+                    formatted_text = list_item.get('formatted_text', [])
+                    
+                    if list_text or formatted_text:
                         if paragraph_index == 0:
                             p = text_frame.paragraphs[0]
                         else:
                             p = text_frame.add_paragraph()
                         
-                        # 不添加手动的bullet符号，让PowerPoint处理
-                        p.text = list_text
                         p.level = 0
                         
-                        # 设置列表样式
-                        for run in p.runs:
-                            run.font.size = Pt(18)
+                        # 根据列表类型设置不同的格式
+                        if item_type == 'ol':
+                            # 有序列表 - 添加数字
+                            prefix = f"{j + 1}. "
+                        else:
+                            # 无序列表 - 使用PowerPoint默认项目符号
+                            prefix = ""
+                        
+                        # 使用格式化文本或纯文本
+                        if formatted_text:
+                            # 为有序列表添加数字前缀
+                            if prefix:
+                                prefix_part = [{'text': prefix, 'bold': False, 'italic': False, 'underline': False, 'link': None, 'color': None}]
+                                combined_text = prefix_part + formatted_text
+                                self._add_formatted_text_to_paragraph(p, combined_text, 'list')
+                            else:
+                                self._add_formatted_text_to_paragraph(p, formatted_text, 'list')
+                        else:
+                            p.text = prefix + list_text
+                            # 设置列表样式，使用优化的字体大小
+                            optimal_size = self._calculate_optimal_font_size([{'text': list_text}], 'list')
+                            for run in p.runs:
+                                run.font.size = Pt(optimal_size)
                         
                         paragraph_index += 1
             elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
@@ -350,17 +441,24 @@ class PPTGenerator:
                 else:
                     p = text_frame.add_paragraph()
                 
-                p.text = text
                 p.level = 0
+                formatted_text = item.get('formatted_text', [])
                 
-                # 设置标题样式
-                for run in p.runs:
-                    run.font.bold = True
+                if formatted_text:
                     level = int(item_type[1])
-                    if level <= 2:
-                        run.font.size = Pt(18)
-                    else:
-                        run.font.size = Pt(16)
+                    self._add_formatted_text_to_paragraph(p, formatted_text, f'h{level}')
+                    # 设置标题样式
+                    for run in p.runs:
+                        run.font.bold = True
+                        run.font.size = Pt(self.font_sizes[f'h{level}'])
+                else:
+                    p.text = text
+                    # 设置标题样式，使用优化的字体大小
+                    level = int(item_type[1])
+                    optimal_size = self._calculate_optimal_font_size([{'text': text}], f'h{level}')
+                    for run in p.runs:
+                        run.font.bold = True
+                        run.font.size = Pt(optimal_size)
                 
                 paragraph_index += 1
             elif item_type in ['pre', 'code']:
@@ -370,13 +468,19 @@ class PPTGenerator:
                 else:
                     p = text_frame.add_paragraph()
                 
-                p.text = text
                 p.level = 0
+                formatted_text = item.get('formatted_text', [])
                 
-                # 设置代码样式
+                if formatted_text:
+                    self._add_formatted_text_to_paragraph(p, formatted_text, 'code')
+                else:
+                    p.text = text
+                
+                # 设置代码样式，使用优化的字体大小
+                optimal_size = self._calculate_optimal_font_size([{'text': text}], 'code')
                 for run in p.runs:
                     run.font.name = 'Consolas'
-                    run.font.size = Pt(14)
+                    run.font.size = Pt(optimal_size)
                     run.font.color.rgb = RGBColor(0, 0, 0)
                 
                 paragraph_index += 1
@@ -387,13 +491,23 @@ class PPTGenerator:
                 else:
                     p = text_frame.add_paragraph()
                 
-                p.text = f'"{text}"'  # 添加引号
                 p.level = 0
+                formatted_text = item.get('formatted_text', [])
                 
-                # 设置引用样式
+                if formatted_text:
+                    # 为引用添加引号
+                    quote_parts = [{'text': '"', 'bold': False, 'italic': True, 'underline': False, 'link': None, 'color': None}]
+                    quote_parts.extend(formatted_text)
+                    quote_parts.append({'text': '"', 'bold': False, 'italic': True, 'underline': False, 'link': None, 'color': None})
+                    self._add_formatted_text_to_paragraph(p, quote_parts, 'body')
+                else:
+                    p.text = f'"{text}"'  # 添加引号
+                
+                # 设置引用样式，使用优化的字体大小
+                optimal_size = self._calculate_optimal_font_size([{'text': text}], 'body')
                 for run in p.runs:
                     run.font.italic = True
-                    run.font.size = Pt(16)
+                    run.font.size = Pt(optimal_size)
                 
                 paragraph_index += 1
             else:
@@ -403,12 +517,17 @@ class PPTGenerator:
                 else:
                     p = text_frame.add_paragraph()
                 
-                p.text = text
                 p.level = 0
+                formatted_text = item.get('formatted_text', [])
                 
-                # 设置普通段落样式
-                for run in p.runs:
-                    run.font.size = Pt(18)
+                if formatted_text:
+                    self._add_formatted_text_to_paragraph(p, formatted_text, 'body')
+                else:
+                    p.text = text
+                    # 设置普通段落样式，使用优化的字体大小
+                    optimal_size = self._calculate_optimal_font_size([{'text': text}], 'body')
+                    for run in p.runs:
+                        run.font.size = Pt(optimal_size)
                 
                 paragraph_index += 1
             
@@ -479,11 +598,14 @@ class PPTGenerator:
     def _add_paragraph_content_at_position(self, slide, item, left, top, width):
         """在指定位置添加段落内容"""
         text = item.get('text', '').strip()
-        if not text:
+        formatted_text = item.get('formatted_text', [])
+        
+        if not text and not formatted_text:
             return 0
         
         # 估算文本高度（更准确的估算）
-        lines = max(1, len(text) // 80)  # 假设每行80个字符
+        display_text = text or ''.join([part['text'] for part in formatted_text])
+        lines = max(1, len(display_text) // 80)  # 假设每行80个字符
         text_height = max(0.3, lines * 0.25)  # 每行约0.25英寸
         
         textbox = slide.shapes.add_textbox(
@@ -491,9 +613,18 @@ class PPTGenerator:
             Inches(width), Inches(text_height)
         )
         text_frame = textbox.text_frame
-        text_frame.text = text
         text_frame.word_wrap = True
         text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
+        text_frame.margin_left = Inches(0.1)
+        text_frame.margin_right = Inches(0.1)
+        text_frame.margin_top = Inches(0.05)
+        text_frame.margin_bottom = Inches(0.05)
+        
+        # 添加格式化文本或纯文本
+        if formatted_text:
+            self._add_formatted_text_to_paragraph(text_frame.paragraphs[0], formatted_text, 'body')
+        else:
+            text_frame.text = text
         
         # 应用样式
         styles = item.get('styles', {})
@@ -502,9 +633,70 @@ class PPTGenerator:
         self.stats['text_blocks'] += 1
         return text_height
     
+    def _add_formatted_text_to_paragraph(self, paragraph, formatted_text_parts, font_size_key='body'):
+        """向段落添加格式化文本"""
+        if not formatted_text_parts:
+            return
+        
+        # 清空段落现有内容
+        paragraph.clear()
+        
+        # 计算合适的字体大小，防止文字超出边界
+        base_font_size = self._calculate_optimal_font_size(formatted_text_parts, font_size_key)
+        
+        for i, part in enumerate(formatted_text_parts):
+            text = part.get('text', '')
+            if not text:
+                continue
+            
+            # 添加文本运行
+            if i == 0:
+                # 第一个部分使用段落的默认运行
+                run = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+                run.text = text
+            else:
+                # 后续部分添加新的运行
+                run = paragraph.add_run()
+                run.text = text
+            
+            # 设置优化后的字体大小
+            run.font.size = Pt(base_font_size)
+            
+            # 应用格式
+            if part.get('bold', False):
+                run.font.bold = True
+            if part.get('italic', False):
+                run.font.italic = True
+            if part.get('underline', False):
+                run.font.underline = True
+            
+            # 处理颜色
+            color = part.get('color')
+            if color:
+                try:
+                    # 解析颜色值
+                    if color.startswith('#'):
+                        # 十六进制颜色
+                        hex_color = color[1:]
+                        if len(hex_color) == 6:
+                            r = int(hex_color[0:2], 16)
+                            g = int(hex_color[2:4], 16)
+                            b = int(hex_color[4:6], 16)
+                            run.font.color.rgb = RGBColor(r, g, b)
+                except:
+                    pass  # 忽略无效颜色
+            
+            # 处理链接（PowerPoint中链接处理比较复杂，这里简化处理）
+            link = part.get('link')
+            if link:
+                # 为链接设置蓝色和下划线
+                run.font.color.rgb = RGBColor(0, 0, 255)
+                run.font.underline = True
+    
     def _add_list_content_at_position(self, slide, item, left, top, width):
         """在指定位置添加列表内容"""
         items = item.get('items', [])
+        item_type = item.get('type', 'ul')
         if not items:
             return 0
         
@@ -518,19 +710,43 @@ class PPTGenerator:
         text_frame = textbox.text_frame
         text_frame.clear()
         text_frame.word_wrap = True
+        text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
+        text_frame.margin_left = Inches(0.1)
+        text_frame.margin_right = Inches(0.1)
+        text_frame.margin_top = Inches(0.05)
+        text_frame.margin_bottom = Inches(0.05)
         
         # 添加列表项
         for i, list_item in enumerate(items):
             item_text = list_item.get('text', '').strip()
-            if item_text:
+            formatted_text = list_item.get('formatted_text', [])
+            
+            if item_text or formatted_text:
                 p = text_frame.paragraphs[0] if i == 0 else text_frame.add_paragraph()
-                # 不添加手动的bullet符号，让PowerPoint处理
-                p.text = item_text
                 p.level = 0
                 
-                # 设置列表样式
-                for run in p.runs:
-                    run.font.size = Pt(18)
+                # 根据列表类型设置不同的格式
+                if item_type == 'ol':
+                    # 有序列表 - 添加数字
+                    prefix = f"{i + 1}. "
+                else:
+                    # 无序列表 - 使用PowerPoint默认项目符号
+                    prefix = ""
+                
+                # 添加格式化文本或纯文本
+                if formatted_text:
+                    # 为有序列表添加数字前缀
+                    if prefix:
+                        prefix_part = [{'text': prefix, 'bold': False, 'italic': False, 'underline': False, 'link': None, 'color': None}]
+                        combined_text = prefix_part + formatted_text
+                        self._add_formatted_text_to_paragraph(p, combined_text, 'list')
+                    else:
+                        self._add_formatted_text_to_paragraph(p, formatted_text, 'list')
+                else:
+                    p.text = prefix + item_text
+                    # 设置列表样式
+                    for run in p.runs:
+                        run.font.size = Pt(self.font_sizes['list'])
                 
                 # 应用自定义样式
                 styles = list_item.get('styles', {})
@@ -742,7 +958,7 @@ class PPTGenerator:
         
         paragraph = title_shape.text_frame.paragraphs[0]
         for run in paragraph.runs:
-            run.font.size = Pt(36)
+            run.font.size = Pt(self.font_sizes['title'])
             run.font.bold = True
             run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
     
@@ -753,7 +969,7 @@ class PPTGenerator:
         
         paragraph = subtitle_shape.text_frame.paragraphs[0]
         for run in paragraph.runs:
-            run.font.size = Pt(18)
+            run.font.size = Pt(self.font_sizes['body'])
             run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_2
     
     def _format_heading_text(self, heading_shape):
@@ -763,7 +979,7 @@ class PPTGenerator:
         
         paragraph = heading_shape.text_frame.paragraphs[0]
         for run in paragraph.runs:
-            run.font.size = Pt(24)
+            run.font.size = Pt(self.font_sizes['h2'])
             run.font.bold = True
             run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
     
@@ -775,7 +991,7 @@ class PPTGenerator:
         paragraph = title_shape.text_frame.paragraphs[0]
         paragraph.alignment = PP_ALIGN.CENTER
         for run in paragraph.runs:
-            run.font.size = Pt(32)
+            run.font.size = Pt(self.font_sizes['h1'])
             run.font.bold = True
             run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
     
@@ -802,13 +1018,13 @@ class PPTGenerator:
         for run in paragraph.runs:
             run.font.bold = True
             run.font.color.rgb = RGBColor(255, 255, 255)
-            run.font.size = Pt(12)
+            run.font.size = Pt(self.font_sizes['body'] - 4)
     
     def _format_table_data_cell(self, cell):
         """格式化数据单元格"""
         paragraph = cell.text_frame.paragraphs[0]
         for run in paragraph.runs:
-            run.font.size = Pt(14)
+            run.font.size = Pt(self.font_sizes['body'] - 2)
             run.font.color.theme_color = MSO_THEME_COLOR.DARK_1
     
     def _add_footer_text(self, slide, text):
@@ -826,7 +1042,7 @@ class PPTGenerator:
         paragraph = text_frame.paragraphs[0]
         paragraph.alignment = PP_ALIGN.RIGHT
         for run in paragraph.runs:
-            run.font.size = Pt(10)
+            run.font.size = Pt(self.font_sizes['caption'])
             run.font.color.rgb = RGBColor(128, 128, 128)
     
     def _add_slide_notes(self, slide, slide_info, analyzed_content):
@@ -926,7 +1142,9 @@ class PPTGenerator:
     def _add_heading_content_at_position(self, slide, item, left, top, width):
         """在指定位置添加标题内容"""
         text = item.get('text', '').strip()
-        if not text:
+        formatted_text = item.get('formatted_text', [])
+        
+        if not text and not formatted_text:
             return 0
         
         height = 0.6  # 标题固定高度
@@ -936,12 +1154,17 @@ class PPTGenerator:
             Inches(width), Inches(height)
         )
         text_frame = textbox.text_frame
-        text_frame.text = text
         text_frame.word_wrap = True
         
-        # 根据标题级别设置样式
-        heading_level = int(item.get('type', 'h3')[1])
+        # 添加格式化文本或纯文本
         paragraph = text_frame.paragraphs[0]
+        heading_level = int(item.get('type', 'h3')[1])
+        if formatted_text:
+            self._add_formatted_text_to_paragraph(paragraph, formatted_text, f'h{heading_level}')
+        else:
+            text_frame.text = text
+        
+        # 根据标题级别设置样式
         self._format_heading_by_level(paragraph, heading_level)
         
         # 应用自定义样式
@@ -1028,34 +1251,38 @@ class PPTGenerator:
                 display_height = max_height
                 display_width = max_height * aspect_ratio
             
-            # 居中放置
+            # 居中放置，添加顶部间距
             image_left = left + (width - display_width) / 2
+            image_top = top + 0.1  # 添加0.1英寸的顶部间距
             
             # 添加图片
             slide.shapes.add_picture(
                 local_path, 
-                Inches(image_left), Inches(top), 
+                Inches(image_left), Inches(image_top), 
                 Inches(display_width), Inches(display_height)
             )
             
             # 添加图片说明
             alt_text = image_info.get('alt', '') or image_info.get('title', '')
+            caption_height = 0
             if alt_text:
-                caption_top = top + display_height + 0.1
+                caption_top = image_top + display_height + 0.1  # 使用调整后的image_top
                 caption_textbox = slide.shapes.add_textbox(
-                    Inches(left), Inches(caption_top), 
-                    Inches(width), Inches(0.3)
+                    Inches(image_left), Inches(caption_top), 
+                    Inches(display_width), Inches(0.3)
                 )
                 caption_textbox.text_frame.text = alt_text
                 caption_textbox.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
                 
                 # 设置说明文字样式
                 for run in caption_textbox.text_frame.paragraphs[0].runs:
-                    run.font.size = Pt(10)
+                    run.font.size = Pt(self.font_sizes['caption'])
                     run.font.color.rgb = RGBColor(128, 128, 128)
+                
+                caption_height = 0.4  # 说明文字高度
             
             self.stats['images'] += 1
-            return display_height + 0.5
+            return display_height + 0.1 + caption_height + 0.1  # 顶部间距 + 图片高度 + 说明文字 + 底部间距
             
         except Exception as e:
             logger.error(f"添加图片失败 {local_path}: {e}")
@@ -1066,11 +1293,12 @@ class PPTGenerator:
         height = 2.0
         placeholder_width = min(width, 4.0)
         placeholder_left = left + (width - placeholder_width) / 2
+        placeholder_top = top + 0.1  # 添加顶部间距
         
         # 创建占位符形状
         placeholder = slide.shapes.add_shape(
             MSO_SHAPE.RECTANGLE, 
-            Inches(placeholder_left), Inches(top), 
+            Inches(placeholder_left), Inches(placeholder_top), 
             Inches(placeholder_width), Inches(height)
         )
         
@@ -1083,16 +1311,19 @@ class PPTGenerator:
         placeholder.text_frame.text = f"图片: {image_info.get('alt', '无法加载')}"
         placeholder.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
         
-        return height + 0.2
+        return height + 0.1 + 0.1  # 顶部间距 + 占位符高度 + 底部间距
     
     def _add_code_content_at_position(self, slide, item, left, top, width):
         """在指定位置添加代码内容"""
         text = item.get('text', '').strip()
-        if not text:
+        formatted_text = item.get('formatted_text', [])
+        
+        if not text and not formatted_text:
             return 0
         
         # 估算代码块高度
-        lines = text.split('\n')
+        display_text = text or ''.join([part['text'] for part in formatted_text])
+        lines = display_text.split('\n')
         code_height = max(0.5, len(lines) * 0.2)
         
         textbox = slide.shapes.add_textbox(
@@ -1100,14 +1331,19 @@ class PPTGenerator:
             Inches(width), Inches(code_height)
         )
         text_frame = textbox.text_frame
-        text_frame.text = text
         text_frame.word_wrap = True
         
-        # 代码样式
+        # 添加格式化文本或纯文本
         paragraph = text_frame.paragraphs[0]
+        if formatted_text:
+            self._add_formatted_text_to_paragraph(paragraph, formatted_text, 'code')
+        else:
+            text_frame.text = text
+        
+        # 代码样式
         for run in paragraph.runs:
             run.font.name = 'Consolas'
-            run.font.size = Pt(14)
+            run.font.size = Pt(self.font_sizes['code'])
             run.font.color.rgb = RGBColor(0, 0, 0)
         
         # 设置背景色
@@ -1116,4 +1352,88 @@ class PPTGenerator:
         textbox.line.color.rgb = RGBColor(200, 200, 200)
         
         self.stats['text_blocks'] += 1
-        return code_height
+        return code_height 
+   def _format_title_text(self, title_shape):
+        """格式化标题文本"""
+        if not title_shape.has_text_frame:
+            return
+        
+        text_frame = title_shape.text_frame
+        for paragraph in text_frame.paragraphs:
+            paragraph.alignment = PP_ALIGN.CENTER
+            for run in paragraph.runs:
+                # 使用优化的标题字体大小
+                optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'title')
+                run.font.size = Pt(optimal_size)
+                run.font.bold = True
+                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
+    
+    def _format_subtitle_text(self, subtitle_shape):
+        """格式化副标题文本"""
+        if not subtitle_shape.has_text_frame:
+            return
+        
+        text_frame = subtitle_shape.text_frame
+        for paragraph in text_frame.paragraphs:
+            paragraph.alignment = PP_ALIGN.CENTER
+            for run in paragraph.runs:
+                # 使用优化的副标题字体大小
+                optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'body')
+                run.font.size = Pt(optimal_size)
+                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_2
+    
+    def _format_heading_text(self, heading_shape):
+        """格式化标题文本"""
+        if not heading_shape.has_text_frame:
+            return
+        
+        text_frame = heading_shape.text_frame
+        for paragraph in text_frame.paragraphs:
+            for run in paragraph.runs:
+                # 使用优化的标题字体大小
+                optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'h1')
+                run.font.size = Pt(optimal_size)
+                run.font.bold = True
+                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
+    
+    def _format_section_title_text(self, title_shape):
+        """格式化章节标题文本"""
+        if not title_shape.has_text_frame:
+            return
+        
+        text_frame = title_shape.text_frame
+        for paragraph in text_frame.paragraphs:
+            paragraph.alignment = PP_ALIGN.CENTER
+            for run in paragraph.runs:
+                # 使用优化的章节标题字体大小
+                optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'h1')
+                run.font.size = Pt(optimal_size)
+                run.font.bold = True
+                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
+    
+    def _add_footer_text(self, slide, footer_text):
+        """添加页脚文本"""
+        # 在幻灯片底部添加页脚
+        left = Inches(0.5)
+        top = Inches(self.layout_config.get('slide_height', 7.5) - 0.5)
+        width = Inches(self.layout_config.get('slide_width', 10) - 1)
+        height = Inches(0.3)
+        
+        textbox = slide.shapes.add_textbox(left, top, width, height)
+        text_frame = textbox.text_frame
+        text_frame.text = footer_text
+        
+        # 设置页脚样式
+        paragraph = text_frame.paragraphs[0]
+        paragraph.alignment = PP_ALIGN.RIGHT
+        for run in paragraph.runs:
+            run.font.size = Pt(self.font_sizes['caption'])
+            run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_3
+    
+    def _add_slide_notes(self, slide, slide_info, analyzed_content):
+        """添加幻灯片备注"""
+        # 可以在这里添加演讲者备注
+        notes_text = slide_info.get('notes', '')
+        if notes_text:
+            notes_slide = slide.notes_slide
+            notes_slide.notes_text_frame.text = notes_text

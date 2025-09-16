@@ -80,6 +80,20 @@ image_processing:
   resize_large_images: true
   max_resolution: [1920, 1080]
   
+  # 网络设置
+  network:
+    timeout: 5  # 下载超时时间（秒）
+    retry_count: 2  # 重试次数
+    user_agent: "HTML2PPT/1.0"
+    
+  # 占位符设置
+  placeholder:
+    create_on_failure: true  # 下载失败时创建本地占位符
+    default_size: [600, 300]  # 默认占位符尺寸
+    background_color: "#E0E0E0"  # 占位符背景色
+    text_color: "#666666"  # 占位符文字颜色
+    text: "图片占位符"  # 占位符文字
+  
 # PPT生成配置
 ppt_generation:
   # 默认模版

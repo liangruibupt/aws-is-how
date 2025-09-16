@@ -71,6 +71,11 @@ class StyleMapper:
     def _apply_font_styles(self, paragraph, html_styles):
         """应用字体样式"""
         for run in paragraph.runs:
+            # 保存现有格式状态
+            existing_bold = run.font.bold
+            existing_italic = run.font.italic
+            existing_underline = run.font.underline
+            
             # 字体族
             font_family = html_styles.get('font-family', '').strip('"\'')
             if font_family:
@@ -85,19 +90,23 @@ class StyleMapper:
                 if size_pt:
                     run.font.size = Pt(size_pt)
             
-            # 字体粗细
+            # 字体粗细 - 只在明确指定时才覆盖现有格式
             font_weight = html_styles.get('font-weight', '')
             if font_weight in ['bold', 'bolder', '700', '800', '900']:
                 run.font.bold = True
-            elif font_weight in ['normal', '400']:
+            elif font_weight in ['normal', '400'] and font_weight:
+                # 只有在明确设置为normal时才重置
                 run.font.bold = False
+            # 如果没有font-weight样式，保持现有的bold状态
             
-            # 字体样式
+            # 字体样式 - 只在明确指定时才覆盖现有格式
             font_style = html_styles.get('font-style', '')
             if font_style == 'italic':
                 run.font.italic = True
-            elif font_style == 'normal':
+            elif font_style == 'normal' and font_style:
+                # 只有在明确设置为normal时才重置
                 run.font.italic = False
+            # 如果没有font-style样式，保持现有的italic状态
             
             # 文本装饰
             text_decoration = html_styles.get('text-decoration', '')
