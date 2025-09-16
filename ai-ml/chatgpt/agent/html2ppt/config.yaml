@@ -1,0 +1,114 @@
+# HTML to PPT Converter Configuration
+
+# 语义分析配置
+semantic_analysis:
+  enabled: true
+  model: "gpt-3.5-turbo"  # 或 "local" 使用本地模型
+  api_key: ""  # OpenAI API密钥
+  max_tokens: 2000
+  temperature: 0.3
+  
+  # 内容分类权重
+  content_weights:
+    title: 1.0
+    heading: 0.8
+    paragraph: 0.6
+    list: 0.7
+    image: 0.5
+    table: 0.6
+
+# 样式映射配置
+style_mapping:
+  # HTML标签到PPT样式的映射
+  tag_mapping:
+    h1: "title"
+    h2: "subtitle" 
+    h3: "heading"
+    h4: "subheading"
+    p: "body"
+    ul: "bullet_list"
+    ol: "number_list"
+    blockquote: "quote"
+    code: "code"
+    
+  # 字体映射
+  font_mapping:
+    default: "Arial"
+    serif: "Times New Roman"
+    sans-serif: "Arial"
+    monospace: "Courier New"
+    
+  # 颜色映射
+  color_mapping:
+    preserve_original: true
+    fallback_colors:
+      text: "#000000"
+      background: "#FFFFFF"
+      accent: "#0078D4"
+
+# 布局设置
+layout_settings:
+  # 幻灯片尺寸
+  slide_width: 10  # 英寸
+  slide_height: 7.5  # 英寸
+  
+  # 边距设置
+  margins:
+    top: 0.5
+    bottom: 0.5
+    left: 0.5
+    right: 0.5
+    
+  # 内容分布
+  content_distribution:
+    max_items_per_slide: 5
+    auto_split_long_content: true
+    preserve_hierarchy: true
+    
+  # 图片布局
+  image_layout:
+    max_width_ratio: 0.8
+    max_height_ratio: 0.6
+    alignment: "center"
+    caption_position: "bottom"
+
+# 图片处理配置
+image_processing:
+  download_external: true
+  max_size_mb: 10
+  supported_formats: ["jpg", "jpeg", "png", "gif", "bmp", "svg"]
+  resize_large_images: true
+  max_resolution: [1920, 1080]
+  
+# PPT生成配置
+ppt_generation:
+  # 默认模版
+  default_template: "templates/default.pptx"
+  
+  # 幻灯片类型
+  slide_types:
+    title_slide: true
+    content_slides: true
+    section_dividers: true
+    summary_slide: false
+    
+  # 备注设置
+  notes:
+    include_original_html: true
+    include_metadata: true
+    include_style_info: false
+    max_note_length: 1000
+
+# 输出设置
+output:
+  # 文件命名
+  filename_pattern: "{original_name}_converted_{timestamp}"
+  
+  # 质量设置
+  compression_level: "medium"  # low, medium, high
+  
+  # 元数据
+  metadata:
+    author: "HTML2PPT Converter"
+    title: "Converted from HTML"
+    subject: "Auto-generated presentation"

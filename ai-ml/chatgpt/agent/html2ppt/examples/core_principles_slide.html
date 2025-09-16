@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 90%;
+            max-width: 1000px;
+            position: relative;
+            padding: 40px;
+            border-radius: 15px;
+            background: rgba(15, 15, 26, 0.7);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .slide-title {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .slide-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 3px;
+        }
+        
+        .principles-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .principle {
+            padding: 20px 25px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .principle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .principle:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+            z-index: -1;
+        }
+        
+        .principle:nth-child(1) {
+            border-color: #3498db;
+        }
+        
+        .principle:nth-child(2) {
+            border-color: #9b59b6;
+        }
+        
+        .principle:nth-child(3) {
+            border-color: #2ecc71;
+        }
+        
+        .principle:nth-child(4) {
+            border-color: #f39c12;
+        }
+        
+        .principle-number {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            opacity: 0.7;
+        }
+        
+        .principle-chinese {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .principle-english {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+        }
+        
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            right: -100px;
+        }
+        
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -50px;
+            left: -50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <h1 class="slide-title">核心原则 | Core Principles</h1>
+        
+        <div class="principles-container">
+            <div class="principle">
+                <div class="principle-number">原则 1</div>
+                <div class="principle-chinese">将敏捷性作为竞争优势</div>
+                <div class="principle-english">Embrace agility as a competitive edge</div>
+            </div>
+            
+            <div class="principle">
+                <div class="principle-number">原则 2</div>
+                <div class="principle-chinese">Agentic 演进基础要素</div>
+                <div class="principle-english">Evolve fundamentals for the agentic era</div>
+            </div>
+            
+            <div class="principle">
+                <div class="principle-number">原则 3</div>
+                <div class="principle-chinese">通过模型选择和数据实现卓越成果</div>
+                <div class="principle-english">Deliver superior outcomes with model choice and data</div>
+            </div>
+            
+            <div class="principle">
+                <div class="principle-number">原则 4</div>
+                <div class="principle-chinese">部署能够改变体验的解决方案</div>
+                <div class="principle-english">Deploy solutions that transform experiences</div>
+            </div>
+        </div>
+        
+        <div class="decorative-circle circle-1"></div>
+        <div class="decorative-circle circle-2"></div>
+    </div>
+</body>
+</html>

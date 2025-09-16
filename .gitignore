@@ -6,3 +6,5 @@ repl_state/
 .DS_Store
 .DS_Store?
 **/.DS_Store
+ai-ml/chatgpt/agent/html2ppt/tests/__pycache__/
+.vscode/

@@ -1,0 +1,8 @@
+# Minimal requirements for basic HTML2PPT functionality
+python-pptx>=0.6.21
+beautifulsoup4>=4.11.0
+lxml>=4.9.0
+Pillow>=9.0.0
+requests>=2.28.0
+pyyaml>=6.0
+cssutils>=2.6.0

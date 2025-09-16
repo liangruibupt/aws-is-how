@@ -1,0 +1,15 @@
+2025-09-16 22:34:50,759 - __main__ - INFO - 开始转换: examples/sample.html -> test_output.pptx
+2025-09-16 22:34:50,759 - __main__ - INFO - 正在解析HTML文档...
+2025-09-16 22:34:50,833 - html_parser - ERROR - 下载图片失败 https://via.placeholder.com/600x300/0078D4/FFFFFF?text=Computer+Vision+Applications: HTTPSConnectionPool(host='via.placeholder.com', port=443): Max retries exceeded with url: /600x300/0078D4/FFFFFF?text=Computer+Vision+Applications (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x105dee7b0>: Failed to resolve 'via.placeholder.com' ([Errno 8] nodename nor servname provided, or not known)"))
+2025-09-16 22:34:50,837 - html_parser - ERROR - 下载图片失败 https://via.placeholder.com/600x300/0078D4/FFFFFF?text=Computer+Vision+Applications: HTTPSConnectionPool(host='via.placeholder.com', port=443): Max retries exceeded with url: /600x300/0078D4/FFFFFF?text=Computer+Vision+Applications (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x105df2710>: Failed to resolve 'via.placeholder.com' ([Errno 8] nodename nor servname provided, or not known)"))
+2025-09-16 22:34:50,838 - __main__ - INFO - HTML解析完成，发现 15 个内容区块
+2025-09-16 22:34:50,838 - __main__ - INFO - 正在进行语义分析...
+2025-09-16 22:34:50,838 - semantic_analyzer - WARNING - 未提供OpenAI API密钥，将使用本地模型
+2025-09-16 22:34:50,838 - semantic_analyzer - WARNING - Transformers包未安装，将使用基础语义分析
+2025-09-16 22:34:50,840 - __main__ - INFO - 正在生成PowerPoint演示文稿...
+2025-09-16 22:34:50,844 - ppt_generator - INFO - 使用模版: templates/default.pptx
+2025-09-16 22:34:50,934 - ppt_generator - INFO - 演示文稿已保存: test_output.pptx
+2025-09-16 22:34:50,934 - ppt_generator - INFO - 统计信息: {'slides': 22, 'images': 0, 'text_blocks': 43, 'tables': 2}
+2025-09-16 22:34:50,934 - ppt_generator - INFO - 成功生成PPT: test_output.pptx
+2025-09-16 22:34:50,934 - __main__ - INFO - 转换完成！输出文件: test_output.pptx
+2025-09-16 22:34:50,934 - __main__ - INFO - 生成统计: 22 张幻灯片, 0 张图片, 43 个文本块
