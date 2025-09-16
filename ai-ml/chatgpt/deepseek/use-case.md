@@ -155,3 +155,16 @@ I need write a email draft to remind SA mgr to notify each team China Region KPI
 # 安装 Amazon Document MCP Server 
 AWS中国区域的专线流量价格是每 GB 多少钱? 注意AWS中国区域价格计算器的地址：https://calculator.amazonaws.cn/ 和中国区文档地址 https://www.amazonaws.cn/?nc1=h_ls
 ```
+
+10. HTML to PPT
+```
+请创建一个能够将HTML文档转换为pptx文档的Agent, 基本要求如下:
+- 能够基于语义提取和识别关键和非关键信息，并思考PPT内容和故事主线
+- PPT中出现的文字、段落内容应与HTML中内容一致
+- 能够支持任意标签结构层级的HTML文档，能根据HTML标签结构定义PPT的结构
+- 能够支持任意HTML标签的样式，能根据HTML标签样式定义PPT的样式
+- PPT内容风格、模版样式应尽可能保持HTML原样式
+- 对于HTML中图片内容，能尽可能保留，并以合理的布局展示在PPT中
+- 能够使用用户指定的PPT模版
+- 必要的文字内容和备注信息应尽可能保留，并存储在指定PPT页的备注中
+```
