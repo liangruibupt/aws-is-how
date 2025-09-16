@@ -208,7 +208,7 @@ class PPTGenerator:
             self._format_heading_text(slide.shapes.title)
         
         # 添加内容
-        self._add_slide_content(slide, content, analyzed_content)
+        self._add_slide_content(slide, content, analyzed_content, title)
         
         # 添加备注
         self._add_slide_notes(slide, slide_info, analyzed_content)
@@ -268,7 +268,7 @@ class PPTGenerator:
         
         return self.presentation.slide_layouts[layout_index]
     
-    def _add_slide_content(self, slide, content, analyzed_content):
+    def _add_slide_content(self, slide, content, analyzed_content, slide_title=""):
         """添加幻灯片内容"""
         if not content:
             return
@@ -278,10 +278,10 @@ class PPTGenerator:
         
         if content_placeholder and self._can_use_placeholder(content):
             # 使用占位符添加内容
-            self._add_content_to_placeholder(content_placeholder, content)
+            self._add_content_to_placeholder(content_placeholder, content, slide_title)
         else:
             # 使用自定义布局添加内容
-            self._add_content_with_custom_layout(slide, content)
+            self._add_content_with_custom_layout(slide, content, slide_title)
     
     def _find_content_placeholder(self, slide):
         """查找内容占位符"""
@@ -294,13 +294,13 @@ class PPTGenerator:
     def _can_use_placeholder(self, content):
         """判断是否可以使用占位符"""
         # 如果内容主要是文本和列表，可以使用占位符
-        text_types = ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        text_types = ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'code', 'blockquote']
         for item in content:
             if item.get('type') not in text_types:
                 return False
         return len(content) <= 5  # 内容不太多时使用占位符
     
-    def _add_content_to_placeholder(self, placeholder, content):
+    def _add_content_to_placeholder(self, placeholder, content, slide_title=""):
         """向占位符添加内容"""
         if not placeholder.has_text_frame:
             return
@@ -319,8 +319,12 @@ class PPTGenerator:
             if not text and item_type not in ['ul', 'ol']:
                 continue
             
+            # 跳过与幻灯片标题重复的标题元素
+            if item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and text == slide_title:
+                continue
+            
             if item_type in ['ul', 'ol']:
-                # 处理列表
+                # 处理列表 - 使用PowerPoint内置的项目符号
                 items = item.get('items', [])
                 for j, list_item in enumerate(items):
                     list_text = list_item.get('text', '').strip()
@@ -330,16 +334,17 @@ class PPTGenerator:
                         else:
                             p = text_frame.add_paragraph()
                         
-                        p.text = f"• {list_text}"
+                        # 不添加手动的bullet符号，让PowerPoint处理
+                        p.text = list_text
                         p.level = 0
                         
                         # 设置列表样式
                         for run in p.runs:
-                            run.font.size = Pt(14)
+                            run.font.size = Pt(18)
                         
                         paragraph_index += 1
             elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
-                # 处理标题
+                # 处理标题（已经过滤掉重复的）
                 if paragraph_index == 0:
                     p = text_frame.paragraphs[0]
                 else:
@@ -358,6 +363,39 @@ class PPTGenerator:
                         run.font.size = Pt(16)
                 
                 paragraph_index += 1
+            elif item_type in ['pre', 'code']:
+                # 处理代码块
+                if paragraph_index == 0:
+                    p = text_frame.paragraphs[0]
+                else:
+                    p = text_frame.add_paragraph()
+                
+                p.text = text
+                p.level = 0
+                
+                # 设置代码样式
+                for run in p.runs:
+                    run.font.name = 'Consolas'
+                    run.font.size = Pt(14)
+                    run.font.color.rgb = RGBColor(0, 0, 0)
+                
+                paragraph_index += 1
+            elif item_type in ['blockquote']:
+                # 处理引用
+                if paragraph_index == 0:
+                    p = text_frame.paragraphs[0]
+                else:
+                    p = text_frame.add_paragraph()
+                
+                p.text = f'"{text}"'  # 添加引号
+                p.level = 0
+                
+                # 设置引用样式
+                for run in p.runs:
+                    run.font.italic = True
+                    run.font.size = Pt(16)
+                
+                paragraph_index += 1
             else:
                 # 处理普通段落
                 if paragraph_index == 0:
@@ -368,13 +406,19 @@ class PPTGenerator:
                 p.text = text
                 p.level = 0
                 
+                # 设置普通段落样式
+                for run in p.runs:
+                    run.font.size = Pt(18)
+                
                 paragraph_index += 1
             
             # 应用样式
-            styles = item.get('styles', {})
-            self.style_mapper.apply_text_styles(p, styles)
+            if paragraph_index > 0:  # 确保段落存在
+                styles = item.get('styles', {})
+                current_p = text_frame.paragraphs[paragraph_index - 1]
+                self.style_mapper.apply_text_styles(current_p, styles)
     
-    def _add_content_with_custom_layout(self, slide, content):
+    def _add_content_with_custom_layout(self, slide, content, slide_title=""):
         """使用自定义布局添加内容"""
         margins = self.layout_config.get('margins', {})
         slide_width = self.layout_config.get('slide_width', 10)
@@ -396,6 +440,11 @@ class PPTGenerator:
                 break  # 空间不足，停止添加
             
             item_type = item.get('type', '')
+            item_text = item.get('text', '').strip()
+            
+            # 跳过与幻灯片标题重复的标题元素
+            if item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and item_text == slide_title:
+                continue
             
             if item_type in ['p', 'div']:
                 height = self._add_paragraph_content_at_position(slide, item, left_margin, current_y, available_width)
@@ -475,12 +524,13 @@ class PPTGenerator:
             item_text = list_item.get('text', '').strip()
             if item_text:
                 p = text_frame.paragraphs[0] if i == 0 else text_frame.add_paragraph()
-                p.text = f"• {item_text}"
+                # 不添加手动的bullet符号，让PowerPoint处理
+                p.text = item_text
                 p.level = 0
                 
                 # 设置列表样式
                 for run in p.runs:
-                    run.font.size = Pt(14)
+                    run.font.size = Pt(18)
                 
                 # 应用自定义样式
                 styles = list_item.get('styles', {})
@@ -758,7 +808,7 @@ class PPTGenerator:
         """格式化数据单元格"""
         paragraph = cell.text_frame.paragraphs[0]
         for run in paragraph.runs:
-            run.font.size = Pt(11)
+            run.font.size = Pt(14)
             run.font.color.theme_color = MSO_THEME_COLOR.DARK_1
     
     def _add_footer_text(self, slide, text):
@@ -1057,7 +1107,7 @@ class PPTGenerator:
         paragraph = text_frame.paragraphs[0]
         for run in paragraph.runs:
             run.font.name = 'Consolas'
-            run.font.size = Pt(10)
+            run.font.size = Pt(14)
             run.font.color.rgb = RGBColor(0, 0, 0)
         
         # 设置背景色
