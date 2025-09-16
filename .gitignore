@@ -9,3 +9,4 @@ repl_state/
 ai-ml/chatgpt/agent/html2ppt/tests/__pycache__/
 ai-ml/chatgpt/agent/html2ppt/src/__pycache__/
 .vscode/
+*.log

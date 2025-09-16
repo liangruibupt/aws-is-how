@@ -183,6 +183,9 @@ class TestPPTGenerator(unittest.TestCase):
         """测试标题幻灯片创建"""
         self.generator._initialize_presentation()
         
+        # Ensure we start with a clean presentation
+        self.assertEqual(len(self.generator.presentation.slides), 0)
+        
         slide_info = {
             'title': '测试演示文稿',
             'content': '自动生成的演示文稿'
@@ -236,7 +239,7 @@ class TestPPTGenerator(unittest.TestCase):
             'styles': {'color': '#000000', 'font-size': '14px'}
         }
         
-        height = self.generator._add_paragraph_content(slide, item, 0)
+        height = self.generator._add_paragraph_content_at_position(slide, item, 0.5, 1.5, 8)
         
         self.assertGreater(height, 0)
         self.assertEqual(self.generator.stats['text_blocks'], 1)
@@ -258,7 +261,7 @@ class TestPPTGenerator(unittest.TestCase):
             ]
         }
         
-        height = self.generator._add_list_content(slide, item, 0)
+        height = self.generator._add_list_content_at_position(slide, item, 0.5, 1.5, 8)
         
         self.assertGreater(height, 0)
         self.assertEqual(self.generator.stats['text_blocks'], 1)
