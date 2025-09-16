@@ -1,0 +1,492 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template to create a VS Code server on EC2 with complete networking infrastructure and simplified permissions'
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Instance Configuration"
+        Parameters:
+          - InstanceType
+          - VSCodeServerName
+          - VSCodeServerPassword
+          - LatestAmiId
+      - Label:
+          default: "Network Configuration"
+        Parameters:
+          - VpcCidr
+          - PublicSubnetCidr
+      - Label:
+          default: "Access Control"
+        Parameters:
+          - SourceIPAddress
+
+Parameters:
+  VSCodeServerPassword:
+    Description: The password for the VS Code server (must be at least 12 characters with uppercase, lowercase, numbers, and special characters)
+    Type: String
+    NoEcho: true
+    Default: 'AmazonBedrockWorkshop@2025#'
+    MinLength: 12
+    AllowedPattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[\w@#$%^&*]{12,}$'
+    ConstraintDescription: "Password must be at least 12 characters and include uppercase, lowercase, numbers, and special characters (@#$%^&*)."
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Description: Latest AMI ID for Amazon Linux 2023, You don't need to change this value.
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+  VSCodeServerName:
+    Type: String
+    Description: EC2 instance name for VS Code server
+    Default: 'VSCode-Server'
+  InstanceType:
+    Type: String
+    Description: EC2 instannce type for VS Code server. Recommended to use t3.medium or larger for best performance
+    Default: 't3.large'
+    AllowedValues:
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - t2.2xlarge
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+  SourceIPAddress:
+    Type: String
+    Description: "Allowed source IP address (CIDR notation) to http to the VS Code server. It is recommeded to restrict to your client ip address. Please refer to https://ifconfig.me/"
+    Default: 0.0.0.0/0
+    ConstraintDescription: "Must be a valid CIDR notation IP address range (e.g., 0.0.0.0/0)"
+  VpcCidr:
+    Type: String
+    Description: CIDR block for the VPC
+    Default: 10.0.0.0/16
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+  PublicSubnetCidr:
+    Type: String
+    Description: CIDR block for the public subnet
+    Default: 10.0.0.0/24
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+
+Resources:
+  # VPC and Networking Resources
+  WorkshopVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-IGW"
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref WorkshopVPC
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref WorkshopVPC
+      CidrBlock: !Ref PublicSubnetCidr
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs 
+          Ref: 'AWS::Region'
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-PublicSubnet"
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref WorkshopVPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-PublicRT"
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+
+  # DEFAULT_AgentExecutionRole for Bedrock Agents
+  DefaultAgentExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "DEFAULT_AgentExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "AllowBedrock"
+            Effect: "Allow"
+            Principal:
+              Service: "bedrock.amazonaws.com"
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonBedrockFullAccess"
+      Path: "/"
+
+  # DEFAULT_AgentExecutionRole Policy for Inference Profiles
+  DefaultAgentExecutionRolePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "BedrockAgentInferenceProfilePolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "AmazonBedrockAgentInferencProfilePolicy1"
+            Effect: "Allow"
+            Action: 
+              - "bedrock:InvokeModel*"
+              - "bedrock:CreateInferenceProfile"
+            Resource:
+              - "arn:aws:bedrock:*::foundation-model/*"
+              - "arn:aws:bedrock:*:*:inference-profile/*"
+              - "arn:aws:bedrock:*:*:application-inference-profile/*"
+          - Sid: "AmazonBedrockAgentInferencProfilePolicy2"
+            Effect: "Allow"
+            Action:
+              - "bedrock:GetInferenceProfile"
+              - "bedrock:ListInferenceProfiles"
+              - "bedrock:DeleteInferenceProfile"
+              - "bedrock:TagResource"
+              - "bedrock:UntagResource"
+              - "bedrock:ListTagsForResource"
+            Resource:
+              - "arn:aws:bedrock:*:*:inference-profile/*"
+              - "arn:aws:bedrock:*:*:application-inference-profile/*"
+          - Sid: "AmazonBedrockAgentBedrockFoundationModelPolicy"
+            Effect: "Allow"
+            Action: 
+              - "bedrock:GetAgentAlias"
+              - "bedrock:InvokeAgent"
+            Resource:
+              - "arn:aws:bedrock:*:*:agent/*"
+              - "arn:aws:bedrock:*:*:agent-alias/*"
+          - Sid: "AmazonBedrockAgentBedrockInvokeGuardrailModelPolicy"
+            Effect: "Allow"
+            Action:
+              - "bedrock:InvokeModel"
+              - "bedrock:GetGuardrail"
+              - "bedrock:ApplyGuardrail"
+            Resource: "arn:aws:bedrock:*:*:guardrail/*"
+          - Sid: "QueryKB"
+            Effect: "Allow"
+            Action: 
+              - "bedrock:Retrieve"
+              - "bedrock:RetrieveAndGenerate"
+            Resource: "arn:aws:bedrock:*:*:knowledge-base/*"
+      Roles:
+        - !Ref DefaultAgentExecutionRole
+
+  # IAM Policy for Bedrock and related services with simplified permissions
+  BedrockWorkshopPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Simplified policy for Bedrock Workshop with necessary permissions
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: BedrockModelPermissions
+            Effect: Allow
+            Action:
+              - bedrock:InvokeModel
+              - bedrock:GetFoundationModel
+              - bedrock:ListFoundationModels
+            Resource:
+              - "arn:aws:bedrock:*:*:foundation-model/*"
+          - Sid: BedrockAgentPermissions
+            Effect: Allow
+            Action:
+              - bedrock:List*
+              - bedrock:Get*
+              - bedrock:Create*
+              - bedrock:Delete*
+              - bedrock:Update*
+              - bedrock:Start*
+              - bedrock:Prepare*
+              - bedrock:Associate*
+              - bedrock:Disassociate*
+              - bedrock:InvokeAgent
+              - bedrock:Retrieve
+              - bedrock:RetrieveAndGenerate
+            Resource: "*"
+          - Sid: OpenSearchServerlessPermissions
+            Effect: Allow
+            Action:
+              - aoss:List*
+              - aoss:Get*
+              - aoss:Create*
+              - aoss:Delete*
+              - aoss:Batch*
+              - aoss:APIAccessAll
+            Resource: "*"
+          - Sid: S3Permissions
+            Effect: Allow
+            Action:
+              - s3:List*
+              - s3:Get*
+              - s3:Put*
+              - s3:Create*
+              - s3:Delete*
+            Resource:
+              - "arn:aws:s3:::general-mortgage-kb-*"
+              - "arn:aws:s3:::general-mortgage-kb-*/*"
+          - Sid: S3ListBuckets
+            Effect: Allow
+            Action:
+              - s3:ListAllMyBuckets
+            Resource: "*"
+          - Sid: IAMPermissions
+            Effect: Allow
+            Action:
+              - iam:List*
+              - iam:Get*
+              - iam:CreateRole
+              - iam:CreatePolicy
+              - iam:DeleteRole
+              - iam:DeletePolicy
+              - iam:PutRolePolicy
+              - iam:DeleteRolePolicy
+              - iam:AttachRolePolicy
+              - iam:DetachRolePolicy
+              - iam:CreateServiceLinkedRole
+            Resource:
+              - "arn:aws:iam::*:role/aws-service-role/observability.aoss.amazonaws*"
+              - "arn:aws:iam::*:role/*AmazonBedrockExecutionRoleForKnowledgeBase*"
+              - "arn:aws:iam::*:role/*bedrock*"
+              - "arn:aws:iam::*:role/*lambda*"
+              - "arn:aws:iam::*:policy/*"
+              - "arn:aws:iam::*:role/DEFAULT_AgentExecutionRole"
+          - Sid: PassRolePermission
+            Effect: Allow
+            Action: "iam:PassRole"
+            Resource:
+              - "arn:aws:iam::*:role/*bedrock*"
+              - "arn:aws:iam::*:role/*lambda*"
+              - "arn:aws:iam::*:role/DEFAULT_AgentExecutionRole"
+              - "arn:aws:iam::*:role/AmazonBedrockExecutionRole*"
+            Condition:
+              StringEquals:
+                iam:PassedToService:
+                  - "bedrock.amazonaws.com"
+                  - "lambda.amazonaws.com"
+          - Sid: LambdaPermissions
+            Effect: Allow
+            Action:
+              - lambda:List*
+              - lambda:Get*
+              - lambda:Create*
+              - lambda:Delete*
+              - lambda:Update*
+              - lambda:Invoke*
+              - lambda:AddPermission
+              - lambda:RemovePermission
+            Resource:
+              - "arn:aws:lambda:*:*:function:*mortgage*"
+          - Sid: STSPermissions
+            Effect: Allow
+            Action:
+              - sts:GetCallerIdentity
+            Resource: "*"
+
+  # 添加 Systems Manager 权限
+  SSMPermissionsPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Policy for Systems Manager permissions
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - ssm:SendCommand
+              - ssm:GetCommandInvocation
+              - ssm:ListCommandInvocations
+              - ssm:DescribeInstanceInformation
+              - ssm:GetAutomationExecution
+              - ssm:StartAutomationExecution
+            Resource: "*"
+
+  # IAM Role for EC2 Instance
+  VSCodeServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Ref BedrockWorkshopPolicy
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - !Ref SSMPermissionsPolicy
+      Path: "/"
+      RoleName: !Sub "${AWS::StackName}-VSCodeServerRole"
+
+  # Instance Profile for EC2
+  VSCodeServerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref VSCodeServerRole
+
+  # Security Group
+  VSCodeServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow VS Code server access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: !Ref SourceIPAddress
+      VpcId: !Ref WorkshopVPC
+
+  # EC2 Instance with IAM Role attached
+  VSCodeServerInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+          - !Ref VSCodeServerSecurityGroup
+          SubnetId: !Ref PublicSubnet
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref VSCodeServerInstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+      Tags:
+        - Key: Name
+          Value: !Ref VSCodeServerName
+        - Key: Workshop
+          Value: "true"
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+
+          echo "####################################################################################################"
+          echo "Trying to install utilities"
+          dnf update -y && rm -rf /var/lib/rpm/.rpm.lock
+          dnf install -y docker git pip && systemctl start docker && chmod 777 /var/run/docker.sock
+          
+          echo "####################################################################################################"
+          echo "Installing Python 3.11"
+          dnf install -y python3.11
+          python3.11 --version
+          alternatives --set python3 /usr/bin/python3.11
+          python3 --version
+
+          echo "####################################################################################################"
+          echo "Trying to install nodejs"
+          dnf update -y && rm -rf /var/lib/rpm/.rpm.lock
+          curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - && rm -rf /var/lib/rpm/.rpm.lock && dnf install nodejs -y
+
+          echo "####################################################################################################"
+          echo "Trying to install code-server"
+          dnf update -y && rm -rf /var/lib/rpm/.rpm.lock
+          wget https://github.com/coder/code-server/releases/download/v4.96.4/code-server-4.96.4-amd64.rpm
+          yum install ./code-server-4.96.4-amd64.rpm -y
+          mkdir -p /home/ec2-user/.config/code-server
+          chown -R ec2-user:ec2-user /home/ec2-user/.config
+          echo "bind-addr: 0.0.0.0:8080" > /home/ec2-user/.config/code-server/config.yaml
+          echo "auth: password" >> /home/ec2-user/.config/code-server/config.yaml
+          echo "password: ${VSCodeServerPassword}" >> /home/ec2-user/.config/code-server/config.yaml
+          echo "cert: false" >> /home/ec2-user/.config/code-server/config.yaml
+          su - ec2-user -c 'nohup code-server &'
+          
+          echo "####################################################################################################"
+          echo "Trying to install kubectl"
+          dnf update -y && rm -rf /var/lib/rpm/.rpm.lock
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          mv ./kubectl /usr/local/bin
+
+          echo "####################################################################################################"
+          echo "Trying to configure shell environment"
+          echo "alias ll='ls -la'" >> /home/ec2-user/.bash_profile
+          echo "alias h='history'" >> /home/ec2-user/.bash_profile
+          echo "alias rm='rm -i'" >> /home/ec2-user/.bash_profile
+          echo "alias k='kubectl'" >> /home/ec2-user/.bash_profile
+          
+          # 安装 AWS CLI v2
+          echo "####################################################################################################"
+          echo "Installing AWS CLI v2"
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          
+          # 配置 AWS 区域
+          echo "####################################################################################################"
+          echo "Configuring AWS Region"
+          mkdir -p /home/ec2-user/.aws
+          echo "[default]" > /home/ec2-user/.aws/config
+          echo "region = ${AWS::Region}" >> /home/ec2-user/.aws/config
+          chown -R ec2-user:ec2-user /home/ec2-user/.aws
+          
+          # 克隆 Amazon Bedrock Agent workshop 代码库
+          echo "####################################################################################################"
+          echo "Cloning Amazon Bedrock Agent GCR Workshop repository"
+          cd /home/ec2-user
+          git clone https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr.git
+          chown -R ec2-user:ec2-user /home/ec2-user/amazon-bedrock-agent-workshop-for-gcr
+          
+          # 确保清理脚本可执行
+          chmod +x /home/ec2-user/amazon-bedrock-agent-workshop-for-gcr/workshop_cleanup.sh
+          
+          # 安装 SSM Agent (如果尚未安装)
+          echo "####################################################################################################"
+          echo "Ensuring SSM Agent is installed and running"
+          dnf install -y amazon-ssm-agent
+          systemctl enable amazon-ssm-agent
+          systemctl start amazon-ssm-agent
+  
+  # 注意：清理逻辑已被移除，因为 Workshop Studio 在终止事件后会自动清空所有资源并回收账号
+  
+Outputs:
+  VSCodeServerURL:
+    Description: URL to access the VS Code server
+    Value: !Sub 'http://${VSCodeServerInstance.PublicDnsName}:8080'
+  VSCodeServerPassword:
+    Description: Password to access the VS Code server
+    Value: !Ref VSCodeServerPassword
+  IAMRoleName:
+    Description: IAM Role attached to the VS Code server
+    Value: !Ref VSCodeServerRole
+  VpcId:
+    Description: ID of the VPC created for the workshop
+    Value: !Ref WorkshopVPC
+  PublicSubnetId:
+    Description: ID of the public subnet created for the workshop
+    Value: !Ref PublicSubnet
+  DefaultAgentExecutionRoleArn:
+    Description: ARN of the DEFAULT_AgentExecutionRole for Bedrock Agents
+    Value: !GetAtt DefaultAgentExecutionRole.Arn
