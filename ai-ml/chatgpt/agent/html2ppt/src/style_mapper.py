@@ -121,7 +121,16 @@ class StyleMapper:
             rgb_color = self._parse_color(color)
             if rgb_color:
                 for run in paragraph.runs:
-                    run.font.color.rgb = rgb_color
+                    # 只对没有设置颜色的run应用样式颜色
+                    # 这样可以保留格式化文本中已设置的颜色
+                    try:
+                        # 检查run是否已经有颜色设置
+                        current_color = run.font.color.rgb
+                        if current_color is None:
+                            run.font.color.rgb = rgb_color
+                    except:
+                        # 如果获取颜色失败，说明没有设置颜色，应用样式颜色
+                        run.font.color.rgb = rgb_color
         
         # 背景颜色（通过段落级别设置）
         background_color = html_styles.get('background-color', '')

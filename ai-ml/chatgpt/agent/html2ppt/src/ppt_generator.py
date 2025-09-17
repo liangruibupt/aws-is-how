@@ -158,6 +158,32 @@ class PPTGenerator:
         
         return slide_plan
     
+    def _force_disable_bullet(self, paragraph):
+        """强制禁用段落的项目符号，确保模板不会覆盖"""
+        try:
+            paragraph.bullet = False
+            # 额外确保没有项目符号格式
+            if hasattr(paragraph, '_element'):
+                # 移除任何项目符号相关的XML元素
+                pPr = paragraph._element.get_or_add_pPr()
+                # 移除项目符号设置
+                for buChar in pPr.xpath('.//a:buChar', namespaces={'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}):
+                    buChar.getparent().remove(buChar)
+                for buAutoNum in pPr.xpath('.//a:buAutoNum', namespaces={'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}):
+                    buAutoNum.getparent().remove(buAutoNum)
+        except:
+            # 如果XML操作失败，至少确保基本设置
+            paragraph.bullet = False
+    
+    def _force_enable_bullet(self, paragraph):
+        """强制启用段落的项目符号"""
+        paragraph.bullet = True
+    
+    def _force_disable_bullet_add_number(self, paragraph, number):
+        """强制禁用项目符号并添加数字前缀"""
+        self._force_disable_bullet(paragraph)
+        # 数字前缀已经在文本中添加了
+    
     def _calculate_optimal_font_size(self, formatted_text_parts, font_size_key='body'):
         """计算最优字体大小，防止文字超出幻灯片边界"""
         if not formatted_text_parts:
@@ -261,7 +287,7 @@ class PPTGenerator:
         optimal_size = self._calculate_optimal_font_size([{'text': subtitle}], 'body')
         for run in paragraph.runs:
             run.font.size = Pt(optimal_size)
-            run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_2
+            run.font.color.rgb = RGBColor(0, 0, 0)  # 使用黑色确保可见性
     
     def _create_content_slide(self, slide_info, analyzed_content):
         """创建内容幻灯片"""
@@ -364,12 +390,15 @@ class PPTGenerator:
     
     def _can_use_placeholder(self, content):
         """判断是否可以使用占位符"""
-        # 如果内容主要是文本和列表，可以使用占位符
-        text_types = ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'code', 'blockquote']
-        for item in content:
-            if item.get('type') not in text_types:
-                return False
-        return len(content) <= 5  # 内容不太多时使用占位符
+        # 临时禁用占位符，强制使用自定义布局来解决项目符号问题
+        return False
+        
+        # 原来的逻辑（暂时禁用）
+        # text_types = ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'code', 'blockquote']
+        # for item in content:
+        #     if item.get('type') not in text_types:
+        #         return False
+        # return len(content) <= 5  # 内容不太多时使用占位符
     
     def _add_content_to_placeholder(self, placeholder, content, slide_title=""):
         """向占位符添加内容"""
@@ -411,11 +440,13 @@ class PPTGenerator:
                         
                         # 根据列表类型设置不同的格式
                         if item_type == 'ol':
-                            # 有序列表 - 添加数字
+                            # 有序列表 - 手动添加数字，强制禁用项目符号
                             prefix = f"{j + 1}. "
+                            self._force_disable_bullet_add_number(p, j + 1)
                         else:
-                            # 无序列表 - 使用PowerPoint默认项目符号
+                            # 无序列表 - 强制启用PowerPoint项目符号
                             prefix = ""
+                            self._force_enable_bullet(p)
                         
                         # 使用格式化文本或纯文本
                         if formatted_text:
@@ -442,6 +473,9 @@ class PPTGenerator:
                     p = text_frame.add_paragraph()
                 
                 p.level = 0
+                # 标题不应该有项目符号 - 强制设置
+                self._force_disable_bullet(p)
+                
                 formatted_text = item.get('formatted_text', [])
                 
                 if formatted_text:
@@ -469,6 +503,9 @@ class PPTGenerator:
                     p = text_frame.add_paragraph()
                 
                 p.level = 0
+                # 代码块不应该有项目符号 - 强制设置
+                self._force_disable_bullet(p)
+                
                 formatted_text = item.get('formatted_text', [])
                 
                 if formatted_text:
@@ -492,6 +529,9 @@ class PPTGenerator:
                     p = text_frame.add_paragraph()
                 
                 p.level = 0
+                # 引用不应该有项目符号 - 强制设置
+                self._force_disable_bullet(p)
+                
                 formatted_text = item.get('formatted_text', [])
                 
                 if formatted_text:
@@ -518,6 +558,9 @@ class PPTGenerator:
                     p = text_frame.add_paragraph()
                 
                 p.level = 0
+                # 普通段落不应该有项目符号 - 强制设置
+                self._force_disable_bullet(p)
+                
                 formatted_text = item.get('formatted_text', [])
                 
                 if formatted_text:
@@ -622,13 +665,26 @@ class PPTGenerator:
         
         # 添加格式化文本或纯文本
         if formatted_text:
+            # 先应用基础样式，再添加格式化文本（这样格式化文本的颜色会覆盖基础样式）
+            text_frame.text = ""  # 确保有一个段落
+            # 强制禁用段落的项目符号
+            self._force_disable_bullet(text_frame.paragraphs[0])
+            styles = item.get('styles', {})
+            self.style_mapper.apply_text_styles(text_frame.paragraphs[0], styles)
+            # 然后添加格式化文本，个别颜色会覆盖基础样式
             self._add_formatted_text_to_paragraph(text_frame.paragraphs[0], formatted_text, 'body')
         else:
             text_frame.text = text
-        
-        # 应用样式
-        styles = item.get('styles', {})
-        self.style_mapper.apply_text_styles(text_frame.paragraphs[0], styles)
+            # 强制禁用段落的项目符号
+            self._force_disable_bullet(text_frame.paragraphs[0])
+            # 应用样式
+            styles = item.get('styles', {})
+            self.style_mapper.apply_text_styles(text_frame.paragraphs[0], styles)
+            
+            # 只有在样式中没有颜色时才设置默认黑色
+            if not styles.get('color'):
+                for run in text_frame.paragraphs[0].runs:
+                    run.font.color.rgb = RGBColor(0, 0, 0)
         
         self.stats['text_blocks'] += 1
         return text_height
@@ -683,8 +739,20 @@ class PPTGenerator:
                             g = int(hex_color[2:4], 16)
                             b = int(hex_color[4:6], 16)
                             run.font.color.rgb = RGBColor(r, g, b)
+                    elif color.startswith('rgb('):
+                        # RGB颜色格式 rgb(255, 0, 0)
+                        rgb_values = color[4:-1].split(',')
+                        if len(rgb_values) == 3:
+                            r = int(rgb_values[0].strip())
+                            g = int(rgb_values[1].strip())
+                            b = int(rgb_values[2].strip())
+                            run.font.color.rgb = RGBColor(r, g, b)
                 except:
-                    pass  # 忽略无效颜色
+                    # 如果颜色解析失败，使用黑色作为fallback
+                    run.font.color.rgb = RGBColor(0, 0, 0)
+            else:
+                # 只有在没有指定颜色时才使用黑色作为默认
+                run.font.color.rgb = RGBColor(0, 0, 0)
             
             # 处理链接（PowerPoint中链接处理比较复杂，这里简化处理）
             link = part.get('link')
@@ -727,11 +795,13 @@ class PPTGenerator:
                 
                 # 根据列表类型设置不同的格式
                 if item_type == 'ol':
-                    # 有序列表 - 添加数字
+                    # 有序列表 - 手动添加数字，强制禁用项目符号
                     prefix = f"{i + 1}. "
+                    self._force_disable_bullet_add_number(p, i + 1)
                 else:
-                    # 无序列表 - 使用PowerPoint默认项目符号
+                    # 无序列表 - 强制启用PowerPoint项目符号
                     prefix = ""
+                    self._force_enable_bullet(p)
                 
                 # 添加格式化文本或纯文本
                 if formatted_text:
@@ -1352,8 +1422,9 @@ class PPTGenerator:
         textbox.line.color.rgb = RGBColor(200, 200, 200)
         
         self.stats['text_blocks'] += 1
-        return code_height 
-   def _format_title_text(self, title_shape):
+        return code_height
+    
+    def _format_title_text(self, title_shape):
         """格式化标题文本"""
         if not title_shape.has_text_frame:
             return
@@ -1366,7 +1437,9 @@ class PPTGenerator:
                 optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'title')
                 run.font.size = Pt(optimal_size)
                 run.font.bold = True
-                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
+                # 让样式映射器处理颜色，或使用深蓝色作为标题默认色
+                if not hasattr(run.font.color, 'rgb') or run.font.color.rgb is None:
+                    run.font.color.rgb = RGBColor(0, 120, 212)  # 深蓝色 #0078D4
     
     def _format_subtitle_text(self, subtitle_shape):
         """格式化副标题文本"""
@@ -1380,7 +1453,9 @@ class PPTGenerator:
                 # 使用优化的副标题字体大小
                 optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'body')
                 run.font.size = Pt(optimal_size)
-                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_2
+                # 使用深灰色作为副标题默认色
+                if not hasattr(run.font.color, 'rgb') or run.font.color.rgb is None:
+                    run.font.color.rgb = RGBColor(51, 51, 51)  # 深灰色 #333
     
     def _format_heading_text(self, heading_shape):
         """格式化标题文本"""
@@ -1394,7 +1469,9 @@ class PPTGenerator:
                 optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'h1')
                 run.font.size = Pt(optimal_size)
                 run.font.bold = True
-                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
+                # 使用深蓝色作为标题默认色
+                if not hasattr(run.font.color, 'rgb') or run.font.color.rgb is None:
+                    run.font.color.rgb = RGBColor(0, 120, 212)  # 深蓝色 #0078D4
     
     def _format_section_title_text(self, title_shape):
         """格式化章节标题文本"""
@@ -1409,7 +1486,9 @@ class PPTGenerator:
                 optimal_size = self._calculate_optimal_font_size([{'text': run.text}], 'h1')
                 run.font.size = Pt(optimal_size)
                 run.font.bold = True
-                run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_1
+                # 使用深蓝色作为章节标题默认色
+                if not hasattr(run.font.color, 'rgb') or run.font.color.rgb is None:
+                    run.font.color.rgb = RGBColor(0, 120, 212)  # 深蓝色 #0078D4
     
     def _add_footer_text(self, slide, footer_text):
         """添加页脚文本"""
@@ -1428,7 +1507,7 @@ class PPTGenerator:
         paragraph.alignment = PP_ALIGN.RIGHT
         for run in paragraph.runs:
             run.font.size = Pt(self.font_sizes['caption'])
-            run.font.color.theme_color = MSO_THEME_COLOR.ACCENT_3
+            run.font.color.rgb = RGBColor(128, 128, 128)  # 使用灰色作为页脚
     
     def _add_slide_notes(self, slide, slide_info, analyzed_content):
         """添加幻灯片备注"""

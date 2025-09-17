@@ -247,6 +247,10 @@ class HTMLParser:
         """提取带格式的文本内容"""
         formatted_parts = []
         
+        # 获取当前元素的样式，包括颜色
+        element_styles = self._get_element_styles(element)
+        element_color = element_styles.get('color')
+        
         for content in element.contents:
             if isinstance(content, NavigableString):
                 text = str(content)
@@ -258,7 +262,7 @@ class HTMLParser:
                         'italic': False,
                         'underline': False,
                         'link': None,
-                        'color': None
+                        'color': element_color  # 使用当前元素的颜色，如果没有则为None
                     })
             elif isinstance(content, Tag):
                 if content.name == 'br':
@@ -268,7 +272,7 @@ class HTMLParser:
                         'italic': False,
                         'underline': False,
                         'link': None,
-                        'color': None
+                        'color': element_color
                     })
                 elif content.name in ['strong', 'b']:
                     # 递归处理嵌套格式
@@ -297,14 +301,6 @@ class HTMLParser:
                 else:
                     # 其他标签，递归处理并提取颜色
                     nested_parts = self._extract_formatted_text(content)
-                    
-                    # 提取颜色信息
-                    color = self._extract_color_from_element(content)
-                    if color:
-                        for part in nested_parts:
-                            if not part.get('color'):  # 不覆盖已有颜色
-                                part['color'] = color
-                    
                     formatted_parts.extend(nested_parts)
         
         # 如果没有格式信息，返回纯文本
@@ -320,7 +316,8 @@ class HTMLParser:
                 current_part['bold'] == part['bold'] and
                 current_part['italic'] == part['italic'] and
                 current_part['underline'] == part['underline'] and
-                current_part['link'] == part['link']):
+                current_part['link'] == part['link'] and
+                current_part['color'] == part['color']):
                 # 合并文本
                 current_part['text'] += part['text']
             else:
