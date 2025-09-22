@@ -498,31 +498,63 @@ class SemanticAnalyzer:
             
             slide_number = 2
             
-            # 内容页
-            for i, section in enumerate(sections):
+            # 智能合并内容页
+            i = 0
+            while i < len(sections):
+                section = sections[i]
                 importance = section.get('importance_score', 0.5)
                 content_types = section.get('content_types', [])
                 suggested_layout = section.get('suggested_layout', 'single_content')
-                
-                # 根据重要性和内容复杂度决定是否分割
                 content_count = len(section.get('content', []))
                 
-                if importance > 0.7 or content_count > 4:
-                    # 重要或复杂的章节可能需要多张幻灯片
-                    if content_count > 4:
-                        # 分割内容
-                        chunks = self._split_content_into_chunks(section['content'])
-                        for j, chunk in enumerate(chunks):
-                            structure['slide_plan'].append({
-                                'slide_number': slide_number,
-                                'type': 'content',
-                                'title': section.get('title', f'章节 {i+1}') + (f' ({j+1})' if len(chunks) > 1 else ''),
-                                'content': chunk,
-                                'layout': suggested_layout,
-                                'source_section': i
-                            })
-                            slide_number += 1
-                    else:
+                # 计算内容权重
+                content_weight = self._calculate_section_weight(section)
+                
+                # 如果内容很少且不是很重要，尝试与下一个章节合并
+                if (content_weight < 2 and importance < 0.7 and 
+                    i + 1 < len(sections) and 
+                    'table' not in content_types and 'image' not in content_types):
+                    
+                    next_section = sections[i + 1]
+                    next_weight = self._calculate_section_weight(next_section)
+                    next_types = next_section.get('content_types', [])
+                    
+                    # 如果合并后的内容量合适，就合并
+                    if (content_weight + next_weight <= 6 and 
+                        'table' not in next_types and 'image' not in next_types):
+                        
+                        combined_content = section.get('content', []) + next_section.get('content', [])
+                        combined_title = section.get('title', f'章节 {i+1}')
+                        
+                        structure['slide_plan'].append({
+                            'slide_number': slide_number,
+                            'type': 'content',
+                            'title': combined_title,
+                            'content': combined_content,
+                            'layout': suggested_layout,
+                            'source_section': i
+                        })
+                        
+                        slide_number += 1
+                        i += 2  # 跳过下一个章节
+                        continue
+                
+                # 如果内容很多，分割成多个幻灯片
+                if content_count > 6 or content_weight > 10:
+                    chunks = self._split_content_into_chunks(section['content'])
+                    for j, chunk in enumerate(chunks):
+                        structure['slide_plan'].append({
+                            'slide_number': slide_number,
+                            'type': 'content',
+                            'title': section.get('title', f'章节 {i+1}') + (f' ({j+1})' if len(chunks) > 1 else ''),
+                            'content': chunk,
+                            'layout': suggested_layout,
+                            'source_section': i
+                        })
+                        slide_number += 1
+                else:
+                    # 创建单独的幻灯片（只有当内容不为空时）
+                    if content_weight > 0:
                         structure['slide_plan'].append({
                             'slide_number': slide_number,
                             'type': 'content',
@@ -532,17 +564,8 @@ class SemanticAnalyzer:
                             'source_section': i
                         })
                         slide_number += 1
-                else:
-                    # 普通章节
-                    structure['slide_plan'].append({
-                        'slide_number': slide_number,
-                        'type': 'content',
-                        'title': section.get('title', f'章节 {i+1}'),
-                        'content': section.get('content', []),
-                        'layout': suggested_layout,
-                        'source_section': i
-                    })
-                    slide_number += 1
+                
+                i += 1
             
             structure['total_slides'] = slide_number - 1
             
@@ -558,27 +581,84 @@ class SemanticAnalyzer:
         
         return structure
     
-    def _split_content_into_chunks(self, content, max_items_per_chunk=3):
+    def _calculate_section_weight(self, section):
+        """计算章节的内容权重"""
+        content = section.get('content', [])
+        if not content:
+            return 0
+        
+        weight = 0
+        for item in content:
+            item_type = item.get('type', '')
+            text = item.get('text', '').strip()
+            
+            if item_type == 'table':
+                weight += 5  # 表格权重很高
+            elif item_type == 'img':
+                weight += 4  # 图片权重高
+            elif item_type in ['ul', 'ol']:
+                items = item.get('items', [])
+                weight += min(len(items) * 0.5, 4)  # 列表项权重
+            elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+                weight += 0.5  # 标题权重较低
+            elif item_type in ['p', 'div']:
+                # 根据文本长度计算权重
+                if text:
+                    weight += min(len(text) / 100, 2)  # 每100字符1分，最多2分
+            elif item_type in ['pre', 'code', 'blockquote']:
+                weight += 2  # 代码和引用权重中等
+        
+        return weight
+    
+    def _split_content_into_chunks(self, content, max_items_per_chunk=4):
         """将内容分割成块"""
         chunks = []
         current_chunk = []
+        current_weight = 0
         
         for item in content:
-            current_chunk.append(item)
+            item_weight = self._calculate_item_weight(item)
             
-            # 如果当前块达到最大项目数，或者遇到重要分割点
-            if (len(current_chunk) >= max_items_per_chunk or 
-                item.get('type') in ['h2', 'h3', 'table']):
+            # 如果添加这个项目会超过权重限制，或者遇到重要分割点
+            if (current_weight + item_weight > 8 or 
+                (len(current_chunk) >= max_items_per_chunk and item.get('type') in ['h2', 'h3', 'table'])):
                 
                 if current_chunk:
                     chunks.append(current_chunk)
                     current_chunk = []
+                    current_weight = 0
+            
+            current_chunk.append(item)
+            current_weight += item_weight
         
         # 添加剩余内容
         if current_chunk:
             chunks.append(current_chunk)
         
         return chunks if chunks else [content]
+    
+    def _calculate_item_weight(self, item):
+        """计算单个内容项的权重"""
+        item_type = item.get('type', '')
+        text = item.get('text', '').strip()
+        
+        if item_type == 'table':
+            return 5
+        elif item_type == 'img':
+            return 4
+        elif item_type in ['ul', 'ol']:
+            items = item.get('items', [])
+            return min(len(items) * 0.5, 4)
+        elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+            return 0.5
+        elif item_type in ['p', 'div']:
+            if text:
+                return min(len(text) / 100, 2)
+            return 0
+        elif item_type in ['pre', 'code', 'blockquote']:
+            return 2
+        else:
+            return 1
     
     def _suggest_color_scheme(self, analyzed_content):
         """建议配色方案"""

@@ -241,12 +241,16 @@
     - [SageMaker Notebook 机器学习服务轻松托管 Stable Diffusion WebUI](https://aws.amazon.com/cn/blogs/china/quickly-build-a-hosted-stable-diffusion-ai-drawing-visualization-environment-based-on-sagemaker-notebook/)
     - [Stable Diffusion on Amazon SageMaker Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/d9ca179a-3a36-4822-9f80-0b3ffcc26f37/en-US)
     - [inpaint-images-with-stable-diffusion-using-amazon-sagemaker-jumpstart](https://aws.amazon.com/blogs/machine-learning/inpaint-images-with-stable-diffusion-using-amazon-sagemaker-jumpstart/)
-    - [基于 Amazon EKS 的 Stable Diffusion ComfyUI 部署方案](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
   - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
   - [SageMaker LMI+Streaming 构建 端到端GenAI Text2Image应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
-  - [Luma Ray2]
-    - [Luma Ray2的ComfyUI node集成](https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock)
-
+  - [ComfyUI]
+    - [Deployment]
+      - [ComfyUI_quickstart](ai-ml/aigc/ComfyUI/ComfyUI_quickstart.md)
+      - [cost-effective-aws-deployment-of-comfyui](https://github.com/aws-samples/cost-effective-aws-deployment-of-comfyui)
+    - [Integration and Usage]
+      - [Luma Ray2的ComfyUI node集成](https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock)
+      - [基于 Amazon EKS 的 Stable Diffusion ComfyUI 部署方案](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
+      - [使用 Amazon EC2 构建 ComfyUI 结合 Krita 的实践](https://aws.amazon.com/cn/blogs/china/using-ec2-to-build-comfyui-and-combine-it-with-krita-practice/)
 - [Scenario based]
   - [Chatbot]
     - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)

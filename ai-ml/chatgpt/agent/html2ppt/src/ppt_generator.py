@@ -144,19 +144,93 @@ class PPTGenerator:
             'layout': 'title_slide'
         })
         
-        # 内容页
+        # 智能合并内容页
         sections = analyzed_content.get('sections', [])
-        for i, section in enumerate(sections):
-            slide_plan.append({
-                'slide_number': i + 2,
-                'type': 'content',
-                'title': section.get('title', f'章节 {i+1}'),
-                'content': section.get('content', []),
-                'layout': 'content_slide',
-                'source_section': i
-            })
+        slide_plan.extend(self._create_smart_slide_plan(sections))
         
         return slide_plan
+    
+    def _create_smart_slide_plan(self, sections):
+        """创建智能幻灯片计划，合并内容少的章节"""
+        smart_plan = []
+        slide_number = 2
+        
+        i = 0
+        while i < len(sections):
+            section = sections[i]
+            section_content = section.get('content', [])
+            section_title = section.get('title', f'章节 {i+1}')
+            
+            # 计算当前章节的内容量
+            content_weight = self._calculate_content_weight(section_content)
+            
+            # 如果内容很少，尝试与下一个章节合并
+            if content_weight < 3 and i + 1 < len(sections):
+                next_section = sections[i + 1]
+                next_content = next_section.get('content', [])
+                next_weight = self._calculate_content_weight(next_content)
+                
+                # 如果合并后的内容量合适，就合并
+                if content_weight + next_weight <= 8:
+                    combined_content = section_content + next_content
+                    combined_title = section_title
+                    
+                    smart_plan.append({
+                        'slide_number': slide_number,
+                        'type': 'content',
+                        'title': combined_title,
+                        'content': combined_content,
+                        'layout': 'content_slide',
+                        'source_section': i
+                    })
+                    
+                    slide_number += 1
+                    i += 2  # 跳过下一个章节，因为已经合并了
+                    continue
+            
+            # 如果不能合并或内容足够，创建单独的幻灯片
+            if content_weight > 0:  # 只为有内容的章节创建幻灯片
+                smart_plan.append({
+                    'slide_number': slide_number,
+                    'type': 'content',
+                    'title': section_title,
+                    'content': section_content,
+                    'layout': 'content_slide',
+                    'source_section': i
+                })
+                slide_number += 1
+            
+            i += 1
+        
+        return smart_plan
+    
+    def _calculate_content_weight(self, content):
+        """计算内容的权重，用于决定是否合并幻灯片"""
+        if not content:
+            return 0
+        
+        weight = 0
+        for item in content:
+            item_type = item.get('type', '')
+            text = item.get('text', '').strip()
+            
+            if item_type == 'table':
+                weight += 4  # 表格权重很高
+            elif item_type == 'img':
+                weight += 3  # 图片权重高
+            elif item_type in ['ul', 'ol']:
+                items = item.get('items', [])
+                weight += min(len(items) * 0.5, 3)  # 列表项权重
+            elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+                weight += 0.5  # 标题权重较低
+            elif item_type in ['p', 'div']:
+                # 根据文本长度计算权重
+                if text:
+                    weight += min(len(text) / 100, 2)  # 每100字符1分，最多2分
+            elif item_type in ['pre', 'code', 'blockquote']:
+                weight += 1.5  # 代码和引用权重中等
+        
+        return weight
     
     def _force_disable_bullet(self, paragraph):
         """强制禁用段落的项目符号，确保模板不会覆盖"""
@@ -300,6 +374,7 @@ class PPTGenerator:
         
         # 设置标题
         title = slide_info.get('title', '')
+        logger.info(f"创建内容幻灯片: {title}")
         if slide.shapes.title:
             slide.shapes.title.text = title
             self._format_heading_text(slide.shapes.title)
@@ -372,8 +447,9 @@ class PPTGenerator:
         
         # 尝试使用内容占位符
         content_placeholder = self._find_content_placeholder(slide)
+        can_use_placeholder = self._can_use_placeholder(content)
         
-        if content_placeholder and self._can_use_placeholder(content):
+        if content_placeholder and can_use_placeholder:
             # 使用占位符添加内容
             self._add_content_to_placeholder(content_placeholder, content, slide_title)
         else:
@@ -390,15 +466,21 @@ class PPTGenerator:
     
     def _can_use_placeholder(self, content):
         """判断是否可以使用占位符"""
-        # 临时禁用占位符，强制使用自定义布局来解决项目符号问题
-        return False
+        # 重新启用占位符，但增加更智能的判断逻辑
+        if not content:
+            return False
         
-        # 原来的逻辑（暂时禁用）
-        # text_types = ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'code', 'blockquote']
-        # for item in content:
-        #     if item.get('type') not in text_types:
-        #         return False
-        # return len(content) <= 5  # 内容不太多时使用占位符
+        # 检查内容类型是否适合占位符
+        text_types = ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'code', 'blockquote']
+        
+        # 如果包含表格或图片，不使用占位符
+        for item in content:
+            item_type = item.get('type', '')
+            if item_type not in text_types:
+                return False
+        
+        # 内容不太多时使用占位符，避免重叠
+        return len(content) <= 3  # 减少到3个元素以下使用占位符
     
     def _add_content_to_placeholder(self, placeholder, content, slide_title=""):
         """向占位符添加内容"""
@@ -442,11 +524,22 @@ class PPTGenerator:
                         if item_type == 'ol':
                             # 有序列表 - 手动添加数字，强制禁用项目符号
                             prefix = f"{j + 1}. "
-                            self._force_disable_bullet_add_number(p, j + 1)
+                            p.bullet = False  # 禁用项目符号
+                            # 强制清除任何继承的项目符号格式
+                            try:
+                                if hasattr(p, '_element'):
+                                    pPr = p._element.get_or_add_pPr()
+                                    # 移除项目符号相关的XML元素
+                                    for buChar in pPr.xpath('.//a:buChar', namespaces={'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}):
+                                        buChar.getparent().remove(buChar)
+                                    for buAutoNum in pPr.xpath('.//a:buAutoNum', namespaces={'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}):
+                                        buAutoNum.getparent().remove(buAutoNum)
+                            except:
+                                pass
                         else:
-                            # 无序列表 - 强制启用PowerPoint项目符号
+                            # 无序列表 - 使用PowerPoint项目符号
                             prefix = ""
-                            self._force_enable_bullet(p)
+                            p.bullet = True   # 启用项目符号
                         
                         # 使用格式化文本或纯文本
                         if formatted_text:
@@ -582,13 +675,100 @@ class PPTGenerator:
     
     def _add_content_with_custom_layout(self, slide, content, slide_title=""):
         """使用自定义布局添加内容"""
+        # 首先隐藏或移除不需要的占位符，避免重叠
+        self._hide_unused_placeholders(slide)
+        
+        # 扁平化内容，包括子元素
+        flattened_content = self._flatten_content(content)
+        
+        # 检查是否包含图片，如果有图片则使用左右分栏布局
+        has_image = any(item.get('type') == 'img' for item in flattened_content)
+        
+        if has_image:
+            self._add_content_with_image_layout(slide, flattened_content, slide_title)
+        else:
+            self._add_content_with_vertical_layout(slide, flattened_content, slide_title)
+    
+    def _add_content_with_image_layout(self, slide, flattened_content, slide_title=""):
+        """使用图片+文字的左右分栏布局"""
         margins = self.layout_config.get('margins', {})
         slide_width = self.layout_config.get('slide_width', 10)
         slide_height = self.layout_config.get('slide_height', 7.5)
         
         # 计算可用区域
         left_margin = margins.get('left', 0.5)
-        top_margin = margins.get('top', 1.5)  # 为标题留出空间
+        top_margin = self._calculate_safe_top_margin(slide)
+        right_margin = margins.get('right', 0.5)
+        bottom_margin = margins.get('bottom', 0.5)
+        
+        available_width = slide_width - left_margin - right_margin
+        available_height = slide_height - top_margin - bottom_margin
+        
+        # 分栏布局：左侧图片，右侧文字
+        image_width = available_width * 0.55  # 图片占55%宽度，增大图片
+        text_width = available_width * 0.4    # 文字占40%宽度，减小文字区域防止超出
+        column_gap = available_width * 0.05   # 5%间距
+        
+        image_left = left_margin
+        text_left = left_margin + image_width + column_gap
+        
+        current_image_y = top_margin
+        current_text_y = top_margin
+        
+        # 分离图片和文字内容
+        image_items = []
+        text_items = []
+        
+        for item in flattened_content:
+            item_type = item.get('type', '')
+            if item_type == 'img':
+                image_items.append(item)
+            else:
+                # 跳过与幻灯片标题重复的标题元素
+                item_text = item.get('text', '').strip()
+                if item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and item_text == slide_title:
+                    continue
+                text_items.append(item)
+        
+        # 添加图片到左侧
+        for item in image_items:
+            if current_image_y >= slide_height - bottom_margin:
+                break
+            height = self._add_image_content_at_position(slide, item, image_left, current_image_y, image_width)
+            current_image_y += height + 0.5  # 增加图片间距
+        
+        # 添加文字内容到右侧
+        for item in text_items:
+            if current_text_y >= slide_height - bottom_margin:
+                break
+            
+            item_type = item.get('type', '')
+            
+            if item_type in ['p', 'div']:
+                height = self._add_paragraph_content_at_position(slide, item, text_left, current_text_y, text_width)
+                current_text_y += height + 0.4  # 增加间距
+            elif item_type in ['ul', 'ol']:
+                height = self._add_list_content_at_position(slide, item, text_left, current_text_y, text_width)
+                current_text_y += height + 0.4  # 增加间距
+            elif item_type == 'table':
+                height = self._add_table_content_at_position(slide, item, text_left, current_text_y, text_width)
+                current_text_y += height + 0.5  # 增加间距
+            elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+                height = self._add_heading_content_at_position(slide, item, text_left, current_text_y, text_width)
+                current_text_y += height + 0.4  # 增加间距
+            elif item_type in ['blockquote', 'pre', 'code']:
+                height = self._add_code_content_at_position(slide, item, text_left, current_text_y, text_width)
+                current_text_y += height + 0.4  # 增加间距
+    
+    def _add_content_with_vertical_layout(self, slide, flattened_content, slide_title=""):
+        """使用传统的垂直布局"""
+        margins = self.layout_config.get('margins', {})
+        slide_width = self.layout_config.get('slide_width', 10)
+        slide_height = self.layout_config.get('slide_height', 7.5)
+        
+        # 计算可用区域，避开模板占位符
+        left_margin = margins.get('left', 0.5)
+        top_margin = self._calculate_safe_top_margin(slide)  # 动态计算安全的顶部边距
         right_margin = margins.get('right', 0.5)
         bottom_margin = margins.get('bottom', 0.5)
         
@@ -597,7 +777,7 @@ class PPTGenerator:
         
         current_y = top_margin
         
-        for item in content:
+        for item in flattened_content:
             if current_y >= slide_height - bottom_margin:
                 break  # 空间不足，停止添加
             
@@ -608,24 +788,25 @@ class PPTGenerator:
             if item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and item_text == slide_title:
                 continue
             
+            # 大幅增加元素间的垂直间距，彻底防止重叠
             if item_type in ['p', 'div']:
                 height = self._add_paragraph_content_at_position(slide, item, left_margin, current_y, available_width)
-                current_y += height + 0.1  # 添加间距
+                current_y += height + 0.4   # 大幅增加间距
             elif item_type in ['ul', 'ol']:
                 height = self._add_list_content_at_position(slide, item, left_margin, current_y, available_width)
-                current_y += height + 0.1
+                current_y += height + 0.4   # 大幅增加间距
             elif item_type == 'table':
                 height = self._add_table_content_at_position(slide, item, left_margin, current_y, available_width)
-                current_y += height + 0.2
+                current_y += height + 0.5   # 表格需要更多间距
             elif item_type == 'img':
                 height = self._add_image_content_at_position(slide, item, left_margin, current_y, available_width)
-                current_y += height + 0.2
+                current_y += height + 0.5   # 图片需要更多间距
             elif item_type in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
                 height = self._add_heading_content_at_position(slide, item, left_margin, current_y, available_width)
-                current_y += height + 0.1
+                current_y += height + 0.4   # 标题需要更多间距
             elif item_type in ['blockquote', 'pre', 'code']:
                 height = self._add_code_content_at_position(slide, item, left_margin, current_y, available_width)
-                current_y += height + 0.1
+                current_y += height + 0.4   # 大幅增加间距
     
     def _create_content_textbox(self, slide):
         """创建内容文本框"""
@@ -646,10 +827,22 @@ class PPTGenerator:
         if not text and not formatted_text:
             return 0
         
-        # 估算文本高度（更准确的估算）
+        # 更准确的文本高度估算
         display_text = text or ''.join([part['text'] for part in formatted_text])
-        lines = max(1, len(display_text) // 80)  # 假设每行80个字符
-        text_height = max(0.3, lines * 0.25)  # 每行约0.25英寸
+        
+        # 考虑中文字符和英文字符的不同宽度
+        char_count = len(display_text)
+        chinese_chars = len([c for c in display_text if ord(c) > 127])
+        english_chars = char_count - chinese_chars
+        
+        # 中文字符占用更多空间，每行约30个中文字符或50个英文字符（更保守的估算）
+        effective_chars = chinese_chars * 1.8 + english_chars
+        chars_per_line = max(30, int(width * 12))  # 根据宽度动态计算每行字符数
+        lines = max(1, int(effective_chars / chars_per_line))
+        
+        # 更保守的高度计算，确保有足够空间
+        base_line_height = 0.35  # 每行基础高度
+        text_height = max(0.6, lines * base_line_height + 0.3)  # 增加额外的缓冲空间
         
         textbox = slide.shapes.add_textbox(
             Inches(left), Inches(top), 
@@ -660,8 +853,8 @@ class PPTGenerator:
         text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
         text_frame.margin_left = Inches(0.1)
         text_frame.margin_right = Inches(0.1)
-        text_frame.margin_top = Inches(0.05)
-        text_frame.margin_bottom = Inches(0.05)
+        text_frame.margin_top = Inches(0.08)  # 增加上边距
+        text_frame.margin_bottom = Inches(0.08)  # 增加下边距
         
         # 添加格式化文本或纯文本
         if formatted_text:
@@ -681,13 +874,22 @@ class PPTGenerator:
             styles = item.get('styles', {})
             self.style_mapper.apply_text_styles(text_frame.paragraphs[0], styles)
             
-            # 只有在样式中没有颜色时才设置默认黑色
+            # 只有在样式中没有颜色时才设置默认黑色，并根据宽度调整字体大小
             if not styles.get('color'):
+                font_size = self.font_sizes['body']
+                if width < 5:  # 如果宽度小于5英寸（分栏布局），使用更小字体
+                    font_size = max(14, font_size - 4)  # 减小字体但不小于14pt
                 for run in text_frame.paragraphs[0].runs:
                     run.font.color.rgb = RGBColor(0, 0, 0)
+                    run.font.size = Pt(font_size)
         
         self.stats['text_blocks'] += 1
-        return text_height
+        
+        # 由于使用了auto_size，需要获取实际的文本框高度
+        # 但在创建时无法立即获取，所以使用更保守的估算
+        # 增加一些缓冲空间以防止重叠
+        actual_height = max(text_height, 0.8)  # 最小高度0.8英寸
+        return actual_height
     
     def _add_formatted_text_to_paragraph(self, paragraph, formatted_text_parts, font_size_key='body'):
         """向段落添加格式化文本"""
@@ -768,8 +970,22 @@ class PPTGenerator:
         if not items:
             return 0
         
-        # 估算列表高度
-        list_height = max(0.5, len(items) * 0.25)
+        # 更准确的列表高度估算
+        total_text_length = 0
+        for list_item in items:
+            item_text = list_item.get('text', '').strip()
+            formatted_text = list_item.get('formatted_text', [])
+            display_text = item_text or ''.join([part['text'] for part in formatted_text])
+            total_text_length += len(display_text)
+        
+        # 考虑列表项的换行和间距，使用更保守的估算
+        chars_per_line = max(30, int(width * 10))  # 根据宽度动态计算每行字符数
+        avg_item_length = total_text_length / len(items) if items else 0
+        lines_per_item = max(1, int(avg_item_length / chars_per_line))
+        
+        # 更保守的高度计算，每个列表项至少0.4英寸
+        base_item_height = 0.4
+        list_height = max(1.0, len(items) * base_item_height + (len(items) - 1) * 0.1)  # 项目间距0.1英寸
         
         textbox = slide.shapes.add_textbox(
             Inches(left), Inches(top), 
@@ -781,8 +997,8 @@ class PPTGenerator:
         text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
         text_frame.margin_left = Inches(0.1)
         text_frame.margin_right = Inches(0.1)
-        text_frame.margin_top = Inches(0.05)
-        text_frame.margin_bottom = Inches(0.05)
+        text_frame.margin_top = Inches(0.08)  # 增加上边距
+        text_frame.margin_bottom = Inches(0.08)  # 增加下边距
         
         # 添加列表项
         for i, list_item in enumerate(items):
@@ -797,11 +1013,22 @@ class PPTGenerator:
                 if item_type == 'ol':
                     # 有序列表 - 手动添加数字，强制禁用项目符号
                     prefix = f"{i + 1}. "
-                    self._force_disable_bullet_add_number(p, i + 1)
+                    p.bullet = False  # 禁用项目符号
+                    # 强制清除任何继承的项目符号格式
+                    try:
+                        if hasattr(p, '_element'):
+                            pPr = p._element.get_or_add_pPr()
+                            # 移除项目符号相关的XML元素
+                            for buChar in pPr.xpath('.//a:buChar', namespaces={'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}):
+                                buChar.getparent().remove(buChar)
+                            for buAutoNum in pPr.xpath('.//a:buAutoNum', namespaces={'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}):
+                                buAutoNum.getparent().remove(buAutoNum)
+                    except:
+                        pass
                 else:
-                    # 无序列表 - 强制启用PowerPoint项目符号
+                    # 无序列表 - 使用PowerPoint项目符号
                     prefix = ""
-                    self._force_enable_bullet(p)
+                    p.bullet = True   # 启用项目符号
                 
                 # 添加格式化文本或纯文本
                 if formatted_text:
@@ -814,16 +1041,22 @@ class PPTGenerator:
                         self._add_formatted_text_to_paragraph(p, formatted_text, 'list')
                 else:
                     p.text = prefix + item_text
-                    # 设置列表样式
+                    # 设置列表样式，根据宽度调整字体大小
+                    font_size = self.font_sizes['list']
+                    if width < 5:  # 如果宽度小于5英寸（分栏布局），使用更小字体
+                        font_size = max(14, font_size - 4)  # 减小字体但不小于14pt
                     for run in p.runs:
-                        run.font.size = Pt(self.font_sizes['list'])
+                        run.font.size = Pt(font_size)
                 
                 # 应用自定义样式
                 styles = list_item.get('styles', {})
                 self.style_mapper.apply_text_styles(p, styles)
         
         self.stats['text_blocks'] += 1
-        return list_height
+        
+        # 由于使用了auto_size，使用更保守的高度估算以防止重叠
+        actual_height = max(list_height, len(items) * 0.5)  # 每个列表项至少0.5英寸
+        return actual_height
     
     def _add_table_content(self, slide, item, y_offset):
         """添加表格内容"""
@@ -1217,7 +1450,11 @@ class PPTGenerator:
         if not text and not formatted_text:
             return 0
         
-        height = 0.6  # 标题固定高度
+        # 根据标题长度动态计算高度
+        display_text = text or ''.join([part['text'] for part in formatted_text])
+        chars_per_line = max(25, int(width * 8))  # 标题字体较大，每行字符数较少
+        lines = max(1, int(len(display_text) / chars_per_line))
+        height = max(0.8, lines * 0.4)  # 标题行高更大
         
         textbox = slide.shapes.add_textbox(
             Inches(left), Inches(top), 
@@ -1309,8 +1546,8 @@ class PPTGenerator:
                 img_width, img_height = img.size
             
             # 计算合适的显示尺寸
-            max_width = width * 0.8
-            max_height = 3.0  # 限制图片高度
+            max_width = width * 0.95  # 充分利用分配的宽度
+            max_height = 4.5  # 增加图片高度限制
             
             # 保持宽高比
             aspect_ratio = img_width / img_height
@@ -1391,10 +1628,11 @@ class PPTGenerator:
         if not text and not formatted_text:
             return 0
         
-        # 估算代码块高度
+        # 估算代码块高度，使用更保守的计算
         display_text = text or ''.join([part['text'] for part in formatted_text])
         lines = display_text.split('\n')
-        code_height = max(0.5, len(lines) * 0.2)
+        # 代码字体较小，但需要更多垂直空间
+        code_height = max(0.8, len(lines) * 0.3 + 0.2)  # 每行0.3英寸 + 0.2英寸缓冲
         
         textbox = slide.shapes.add_textbox(
             Inches(left), Inches(top), 
@@ -1490,6 +1728,56 @@ class PPTGenerator:
                 if not hasattr(run.font.color, 'rgb') or run.font.color.rgb is None:
                     run.font.color.rgb = RGBColor(0, 120, 212)  # 深蓝色 #0078D4
     
+    def _hide_unused_placeholders(self, slide):
+        """隐藏未使用的占位符，避免重叠"""
+        try:
+            for shape in slide.shapes:
+                if hasattr(shape, 'placeholder_format'):
+                    placeholder_type = shape.placeholder_format.type
+                    # 隐藏内容占位符（类型2和7），保留标题占位符（类型1）
+                    if placeholder_type in [2, 7]:
+                        # 检查占位符是否为空或只包含默认文本
+                        if hasattr(shape, 'text_frame') and shape.text_frame:
+                            text_content = shape.text_frame.text.strip()
+                            if not text_content or text_content == "Click to add text":
+                                # 完全移除占位符，而不是隐藏
+                                try:
+                                    # 将占位符移到幻灯片外部并设置为最小尺寸
+                                    shape.left = Inches(-20)  # 移到更远的左侧外部
+                                    shape.top = Inches(-20)   # 移到更远的顶部外部
+                                    shape.width = Inches(0.01) # 极小宽度
+                                    shape.height = Inches(0.01) # 极小高度
+                                    # 清空文本内容
+                                    shape.text_frame.clear()
+                                except:
+                                    # 如果无法移动，至少清空内容
+                                    try:
+                                        shape.text_frame.clear()
+                                    except:
+                                        pass
+        except Exception as e:
+            logger.warning(f"隐藏占位符时出错: {e}")
+    
+    def _calculate_safe_top_margin(self, slide):
+        """计算安全的顶部边距，避开模板占位符"""
+        safe_top = 1.5  # 默认顶部边距
+        
+        # 检查幻灯片中现有的占位符位置
+        title_placeholder_bottom = 0
+        for shape in slide.shapes:
+            if hasattr(shape, 'placeholder_format'):
+                # 只考虑标题占位符，给内容留出更多空间
+                placeholder_type = shape.placeholder_format.type
+                if placeholder_type == 1 and hasattr(shape, 'top') and hasattr(shape, 'height'):  # 标题占位符
+                    title_placeholder_bottom = shape.top.inches + shape.height.inches
+                    break
+        
+        if title_placeholder_bottom > 0:
+            # 只在标题占位符下方留出0.1英寸的小间距
+            safe_top = max(safe_top, title_placeholder_bottom + 0.1)
+        
+        return safe_top
+    
     def _add_footer_text(self, slide, footer_text):
         """添加页脚文本"""
         # 在幻灯片底部添加页脚
@@ -1515,4 +1803,115 @@ class PPTGenerator:
         notes_text = slide_info.get('notes', '')
         if notes_text:
             notes_slide = slide.notes_slide
-            notes_slide.notes_text_frame.text = notes_text
+            notes_slide.notes_text_frame.text = notes_text    
+
+    def _add_image_content_at_position(self, slide, item, left, top, width):
+        """在指定位置添加图片内容"""
+        image_info = item.get('image_info', {})
+        if not image_info:
+            return 0
+        
+        local_path = image_info.get('local_path')
+        if not local_path or not os.path.exists(local_path):
+            return self._add_image_placeholder_at_position(slide, image_info, left, top, width)
+        
+        try:
+            # 获取图片信息并计算尺寸
+            with Image.open(local_path) as img:
+                img_width, img_height = img.size
+            
+            # 计算合适的显示尺寸
+            max_width = width * 0.95  # 充分利用分配的宽度
+            max_height = 4.5  # 增加图片高度限制
+            
+            # 保持宽高比
+            aspect_ratio = img_width / img_height
+            if max_width / aspect_ratio <= max_height:
+                display_width = max_width
+                display_height = max_width / aspect_ratio
+            else:
+                display_height = max_height
+                display_width = max_height * aspect_ratio
+            
+            # 居中放置，添加顶部间距
+            image_left = left + (width - display_width) / 2
+            image_top = top + 0.1  # 添加0.1英寸的顶部间距
+            
+            # 添加图片
+            slide.shapes.add_picture(
+                local_path, 
+                Inches(image_left), Inches(image_top), 
+                Inches(display_width), Inches(display_height)
+            )
+            
+            # 添加图片说明
+            alt_text = image_info.get('alt', '') or image_info.get('title', '')
+            caption_height = 0
+            if alt_text:
+                caption_top = image_top + display_height + 0.1  # 使用调整后的image_top
+                caption_textbox = slide.shapes.add_textbox(
+                    Inches(image_left), Inches(caption_top), 
+                    Inches(display_width), Inches(0.3)
+                )
+                caption_textbox.text_frame.text = alt_text
+                caption_textbox.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
+                
+                # 设置说明文字样式
+                for run in caption_textbox.text_frame.paragraphs[0].runs:
+                    run.font.size = Pt(self.font_sizes['caption'])
+                    run.font.color.rgb = RGBColor(128, 128, 128)
+                
+                caption_height = 0.4  # 说明文字高度
+            
+            self.stats['images'] += 1
+            return display_height + 0.1 + caption_height + 0.1  # 顶部间距 + 图片高度 + 说明文字 + 底部间距
+            
+        except Exception as e:
+            logger.error(f"添加图片失败 {local_path}: {e}")
+            return self._add_image_placeholder_at_position(slide, image_info, left, top, width)
+    
+    def _add_image_placeholder_at_position(self, slide, image_info, left, top, width):
+        """在指定位置添加图片占位符"""
+        height = 2.0
+        placeholder_width = min(width, 4.0)
+        placeholder_left = left + (width - placeholder_width) / 2
+        placeholder_top = top + 0.1  # 添加顶部间距
+        
+        # 创建占位符形状
+        placeholder = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE, 
+            Inches(placeholder_left), Inches(placeholder_top), 
+            Inches(placeholder_width), Inches(height)
+        )
+        
+        # 设置占位符样式
+        placeholder.fill.solid()
+        placeholder.fill.fore_color.rgb = RGBColor(240, 240, 240)
+        placeholder.line.color.rgb = RGBColor(200, 200, 200)
+        
+        # 添加占位符文字
+        placeholder.text_frame.text = f"图片: {image_info.get('alt', '无法加载')}"
+        placeholder.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
+        
+        return height + 0.1 + 0.1  # 顶部间距 + 占位符高度 + 底部间距
+    
+    def _flatten_content(self, content):
+        """扁平化内容，包括子元素，但保持列表和表格结构的完整性"""
+        flattened = []
+        
+        for item in content:
+            item_type = item.get('type', '')
+            
+            # 对于列表和表格，保持其结构完整性，不扁平化子项目
+            if item_type in ['ul', 'ol', 'table']:
+                flattened.append(item)
+            else:
+                # 添加当前项目
+                flattened.append(item)
+                
+                # 递归处理子元素（除了列表项，因为它们应该保持在列表中）
+                children = item.get('children', [])
+                if children and item_type not in ['li']:
+                    flattened.extend(self._flatten_content(children))
+        
+        return flattened
