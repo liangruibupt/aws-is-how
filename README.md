@@ -1873,6 +1873,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [How BMW uses AWS to scale and automate SDV with virtual ECUs](https://aws.amazon.com/blogs/industries/how-bmw-uses-aws-to-scale-and-automate-sdv-with-virtual-ecus/)
   - [The AWS Architecture Behind BMW Operating System 9: How the Cloud Supports the Latest in Customized In-Car Connectivity](https://aws.amazon.com/solutions/case-studies/bmw-software-defined-vehicles/)
   - [AWS and Qualcomm Software-Defined Vehicle demonstrator for Cloud-Native Snapdragon Digital Chassis development](https://aws.amazon.com/cn/blogs/industries/aws-and-qualcomm-software-defined-vehicle-demonstrator-for-cloud-native-snapdragon-digital-chassis-development/)
+  - [借助 AWS Graviton 实现 Android Automotive 虚拟化，打造高效虚拟化车载系统](https://aws.amazon.com/cn/blogs/china/using-aws-graviton-to-virtualize-android-automotive-and-build-efficient-virtualized-in-vehicle-systems/)
   
 - [Autonomous Driving]
   - [ADDF is a collection of modules, deployed using the SeedFarmer orchestration tool. ADDF modules enable users to quickly bootstrap environments](https://github.com/awslabs/autonomous-driving-data-framework)
