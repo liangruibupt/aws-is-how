@@ -73,3 +73,28 @@ The overall atmosphere must feel confident, approachable, and modern, with a rel
 The photo should look like a refined corporate headshot suitable for resumes or LinkedIn. 
 --no text, logos, clutter, watermarks, artistic effects, or distracting elements
 ```
+
+6. Try [wan22-animate-and-qwen-image-edit-2509]https://blog.comfy.org/p/wan22-animate-and-qwen-image-edit-2509
+```bash
+中景特写，户外专业摄影，一位年轻漂亮的中国少女站在热带海滩上，侧身向镜头。她有着长长的、笔直的深棕色头发，披散在肩上，脸上洋溢着灿烂的笑容，露出了洁白的牙齿。她的皮肤白皙，穿着一件白色运动背心，紧贴着她苗条的身材，还有一条浅蓝色的运动短裤。她手拿一顶编制草帽，她的右手放在胸部，弯腰，左臂弯曲到肘部，手轻轻地触碰着膝盖。她的左腕戴着一条薄薄的紫色手链。
+
+在背景中，有一片湛蓝的天空，一片平静的蓝绿色海洋，波浪轻柔地拍打着海岸，一片沙滩。一棵椰子树的叶子部分框住了画面的左上角。左边有两把灰色的躺椅，上面铺着白色的坐垫，放在沙滩上。整体氛围轻松而明媚，给人一种温暖的热带环境的感觉。
+```
+
+## update ComfyUI
+
+Follow up the guide for [manual installation update](https://docs.comfy.org/installation/update_comfyui#manual-installation)
+
+```bash
+source venv/bin/activate
+
+cd ~/ai-workspace/ComfyUI
+git pull
+
+pip install -r requirements.txt
+
+python main.py --listen 0.0.0.0 --port 8188
+
+Using the Manager to update to the stable version
+```
+
