@@ -4,6 +4,7 @@
   - [AWS Skill builder](#aws-skill-builder)
   - [freeCodeCamp](#freecodecamp)
   - [Architecture Design](#architecture-design)
+  - [Introducing the AWS Product Lifecycle page and AWS service availability updates](#introducing-the-aws-product-lifecycle-page-and-aws-service-availability-updates)
   - [AI/ML](#aiml)
     - [ML Study](#ml-study)
     - [SageMaker](#sagemaker)
@@ -164,6 +165,8 @@
 - [Building hexagonal architectures on AWS](https://docs.aws.amazon.com/prescriptive-guidance/latest/hexagonal-architectures/welcome.html)
 - [Service Screener is a tool that runs automated checks on AWS environments and provides recommendations based on AWS and community best practices](https://github.com/aws-samples/service-screener-v2)
   
+## [Introducing the AWS Product Lifecycle page and AWS service availability updates](https://aws.amazon.com/blogs/aws/introducing-the-aws-product-lifecycle-page-and-aws-service-availability-updates/)
+
 ## AI/ML
 
 ### ML Study
@@ -226,8 +229,24 @@
   - [Implementing advanced prompt engineering with Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/)
   - [Evaluating prompts at scale with Prompt Management and Prompt Flows for Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/evaluating-prompts-at-scale-with-prompt-management-and-prompt-flows-for-amazon-bedrock/)
   - [Enhance performance of generative language models with self-consistency prompting](https://aws.amazon.com/blogs/machine-learning/enhance-performance-of-generative-language-models-with-self-consistency-prompting-on-amazon-bedrock/)
+
+- [Video]
+  - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
+  - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
+  - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
+  - [利用 Amazon Bedrock Data Automation（BDA）对视频数据进行自动化处理与检索](https://aws.amazon.com/cn/blogs/china/automating-video-data-processing-and-retrieval-using-amazon-bedrock-data-automation/)
+  - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
+  
+- [Audio]
+  - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
+  - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
+  - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN) and [Amazon Bedrock的实时语音解决方案](https://aws.amazon.com/cn/blogs/china/building-an-end-to-end-real-time-voice-assistant-on-amazon-bedrock/)
+  - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
+  - [MiniMax Speech 2.5 3秒Clone你的声音，40种语言完美还原](https://mp.weixin.qq.com/s/Jqzrj5-V70LgPaP_ionBBQ)
+- [Content Moderation]
+  - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
    
-- [Image Generation]
+- [Image]
   - [Stable Diffusion]
     - [stable-diffusion-webui self hosted on g4dn.xlarge with Ubuntu 22.04 LTS](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
       - Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. 
@@ -251,6 +270,9 @@
       - [Luma Ray2的ComfyUI node集成](https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock)
       - [基于 Amazon EKS 的 Stable Diffusion ComfyUI 部署方案](https://aws.amazon.com/cn/blogs/china/stable-diffusion-comfyui-deployment-solution-based-on-amazon-eks/)
       - [使用 Amazon EC2 构建 ComfyUI 结合 Krita 的实践](https://aws.amazon.com/cn/blogs/china/using-ec2-to-build-comfyui-and-combine-it-with-krita-practice/)
+  - [Use case]
+    - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
+    - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
 - [Scenario based]
   - [Chatbot]
     - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)
@@ -389,23 +411,6 @@
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
   - [Generative BI using RAG on AWS](https://github.com/aws-samples/generative-bi-using-rag)
-  
-- [Multi-model]
-  - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
-  - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
-  - [Video]
-    - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
-    - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
-    - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
-    - [利用 Amazon Bedrock Data Automation（BDA）对视频数据进行自动化处理与检索](https://aws.amazon.com/cn/blogs/china/automating-video-data-processing-and-retrieval-using-amazon-bedrock-data-automation/)
-  - [Audio]
-    - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
-    - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
-    - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN) and [Amazon Bedrock的实时语音解决方案](https://aws.amazon.com/cn/blogs/china/building-an-end-to-end-real-time-voice-assistant-on-amazon-bedrock/)
-    - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
-    - [MiniMax Speech 2.5 3秒Clone你的声音，40种语言完美还原](https://mp.weixin.qq.com/s/Jqzrj5-V70LgPaP_ionBBQ)
-  - [Content Moderation]
-    - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
 
 - [Software Develop Lifecycle]
   - [Amazon Q Developer]
