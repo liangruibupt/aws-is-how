@@ -81,6 +81,10 @@ The photo should look like a refined corporate headshot suitable for resumes or 
 在背景中，有一片湛蓝的天空，一片平静的蓝绿色海洋，波浪轻柔地拍打着海岸，一片沙滩。一棵椰子树的叶子部分框住了画面的左上角。左边有两把灰色的躺椅，上面铺着白色的坐垫，放在沙滩上。整体氛围轻松而明媚，给人一种温暖的热带环境的感觉。
 ```
 
+```bash
+Hyperrealistic macro photograph of a team of tiny bakers—each precisely 2 inches tall—collaborating on an enormous, golden-brown croissant with flaky, layered textures. The bakers are engaged in dynamic, detailed actions: one uses a miniature wooden bucket to spread rich, creamy butter between the croissant’s layers, another climbs a thin rope ladder to evenly pipe smooth, glossy chocolate filling onto the top, and a third brushes a light egg wash with a tiny pastry brush. The scene is bathed in warm, soft kitchen lighting with cinematic depth—subtle highlights on the croissant’s golden crust, gentle shadows that emphasize texture, and a soft glow from overhead pendant lights. Floating flour dust particles catch the light, adding a sense of movement and realism, while tiny details like the bakers’ stitched cloth aprons, smudged flour on their faces, the rough wood of the worktable, and the slight sheen of melted butter on the croissant are rendered with ultra-precision. Ultra-detailed, 8K resolution, photorealistic textures, sharp focus on the bakers and croissant, shallow depth of field to blur the background slightly, rich warm color palette, lifelike proportions, and a cozy, whimsical atmosphere that balances realism with charm.
+```
+
 ## update ComfyUI
 
 Follow up the guide for [manual installation update](https://docs.comfy.org/installation/update_comfyui#manual-installation)
