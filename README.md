@@ -437,14 +437,6 @@
     - [Design multi-agent orchestration with reasoning](https://aws.amazon.com/cn/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/)
   - [AWS announces new innovations for building AI agents at AWS Summit New York 2025](https://www.aboutamazon.com/news/aws/aws-summit-agentic-ai-innovations-2025?utm_source=internalcomms&utm_medium=atoz)
     - [Enabling customers to deliver production-ready AI agents at scale](https://aws.amazon.com/blogs/machine-learning/enabling-customers-to-deliver-production-ready-ai-agents-at-scale/)
-    - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
-    - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
-    - [Agentic AI基础设施实践经验系列（三）：Agent记忆模块的最佳实践](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-deep-practice-experience-thinking-series-three-best-practices-for-agent-memory-module)
-    - [Agentic AI基础设施实践经验系列（四）：MCP服务器从本地到云端的部署演进](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-experience-series-four-mcp-server-from-local)
-    - [Agentic AI基础设施实践经验系列（五）：Agent应用系统中的身份认证与授权管理](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-5/)
-    - [Agentic AI基础设施实践经验系列（六）：Agent质量评估](https://aws.amazon.com/cn/blogs/china/agent-quality-evaluation/)
-    - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
-    - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
   - [LangChain and LangGraph]
     - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
@@ -467,10 +459,23 @@
       - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
       - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
     - [Bedrock AgentCore]
-      - [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
+      - [Agent Core Hands on Lab]
+        - [QuickStart](ai-ml/chatgpt/agent/bedrock_agentcore/quickstart/amazon-bedrock-agentcore-quickstart-key-components.md)
+          - Above quick start based on [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
+        - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
+          - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
       - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
-      - [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
+      - [Agentic AI基础设施实践经验系列]
+        - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
+        - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
+        - [Agentic AI基础设施实践经验系列（三）：Agent记忆模块的最佳实践](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-deep-practice-experience-thinking-series-three-best-practices-for-agent-memory-module)
+        - [Agentic AI基础设施实践经验系列（四）：MCP服务器从本地到云端的部署演进](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-experience-series-four-mcp-server-from-local)
+        - [Agentic AI基础设施实践经验系列（五）：Agent应用系统中的身份认证与授权管理](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-5/)
+        - [Agentic AI基础设施实践经验系列（六）：Agent质量评估](https://aws.amazon.com/cn/blogs/china/agent-quality-evaluation/)
+        - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
+        - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
+        
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
@@ -1031,6 +1036,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [WAF的托管规则说明](security/waf/WAF的托管规则说明.md)
 - [中国区抗DDoS方案](https://www.nwcdcloud.cn/articledetail.aspx?id=63)
 - [Strengthen Your Web Application Defenses with AWS WAF](https://catalog.us-east-1.prod.workshops.aws/workshops/81e94a4b-b47f-4acc-a284-914c4514d50f/zh-CN)
+- [AWS WAF AntiDDoS - Global Region](https://aws.amazon.com/cn/blogs/china/new-aws-waf-antiddos-managed-rules/)
 
 ### Permission - IAM Policy, S3 Policy, RAM Policy
 - [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
@@ -1393,6 +1399,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Deploying IPFS Cluster using AWS Fargate and Amazon EFS One Zone](https://aws.amazon.com/cn/blogs/containers/deploying-ipfs-cluster-using-aws-fargate-and-amazon-efs-one-zone/)
 
 - [FSX Security Scan](https://aws.amazon.com/blogs/storage/securing-your-amazon-fsx-for-ontap-windows-share-smb-against-viruses/)
+
+- [开源版JuiceFS on Amazon EKS 上的实践](https://aws.amazon.com/cn/blogs/china/practice-of-open-source-juicefs-on-amazon-eks/)
   
 ## Database
 ### RDS
@@ -1899,6 +1907,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [在中国区部署 SIMPHERA Architecture](https://aws.amazon.com/cn/blogs/china/deploying-simphera-architecture-in-china/)
   - [理想汽车过去一年发表的16篇智驾及AI应用相关论文](https://mp.weixin.qq.com/s/3rkJpmbOsknIrgl6dKlwJw)
   - [Accelerating AI/ML development at BMW Group with Amazon SageMaker Studio](https://aws.amazon.com/cn/blogs/machine-learning/accelerating-ai-ml-development-at-bmw-group-with-amazon-sagemaker-studio/)
+  - [AD Insight Hub](https://aws.amazon.com/cn/blogs/china/insight-hub-end-to-end-solution-addressing-data-challenges/)
 
 - [Vechile Data Plantform - VDP]
   - [BMW Cloud Data Hub: A reference implementation of the modern data architecture on AWS](https://aws.amazon.com/blogs/industries/bmw-cloud-data-hub-a-reference-implementation-of-the-modern-data-architecture-on-aws/)
