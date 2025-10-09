@@ -37,13 +37,13 @@ pip install --force-reinstall -U -r requirements.txt
 
 后续文档均以 web based vscode IDE 为例
 
-1. [runtime_with_strands_and_bedrock_models](amazon-bedrock-agentcore-workshop/01-AgentCore-runtime/01-hosting-agent/01-strands-with-bedrock-model/runtime_with_strands_and_bedrock_models.ipynb)
+1. 第一个 Notebook [runtime_with_strands_and_bedrock_models](amazon-bedrock-agentcore-workshop/01-AgentCore-runtime/01-hosting-agent/01-strands-with-bedrock-model/runtime_with_strands_and_bedrock_models.ipynb)
 ```bash
 pip install -r requirements.txt
 ```
 
 选择正确的 Kernel
 
-![选择正确的 Kernel]()
+![选择正确的 Kernel](select-python-interprepter.png)
 
 2. 
