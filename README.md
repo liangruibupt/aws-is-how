@@ -530,6 +530,7 @@
 ### Robotics
 - [Genesis-Embodied-AI](https://github.com/Genesis-Embodied-AI/Genesis)
 - [NVIDIA Isaac Lab on AWS](https://catalog.us-east-1.prod.workshops.aws/workshops/075ce3fe-6888-4ea9-986e-5bdd1b767ef7/en-US)
+- [云端机器人研发：在 AWS 实现 ROS 2 设备与 Isaac Sim 的 Lerobot 仿真及数据流](https://aws.amazon.com/cn/blogs/china/cloud-robotics-development-aws-ros2-isaac/)
 
 ## Cost
 ### Cost Explorer
