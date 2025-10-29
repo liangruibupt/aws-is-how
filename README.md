@@ -156,6 +156,7 @@
   - [HealthCare and Life Science](#healthcare-and-life-science)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
+  - [Summary of the Amazon DynamoDB Service Disruption in Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/cn/message/101925/)
 
 ## [AWS Skill builder](https://explore.skillbuilder.aws/learn/course/11458/play/42651/play-cloud-quest-cloud-practitioner)
 
@@ -411,6 +412,7 @@
   - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
   - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
   - [Generative BI using RAG on AWS](https://github.com/aws-samples/generative-bi-using-rag)
+  - [Data engineering agent - 面向业务的 AI Chatbot、面向系统的 Agent API，以及面向分析的 BI Dashboard，统一的 Agent 被交付](https://mp.weixin.qq.com/s/K5xvMr6M9w7DKYlvAoMsiQ)
 
 - [Software Develop Lifecycle]
   - [Amazon Q Developer]
@@ -459,13 +461,16 @@
       - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
       - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
     - [Bedrock AgentCore]
+      - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
       - [Agent Core Hands on Lab]
         - [QuickStart](ai-ml/chatgpt/agent/bedrock_agentcore/quickstart/amazon-bedrock-agentcore-quickstart-key-components.md)
           - Above quick start based on [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
+          - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
         - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
           - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
       - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
+      - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
       - [Agentic AI基础设施实践经验系列]
         - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
         - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
@@ -510,9 +515,10 @@
       - [Strands Agents SDK 1.0](https://aws.amazon.com/blogs/opensource/introducing-strands-agents-1-0-production-ready-multi-agent-orchestration-made-simple/)
       - [Agentic AI on EKS Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/f795222d-a4e1-4610-8ffa-170319c282c0/en-US/02-single-agent)
       - [Strands Agents Open Studio](https://github.com/xiehust/strands_studio_ui)
-  - [Bedrock AgentCore]
-    - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
-    - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
+  - [AgentSkill]
+    - [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+    - [Agent Skills 逆向工程解密，用Strands Agents SDK完美实现Agent Skills](https://mp.weixin.qq.com/s/oE2S0jMWyFjkYL4ZZvmamQ)
+  
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
@@ -594,6 +600,13 @@
   - [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
   - [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
   - [GPU Perf - LLM GPU推理性能可视化平台](https://github.com/yytdfc/llm-performance-viz)
+  - [GPU 虚拟化]
+    - [Nvidia MIG]
+      - [Maximizing GPU utilization with NVIDIA’s Multi-Instance GPU (MIG) on Amazon EKS: Running more pods per GPU for enhanced performance](https://aws.amazon.com/blogs/containers/maximizing-gpu-utilization-with-nvidias-multi-instance-gpu-mig-on-amazon-eks-running-more-pods-per-gpu-for-enhanced-performance/)
+      - [Maximizing GPU Utilization using NVIDIA Run:ai in Amazon EKS](https://aws.amazon.com/blogs/containers/maximizing-gpu-utilization-using-nvidia-runai-in-amazon-eks/)
+      - [Maximizing GPU Utilization with NVIDIA MIG on Amazon EKS](https://medium.com/@farrukh.mustafa/maximizing-gpu-utilization-with-nvidia-mig-on-amazon-eks-c1a488641d99)
+    - [Project-HAMi - Heterogeneous AI Computing Virtualization Middleware](https://github.com/Project-HAMi/HAMi)
+      - [Virtualizing Any GPU on AWS with HAMi: Free Memory Isolation](https://dynamia.ai/blog/aws)
 - [Network of EC2]
   - [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
   - [EC2 network performance](EC2/EC2_Networking_performance.md)
@@ -1309,6 +1322,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Migrate from AliCoud workshop](http://gotoaws.cloudguru.run/)
 - [Assess secure Windows Servers for TCO analysis using Migration Evaluator](https://aws.amazon.com/blogs/mt/assess-secure-windows-servers-for-tco-analysis-using-migration-evaluator/)
 - [Resource Discovery for Azure](https://github.com/awslabs/resource-discovery-for-azure)
+- [AWS AI-Powered Migration Assistant - Cloud Migration assessment](https://prod.migration.gcr.aws.dev/home)
 
 ### File migration
 - [Getting Start Transfer Family](migration/TransferFamily/GettingStartTransferFamily.md)
@@ -1947,6 +1961,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Empowering biomedical discovery with AI agents](https://www.cell.com/cell/fulltext/S0092-8674(24)01070-5)
     - [Healthcare and Life Sciences Agent Catalog](http://hcls-agents-catalog-ui-app-blue-1955574525.us-west-2.elb.amazonaws.com/)
     - [Life Sciences Innovation with Agentic AI](https://aws.amazon.com/blogs/industries/accelerating-life-sciences-innovation-with-agentic-ai-on-aws/)
+    - [Claude for Life Sciences](https://www.anthropic.com/news/claude-for-life-sciences)
   - [LS and HC Compliance]
     - [Open source PACS (picture archiving and communication system) solution - part1](https://aws.amazon.com/cn/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-1/)
     - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)

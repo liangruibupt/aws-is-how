@@ -168,3 +168,53 @@ AWS中国区域的专线流量价格是每 GB 多少钱? 注意AWS中国区域�
 - 能够使用用户指定的PPT模版
 - 必要的文字内容和备注信息应尽可能保留，并存储在指定PPT页的备注中
 ```
+
+11. Prepare the customer visit flow
+```
+I need visit customer CTO / Chief Scientist / Chief Architecture / CIO, I need do the comprehensive research for customer profile including recent news, recent sales performance, new launched products etc. I also need do the research for CTO / Chief Scientist / Chief Architecture / CIO including recent public speech, events announcement, recent blogs or publish, what's the recent focus. The flow allow me input the customer name before do the research. The flow can ask me the name of CTO / Chief Scientist / CIO, if I do not know, then flow can search their name then do the research. The generated result max up to 6 pages and summary the talking points for me. The output is Microsoft Word document contain above research contents and talking points.
+```
+
+12. Migration insights
+```
+The top 3 migration driver in the attached file and give me summary from migration type like IDC2AWS, GCP2AWS, Ali2AWS etc;  Stage like Launched, Qualify, TV etc; Total Rev. You can also add your insights.
+
+You have checked all the data in the file, give me the total revenue, total companies number and summary by table with details, sort with deal size and stage
+```
+
+13. Knowledge check
+```
+查询 AWS 上面2024年之后发布的最新P系列和G系列的GPU数量小于8的实例，采用 mcp 查询文档，t通过 Table 格式输出。
+
+
+把上面的实例类型，通过 aws-pricing-mcp-server 查询在 us-east-1 region的价格，包括 OD, ISP, Spot 单价，如果最后信息不足,在通过 aws cli 获取信息, 结果通过 table 列出。
+```
+
+## AWS 2024年后发布的P系列和G系列GPU实例（GPU数量<8）- 完整版
+
+| 实例系列 | 实例类型 | GPU型号 | GPU数量 | GPU内存 | 系统内存(GiB) | vCPUs | 处理器 | 网络带宽 | 主要用途 |
+|---------|----------|---------|---------|---------|---------------|-------|--------|----------|----------|
+| P6e-GB200 | p6e-gb200.36xlarge | NVIDIA GB200 | 4 | 740 GiB (4×185 GiB) | 960.00 | 144 | NVIDIA Grace CPU | - | AI训练/推理 |
+| G6 | g6.xlarge | NVIDIA L4 | 1 | 22 GiB | 16.00 | 4 | AMD EPYC 7R13 | 2.5/10.0 Gbps | 图形工作站/推理 |
+| G6 | g6.2xlarge | NVIDIA L4 | 1 | 22 GiB | 32.00 | 8 | AMD EPYC 7R13 | 5.0/10.0 Gbps | 图形工作站/推理 |
+| G6 | g6.4xlarge | NVIDIA L4 | 1 | 22 GiB | 64.00 | 16 | AMD EPYC 7R13 | 10.0/25.0 Gbps | 图形工作站/推理 |
+| G6 | g6.8xlarge | NVIDIA L4 | 1 | 22 GiB | 128.00 | 32 | AMD EPYC 7R13 | 25 Gbps | 图形工作站/推理 |
+| G6 | g6.16xlarge | NVIDIA L4 | 1 | 22 GiB | 256.00 | 64 | AMD EPYC 7R13 | 25 Gbps | 图形工作站/推理 |
+| G6 | g6.12xlarge | NVIDIA L4 | 4 | 89 GiB (4×22 GiB) | 192.00 | 48 | AMD EPYC 7R13 | 40 Gbps | 图形工作站/推理 |
+| G6 | g6.24xlarge | NVIDIA L4 | 4 | 89 GiB (4×22 GiB) | 384.00 | 96 | AMD EPYC 7R13 | 50 Gbps | 图形工作站/推理 |
+| G6e | g6e.xlarge | NVIDIA L40S | 1 | 44 GiB | 32.00 | 4 | AMD EPYC 7R13 | 2.5/10.0 Gbps | 图形工作站/推理 |
+| G6e | g6e.2xlarge | NVIDIA L40S | 1 | 44 GiB | 64.00 | 8 | AMD EPYC 7R13 | 5.0/10.0 Gbps | 图形工作站/推理 |
+| G6e | g6e.4xlarge | NVIDIA L40S | 1 | 44 GiB | 128.00 | 16 | AMD EPYC 7R13 | 10.0/25.0 Gbps | 图形工作站/推理 |
+| G6e | g6e.8xlarge | NVIDIA L40S | 1 | 44 GiB | 256.00 | 32 | AMD EPYC 7R13 | 25 Gbps | 图形工作站/推理 |
+| G6e | g6e.16xlarge | NVIDIA L40S | 1 | 44 GiB | 512.00 | 64 | AMD EPYC 7R13 | 25 Gbps | 图形工作站/推理 |
+| G6e | g6e.12xlarge | NVIDIA L40S | 4 | 178 GiB (4×44 GiB) | 384.00 | 48 | AMD EPYC 7R13 | 40 Gbps | 图形工作站/推理 |
+| G6e | g6e.24xlarge | NVIDIA L40S | 4 | 178 GiB (4×44 GiB) | 768.00 | 96 | AMD EPYC 7R13 | 50 Gbps | 图形工作站/推理 |
+| G6f | g6f.large | NVIDIA L4 | 1 | 2 GiB | 8.00 | 2 | AMD EPYC 7R13 | - | 轻量级推理 |
+| G6f | g6f.xlarge | NVIDIA L4 | 1 | 2 GiB | 16.00 | 4 | AMD EPYC 7R13 | - | 轻量级推理 |
+| G6f | g6f.2xlarge | NVIDIA L4 | 1 | 5 GiB | 32.00 | 8 | AMD EPYC 7R13 | - | 轻量级推理 |
+| G6f | g6f.4xlarge | NVIDIA L4 | 1 | 11 GiB | 64.00 | 16 | AMD EPYC 7R13 | - | 轻量级推理 |
+| Gr6 | gr6.4xlarge | NVIDIA L4 | 1 | 22 GiB | 128.00 | 16 | AMD EPYC 7R13 | - | 图形工作站 |
+| Gr6 | gr6.8xlarge | NVIDIA L4 | 1 | 22 GiB | 256.00 | 32 | AMD EPYC 7R13 | - | 图形工作站 |
+| Gr6f | gr6f.4xlarge | NVIDIA L4 | 1 | 11 GiB | 128.00 | 16 | AMD EPYC 7R13 | - | 图形工作站 |
+
+
+14. [reimbursement-helper](https://gitlab.aws.dev/kentpeng/reimbursement-helper)
