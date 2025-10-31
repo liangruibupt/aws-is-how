@@ -1,0 +1,1218 @@
+{
+  "Parameters": {
+    "WorkshopMode": {
+      "Type": "String",
+      "Default": "SELF_PACED",
+      "AllowedValues": [
+        "SELF_PACED",
+        "WS_EVENT"
+      ],
+      "Description": "Workshop deployment mode - SELF_PACED for personal accounts, WS_EVENT for workshop events"
+    }
+  },
+  "Resources": {
+    "WorkshopUserPool415C713C": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true
+        },
+        "AliasAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "Schema": [
+          {
+            "Mutable": true,
+            "Name": "email",
+            "Required": true
+          },
+          {
+            "Mutable": true,
+            "Name": "given_name",
+            "Required": true
+          },
+          {
+            "Mutable": true,
+            "Name": "family_name",
+            "Required": true
+          }
+        ],
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolName": "WorkshopUserPool",
+        "UsernameConfiguration": {
+          "CaseSensitive": false
+        },
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopUserPool/Resource"
+      }
+    },
+    "WorkshopDefaultPasswordSecret46C0E31F": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": "Default password for workshop users",
+        "GenerateSecretString": {
+          "ExcludeCharacters": "\"@/\\",
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "PasswordLength": 16,
+          "RequireEachIncludedType": true,
+          "SecretStringTemplate": "{}"
+        },
+        "Name": "workshop/default-password"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopDefaultPasswordSecret/Resource"
+      }
+    },
+    "HRDocumentsBucketAA8FFB42": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::Join": [
+            "",
+            [
+              "anycompany-hr-documents-",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              }
+            ]
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/HRDocumentsBucket/Resource"
+      }
+    },
+    "WorkshopArtifactsBucketEF691A47": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::Join": [
+            "",
+            [
+              "workshop-artifacts-",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              }
+            ]
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopArtifactsBucket/Resource"
+      }
+    },
+    "WorkshopResourceServer04BE4F28": {
+      "Type": "AWS::Cognito::UserPoolResourceServer",
+      "Properties": {
+        "Identifier": "workshop",
+        "Name": "workshop",
+        "Scopes": [
+          {
+            "ScopeDescription": "Read access to resources",
+            "ScopeName": "read"
+          },
+          {
+            "ScopeDescription": "Write access to resources",
+            "ScopeName": "write"
+          }
+        ],
+        "UserPoolId": {
+          "Ref": "WorkshopUserPool415C713C"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopResourceServer/Resource"
+      }
+    },
+    "WorkshopOpenApiUserPoolClientA2A93871": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "openid",
+          "email",
+          "profile",
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "WorkshopResourceServer04BE4F28"
+                },
+                "/read"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "WorkshopResourceServer04BE4F28"
+                },
+                "/write"
+              ]
+            ]
+          }
+        ],
+        "CallbackURLs": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".quicksight.aws.amazon.com/sn/oauthcallback"
+              ]
+            ]
+          }
+        ],
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_USER_SRP_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ],
+        "GenerateSecret": true,
+        "PreventUserExistenceErrors": "ENABLED",
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "UserPoolId": {
+          "Ref": "WorkshopUserPool415C713C"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopOpenApiUserPoolClient/Resource"
+      }
+    },
+    "WorkshopMcpUserPoolClient198E0994": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "client_credentials"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "WorkshopResourceServer04BE4F28"
+                },
+                "/read"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "WorkshopResourceServer04BE4F28"
+                },
+                "/write"
+              ]
+            ]
+          }
+        ],
+        "GenerateSecret": true,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "UserPoolId": {
+          "Ref": "WorkshopUserPool415C713C"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopMcpUserPoolClient/Resource"
+      }
+    },
+    "WorkshopCognitoDomain": {
+      "Type": "AWS::Cognito::UserPoolDomain",
+      "Properties": {
+        "Domain": {
+          "Fn::Join": [
+            "",
+            [
+              "workshop-hr-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "UserPoolId": {
+          "Ref": "WorkshopUserPool415C713C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopCognitoDomain"
+      }
+    },
+    "WorkshopEmployeesTable5D393DAA": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "employee_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "employee_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "TableName": "WorkshopEmployeesTable",
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopEmployeesTable/Resource"
+      }
+    },
+    "WorkshopJobListingsTable15B2EE7F": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "job_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "job_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "TableName": "WorkshopJobListingsTable",
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopJobListingsTable/Resource"
+      }
+    },
+    "WorkshopEmailsTableC100511F": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "message_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "message_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "TableName": "WorkshopEmailsTable",
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopEmailsTable/Resource"
+      }
+    },
+    "WorkshopCalendarTableF76627C7": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "event_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "event_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "TableName": "WorkshopCalendarTable",
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopCalendarTable/Resource"
+      }
+    },
+    "WorkshopTicketsTable8EF924FE": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "ticket_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "status",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "TicketsByStatus",
+            "KeySchema": [
+              {
+                "AttributeName": "status",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "ticket_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "TableName": "WorkshopTicketsTable",
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopTicketsTable/Resource"
+      }
+    },
+    "WorkshopTimeOffTable5FE30993": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "request_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "status",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "start_date",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "TimeOffByStatus",
+            "KeySchema": [
+              {
+                "AttributeName": "status",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "start_date",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "request_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "TableName": "WorkshopTimeOffTable",
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/WorkshopTimeOffTable/Resource"
+      }
+    },
+    "PopulateTestDataLambdaServiceRole92CE4549": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/PopulateTestDataLambda/ServiceRole/Resource"
+      }
+    },
+    "PopulateTestDataLambdaServiceRoleDefaultPolicy27A5A05B": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:PutItem",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "WorkshopEmployeesTable5D393DAA",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "WorkshopJobListingsTable15B2EE7F",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            },
+            {
+              "Action": [
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:GetSecretValue"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "WorkshopDefaultPasswordSecret46C0E31F"
+              }
+            },
+            {
+              "Action": [
+                "cognito-idp:AdminCreateUser",
+                "cognito-idp:AdminSetUserPassword",
+                "cognito-idp:DescribeUserPoolClient"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "WorkshopUserPool415C713C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "WorkshopUserPool415C713C",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "athena:GetDataCatalog",
+                "athena:ListDataCatalogs",
+                "ds:AuthorizeApplication",
+                "ds:CheckAlias",
+                "ds:CreateAlias",
+                "ds:CreateIdentityPoolDirectory",
+                "ds:DeleteDirectory",
+                "ds:DescribeDirectories",
+                "ds:DescribeTrusts",
+                "ds:UnauthorizeApplication",
+                "iam:AttachRolePolicy",
+                "iam:CreatePolicy",
+                "iam:CreatePolicyVersion",
+                "iam:CreateRole",
+                "iam:DeletePolicyVersion",
+                "iam:DeleteRole",
+                "iam:DetachRolePolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListEntitiesForPolicy",
+                "iam:ListPolicyVersions",
+                "iam:ListRoles",
+                "iam:listPolicies",
+                "organizations:*",
+                "quicksight:*",
+                "s3:ListAllMyBuckets"
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "QuickSightComprehensiveAccess"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "PopulateTestDataLambdaServiceRoleDefaultPolicy27A5A05B",
+        "Roles": [
+          {
+            "Ref": "PopulateTestDataLambdaServiceRole92CE4549"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/PopulateTestDataLambda/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "PopulateTestDataLambdaC0EB9E3F": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ZipFile": "import json\nimport logging\nimport os\nimport subprocess\nimport sys\nimport time\nimport uuid\nfrom datetime import datetime, timezone\nfrom typing import Any\n\nimport boto3\nfrom botocore.exceptions import ClientError\n\n# Install crhelper at runtime\nsubprocess.check_call([sys.executable, \"-m\", \"pip\", \"install\", \"crhelper\", \"-t\", \"/tmp\"])  # noqa: S603, S108\nsys.path.insert(0, \"/tmp\")  # noqa: S108\n\n\nfrom crhelper import CfnResource  # type: ignore # noqa: E402\n\n# Initialize logging\nlogger = logging.getLogger()\nlogger.setLevel(logging.INFO)\n\n# Initialize the helper\nhelper = CfnResource(json_logging=False, log_level=\"DEBUG\", boto_level=\"CRITICAL\")\n\n# Global client initialization\ncognito = boto3.client(\"cognito-idp\")\nquicksight = boto3.client(\"quicksight\")\n# Initialize AWS clients\ndynamodb = boto3.resource(\"dynamodb\")\nsecrets_client = boto3.client(\"secretsmanager\")\nregion = os.environ.get(\"AWS_REGION\", \"us-east-1\")\n\n\ndef get_default_password() -> str:\n    \"\"\"Get default password from Secrets Manager\"\"\"\n    response = secrets_client.get_secret_value(SecretId=\"workshop/default-password\")\n    return str(json.loads(response[\"SecretString\"])[\"password\"])\n\n\ndef setup_quicksight_iam_role(aws_account_id: str, workshop_mode: str) -> None:\n    \"\"\"Pre-register workshop participant IAM role in QuickSight with ADMIN_PRO\"\"\"\n    # Only setup IAM role in workshop events, not self-paced mode\n    if workshop_mode != \"WS_EVENT\":\n        logger.info(\"Self-paced mode - skipping QuickSight IAM role registration\")\n        return\n    # When IAM users access QuickSight for the first time, they're auto-provisioned\n    # To ensure they get ADMIN_PRO role instead of default READER, we pre-register\n    # the WSParticipantRole IAM role in QuickSight\n\n    # The participant role ARN that workshop users will assume\n    participant_role_arn = f\"arn:aws:iam::{aws_account_id}:role/WSParticipantRole\"\n\n    try:\n        # Register the IAM role in QuickSight with ADMIN_PRO role\n        # This ensures anyone assuming WSParticipantRole gets ADMIN_PRO access\n        quicksight.register_user(\n            AwsAccountId=aws_account_id,\n            Namespace=\"default\",\n            IdentityType=\"IAM\",\n            IamArn=participant_role_arn,\n            SessionName=\"Participant\",\n            Email=\"workshop-user@example.com\",\n            UserRole=\"ADMIN_PRO\",\n        )\n        logger.info(\n            \"Pre-registered WSParticipantRole/Participant in QuickSight with ADMIN_PRO role\"\n        )\n    except ClientError as e:\n        if e.response[\"Error\"][\"Code\"] == \"ResourceExistsException\":\n            # Role already registered, try to update to ADMIN_PRO\n            try:\n                quicksight.update_user(\n                    AwsAccountId=aws_account_id,\n                    Namespace=\"default\",\n                    UserName=\"WSParticipantRole/Participant\",\n                    Email=\"workshop-user@example.com\",\n                    Role=\"ADMIN_PRO\",\n                )\n                logger.info(\"Updated existing WSParticipantRole/Participant to ADMIN_PRO\")\n            except ClientError as update_error:\n                logger.warning(\n                    f\"Could not update WSParticipantRole/Participant: {update_error!s}\"\n                )\n        else:\n            logger.warning(f\"Could not register WSParticipantRole/Participant: {e!s}\")\n\n    logger.info(\"QuickSight IAM role registration completed\")\n\n\ndef setup_quicksight(aws_account_id: str, employees: list, workshop_mode: str) -> None:\n    \"\"\"Setup QuickSight subscription and users idempotently\"\"\"\n    # Check if subscription exists\n    try:\n        response = quicksight.describe_account_subscription(AwsAccountId=aws_account_id)\n        account_info = response[\"AccountInfo\"]\n        status = account_info[\"AccountSubscriptionStatus\"]\n        auth_method = account_info.get(\"AuthenticationMethod\")\n\n        logger.info(f\"QuickSight subscription exists - Status: {status}, Auth: {auth_method}\")\n\n        if status == \"UNSUBSCRIBED\":\n            logger.info(\n                \"QuickSight account is UNSUBSCRIBED, will create new subscription to reactivate\"\n            )\n            # Fall through to create new subscription - this reactivates the account\n        elif status in [\"ACCOUNT_CREATED\", \"OK\"]:\n            logger.info(f\"QuickSight account already exists and is active (status: {status})\")\n            # Setup IAM role for workshop participants, then exit\n            setup_quicksight_iam_role(aws_account_id, workshop_mode)\n            return\n        else:\n            logger.info(f\"QuickSight account in unexpected state: {status}, {auth_method}\")\n            return\n    except ClientError as e:\n        if e.response[\"Error\"][\"Code\"] == \"ResourceNotFoundException\":\n            logger.info(\"QuickSight subscription not found, attempting to create...\")\n        else:\n            logger.error(f\"Error checking QuickSight subscription: {e!s}\")\n            raise\n\n    # Create subscription\n    try:\n        logger.info(\"Creating QuickSight ENTERPRISE subscription...\")\n\n        quicksight.create_account_subscription(\n            Edition=\"ENTERPRISE\",\n            AuthenticationMethod=\"IAM_AND_QUICKSIGHT\",\n            AwsAccountId=aws_account_id,\n            AccountName=f\"QuickSight-Workshop-{aws_account_id}-{region}-{int(datetime.now(timezone.utc).timestamp())}\",\n            NotificationEmail=\"workshop-user@example.com\",\n        )\n        logger.info(\"QuickSight subscription creation initiated successfully\")\n    except ClientError as e:\n        if e.response[\"Error\"][\"Code\"] == \"ResourceExistsException\":\n            logger.info(\"QuickSight subscription already exists\")\n        else:\n            logger.error(f\"Failed to create QuickSight subscription: {e!s}\")\n            raise\n\n    # Wait for account creation\n    logger.info(\"Waiting for QuickSight account to be created...\")\n    start_time = time.time()\n    while time.time() - start_time < 300:\n        try:\n            response = quicksight.describe_account_subscription(AwsAccountId=aws_account_id)\n            current_status = response[\"AccountInfo\"][\"AccountSubscriptionStatus\"]\n            logger.info(f\"Current QuickSight status: {current_status}\")\n            if current_status == \"ACCOUNT_CREATED\":\n                logger.info(\"QuickSight account creation completed\")\n                break\n        except ClientError as e:\n            logger.warning(f\"Error checking account status: {e!s}\")\n        time.sleep(15)\n    else:\n        logger.error(\"QuickSight account creation timed out after 5 minutes\")\n        msg = \"QuickSight account creation timed out\"\n        raise TimeoutError(msg)\n\n    # Setup IAM role for workshop participants\n    setup_quicksight_iam_role(aws_account_id, workshop_mode)\n\n    # Configure SPICE capacity for auto-purchase in workshop mode only\n    if workshop_mode == \"WS_EVENT\":\n        try:\n            quicksight.update_spice_capacity_configuration(\n                AwsAccountId=aws_account_id, PurchaseMode=\"AUTO_PURCHASE\"\n            )\n            logger.info(\"SPICE capacity configured for auto-purchase\")\n        except ClientError as e:\n            logger.warning(f\"Could not configure SPICE capacity: {e!s}\")\n\n    logger.info(\"QuickSight setup completed\")\n\n\n@helper.create\ndef create(event: dict[str, Any], context: Any) -> str:  # noqa: PLR0912, PLR0915\n    \"\"\"Handle CREATE events\"\"\"\n    employees_table_name = event[\"ResourceProperties\"][\"EmployeesTableName\"]\n    job_listings_table_name = event[\"ResourceProperties\"][\"JobListingsTableName\"]\n    user_pool_id = event[\"ResourceProperties\"][\"UserPoolId\"]\n    workshop_mode = event[\"ResourceProperties\"].get(\"WorkshopMode\", \"SELF_PACED\")\n    aws_account_id = context.invoked_function_arn.split(\":\")[4]\n\n    employees_table = dynamodb.Table(employees_table_name)\n    job_listings_table = dynamodb.Table(job_listings_table_name)\n\n    # Get default password and set in Data for CloudFormation output\n    try:\n        default_password = get_default_password()\n        helper.Data[\"DefaultPassword\"] = default_password\n        logger.info(\"Retrieved and set default password successfully\")\n    except Exception as e:\n        logger.error(f\"Failed to retrieve default password: {e!s}\")\n        helper.Data[\"DefaultPassword\"] = \"ERROR_RETRIEVING_PASSWORD\"\n\n    # Set additional outputs for CloudFormation\n    region = os.environ.get(\"AWS_REGION\", \"us-east-1\")\n    helper.Data[\"QuickSuiteAccountName\"] = f\"QuickSight-Workshop-{aws_account_id}-{region}\"\n    helper.Data[\"DefaultUser\"] = \"workshop-user\"\n    helper.Data[\"DefaultUserEmail\"] = \"workshop-user@example.com\"\n\n    # AWS Style Guide approved names + workshop-user as CEO\n    employees = [\n        {\n            \"first\": \"Workshop\",\n            \"last\": \"User\",\n            \"username\": \"workshop-user\",\n            \"email\": \"workshop-user@example.com\",\n        },\n        {\"first\": \"Jane\", \"last\": \"Doe\", \"username\": \"jane_doe\", \"email\": \"jane_doe@example.com\"},\n        {\n            \"first\": \"John\",\n            \"last\": \"Stiles\",\n            \"username\": \"john_stiles\",\n            \"email\": \"john_stiles@example.com\",\n        },\n        {\n            \"first\": \"Maria\",\n            \"last\": \"Garcia\",\n            \"username\": \"maria_garcia\",\n            \"email\": \"maria_garcia@example.com\",\n        },\n        {\n            \"first\": \"Carlos\",\n            \"last\": \"Salazar\",\n            \"username\": \"carlos_salazar\",\n            \"email\": \"carlos_salazar@example.com\",\n        },\n        {\n            \"first\": \"Saanvi\",\n            \"last\": \"Sarkar\",\n            \"username\": \"saanvi_sarkar\",\n            \"email\": \"saanvi_sarkar@example.com\",\n        },\n        {\n            \"first\": \"Alejandro\",\n            \"last\": \"Rosalez\",\n            \"username\": \"alejandro_rosalez\",\n            \"email\": \"alejandro_rosalez@example.com\",\n        },\n        {\n            \"first\": \"Ana Carolina\",\n            \"last\": \"Silva\",\n            \"username\": \"ana_carolina_silva\",\n            \"email\": \"ana_carolina_silva@example.com\",\n        },\n        {\n            \"first\": \"Arnav\",\n            \"last\": \"Desai\",\n            \"username\": \"arnav_desai\",\n            \"email\": \"arnav_desai@example.com\",\n        },\n        {\n            \"first\": \"Diego\",\n            \"last\": \"Ramirez\",\n            \"username\": \"diego_ramirez\",\n            \"email\": \"diego_ramirez@example.com\",\n        },\n        {\n            \"first\": \"Jorge\",\n            \"last\": \"Souza\",\n            \"username\": \"jorge_souza\",\n            \"email\": \"jorge_souza@example.com\",\n        },\n        {\n            \"first\": \"Marcia\",\n            \"last\": \"Oliveira\",\n            \"username\": \"marcia_oliveira\",\n            \"email\": \"marcia_oliveira@example.com\",\n        },\n        {\n            \"first\": \"Martha\",\n            \"last\": \"Rivera\",\n            \"username\": \"martha_rivera\",\n            \"email\": \"martha_rivera@example.com\",\n        },\n        {\n            \"first\": \"Mary\",\n            \"last\": \"Major\",\n            \"username\": \"mary_major\",\n            \"email\": \"mary_major@example.com\",\n        },\n        {\n            \"first\": \"Mateo\",\n            \"last\": \"Jackson\",\n            \"username\": \"mateo_jackson\",\n            \"email\": \"mateo_jackson@example.com\",\n        },\n        {\n            \"first\": \"Nikhil\",\n            \"last\": \"Jayashankar\",\n            \"username\": \"nikhil_jayashankar\",\n            \"email\": \"nikhil_jayashankar@example.com\",\n        },\n        {\n            \"first\": \"Paulo\",\n            \"last\": \"Santos\",\n            \"username\": \"paulo_santos\",\n            \"email\": \"paulo_santos@example.com\",\n        },\n        {\n            \"first\": \"Richard\",\n            \"last\": \"Roe\",\n            \"username\": \"richard_roe\",\n            \"email\": \"richard_roe@example.com\",\n        },\n        {\n            \"first\": \"Shirley\",\n            \"last\": \"Rodriguez\",\n            \"username\": \"shirley_rodriguez\",\n            \"email\": \"shirley_rodriguez@example.com\",\n        },\n        {\n            \"first\": \"Sofia\",\n            \"last\": \"Martínez\",\n            \"username\": \"sofia_martinez\",\n            \"email\": \"sofia_martinez@example.com\",\n        },\n        {\n            \"first\": \"Terry\",\n            \"last\": \"Whitlock\",\n            \"username\": \"terry_whitlock\",\n            \"email\": \"terry_whitlock@example.com\",\n        },\n    ]\n\n    departments = [\n        \"Engineering\",\n        \"Marketing\",\n        \"Sales\",\n        \"Human Resources\",\n        \"Finance\",\n        \"Operations\",\n        \"Legal\",\n        \"IT\",\n    ]\n    positions = [\n        \"Manager\",\n        \"Senior Engineer\",\n        \"Engineer\",\n        \"Analyst\",\n        \"Coordinator\",\n        \"Specialist\",\n        \"Director\",\n        \"VP\",\n    ]\n\n    # Track generated employee IDs for manager relationships\n    employee_ids = []\n\n    # Track employees by department for smart manager assignment\n    employee_by_dept: dict[str, list[dict[str, str]]] = {}\n\n    # Check if employees already exist\n    existing_employees = employees_table.scan()\n    if existing_employees[\"Items\"]:\n        logger.info(\"Employees already exist, skipping employee creation\")\n        # Extract existing employee IDs for job assignment\n        for emp in existing_employees[\"Items\"]:\n            employee_ids.append(str(emp[\"employee_id\"]))\n            dept = str(emp.get(\"department\", \"ENGINEERING\"))\n            if dept not in employee_by_dept:\n                employee_by_dept[dept] = []\n            emp_data: dict[str, str] = {\n                \"id\": str(emp[\"employee_id\"]),\n                \"position\": str(emp.get(\"position\", \"ENGINEER\")),\n            }\n            employee_by_dept[dept].append(emp_data)\n    else:\n        # Create new employees\n        for i, emp in enumerate(employees):\n            employee_id = f\"emp_{str(uuid.uuid4())[:8]}\"  # Generate short prefixed ID\n            employee_ids.append(employee_id)\n            email = emp[\"email\"]\n            username = emp[\"username\"]\n            dept = departments[i % len(departments)]\n            pos = positions[i % len(positions)]\n\n            # Track employees by department\n            if dept not in employee_by_dept:\n                employee_by_dept[dept] = []\n            employee_by_dept[dept].append({\"id\": employee_id, \"position\": pos})\n\n            # Create Cognito user - use actual username\n            try:\n                cognito.admin_create_user(\n                    UserPoolId=user_pool_id,\n                    Username=username,  # Use actual username\n                    UserAttributes=[\n                        {\"Name\": \"email\", \"Value\": email},\n                        {\"Name\": \"email_verified\", \"Value\": \"true\"},\n                        {\"Name\": \"given_name\", \"Value\": emp[\"first\"]},\n                        {\"Name\": \"family_name\", \"Value\": emp[\"last\"]},\n                    ],\n                    TemporaryPassword=\"WorkShopP@ssword1!\",\n                    MessageAction=\"SUPPRESS\",\n                )\n\n                # Set permanent password\n                cognito.admin_set_user_password(\n                    UserPoolId=user_pool_id,\n                    Username=username,  # Use actual username\n                    Password=str(get_default_password()),\n                    Permanent=True,\n                )\n\n            except cognito.exceptions.UsernameExistsException:\n                logger.info(f\"User {username} already exists, skipping creation\")\n\n            # Create employee record in DynamoDB\n            # Assign managers - everyone gets a manager except the CEO (first employee)\n            manager_id = None\n            if i == 0:\n                # First employee is CEO - no manager\n                pass\n            elif i < 5:\n                # Senior employees (positions 1-4) report to CEO\n                manager_id = employee_ids[0]\n            else:\n                # Other employees report to senior employees (cycling through positions 1-4)\n                manager_id = employee_ids[1 + ((i - 5) % 4)]\n\n            employee_item = {\n                \"employee_id\": employee_id,  # Use generated UUID\n                \"record_type\": \"EMPLOYEE\",\n                \"first_name\": emp[\"first\"],\n                \"last_name\": emp[\"last\"],\n                \"email\": email,\n                \"department\": dept,\n                \"position\": pos,\n                \"status\": \"Active\",\n                \"hire_date\": \"2023-01-15\",\n                \"created_at\": datetime.now(timezone.utc).isoformat(),\n            }\n\n            # Add manager_id for everyone except CEO\n            if manager_id:\n                employee_item[\"manager_id\"] = manager_id\n\n            employees_table.put_item(Item=employee_item)\n\n    # Check if job listings already exist\n    existing_jobs = job_listings_table.scan()\n    if existing_jobs[\"Items\"]:\n        logger.info(\"Job listings already exist, skipping job creation\")\n    else:\n        # Create job listings\n        job_listings = [\n            # Engineering positions\n            {\n                \"title\": \"Senior Software Engineer\",\n                \"dept\": \"Engineering\",\n                \"location\": \"Seattle, WA\",\n                \"desc\": \"Build scalable cloud applications\",\n                \"req\": \"5+ years Python/Java experience\",\n                \"salary_range\": \"$120,000 - $160,000\",\n            },\n            {\n                \"title\": \"Frontend Developer\",\n                \"dept\": \"Engineering\",\n                \"location\": \"Remote\",\n                \"desc\": \"Create responsive web interfaces\",\n                \"req\": \"3+ years React/Angular experience\",\n                \"salary_range\": \"$90,000 - $120,000\",\n            },\n            {\n                \"title\": \"DevOps Engineer\",\n                \"dept\": \"Engineering\",\n                \"location\": \"Austin, TX\",\n                \"desc\": \"Manage CI/CD pipelines and infrastructure\",\n                \"req\": \"AWS/Docker expertise required\",\n                \"salary_range\": \"$110,000 - $140,000\",\n            },\n            {\n                \"title\": \"Data Scientist\",\n                \"dept\": \"Engineering\",\n                \"location\": \"San Francisco, CA\",\n                \"desc\": \"Analyze large datasets and build ML models\",\n                \"req\": \"PhD in Statistics/CS preferred\",\n                \"salary_range\": \"$130,000 - $170,000\",\n            },\n            {\n                \"title\": \"Mobile Developer\",\n                \"dept\": \"Engineering\",\n                \"location\": \"New York, NY\",\n                \"desc\": \"Develop iOS and Android applications\",\n                \"req\": \"Swift/Kotlin experience required\",\n                \"salary_range\": \"$100,000 - $130,000\",\n            },\n            # Marketing positions\n            {\n                \"title\": \"Marketing Manager\",\n                \"dept\": \"Marketing\",\n                \"location\": \"New York, NY\",\n                \"desc\": \"Lead marketing campaigns and strategy\",\n                \"req\": \"5+ years marketing experience\",\n                \"salary_range\": \"$85,000 - $115,000\",\n            },\n            {\n                \"title\": \"Content Marketing Specialist\",\n                \"dept\": \"Marketing\",\n                \"location\": \"Remote\",\n                \"desc\": \"Create engaging content across channels\",\n                \"req\": \"Strong writing and SEO skills\",\n                \"salary_range\": \"$60,000 - $80,000\",\n            },\n            {\n                \"title\": \"Digital Marketing Analyst\",\n                \"dept\": \"Marketing\",\n                \"location\": \"San Francisco, CA\",\n                \"desc\": \"Analyze marketing performance metrics\",\n                \"req\": \"Google Analytics certification\",\n                \"salary_range\": \"$70,000 - $95,000\",\n            },\n            {\n                \"title\": \"Brand Manager\",\n                \"dept\": \"Marketing\",\n                \"location\": \"Los Angeles, CA\",\n                \"desc\": \"Manage brand identity and positioning\",\n                \"req\": \"Brand management experience\",\n                \"salary_range\": \"$80,000 - $110,000\",\n            },\n            # Sales positions\n            {\n                \"title\": \"Sales Manager\",\n                \"dept\": \"Sales\",\n                \"location\": \"New York, NY\",\n                \"desc\": \"Lead sales team and strategy\",\n                \"req\": \"5+ years sales management\",\n                \"salary_range\": \"$90,000 - $120,000 + commission\",\n            },\n            {\n                \"title\": \"Account Executive\",\n                \"dept\": \"Sales\",\n                \"location\": \"San Francisco, CA\",\n                \"desc\": \"Manage key client relationships\",\n                \"req\": \"B2B sales experience\",\n                \"salary_range\": \"$70,000 - $90,000 + commission\",\n            },\n            {\n                \"title\": \"Sales Development Representative\",\n                \"dept\": \"Sales\",\n                \"location\": \"Remote\",\n                \"desc\": \"Generate and qualify leads\",\n                \"req\": \"Strong communication skills\",\n                \"salary_range\": \"$45,000 - $60,000 + commission\",\n            },\n            {\n                \"title\": \"Customer Success Manager\",\n                \"dept\": \"Sales\",\n                \"location\": \"Seattle, WA\",\n                \"desc\": \"Ensure customer satisfaction and retention\",\n                \"req\": \"Customer success experience\",\n                \"salary_range\": \"$75,000 - $95,000\",\n            },\n            # HR positions\n            {\n                \"title\": \"HR Manager\",\n                \"dept\": \"Human Resources\",\n                \"location\": \"New York, NY\",\n                \"desc\": \"Oversee HR operations and policies\",\n                \"req\": \"5+ years HR management\",\n                \"salary_range\": \"$80,000 - $110,000\",\n            },\n            {\n                \"title\": \"Talent Acquisition Specialist\",\n                \"dept\": \"Human Resources\",\n                \"location\": \"Remote\",\n                \"desc\": \"Recruit and hire top talent\",\n                \"req\": \"Recruiting experience required\",\n                \"salary_range\": \"$60,000 - $80,000\",\n            },\n            {\n                \"title\": \"HR Business Partner\",\n                \"dept\": \"Human Resources\",\n                \"location\": \"San Francisco, CA\",\n                \"desc\": \"Partner with business units on HR strategy\",\n                \"req\": \"HRBP experience preferred\",\n                \"salary_range\": \"$90,000 - $120,000\",\n            },\n            {\n                \"title\": \"Learning and Development Manager\",\n                \"dept\": \"Human Resources\",\n                \"location\": \"Austin, TX\",\n                \"desc\": \"Design employee training programs\",\n                \"req\": \"L&D experience required\",\n                \"salary_range\": \"$75,000 - $100,000\",\n            },\n            # Finance positions\n            {\n                \"title\": \"Financial Analyst\",\n                \"dept\": \"Finance\",\n                \"location\": \"New York, NY\",\n                \"desc\": \"Analyze financial data and trends\",\n                \"req\": \"Finance degree and 3+ years experience\",\n                \"salary_range\": \"$70,000 - $95,000\",\n            },\n            {\n                \"title\": \"Senior Accountant\",\n                \"dept\": \"Finance\",\n                \"location\": \"Chicago, IL\",\n                \"desc\": \"Handle complex accounting functions\",\n                \"req\": \"CPA preferred, 5+ years experience\",\n                \"salary_range\": \"$75,000 - $100,000\",\n            },\n            {\n                \"title\": \"Finance Manager\",\n                \"dept\": \"Finance\",\n                \"location\": \"San Francisco, CA\",\n                \"desc\": \"Manage finance team and operations\",\n                \"req\": \"Finance management experience\",\n                \"salary_range\": \"$95,000 - $125,000\",\n            },\n            # Operations positions\n            {\n                \"title\": \"Operations Manager\",\n                \"dept\": \"Operations\",\n                \"location\": \"Chicago, IL\",\n                \"desc\": \"Oversee daily operations\",\n                \"req\": \"Operations management experience\",\n                \"salary_range\": \"$80,000 - $110,000\",\n            },\n            {\n                \"title\": \"Supply Chain Analyst\",\n                \"dept\": \"Operations\",\n                \"location\": \"Dallas, TX\",\n                \"desc\": \"Optimize supply chain processes\",\n                \"req\": \"Supply chain experience\",\n                \"salary_range\": \"$65,000 - $85,000\",\n            },\n            # Legal positions\n            {\n                \"title\": \"Legal Counsel\",\n                \"dept\": \"Legal\",\n                \"location\": \"New York, NY\",\n                \"desc\": \"Provide legal advice and support\",\n                \"req\": \"JD and bar admission required\",\n                \"salary_range\": \"$120,000 - $160,000\",\n            },\n            # IT positions\n            {\n                \"title\": \"IT Support Specialist\",\n                \"dept\": \"IT\",\n                \"location\": \"Remote\",\n                \"desc\": \"Provide technical support to employees\",\n                \"req\": \"IT support experience required\",\n                \"salary_range\": \"$50,000 - $70,000\",\n            },\n            {\n                \"title\": \"Network Administrator\",\n                \"dept\": \"IT\",\n                \"location\": \"Seattle, WA\",\n                \"desc\": \"Manage network infrastructure\",\n                \"req\": \"Network administration experience\",\n                \"salary_range\": \"$70,000 - $95,000\",\n            },\n        ]\n\n        def find_manager_for_job(job_title: str, job_dept: str) -> str:  # noqa: ARG001\n            \"\"\"Find appropriate manager based on job title and department\"\"\"\n            # Look for managers in the same department first\n            if job_dept in employee_by_dept:\n                dept_employees = employee_by_dept[job_dept]\n                # Prefer managers, directors, VPs\n                managers = [\n                    emp\n                    for emp in dept_employees\n                    if any(\n                        role in emp[\"position\"].upper() for role in [\"MANAGER\", \"DIRECTOR\", \"VP\"]\n                    )\n                ]\n                if managers:\n                    return managers[0][\"id\"]\n                # Fallback to any employee in the department\n                if dept_employees:\n                    return dept_employees[0][\"id\"]\n\n            # Fallback to first available employee\n            return employee_ids[0] if employee_ids else \"unknown\"\n\n        for job in job_listings:\n            job_id = f\"job_{str(uuid.uuid4())[:8]}\"  # Generate short prefixed ID\n            # Smart manager assignment based on job department\n            hiring_manager_id = find_manager_for_job(job[\"title\"], job[\"dept\"])\n\n            job_listings_table.put_item(\n                Item={\n                    \"job_id\": job_id,\n                    \"title\": job[\"title\"],\n                    \"department\": job[\"dept\"],\n                    \"location\": job[\"location\"],\n                    \"description\": job[\"desc\"],\n                    \"requirements\": job[\"req\"],\n                    \"salary_range\": job[\"salary_range\"],\n                    \"hiring_manager_id\": hiring_manager_id,  # Smart assignment\n                    \"status\": \"OPEN\",  # Default to OPEN\n                    \"created_at\": datetime.now(timezone.utc).isoformat(),\n                }\n            )\n\n    # Setup QuickSight subscription and users\n    setup_quicksight(aws_account_id, employees, workshop_mode)\n\n    # Return a unique physical resource ID\n    return \"test-data-populated\"\n\n\n@helper.update\ndef update(event: dict[str, Any], context: Any) -> None:\n    \"\"\"Handle UPDATE events - also populate data\"\"\"\n    return create(event, context)\n\n\n@helper.delete\ndef delete(event: dict[str, Any], context: Any) -> None:  # noqa: ARG001\n    \"\"\"Handle DELETE events - no action needed for workshop\"\"\"\n\n\ndef lambda_handler(event: dict[str, Any], context: Any) -> None:\n    \"\"\"Main Lambda handler\"\"\"\n    helper(event, context)\n"
+        },
+        "Handler": "index.lambda_handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "PopulateTestDataLambdaServiceRole92CE4549",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.12",
+        "Timeout": 900
+      },
+      "DependsOn": [
+        "PopulateTestDataLambdaServiceRoleDefaultPolicy27A5A05B",
+        "PopulateTestDataLambdaServiceRole92CE4549"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/PopulateTestDataLambda/Resource"
+      }
+    },
+    "PopulateTestDataLambdaLogGroup2E20A208": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "PopulateTestDataLambdaC0EB9E3F"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 731
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/PopulateTestDataLambda/LogGroup/Resource"
+      }
+    },
+    "PopulateTestData": {
+      "Type": "Custom::PopulateTestData",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "PopulateTestDataLambdaC0EB9E3F",
+            "Arn"
+          ]
+        },
+        "EmployeesTableName": {
+          "Ref": "WorkshopEmployeesTable5D393DAA"
+        },
+        "JobListingsTableName": {
+          "Ref": "WorkshopJobListingsTable15B2EE7F"
+        },
+        "UserPoolId": {
+          "Ref": "WorkshopUserPool415C713C"
+        },
+        "WorkshopMode": {
+          "Ref": "WorkshopMode"
+        },
+        "Timestamp": "1761617603403"
+      },
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/PopulateTestData"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1WXW/bNhT9LeVjwGhdiu3Bb67nBsGywbOcAYMRBNfktcyGIrVLyolG6L8PpCRbdtoifehL0QdB1P085/BLV9nV21+yt2/gyV0K+Xip1SYLuQfxyGdbswCCEj0Shyf3EIQtjPI2C3cOaWGtXgdW98M/oUQ2YReMM4d6m6vC3FVzAxuNkk22oB1y5lRhbswMHOZonPJqj2e+qVbg0LFJYFiC0mziqUae2pjUIn63nEHt7d9IatucxbacOQ9GAsmp96Q2tU/1Ws4IS7sHvbBaiYZNmETnyTasvY9kB1J8GCzR2ZoE5kh7pHVgSqLxaquQeqYD+bPP08SxMsJWEQy7OOt5mnFAMNMKjR+p3Ncp0CCBxxwFoR80gtrvPmj7lNRLGeDckyU5FjGn6hAvS9UhOIlrObPT2u9ile1QLta2pP4Dr6yZWYnXBMYfFT8S40yA1hsQj3eke66cubqqLHmUN0lD3yzI7pVEGpIqwj0aH+HMn5XzaATOiWwM6Jq8UoWX2EVScUaYWoN2n4Ldnk5Ip/zY8pstQZmWu9TNlWCgQMpC130dWOcYzbZEJ0hVUbFPIs49KVNEhG70vcKy0uDxPCU5f8emt+Oz0LXE2Q4IhD/qqEyy5xWI496q+gm+RVNEcVIk4b+1IpyD2N10SXLVVMcd9uXd0lFouXuXhfe1eEwSbNJgJMFna/CvCU4NuyYtl42B0spNFlbxcFkH5uN7VKcC8iqqntQKzBxdPhFkeVySG6W1MsUfVkbTYvrPw2K+fFjO/7qb56sYq0pc2Vu1x8M58gpW3wMYZ8n/gPu9wQUpr7XdgM5R2Hg/NjdG4jObxJstjr6WSnv/Q4WkQjqf0mnUcg3lRkIWPtRGxNR1YFSbiLXP3IGR+vAHITp2Fz0fW/vR38FQo+UKyiwsbTruwLm6RPk+QapIGaEq0FMhbG18X6uLiQlTcbh/Ws66W0smZVS8+dbhxNZMqY+978Va2cXQYtBzHXqv9+nu0Mrgwccu2CucX677bbxJ0igJ78wRzQHoykbPC/wvzVLmHjyWaLw7afttzAl0h7fl2hYuC7e2uCZbV+vAdD88rNkufohoWz78WCayn3k6YfrAlhsrMfvoftpfvct+zX5+89Epddmv4WzZvf8HL69APTcMAAA="
+      },
+      "Metadata": {
+        "aws:cdk:path": "AmazonQuickSuiteWorkshopCoreInfraStack/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-3"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-4"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "il-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "AWS::Region"
+            },
+            "us-west-2"
+          ]
+        }
+      ]
+    }
+  },
+  "Outputs": {
+    "ExportsOutputFnGetAttWorkshopEmailsTableC100511FArn203A960A": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopEmailsTableC100511F",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopEmailsTableC100511FArn203A960A"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopCalendarTableF76627C7ArnFEA1C9DA": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopCalendarTableF76627C7",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopCalendarTableF76627C7ArnFEA1C9DA"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopTicketsTable8EF924FEArnDF5E8C8D": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopTicketsTable8EF924FE",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopTicketsTable8EF924FEArnDF5E8C8D"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopTimeOffTable5FE30993ArnC248D609": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopTimeOffTable5FE30993",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopTimeOffTable5FE30993ArnC248D609"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopEmployeesTable5D393DAAArn4AE89033": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopEmployeesTable5D393DAA",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopEmployeesTable5D393DAAArn4AE89033"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopJobListingsTable15B2EE7FArnF211BE34": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopJobListingsTable15B2EE7F",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopJobListingsTable15B2EE7FArnF211BE34"
+      }
+    },
+    "ExportsOutputRefWorkshopEmployeesTable5D393DAAEE3ADE14": {
+      "Value": {
+        "Ref": "WorkshopEmployeesTable5D393DAA"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopEmployeesTable5D393DAAEE3ADE14"
+      }
+    },
+    "ExportsOutputRefWorkshopJobListingsTable15B2EE7FD7BEADC8": {
+      "Value": {
+        "Ref": "WorkshopJobListingsTable15B2EE7F"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopJobListingsTable15B2EE7FD7BEADC8"
+      }
+    },
+    "ExportsOutputRefWorkshopEmailsTableC100511FE2316D8D": {
+      "Value": {
+        "Ref": "WorkshopEmailsTableC100511F"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopEmailsTableC100511FE2316D8D"
+      }
+    },
+    "ExportsOutputRefWorkshopCalendarTableF76627C712069214": {
+      "Value": {
+        "Ref": "WorkshopCalendarTableF76627C7"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopCalendarTableF76627C712069214"
+      }
+    },
+    "ExportsOutputRefWorkshopTicketsTable8EF924FE18EBBEEE": {
+      "Value": {
+        "Ref": "WorkshopTicketsTable8EF924FE"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopTicketsTable8EF924FE18EBBEEE"
+      }
+    },
+    "ExportsOutputRefWorkshopTimeOffTable5FE309930915DD3C": {
+      "Value": {
+        "Ref": "WorkshopTimeOffTable5FE30993"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopTimeOffTable5FE309930915DD3C"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopUserPool415C713CArnF651F8E2": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopUserPool415C713C",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopUserPool415C713CArnF651F8E2"
+      }
+    },
+    "ExportsOutputRefWorkshopMcpUserPoolClient198E0994CBDA6269": {
+      "Value": {
+        "Ref": "WorkshopMcpUserPoolClient198E0994"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopMcpUserPoolClient198E0994CBDA6269"
+      }
+    },
+    "ExportsOutputRefWorkshopUserPool415C713C612A4251": {
+      "Value": {
+        "Ref": "WorkshopUserPool415C713C"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopUserPool415C713C612A4251"
+      }
+    },
+    "ExportsOutputFnGetAttWorkshopArtifactsBucketEF691A47ArnAC91F715": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WorkshopArtifactsBucketEF691A47",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputFnGetAttWorkshopArtifactsBucketEF691A47ArnAC91F715"
+      }
+    },
+    "ExportsOutputRefWorkshopArtifactsBucketEF691A471F737A5B": {
+      "Value": {
+        "Ref": "WorkshopArtifactsBucketEF691A47"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopArtifactsBucketEF691A471F737A5B"
+      }
+    },
+    "ExportsOutputRefWorkshopOpenApiUserPoolClientA2A9387183572008": {
+      "Value": {
+        "Ref": "WorkshopOpenApiUserPoolClientA2A93871"
+      },
+      "Export": {
+        "Name": "AmazonQuickSuiteWorkshopCoreInfraStack:ExportsOutputRefWorkshopOpenApiUserPoolClientA2A9387183572008"
+      }
+    }
+  }
+}
