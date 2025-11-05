@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora MySQL Graviton4 升级指南</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #232F3E;
+            border-bottom: 3px solid #FF9900;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #232F3E;
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid #FF9900;
+        }
+        h3 {
+            color: #0073bb;
+        }
+        .recommendation-box {
+            background: #e8f4fd;
+            border: 1px solid #0073bb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success-box {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #232F3E;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .code-block {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .flowchart {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .flow-box {
+            display: inline-block;
+            background: #e8f4fd;
+            border: 2px solid #0073bb;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+        .flow-arrow {
+            font-size: 20px;
+            color: #0073bb;
+            margin: 0 10px;
+        }
+        .phase {
+            background: #232F3E;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Aurora MySQL Graviton4 升级指南</h1>
+        
+        <div class="recommendation-box">
+            <h3>📋 当前集群配置分析</h3>
+            <ul>
+                <li><strong>实例配置：</strong>db.r6.2xlarge, db.r7.2xlarge, db.r8.4xlarge</li>
+                <li><strong>MySQL版本：</strong>MySQL 8.0</li>
+                <li><strong>升级目标：</strong>Graviton4 (db.r8g系列)</li>
+            </ul>
+        </div>
+
+        <h2>🎯 推荐的Aurora LTS版本</h2>
+        
+        <div class="success-box">
+            <h3>✅ 推荐版本</h3>
+            <p><strong>Aurora MySQL 8.0.mysql_aurora.3.07.1 (LTS)</strong></p>
+            <ul>
+                <li>完全支持Graviton4处理器</li>
+                <li>长期支持版本，稳定性高</li>
+                <li>性能优化，兼容性好</li>
+            </ul>
+        </div>
+
+        <h2>🔄 实例类型映射</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>当前实例类型</th>
+                    <th>推荐Graviton4实例</th>
+                    <th>vCPU</th>
+                    <th>内存(GiB)</th>
+                    <th>性能提升</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>db.r6.2xlarge</td>
+                    <td>db.r8g.2xlarge</td>
+                    <td>8</td>
+                    <td>64</td>
+                    <td>~20%</td>
+                </tr>
+                <tr>
+                    <td>db.r7.2xlarge</td>
+                    <td>db.r8g.2xlarge</td>
+                    <td>8</td>
+                    <td>64</td>
+                    <td>~15%</td>
+                </tr>
+                <tr>
+                    <td>db.r8.4xlarge</td>
+                    <td>db.r8g.4xlarge</td>
+                    <td>16</td>
+                    <td>128</td>
+                    <td>~25%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>📊 蓝绿部署升级流程图</h2>
+        
+        <div class="flowchart">
+            <div class="phase">阶段1: 准备工作</div><br>
+            <div class="flow-box">备份验证</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">性能基线</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">兼容性检查</div>
+            <br><br>
+            
+            <div class="phase">阶段2: 蓝绿环境创建</div><br>
+            <div class="flow-box">创建蓝绿集群</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">数据同步</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">配置验证</div>
+            <br><br>
+            
+            <div class="phase">阶段3: 测试验证</div><br>
+            <div class="flow-box">功能测试</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">性能测试</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">压力测试</div>
+            <br><br>
+            
+            <div class="phase">阶段4: 切换部署</div><br>
+            <div class="flow-box">流量切换</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">监控验证</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">回滚准备</div>
+        </div>
+
+        <h2>📝 详细升级步骤</h2>
+
+        <div class="step">
+            <h3>步骤1: 准备工作</h3>
+            
+            <h4>1.1 创建集群快照</h4>
+            <div class="code-block">
+aws rds create-db-cluster-snapshot \
+    --db-cluster-identifier your-aurora-cluster \
+    --db-cluster-snapshot-identifier pre-graviton4-upgrade-$(date +%Y%m%d)
+            </div>
+
+            <h4>1.2 收集性能基线</h4>
+            <div class="code-block">
+# 收集关键性能指标
+aws cloudwatch get-metric-statistics \
+    --namespace AWS/RDS \
+    --metric-name CPUUtilization \
+    --dimensions Name=DBClusterIdentifier,Value=your-aurora-cluster \
+    --start-time 2025-10-25T00:00:00Z \
+    --end-time 2025-11-01T00:00:00Z \
+    --period 3600 \
+    --statistics Average,Maximum
+            </div>
+
+            <h4>1.3 检查应用兼容性</h4>
+            <ul>
+                <li>验证应用程序与Graviton4的兼容性</li>
+                <li>检查第三方工具和驱动程序</li>
+                <li>确认监控工具支持</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>步骤2: 创建蓝绿环境</h3>
+            
+            <h4>2.1 从快照创建新集群</h4>
+            <div class="code-block">
+aws rds restore-db-cluster-from-snapshot \
+    --db-cluster-identifier aurora-graviton4-green \
+    --snapshot-identifier pre-graviton4-upgrade-20251101 \
+    --engine aurora-mysql \
+    --engine-version 8.0.mysql_aurora.3.07.1
+            </div>
+
+            <h4>2.2 添加Graviton4实例</h4>
+            <div class="code-block">
+# 添加Writer实例
+aws rds create-db-instance \
+    --db-instance-identifier aurora-graviton4-writer \
+    --db-cluster-identifier aurora-graviton4-green \
+    --db-instance-class db.r8g.2xlarge \
+    --engine aurora-mysql
+
+# 添加Reader实例
+aws rds create-db-instance \
+    --db-instance-identifier aurora-graviton4-reader-1 \
+    --db-cluster-identifier aurora-graviton4-green \
+    --db-instance-class db.r8g.2xlarge \
+    --engine aurora-mysql
+
+aws rds create-db-instance \
+    --db-instance-identifier aurora-graviton4-reader-2 \
+    --db-cluster-identifier aurora-graviton4-green \
+    --db-instance-class db.r8g.4xlarge \
+    --engine aurora-mysql
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>步骤3: 测试验证</h3>
+            
+            <h4>3.1 功能测试清单</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>测试项目</th>
+                        <th>测试内容</th>
+                        <th>预期结果</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>连接测试</td>
+                        <td>应用程序连接验证</td>
+                        <td>正常连接</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>读写测试</td>
+                        <td>基本CRUD操作</td>
+                        <td>操作成功</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>事务测试</td>
+                        <td>复杂事务处理</td>
+                        <td>事务完整性</td>
+                        <td>□</td>
+                    </tr>
+                    <tr>
+                        <td>存储过程</td>
+                        <td>自定义存储过程</td>
+                        <td>执行正常</td>
+                        <td>□</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>3.2 性能测试脚本</h4>
+            <div class="code-block">
+# 使用sysbench进行性能测试
+sysbench oltp_read_write \
+    --mysql-host=aurora-graviton4-green.cluster-xxx.rds.amazonaws.com \
+    --mysql-user=testuser \
+    --mysql-password=password \
+    --mysql-db=testdb \
+    --tables=10 \
+    --table-size=100000 \
+    --threads=16 \
+    --time=300 \
+    --report-interval=10 \
+    run
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>步骤4: 流量切换</h3>
+            
+            <h4>4.1 DNS切换策略</h4>
+            <div class="warning-box">
+                <strong>⚠️ 注意：</strong>建议在业务低峰期进行切换，并准备回滚方案
+            </div>
+            
+            <div class="code-block">
+# 更新应用程序配置中的数据库端点
+# 从: original-cluster.cluster-xxx.rds.amazonaws.com
+# 到: aurora-graviton4-green.cluster-xxx.rds.amazonaws.com
+            </div>
+
+            <h4>4.2 监控关键指标</h4>
+            <ul>
+                <li>CPU利用率</li>
+                <li>内存使用率</li>
+                <li>连接数</li>
+                <li>查询延迟</li>
+                <li>错误率</li>
+            </ul>
+        </div>
+
+        <h2>🔍 测试验证清单</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>测试阶段</th>
+                    <th>测试项目</th>
+                    <th>验收标准</th>
+                    <th>完成状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="3">功能测试</td>
+                    <td>应用连接性</td>
+                    <td>所有应用正常连接</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td>数据一致性</td>
+                    <td>数据完整无误</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td>业务流程</td>
+                    <td>关键业务正常</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">性能测试</td>
+                    <td>查询性能</td>
+                    <td>性能提升15-25%</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td>并发处理</td>
+                    <td>并发能力不降低</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td>资源利用</td>
+                    <td>CPU/内存优化</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">稳定性测试</td>
+                    <td>长时间运行</td>
+                    <td>24小时稳定运行</td>
+                    <td>□</td>
+                </tr>
+                <tr>
+                    <td>故障恢复</td>
+                    <td>故障转移正常</td>
+                    <td>□</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🚨 回滚方案</h2>
+        
+        <div class="warning-box">
+            <h3>紧急回滚步骤</h3>
+            <ol>
+                <li><strong>立即切换：</strong>将应用程序端点切回原集群</li>
+                <li><strong>验证服务：</strong>确认所有服务恢复正常</li>
+                <li><strong>数据同步：</strong>如有必要，同步切换期间的数据变更</li>
+                <li><strong>问题分析：</strong>分析升级失败原因</li>
+            </ol>
+        </div>
+
+        <div class="code-block">
+# 快速回滚命令
+# 1. 更新应用配置
+# 2. 重启应用服务
+# 3. 验证连接
+aws rds describe-db-clusters --db-cluster-identifier original-cluster
+        </div>
+
+        <h2>📈 预期收益</h2>
+        
+        <div class="success-box">
+            <h3>✅ 升级后预期收益</h3>
+            <ul>
+                <li><strong>性能提升：</strong>15-25%的查询性能改善</li>
+                <li><strong>成本优化：</strong>相同性能下成本降低10-20%</li>
+                <li><strong>能效提升：</strong>更好的能源效率</li>
+                <li><strong>未来兼容：</strong>支持最新AWS功能</li>
+            </ul>
+        </div>
+
+        <h2>📞 支持资源</h2>
+        
+        <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-mysql-blue-green-deployments.html">Aurora蓝绿部署官方文档</a></li>
+            <li><a href="https://aws.amazon.com/cn/blogs/china/q-cli-helps-intsig-achieve-aurora-upgrade-and-operations/">Q CLI Aurora升级实践</a></li>
+            <li><a href="https://aws.amazon.com/rds/aurora/graviton/">Graviton处理器优势</a></li>
+        </ul>
+
+        <div class="recommendation-box">
+            <h3>💡 最佳实践建议</h3>
+            <ul>
+                <li>在非生产环境先进行完整测试</li>
+                <li>选择业务低峰期进行升级</li>
+                <li>准备详细的回滚计划</li>
+                <li>升级后持续监控性能指标</li>
+                <li>逐步迁移，降低风险</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
