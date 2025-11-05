@@ -1,3 +1,31 @@
+# Sales Agent Toolkit
+
+## [Offical Sales Agent Toolkit mcp server](https://w.amazon.com/bin/view/SalesAgentToolkit)
+1. Valid Midway authentication - ```mwinit```
+2. Install toolbox by following the [instructions](https://docs.hub.amazon.dev/builder-toolbox/user-guide/getting-started/#installing-toolbox)
+3. Install [mcp-registry](https://docs.hub.amazon.dev/gen-ai-dev/mcp-guidance/#using-model-context-protocol-servers) via toolbox - ```toolbox install mcp-registry```
+4. Installation mcp server
+```bash
+mcp-registry install aws-sentral-mcp
+mcp-registry install aws-outlook-mcp
+```
+5. Configuration
+```json
+{
+    "mcpServers": { 
+        "aws-sentral-mcp": { 
+            "command": "aws-sentral-mcp",
+            "disabled": false,
+         },
+         "aws-outlook-mcp": { 
+            "command": "aws-outlook-mcp",
+            "disabled": false,
+         }
+      }
+}
+```
+
+## Self host outlook-for-mac server
 ssh -V
 ssh-keygen -t ecdsa
 mwinit -f -s -k ~/.ssh/id_ecdsa.pub
@@ -26,5 +54,13 @@ pip install -r requirements.txt
         "PYTHON_PATH": "/Users/ruiliang/Documents/workspace/OutlookForMac-mcp-server/.venv/bin/python3"
       }
     }
+        "outlook-mcp-server" : {
+      "command" : "/Users/ruiliang/Documents/workspaces/OutlookForMac-mcp-server/outlook_mcp.py",
+      "args" : [ ],
+      "env" : {
+        "OUTLOOK_MCP_LOG_LEVEL" : "INFO",
+        "USER_EMAIL" : "ruiliang@amazon.com",
+        "PYTHON_PATH" : "/Users/ruiliang/Documents/workspaces/OutlookForMac-mcp-server/.venv/bin/python3"
+      }
   }
 }

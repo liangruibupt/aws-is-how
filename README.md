@@ -339,6 +339,7 @@
     - [Nova Sonic Speech-to-Speech Model Samples](https://github.com/aws-samples/amazon-nova-samples/tree/main/speech-to-speech)
     - [nova-sonic Web Demo](https://nova-sonic.teague.live/login)
     - [Amazon Nova Sonic (speech-to-speech) Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/5238419f-1337-4e0f-8cd7-02239486c40d/en-US)
+    - [nova-multimodal-embedding-model practice](https://aws.amazon.com/cn/blogs/china/amazon-nova-multimodal-embedding-model-practical-guide/)
   - [Deepseek]
     - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
@@ -625,6 +626,7 @@
   - [GRAVITON2 电商独立站](https://graviton2.awspsa.com/)
   - [Porting Advisor for Graviton](https://github.com/aws/porting-advisor-for-graviton)
   - [AWS Graviton4 加速 Apache APISIX 消息处理](https://aws.amazon.com/cn/blogs/china/aws-graviton4-accelerates-apache-apisix-message-processing/)
+  - [Q CLI for Aurora Graviton4 upgrade](https://aws.amazon.com/cn/blogs/china/q-cli-helps-intsig-achieve-aurora-upgrade-and-operations/)
 
 - [Operation]
   - [What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
@@ -1951,6 +1953,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
       - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
       - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
       - [Migration & Storage of Sequence Data with AWS HealthOmics](https://aws.amazon.com/solutions/guidance/migration-and-storage-of-sequence-data-with-aws-healthomics/)
+      - [NONMEM + PsN + MPICH on Parallel Cluster 构建云端药代动力学/药效学建模及数据分析流程](https://aws.amazon.com/cn/blogs/china/building-cloud-based-pk-pd-modelling-and-data-analysis-process-with-nonmem-psn-and-amazon-parallelcluster/)
     - [Statistical Compute Environment using R]
       - [Deploying a Statistical Compute Environment using R on Amazon EKS](https://aws.amazon.com/blogs/industries/deploying-a-statistical-compute-environment-using-r-on-amazon-eks/)
   - [Data Analysis]

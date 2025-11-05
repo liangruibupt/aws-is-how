@@ -44,6 +44,12 @@ flowchart TD
 prompt: 根据提供的图片，帮忙生成使用 2023年之后最新版本的 AWS 服务官方图标的架构图代码，输出格式可以直接导入到draw.io
 
 prompt: Follow up the AWS Well-Architected design guidance, generate an aws architecture diagram that uses the official icons of the latest version of AWS services after 2023. The architecture is 3-tier architecture built by serverless backend with API Gateway, Lambda, DynamoDB, and S3. The output format can be directly imported into draw.io.
+
+按以下要求生成drawio(xml)格式，AWS风格的架构图：
+1. 我有一个Aurora的测试环境在美东1区域；
+2. 堡垒机在公网子网，开放22和3306端口，支持从外网访问；
+3. Aurora集群有三个实例，实例配置为db.r6.2xlarge, db.r7.2xlarge和db.r8.2xlarge
+4. 三个实例分布在三个私有子网，其中db.r6g.2xlarge为主实例；
 ```
 
 3. 解读周报和月报
@@ -76,8 +82,10 @@ Read the quip <URL>, summary the migration items, catelog results as Migration D
 Migration Driver list: 1. Compliance & Security, 2. Functionality and Performance Advantage, 3. Resilience, 4. Data & AI Agility, 5. Business Community Strength, 6. Cost Optimization by Tech driven, 7. CSP region EOL or IDC retirement, 8. Tech stack consistency for simplified operation, 9. Modernization
 
 
-Read the quip <URL>, Please summary items tagged '[CNR]', 'BJS', 'ZHY', '[C2C,', '[C2C', '[G2C,', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Owner>. Save result to cnr_insights.md under current folder.
+Read the quip <URL>, Please summary items tagged '[CNR]', 'BJS', 'ZHY', '[C2C', '[C2C', '[G2C,', 'China Region'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Owner>. Save result to cnr_insights.md under current folder.
 Here is the output example: NewCompany(C2C, L, ISV) migrated their CI/CD system from Azure China to AWS ZHY with $5K MRR, implementing Spot instances within EKS to achieve 50% cost savings compared to Azure. (SA Owner: John)
+
+Convert the items in the attached file as table format. The table schema is Customer Name | Catalog (C2C, G2C, C2G2C) | Type (Migration, GenAI) | Description | AWS Region (BJS, ZHY) | ARR/MRR | SA Owner
 
 阅读 quip link <Quip URL>, 
 - 第一步，提取和分析打了'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'ADAS Opp', 'SDV Opp', 'Compliance & Security Opp', 'Analytics Opp', 'CO Opp', 'Cockpit Opp' 的内容。
@@ -87,6 +95,8 @@ Here is the output example: NewCompany(C2C, L, ISV) migrated their CI/CD system 
 Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'MIH Opp', 'HPC Opp', 'CO Opp', 'Security Opp', 'Analytics Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder.
 Here is the output example: MyCompany(L) deployed self-developed ERP system in Frankfurt region for its global business expansion with $70K ARR. SA Alex.
 
+Read the quip link https://quip-amazon.com/zSavATeQcfBv/Weekly-Update-SA, please help me summarize the content marked in red font tagged with 2x2 or * Opp (For example, GenAI Opp, Migration Opp, Analytics Opp, c2G Opp, G2C Opp, Compliance Opp, CO Opp, etc). The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder. Please use the english for output.
+Here is the output example: MyCompany(L) deployed self-developed ERP system in Frankfurt region for its global business expansion with $70K ARR. SA Alex.
 ```
 
 4. 阅读研究报告
@@ -183,6 +193,16 @@ You have checked all the data in the file, give me the total revenue, total comp
 
 13. Knowledge check
 ```
+"awslabs.aws-documentation-mcp-server" : {
+      "command" : "uvx",
+      "args" : [ "awslabs.aws-documentation-mcp-server@latest" ],
+      "env" : {
+        "FASTMCP_LOG_LEVEL" : "ERROR"
+      },
+      "disabled" : false,
+      "autoApprove" : [ "read_documentation", "search_documentation", "recommend", "get_available_services" ]
+    }
+
 查询 AWS 上面2024年之后发布的最新P系列和G系列的GPU数量小于8的实例，采用 mcp 查询文档，t通过 Table 格式输出。
 
 
@@ -218,3 +238,35 @@ You have checked all the data in the file, give me the total revenue, total comp
 
 
 14. [reimbursement-helper](https://gitlab.aws.dev/kentpeng/reimbursement-helper)
+
+15. SFDC account management
+```
+The AWSentralMCP server provides 60 tools organized into 15 categories for comprehensive Salesforce operations. So use this MCP server to Help me analysis BMW China on AWS past 3 month usage summary and trending analysis
+```
+
+16. Fetch url and give summary
+```
+please read url https://www.aboutamazon.eu/news/aws/built-operated-controlled-and-secured-in-europe-aws-unveils-new-sovereign-controls-and-governance-structure-for-the-aws-european-sovereign-cloud, 总结关键信息，以中文输出。
+```
+
+17. Write doc
+```
+@prompt_farm 'Rewrite in Amazon Writing Style'
+
+```
+
+18. Field Advisor
+```
+Give me the summary about 2025 Spend & Usage, then I need you further summary about 1. What's top deals by stage? 2. What the stalled opportunities? 3. What's the GenAI related opportunities?
+Write a doc about 'how to achieve AWS DMS resilience?'
+```
+
+19. Aurora Upgrade
+```
+我现有的 Aurora MySQL 集群有三个实例，包括 db.r6.2xlarge, db.r7.2xlarge和 db.r8.4xlarge， 对应 MySQL 版本为 MySQL 8.0 我需要将 Aurora 升级到 Graviton4。请给我推荐的 Aurora LTS 版本，以及提供蓝绿部署方式的升级详细步骤指南和测试流程图，结果通过 HTML 的方式输出，便于阅读。
+```
+
+20. Outlook Assistant
+```
+检查我下周周一11.03和周二11.04的会议安排,如果我需要有一个 1 小时的客户会议,从 aws 办公室到客户办公室需要 30 分钟,帮我看看合适的时间,并且创建一个 Meeting RSVP
+```
