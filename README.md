@@ -698,6 +698,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Data Science on AWS - Quick Start Workshop](https://github.com/data-science-on-aws/workshop)
 
 - [Build a Lake House Architecture on AWS](https://aws.amazon.com/cn/blogs/big-data/build-a-lake-house-architecture-on-aws/)
+- [Modern Data Lakehouse Medallion Architecture on AWS with Iceberg Tables](https://catalog.us-east-1.prod.workshops.aws/workshops/892f91c3-7710-4938-9ec7-349d80d2e9dd/en-US)
 
 - [Harness the power of your data with AWS Analytics with Lake House](https://aws.amazon.com/cn/blogs/big-data/harness-the-power-of-your-data-with-aws-analytics/)
 
@@ -749,6 +750,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Submit EMR Job remotely](analytics/emr/101Workshop/Submit_Job_remotely.md)
   - [如何优雅地提交一个 Amazon EMR Serverless 作业？](https://aws.amazon.com/cn/blogs/china/best-practice-how-to-gracefully-submit-an-amazon-emr-serverless-job/)
   - [如何在 Amazon EMR Serverless 上执行纯 SQL 文件？](https://aws.amazon.com/cn/blogs/china/how-to-execute-plain-sql-files-on-amazon-emr-serverless-solution/)
+  - [Spark Optimization and Hands on Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/481c30f7-8989-40e7-b7fd-f349138ee275/en-US)
   
 - [Workflow]
   - [Apache DolphinScheduler 进行数据任务调度](https://aws.amazon.com/cn/blogs/china/data-task-scheduling-using-apache-dolphinscheduler-on-aws/)
@@ -1965,6 +1967,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Healthcare and Life Sciences Agent Catalog](http://hcls-agents-catalog-ui-app-blue-1955574525.us-west-2.elb.amazonaws.com/)
     - [Life Sciences Innovation with Agentic AI](https://aws.amazon.com/blogs/industries/accelerating-life-sciences-innovation-with-agentic-ai-on-aws/)
     - [Claude for Life Sciences](https://www.anthropic.com/news/claude-for-life-sciences)
+    - [Medical Insights Hub]
+      - [Deployment guide - medical-insights-hub](https://amzn-chn.feishu.cn/file/IyyobyL1RoEGc3x5nKicUjJynUC)
+    - [Medical Deep Insights]
+      - [Backend deployment - medical-deep-insights](https://amzn-chn.feishu.cn/file/Bwobb9WVBofQd2xJycBcvfOunXb)
+      - [Frontend deployment - medical-deep-insight-agents](https://amzn-chn.feishu.cn/file/XgrAbi0UDoLm4TxH40ecsiosnXc)
   - [LS and HC Compliance]
     - [Open source PACS (picture archiving and communication system) solution - part1](https://aws.amazon.com/cn/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-1/)
     - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)
