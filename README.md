@@ -440,6 +440,7 @@
     - [Design multi-agent orchestration with reasoning](https://aws.amazon.com/cn/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/)
   - [AWS announces new innovations for building AI agents at AWS Summit New York 2025](https://www.aboutamazon.com/news/aws/aws-summit-agentic-ai-innovations-2025?utm_source=internalcomms&utm_medium=atoz)
     - [Enabling customers to deliver production-ready AI agents at scale](https://aws.amazon.com/blogs/machine-learning/enabling-customers-to-deliver-production-ready-ai-agents-at-scale/)
+    - [Agentic Design Patterns - A Hands-On Guide to Building Intelligent Systems](https://github.com/ginobefun/agentic-design-patterns-cn/tree/main)
   - [LangChain and LangGraph]
     - [LangChain for LLM Application Development](https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/?continueFlag=40c2724537472cbb3553ce1582e0db80)
   - [Dify - an open-source large language model (LLM) application development platform](https://docs.dify.ai/v/zh-hans)
@@ -1967,6 +1968,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Healthcare and Life Sciences Agent Catalog](http://hcls-agents-catalog-ui-app-blue-1955574525.us-west-2.elb.amazonaws.com/)
     - [Life Sciences Innovation with Agentic AI](https://aws.amazon.com/blogs/industries/accelerating-life-sciences-innovation-with-agentic-ai-on-aws/)
     - [Claude for Life Sciences](https://www.anthropic.com/news/claude-for-life-sciences)
+    - [Nexus-AI](https://nexus-ai.epochx.cn/)
     - [Medical Insights Hub]
       - [Deployment guide - medical-insights-hub](https://amzn-chn.feishu.cn/file/IyyobyL1RoEGc3x5nKicUjJynUC)
     - [Medical Deep Insights]

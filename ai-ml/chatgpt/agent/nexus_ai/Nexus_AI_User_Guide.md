@@ -211,3 +211,42 @@ python agents/generated_agents/html2pptx/html2pptx_agent.py convert \
 
 **提示**：如果您在使用过程中遇到问题，请查看日志文件或联系技术支持。
 
+## 生成Agent
+```
+nohup python -u agents/system_agents/agent_build_workflow/agent_build_workflow.py -i "创建一个AWS GPU 分析助手，建议名称为GPU_advisor_agent，能够提供GPU 选型，区域和价格建议，基本要求如下：
+1、  能够基于客户给出的 Nvidia 的 GPU 型号和卡数（例如 1,2,4,8）找到对应的最合适的 AWS EC2 实例类型和大小。
+2、  给出对应的 EC2 实例类型可选的 AWS Region 列表
+3、  利用现有的aws_pricing_agent 获取对应EC2 实例在对应区域的 On demand, Spot, Saving Plan, Capacity Block(如果有)，SageMaker Hyperpod(如果有), SageMaker Hyperpod Flexible Training Plans(如果有)
+
+**重要**
+- agent所有计算结果必须基于工具或者代码计算得到，不能猜测
+- agent对于分析报表等数据应缓存在本地
+
+已完成部分项目Agent名称是GPU_advisor_agent" &
+tail -f nohup.out
+```
+
+## 由于quota导致生成agent失败
+
+错误
+```
+botocore.exceptions.EventStreamError: An error occurred (serviceUnavailableException) when calling the ConverseStream operation: Bedrock is unable to process your request.
+└ Bedrock region: us-west-2
+└ Model id: global.anthropic.claude-haiku-4-5-20251001-v1:0
+```
+
+已经重试过后的了，重新跑的话有两个办法，一个是原先的提示词里加一下“已完成部分项目Agent名称是<xxx>”，他会检查从断点继续，不过偶尔会出点小问题，二是删掉agents/tools/prompts/projects里对应目录重新跑，或者提示词里强制指定个名字 例如 
+```
+rm -rf projects/news_retrieval_agent
+rm -rf agents/generated_agents/news_retrieval_agent
+rm -rf tools/generated_tools/news_retrieval_agent
+rm -rf prompts/generated_agents_prompts/news_retrieval_agent
+```
+
+## 如何修改默认的 Agent 使用的模型
+
+要修改prompts/generated_agents_prompts/<agent name>/<agent name>.yaml中的模版，里面有版本控制，默认用的latest版本，顺序加载到一个model，如果为空默认才会用 project_config.json 的
+
+## 如何修改 create agent 时候使用的模型和 region
+
+修改 config/default_config.yaml 中的 `bedrock_region_name` and `aws_region_name`
