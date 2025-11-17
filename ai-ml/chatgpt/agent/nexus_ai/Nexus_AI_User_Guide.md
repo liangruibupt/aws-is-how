@@ -213,6 +213,10 @@ python agents/generated_agents/html2pptx/html2pptx_agent.py convert \
 
 ## 生成Agent
 ```
+ssh -i your-key.pem -L 16686:localhost:16686 -L 7474:localhost:7474 -L 7687:localhost:7687 ec2-user@your-ec2-ip
+```
+
+```
 nohup python -u agents/system_agents/agent_build_workflow/agent_build_workflow.py -i "创建一个AWS GPU 分析助手，建议名称为GPU_advisor_agent，能够提供GPU 选型，区域和价格建议，基本要求如下：
 1、  能够基于客户给出的 Nvidia 的 GPU 型号和卡数（例如 1,2,4,8）找到对应的最合适的 AWS EC2 实例类型和大小。
 2、  给出对应的 EC2 实例类型可选的 AWS Region 列表

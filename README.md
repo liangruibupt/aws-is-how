@@ -202,6 +202,7 @@
 - [image classification using resnet](ai-ml/image-classification-resnet)
 - [Open CV on Lambda](ai-ml/auto-image-classification/lambda_opencv.md)
 - [OCR]
+  - [MinerU is a tool that converts PDFs into machine-readable formats (e.g., markdown, JSON)](https://github.com/opendatalab/MinerU)
   - [Train and deploy OCR model on SageMaker](https://github.com/aws-samples/train-and-deploy-ocr-model-on-amazon-sagemaker)
   - [Scale YOLOv5 inference with Amazon SageMaker endpoints and AWS Lambda](https://aws.amazon.com/blogs/machine-learning/scale-yolov5-inference-with-amazon-sagemaker-endpoints-and-aws-lambda/)
   - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
@@ -1077,6 +1078,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### SIEM and SOC
 - [Security Hub quick start](security/security-hub/securityhub_customer_findings.md)
 - [Customer security findings for security hub](security/security-hub/securityhub_customer_findings.md)
+- [SIEM on Amazon OpenSearch Service](https://github.com/aws-samples/siem-on-amazon-opensearch-service)
 
 ### Vulnerability Assessment - Inspector and Alternative
 - [Inspector alternantive in China region - tenable nessus](https://zh-cn.tenable.com/products/nessus)
@@ -1944,14 +1946,20 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Building the Future of In-Vehicle Experiences with AWS Generative AI Solutions: A Strategic Overview](https://aws.amazon.com/blogs/industries/building-the-future-of-in-vehicle-experiences-with-aws-generative-ai-solutions/)
   - [Small Language Model on vehicle](https://aws.amazon.com/blogs/industries/software-defined-vehicles-genai-iot-the-path-to-ai-defined-vehicles/)
 
+- [Battery and Charging]
+  - [Battery Passport on AWS 技术方案](https://aws.amazon.com/blogs/industries/building-a-battery-passport-on-aws-part-1/)
+  - [Electric Vehicle Battery Health Prediction on AWSElectric Vehicle Battery Health Prediction on AWS](https://aws.amazon.com/solutions/guidance/electric-vehicle-battery-health-prediction-on-aws/)
+  
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
     
   - [High-throughput Modeling & Screening]
-    - [Protein Folding and Design]
+    - [CDD and AIDD - Protein Folding and Design]
       - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
       - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
       - [ESM3 - flagship multimodal protein generative model; ESM C - best protein representation learning model](https://github.com/evolutionaryscale/esm)
+      - [AI快速生成全新抗体设计图](https://mp.weixin.qq.com/s/ynoIwDfE-gs2nMvI3i14jw)
+      - [利用 RFdiffusion + ProteinMPNN + ESMFold 自动设计出一批新的 Herceptin 重链 CDR 变体，并筛选出结构最可信、最值得做湿实验验证的候选序列](https://github.com/aws-samples/aws-healthcare-lifescience-ai-ml-sample-notebooks/blob/main/workshops/AI_Driven_Protein_Analysis/2-protein-design.ipynb)
     - [Drug Discovery Workflows]
       - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
       - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
