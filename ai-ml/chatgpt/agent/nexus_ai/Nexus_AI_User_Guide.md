@@ -232,19 +232,30 @@ tail -f nohup.out
 
 ## 由于quota导致生成agent失败
 
-错误
-```
+1. 常见错误
+``` bash
 botocore.exceptions.EventStreamError: An error occurred (serviceUnavailableException) when calling the ConverseStream operation: Bedrock is unable to process your request.
 └ Bedrock region: us-west-2
 └ Model id: global.anthropic.claude-haiku-4-5-20251001-v1:0
 ```
 
-已经重试过后的了，重新跑的话有两个办法，一个是原先的提示词里加一下“已完成部分项目Agent名称是<xxx>”，他会检查从断点继续，不过偶尔会出点小问题，二是删掉agents/tools/prompts/projects里对应目录重新跑，或者提示词里强制指定个名字 例如 
+2. 重新执行：已经重试过后的了，重新跑的话有两个办法，一个是原先的提示词里加一下“已完成部分项目Agent名称是<xxx>”，他会检查从断点继续，不过偶尔会出点小问题，二是删掉agents/tools/prompts/projects里对应目录重新跑，或者提示词里强制指定个名字 例如 
 ```
 rm -rf projects/news_retrieval_agent
 rm -rf agents/generated_agents/news_retrieval_agent
 rm -rf tools/generated_tools/news_retrieval_agent
 rm -rf prompts/generated_agents_prompts/news_retrieval_agent
+```
+
+3. 修改配置，构建 agent build workflow 不同 agent 采用不同模型
+修改 `prompts/system_agents_prompts/agent_build_workflow` 里面每一个 agent 里面 `supported_models`
+```yaml
+supported_models:
+          - "global.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          - "global.anthropic.claude-haiku-4-5-20251001-v1:0"
+          - "global.anthropic.claude-sonnet-4-20250514-v1:0"
+          - "qwen.qwen3-coder-30b-a3b-v1:0"
+
 ```
 
 ## 如何修改默认的 Agent 使用的模型
@@ -254,3 +265,5 @@ rm -rf prompts/generated_agents_prompts/news_retrieval_agent
 ## 如何修改 create agent 时候使用的模型和 region
 
 修改 config/default_config.yaml 中的 `bedrock_region_name` and `aws_region_name`
+
+## 如何create agent的时候，每一个

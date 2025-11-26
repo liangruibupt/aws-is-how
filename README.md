@@ -231,13 +231,16 @@
   - [Implementing advanced prompt engineering with Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/)
   - [Evaluating prompts at scale with Prompt Management and Prompt Flows for Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/evaluating-prompts-at-scale-with-prompt-management-and-prompt-flows-for-amazon-bedrock/)
   - [Enhance performance of generative language models with self-consistency prompting](https://aws.amazon.com/blogs/machine-learning/enhance-performance-of-generative-language-models-with-self-consistency-prompting-on-amazon-bedrock/)
+  - [Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
 
 - [Video]
+  - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
   - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
   - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
   - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
   - [利用 Amazon Bedrock Data Automation（BDA）对视频数据进行自动化处理与检索](https://aws.amazon.com/cn/blogs/china/automating-video-data-processing-and-retrieval-using-amazon-bedrock-data-automation/)
   - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
+  - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
   
 - [Audio]
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
@@ -289,8 +292,6 @@
     - [Towards General Purpose Virtual Try-on](https://github.com/xiezhy6/GP-VTON)
     - [How to improve user engagement with real-time AR effects using BytePlus Effects and Amazon IVS](https://aws.amazon.com/cn/blogs/media/how-to-improve-user-engagement-with-real-time-ar-effects-using-byteplus-effects-and-amazon-ivs/)
     - [硅基数字人HeyGem.ai模型](https://github.com/GuijiAI/HeyGem.ai)
-  - [Industry video handling]
-    - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
   - [OCR]
     - [使用 Bedrock Agent 实现发票查询知识库和开发票](https://catalog.us-east-1.prod.workshops.aws/workshops/180cd73a-ccaf-4ade-9e5d-cf964c637638/zh-CN/0-0-introduction)
     - [Amazon Nova 助力功夫源：提升金融数据分析效率，推动量化投资普惠化](https://aws.amazon.com/cn/blogs/china/amazon-nova-helps-kungfu-trader-unlock-intelligent-quantitative-analysis/)
@@ -1949,6 +1950,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Battery and Charging]
   - [Battery Passport on AWS 技术方案](https://aws.amazon.com/blogs/industries/building-a-battery-passport-on-aws-part-1/)
   - [Electric Vehicle Battery Health Prediction on AWSElectric Vehicle Battery Health Prediction on AWS](https://aws.amazon.com/solutions/guidance/electric-vehicle-battery-health-prediction-on-aws/)
+  - [Battery Digital Twin: The Future of Battery Intelligence](https://aws.amazon.com/blogs/industries/battery-digital-twin-the-future-of-battery-intelligence/)
   
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
