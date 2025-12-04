@@ -275,3 +275,25 @@ Write a doc about 'how to achieve AWS DMS resilience?'
 ```
 我想要拜访朴朴超市 (官方网站: https://pupumall.com/)的 CTO，探讨 如何 利用 Generative AI 实现新的业务模式，新的业务用例，提升用户粘性，获取新的用户，实现出海业务高速增长。需要你帮我进行目标企业分析，行业洞察，帮我生成一个客户拜访前的准备文档，包括可能的商机分析，AWS技术能力和Amazon 生态可以与客户业务想结合的相关建议，目的是进一步探索业务用例进行 PoC
 ```
+
+22. Marketing session query
+```
+Please help me summary the 2025 reInvent Life Science and Healthcare session
+Please help me narrow down session related to Life Science Commerical Line of Business
+
+I need create a Agent to answer Life Scienct company commerical department related question. Help me prepare the prompt for AWS Quick Suite
+
+I want to join the BeiGene https://beonemedicines.com/ commerical department, I need do a research about BeiGene commerical business and prepare the interview questions to be a qualified staff in beonemedicines commerical department.
+
+How would you approach building a territory plan for BRUKINSA in a competitive hematology market?
+
+Explain how you would communicate BRUKINSA's clinical advantages over ibrutinib and acalabrutinib to skeptical oncologists.
+
+Describe your approach to building relationships with multidisciplinary cancer care teams to further promote the Brukinsa.
+
+To promote the Tevimbra, what digital channels would you prioritize for reaching oncology healthcare providers in 2026?
+
+Analysis the BeOne Medicines 2025 YTD finance performance. Draw clear diagrams and each diagram with key message bulletpoints
+
+Give me a briefing about best next engagement action solution
+```

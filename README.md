@@ -484,6 +484,7 @@
         - [Agentic AI基础设施实践经验系列（六）：Agent质量评估](https://aws.amazon.com/cn/blogs/china/agent-quality-evaluation/)
         - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
         - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
+        - [Agentic AI基础设施实践经验系列（九）：Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
         
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
@@ -1942,6 +1943,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [GSMA’s SAS-SM](https://aws.amazon.com/blogs/industries/implementing-a-gsma-compliant-remote-sim-provisioning-workload-on-aws/)
   - [AutoMQ integraion with S3 Tables and Iceberg](https://github.com/AutoMQ/automq/wiki/Introducing-AutoMQ-Table-Topic:-Seamless-Integration-with-S3-Tables-and-Iceberg)
   - [BMW Connected Drive Migration Case](https://aws.amazon.com/solutions/case-studies/bmw-group-migration/)
+  - [汽车服务图谱增强检索方案](https://aws.amazon.com/cn/blogs/china/automotive-services-graphrag/)
 
 - [Smart Cockpit]
   - [Building the Future of In-Vehicle Experiences with AWS Generative AI Solutions: A Strategic Overview](https://aws.amazon.com/blogs/industries/building-the-future-of-in-vehicle-experiences-with-aws-generative-ai-solutions/)
@@ -1951,6 +1953,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Battery Passport on AWS 技术方案](https://aws.amazon.com/blogs/industries/building-a-battery-passport-on-aws-part-1/)
   - [Electric Vehicle Battery Health Prediction on AWSElectric Vehicle Battery Health Prediction on AWS](https://aws.amazon.com/solutions/guidance/electric-vehicle-battery-health-prediction-on-aws/)
   - [Battery Digital Twin: The Future of Battery Intelligence](https://aws.amazon.com/blogs/industries/battery-digital-twin-the-future-of-battery-intelligence/)
+  - [Singapore’s EVe harnesses the power of data](https://aws.amazon.com/blogs/publicsector/singapores-eve-harnesses-the-power-of-data-with-help-from-ntt-data-aws/)
   
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)

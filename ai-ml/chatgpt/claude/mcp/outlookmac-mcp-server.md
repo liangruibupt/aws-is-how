@@ -25,6 +25,11 @@ mcp-registry install aws-outlook-mcp
 }
 ```
 
+6. Testing
+```
+根据ai-ml/Dec01-Dec05.md的内容,利用aws-sentral-mcp 创建 SA activity
+```t
+
 ## Self host outlook-for-mac server
 1. Installation
 ```
