@@ -51,3 +51,5 @@ cd sample-strands-in-5-minutes/bedrock-agentcore-integration/workshop/cn
 AgentCore Browser 部分可能会因为 amazon.com 反爬虫导致失败。
 
 1. 注意Brower use 的实现 browser_use.py
+
+## Global [Getting started with Amazon Bedrock AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/850fcd5c-fd1f-48d7-932c-ad9babede979/en-US) workshop

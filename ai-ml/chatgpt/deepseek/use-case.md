@@ -95,7 +95,7 @@ Convert the items in the attached file as table format. The table schema is Cust
 Read the quip <URL>, summary the content from June 01 to June 30. Please summary items tagged 'GenAI Opp', 'C2G Opp', 'G2C Opp', 'Migration Opp', 'MIH Opp', 'HPC Opp', 'CO Opp', 'Security Opp', 'Analytics Opp'. The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder.
 Here is the output example: MyCompany(L) deployed self-developed ERP system in Frankfurt region for its global business expansion with $70K ARR. SA Alex.
 
-Read the quip link https://quip-amazon.com/zSavATeQcfBv/Weekly-Update-SA, please help me summarize the content marked in red font tagged with 2x2 or * Opp (For example, GenAI Opp, Migration Opp, Analytics Opp, c2G Opp, G2C Opp, Compliance Opp, CO Opp, etc). The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder. Please use the english for output.
+Read the quip link <URL>, please help me summarize the content marked in red font tagged with 2x2 or * Opp (For example, GenAI Opp, Migration Opp, Analytics Opp, c2G Opp, G2C Opp, Compliance Opp, CO Opp, etc). The result item output format is <customer name><description><AWS Region Names><ARR or MRR><SA Name>. Save result to xxx_insights.md under current folder. Please use the english for output.
 Here is the output example: MyCompany(L) deployed self-developed ERP system in Frankfurt region for its global business expansion with $70K ARR. SA Alex.
 ```
 
@@ -280,7 +280,10 @@ Write a doc about 'how to achieve AWS DMS resilience?'
 ```
 Please help me summary the 2025 reInvent Life Science and Healthcare session
 Please help me narrow down session related to Life Science Commerical Line of Business
+```
 
+23. Life Science Commerical query
+```
 I need create a Agent to answer Life Scienct company commerical department related question. Help me prepare the prompt for AWS Quick Suite
 
 I want to join the BeiGene https://beonemedicines.com/ commerical department, I need do a research about BeiGene commerical business and prepare the interview questions to be a qualified staff in beonemedicines commerical department.
@@ -296,4 +299,16 @@ To promote the Tevimbra, what digital channels would you prioritize for reaching
 Analysis the BeOne Medicines 2025 YTD finance performance. Draw clear diagrams and each diagram with key message bulletpoints
 
 Give me a briefing about best next engagement action solution
+```
+
+24. Charging & Power Storage Research
+```
+根据下面的提纲完成任务：
+1、搜索星星充电（万邦）公司基本信息和出海战略概述
+2、调研星星充电（万邦）出海的具体国家和地区分布
+3、分析星星充电（万邦）在海外市场的产品线和业务模式
+4、收集星星充电（万邦）海外销量数据和市场份额表现
+5、研究星星充电（万邦）在海外市场的竞争优势和挑战
+6、整理数据并创建可视化图表
+7、生成符合视觉要求的HTML分析报告
 ```
