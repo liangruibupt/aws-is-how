@@ -154,6 +154,8 @@
   - [Metaverse](#metaverse)
   - [Automotive](#automotive)
   - [HealthCare and Life Science](#healthcare-and-life-science)
+  - [Retail and ECommerce](#retail-and-ecommerce)
+    - [E-Commerce 选品和设计](#e-commerce-选品和设计)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
   - [Summary of the Amazon DynamoDB Service Disruption in Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/cn/message/101925/)
@@ -607,6 +609,7 @@
   - [GPU Perf - LLM GPU推理性能可视化平台](https://github.com/yytdfc/llm-performance-viz)
   - [GPU 虚拟化]
     - [Nvidia MIG]
+      - [基于 MIG 技术在 Amazon SageMaker HyperPod 上实现 GPU 虚拟化](https://aws.amazon.com/cn/blogs/china/gpu-virtualization-using-mig-technology-on-amazon-sagemaker-hyperpod/)
       - [Maximizing GPU utilization with NVIDIA’s Multi-Instance GPU (MIG) on Amazon EKS: Running more pods per GPU for enhanced performance](https://aws.amazon.com/blogs/containers/maximizing-gpu-utilization-with-nvidias-multi-instance-gpu-mig-on-amazon-eks-running-more-pods-per-gpu-for-enhanced-performance/)
       - [Maximizing GPU Utilization using NVIDIA Run:ai in Amazon EKS](https://aws.amazon.com/blogs/containers/maximizing-gpu-utilization-using-nvidia-runai-in-amazon-eks/)
       - [Maximizing GPU Utilization with NVIDIA MIG on Amazon EKS](https://medium.com/@farrukh.mustafa/maximizing-gpu-utilization-with-nvidia-mig-on-amazon-eks-c1a488641d99)
@@ -1024,6 +1027,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Cognito User Pool alternative solution - Authing demo](https://github.com/aws-samples/aws-authing-demo)
 - [Cognito with WeChat integration](https://aws.amazon.com/cn/blogs/china/amazon-cognito-wechat-deployment-1/)
+- [使用 AWS Lambda 和 API Gateway 实现微信小程序后端服务](https://aws.amazon.com/cn/blogs/china/use-aws-lambda-and-api-gateway-to-implement-wechat-mini-program-backend-services/)
 - [integrate Amazon SES with an Amazon Cognito user pool](https://repost.aws/knowledge-center/cognito-user-pool-ses-integration)
   
 - [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
@@ -1137,6 +1141,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Direct Connect SiteLink: send data from one Direct Connect location to another, bypassing AWS Regions](https://aws.amazon.com/blogs/networking-and-content-delivery/introducing-aws-direct-connect-sitelink/)
 
 - [AWS Site-to-Site VPN Private IP VPNs](https://aws.amazon.com/blogs/networking-and-content-delivery/introducing-aws-site-to-site-vpn-private-ip-vpns/)
+- [build IPsec tunnels with static or dynamic customer gateway IP addresses - certificate-based VPN](https://repost.aws/knowledge-center/vpn-certificate-based-site-to-site)
 
 - [Direct Connect and AWS Local Zones interoperability patterns](https://aws.amazon.com/blogs/networking-and-content-delivery/aws-direct-connect-and-aws-local-zones-interoperability-patterns/)
 
@@ -1946,6 +1951,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [AutoMQ integraion with S3 Tables and Iceberg](https://github.com/AutoMQ/automq/wiki/Introducing-AutoMQ-Table-Topic:-Seamless-Integration-with-S3-Tables-and-Iceberg)
   - [BMW Connected Drive Migration Case](https://aws.amazon.com/solutions/case-studies/bmw-group-migration/)
   - [汽车服务图谱增强检索方案](https://aws.amazon.com/cn/blogs/china/automotive-services-graphrag/)
+  - [车联网 AIoT 管理控制台](https://aws.amazon.com/cn/blogs/china/vehicle-internet-of-things-aiot-management-console/)
 
 - [Smart Cockpit]
   - [Building the Future of In-Vehicle Experiences with AWS Generative AI Solutions: A Strategic Overview](https://aws.amazon.com/blogs/industries/building-the-future-of-in-vehicle-experiences-with-aws-generative-ai-solutions/)
@@ -1992,3 +1998,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [LS and HC Compliance]
     - [Open source PACS (picture archiving and communication system) solution - part1](https://aws.amazon.com/cn/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-1/)
     - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)
+
+## Retail and ECommerce
+### E-Commerce 选品和设计
+- [依托 Amazon Bedrock AgentCore 紫讯打造浏览器自动化智能体 BrowserAct](https://www.amazonaws.cn/en/customer-stories/zixuntech-browseract/)
