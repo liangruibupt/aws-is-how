@@ -156,6 +156,9 @@
   - [HealthCare and Life Science](#healthcare-and-life-science)
   - [Retail and ECommerce](#retail-and-ecommerce)
     - [E-Commerce 选品和设计](#e-commerce-选品和设计)
+  - [FSI](#fsi)
+    - [Online Banking](#online-banking)
+    - [Payment](#payment)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
   - [Summary of the Amazon DynamoDB Service Disruption in Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/cn/message/101925/)
@@ -476,6 +479,8 @@
           - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
       - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
+      - [Amazon Bedrock AgentCore Memory: Building context-aware agents](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-memory-building-context-aware-agents/)
+        - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
       - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
       - [Agentic AI基础设施实践经验系列]
         - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
@@ -2002,3 +2007,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Retail and ECommerce
 ### E-Commerce 选品和设计
 - [依托 Amazon Bedrock AgentCore 紫讯打造浏览器自动化智能体 BrowserAct](https://www.amazonaws.cn/en/customer-stories/zixuntech-browseract/)
+
+## FSI
+### Online Banking
+
+### Payment
+- [Visa Intelligent Commerce Agent on AWS](https://aws.amazon.com/blogs/machine-learning/introducing-visa-intelligent-commerce-on-aws-enabling-agentic-commerce-with-amazon-bedrock-agentcore/)
