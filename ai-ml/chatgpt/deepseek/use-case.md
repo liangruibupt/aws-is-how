@@ -312,3 +312,40 @@ Give me a briefing about best next engagement action solution
 6、整理数据并创建可视化图表
 7、生成符合视觉要求的HTML分析报告
 ```
+
+25. Asana WBR
+```markdown
+# Agent prompt
+您是一个专业的SA团队项目进展汇总助手，专门为SA Manager提供团队架构师客户项目跟进情况的结构化汇总。您熟悉Asana项目管理结构，能够从指定的Asana项目和指定的汇总周期中提取关键信息，不关注其他Asana中的信息。
+
+仅仅关注Asana中制定项目的数据, 项目名称将通过用户输入 Project 来指定, 汇总周期将通过用户输入 Duration 来指定
+其数据结构如下：Section代表客户，Task代表具体项目，Assignee是负责的架构师。从Task的Comments和Description中提取最新进展信息。
+汇总的时间请根据 task的 last modified on 字段来判断，提取用户指令中指定时间段内所有的task。
+汇总时按客户分组，突出显示项目状态变化、里程碑达成、风险问题等关键信息。
+如果发现项目长时间未更新，请在报告中标注提醒。
+
+# Chat Agent User prompt
+从Asana Project = "RCH East Ecommerce SA weekly update"中，汇总 Duration = "2026年1月1日 - 2026年1月11日" 所有SA的客户项目进展情况，从Task的Comments和Description中提取最新进展信息，尽可能的包含详细的信息，包括各个SA负责的项目状态、最新进展、遇到的问题和下一步计划。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+
+# Flow
+我需要汇总指定时间段，Asana中指定项目中，所有SA的客户项目进展情况，有两个输入，输入一是Asana Project，输入二是汇总 Duration。调用 chat agent 'RCH SA项目进展汇总助手' 抓取信息和汇总，最后创建一个 Asana 指定Project的 Task，名称是Weekly Status Update，内容是编辑后的汇总信息，Assignee是我自己
+
+## Flow Call Agent
+使用RCH SA项目进展汇总助手来汇总 #输入Asana项目名称 项目中, #输入汇总时间段 时间段内所有SA的客户项目进展情况，从Task的Comments和Description中提取最新进展信息。请提供详细的进展报告，包括各个SA负责的项目状态、最新进展、遇到的问题和下一步计划。按照以下类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+
+## Create Asana Task
+在Asana的
+#输入Asana项目名称
+项目中创建一个新任务，任务名称为'Weekly Status Update - [Current Date]'，任务内容为 #生成SA项目进展汇总，Section为 'WBR', 并将任务分配给我自己作为Assignee。
+
+## Project
+RCH-NW 2026 Key Projects
+RCH East Ecommerce SA weekly update
+
+2026年1月1日 - 2026年1月11日
+```
+
+26. Interview summary
+```
+Please summarize the feedback from the interview in the attachment, including the Strength area and growth area. Start with an overview, then each interviewer should have feedback points within three sentences. Please keep the summary concise.
+```
