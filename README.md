@@ -346,7 +346,7 @@
     - [Nova Sonic Speech-to-Speech Model Samples](https://github.com/aws-samples/amazon-nova-samples/tree/main/speech-to-speech)
     - [nova-sonic Web Demo](https://nova-sonic.teague.live/login)
     - [Amazon Nova Sonic (speech-to-speech) Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/5238419f-1337-4e0f-8cd7-02239486c40d/en-US)
-    - [nova-multimodal-embedding-model practice](https://aws.amazon.com/cn/blogs/china/amazon-nova-multimodal-embedding-model-practical-guide/)
+    - [Nova MME nova-multimodal-embedding-model practice](https://aws.amazon.com/cn/blogs/china/amazon-nova-multimodal-embedding-model-practical-guide/)
   - [Deepseek]
     - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
@@ -423,7 +423,8 @@
   - [Data engineering agent - 面向业务的 AI Chatbot、面向系统的 Agent API，以及面向分析的 BI Dashboard，统一的 Agent 被交付](https://mp.weixin.qq.com/s/K5xvMr6M9w7DKYlvAoMsiQ)
 
 - [Software Develop Lifecycle]
-  - [Amazon Q Developer]
+  - [Amazon Q Developer/Kiro]
+    - [Kiro Community](https://github.com/kiro-community/)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
     - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
     - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
@@ -2007,6 +2008,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Retail and ECommerce
 ### E-Commerce 选品和设计
 - [依托 Amazon Bedrock AgentCore 紫讯打造浏览器自动化智能体 BrowserAct](https://www.amazonaws.cn/en/customer-stories/zixuntech-browseract/)
+- [阿尔特携手 Amazon AgentCore ，打造懂你的AI，智能搜索成本降低34%](https://aws.amazon.com/cn/blogs/china/arte-partners-with-amazon-agentcore/)
+- [垂直电商以图搜图再升级：DINO 模型带来精准匹配体验](https://aws.amazon.com/cn/blogs/china/vertical-e-commerce-image-search-upgraded-dino-model-brings-accurate-matching-experience/)
+- [图片侵权检测](https://eric-bot.com/)
 
 ## FSI
 ### Online Banking
