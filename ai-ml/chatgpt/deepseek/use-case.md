@@ -325,13 +325,20 @@ Give me a briefing about best next engagement action solution
 如果发现项目长时间未更新，请在报告中标注提醒。
 
 # Chat Agent User prompt
-从Asana Project = "RCH East Ecommerce SA weekly update"中，汇总 Duration = "2026年1月1日 - 2026年1月11日" 所有SA的客户项目进展情况，从Task的Comments和Description中提取最新进展信息，尽可能的包含详细的信息，包括各个SA负责的项目状态、最新进展、遇到的问题和下一步计划。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+从Asana Project = "RCH-NW 2026 Key Projects"中，汇总 Duration = "2026年1月19日 - 2026年1月25日" 所有 Assignee 的客户项目进展情况，从Task的Comments和Description中提取最新进展信息，尽可能的包含详细的信息，包括每一个 Assignee 负责的项目最新进展、遇到的问题和下一步计划。不要遗漏某个Assignee, 如果last modified on 不在指定Duration，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+
+Feb01 version
+从Asana Project = "RCH-NW 2026 Key Projects"中, last modified on 在 "2026年1月25日 - 2026年2月1日" 的 tasks。新创建的 task 从 Description 中提取最新进展信息；已有的 task，提取添加和修改时间"2026年1月25日 - 2026年2月1日"之间的Task Comments作为最新进展信息，不要遗漏。确保你检查了所有 Assignee 和 Section。 如果last modified on 不在 "2026年1月25日 - 2026年2月1日"，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+
+Project=‘RCH East Ecommerce SA weekly update’，Section=‘SkyScanner’，在2026年1月25日 - 2026年2月1日的更新总结。 新创建的 task 从 Description 中提取最新进展信息；已有的 task，提取添加和修改时间"2026年1月25日 - 2026年2月1日"之间的Task Comments作为最新进展信息，不要遗漏。
 
 # Flow
 我需要汇总指定时间段，Asana中指定项目中，所有SA的客户项目进展情况，有两个输入，输入一是Asana Project，输入二是汇总 Duration。调用 chat agent 'RCH SA项目进展汇总助手' 抓取信息和汇总，最后创建一个 Asana 指定Project的 Task，名称是Weekly Status Update，内容是编辑后的汇总信息，Assignee是我自己
 
 ## Flow Call Agent
-使用RCH SA项目进展汇总助手来汇总 #输入Asana项目名称 项目中, #输入汇总时间段 时间段内所有SA的客户项目进展情况，从Task的Comments和Description中提取最新进展信息。请提供详细的进展报告，包括各个SA负责的项目状态、最新进展、遇到的问题和下一步计划。按照以下类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+使用RCH SA项目进展汇总助手来汇总 #输入Asana项目名称 项目中, #输入汇总时间段 时间段内所有 Assignee 和 Section 进展情况。新创建的 Task 从 Description 中提取最新进展信息；Existed 的 Task，提取添加和修改时间在 #输入汇总时间段 之间的Task Comments作为最新进展信息，不要遗漏。确保你检查了所有 Assignee 和 Section。 如果last modified on 不在 #输入汇总时间段，可以忽略该 Task 更新。
+
+按照以下类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
 
 ## Create Asana Task
 在Asana的
