@@ -65,10 +65,10 @@ pip install -r requirements.txt
     }
 }
 ```
-# Quip MCP
+## Quip MCP
 https://quip-amazon.com/b6lRA8oPOEZw/AWS-FAQ-Hub-User-Guide, FAQ Hub MCP 通过提供内部文档访问来扩展 Amazon Q CLI / Kiro 的功能，包括故障排除指南和 FAQ 等，包含了 aws-faq 和 quip-mcp 两个 MCP Server 的配置
 
-# Highspot MCP
+## Highspot MCP
 
 Highspot MCP 配置 https://quip-amazon.com/ucGaAhcH9243/AWS-Highspot-MCP-
 
@@ -159,3 +159,6 @@ chat_with_highspot
 帮我在 highspot 上面 search 半年内最新版本的 China Region first call deck
 search_in_highspot
 ```
+
+## Asana MCP
+The full guidance can be fou](https://w.amazon.com/bin/view/UPMT/DiscoTec/Teams/Churro/AI/Asana)
