@@ -156,9 +156,10 @@
   - [HealthCare and Life Science](#healthcare-and-life-science)
   - [Retail and ECommerce](#retail-and-ecommerce)
     - [E-Commerce 选品和设计](#e-commerce-选品和设计)
+    - [导购和客服](#导购和客服)
   - [FSI](#fsi)
     - [Online Banking](#online-banking)
-    - [Payment](#payment)
+    - [Hospitality](#hospitality)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
   - [Summary of the Amazon DynamoDB Service Disruption in Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/cn/message/101925/)
@@ -391,10 +392,12 @@
   - [Prompt Caching]
     - [Getting started with Bedrock prompt_caching](https://github.com/aws-samples/amazon-bedrock-samples/blob/main/introduction-to-bedrock/prompt-caching/getting_started_with_prompt_caching.ipynb))
     - [Prompt caching on amazon bedrock](https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/)
+  - [使用Amazon Bedrock + 自建ECS Docker Sandbox实现Agent 程序化工具调用Programmatic Tool Calling](https://aws.amazon.com/cn/blogs/china/programmatic-tool-calling-agent-using-bedrock-and-ecs-docker-sandbox/)
 
 - [RLHF]
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
   - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
+  - [Residual Connections Are Getting an Upgrade (mHC)](https://www.youtube.com/watch?v=jYn_1PpRzxI&t=165s)
 
 - [RAG - retrieval-augmented generation]
   - [Smart Search 基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
@@ -431,6 +434,7 @@
     - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
     - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
     - [Prompt Driven Development Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/2a43bf02-09e5-4cb0-9b86-dd61fd285808/zh-CN)
+    - [Proxy gateway for Kiro API](https://github.com/jwadow/kiro-gateway)
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
@@ -531,7 +535,10 @@
   - [AgentSkill]
     - [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
     - [Agent Skills 逆向工程解密，用Strands Agents SDK完美实现Agent Skills](https://mp.weixin.qq.com/s/oE2S0jMWyFjkYL4ZZvmamQ)
-  
+  - [Clawdbot - Moltbot]
+    - [moltbot](https://github.com/moltbot/moltbot)
+    - [Moltbot-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-Moltbot-on-AWS-with-Bedrock)
+    - [moltbot-skills](https://github.com/VoltAgent/awesome-moltbot-skills)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
@@ -732,6 +739,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Update and Insert (upsert) Data from AWS Glue](https://towardsdatascience.com/update-and-insert-upsert-data-from-aws-glue-698ac582e562)
   - [Introducing PII data identification and handling using AWS Glue DataBrew](https://aws.amazon.com/blogs/big-data/introducing-pii-data-identification-and-handling-using-aws-glue-databrew/)
   - [Best practices to scale Apache Spark jobs and partition data with AWS Glue](https://aws.amazon.com/blogs/big-data/best-practices-to-scale-apache-spark-jobs-and-partition-data-with-aws-glue/)
+  - [monitor optimize cost glue spark](https://aws.amazon.com/blogs/big-data/monitor-optimize-cost-glue-spark/)
   
 - [Glue Crawler]
   - [Glue Crawler handle the CSV contains quote string](analytics/Glue-Quote-String-Crawler.md)
@@ -1529,9 +1537,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Neo4j-On-AWS](database/neo4j/Neo4j-On-AWS.md)
 
 - [How to use the Neptune to Build Your First Graph Application](database/Neptune/workshop101)
-
 - [利用Neptune图数据库构建工厂知识图谱实践](https://aws.amazon.com/cn/blogs/china/the-practice-of-using-neptune-graph-database-to-construct-plant-knowledge-map/)
 - [Diagram-as-code using generative AI to build a data model for Amazon Neptune](https://aws.amazon.com/blogs/database/diagram-as-code-using-generative-ai-to-build-a-data-model-for-amazon-neptune/)
+- [Neptune与开源Neo4j基于Pokec社交数据的性能测试和场景总结-163万用户和3062万关系边](https://aws.amazon.com/cn/blogs/china/performance-testing-and-scenario-summary-based-on-pokec-social-data/)
 
 ### ElastiCache
 - [Building a fast session store for your online applications with Amazon ElastiCache for Redis](database/redis/session_store)
@@ -1971,14 +1979,16 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   
 ## HealthCare and Life Science
   - [Solutions for Healthcare, Life Sciences, and Genomics](https://aws.amazon.com/solutions/health/?nc=sn&loc=1&dn=he)
+  - [AWS re:Invent 2025: A transformative moment for healthcare and life sciences](https://aws.amazon.com/blogs/industries/aws-reinvent-2025-a-transformative-moment-for-healthcare-and-life-sciences/)
     
-  - [High-throughput Modeling & Screening]
+  - [Drug Discovery and R&D]
     - [CDD and AIDD - Protein Folding and Design]
       - [AWS Batch Architecture for Protein Folding and Design](https://github.com/aws-solutions-library-samples/aws-batch-arch-for-protein-folding)
       - [基于 Alphafold2 一键构建云上高可用蛋白质结构预测平台](https://aws.amazon.com/cn/blogs/china/one-click-construction-of-a-highly-available-protein-structure-prediction-platform-on-the-cloud-part-one/)
       - [ESM3 - flagship multimodal protein generative model; ESM C - best protein representation learning model](https://github.com/evolutionaryscale/esm)
       - [AI快速生成全新抗体设计图](https://mp.weixin.qq.com/s/ynoIwDfE-gs2nMvI3i14jw)
       - [利用 RFdiffusion + ProteinMPNN + ESMFold 自动设计出一批新的 Herceptin 重链 CDR 变体，并筛选出结构最可信、最值得做湿实验验证的候选序列](https://github.com/aws-samples/aws-healthcare-lifescience-ai-ml-sample-notebooks/blob/main/workshops/AI_Driven_Protein_Analysis/2-protein-design.ipynb)
+      - [Accelerating the Design of Candidate Drugs Using Amazon SageMaker with Nimbus Therapeutics](https://aws.amazon.com/cn/solutions/case-studies/nimbus-therapeutics/)
     - [Drug Discovery Workflows]
       - [AWS HealthOmics - End to End workshop](hcls/amazon_omics/amazon-omics-workshop.md)
       - [Drug Discovery Workflows for AWS HealthOmics](https://github.com/aws-samples/drug-discovery-workflows)
@@ -2012,8 +2022,16 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [垂直电商以图搜图再升级：DINO 模型带来精准匹配体验](https://aws.amazon.com/cn/blogs/china/vertical-e-commerce-image-search-upgraded-dino-model-brings-accurate-matching-experience/)
 - [图片侵权检测](https://eric-bot.com/)
 
+### 导购和客服
+- [How Amazon is using generative and agentic AI to transform the shopping experience](https://www.aboutamazon.com/news/retail/amazon-agentic-ai-gen-ai-shopping)  
+  - [Amazon’s next-gen AI assistant Rufus for shopping is now even smarter, more capable, and more helpful](https://www.aboutamazon.com/news/retail/amazon-rufus-ai-assistant-personalized-shopping-features)
+  - [How Rufus scales conversational shopping experiences to millions of Amazon customers](https://aws.amazon.com/blogs/machine-learning/how-rufus-scales-conversational-shopping-experiences-to-millions-of-amazon-customers-with-amazon-bedrock/)
+  - [Amazon’s new AI-powered shopping feature ‘Help Me Decide’ makes it easy to quickly pick the right product](https://www.aboutamazon.com/news/retail/amazon-things-to-buy-help-me-decide-gen-ai)
+  - [Introducing Amazon Lens Live: Instant scanning, real-time product matches, and insights from Amazon's AI Shopping Assistant](https://www.aboutamazon.com/news/retail/search-image-amazon-lens-live-shopping-rufus)
+- [Visa Intelligent Commerce on AWS: Enabling agentic commerce with Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/introducing-visa-intelligent-commerce-on-aws-enabling-agentic-commerce-with-amazon-bedrock-agentcore/)
+
 ## FSI
 ### Online Banking
 
-### Payment
-- [Visa Intelligent Commerce Agent on AWS](https://aws.amazon.com/blogs/machine-learning/introducing-visa-intelligent-commerce-on-aws-enabling-agentic-commerce-with-amazon-bedrock-agentcore/)
+### Hospitality
+- [travel concierge agent](https://github.com/awslabs/amazon-bedrock-agentcore-samples/tree/main/05-blueprints/travel-concierge-agent)
