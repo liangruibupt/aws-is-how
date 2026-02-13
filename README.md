@@ -497,7 +497,10 @@
         - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
         - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
         - [Agentic AI基础设施实践经验系列（九）：Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
-        
+
+    - [Claude Agent]
+      - [Building Agentic Applications with Claude Agent SDK and Amazon Bedrock AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/2ab3895e-8b7c-4f5c-b0c7-8597d6954290/en-US/introduction)
+
   - [MCP](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
@@ -537,8 +540,11 @@
     - [Agent Skills 逆向工程解密，用Strands Agents SDK完美实现Agent Skills](https://mp.weixin.qq.com/s/oE2S0jMWyFjkYL4ZZvmamQ)
   - [Clawdbot - Moltbot]
     - [moltbot](https://github.com/moltbot/moltbot)
-    - [Moltbot-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-Moltbot-on-AWS-with-Bedrock)
+    - [openclaw 在 aws 快速搭建和配置](https://mp.weixin.qq.com/s/0k62KUk6wveo1OEt72xI9Q)
+      - [Moltbot-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-Moltbot-on-AWS-with-Bedrock)
+      - 
     - [moltbot-skills](https://github.com/VoltAgent/awesome-moltbot-skills)
+    - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
 
 ### Labeling
 - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)

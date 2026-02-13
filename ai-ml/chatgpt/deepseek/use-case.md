@@ -328,7 +328,7 @@ Give me a briefing about best next engagement action solution
 从Asana Project = "RCH-NW 2026 Key Projects"中，汇总 Duration = "2026年1月19日 - 2026年1月25日" 所有 Assignee 的客户项目进展情况，从Task的Comments和Description中提取最新进展信息，尽可能的包含详细的信息，包括每一个 Assignee 负责的项目最新进展、遇到的问题和下一步计划。不要遗漏某个Assignee, 如果last modified on 不在指定Duration，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
 
 Feb01 version
-从Asana Project = "RCH-NW 2026 Key Projects"中, last modified on 在 "2026年1月25日 - 2026年2月1日" 的 tasks。新创建的 task 从 Description 中提取最新进展信息；已有的 task，提取添加和修改时间"2026年1月25日 - 2026年2月1日"之间的Task Comments作为最新进展信息，不要遗漏。确保你检查了所有 Assignee 和 Section。 如果last modified on 不在 "2026年1月25日 - 2026年2月1日"，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
+从Asana Project = "RCH East Ecommerce SA weekly update"中, 汇总 last modified on 在 "2026年2月2日 - 2026年2月9日" 的 tasks。新创建的 task 从 Description 和最新的Task Comments中提取最新进展信息；已有的 task，提取在"2026年2月2日 - 2026年2月9日" 添加的Task Comments 的作为最新进展信息。确保你检查了所有 Assignee 和 Section，不要遗漏。 如果last modified on 不在 "2026年2月2日 - 2026年2月9日" ，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
 
 Project=‘RCH East Ecommerce SA weekly update’，Section=‘SkyScanner’，在2026年1月25日 - 2026年2月1日的更新总结。 新创建的 task 从 Description 中提取最新进展信息；已有的 task，提取添加和修改时间"2026年1月25日 - 2026年2月1日"之间的Task Comments作为最新进展信息，不要遗漏。
 

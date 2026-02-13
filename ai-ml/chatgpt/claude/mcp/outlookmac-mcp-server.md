@@ -161,4 +161,109 @@ search_in_highspot
 ```
 
 ## Asana MCP
-The full guidance can be fou](https://w.amazon.com/bin/view/UPMT/DiscoTec/Teams/Churro/AI/Asana)
+1. Step 1: Request Asana Personal Access Token
+   
+    1.1 File Token Request Reference Ticket: https://t.corp.amazon.com/V2072051873/communication 
+
+    1.2 Generate Token: Once approved, follow instructions at: https://developers.asana.com/docs/personal-access-token 
+
+2. Step 2: Setup the Asana MCP
+   
+    2.1 Permissions: You must be a member of the following POSIX groups (verify at Permissions Portal): `software, source-code, apolloop, and toolbox-users-*`. If you're missing any, your manager can add you — see [What to do if you're missing permissions](https://docs.hub.amazon.dev/dev-setup/prerequisites/#development-prereq-missing-permissions)
+   
+    2.2 Option1: The full guidance reference [Asana MCP Server Setup Guide - Complete Configuration and Usage](https://w.amazon.com/bin/view/UPMT/DiscoTec/Teams/Churro/AI/Asana)
+
+        ```
+        Install via AIM (Recommended) `aim mcp install asana-mcp`
+   
+        But I encounter the error when running command
+    
+        aim mcp install asana-mcp
+        ✗ Failed to install MCP server
+
+        Failed to resolve version set 'AsanaMCPServer/development' for package 'AsanaMCPServer-1.0'.
+        The version set may be deprecated or unavailable.
+        Contact the package owner to revive the version set, or check if a newer version is available.
+        ```
+
+        So I change to manual install
+        ```
+        git clone ssh://git.amazon.com/pkg/AsanaMCPServer
+        cd AsanaMCPServer
+        git log
+        npm install
+        npm run build
+        ```
+    
+    2.3 Option2: [Asana MCP Server Runbook](https://w.amazon.com/bin/view/Victoria/Ark/SOPs/AsanaMCP/)
+    
+    - install [brazil cli on by macbook](https://docs.hub.amazon.dev/brazil/cli-guide/setup-macos/) `toolbox install brazilcli`
+
+        Since Mac OS 10.15 (Catalina), the root filesystem is read-only. But, for backwards compatibility, a tool (for example, Brazil CLI) wants to install some shims under /apollo. To get around this, Mac OS provides functionality to create a synthetic root filesystem symlink on boot; Builder Toolbox knows how to do this for you. You just need restart the Macbook once you first run `toolbox install brazilcli`, then you can run it again. more information, please check [Troubleshooting Builder Toolbox](https://docs.hub.amazon.dev/builder-toolbox/user-guide/troubleshooting/#trying-to-install-a-tool-that-has-exports-located-on-the-root-filesystem)
+
+        ```
+        toolbox install brazilcli
+        Installing brazilcli version 2.0.215533.0   
+        Successfully installed brazilcli version 2.0.215533.0
+
+        Tool: brazilcli
+        Description: Brazil CLI
+        Team: Build Execution
+        Email: bx-team@amazon.com
+
+        For more information about this tool, see https://w.amazon.com/index.php/BrazilCLI_2.0
+        To report bug/issue, see https://w.amazon.com/index.php/BrazilCLI_2.0#bug
+
+        Commands: brazil, brazil-bootstrap, brazil-build, brazil-build-rainbow, brazil-build-tool-exec, brazil-cmd-complete, brazil-context, brazil-farm, brazil-json-client, brazil-package-cache, brazil-path, brazil-recursive-cmd, brazil-runtime-exec, brazil-setup, brazil-test-exec, brazil-wire-ctl, downloadS3Binary, findup, get-current-platform
+        ```
+
+    - Test your setup by running `brazil help`
+
+    - Enable Brazil CLI tab completion: `brazil setup completion`
+
+    - Clone and setup the repo
+      ```
+      # Clone the repository
+      brazil ws create --root asana_mcp
+      cd asana_mcp
+      brazil ws use -p AsanaMCPServer (use live version set)
+      cd AsanaMCPServer
+
+      # Install dependencies
+      npm install
+
+      # Build the server
+      npm run build
+      ```
+
+3. Configure the MCP
+
+~/.kiro/settings/mcp.json
+~/.aws/amazonq/mcp.json
+```
+{
+  "mcpServers": {
+    "asana": {
+      "command": "node",
+      "args": [
+        "~/workspaces/AsanaMCPServer/dist/src/bin/mcp-server.js"
+      ],
+      "env": {
+        "ASANA_ACCESS_TOKEN": "YOUR_TOKEN_HERE"
+      },
+      "disabled": false
+    }
+  }
+}
+```
+
+4. Testing in Kiro
+```
+Can you show me my current Asana tasks?
+
+Can you show me the recent 7 days tasks under project 'xxxx'
+```
+
+## Quip Exporter
+1. Install link: https://w.amazon.com/bin/view/Quip_Exporter/
+2. Usage `./quip-exporter --access-token "YOUR_PAT" --id "FOLDER_OR_DOC_ID" --output-dir ./export`
