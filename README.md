@@ -540,9 +540,7 @@
     - [Agent Skills 逆向工程解密，用Strands Agents SDK完美实现Agent Skills](https://mp.weixin.qq.com/s/oE2S0jMWyFjkYL4ZZvmamQ)
   - [Clawdbot - Moltbot]
     - [moltbot](https://github.com/moltbot/moltbot)
-    - [openclaw 在 aws 快速搭建和配置](https://mp.weixin.qq.com/s/0k62KUk6wveo1OEt72xI9Q)
-      - [Moltbot-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-Moltbot-on-AWS-with-Bedrock)
-      - 
+    - [openclaw 在 aws 快速搭建和配置](ai-ml/chatgpt/agent/openclaw/OpenClawOnAWS.md)
     - [moltbot-skills](https://github.com/VoltAgent/awesome-moltbot-skills)
     - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
 
@@ -944,6 +942,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Data Lineage](analytics/governance/Data_Lineage.md)
   - [Data Lakehouse数据血缘分析Agent + MCP + Neptune + open lineage](https://github.com/aws-samples/sample-of-lakehouse-data-lineage-with-aws-strands-agents-and-mcp)
+
+- [Metadata management]
+  - [Build a trusted foundation for data and AI using Alation and Amazon SageMaker Unified Studio](https://aws.amazon.com/blogs/big-data/build-a-trusted-foundation-for-data-and-ai-using-alation-and-amazon-sagemaker-unified-studio/) 
 
 ### BI
 - [Amazon QuickSight Workshop](https://learnquicksight.workshop.aws/en/)

@@ -11,3 +11,22 @@ ai-ml/chatgpt/agent/html2ppt/src/__pycache__/
 .vscode/
 *.log
 .kiro/
+
+# Credentials and secrets
+.env
+.env.*
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+credentials
+credentials.json
+*.tfvars
+*.tfvars.json
+
+# Python
+__pycache__/
+*.pyc
