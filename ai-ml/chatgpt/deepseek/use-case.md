@@ -149,9 +149,12 @@ A young Asian woman with fair skin and delicate facial features walks slowly alo
 
 这个 Excel 文件的Summary Sheet 包含了 AUTO, ISV, LS_HC, ME_AD 四个行业的 Top 50 account 的 EC2 mix % rate 以及 Windows instance % rate。
 帮我分别总结 Summary Sheet 中每个行业的All_Services_Rev 大于 100,000 的 account，在这些account 中 EC2 mix rate 大于 30%的 account，按照All_Services_Rev 从高到低排序，取前 10 名。以及Windows instance rate 大于 20%的 account，按照从高到低排序，取前 10 名。按照行业分开统计，用 table 方式输出 | account | Industry |  All_Services_Rev | Rate |
+```
 
-这个 Excel 文件的Summary Sheet 包含了 AUTO, ISV, LS_HC, ME_AD 四个行业的 Top 50 account 的 EC2 mix % rate 以及 Windows instance % rate。
-第一步帮我分别总结 Summary Sheet 中每个行业的 All_Services_Rev 大于 100,000 的 account。第二步这些 account 中 Windows instance rate 大于 20%的 account。按照All_Services_Rev 从高到低排序。 按照行业分开统计，用 table 方式输出 | account | Industry | All_Services_Rev | Windows instance rate |
+```
+你先检查一下你的读取 Excel 的 SKILL，如果没有，先去 Anthropic 官方 github 上面看一下有没有相关 SKILL，如果有安装使用，如果没有采用python code 的方式，无论是openpyxl还是 libreoffice 都可以。
+
+下面分析 GenAI 这个目录下的 excel 文件，我希望总结出来 不同Segment和Category下面的典型 Use Case有哪些，有哪些Customer 已经实现了这些 use case, 采用了哪些 AWS 服务/Platform，这些Opportunity 的 Status 如何，Launch Date，MRR 的情况，已经这些 use case，有哪些经验Insights 总结或者 Call out?
 ```
 
 8. Email handing
@@ -350,9 +353,53 @@ RCH-NW 2026 Key Projects
 RCH East Ecommerce SA weekly update
 
 2026年1月1日 - 2026年1月11日
+
+RCH-NW 2026 Key Projects
+
+## Claude Code
+Generate ASANA Projects 'RCH-NW 2026 Key Projects' and 'RCH East Ecommerce SA weekly update' separate report for duration '2026-02-10 to 2026-02-28' in parallel using Agent Teams mode. The output is Chinese, do not replace any existed report.
+
+Using Agent Teams mode, Generate Monthly Report — Full February (2026-02-01 to 2026-02-28), all 3 projects in parallel, with special emphasis 1. Migration 2. Higlight (launched or Tag with 2x2) 3. Challenge & Risk (Tag with call-out) 4. Lowlight (migration out or lost). do not replace any existed report.
 ```
 
 26. Interview summary
 ```
 Please summarize the feedback from the interview in the attachment, including the Strength area and growth area. Start with an overview, then each interviewer should have feedback points within three sentences. Please keep the summary concise.
+```
+
+27. Trigger the Claude code Parallel work with sub-agent
+```
+Research these 5 API providers in parallel using separate subagents and summarize the differences.
+```
+
+28. Write the narrative
+```
+In the style of Amazon Narrative writing, Please rewrite below content as a native English speaker and make it concise
+can you modify sentences as a native speaker and make it concise?
+can you modify sentences as a native speaker and enrich it with positive wording？
+can you modify sentences as a native speaker and rewrite it into evaluation criteria for senior managers?
+
+You are a Solution Architect Senior Manager, you need maximize the projects win ratio with limited SA resources. please help write a initiative for me within 1 sentence
+Based on the data point in @fileName, I need write a promotion document for my direct report, a solutions architect manager, please help write paragraph about his ownership and delivery result 
+
+You are a sales director, I need write a promotion feedback for my peer - Solutions Architect Senior Manager to his leadership in earn trust, ownership and delivery result. In the style of Amazon Narrative writing, Please write paragraph as a native English speaker and make it concise.
+```
+
+29. NotebookLLM
+```markdown
+**Role**: You are a professional Presentation Architect.
+**Task**: Convert the provided transcript into presentation slides based on the Amazon AWS aesthetic. If no transcript provided but url link, you need first study the link and generate the transcript 
+**CRITICAL CONTENT RULES (Must Follow)**:
+1. SUMMARIZATION: Condense the content. I used for Keynote presentation, so convert detailed explanations into short summaries.
+2. ONE-TO-ONE MAPPING: For every distinct topic or paragraph in the transcript, create a separate slide.
+3. PRESERVE STRUCTURE: Follow the exact sequence of the transcript. If the transcript has 15 distinct points, generate exactly 15 slides.
+4. DENSITY: It is better to have more slides with less text per slide, than fewer slides with crammed text.
+**Visual Style (AWS Theme)**:
+1. Colors: Deep Squid Ink (#232F3E) background, AWS Orange (#FF9900) and API Blue (#00A1C9) accents.
+2. Graphics: Isometric 3D elements (cubes/servers), hexagonal grids, connecting lines.
+3. Vibe: Technical, engineered, reliable, like a system architecture diagram.
+
+阅读下面两个link，总结 Amazon 和 OpenAI 最新合作的要点，突出业务价值和行业影响，中文输出2 页 用在 keynotes presentation。
+https://openai.com/index/amazon-partnership/
+https://www.aboutamazon.com/news/aws/amazon-open-ai-strategic-partnership-investment
 ```
