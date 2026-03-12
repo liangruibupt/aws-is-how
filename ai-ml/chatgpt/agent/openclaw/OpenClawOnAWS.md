@@ -1,8 +1,12 @@
 ## 个人版本 OpenClaw
 - [openclaw 在 aws 快速搭建和配置](https://mp.weixin.qq.com/s/0k62KUk6wveo1OEt72xI9Q)
-      - [Moltbot-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-Moltbot-on-AWS-with-Bedrock)
+      - [个人版 OpenClaw-on-AWS-with-Bedrock](https://github.com/aws-samples/sample-OpenClaw-on-AWS-with-Bedrock)
+      - [个人版 lightsail-quick-start-guide-openclaw](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-quick-start-guide-openclaw.html)
+      - [公司平台搭建：可以考虑这个AgentCore方案](https://github.com/aws-samples/sample-host-openclaw-on-amazon-bedrock-agentcore)
+      - [多租户平台搭建基于EKS的方案: one openclaw instance per pod, multi tenant use case]( https://github.com/aws-samples/sample-multi-tenancy-openclaw-on-eks)
 - [OpenClaw on EC2 Mac Instance](https://mp.weixin.qq.com/s/tT_dTZ_ykBvohCv26p3n0Q)
 - [Clawdbot 接入飞书保姆级教程](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
+
 
 ## 部署几百个上千个 OpenClaw
 利用 https://github.com/awslabs/InfraForge 同时部署几百个上千个都没问题
@@ -55,7 +59,7 @@ model: Bedrock 模型（默认 Claude Sonnet 4.5）model region: AWS Bedrock 模
 
 ## 配置 Channels
 ### [配置 Slack](https://mp.weixin.qq.com/s/0k62KUk6wveo1OEt72xI9Q) 或者 [官方Slack配置](https://docs.openclaw.ai/channels/slack)
-### [配置飞书](ai-ml/chatgpt/agent/openclaw/openclaw-feishu.md)
+### [配置飞书](openclaw-feishu.md)
 
 
 ## 配置 Tools
