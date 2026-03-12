@@ -10,8 +10,25 @@
     - [SageMaker](#sagemaker)
     - [Jupyter Notebooks](#jupyter-notebooks)
     - [Compute vision](#compute-vision)
-    - [LLM and GenAI](#llm-and-genai)
-    - [Labeling](#labeling)
+    - [GenAI Overview](#genai-overview)
+    - [Promote-Engineering](#promote-engineering)
+    - [Video in GenAI](#video-in-genai)
+    - [Audio in GenAI](#audio-in-genai)
+    - [Image in GenAI](#image-in-genai)
+    - [Scenario based GenAI](#scenario-based-genai)
+    - [Vector database](#vector-database)
+    - [LLM Models](#llm-models)
+    - [Bedrock practice](#bedrock-practice)
+    - [RLHF](#rlhf)
+    - [RAG - retrieval-augmented generation](#rag---retrieval-augmented-generation)
+    - [Deep Research](#deep-research)
+    - [Agentic AI in Software Develop Lifecycle](#agentic-ai-in-software-develop-lifecycle)
+    - [Agent workflow and Framework](#agent-workflow-and-framework)
+    - [MCP](#mcp)
+    - [Agent Infra](#agent-infra)
+    - [Agent Technology](#agent-technology)
+    - [OpenClaw](#openclaw)
+    - [GenAI Business Application](#genai-business-application)
     - [Federated ML](#federated-ml)
     - [ML Hardware](#ml-hardware)
     - [Robotics](#robotics)
@@ -189,12 +206,16 @@
   - [Invoke SageMaker Notebook via Event](ai-ml/SageMaker/Invoke_SageMaker_Notebook_via_event.md)
     - [Lambda-Trigger-SageMaker-Notebook](ai-ml/SageMaker/Lambda-Trigger-SageMaker-Notebook.md)
     - [Scheduling Jupyter notebooks on SageMaker ephemeral instances](https://aws.amazon.com/blogs/machine-learning/scheduling-jupyter-notebooks-on-sagemaker-ephemeral-instances/)
-- [SageMaker training job]
+- [SageMaker training job and HyperPod]
   - [SageMaker input mode: pipe mode and file mode](https://aws.amazon.com/blogs/machine-learning/using-pipe-input-mode-for-amazon-sagemaker-algorithms/)
   - [Save costs by automatically shutting down idle resources within Amazon SageMaker Studio](https://aws.amazon.com/blogs/machine-learning/save-costs-by-automatically-shutting-down-idle-resources-within-amazon-sagemaker-studio/)
   - [SageMaker Neo supported devices edge devices](https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/neo-supported-devices-edge-devices.html)
+  - [SageMaker-HyperPod-InstantStart](ai-ml/SageMaker/SageMaker-HyperPod-InstantStart.md)
   - [Amazon SageMaker HyperPod introduces Amazon EKS support](https://aws.amazon.com/blogs/aws/amazon-sagemaker-hyperpod-introduces-amazon-eks-support/)
   - [Amazon EKS support in Amazon SageMaker HyperPod](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-eks-support-in-amazon-sagemaker-hyperpod/)
+  - [Hyperpod Troubleshooting Guide](https://awslabs.github.io/ai-on-sagemaker-hyperpod/docs/common/troubleshooting-guide)
+    - [HyperPod InstantStart 方案， 提供 UI 界面和业界主流训练推理框架集成,Buyer客户可以最大程度避免直接与 EKS 交互](https://amzn-chn.feishu.cn/docx/VZfAdXTJKor7TCxPrZdcbGYXnaf?from=from_copylink)
+    - [基于 Service Team 提供的 blueprints 部署模板,同时支持 Slurm 和 EKS, 并且预置了 Ray Train 等框架,简化端到端部署](https://awslabs.github.io/ai-on-sagemaker-hyperpod/)
 
 ### Jupyter Notebooks
 - [A gallery of interesting Jupyter Notebooks](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
@@ -216,9 +237,7 @@
     - [PaddleOCR的轻量级车牌识别](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/applications/%E8%BD%BB%E9%87%8F%E7%BA%A7%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB.md)
 - [新希望-构建云上智慧牧场](https://aws.amazon.com/cn/blogs/china/smart-ranch-with-aws/)
 
-
-### LLM and GenAI
-- [GenAI Overview]
+### GenAI Overview
   - [一文读懂AIGC](https://mp.weixin.qq.com/s/gLj4sfn5dOuZL1pwCKWqzg)
     - 跨模态深度学习模型CLIP（Contrastive Language-Image Pre-Training）
     - “对抗生成网络”GAN（Generative Adverserial Network）
@@ -231,15 +250,14 @@
   - [understand The tokenize](https://huggingface.co/spaces/Xenova/the-tokenizer-playground)
   - [图解AI三大核心技术：RAG、大模型、智能体](https://mp.weixin.qq.com/s/pe2Rn6O_1KyqfFbCtMpqiw)
 
-- [Promote-Engineering]
-  - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
+### Promote-Engineering
   - [Prompt engineering techniques and best practices with Claude3](https://aws.amazon.com/blogs/machine-learning/prompt-engineering-techniques-and-best-practices-learn-by-doing-with-anthropics-claude-3-on-amazon-bedrock/)
   - [Implementing advanced prompt engineering with Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/)
   - [Evaluating prompts at scale with Prompt Management and Prompt Flows for Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/evaluating-prompts-at-scale-with-prompt-management-and-prompt-flows-for-amazon-bedrock/)
   - [Enhance performance of generative language models with self-consistency prompting](https://aws.amazon.com/blogs/machine-learning/enhance-performance-of-generative-language-models-with-self-consistency-prompting-on-amazon-bedrock/)
   - [Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
 
-- [Video]
+### Video in GenAI
   - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
   - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
   - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
@@ -248,7 +266,7 @@
   - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
   - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
   
-- [Audio]
+### Audio in GenAI
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
   - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
   - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN) and [Amazon Bedrock的实时语音解决方案](https://aws.amazon.com/cn/blogs/china/building-an-end-to-end-real-time-voice-assistant-on-amazon-bedrock/)
@@ -257,7 +275,7 @@
 - [Content Moderation]
   - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
    
-- [Image]
+### Image in GenAI
   - [Stable Diffusion]
     - [stable-diffusion-webui self hosted on g4dn.xlarge with Ubuntu 22.04 LTS](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
       - Remember run `sudo apt-get update` before `sudo apt install wget git python3 python3-venv`. 
@@ -273,6 +291,7 @@
     - [inpaint-images-with-stable-diffusion-using-amazon-sagemaker-jumpstart](https://aws.amazon.com/blogs/machine-learning/inpaint-images-with-stable-diffusion-using-amazon-sagemaker-jumpstart/)
   - [open_artifacts_for_bedrock](https://github.com/aws-samples/open_artifacts_for_bedrock)
   - [SageMaker LMI+Streaming 构建 端到端GenAI Text2Image应用](https://catalog.us-east-1.prod.workshops.aws/workshops/4aec1efd-5181-46be-b7b1-2ee9292dae80/zh-CN)
+    - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
   - [ComfyUI]
     - [Deployment]
       - [ComfyUI_quickstart](ai-ml/aigc/ComfyUI/ComfyUI_quickstart.md)
@@ -284,15 +303,20 @@
   - [Use case]
     - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
     - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
-- [Scenario based]
+  - [Amazon Nova 生成图片 Prompt](https://mp.weixin.qq.com/s/avxar5vm0ShNj_7bjoacgQ)
+  
+### Scenario based GenAI
   - [Chatbot]
     - [Bedrock 赋能猛兽派对内部飞书创新智能问答](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-empowers-sourcetech-internal-feishu-innovative-intelligent-qa/)
     - [使用 Amazon SageMaker + Amazon Bedrock 构建全语音智能问答助手](https://aws.amazon.com/cn/blogs/china/building-a-fully-voice-enabled-intelligent-question-answering-assistant-using-amazon-sagemaker-and-amazon-bedrock/)
     - [AI Powered Chatbot](https://mp.weixin.qq.com/s/9ePNLY6bybgW2GZH_lBFGw)
     - [Building a serverless document chat with AWS Lambda and Amazon Bedrock](https://aws.amazon.com/cn/blogs/compute/building-a-serverless-document-chat-with-aws-lambda-and-amazon-bedrock/)
-  - [Image generation]
-    - [基于 Amazon SageMaker 使用 Grounded-SAM 加速电商广告素材生成](https://aws.amazon.com/cn/blogs/china/accelerated-e-commerce-ad-material-generation-using-grounded-sam-based-on-amazon-sagemaker-part-one/)
-    - [Nova AI生成图片 Prompt](https://mp.weixin.qq.com/s/avxar5vm0ShNj_7bjoacgQ)
+  - [Text2SQL - Data Agent]
+    - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
+    - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
+    - [Generative BI using RAG on AWS](https://github.com/aws-samples/generative-bi-using-rag)
+    - [Data engineering agent - 面向业务的 AI Chatbot、面向系统的 Agent API，以及面向分析的 BI Dashboard，统一的 Agent 被交付](https://mp.weixin.qq.com/s/K5xvMr6M9w7DKYlvAoMsiQ)
+    - [云器 Data Agent](https://mp.weixin.qq.com/s/r2nwY-9PW5EFUkyQeBlV9A)
   - [Digital human and Role play]
     - [AIGC 助力电商虚拟试穿新体验](https://aws.amazon.com/cn/blogs/china/e-commerce-virtual-try-on-new-experience-based-on-aigc/)
     - [Towards General Purpose Virtual Try-on](https://github.com/xiezhy6/GP-VTON)
@@ -330,14 +354,25 @@
     - [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
   - [Contact Center]
     - [华宝新能 拓展 GenAI 在客户服务领域的新场景](https://aws.amazon.com/cn/blogs/china/new-use-cases-for-generative-ai-in-customer-service/)
-- [Vector database]
-  - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
+  - [Labeling]
+    - [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
+  - [CV Labeling]
+    - [cvat-on-aws-china](https://github.com/aws-samples/cvat-on-aws-china)
+    - [CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
   
-- [LLM]
+### Vector database
+  - [RDS for PostgreSQL now supports pgvector for simplified ML model integration](https://aws.amazon.com/cn/about-aws/whats-new/2023/05/amazon-rds-postgresql-pgvector-ml-model-integration/)
+  - [FlagEmbedding - retrieval, classification, clustering, or semantic search. And it also can be used in vector databases for LLMs](https://huggingface.co/BAAI/bge-large-zh)
+  - [S3 Vectors: First cloud storage with native vector support at scale](https://aws.amazon.com/blogs/aws/introducing-amazon-s3-vectors-first-cloud-storage-with-native-vector-support-at-scale/)
+    - [Amazon S3 Vectors: Revolutionizing AI Data Storage with Use Cases](https://repost.aws/articles/ARY9EKiGFISfisAyvigDX3lQ/amazon-s3-vectors-revolutionizing-ai-data-storage-with-use-cases)
+    - [Amazon S3 Vectors Embed CLI](https://github.com/awslabs/s3vectors-embed-cli)
+  
+### LLM Models
   - [Claude]
     - [Amazon Bedrock Claude3 Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/en-US)
     - [Claude Artifacts workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
     - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
+    - [无需修改代码即可在 Anthropic SDK 中使用 AWS Bedrock 上的各种大语言模型](https://github.com/xiehust/anthropic_api_converter)
   - [Llama]
     - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
   - [Nova]
@@ -348,6 +383,8 @@
     - [nova-sonic Web Demo](https://nova-sonic.teague.live/login)
     - [Amazon Nova Sonic (speech-to-speech) Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/5238419f-1337-4e0f-8cd7-02239486c40d/en-US)
     - [Nova MME nova-multimodal-embedding-model practice](https://aws.amazon.com/cn/blogs/china/amazon-nova-multimodal-embedding-model-practical-guide/)
+    - [Amazon SageMaker Inference for custom Amazon Nova models](https://aws.amazon.com/blogs/aws/announcing-amazon-sagemaker-inference-for-custom-amazon-nova-models/)
+      - [和 Nova Forge 是否有结合，或者两者如何进行定位? 这里提的是指轻量的微调，不是那种有数据混合的, 数据混合的还是采用 Nova Forge]
   - [Deepseek]
     - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
@@ -371,7 +408,7 @@
     - [Fine-tune OpenAI GPT-OSS models on Amazon SageMaker AI using Hugging Face libraries](https://aws.amazon.com/blogs/machine-learning/fine-tune-openai-gpt-oss-models-on-amazon-sagemaker-ai-using-hugging-face-libraries/)
     - [GPT OSS models from OpenAI are now available on SageMaker JumpStart](https://aws.amazon.com/cn/blogs/machine-learning/gpt-oss-models-from-openai-are-now-available-on-sagemaker-jumpstart/)
   
-- [Bedrock practice]  
+### Bedrock practice
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
   - [使用 Amazon SageMaker 和 Bedrock 构建营销场景端到端应用](https://aws.amazon.com/cn/blogs/china/build-end-to-end-applications-for-marketing-scenarios-using-amazon-sagemaker-and-bedrock/)
   - [使用 Amazon Bedrock 和 Amazon SageMaker，开启全新的生成式 AI ](https://dev.amazoncloud.cn/column/article/65dc1501e3b3f2107638534d)
@@ -394,12 +431,12 @@
     - [Prompt caching on amazon bedrock](https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/)
   - [使用Amazon Bedrock + 自建ECS Docker Sandbox实现Agent 程序化工具调用Programmatic Tool Calling](https://aws.amazon.com/cn/blogs/china/programmatic-tool-calling-agent-using-bedrock-and-ecs-docker-sandbox/)
 
-- [RLHF]
+### RLHF
   - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
   - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
   - [Residual Connections Are Getting an Upgrade (mHC)](https://www.youtube.com/watch?v=jYn_1PpRzxI&t=165s)
 
-- [RAG - retrieval-augmented generation]
+### RAG - retrieval-augmented generation
   - [Smart Search 基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [Smart Search V2 基于智能搜索的大语言模型增强方案2](https://catalog.us-east-1.prod.workshops.aws/workshops/3973557a-0853-41f6-9678-00ae171ba1f6/zh-CN/03cdkinstall/30preinstall)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -416,16 +453,10 @@
   - [Build a RAG based question answer solution using Amazon Bedrock Knowledge Base, vector engine for Amazon OpenSearch Service Serverless and LangChain](https://github.com/aws-samples/bedrock-kb-rag-workshop/blob/main/blog_post.md)
   - [Create an agentic RAG application with LlamaIndex, and Mistral in Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/create-an-agentic-rag-application-for-advanced-knowledge-discovery-with-llamaindex-and-mistral-in-amazon-bedrock/)
   
-- [Deep Research]
+### Deep Research
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
-  
-- [Text2SQL]
-  - [DB-GPT与百川社区强强联手，无缝支持百川模型推理与Text2SQL微调](https://mp.weixin.qq.com/s/fL9zpWMVqxfTG3uvh7V6Gg)
-  - [text2sql_gen_demo notebook](https://github.com/qingyuan18/llm-samples/blob/main/codegen/text2sql/text2sql_gen_demo.ipynb)
-  - [Generative BI using RAG on AWS](https://github.com/aws-samples/generative-bi-using-rag)
-  - [Data engineering agent - 面向业务的 AI Chatbot、面向系统的 Agent API，以及面向分析的 BI Dashboard，统一的 Agent 被交付](https://mp.weixin.qq.com/s/K5xvMr6M9w7DKYlvAoMsiQ)
 
-- [Software Develop Lifecycle]
+### Agentic AI in Software Develop Lifecycle
   - [Amazon Q Developer/Kiro]
     - [Kiro Community](https://github.com/kiro-community/)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -435,19 +466,24 @@
     - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
     - [Prompt Driven Development Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/2a43bf02-09e5-4cb0-9b86-dd61fd285808/zh-CN)
     - [Proxy gateway for Kiro API](https://github.com/jwadow/kiro-gateway)
+    - [配置 kiro 使用企业单点登录系统](https://mp.weixin.qq.com/s/qFiUSz0GOAIv2Ekh4aXtbA?clicktag=bar_share&scene=294&clickpos=0&from_safari=1)
+      - [Kiro 通过AWS Identity Center 认证，所以实际上是 Identity Center 和企业做 SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source-idp.html)
+    - [通过ACP协议，使用api调用kiro cli - 把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
-  - [GenDev for SRE]
+  - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
+      - [FSI - 维信金科 SRE Agent](https://aws.amazon.com/cn/solutions/case-studies/vcredit/)
+      - 
     - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
     - [K8S GPT with bedrock practice](https://aws.amazon.com/blogs/machine-learning/use-k8sgpt-and-amazon-bedrock-for-simplified-kubernetes-cluster-maintenance/)
   - [SDE Agent and Dev Agent]
     - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
     - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
 
-- [Agent and workflow]
+### Agent workflow and Framework
   - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
     - [Design multi-agent orchestration with reasoning](https://aws.amazon.com/cn/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/)
   - [AWS announces new innovations for building AI agents at AWS Summit New York 2025](https://www.aboutamazon.com/news/aws/aws-summit-agentic-ai-innovations-2025?utm_source=internalcomms&utm_medium=atoz)
@@ -466,42 +502,26 @@
   - [Other Agent tools]
     - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
     - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
-  - [Computer use and brower use]
-    - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
   - [Amazon Bedrock Agents]
     - [基于MCP构建端到端的AI-Agent应用工作坊 - Bendrock Agents, Strands Agents, AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
       - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
       - [Bedrock Agent hands on](ai-ml/chatgpt/agent/bedrock_agents)
       - [Amazon Bedrock Agent 动手练习工作坊](https://github.com/xina0311/amazon-bedrock-agent-workshop-for-gcr)
       - [Amazon Bedrock Agents Workshop](https://catalog.workshops.aws/agents-for-amazon-bedrock/en-US)
-    - [Bedrock AgentCore]
-      - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
-      - [Agent Core Hands on Lab]
-        - [QuickStart](ai-ml/chatgpt/agent/bedrock_agentcore/quickstart/amazon-bedrock-agentcore-quickstart-key-components.md)
-          - Above quick start based on [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
-          - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
-        - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
-          - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
-      - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
-      - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
-      - [Amazon Bedrock AgentCore Memory: Building context-aware agents](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-memory-building-context-aware-agents/)
-        - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
-      - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
-      - [Agentic AI基础设施实践经验系列]
-        - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
-        - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
-        - [Agentic AI基础设施实践经验系列（三）：Agent记忆模块的最佳实践](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-deep-practice-experience-thinking-series-three-best-practices-for-agent-memory-module)
-        - [Agentic AI基础设施实践经验系列（四）：MCP服务器从本地到云端的部署演进](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-experience-series-four-mcp-server-from-local)
-        - [Agentic AI基础设施实践经验系列（五）：Agent应用系统中的身份认证与授权管理](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-5/)
-        - [Agentic AI基础设施实践经验系列（六）：Agent质量评估](https://aws.amazon.com/cn/blogs/china/agent-quality-evaluation/)
-        - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
-        - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
-        - [Agentic AI基础设施实践经验系列（九）：Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
+  - [Strands Agents](https://strandsagents.com/)
+      - [Strands Agent Hands On](ai-ml/chatgpt/agent/strands_agents)
+      - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
+      - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
+      - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
+      - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
+      - [Strands Agent Example](https://github.com/aws-samples/sample_agentic_ai_strands)
+      - [agenticai-memory-patterns-with-strands-sdk](https://builder.aws.com/content/2z6ITJXONL0Lu9nrkWopb3mLIQU/agenticai-memory-patterns-with-strands-sdk)
+      - [Strands Agents SDK 1.0](https://aws.amazon.com/blogs/opensource/introducing-strands-agents-1-0-production-ready-multi-agent-orchestration-made-simple/)
+      - [Agentic AI on EKS Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/f795222d-a4e1-4610-8ffa-170319c282c0/en-US/02-single-agent)
+      - [Strands Agents Open Studio](https://github.com/xiehust/strands_studio_ui)
 
-    - [Claude Agent]
-      - [Building Agentic Applications with Claude Agent SDK and Amazon Bedrock AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/2ab3895e-8b7c-4f5c-b0c7-8597d6954290/en-US/introduction)
-
-  - [MCP](https://github.com/modelcontextprotocol/servers)
+### MCP
+    - [MCP official site](https://github.com/modelcontextprotocol/servers)
     - [MCP Servers Explained: What They Are, How They Work, and Why Cline is Revolutionizing AI Tools](https://cline.bot/blog/mcp-servers-explained-what-they-are-how-they-work-and-why-cline-is-revolutionizing-ai-tools)
     - [Anthropic 发布了 Streamable HTTP](https://mp.weixin.qq.com/s/9y-VBbP31I8wXur5vEN4Ug)
       - [使用 Amazon Lambda 快速部署 Streamable HTTP Github MCP Server](https://aws.amazon.com/cn/blogs/china/deploy-streamable-http-github-mcp-server-using-amazon-lambda/  l)
@@ -519,36 +539,63 @@
       - [A sample MCP server for understanding cloud spend](https://github.com/aws-samples/sample-cloud-spend-mcp-server)
     - [Use Case]
       - [从零构建 MCP 架构下的 Agentic RAG 系统](https://mp.weixin.qq.com/s/11jlAQkL008Tuq_vEyjjTg)
+      - [飞书 Remote MCP 配置](https://amzn-chn.feishu.cn/wiki/B5aawkRUdiusxgkvtkNcXAfDnkd)
+### Agent Infra
   - [E2B]
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
+  - [Kata Container]
+    - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
+  - [Bedrock AgentCore]
+      - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
+      - [Agent Core Hands on Lab]
+        - [QuickStart](ai-ml/chatgpt/agent/bedrock_agentcore/quickstart/amazon-bedrock-agentcore-quickstart-key-components.md)
+          - Above quick start based on [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
+          - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
+        - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
+          - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
+      - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
+      - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
+        - [AgentCore Gateway × Responses API 服务端工具执行](https://aws.amazon.com/about-aws/whats-new/2026/02/amazon-bedrock-server-side-tool-execution-agentcore-gateway/)
+      - [Amazon Bedrock AgentCore Memory: Building context-aware agents](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-memory-building-context-aware-agents/)
+        - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
+      - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
+      - [Building Agentic Applications with Claude Agent SDK and Amazon Bedrock AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/2ab3895e-8b7c-4f5c-b0c7-8597d6954290/en-US/introduction)
+      - [Agentic AI基础设施实践经验系列]
+        - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
+        - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
+        - [Agentic AI基础设施实践经验系列（三）：Agent记忆模块的最佳实践](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-deep-practice-experience-thinking-series-three-best-practices-for-agent-memory-module)
+        - [Agentic AI基础设施实践经验系列（四）：MCP服务器从本地到云端的部署演进](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-experience-series-four-mcp-server-from-local)
+        - [Agentic AI基础设施实践经验系列（五）：Agent应用系统中的身份认证与授权管理](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-5/)
+        - [Agentic AI基础设施实践经验系列（六）：Agent质量评估](https://aws.amazon.com/cn/blogs/china/agent-quality-evaluation/)
+        - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
+        - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
+        - [Agentic AI基础设施实践经验系列（九）：Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
+### Agent Technology
   - [Agent to Agent - A2A]
     - [A2A protocol](https://a2aprotocol.ai/)
-  - [Strands Agents](https://strandsagents.com/)
-      - [Strands Agent Hands On](ai-ml/chatgpt/agent/strands_agents)
-      - [Open Protocols for Agent Interoperability Part 1: Inter-Agent Communication on MCP](https://aws.amazon.com/cn/blogs/opensource/open-protocols-for-agent-interoperability-part-1-inter-agent-communication-on-mcp/)
-      - [Learning-Strands-Agents](https://github.com/davidshtian/Learning-Strands-Agents)
-      - [Introducing Strands Agents, an Open Source AI Agents SDK](https://aws.amazon.com/tw/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/)
-      - [亚马逊云科技中国区构建 Agentic AI 应用实践指南](https://aws.amazon.com/cn/blogs/china/practical-guide-to-building-agentic-ai-applications-for-aws-china-region/)
-      - [Strands Agent Example](https://github.com/aws-samples/sample_agentic_ai_strands)
-      - [agenticai-memory-patterns-with-strands-sdk](https://builder.aws.com/content/2z6ITJXONL0Lu9nrkWopb3mLIQU/agenticai-memory-patterns-with-strands-sdk)
-      - [Strands Agents SDK 1.0](https://aws.amazon.com/blogs/opensource/introducing-strands-agents-1-0-production-ready-multi-agent-orchestration-made-simple/)
-      - [Agentic AI on EKS Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/f795222d-a4e1-4610-8ffa-170319c282c0/en-US/02-single-agent)
-      - [Strands Agents Open Studio](https://github.com/xiehust/strands_studio_ui)
-  - [AgentSkill]
+  - [Computer use and brower use]
+    - [Compute use demo](https://github.com/noteflow-ai/demo/blob/main/Computer-Use-Demo.md)
+  - [Agent Skill]
     - [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
     - [Agent Skills 逆向工程解密，用Strands Agents SDK完美实现Agent Skills](https://mp.weixin.qq.com/s/oE2S0jMWyFjkYL4ZZvmamQ)
-  - [Clawdbot - Moltbot]
-    - [moltbot](https://github.com/moltbot/moltbot)
-    - [openclaw 在 aws 快速搭建和配置](ai-ml/chatgpt/agent/openclaw/OpenClawOnAWS.md)
-    - [moltbot-skills](https://github.com/VoltAgent/awesome-moltbot-skills)
-    - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
 
-### Labeling
-- [使用 Amazon SageMaker Ground Truth 标记 3D 点云](https://aws.amazon.com/cn/blogs/china/new-label-3d-point-clouds-with-amazon-sagemaker-ground-truth/) and [guide](https://docs.amazonaws.cn/sagemaker/latest/dg/sms-point-cloud.html)
-- [CV Labeling]
-  - [cvat-on-aws-china](https://github.com/aws-samples/cvat-on-aws-china)
-  - [CV Labeling: VOTT](https://github.com/microsoft/VoTT/releases)
+### OpenClaw
+    - [Tech Parts]
+      - [openclaw github](https://github.com/openclaw/openclaw)
+      - [openclaw 在 aws 快速搭建和配置](ai-ml/chatgpt/agent/openclaw/OpenClawOnAWS.md)
+      - [openclaw - skills](https://github.com/VoltAgent/awesome-moltbot-skills)
+      - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
+      - [用OpenClaw快速创造一个Kiro CLI Bot](https://mp.weixin.qq.com/s/WQI8FBdon7WXVpQh16wRdA)
+    - [Business Part]
+      - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
+      - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
+
+### GenAI Business Application
+  - [Quick Suite]
+    - [A Complete Guide to Amazon Quick Suite](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
+  - [Frontier Agent]
+    - [introducing-openai-frontier](https://openai.com/index/introducing-openai-frontier/)
 
 ### Federated ML
 - [Amazon Redshift ML: Create, train, and deploy machine learning (ML) models using familiar SQL commands](https://aws.amazon.com/redshift/features/redshift-ml/)
@@ -706,6 +753,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [NICE DCV Guide](https://docs.aws.amazon.com/dcv/latest/adminguide/what-is-dcv.html)
   - [NICE DCV Connection Gateway - enables users to access a fleet of NICE DCV servers through a single access point to a LAN or VPC](https://docs.aws.amazon.com/dcv/latest/gw-admin/what-is-gw.html)
   - [NICE DCV Session Manager - the Agents, a Broker and API that makes it easy to build front-end applications that programmatically create and manage the lifecycle of NICE DCV sessions across a fleet of NICE DCV servers](https://docs.aws.amazon.com/dcv/latest/sm-admin/what-is-sm.html)
+  - [amazon-dcv 2024 launched](https://aws.amazon.com/blogs/aws/nice-desktop-cloud-visualization-dcv-is-now-amazon-dcv/)
 
 - SOCA
   - [SOCA 帮助半导体企业快速启动 EDA 云上部署](https://aws.amazon.com/cn/blogs/china/scaling-eda-workloads-using-scale-out-computing-on-aws/)
@@ -1086,6 +1134,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [中国区抗DDoS方案](https://www.nwcdcloud.cn/articledetail.aspx?id=63)
 - [Strengthen Your Web Application Defenses with AWS WAF](https://catalog.us-east-1.prod.workshops.aws/workshops/81e94a4b-b47f-4acc-a284-914c4514d50f/zh-CN)
 - [AWS WAF AntiDDoS - Global Region](https://aws.amazon.com/cn/blogs/china/new-aws-waf-antiddos-managed-rules/)
+- [AWS WAF Rules Reviewer: 一键审查你的 WAF 配置](https://github.com/chenghit/aws-waf-rules-reviewer)
 
 ### Permission - IAM Policy, S3 Policy, RAM Policy
 - [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
@@ -1911,6 +1960,10 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Verify the resilience of your workloads using Chaos Engineering](https://aws.amazon.com/cn/blogs/architecture/verify-the-resilience-of-your-workloads-using-chaos-engineering/)
 - [用Q CLI进行智能韧性测试](https://aws.amazon.com/cn/blogs/china/conducting-intelligent-chaos-engineering-experiments-with-the-amazon-q-developer-cli/)
   - [Beyond Traditional Resilience: Revolutionizing Resilience Testing with Amazon Q](https://catalog.us-east-1.prod.workshops.aws/workshops/1d64fc33-a113-4cfa-9348-92c777506647/en-US)
+- [针对多AZ部署的系统，推荐采用 ARC zonal shift /zonal autoshift 进行快速切换，这是经过AWS自身服务进行了充分验证的措施: Application Load Balancer, Network Load Balancer, Amazon EKS, EC2 Auto Scaling Groups]
+  - [Zonal Shift 不直接作用于单个 EC2 实例，而是通过 EC2 Auto Scaling Group (ASG) 来实现对 EC2 工作负载的 AZ 流量转移]
+  - [Zonal Autoshift 在上述资源支持的基础上，还必须配置 Practice Run（演练）]
+  - [Using zonal shift with Amazon EC2 Auto Scaling](https://aws.amazon.com/blogs/compute/using-zonal-shift-with-amazon-ec2-auto-scaling/)
 
 ## Game
 ### GameLift
