@@ -172,6 +172,7 @@
   - [Automotive](#automotive)
   - [HealthCare and Life Science](#healthcare-and-life-science)
   - [Retail and ECommerce](#retail-and-ecommerce)
+    - [快时尚电商行业智能体设计思路与应用实践](#快时尚电商行业智能体设计思路与应用实践)
     - [E-Commerce 选品和设计](#e-commerce-选品和设计)
     - [导购和客服](#导购和客服)
   - [FSI](#fsi)
@@ -476,7 +477,7 @@
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
       - [FSI - 维信金科 SRE Agent](https://aws.amazon.com/cn/solutions/case-studies/vcredit/)
-      - 
+      - [AI Ops Sample](https://amzn-chn.feishu.cn/wiki/BYmAwDtnWiOfqak9y51cbvrHn1g)
     - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
     - [K8S GPT with bedrock practice](https://aws.amazon.com/blogs/machine-learning/use-k8sgpt-and-amazon-bedrock-for-simplified-kubernetes-cluster-maintenance/)
   - [SDE Agent and Dev Agent]
@@ -579,6 +580,12 @@
   - [Agent Skill]
     - [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
     - [Agent Skills 逆向工程解密，用Strands Agents SDK完美实现Agent Skills](https://mp.weixin.qq.com/s/oE2S0jMWyFjkYL4ZZvmamQ)
+  - [Agent Client Protocol (ACP)]
+    - [Get started with the Agent Client Protocol](https://agentclientprotocol.com/get-started/introduction)
+    - [把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
+      - [Kiro CLI ACP](https://kiro.dev/docs/cli/acp/)
+      - [Kiro CLI ACP + 飞书](https://github.com/xufanglin/acp-link)
+    - [Ecs + Claude Code也是做的ops agent已经加了teams，slack，飞书插件](https://github.com/warren830/opsagent)
 
 ### OpenClaw
     - [Tech Parts]
@@ -587,6 +594,7 @@
       - [openclaw - skills](https://github.com/VoltAgent/awesome-moltbot-skills)
       - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
       - [用OpenClaw快速创造一个Kiro CLI Bot](https://mp.weixin.qq.com/s/WQI8FBdon7WXVpQh16wRdA)
+      - [Openclaw cost saving](ai-ml/chatgpt/agent/openclaw/Openclaw_cost_saving.md)
     - [Business Part]
       - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
       - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
@@ -2076,6 +2084,15 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Open source PACS (picture archiving and communication system) solution - part2](https://aws.amazon.com/blogs/opensource/running-dicoogle-an-open-source-pacs-solution-on-aws-part-2/)
 
 ## Retail and ECommerce
+### 快时尚电商行业智能体设计思路与应用实践
+- [1. 借助超长上下文窗口分钟级构建智能客服系统](https://aws.amazon.com/cn/blogs/china/fast-fashion-e-commerce-agent-design-ideas-and-application-practice-part-one/)
+- [2. 借助 LangChain/LangGraph 和 MCP 重塑行业的智能化生态系统](https://aws.amazon.com/cn/blogs/china/fast-fashion-e-commerce-agent-design-ideas-and-application-practice-part-two/)
+- [3. 借助 Transcribe/Polly 打造新一代智能语音客服，实现媲美人工客服的对话体验](https://aws.amazon.com/cn/blogs/china/fast-fashion-e-commerce-agent-design-ideas-and-application-practice-part-three/)
+- [4. 借助Amazon AgentCore 实现智能客服 SOP 的可执行 MCP 工具化实践](https://aws.amazon.com/cn/blogs/china/intelligent-agent-design-approach-and-application-practice-in-the-fast-fashion-e-commerce-industry-4/)
+- [6. 借助 Amazon Bedrock AgentCore MCP Server，Amazon Bedrock，Strands Agents，Kiro 实现智能体极速研发](https://aws.amazon.com/cn/blogs/china/design-and-practical-application-of-intelligent-agents-in-e-commerce-industry/)
+- [7. Amazon Bedrock AgentCore Runtime 深度解析和场景分析](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-agentcore-runtime-deep-dive-and-scenario-analysis/)
+- [8. 基于 WebSocket 的语音系统：Nova 2 Sonic, AgentCore, Strands Agents 企业级架构实践](https://aws.amazon.com/cn/blogs/china/fast-fashion-ecommerce-agent-design-8-websocket-voice-system/)
+- [基于Strands Agents SDK和Amazon Bedrock AgentCore构建商品详情图广告词审查Agent](https://aws.amazon.com/cn/blogs/china/product-ad-review-agent-with-strands-sdk-bedrock/)
 ### E-Commerce 选品和设计
 - [依托 Amazon Bedrock AgentCore 紫讯打造浏览器自动化智能体 BrowserAct](https://www.amazonaws.cn/en/customer-stories/zixuntech-browseract/)
 - [阿尔特携手 Amazon AgentCore ，打造懂你的AI，智能搜索成本降低34%](https://aws.amazon.com/cn/blogs/china/arte-partners-with-amazon-agentcore/)
