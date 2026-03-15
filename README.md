@@ -588,17 +588,17 @@
     - [Ecs + Claude Code也是做的ops agent已经加了teams，slack，飞书插件](https://github.com/warren830/opsagent)
 
 ### OpenClaw
-    - [Tech Parts]
-      - [openclaw github](https://github.com/openclaw/openclaw)
-      - [openclaw 在 aws 快速搭建和配置](ai-ml/chatgpt/agent/openclaw/OpenClawOnAWS.md)
-      - [openclaw - skills](https://github.com/VoltAgent/awesome-moltbot-skills)
-      - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
-      - [用OpenClaw快速创造一个Kiro CLI Bot](https://mp.weixin.qq.com/s/WQI8FBdon7WXVpQh16wRdA)
-      - [Openclaw cost saving](ai-ml/chatgpt/agent/openclaw/Openclaw_cost_saving.md)
-        - [如何优化 OpenClaw的Token 使用](https://mp.weixin.qq.com/s/lyYHme7Dwhv1tJQ-r4wMSg)
-    - [Business Part]
-      - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
-      - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
+  - [Tech Parts]
+    - [openclaw github](https://github.com/openclaw/openclaw)
+    - [openclaw 在 aws 快速搭建和配置](ai-ml/chatgpt/agent/openclaw/OpenClawOnAWS.md)
+    - [openclaw - skills](https://github.com/VoltAgent/awesome-moltbot-skills)
+    - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
+    - [用OpenClaw快速创造一个Kiro CLI Bot](https://mp.weixin.qq.com/s/WQI8FBdon7WXVpQh16wRdA)
+    - [Openclaw cost saving](ai-ml/chatgpt/agent/openclaw/Openclaw_cost_saving.md)
+      - [如何优化 OpenClaw的Token 使用](https://mp.weixin.qq.com/s/lyYHme7Dwhv1tJQ-r4wMSg)
+  - [Business Part]
+    - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
+    - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
 
 ### GenAI Business Application
   - [Quick Suite]
