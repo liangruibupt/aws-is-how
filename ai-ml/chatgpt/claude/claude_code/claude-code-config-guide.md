@@ -131,10 +131,11 @@ cat > ~/.claude/settings.json << 'EOF'
     "AWS_REGION": "ap-northeast-1",
     "AWS_BEARER_TOKEN_BEDROCK": "<替换 Bedrock API Key>",
     "ANTHROPIC_MODEL": "global.anthropic.claude-opus-4-6-v1[1m]",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "global.anthropic.claude-opus-4-6-v1[1m]",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "global.anthropic.claude-opus-4-6-v1[1m]",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "global.anthropic.claude-sonnet-4-6",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "ANTHROPIC_SMALL_FAST_MODEL": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
     "CLAUDE_CODE_EFFORT_LEVEL": "high",
-    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "32000",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   }
 }
