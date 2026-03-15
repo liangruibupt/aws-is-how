@@ -595,6 +595,7 @@
       - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
       - [用OpenClaw快速创造一个Kiro CLI Bot](https://mp.weixin.qq.com/s/WQI8FBdon7WXVpQh16wRdA)
       - [Openclaw cost saving](ai-ml/chatgpt/agent/openclaw/Openclaw_cost_saving.md)
+        - [如何优化 OpenClaw的Token 使用](https://mp.weixin.qq.com/s/lyYHme7Dwhv1tJQ-r4wMSg)
     - [Business Part]
       - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
       - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
@@ -2112,3 +2113,5 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### Hospitality
 - [travel concierge agent](https://github.com/awslabs/amazon-bedrock-agentcore-samples/tree/main/05-blueprints/travel-concierge-agent)
+- [基于AgentCore构建自学习、可进化的文旅行业近似信息抽取Agents](https://aws.amazon.com/cn/blogs/china/self-learning-evolvable-agents-for-cultural-tourism-info-extraction-with-agentcore/)
+- [PKFARE Introduces AI Customer Service Agent to Simplify Post-Ticketing Automation in Flight Distribution](https://aws.amazon.com/cn/blogs/china/pkfare-ai-agent-simplifies-post-ticketing-automation-flight-distribution/)
