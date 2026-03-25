@@ -4,6 +4,7 @@
       - [个人版 lightsail-quick-start-guide-openclaw](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-quick-start-guide-openclaw.html)
       - [公司平台搭建：可以考虑这个AgentCore方案](https://github.com/aws-samples/sample-host-openclaw-on-amazon-bedrock-agentcore)
       - [多租户平台搭建基于EKS的方案: one openclaw instance per pod, multi tenant use case]( https://github.com/aws-samples/sample-multi-tenancy-openclaw-on-eks)
+        - [OpenClaw on EKS的Hands-On Workshop - 包括Operator和Agent Sendbox的Demo](https://catalog.us-east-1.prod.workshops.aws/workshops/afba7f08-c987-40dc-afa5-da3e200ae7c5/zh-CN)
 - [OpenClaw on EC2 Mac Instance](https://mp.weixin.qq.com/s/tT_dTZ_ykBvohCv26p3n0Q)
 - [Clawdbot 接入飞书保姆级教程](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
 
