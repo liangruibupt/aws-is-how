@@ -1,4 +1,40 @@
-1. 生成 Mermaid 代码
+# 目录 / Table of Contents
+
+- [1. 生成 Mermaid 代码](#1-生成-mermaid-代码)
+- [2. 生成 draw.io 的图](#2-生成-drawio-的图)
+- [3. 解读周报和月报](#3-解读周报和月报)
+- [4. 阅读研究报告](#4-阅读研究报告)
+- [5. 竞对分析](#5-竞对分析)
+- [6. Image Generation](#6-image-generation)
+- [7. Excel 分析](#7-excel-分析)
+- [8. Email handing](#8-email-handing)
+- [9. 用 Q CLI 进行 AWS 文档查询](#9-用-q-cli-进行-aws-文档查询)
+- [10. HTML to PPT](#10-html-to-ppt)
+- [11. Prepare the customer visit flow](#11-prepare-the-customer-visit-flow)
+- [12. Migration insights](#12-migration-insights)
+- [13. Knowledge check](#13-knowledge-check)
+- [14. reimbursement-helper](#14-reimbursement-helper)
+- [15. SFDC account management](#15-sfdc-account-management)
+- [16. Fetch url and give summary](#16-fetch-url-and-give-summary)
+- [17. Write doc](#17-write-doc)
+- [18. Field Advisor](#18-field-advisor)
+- [19. Aurora Upgrade](#19-aurora-upgrade)
+- [20. Outlook Assistant](#20-outlook-assistant)
+- [21. 客户分析](#21-客户分析)
+- [22. Marketing session query](#22-marketing-session-query)
+- [23. Life Science Commerical query](#23-life-science-commerical-query)
+- [24. Charging & Power Storage Research](#24-charging--power-storage-research)
+- [25. Asana WBR](#25-asana-wbr)
+- [26. Interview summary](#26-interview-summary)
+- [27. Trigger the Claude code Parallel work with sub-agent](#27-trigger-the-claude-code-parallel-work-with-sub-agent)
+- [28. Write the narrative](#28-write-the-narrative)
+- [29. NotebookLLM](#29-notebookllm)
+- [30. 投研助手](#30-投研助手)
+- [31. Review doc 助手](#31-review-doc-助手)
+
+---
+
+## 1. 生成 Mermaid 代码
 ```
 prompt: 帮我写一个普通用户注册和使用 deepseek 的流程指南，请将上面的 deepseek 注册和使用2个流程指南，分别转为 mermaid 代码，方便我在 mermaid平台使用
 ```
@@ -39,7 +75,7 @@ flowchart TD
     U8 --> End[结束]
 ```
 
-2. 生成 draw.io 的图
+## 2. 生成 draw.io 的图
 ```
 prompt: 根据提供的图片，帮忙生成使用 2023年之后最新版本的 AWS 服务官方图标的架构图代码，输出格式可以直接导入到draw.io
 
@@ -356,10 +392,41 @@ RCH East Ecommerce SA weekly update
 
 RCH-NW 2026 Key Projects
 
-## Claude Code
-Generate ASANA Projects 'RCH-NW 2026 Key Projects' and 'RCH East Ecommerce SA weekly update' separate report for duration '2026-02-10 to 2026-02-28' in parallel using Agent Teams mode. The output is Chinese, do not replace any existed report.
+## Claude Code WBR
+Generate ASANA Projects 'RCH-NW 2026 Key Projects' and 'RCH East Ecommerce SA weekly update' separate report for duration '2026-02-10 to 2026-02-28', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. Using Agent Teams mode run in parallelly. The output is Chinese, do not replace any existed report.
 
-Using Agent Teams mode, Generate Monthly Report — Full February (2026-02-01 to 2026-02-28), all 3 projects in parallel, with special emphasis 1. Migration 2. Higlight (launched or Tag with 2x2) 3. Challenge & Risk (Tag with call-out) 4. Lowlight (migration out or lost). do not replace any existed report.
+## Claude Code WBR + new added task
+You have generated ASANA 3 Projects separate report for duration '2026-03-15 to 2026-03-22', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. I need you help extract the task create or modifed on 2026-03-23, then update the existed three 03-22 report with new section under '### 本周重点关注' with name '### 03-23新增'. Do not replace or update any existed content. Using Agent Teams mode run in parallelly. The output is Chinese.
+
+将我通过'!!'标记的 items 总结之后，放到 ‘### 本周重点关注’ 下面，表格方式，表头信息：
+｜ # ｜ 任务 | 客户 | SA | 状态 | 关键信息 |
+|---|------|------|----|------|---------|
+
+## Claude Code MBR old
+Using Agent Teams mode to generate Monthly Report — Full February (2026-02-01 to 2026-02-28), all 3 projects in parallel, check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The report should be orgnized with special emphasis 1. Migration 2. Higlight (launched or Tag with 2x2) 3. Challenge & Risk (Tag with call-out) 4. Lowlight (migration out or lost). Do not replace any existed report.
+
+## Claude Code MBR submit version
+你现在在 reports/weekly下面有 3 个项目 3 月份 TYD 的 weekly reports, 我需要你按照下面的格式整理出一份monthly report.
+月报是 narrative 的方式，不是表格方式，你可以把近似的内容总结在一起，例如 Kiro, Claude Code 都可以归类到 [AI Coding], Rufus, Shop assistant 归类到 [Industry Solution]。类似的分类还包括 [Migration], [Modernization], [Agent]等。 下面是一个参考的 narrative 。每个案例需有一个 Opportunity ID，获取方式可以从 SFDC Opp Link 获得，例如 URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' 的 Opportunity ID=[006RU00000QWjvtYAD]
+
+Narrative Example
+```
+[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer).
+```
+
+The monthly report format
+
+# [Top Business Observations]  
+##[Migration and modernization observation, with Opportunity ID]
+
+# [GenAI] 
+##[Bedrock Top Accounts Call-out] 
+
+# [Customer Highlights] 
+
+# [Customer Lowlights] 
+
+# [External Blockers, Major Risks and Challenges] 
 ```
 
 26. Interview summary
@@ -402,4 +469,31 @@ You are a sales director, I need write a promotion feedback for my peer - Soluti
 阅读下面两个link，总结 Amazon 和 OpenAI 最新合作的要点，突出业务价值和行业影响，中文输出2 页 用在 keynotes presentation。
 https://openai.com/index/amazon-partnership/
 https://www.aboutamazon.com/news/aws/amazon-open-ai-strategic-partnership-investment
+```
+
+30. 投研助手
+```
+我需要你做一个投资助手程序，这个助手是一个股票和基金投资经理的角色，已经有超过 5 年的投资经验，是数据驱动的投资风格，能做长线投资的潜力股建议，同时有敏锐嗅觉发现会短期高速增长的红利的黑马。
+
+每天基于市场信息和行业趋势，给我10 条股票投资建议，关注在中国 A 股，港股和美股， 每天北京时间 7 点给我邮件 48080251@qq.com 
+你搜索信息的范围也要调整到截止发送时间前的发生重要事件和信息，10 条投资建议需要包括：3 个关注有潜力的行业，然后是具体公司。
+投资建议需要有insights: 例如投资分析，除了PE值之外，能否增加PEG = PE ÷ 盈利增长率，也就是需要提供增长率做参考，然后如果每个推荐的股票，能提供所属行业和细分赛道的最低，平均和最高PE值，这样就可以看出推荐股票在行业的发展水平。
+
+内容分成下面几个模块
+第一部分：宏观面分析，从全球市场环境，三大市场走势，资金面情况，给出深刻见解
+第二部分：行业洞察
+第三部分：个股推荐
+最后部分：今日值得关注的事件或者今日要闻
+
+如果你需要SMTP 授权码，可以采用这个: xxxxx 
+发件邮箱地址 48080251@qq.com
+
+你搜集完信息，需要用claude Sonnet 4.6 inference profile id global.anthropic.claude-sonnet-4-6 来对你收集到的投资市场数据，进行分析，并且给出行业和个股推荐. 你所在的EC2 包含了调用bedrock Claude的IAM role，用instance profile 就可以获得权限
+
+输出是HTML格式，要美观，符合主流AI Gemini 或者Claude 风格
+```
+
+31. Review doc 助手
+```
+我需要写一个Q1 的 review word 文档，文档的格式需要严格遵守模板 MBR/APJC Tech Review Template.docx，其中’2.0 State of the Union‘ 这个章节可以忽略，其他章节都需要撰写。 注意文档是narrative 的方式，不是表格方式。word 总页数在 3 页以内。 文档的素材来自于 MBR 目录下的两个 markdown 文件，Migration/OP2_Migration_Summary.md, GenAI/RCH_GenAI_Analysis.md, GenAI/RCH_GenAI_Executive_Briefing.docx。如何生成 Word 文档，你可以参考 GenAI/gen_briefing.py
 ```
