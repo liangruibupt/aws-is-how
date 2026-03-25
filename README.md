@@ -175,6 +175,7 @@
     - [快时尚电商行业智能体设计思路与应用实践](#快时尚电商行业智能体设计思路与应用实践)
     - [E-Commerce 选品和设计](#e-commerce-选品和设计)
     - [导购和客服](#导购和客服)
+    - [物流和供应链](#物流和供应链)
   - [FSI](#fsi)
     - [Online Banking](#online-banking)
     - [Hospitality](#hospitality)
@@ -586,6 +587,8 @@
       - [Kiro CLI ACP](https://kiro.dev/docs/cli/acp/)
       - [Kiro CLI ACP + 飞书](https://github.com/xufanglin/acp-link)
     - [Ecs + Claude Code也是做的ops agent已经加了teams，slack，飞书插件](https://github.com/warren830/opsagent)
+  - [Agent Harness]
+    - [真正的 Agent Harness 工程](https://github.com/shareAI-lab/learn-claude-code/blob/main/README-zh.md)
 
 ### OpenClaw
   - [Tech Parts]
@@ -599,6 +602,7 @@
   - [Business Part]
     - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
     - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
+    - [openclaw use cases in ecommerce - per-Pod per openclaw, 用 per-tenant Pod 做隔离](https://aws.amazon.com/cn/blogs/china/exploring-openclaw-use-cases-in-ecommerce-platforms/)
 
 ### GenAI Business Application
   - [Quick Suite]
@@ -2108,6 +2112,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Introducing Amazon Lens Live: Instant scanning, real-time product matches, and insights from Amazon's AI Shopping Assistant](https://www.aboutamazon.com/news/retail/search-image-amazon-lens-live-shopping-rufus)
 - [Visa Intelligent Commerce on AWS: Enabling agentic commerce with Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/introducing-visa-intelligent-commerce-on-aws-enabling-agentic-commerce-with-amazon-bedrock-agentcore/)
 
+### 物流和供应链
+- [物流数据湖构建与分析中台转型案例分析](https://aws.amazon.com/cn/blogs/china/logistics-data-lake-construction-and-analytics-middle-office-transformation-case-study/)
+  
 ## FSI
 ### Online Banking
 
