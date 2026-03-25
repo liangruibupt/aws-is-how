@@ -179,3 +179,141 @@ curl http://127.0.0.1:8888/health
 - 模型配置（主模型、各级别默认模型、[1m] context window）
 - 性能调优选项
 - SessionStart hook 自动启动 proxy
+
+## gstack: It turns Claude Code into a virtual engineering team
+https://github.com/garrytan/gstack
+
+### Quick start
+#### Install gstack (30 seconds — see below)
+  - Install on your machine
+  ```
+  Install gstack: run git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup then add a "gstack" section to CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp__claude-in-chrome__* tools, and lists the available skills: /plan-ceo-review, /plan-eng-review, /plan-design-review, /design-consultation, /review, /ship, /browse, /qa, /qa-only, /qa-design-review, /setup-browser-cookies, /retro, /document-release. Then ask the user if they also want to add gstack to the current project so teammates get it.
+  ```
+  - Add to your repo so teammates get it (optional)
+  ```
+  Add gstack to this project: run cp -Rf ~/.claude/skills/gstack .claude/skills/gstack && rm -rf .claude/skills/gstack/.git && cd .claude/skills/gstack && ./setup then add a "gstack" section to this project's CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp__claude-in-chrome__* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /plan-design-review, /design-consultation, /review, /ship, /browse, /qa, /qa-only, /qa-design-review, /setup-browser-cookies, /retro, /document-release, and tells Claude that if gstack skills aren't working, run cd .claude/skills/gstack && ./setup to build the binary and register skills.
+  ```
+  - Run /plan-ceo-review on any feature idea
+  - Run /review on any branch with changes
+  - Run /qa on your staging URL
+
+  - Team SKILL
+    ```
+    /plan-ceo-review
+    /plan-eng-review
+    /plan-design-review
+    /design-consultation
+    /review
+    /ship
+    /browse
+    /qa
+    /qa-only
+    /design-review
+    /setup-browser-cookies
+    /retro
+    /document-release
+    ```
+
+#### Install the Superpowers
+1. Install
+```
+Install the superpowers Skill from https://claude.com/plugins/superpowers
+
+Superpowers is installed. It's a structured software development skills
+  framework by Jesse Vincent (182K+ installs) that provides:
+
+  - Test-Driven Development — red-green-refactor cycles
+  - Systematic Debugging — four-phase root cause investigation before fixes
+  - Brainstorming — Socratic requirement refinement before coding
+  - Code Review — built-in architectural oversight agent
+  - Plan Execution — batched implementation with review checkpoints
+  - Skill Authoring — create and test new skills with TDD
+
+  You may notice some overlap with skills you already have (brainstorming, TDD,
+  debugging, executing-plans). The superpowers versions tend to be more
+  prescriptive/structured in their methodology.
+
+Based on the installed skills, Superpowers provides these commands:
+
+  ┌─────────────────┬──────────────────────────┬──────────────────────────────┐
+  │      Skill      │         Command          │         When to Use          │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │                 │                          │ Before any creative work —   │
+  │ Brainstorming   │ /brainstorming           │ explore requirements &       │
+  │                 │                          │ design before coding         │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │ Test-Driven     │                          │ Before writing               │
+  │ Development     │ /test-driven-development │ implementation code for      │
+  │                 │                          │ features or bugfixes         │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │ Systematic      │                          │ When encountering bugs, test │
+  │ Debugging       │ /systematic-debugging    │  failures, or unexpected     │
+  │                 │                          │ behavior                     │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │                 │                          │ When you have a              │
+  │ Writing Plans   │ /writing-plans           │ spec/requirements and need a │
+  │                 │                          │  multi-step plan             │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │ Executing Plans │ /executing-plans         │ Run a written plan with      │
+  │                 │                          │ review checkpoints           │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │                 │                          │ After completing tasks or    │
+  │ Code Review     │ /requesting-code-review  │ major features, before       │
+  │                 │                          │ merging                      │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │                 │                          │ Review changed code for      │
+  │ Simplify        │ /simplify                │ reuse, quality, and          │
+  │                 │                          │ efficiency                   │
+  ├─────────────────┼──────────────────────────┼──────────────────────────────┤
+  │ Skill Creator   │ /skill-creator           │ Create or update new skills  │
+  └─────────────────┴──────────────────────────┴──────────────────────────────┘
+
+  The typical workflow Superpowers enforces:
+  1. /brainstorming — clarify what to build
+  2. /writing-plans — plan the implementation
+  3. /test-driven-development — write tests first, then code
+  4. /systematic-debugging — if something breaks, investigate root cause first
+  5. /requesting-code-review — verify before merging
+  6. /simplify — clean up
+```
+
+2. gstack V.S Superpowers
+```
+❯ ok, I installed gstack and Superpowers 2 skills, Do I need them both or you
+recommend only use the Superpowers will be enough or better?
+
+⏺ Good question. Here's a practical comparison:
+
+  Superpowers (dev methodology):
+  - TDD (red-green-refactor)
+  - Systematic debugging (root cause first)
+  - Brainstorming (requirements before code)
+  - Plan execution with review checkpoints
+
+  gstack (product/QA workflow):
+  - /browse — headless browser (its killer feature)
+  - /qa, /qa-only — QA testing
+  - /review, /ship — code review & ship checklists
+  - /plan-*-review — CEO/eng/design plan reviews
+  - /retro, /document-release — team process
+
+  Overlap: brainstorming, code review, planning
+
+  My recommendation: For your project (Python CLI, no web frontend), Superpowers
+  alone is sufficient. Here's why:
+
+  1. The TDD and systematic debugging skills are directly useful for your daily
+  coding
+  1. gstack's main differentiator (/browse) overlaps with the agent-browser skill
+  you just installed
+  1. gstack's design reviews, ship checklists, and retros are more relevant for
+  frontend/product teams
+```
+
+#### Install the agent browser
+```
+you can also help me install the skill https://agent-browser.dev/skills, you can use it for web testing
+This gives you browser automation for web testing — navigation, snapshots, form filling, screenshots, data extraction, session management, and visual diffing.
+You can invoke it with the /agent-browser skill.
+You're now running with Superpowers + agent-browser.
+```
