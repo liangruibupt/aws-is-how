@@ -260,13 +260,17 @@
   - [Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
 
 ### Video in GenAI
-  - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
-  - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
-  - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
-  - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
-  - [利用 Amazon Bedrock Data Automation（BDA）对视频数据进行自动化处理与检索](https://aws.amazon.com/cn/blogs/china/automating-video-data-processing-and-retrieval-using-amazon-bedrock-data-automation/)
-  - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
-  - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
+  - [Video Understanding and Management]
+    - [IPC GenAI 应用场景与方案概述](https://aws.amazon.com/cn/blogs/china/overview-of-ipc-genai-application-scenarios-and-solutions/)
+    - [Video summarization](https://aws.amazon.com/blogs/media/video-summarization-with-aws-artificial-intelligence-ai-and-machine-learning-ml-services/)
+    - [Intelligent video and audio Q&A with multilingual support using LLMs on Amazon SageMaker](https://aws.amazon.com/blogs/machine-learning/intelligent-video-and-audio-qa-with-multilingual-support-using-llms-on-amazon-sagemaker/)
+    - [利用 Amazon Bedrock Data Automation（BDA）对视频数据进行自动化处理与检索](https://aws.amazon.com/cn/blogs/china/automating-video-data-processing-and-retrieval-using-amazon-bedrock-data-automation/)
+  - [Generate Video]
+    - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
+    - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
+    - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
+    - [open-gallery生视频](https://github.com/qingyuan18/open-gallery.git)
+    - [story2video](https://github.com/qingyuan18/open_vibe_video.git)
   
 ### Audio in GenAI
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
@@ -474,6 +478,9 @@
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
+    - [autoresearch 方法，把 skill 通过率从 50% 提到了 90%](https://mp.weixin.qq.com/s/ourgjuzpj6uJb3W73c6Y-g)
+    - [Claude Code Demo for LS_HC Enterprise customer](https://w0yne.github.io/smile-corp-ai-demo-ways-of-working-sharing/1)
+    - [Everything claude code](https://github.com/affaan-m/everything-claude-code/blob/main/README.zh-CN.md)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
@@ -603,6 +610,9 @@
     - [傅盛龙虾养成日记PPT](https://mp.weixin.qq.com/s/iMw0NfBsLjwf4A_XILp1yA)
     - [Awesome OpenClaw Use Cases](https://github.com/hesamsheikh/awesome-openclaw-usecases)
     - [openclaw use cases in ecommerce - per-Pod per openclaw, 用 per-tenant Pod 做隔离](https://aws.amazon.com/cn/blogs/china/exploring-openclaw-use-cases-in-ecommerce-platforms/)
+  - [Digital Employee]
+    - [junior](https://junior.so/)
+    - [moxt](moxt)
 
 ### GenAI Business Application
   - [Quick Suite]
@@ -1180,6 +1190,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [测region之间延迟](https://www.cloudping.co/grid)
 - [测当前环境到各region的延迟](https://www.cloudping.info/)
 - [测全球主要城市到指定ip的延迟](https://tools.ipip.net/traceroute.php)
+- [Check the ip](https://checkip.amazonaws.com/)
   
 ### VPC
 - [How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
@@ -2079,6 +2090,12 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Life Sciences Innovation with Agentic AI](https://aws.amazon.com/blogs/industries/accelerating-life-sciences-innovation-with-agentic-ai-on-aws/)
     - [Claude for Life Sciences](https://www.anthropic.com/news/claude-for-life-sciences)
     - [Nexus-AI](https://nexus-ai.epochx.cn/)
+    - [临床招募 AI Agent Demo 方案概览](https://nexus-ai-event-workspace-2026.s3.amazonaws.com/f1d592f6-5c39-46e1-afc5-ef5e94c0cf69/0be8d6f8-9b30-4516-b002-2a4ffe62dff0/demo_overview.html)
+        - Demo 1: 智能患者-试验匹配 Agent
+        - Demo 2: 患者预筛选对话 Agent
+        - Demo 3: 试验方案智能解析 Agent
+        - Demo 4: 多Agent协作招募工作流
+        - Demo 5: 语音招募助手 (BidiAgent)
     - [Medical Insights Hub]
       - [Deployment guide - medical-insights-hub](https://amzn-chn.feishu.cn/file/IyyobyL1RoEGc3x5nKicUjJynUC)
     - [Medical Deep Insights]
