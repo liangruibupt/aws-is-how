@@ -1,33 +1,35 @@
 # 目录 / Table of Contents
 
-- [1. 生成 Mermaid 代码](#1-生成-mermaid-代码)
-- [2. 生成 draw.io 的图](#2-生成-drawio-的图)
-- [3. 解读周报和月报](#3-解读周报和月报)
-- [4. 阅读研究报告](#4-阅读研究报告)
-- [5. 竞对分析](#5-竞对分析)
-- [6. Image Generation](#6-image-generation)
-- [7. Excel 分析](#7-excel-分析)
-- [8. Email handing](#8-email-handing)
-- [9. 用 Q CLI 进行 AWS 文档查询](#9-用-q-cli-进行-aws-文档查询)
-- [10. HTML to PPT](#10-html-to-ppt)
-- [11. Prepare the customer visit flow and call plan](#11-prepare-the-customer-visit-flow-and-call-plan)
-- [12. Migration insights](#12-migration-insights)
-- [13. Knowledge check](#13-knowledge-check)
-- [14. reimbursement-helper](#14-reimbursement-helper)
-- [15. SFDC account management](#15-sfdc-account-management)
-- [16. Fetch url and give summary](#16-fetch-url-and-give-summary)
-- [17. Aurora Upgrade](#17-aurora-upgrade)
-- [18. Outlook Assistant](#18-outlook-assistant)
-- [19. Marketing session query](#19-marketing-session-query)
-- [20. Life Science Commerical query](#20-life-science-commerical-query)
-- [21. 研究一个行业](#21-研究一个行业例如-charging--power-storage-research)
-- [22. Asana WBR Assistant](#22-asana-wbr-assistant)
-- [23. Interview summary](#23-interview-summary)
-- [24. Trigger the Claude code Parallel work with sub-agent](#24-trigger-the-claude-code-parallel-work-with-sub-agent)
-- [25. Write the Amazon narrative](#25-write-the-amazon-narrative)
-- [26. NotebookLLM](#26-notebookllm)
-- [27. 投研助手](#27-投研助手)
-- [28. Review doc 助手](#28-review-doc-助手)
+- [目录 / Table of Contents](#目录--table-of-contents)
+  - [1. 生成 Mermaid 代码](#1-生成-mermaid-代码)
+  - [2. 生成 draw.io 的图](#2-生成-drawio-的图)
+  - [3. 解读周报和月报](#3-解读周报和月报)
+  - [4. 阅读研究报告](#4-阅读研究报告)
+  - [5. 竞对分析](#5-竞对分析)
+  - [6. Image Generation](#6-image-generation)
+  - [7. Excel 分析](#7-excel-分析)
+  - [8. Email handing](#8-email-handing)
+  - [9. 用 Q CLI 进行 AWS 文档查询](#9-用-q-cli-进行-aws-文档查询)
+  - [10. HTML to PPT](#10-html-to-ppt)
+  - [11. Prepare the customer visit flow and call plan](#11-prepare-the-customer-visit-flow-and-call-plan)
+  - [12. Migration insights](#12-migration-insights)
+  - [13. Knowledge check](#13-knowledge-check)
+  - [14. reimbursement-helper](#14-reimbursement-helper)
+  - [15. SFDC account management](#15-sfdc-account-management)
+  - [16. Fetch url and give summary](#16-fetch-url-and-give-summary)
+  - [17. Aurora Upgrade](#17-aurora-upgrade)
+  - [18. Outlook Assistant](#18-outlook-assistant)
+  - [19. Marketing session query and Business review](#19-marketing-session-query-and-business-review)
+  - [20. Life Science Commerical query](#20-life-science-commerical-query)
+  - [21. 研究一个行业，例如 Charging \& Power Storage Research](#21-研究一个行业例如-charging--power-storage-research)
+  - [22. Asana WBR Assistant](#22-asana-wbr-assistant)
+  - [23. Interview summary](#23-interview-summary)
+  - [24. Trigger the Claude code Parallel work with sub-agent](#24-trigger-the-claude-code-parallel-work-with-sub-agent)
+  - [25. Write the Amazon narrative](#25-write-the-amazon-narrative)
+  - [26. NotebookLLM](#26-notebookllm)
+  - [27. 投研助手](#27-投研助手)
+  - [28. Review doc 助手](#28-review-doc-助手)
+  - [29. Agent Teams](#29-agent-teams)
 
 ---
 
@@ -304,10 +306,12 @@ Please read url https://www.aboutamazon.eu/news/aws/built-operated-controlled-an
 检查我下周周一11.03和周二11.04的会议安排,如果我需要有一个 1 小时的客户会议,从 aws 办公室到客户办公室需要 30 分钟,帮我看看合适的时间,并且创建一个 Meeting RSVP
 ```
 
-## 19. Marketing session query
+## 19. Marketing session query and Business review
 ```
 Please help me summary the 2025 reInvent Life Science and Healthcare session
 Please help me narrow down session related to Life Science Commerical Line of Business
+
+Help me list the top 10 YTD SRP Rev Account with YTD Attn beyond 100% and top 10 YTD SRP Rev Account with YTD Attn lower than 80% in 4 industry: RTL_CPG_H, FSI, LS_HC, Cross Industry. The output summary and insight generate the PPT with AWS 2025 version template
 ```
 
 ## 20. Life Science Commerical query
@@ -382,7 +386,7 @@ RCH East Ecommerce SA weekly update
 RCH-NW 2026 Key Projects
 
 ## Claude Code WBR
-Generate ASANA Projects 'RCH-NW 2026 Key Projects' and 'RCH East Ecommerce SA weekly update' separate report for duration '2026-02-10 to 2026-02-28', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. Using Agent Teams mode run in parallelly. The output is Chinese, do not replace any existed report.
+Generate ASANA 3 Projects separate report for duration '2026-03-23 to 2026-03-29', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. Using Agent Teams mode run in parallelly. The output is Chinese, do not replace any existed report.
 
 ## Claude Code WBR + new added task
 You have generated ASANA 3 Projects separate report for duration '2026-03-15 to 2026-03-22', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. I need you help extract the task create or modifed on 2026-03-23, then update the existed three 03-22 report with new section under '### 本周重点关注' with name '### 03-23新增'. Do not replace or update any existed content. Using Agent Teams mode run in parallelly. The output is Chinese.
@@ -391,31 +395,78 @@ You have generated ASANA 3 Projects separate report for duration '2026-03-15 to 
 ｜ # ｜ 任务 | 客户 | SA | 状态 | 关键信息 |
 |---|------|------|----|------|---------|
 
-## Claude Code MBR old
-Using Agent Teams mode to generate Monthly Report — Full February (2026-02-01 to 2026-02-28), all 3 projects in parallel, check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The report should be orgnized with special emphasis 1. Migration 2. Higlight (launched or Tag with 2x2) 3. Challenge & Risk (Tag with call-out) 4. Lowlight (migration out or lost). Do not replace any existed report.
+## Claude Code MBR 一次生产
+Using Agent Teams mode to generate 2026 Jan Monthly Report 3 projects in parallel.
 
-## Claude Code MBR submit version
-你现在在 reports/weekly下面有 3 个项目 3 月份 TYD 的 weekly reports, 我需要你按照下面的格式整理出一份monthly report.
-月报是 narrative 的方式，不是表格方式，你可以把近似的内容总结在一起，例如 Kiro, Claude Code 都可以归类到 [AI Coding], Rufus, Shop assistant 归类到 [Industry Solution]。类似的分类还包括 [Migration], [Modernization], [Agent]等。 下面是一个参考的 narrative 。每个案例需有一个 Opportunity ID，获取方式可以从 SFDC Opp Link 获得，例如 URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' 的 Opportunity ID=[006RU00000QWjvtYAD]
+1. The monthly report adopts a narrative approach instead of a tabular one. 
 
-Narrative Example
+2. The monthly report format
 
-_[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer)._
+# [Top Business Observations]
 
+## [Migration and modernization observation, with Opportunity ID]
+### [Migration]
+### [Modernization]
 
-The monthly report format
+## [Industry Solution]
 
-# [Top Business Observations]  
-##[Migration and modernization observation, with Opportunity ID]
-
-# [GenAI] 
-##[Bedrock Top Accounts Call-out] 
+## [GenAI]
+### [AI Coding]
+### [Agent]
+### [Quick Suite]
+### [GPU]
 
 # [Customer Highlights] 
 
 # [Customer Lowlights] 
 
 # [External Blockers, Major Risks and Challenges] 
+
+3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
+
+4. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task
+
+5. Below are reference example of narrative. 
+
+_[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer)._
+
+
+## Claude Code MBR 基于WBR版本
+Using Agent Teams mode to generate 2026 March Monthly Report 3 projects in parallel. 
+
+1. You now have the March weekly reports for TYD of 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
+
+2. The monthly report format
+
+# [Top Business Observations]
+
+## [Migration and modernization observation, with Opportunity ID]
+### [Migration]
+### [Modernization]
+
+## [Industry Solution]
+
+## [GenAI]
+### [AI Coding]
+### [Agent]
+### [Quick Suite]
+### [GPU]
+
+# [Customer Highlights] 
+
+# [Customer Lowlights] 
+
+# [External Blockers, Major Risks and Challenges] 
+
+3. The monthly report adopts a narrative approach instead of a tabular one. 
+
+4. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
+
+5. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task.
+
+6. Below are reference example of narrative. 
+
+_[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer)._
 ```
 
 ## 23. Interview summary
@@ -486,5 +537,19 @@ https://www.aboutamazon.com/news/aws/amazon-open-ai-strategic-partnership-invest
 ```
 我需要写一个Q1 的 review word 文档，文档的格式需要严格遵守模板 MBR/APJC Tech Review Template.docx，其中’2.0 State of the Union‘ 这个章节可以忽略，其他章节都需要撰写。 注意文档是narrative 的方式，不是表格方式。word 总页数在 3 页以内。 文档的素材来自于 MBR 目录下的两个 markdown 文件，Migration/OP2_Migration_Summary.md, GenAI/RCH_GenAI_Analysis.md, GenAI/RCH_GenAI_Executive_Briefing.docx。如何生成 Word 文档，你可以参考 GenAI/gen_briefing.py
 
-Rewrite in Amazon Writing Styl
+Rewrite in Amazon Writing Style
+```
+
+## 29. Agent Teams
+```
+当你进行 implement 的时候，采用 tmux split pane 展示 sub agents coding的状态
+~/.claude/settings.json
+"env": {
+  "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+},
+"preference":{
+    "tmuxSplitPanes": true
+}
+
+tmux new-session -s claude-work
 ```
