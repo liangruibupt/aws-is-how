@@ -7,6 +7,7 @@
         - [OpenClaw on EKS的Hands-On Workshop - 包括Operator和Agent Sendbox的Demo](https://catalog.us-east-1.prod.workshops.aws/workshops/afba7f08-c987-40dc-afa5-da3e200ae7c5/zh-CN)
 - [OpenClaw on EC2 Mac Instance](https://mp.weixin.qq.com/s/tT_dTZ_ykBvohCv26p3n0Q)
 - [Clawdbot 接入飞书保姆级教程](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
+- [FlexAI Agentic Workshop: 基于 EKS & Graviton 部署企业级多租户 OpenClaw 智能助理](https://events.amazoncloud.cn/labs/cloudlab-openclaw-china-region)
 
 
 ## 部署几百个上千个 OpenClaw
