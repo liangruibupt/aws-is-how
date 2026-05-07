@@ -20,9 +20,11 @@
     - [LLM Models](#llm-models)
     - [Bedrock practice](#bedrock-practice)
     - [RLHF](#rlhf)
-    - [RAG - retrieval-augmented generation](#rag---retrieval-augmented-generation)
+    - [Knowledge Base](#knowledge-base)
+      - [RAG - retrieval-augmented generation](#rag---retrieval-augmented-generation)
+      - [LLM based KB](#llm-based-kb)
     - [Deep Research](#deep-research)
-    - [Agentic AI in Software Develop Lifecycle](#agentic-ai-in-software-develop-lifecycle)
+    - [AI Coding](#ai-coding)
     - [Agent workflow and Framework](#agent-workflow-and-framework)
     - [MCP](#mcp)
     - [Agent Infra](#agent-infra)
@@ -168,6 +170,7 @@
     - [HA/DR](#hadr)
   - [Office and business application](#office-and-business-application)
     - [Workspaces - VDI](#workspaces---vdi)
+    - [AI in the office](#ai-in-the-office)
   - [Metaverse](#metaverse)
   - [Automotive](#automotive)
   - [HealthCare and Life Science](#healthcare-and-life-science)
@@ -269,8 +272,7 @@
     - [Nova Reel Prompt Optimizer](https://github.com/xiehust/reel_optimizer/tree/main)
     - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
     - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
-    - [open-gallery生视频](https://github.com/qingyuan18/open-gallery.git)
-    - [story2video](https://github.com/qingyuan18/open_vibe_video.git)
+    - [story2video 生视频](https://github.com/qingyuan18/open_vibe_video.git)
   
 ### Audio in GenAI
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
@@ -309,7 +311,10 @@
   - [Use case]
     - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
     - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
+    - [open-gallery生图片](https://github.com/qingyuan18/open-gallery.git)
   - [Amazon Nova 生成图片 Prompt](https://mp.weixin.qq.com/s/avxar5vm0ShNj_7bjoacgQ)
+  - [GPT-Image-2]
+    - [65个GPT Image 2实测用例（含Prompt）](https://mp.weixin.qq.com/s/f0vdYTP1Z9aDJeEkTonjhA)
   
 ### Scenario based GenAI
   - [Chatbot]
@@ -378,7 +383,9 @@
     - [Amazon Bedrock Claude3 Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/en-US)
     - [Claude Artifacts workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
     - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
-    - [无需修改代码即可在 Anthropic SDK 中使用 AWS Bedrock 上的各种大语言模型](https://github.com/xiehust/anthropic_api_converter)
+    - [Anthropic API Gateway: 无需修改代码即可在 Anthropic SDK 中使用 AWS Bedrock 上的各种大语言模型](https://github.com/aws-samples/sample-bedrock-api-proxy)
+    - [Opus 4.7 + claude code 问题汇总 2026.04.20](https://amzn-chn.feishu.cn/docx/SA6ddWe4LoLeEsxyGIIcN1cJnpf)
+    - [From developer desks to the whole organization: Running Claude Cowork in Amazon Bedrock](https://aws.amazon.com/cn/blogs/machine-learning/from-developer-desks-to-the-whole-organization-running-claude-cowork-in-amazon-bedrock/)
   - [Llama]
     - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
   - [Nova]
@@ -442,7 +449,8 @@
   - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
   - [Residual Connections Are Getting an Upgrade (mHC)](https://www.youtube.com/watch?v=jYn_1PpRzxI&t=165s)
 
-### RAG - retrieval-augmented generation
+### Knowledge Base
+#### RAG - retrieval-augmented generation
   - [Smart Search 基于智能搜索的大语言模型增强方案](https://catalog.us-east-1.prod.workshops.aws/workshops/486e5ddd-b414-4e7f-9bfd-3884a89353e3/zh-CN)
   - [Smart Search V2 基于智能搜索的大语言模型增强方案2](https://catalog.us-east-1.prod.workshops.aws/workshops/3973557a-0853-41f6-9678-00ae171ba1f6/zh-CN/03cdkinstall/30preinstall)
   - [基于智能搜索和大模型打造企业下一代知识库](https://aws.amazon.com/cn/blogs/china/intelligent-search-based-enhancement-solutions-for-llm-part-two/)
@@ -458,11 +466,14 @@
   - [RAG 挑战赛冠军方案解析：从数据解析到多路由器检索的工程实践](https://mp.weixin.qq.com/s/VPidqY02ngsrnXhpOol3_A)
   - [Build a RAG based question answer solution using Amazon Bedrock Knowledge Base, vector engine for Amazon OpenSearch Service Serverless and LangChain](https://github.com/aws-samples/bedrock-kb-rag-workshop/blob/main/blog_post.md)
   - [Create an agentic RAG application with LlamaIndex, and Mistral in Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/create-an-agentic-rag-application-for-advanced-knowledge-discovery-with-llamaindex-and-mistral-in-amazon-bedrock/)
-  
+
+#### LLM based KB
+- [karpathy A pattern for building personal knowledge bases using LLMs - LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+
 ### Deep Research
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
 
-### Agentic AI in Software Develop Lifecycle
+### AI Coding
   - [Amazon Q Developer/Kiro]
     - [Kiro Community](https://github.com/kiro-community/)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -478,9 +489,12 @@
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
+      - [claudecode-bedrock-proxy for prompt cache](https://github.com/KevinZhao/claudecode-bedrock-proxy)
     - [autoresearch 方法，把 skill 通过率从 50% 提到了 90%](https://mp.weixin.qq.com/s/ourgjuzpj6uJb3W73c6Y-g)
     - [Claude Code Demo for LS_HC Enterprise customer](https://w0yne.github.io/smile-corp-ai-demo-ways-of-working-sharing/1)
     - [Everything claude code](https://github.com/affaan-m/everything-claude-code/blob/main/README.zh-CN.md)
+    - [我给 Claude Code 做了个 AI 硬件监工 - claude-desktop-buddy M5 Paper Buddy](https://mp.weixin.qq.com/s/l05ETEEFnEYOdJqiiyT9HQ)
+    - [Claude Code Security Reviewer](https://github.com/anthropics/claude-code-security-review)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
@@ -488,9 +502,12 @@
       - [AI Ops Sample](https://amzn-chn.feishu.cn/wiki/BYmAwDtnWiOfqak9y51cbvrHn1g)
     - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
     - [K8S GPT with bedrock practice](https://aws.amazon.com/blogs/machine-learning/use-k8sgpt-and-amazon-bedrock-for-simplified-kubernetes-cluster-maintenance/)
-  - [SDE Agent and Dev Agent]
+    - [RDS to DynamoDB migration assistant agent](https://github.com/aws-samples/sample-ai-assisted-rds-to-dynamodb-migration)
+    - [低成本RDS/Aurora MySQL审计日志管理方案](https://github.com/aws-samples/sample-rds-mysql-audit-serverless-solution)
+  - [SDE Agent and DevOps Agent]
     - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
     - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
+    - [在 EKS 上部署 Outline Wiki，集成完整的可观测性方案（Prometheus + Grafana + OpenSearch）以及 AWS DevOps Agent。包含飞书通知和故障注入脚本，用于现场演示场景](https://github.com/JoeShi/devops-agent-demo)
 
 ### Agent workflow and Framework
   - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
@@ -511,6 +528,8 @@
   - [Other Agent tools]
     - [Chatbot Portal with Agent](https://github.com/aws-samples/Intelli-Agent)
     - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
+    - [Super Agent on AgentCore](https://github.com/vorale/super-agent)
+    - [AgentX]
   - [Amazon Bedrock Agents]
     - [基于MCP构建端到端的AI-Agent应用工作坊 - Bendrock Agents, Strands Agents, AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
       - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
@@ -594,8 +613,11 @@
       - [Kiro CLI ACP](https://kiro.dev/docs/cli/acp/)
       - [Kiro CLI ACP + 飞书](https://github.com/xufanglin/acp-link)
     - [Ecs + Claude Code也是做的ops agent已经加了teams，slack，飞书插件](https://github.com/warren830/opsagent)
-  - [Agent Harness]
+  - [Agent Harness Engineering]
     - [真正的 Agent Harness 工程](https://github.com/shareAI-lab/learn-claude-code/blob/main/README-zh.md)
+    - [Agent 圈深度研究报告：五大方向 + Agentic AI 全景](https://my.feishu.cn/docx/AqZfdCQpIoDsKlxWgHUcrOTynQd)
+    - [OpenAI Harness Engineering 深度研究报告](https://my.feishu.cn/docx/JWvmd0JX6oRXYDxTLKHcTypInfe)
+      - [在智能体优先的世界中利用 Codex Harness-engineering](https://openai.com/zh-Hans-CN/index/harness-engineering/)
 
 ### OpenClaw
   - [Tech Parts]
@@ -603,6 +625,7 @@
     - [openclaw 在 aws 快速搭建和配置](ai-ml/chatgpt/agent/openclaw/OpenClawOnAWS.md)
     - [openclaw - skills](https://github.com/VoltAgent/awesome-moltbot-skills)
     - [openclaw 接入飞书](https://mp.weixin.qq.com/s/_i1fgNbeDrBR5wurEmJf0A)
+      - [OpenClaw 飞书文档自动分享指南](https://amzn-chn.feishu.cn/docx/JZFLdYKsDoRqJNxVCLOcTpdGnzd)
     - [用OpenClaw快速创造一个Kiro CLI Bot](https://mp.weixin.qq.com/s/WQI8FBdon7WXVpQh16wRdA)
     - [Openclaw cost saving](ai-ml/chatgpt/agent/openclaw/Openclaw_cost_saving.md)
       - [如何优化 OpenClaw的Token 使用](https://mp.weixin.qq.com/s/lyYHme7Dwhv1tJQ-r4wMSg)
@@ -702,6 +725,8 @@
       - [Maximizing GPU Utilization with NVIDIA MIG on Amazon EKS](https://medium.com/@farrukh.mustafa/maximizing-gpu-utilization-with-nvidia-mig-on-amazon-eks-c1a488641d99)
     - [Project-HAMi - Heterogeneous AI Computing Virtualization Middleware](https://github.com/Project-HAMi/HAMi)
       - [Virtualizing Any GPU on AWS with HAMi: Free Memory Isolation](https://dynamia.ai/blog/aws)
+  - [推理加速 Inference Accleration]
+    - [PD Prefill and Decode 分离的推理加速](https://mp.weixin.qq.com/s/sQdO0z4hnptJs2_zSCn1Rg?scene=334)
 - [Network of EC2]
   - [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
   - [EC2 network performance](EC2/EC2_Networking_performance.md)
@@ -1326,7 +1351,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
   - [使用 Lambda 函数URL + CloudFront 实现S3镜像回源](https://mp.weixin.qq.com/s/mzRuFciCJXOfQpN-WV9IyA)
 
-
 - Lambda usage
   - [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
   - [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
@@ -1349,6 +1373,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Understanding AWS Lambda scaling and throughput](https://aws.amazon.com/cn/blogs/compute/understanding-aws-lambda-scaling-and-throughput/)
   - [Lambda provisioned capacity autoscaling的实践](https://github.com/awslabs/aws-lambda-web-adapter/blob/main/examples/springboot/template.yaml)
   - [Simplifying serverless best practices with Lambda Powertools](https://aws.amazon.com/cn/blogs/opensource/simplifying-serverless-best-practices-with-lambda-powertools/)
+  - [The invisible engineering behind Lambda’s network](https://atoz.amazon.work/feed/content/693139b8-ba8c-4c71-9585-006317feca69)
 
 - [lambda Web adapter](https://github.com/awslabs/aws-lambda-web-adapter)
   - [Using response streaming with AWS Lambda Web Adapter to optimize performance](https://aws.amazon.com/blogs/compute/using-response-streaming-with-aws-lambda-web-adapter-to-optimize-performance/)
@@ -2004,6 +2029,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ## Office and business application
 ### Workspaces - VDI
 - [How to Enable Multi-Factor Authentication for AWS Services by Using AWS Microsoft AD and On-Premises Credentials](https://aws.amazon.com/blogs/security/how-to-enable-multi-factor-authentication-for-amazon-workspaces-and-amazon-quicksight-by-using-microsoft-ad-and-on-premises-credentials/)
+### AI in the office
+- [minimax office  skills](https://github.com/MiniMax-AI/skills?tab=readme-ov-file)
+- [Frontend Slides creating stunning, animation-rich HTML presentations — from scratch or by converting PowerPoint files](https://github.com/zarazhangrui/frontend-slides)
 
 
 ## Metaverse
