@@ -15,7 +15,7 @@
   - [12. Migration insights](#12-migration-insights)
   - [13. Knowledge check](#13-knowledge-check)
   - [14. reimbursement-helper](#14-reimbursement-helper)
-  - [15. SFDC account management](#15-sfdc-account-management)
+  - [15. SFDC account management and Opp pipeline](#15-sfdc-account-management-and-opp-pipeline)
   - [16. Fetch url and give summary](#16-fetch-url-and-give-summary)
   - [17. Aurora Upgrade](#17-aurora-upgrade)
   - [18. Outlook Assistant](#18-outlook-assistant)
@@ -32,6 +32,8 @@
   - [29. Agent Teams](#29-agent-teams)
   - [30. Interactive Discussion](#30-interactive-discussion)
   - [31. Dashboard Inisights](#31-dashboard-inisights)
+  - [32. xiaohongshu](#32-xiaohongshu)
+  - [33. Quick BMS Demo](#33-quick-bms-demo)
 
 ---
 
@@ -236,6 +238,9 @@ You are act as Director of AWS Solutions Architecture (SA) to support me to 1) p
 The top 3 migration driver in the attached file and give me summary from migration type like IDC2AWS, GCP2AWS, Ali2AWS etc;  Stage like Launched, Qualify, TV etc; Total Rev. You can also add your insights.
 
 You have checked all the data in the file, give me the total revenue, total companies number and summary by table with details, sort with deal size and stage
+
+根据我 inbox 的 4 个行业 Open Pipeline Report results (CMHK FY26 RCH, CMHK FY26 LS_HC, CMHK FY26 FSI, CMHK FY26 CI) 邮件，总结当前和 IDC Migration 相关的 Opp，输出格式如下
+Account | Opp Nam | Opp ID | Description | ARR | Status
 ```
 
 ## 13. Knowledge check
@@ -289,11 +294,15 @@ You have checked all the data in the file, give me the total revenue, total comp
 
 ## 14. [reimbursement-helper](https://gitlab.aws.dev/kentpeng/reimbursement-helper)
 
-## 15. SFDC account management
+## 15. SFDC account management and Opp pipeline
 ```markdown
 The AWSentralMCP server provides 60 tools organized into 15 categories for comprehensive Salesforce operations. So use this MCP server to Help me analysis BMW China on AWS past 3 month usage summary and trending analysis. 
 
 Give me the summary about 2025 Spend & Usage, then I need you further summary about 1. What's top deals by stage? 2. What the stalled opportunities? 3. What's the GenAI related opportunities?
+
+
+根据我 china_bd/ops folder 的 4 个行业 Open Pipeline Report results (CMHK FY26 RCH, CMHK FY26 LS_HC, CMHK FY26 FSI, CMHK FY26 CI) 邮件，总结本周和上周 Opp 的差异性，输出格式如下
+Account | Opp Nam | Opp ID | Description | ARR | Status
 ```
 
 ## 16. Fetch url and give summary
@@ -421,11 +430,12 @@ Using Agent Teams mode to generate 2026 Jan Monthly Report 3 projects in paralle
 ### [Quick Suite]
 ### [GPU]
 
+# [External Blockers, Major Risks and Challenges] 
+
 # [Customer Highlights] 
 
 # [Customer Lowlights] 
 
-# [External Blockers, Major Risks and Challenges] 
 
 3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
 
@@ -437,11 +447,11 @@ _[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey v
 
 
 ## Claude Code MBR 基于WBR版本
-Using Agent Teams mode to generate 2026 March Monthly Report 3 projects in parallel. 
+Using Agent Teams mode to generate 2026 May Monthly Report 3 projects in parallel. 
 
-1. You now have the March weekly reports for TYD of 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
+You now have the May weekly reports for 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
 
-2. The monthly report format
+1. The monthly report format
 
 # [Top Business Observations]
 
@@ -457,19 +467,19 @@ Using Agent Teams mode to generate 2026 March Monthly Report 3 projects in paral
 ### [Quick Suite]
 ### [GPU]
 
+# [External Blockers, Major Risks and Challenges] 
+
 # [Customer Highlights] 
 
 # [Customer Lowlights] 
 
-# [External Blockers, Major Risks and Challenges] 
+2. The monthly report adopts a narrative approach instead of a tabular one. 
 
-3. The monthly report adopts a narrative approach instead of a tabular one. 
+3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
 
-4. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
+4. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task.
 
-5. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task.
-
-6. Below are reference example of narrative. 
+5. Below are reference example of narrative. 
 
 _[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer)._
 ```
@@ -495,6 +505,11 @@ You are a Solution Architect Senior Manager, you need maximize the projects win 
 Based on the data point in @fileName, I need write a promotion document for my direct report, a solutions architect manager, please help write paragraph about his ownership and delivery result 
 
 You are a sales director, I need write a promotion feedback for my peer - Solutions Architect Senior Manager to his leadership in earn trust, ownership and delivery result. In the style of Amazon Narrative writing, Please write paragraph as a native English speaker and make it concise.
+
+
+基于 SA Role Guideline (L6 expectations) + SA Promotion Toolkit Q2 2026，从SA Leadership视角，进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
+
+基于 CSM Role Guideline (L6 expectations) + SA Promotion Toolkit Q2 2026，从SA Leadership视角，进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
 ```
 
 ## 26. NotebookLLM
@@ -577,4 +592,25 @@ From[CMHK_REV_01] MBR Usage & Rev Dashboard → 1.Rev, help me list the top 10 Y
 
 # From
 From [CMHK PPL 01] Pipeline & Inputs Management Dashboard → 1. Creation, help me list the ARR Top10 的 Open Opportunities in 4 industry: RTL_CPG_H, FSI, LS_HC, Cross. From [CMHK PPL 01] Pipeline & Inputs Management Dashboard →  2.Conversion help me list the ARR Top10 的 Launched Opportunities in 4 industry: RTL_CPG_H, FSI, LS_HC, Cross. You can filter the industry by SH_L4 Unit.
+```
+
+## 32. xiaohongshu
+```
+基于刚才总结的爆款模板，帮我生成 3 篇完整的小红书文案。每篇包含：
+标题（给 A/B 两版，一版用情绪对比型，一版用数据对比型）
+正文（按"情景设定 → 吸引眼球 → 总结要点"结构写）
+标签（10 个，按大词+中词+长尾词组合）
+
+3 篇的角度分别是：
+第 1 篇：规划达人，一切安排井井有条
+第 2 篇：喜欢惊喜，喜欢融入当地生活
+第 3 篇：打卡族，照片党
+请用可以直接复制使用的格式输出。
+```
+
+## 33. Quick BMS Demo
+```
+我要搭建一个BMS (Battery Management System) 专家 Agent，但是我缺少 domain knowledge，你帮我搭建出一个 prototype，包括前端页面，一个 chat window，sample dashboard, sample question 等
+
+接入 LLM 后端实现真实对话, 添加故障诊断引擎, 导出为可分享的 HTML 文件, 对接真实 BMS 数据源的参考代码
 ```
