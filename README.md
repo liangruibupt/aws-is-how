@@ -254,6 +254,7 @@
   - [A guide to making your AI vision a reality](https://aws.amazon.com/cn/blogs/enterprise-strategy/a-guide-to-making-your-ai-vision-a-reality/)
   - [understand The tokenize](https://huggingface.co/spaces/Xenova/the-tokenizer-playground)
   - [图解AI三大核心技术：RAG、大模型、智能体](https://mp.weixin.qq.com/s/pe2Rn6O_1KyqfFbCtMpqiw)
+  - [红杉 AI Ascent 2026 主题演讲全文译](https://mp.weixin.qq.com/s/rUdF81Reofw7ZbojM0zZwg?scene=334), [2026红杉美国年度分享：AGI已经到来，重新定义AI革命](https://mp.weixin.qq.com/s/kZ-9O-tGMcgoCXEZ897o4Q?scene=334)
 
 ### Promote-Engineering
   - [Prompt engineering techniques and best practices with Claude3](https://aws.amazon.com/blogs/machine-learning/prompt-engineering-techniques-and-best-practices-learn-by-doing-with-anthropics-claude-3-on-amazon-bedrock/)
@@ -386,6 +387,7 @@
     - [Anthropic API Gateway: 无需修改代码即可在 Anthropic SDK 中使用 AWS Bedrock 上的各种大语言模型](https://github.com/aws-samples/sample-bedrock-api-proxy)
     - [Opus 4.7 + claude code 问题汇总 2026.04.20](https://amzn-chn.feishu.cn/docx/SA6ddWe4LoLeEsxyGIIcN1cJnpf)
     - [From developer desks to the whole organization: Running Claude Cowork in Amazon Bedrock](https://aws.amazon.com/cn/blogs/machine-learning/from-developer-desks-to-the-whole-organization-running-claude-cowork-in-amazon-bedrock/)
+    - [Claude Platform on AWS: Anthropic’s native platform, through your AWS account](https://aws.amazon.com/blogs/machine-learning/introducing-claude-platform-on-aws-anthropics-native-platform-through-your-aws-account/)
   - [Llama]
     - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
   - [Nova]
@@ -442,6 +444,7 @@
   - [Prompt Caching]
     - [Getting started with Bedrock prompt_caching](https://github.com/aws-samples/amazon-bedrock-samples/blob/main/introduction-to-bedrock/prompt-caching/getting_started_with_prompt_caching.ipynb))
     - [Prompt caching on amazon bedrock](https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/)
+    - [Bedrock Claude 模型 Prompt Cache · 多轮命中动画演示](https://ds470b74heox1.cloudfront.net/)
   - [使用Amazon Bedrock + 自建ECS Docker Sandbox实现Agent 程序化工具调用Programmatic Tool Calling](https://aws.amazon.com/cn/blogs/china/programmatic-tool-calling-agent-using-bedrock-and-ecs-docker-sandbox/)
 
 ### RLHF
@@ -495,6 +498,7 @@
     - [Everything claude code](https://github.com/affaan-m/everything-claude-code/blob/main/README.zh-CN.md)
     - [我给 Claude Code 做了个 AI 硬件监工 - claude-desktop-buddy M5 Paper Buddy](https://mp.weixin.qq.com/s/l05ETEEFnEYOdJqiiyT9HQ)
     - [Claude Code Security Reviewer](https://github.com/anthropics/claude-code-security-review)
+    - [cc-connect Bridge AI Agents to Chat Platform with ACP](https://github.com/chenhg5/cc-connect)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
@@ -508,6 +512,8 @@
     - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
     - [SWE-agent turns LMs (e.g. GPT-4) into software engineering agents](https://github.com/princeton-nlp/SWE-agent)
     - [在 EKS 上部署 Outline Wiki，集成完整的可观测性方案（Prometheus + Grafana + OpenSearch）以及 AWS DevOps Agent。包含飞书通知和故障注入脚本，用于现场演示场景](https://github.com/JoeShi/devops-agent-demo)
+    - [DevOps Agent exposed as ACP and MCP](https://docs.aws.amazon.com/devopsagent/latest/userguide/working-with-devops-agent-interfacing-with-the-devops-agent.html)
+    - [把 AWS DevOps Agent 连接到部署在 EKS 上的自建 MCP Server，通过 VPC Lattice Private Connection 在私网完成 AWS 中国区以及其他云的管理](https://github.com/warren830/aws-devops-agent)
 
 ### Agent workflow and Framework
   - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
@@ -599,6 +605,8 @@
         - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
         - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
         - [Agentic AI基础设施实践经验系列（九）：Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
+        - [AgentCore Identity 新增 On-Behalf-Of (OBO) Token Exchange — 多 Agent 链路中代表用户访问下游服务，无需对每个资源单独做 consent flow](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
+      - [agentcore-hackathon](https://github.com/Kathy-PJ/ci-agentcore-hackathon/tree/main)
 ### Agent Technology
   - [Agent to Agent - A2A]
     - [A2A protocol](https://a2aprotocol.ai/)
@@ -618,7 +626,11 @@
     - [Agent 圈深度研究报告：五大方向 + Agentic AI 全景](https://my.feishu.cn/docx/AqZfdCQpIoDsKlxWgHUcrOTynQd)
     - [OpenAI Harness Engineering 深度研究报告](https://my.feishu.cn/docx/JWvmd0JX6oRXYDxTLKHcTypInfe)
       - [在智能体优先的世界中利用 Codex Harness-engineering](https://openai.com/zh-Hans-CN/index/harness-engineering/)
-
+    - [Harness Agent design example](https://github.com/xg-gh-25/SwarmAI)
+    - [AI Agent for Data - Data Agent](https://github.com/xg-gh-25/SwarmAI/discussions/36)
+    - [How We Built a 4-Layer Progressive Memory System](https://github.com/xg-gh-25/SwarmAI/discussions/37)
+  - [Agent Payment]
+    - [Agents that transact: Introducing Amazon Bedrock AgentCore payments, built with Coinbase and Stripe](https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/)
 ### OpenClaw
   - [Tech Parts]
     - [openclaw github](https://github.com/openclaw/openclaw)
@@ -639,7 +651,17 @@
 
 ### GenAI Business Application
   - [Quick Suite]
-    - [A Complete Guide to Amazon Quick Suite](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
+    - [A Complete Guide to Amazon Quick Suite - HR scenario](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
+      - [规模化HR团队（SSC/HRBP/COE）Quick Desktop workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/57d4c79a-b861-4b25-b1bd-645561005bef/zh-CN)
+  - [Quick Desktop]
+    - [quick-dingtalk-mcp](https://github.com/keithyt06/quick-dingtalk-mcp)
+    - [feishu-quick-mcp](https://amzn-chn.feishu.cn/wiki/GHWLwdSv4ipMyUkA71vcHhxFnfh)
+      - `lark-cli auth login --scope "im:message im:message.send_as_user im:message:readonly im:message.group_msg:get_as_user im:message.p2p_msg:get_as_user im:chat:read search:message contact:user:search contact:user.base:readonly docx:document:create docx:document:readonly docx:document:write_only search:docs:read"`
+      - [为 Amazon Quick Desktop 提供飞书工具能力的远程 MCP 服务](https://github.com/ddpie/lark-mcp-on-agentcore)
+    - [用 Amazon Quick Desktop 实现小红书从选题到发布的全流程自动化](https://events.amazoncloud.cn/labs/cloudlab-quick-rednote)
+    - [Quick 企业版如何配置desktop 和web 使用同一个账号登陆]
+      - [使用 Keycloak 作为 IDP 实现 Amazon Quick SSO 配置指南](https://amzn-chn.feishu.cn/docx/NmKkdOcZAo60DPxRB2zcUnxLnff)
+      - [Okta + IAM Identity Center 配置指南](https://amzn-chn.feishu.cn/docx/UGsOdKOYnoRgqFxfhFpcFljinWf) 
   - [Frontier Agent]
     - [introducing-openai-frontier](https://openai.com/index/introducing-openai-frontier/)
 
@@ -1174,7 +1196,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### WAF
 - [aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
-
+- [WAF Agent Bot](https://github.com/aws-samples/sample-building-a-conversational-ai-agent-for-aws-waf-analysis-with-agentcore)
 - [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
 - [WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
 - [使用 Amazon WAF 进行 Captcha人机验证](https://aws.amazon.com/cn/blogs/china/use-amazon-waf-for-captcha-man-machine-verification/)
@@ -2032,6 +2054,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### AI in the office
 - [minimax office  skills](https://github.com/MiniMax-AI/skills?tab=readme-ov-file)
 - [Frontend Slides creating stunning, animation-rich HTML presentations — from scratch or by converting PowerPoint files](https://github.com/zarazhangrui/frontend-slides)
+- [Beatiful HTML presentation template](https://github.com/zarazhangrui/beautiful-html-templates)
 
 
 ## Metaverse
