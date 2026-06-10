@@ -590,6 +590,8 @@ Analyze Shinho account in detail and create recovery action plan
 # Summary inisghts for 4 industry and generate PPT
 From[CMHK_REV_01] MBR Usage & Rev Dashboard → 1.Rev, help me list the top 10 YTD SRP Rev Account and top 10 YTD SRP Rev Account with YTD Attn lower than 80% in 4 industry: RTL_CPG_H, FSI, LS_HC, Cross Industry.You can filter the industry by SH_L4 Unit. The output summary and insight generate the PPT with AWS 2025 version template. Or Export the data as a Word document  
 
+访问 [CMHK_REV_01] MBR Usage & Rev Dashboard，分析各个子行业 usage and rev 的月度 trending 同时给我每个行业 Top 10 usage account trending
+
 # From
 From [CMHK PPL 01] Pipeline & Inputs Management Dashboard → 1. Creation, help me list the ARR Top10 的 Open Opportunities in 4 industry: RTL_CPG_H, FSI, LS_HC, Cross. From [CMHK PPL 01] Pipeline & Inputs Management Dashboard →  2.Conversion help me list the ARR Top10 的 Launched Opportunities in 4 industry: RTL_CPG_H, FSI, LS_HC, Cross. You can filter the industry by SH_L4 Unit.
 ```
