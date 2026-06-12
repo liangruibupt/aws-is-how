@@ -615,4 +615,6 @@ From [CMHK PPL 01] Pipeline & Inputs Management Dashboard → 1. Creation, help 
 我要搭建一个BMS (Battery Management System) 专家 Agent，但是我缺少 domain knowledge，你帮我搭建出一个 prototype，包括前端页面，一个 chat window，sample dashboard, sample question 等
 
 接入 LLM 后端实现真实对话, 添加故障诊断引擎, 导出为可分享的 HTML 文件, 对接真实 BMS 数据源的参考代码
+
+Use HTML to create an animated diagram of the solar system's orbital motion for middle school classroom teaching.
 ```

@@ -739,6 +739,7 @@
   - [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
   - [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
   - [GPU Perf - LLM GPU推理性能可视化平台](https://github.com/yytdfc/llm-performance-viz)
+  - [Chip and Morta - AWS Chip Strategy](https://www.airealist.ai/p/chip-and-mortar)
   - [GPU 虚拟化]
     - [Nvidia MIG]
       - [基于 MIG 技术在 Amazon SageMaker HyperPod 上实现 GPU 虚拟化](https://aws.amazon.com/cn/blogs/china/gpu-virtualization-using-mig-technology-on-amazon-sagemaker-hyperpod/)
