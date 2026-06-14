@@ -499,6 +499,7 @@
     - [我给 Claude Code 做了个 AI 硬件监工 - claude-desktop-buddy M5 Paper Buddy](https://mp.weixin.qq.com/s/l05ETEEFnEYOdJqiiyT9HQ)
     - [Claude Code Security Reviewer](https://github.com/anthropics/claude-code-security-review)
     - [cc-connect Bridge AI Agents to Chat Platform with ACP](https://github.com/chenhg5/cc-connect)
+    - [Remote Claude Control by Feishu and Tmux](https://github.com/w0yne/remote-claude-control)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
@@ -514,6 +515,7 @@
     - [在 EKS 上部署 Outline Wiki，集成完整的可观测性方案（Prometheus + Grafana + OpenSearch）以及 AWS DevOps Agent。包含飞书通知和故障注入脚本，用于现场演示场景](https://github.com/JoeShi/devops-agent-demo)
     - [DevOps Agent exposed as ACP and MCP](https://docs.aws.amazon.com/devopsagent/latest/userguide/working-with-devops-agent-interfacing-with-the-devops-agent.html)
     - [把 AWS DevOps Agent 连接到部署在 EKS 上的自建 MCP Server，通过 VPC Lattice Private Connection 在私网完成 AWS 中国区以及其他云的管理](https://github.com/warren830/aws-devops-agent)
+    - [将阿里云 云效（Yunxiao） 官方 MCP server，以容器形式托管到 Amazon Bedrock AgentCore Runtime，对外暴露为一个受 IAM/SigV4 保护的远程 MCP 端点，供 AWS DevOps Agent 等 MCP 客户端调用](https://github.com/keithyt06/aliyun-yunxiao-mcp-agentcore)
 
 ### Agent workflow and Framework
   - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
@@ -631,6 +633,7 @@
     - [How We Built a 4-Layer Progressive Memory System](https://github.com/xg-gh-25/SwarmAI/discussions/37)
   - [Agent Payment]
     - [Agents that transact: Introducing Amazon Bedrock AgentCore payments, built with Coinbase and Stripe](https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/)
+    - [基于Amazon Bedrock AgentCore与 x402 的Agentic Payment 方案](https://aws.amazon.com/cn/blogs/china/ai-agent-based-on-amazon-bedrock-agentcore-x402-agentic-payment-solution/)
 ### OpenClaw
   - [Tech Parts]
     - [openclaw github](https://github.com/openclaw/openclaw)

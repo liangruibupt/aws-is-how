@@ -28,7 +28,7 @@
   - [25. Write the Amazon narrative](#25-write-the-amazon-narrative)
   - [26. NotebookLLM](#26-notebookllm)
   - [27. 投研助手](#27-投研助手)
-  - [28. Review doc 助手](#28-review-doc-助手)
+  - [28. MBR / MMR / QBR Review doc 助手](#28-mbr--mmr--qbr-review-doc-助手)
   - [29. Agent Teams](#29-agent-teams)
   - [30. Interactive Discussion](#30-interactive-discussion)
   - [31. Dashboard Inisights](#31-dashboard-inisights)
@@ -553,11 +553,40 @@ https://www.aboutamazon.com/news/aws/amazon-open-ai-strategic-partnership-invest
 输出是HTML格式，要美观，符合主流AI Gemini 或者Claude 风格
 ```
 
-## 28. Review doc 助手
+## 28. MBR / MMR / QBR Review doc 助手
 ```
 我需要写一个Q1 的 review word 文档，文档的格式需要严格遵守模板 MBR/APJC Tech Review Template.docx，其中’2.0 State of the Union‘ 这个章节可以忽略，其他章节都需要撰写。 注意文档是narrative 的方式，不是表格方式。word 总页数在 3 页以内。 文档的素材来自于 MBR 目录下的两个 markdown 文件，Migration/OP2_Migration_Summary.md, GenAI/RCH_GenAI_Analysis.md, GenAI/RCH_GenAI_Executive_Briefing.docx。如何生成 Word 文档，你可以参考 GenAI/gen_briefing.py
 
 Rewrite in Amazon Writing Style
+
+For Q2 QBR, I will need to prepare a 2-pager document for topic: Capture the Enterprise Agentic AI Transformation Wave. Please prepare a brief writeup on observation, initiative, opportunity, risk/challenge/blocker, and support need/asks. 
+- Observation: How industry-line customers are changing; customer expectations  
+- Initiative (key focus): What cards we hold and how we drive next (staged milestones + owner) 
+
+The input as below files: 
+1. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/QBR/RFHC_SA_Q1_Review.docx
+2. '/Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/QBR/Tech trends doc for AGS Leadership - CMHK.docx' - You can check the main body part, for he appendix part only need focusing on LS_HC, CI (Cross Industry), FSI, RTL_CPG_H / 'Retail CPG H' 4 industries
+3. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/MMR/Markdown/MMR-2026-RFHC-SA.md
+4. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/OP1_OP2/GenAI
+5. Agentic AI use case summary /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/MMR/Markdown/MMR-2026-RFHC-SA-AgenticAI-UseCases.md
+
+The output is a 2 page docx file.
+
+
+
+I need write how to leverage AI to drive Cross Service core (Traditional Infrastructure services) revenue?
+-Initiatives, such as 1) data gravity, 2) AI drive migration, 3) AI drive modernization to defense other competitors, the other good idea beyond these 3 Initiatives
+For Initiatives, we need the input goals and output goals
+-what success metics looks like?
+
+The input as below files: 
+1. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/OP1_OP2/Migration
+2. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/QBR
+3. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/MMR/Markdown/MMR-2026-RFHC-SA.md
+4. /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/OP1_OP2/GenAI
+
+The output is a 1 page docx file
+
 ```
 
 ## 29. Agent Teams
