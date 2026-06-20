@@ -584,6 +584,7 @@
     - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
   - [Bedrock AgentCore]
       - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
+      - [New in Amazon Bedrock AgentCore: Build agents with broader knowledge and continuous learning](https://aws.amazon.com/blogs/machine-learning/new-in-amazon-bedrock-agentcore-build-agents-with-broader-knowledge-and-continuous-learning/)
       - [Agent Core Hands on Lab]
         - [QuickStart](ai-ml/chatgpt/agent/bedrock_agentcore/quickstart/amazon-bedrock-agentcore-quickstart-key-components.md)
           - Above quick start based on [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
@@ -662,6 +663,7 @@
       - `lark-cli auth login --scope "im:message im:message.send_as_user im:message:readonly im:message.group_msg:get_as_user im:message.p2p_msg:get_as_user im:chat:read search:message contact:user:search contact:user.base:readonly docx:document:create docx:document:readonly docx:document:write_only search:docs:read"`
       - [为 Amazon Quick Desktop 提供飞书工具能力的远程 MCP 服务](https://github.com/ddpie/lark-mcp-on-agentcore)
     - [用 Amazon Quick Desktop 实现小红书从选题到发布的全流程自动化](https://events.amazoncloud.cn/labs/cloudlab-quick-rednote)
+    - [Amazon Quick Web & Desktop 企业级 Agentic AI 实战工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/1477fb37-26c3-4ccc-ac93-380b5b8e0bed/zh-CN)
     - [Quick 企业版如何配置desktop 和web 使用同一个账号登陆]
       - [使用 Keycloak 作为 IDP 实现 Amazon Quick SSO 配置指南](https://amzn-chn.feishu.cn/docx/NmKkdOcZAo60DPxRB2zcUnxLnff)
       - [Okta + IAM Identity Center 配置指南](https://amzn-chn.feishu.cn/docx/UGsOdKOYnoRgqFxfhFpcFljinWf) 
@@ -2105,6 +2107,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [BMW Connected Drive Migration Case](https://aws.amazon.com/solutions/case-studies/bmw-group-migration/)
   - [汽车服务图谱增强检索方案](https://aws.amazon.com/cn/blogs/china/automotive-services-graphrag/)
   - [车联网 AIoT 管理控制台](https://aws.amazon.com/cn/blogs/china/vehicle-internet-of-things-aiot-management-console/)
+  - [Real-Time Geo-Fencing and Automate Alert Triage with Agentic AI](https://studio.us-east-1.prod.workshops.aws/workshops/c05fdfcb-fb8b-4a89-a0b5-3c6bd78dc9)
 
 - [Smart Cockpit]
   - [Building the Future of In-Vehicle Experiences with AWS Generative AI Solutions: A Strategic Overview](https://aws.amazon.com/blogs/industries/building-the-future-of-in-vehicle-experiences-with-aws-generative-ai-solutions/)

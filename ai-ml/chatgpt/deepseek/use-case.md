@@ -34,6 +34,7 @@
   - [31. Dashboard Inisights](#31-dashboard-inisights)
   - [32. xiaohongshu](#32-xiaohongshu)
   - [33. Quick BMS Demo](#33-quick-bms-demo)
+  - [34. Promotion Doc review](#34-promotion-doc-review)
 
 ---
 
@@ -505,11 +506,6 @@ You are a Solution Architect Senior Manager, you need maximize the projects win 
 Based on the data point in @fileName, I need write a promotion document for my direct report, a solutions architect manager, please help write paragraph about his ownership and delivery result 
 
 You are a sales director, I need write a promotion feedback for my peer - Solutions Architect Senior Manager to his leadership in earn trust, ownership and delivery result. In the style of Amazon Narrative writing, Please write paragraph as a native English speaker and make it concise.
-
-
-基于 SA Role Guideline (L6 expectations) + SA Promotion Toolkit Q2 2026，从SA Leadership视角，进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
-
-基于 CSM Role Guideline (L6 expectations) + SA Promotion Toolkit Q2 2026，从SA Leadership视角，进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
 ```
 
 ## 26. NotebookLLM
@@ -587,6 +583,17 @@ The input as below files:
 
 The output is a 1 page docx file
 
+Initiatives is narrative + action + target customer or customer ratio + success metrics. 
+The success metric example: 50%+ SDE AI coding on AWS at lighthouse accounts, 20+ account adopted AIPLC and data AIDLC seperately.
+
+I listed the initiatives
+1. Scale AI Coding. For AI Coding, we are not only replace the tools but focus on workflows are redesigned around AI technology stack and aligned with business outcomes. So we will extend to AIPLC and Data AIDLC.
+2. Drive Frontier Agents scale at production. We have build strong pipeline, now need move to production.
+3. Using Quick in no-tech persona to practice CDE engagement and Using Bedrock + AgentCore to reignite industry solutions in LoB
+4. Build Agent Data Layer (memory / semantic / domain knowledge) in new Platform and Revisit customer existed agent workloads to enhance the Data Layer - Data Gravity。
+5. Leverage AI to accelerate Core-services Migration and modernization
+
+So write the initiatives part
 ```
 
 ## 29. Agent Teams
@@ -646,4 +653,11 @@ From [CMHK PPL 01] Pipeline & Inputs Management Dashboard → 1. Creation, help 
 接入 LLM 后端实现真实对话, 添加故障诊断引擎, 导出为可分享的 HTML 文件, 对接真实 BMS 数据源的参考代码
 
 Use HTML to create an animated diagram of the solar system's orbital motion for middle school classroom teaching.
+```
+
+## 34. Promotion Doc review
+```
+基于 SA Role Guideline (L6 expectations) + SA/CSM Promotion Toolkit Q2 2026，从SA Org Leadership视角，对候选人promotion doc 进行 L6 SA的评估， 进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
+
+基于 CSM Role Guideline (L6 expectations) + SA/CSM Promotion Toolkit Q2 2026，从SA Org Leadership视角，进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
 ```
