@@ -18,6 +18,15 @@
     - [Scenario based GenAI](#scenario-based-genai)
     - [Vector database](#vector-database)
     - [LLM Models](#llm-models)
+      - [Claude](#claude)
+      - [OpenAI GPT](#openai-gpt)
+      - [Llama](#llama)
+      - [Nova](#nova)
+      - [Deepseek](#deepseek)
+      - [China otherLLM](#china-otherllm)
+      - [More Open-Source Model](#more-open-source-model)
+      - [vllm and ollma](#vllm-and-ollma)
+    - [World Models](#world-models)
     - [Bedrock practice](#bedrock-practice)
     - [RLHF](#rlhf)
     - [Knowledge Base](#knowledge-base)
@@ -181,7 +190,7 @@
     - [物流和供应链](#物流和供应链)
   - [FSI](#fsi)
     - [Online Banking](#online-banking)
-    - [Hospitality](#hospitality)
+  - [Hospitality](#hospitality)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
   - [Summary of the Amazon DynamoDB Service Disruption in Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/cn/message/101925/)
@@ -313,6 +322,7 @@
     - [莉莉丝项目组在 GenAI 的技术实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-technical-practice-on-genai/)  
     - [莉莉丝项目组在大模型多模态上的实践](https://aws.amazon.com/cn/blogs/china/lilith-farlight84-practice-on-large-model-multi-modality/)
     - [open-gallery生图片](https://github.com/qingyuan18/open-gallery.git)
+    - [不同模型的出图效果（附Prompt）](https://mp.weixin.qq.com/s/fz5AqZuRH9nFQnBmyk2B9Q)
   - [Amazon Nova 生成图片 Prompt](https://mp.weixin.qq.com/s/avxar5vm0ShNj_7bjoacgQ)
   - [GPT-Image-2]
     - [65个GPT Image 2实测用例（含Prompt）](https://mp.weixin.qq.com/s/f0vdYTP1Z9aDJeEkTonjhA)
@@ -380,7 +390,8 @@
     - [Amazon S3 Vectors Embed CLI](https://github.com/awslabs/s3vectors-embed-cli)
   
 ### LLM Models
-  - [Claude]
+#### Claude
+  - [Claude Workshop]
     - [Amazon Bedrock Claude3 Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/en-US)
     - [Claude Artifacts workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
     - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
@@ -388,20 +399,27 @@
     - [Opus 4.7 + claude code 问题汇总 2026.04.20](https://amzn-chn.feishu.cn/docx/SA6ddWe4LoLeEsxyGIIcN1cJnpf)
     - [From developer desks to the whole organization: Running Claude Cowork in Amazon Bedrock](https://aws.amazon.com/cn/blogs/machine-learning/from-developer-desks-to-the-whole-organization-running-claude-cowork-in-amazon-bedrock/)
     - [Claude Platform on AWS: Anthropic’s native platform, through your AWS account](https://aws.amazon.com/blogs/machine-learning/introducing-claude-platform-on-aws-anthropics-native-platform-through-your-aws-account/)
-  - [Llama]
-    - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
-  - [Nova]
-    - [Amazon Nova Multimodal understanding workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/012d9c20-25dc-4065-bdb6-50e935e8bd9f/en-US/030-hands-on-labs)
-    - [用 Amazon Bedrock 与 Nova 大模型构建客户之声解决方案](https://github.com/aws-samples/voice-of-customer-classification-for-retail-with-amazon-foundation-models)
-    - [Amazon Nova Canvas and Amazon Nova Reel Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/66a0984a-ad2b-481f-a1cf-e7896ea9595b/en-US)
-    - [Nova Sonic Speech-to-Speech Model Samples](https://github.com/aws-samples/amazon-nova-samples/tree/main/speech-to-speech)
+    - [斯坦福 STORM 方法：怎样让 Claude 在几分钟内像博士一样做研究](ai-ml/chatgpt/claude/Claude-with-STORM-Research.md)
+#### OpenAI GPT
+  - [GPT-OSS]
+    - [Fine-tune OpenAI GPT-OSS models on Amazon SageMaker AI using Hugging Face libraries](https://aws.amazon.com/blogs/machine-learning/fine-tune-openai-gpt-oss-models-on-amazon-sagemaker-ai-using-hugging-face-libraries/)
+    - [GPT OSS models from OpenAI are now available on SageMaker JumpStart](https://aws.amazon.com/cn/blogs/machine-learning/gpt-oss-models-from-openai-are-now-available-on-sagemaker-jumpstart/)
+  - [GPT 闭源模型]
+
+#### Llama
+  - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
+#### Nova
+  - [Amazon Nova Multimodal understanding workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/012d9c20-25dc-4065-bdb6-50e935e8bd9f/en-US/030-hands-on-labs)
+  - [用 Amazon Bedrock 与 Nova 大模型构建客户之声解决方案](https://github.com/aws-samples/voice-of-customer-classification-for-retail-with-amazon-foundation-models)
+  - [Amazon Nova Canvas and Amazon Nova Reel Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/66a0984a-ad2b-481f-a1cf-e7896ea9595b/en-US)
+  - [Nova Sonic Speech-to-Speech Model Samples](https://github.com/aws-samples/amazon-nova-samples/tree/main/speech-to-speech)
     - [nova-sonic Web Demo](https://nova-sonic.teague.live/login)
     - [Amazon Nova Sonic (speech-to-speech) Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/5238419f-1337-4e0f-8cd7-02239486c40d/en-US)
-    - [Nova MME nova-multimodal-embedding-model practice](https://aws.amazon.com/cn/blogs/china/amazon-nova-multimodal-embedding-model-practical-guide/)
-    - [Amazon SageMaker Inference for custom Amazon Nova models](https://aws.amazon.com/blogs/aws/announcing-amazon-sagemaker-inference-for-custom-amazon-nova-models/)
-      - [和 Nova Forge 是否有结合，或者两者如何进行定位? 这里提的是指轻量的微调，不是那种有数据混合的, 数据混合的还是采用 Nova Forge]
-  - [Deepseek]
-    - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
+  - [Nova MME nova-multimodal-embedding-model practice](https://aws.amazon.com/cn/blogs/china/amazon-nova-multimodal-embedding-model-practical-guide/)
+  - [Amazon SageMaker Inference for custom Amazon Nova models](https://aws.amazon.com/blogs/aws/announcing-amazon-sagemaker-inference-for-custom-amazon-nova-models/)
+    - [和 Nova Forge 是否有结合，或者两者如何进行定位? 这里提的是指轻量的微调，不是那种有数据混合的, 数据混合的还是采用 Nova Forge]
+ #### Deepseek
+  - [Deepseek on AWS deployment](https://aws.amazon.com/cn/blogs/aws/deepseek-r1-models-now-available-on-aws/)
     - [deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/)
     - [轻松部署DeepSeek-R1 671B动态量化模型](https://github.com/aws-samples/llm_deploy_gcr/blob/main/sagemaker/DeepSeek-R1-671b_dynamic-quants/deploy_and_test.ipynb)
     - [Graviton4 Run Deepseek](https://community.aws/content/2rhRJI6cxBa1Ib5f3TjsfPadpXs/deploying-deepseek-r1-distill-llama-70b-for-batch-inference-on-aws-graviton4)
@@ -410,18 +428,22 @@
     - [使用亚马逊云科技自研芯片 Inferentia2 部署 DeepSeek R1 Distillation 模型（二）](https://aws.amazon.com/cn/blogs/china/deploying-the-deepseek-r1-distillation-model-using-amazon-inferentia2-part-two/)
     - [本地 671B DeepSeek-Coder-V3/R1: 仅使用 14GB 显存和 382GB 内存运行其 Q4_K_M 版本](https://github.com/kvcache-ai/ktransformers/blob/main/doc/zh/DeepseekR1_V3_tutorial_zh.md)
     - [Hosting DeepSeek-R1 on Amazon EKS](https://github.com/aws-samples/deepseek-using-vllm-on-eks)
-  - [China otherLLM]
-    - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
-    - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
-    - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+#### China otherLLM
+  - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
+  - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
+  - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+#### More Open-Source Model
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
-  - [vllm and ollma]
-    - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
-    - [lightweight tool designed to simplify models deployment](https://github.com/aws-samples/easy-model-deployer)
-    - [Testing LLM API performance with automated deployment and extensive test matrices: Throughput, First Token Latency, Percentiles, End-to-End Latency, Output Tokens Per Second](https://github.com/yytdfc/llm-performance-viz/blob/main/README_CN.md)
-  - [GPT-OSS]
-    - [Fine-tune OpenAI GPT-OSS models on Amazon SageMaker AI using Hugging Face libraries](https://aws.amazon.com/blogs/machine-learning/fine-tune-openai-gpt-oss-models-on-amazon-sagemaker-ai-using-hugging-face-libraries/)
-    - [GPT OSS models from OpenAI are now available on SageMaker JumpStart](https://aws.amazon.com/cn/blogs/machine-learning/gpt-oss-models-from-openai-are-now-available-on-sagemaker-jumpstart/)
+  - [Gemma]
+    - [Google DeepMind’s DiffusionGemma for Local AI](https://blogs.nvidia.com/blog/rtx-ai-garage-local-gemma-diffusion/) (https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/)
+#### vllm and ollma
+  - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
+  - [lightweight tool designed to simplify models deployment](https://github.com/aws-samples/easy-model-deployer)
+  - [Testing LLM API performance with automated deployment and extensive test matrices: Throughput, First Token Latency, Percentiles, End-to-End Latency, Output Tokens Per Second](https://github.com/yytdfc/llm-performance-viz/blob/main/README_CN.md)
+
+
+### World Models
+- [Learn World Models](https://github.com/datawhalechina/learn-world-model/blob/main/README-CN.md)
   
 ### Bedrock practice
   - [Patterns for Building Generative AI Applications on Amazon Bedrock](https://community.aws/posts/build-generative-ai-applications-with-amazon-bedrock)
@@ -477,6 +499,8 @@
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
 
 ### AI Coding
+  - [Ontoplogy on AI Coding]
+    - [GitNexus: The Zero-Server Code Intelligence Engine - GitNexus is a client-side knowledge graph creator that runs entirely in your browser.](https://github.com/abhigyanpatwari/GitNexus)
   - [Amazon Q Developer/Kiro]
     - [Kiro Community](https://github.com/kiro-community/)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -657,6 +681,7 @@
   - [Quick Suite]
     - [A Complete Guide to Amazon Quick Suite - HR scenario](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
       - [规模化HR团队（SSC/HRBP/COE）Quick Desktop workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/57d4c79a-b861-4b25-b1bd-645561005bef/zh-CN)
+      - [Quick Flow workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a8484e57-2e30-40ee-bd98-0122f0d05acc/en-US)
   - [Quick Desktop]
     - [quick-dingtalk-mcp](https://github.com/keithyt06/quick-dingtalk-mcp)
     - [feishu-quick-mcp](https://amzn-chn.feishu.cn/wiki/GHWLwdSv4ipMyUkA71vcHhxFnfh)
@@ -1850,6 +1875,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 [AWS Well-Architected]
   - [AWS Well-Architected labs](https://wellarchitectedlabs.com/)
   - [AWS Well-Architected Labs in Chinese](http://wa.bwcx.me/)
+  - [AWS Well-Architected Agent SKILL](https://github.com/aws-samples/sample-aws-resilience-skill/tree/master/aws-well-architected-review)
+  - [Resilience and Seucirty - SSR KPI 实操指南(Quick Apps版本 + Desktop版本)](https://amzn-chn.feishu.cn/docx/FnDldUD4fo8jnQx7wBxckSMAn8e)
 
 
 [Organizing Your AWS Environment Using Multiple Accounts]
@@ -2192,8 +2219,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   
 ## FSI
 ### Online Banking
+- [Claude for Financial Services 中文全解](https://mp.weixin.qq.com/s/w-4hoSO-j0Uy_uw2KcwkEw)
 
-### Hospitality
+## Hospitality
 - [travel concierge agent](https://github.com/awslabs/amazon-bedrock-agentcore-samples/tree/main/05-blueprints/travel-concierge-agent)
 - [基于AgentCore构建自学习、可进化的文旅行业近似信息抽取Agents](https://aws.amazon.com/cn/blogs/china/self-learning-evolvable-agents-for-cultural-tourism-info-extraction-with-agentcore/)
 - [PKFARE Introduces AI Customer Service Agent to Simplify Post-Ticketing Automation in Flight Distribution](https://aws.amazon.com/cn/blogs/china/pkfare-ai-agent-simplifies-post-ticketing-automation-flight-distribution/)

@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 560" width="820" height="560" font-family="'Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <!-- sky -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"   stop-color="#5fa9e6"/>
+      <stop offset="0.55" stop-color="#9ccdf0"/>
+      <stop offset="1"   stop-color="#dcecf7"/>
+    </linearGradient>
+    <!-- ballast / track bed -->
+    <linearGradient id="ballast" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9bdc0"/>
+      <stop offset="1" stop-color="#8c9196"/>
+    </linearGradient>
+
+    <linearGradient id="gRoof" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e6ebf1"/>
+    </linearGradient>
+    <linearGradient id="gNose" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0"   stop-color="#ffffff"/>
+      <stop offset="0.6" stop-color="#eef2f6"/>
+      <stop offset="1"   stop-color="#cbd5df"/>
+    </linearGradient>
+    <linearGradient id="gSide" x1="0" y1="0" x2="1" y2="0.25">
+      <stop offset="0" stop-color="#dbe1e8"/>
+      <stop offset="1" stop-color="#a6b3bf"/>
+    </linearGradient>
+    <linearGradient id="gMask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c343a"/>
+      <stop offset="1" stop-color="#0d1115"/>
+    </linearGradient>
+    <linearGradient id="gGlass" x1="0.1" y1="0" x2="0.45" y2="1">
+      <stop offset="0"    stop-color="#7e9aab"/>
+      <stop offset="0.45" stop-color="#2a4552"/>
+      <stop offset="1"    stop-color="#0a1118"/>
+    </linearGradient>
+    <linearGradient id="gGlassSide" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0" stop-color="#2e4a57"/>
+      <stop offset="1" stop-color="#0a131b"/>
+    </linearGradient>
+    <linearGradient id="gRed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ea3a41"/>
+      <stop offset="1" stop-color="#bf1722"/>
+    </linearGradient>
+    <linearGradient id="gRedSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d3262f"/>
+      <stop offset="1" stop-color="#9a111c"/>
+    </linearGradient>
+    <linearGradient id="gSkirt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ccd4dc"/>
+      <stop offset="1" stop-color="#a6b1bb"/>
+    </linearGradient>
+    <linearGradient id="gSkirtSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#93a2ac"/>
+      <stop offset="1" stop-color="#6b7983"/>
+    </linearGradient>
+    <radialGradient id="gLight" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0"   stop-color="#ffffff"/>
+      <stop offset="0.4" stop-color="#dbf2ff"/>
+      <stop offset="1"   stop-color="#7cc4ec" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gCoupler" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#717c83"/>
+      <stop offset="1" stop-color="#20262b"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+
+    <!-- near-corner of cab (front meets side) is at x=472; nose snout reaches left -->
+    <clipPath id="clipSide">
+      <path d="M472,168 L786,250 L786,398 L500,452 Z"/>
+    </clipPath>
+    <clipPath id="clipNose">
+      <path d="M96,300 C 168,224 312,180 472,168 L472,470 C 352,484 244,474 176,452 C 130,438 104,406 100,372 C 98,346 90,320 96,300 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- ===================== BACKGROUND SCENE ===================== -->
+  <rect width="820" height="560" fill="url(#sky)"/>
+
+  <!-- distant low buildings near the horizon -->
+  <g opacity="0.85">
+    <rect x="0"   y="338" width="150" height="34" fill="#cdd6dd"/>
+    <rect x="150" y="328" width="120" height="44" fill="#bcc7cf"/>
+    <rect x="600" y="334" width="120" height="38" fill="#c6d0d7"/>
+    <rect x="720" y="324" width="100" height="48" fill="#b6c2ca"/>
+  </g>
+
+  <!-- catenary masts + wires -->
+  <g stroke="#7c858b" fill="none" stroke-linecap="round">
+    <!-- mast 1 (right) -->
+    <line x1="690" y1="60"  x2="690" y2="372" stroke-width="6"/>
+    <line x1="690" y1="96"  x2="560" y2="120" stroke-width="3"/>
+    <line x1="690" y1="130" x2="560" y2="150" stroke-width="3"/>
+    <!-- mast 2 (far right edge) -->
+    <line x1="792" y1="40"  x2="792" y2="330" stroke-width="6"/>
+    <line x1="792" y1="80"  x2="690" y2="96"  stroke-width="3"/>
+    <!-- contact + messenger wires sweeping toward the vanishing point (left/low → right/up) -->
+    <line x1="20"  y1="208" x2="792" y2="74"  stroke-width="1.6" stroke="#5f686e"/>
+    <line x1="20"  y1="236" x2="792" y2="104" stroke-width="1.6" stroke="#5f686e"/>
+    <line x1="120" y1="150" x2="690" y2="96"  stroke-width="1.4" stroke="#697178"/>
+    <!-- droppers -->
+    <line x1="300" y1="196" x2="300" y2="214" stroke-width="1"/>
+    <line x1="430" y1="180" x2="430" y2="200" stroke-width="1"/>
+    <line x1="560" y1="120" x2="560" y2="150" stroke-width="1"/>
+  </g>
+
+  <!-- track bed: ballast band + rails receding to the right -->
+  <polygon points="0,470 820,398 820,560 0,560" fill="url(#ballast)"/>
+  <g stroke="#6f767b" stroke-width="1" opacity="0.5">
+    <line x1="40" y1="498" x2="820" y2="430"/>
+    <line x1="40" y1="540" x2="820" y2="470"/>
+  </g>
+  <!-- a couple of rails (steel) -->
+  <polygon points="470,520 820,452 820,460 470,528" fill="#7d878d"/>
+  <polygon points="540,548 820,486 820,496 540,558" fill="#7d878d"/>
+
+  <!-- ground shadow under the train -->
+  <ellipse cx="420" cy="498" rx="360" ry="30" fill="#3a2f32" opacity="0.28" filter="url(#shadow)"/>
+
+  <!-- ===================== ROOF ===================== -->
+  <path d="M96,300
+           C 168,224 312,180 472,168
+           L 786,250
+           C 690,266 560,286 500,300
+           C 372,272 230,250 150,266
+           C 124,272 104,288 96,300 Z"
+        fill="url(#gRoof)" stroke="#2b3a44" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="320,198 478,186 568,202 408,218" fill="#dde6ec" stroke="#c2cdd4" stroke-width="1"/>
+  <polygon points="548,200 668,214 716,230 600,216" fill="#d7e1e7" stroke="#bdc9d0" stroke-width="1"/>
+
+  <!-- ===================== SIDE FACE (stronger convergence) ===================== -->
+  <path d="M472,168 L786,250 L786,398 L500,452 Z"
+        fill="url(#gSide)" stroke="#2b3a44" stroke-width="2" stroke-linejoin="round"/>
+  <g clip-path="url(#clipSide)">
+    <!-- window strip -->
+    <polygon points="498,232 770,300 770,346 498,318" fill="url(#gGlassSide)" stroke="#243038" stroke-width="2"/>
+    <polygon points="572,250 581,252 581,338 572,335" fill="url(#gSide)"/>
+    <polygon points="646,268 655,270 655,344 646,342" fill="url(#gSide)"/>
+    <polygon points="712,284 721,286 721,349 712,347" fill="url(#gSide)"/>
+    <polygon points="512,236 600,256 580,286 504,266" fill="#ffffff" opacity="0.10"/>
+    <!-- red line along window top -->
+    <polygon points="498,224 786,238 786,250 498,236" fill="url(#gRedSide)"/>
+    <!-- bold lower-body red swoosh — rises toward the rear (right) -->
+    <path d="M500,430
+             C 580,406 660,392 786,360
+             L 786,344
+             C 660,374 580,388 506,412
+             C 502,414 500,418 500,422 Z"
+          fill="url(#gRedSide)"/>
+  </g>
+  <text x="556" y="380" font-size="15" font-weight="700" fill="#c01a22" transform="rotate(-5 556 380)">22 号线 · 平谷线</text>
+  <!-- side skirt -->
+  <polygon points="500,420 786,360 786,398 500,452 Z" fill="url(#gSkirtSide)" stroke="#5f6f78" stroke-width="1"/>
+  <ellipse cx="612" cy="424" rx="34" ry="18" fill="#2a343b" opacity="0.5"/>
+
+  <!-- ===================== FRONT: streamlined high-speed nose ===================== -->
+  <path d="M96,300
+           C 168,224 312,180 472,168
+           L 472,470
+           C 352,484 244,474 176,452
+           C 130,438 104,406 100,372
+           C 98,346 90,320 96,300 Z"
+        fill="url(#gNose)" stroke="#2b3a44" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <g clip-path="url(#clipNose)">
+    <!-- black cab mask (roof cap + windscreen surround) -->
+    <path d="M108,300
+             C 176,236 312,196 466,190
+             L 462,380
+             C 352,392 232,388 168,380
+             C 144,377 128,358 126,334
+             C 125,320 124,308 108,300 Z"
+          fill="url(#gMask)"/>
+    <!-- panoramic glass -->
+    <path d="M142,300
+             C 204,244 318,218 446,224
+             L 442,346
+             C 330,354 224,350 178,345
+             C 158,343 150,330 150,316 Z"
+          fill="url(#gGlass)" stroke="#070d12" stroke-width="1"/>
+    <path d="M168,298 C 214,256 286,236 344,230 L 322,350 C 270,350 210,348 176,344 Z" fill="#bfe6f7" opacity="0.08"/>
+    <polygon points="206,344 252,250 268,252 226,348" fill="#ffffff" opacity="0.09"/>
+    <!-- wipers -->
+    <line x1="196" y1="346" x2="276" y2="272" stroke="#0c161c" stroke-width="2.4" stroke-linecap="round"/>
+    <line x1="300" y1="350" x2="372" y2="278" stroke="#0c161c" stroke-width="2.4" stroke-linecap="round"/>
+
+    <!-- FRONT RED LINE: thin piping tracing the LOWER edge of the black mask,
+         sweeping up over the shoulder to meet the side's upper red line -->
+    <path d="M104,332
+             C 176,266 320,222 470,214
+             L 470,196
+             C 316,202 174,244 110,308
+             C 105,316 102,324 104,332 Z"
+          fill="url(#gRed)"/>
+    <!-- lower-body red swoosh on the nose, continuous with the side wave -->
+    <path d="M104,420
+             C 190,398 320,396 472,410
+             L 472,392
+             C 320,378 196,382 122,406
+             C 114,409 106,414 104,420 Z"
+          fill="url(#gRed)"/>
+  </g>
+
+  <!-- swept LED headlights at lower nose corners -->
+  <path d="M120,392 C 152,386 196,383 232,383 L 234,404 C 198,405 158,408 128,416 C 122,408 118,400 120,392 Z" fill="#10171d"/>
+  <path d="M126,393 C 156,388 196,386 228,385 L 230,401 C 196,402 160,405 132,411 Z" fill="url(#gLight)" filter="url(#glow)"/>
+  <path d="M362,392 L440,384 L442,405 L364,413 Z" fill="#10171d"/>
+  <path d="M366,395 L436,388 L438,402 L368,409 Z" fill="url(#gLight)" filter="url(#glow)"/>
+
+  <!-- exposed front coupler -->
+  <polygon points="246,456 360,466 356,506 242,494" fill="url(#gCoupler)" stroke="#0d141a" stroke-width="1.5"/>
+  <rect x="278" y="470" width="48" height="18" rx="3" fill="#0c1216"/>
+  <line x1="258" y1="474" x2="258" y2="492" stroke="#0c1216" stroke-width="3"/>
+  <line x1="344" y1="474" x2="344" y2="494" stroke="#0c1216" stroke-width="3"/>
+
+  <!-- route roundel -->
+  <circle cx="196" cy="428" r="27" fill="#ffffff" stroke="#d12530" stroke-width="4"/>
+  <text x="196" y="438" text-anchor="middle" font-size="26" font-weight="800" fill="#c01a22">22</text>
+
+  <!-- near corner edge -->
+  <line x1="472" y1="168" x2="472" y2="470" stroke="#ffffff" stroke-width="1.6" opacity="0.5"/>
+  <line x1="472" y1="168" x2="472" y2="470" stroke="#2b3a44" stroke-width="0.9" opacity="0.55"/>
+
+  <!-- caption -->
+  <rect x="28" y="516" width="430" height="30" rx="5" fill="#ffffff" opacity="0.72"/>
+  <text x="40" y="537" font-size="19" font-weight="700" fill="#c01a22">北京地铁 22 号线（平谷线）· 市域 D 型车 160 km/h</text>
+</svg>

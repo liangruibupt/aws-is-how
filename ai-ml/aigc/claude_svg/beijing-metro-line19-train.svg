@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 560" width="820" height="560" font-family="'Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <!-- depot hall background -->
+    <linearGradient id="hall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"   stop-color="#cfd6dd"/>
+      <stop offset="0.5" stop-color="#dde2e7"/>
+      <stop offset="1"   stop-color="#b9bfc6"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9aa0a7"/>
+      <stop offset="1" stop-color="#6f757b"/>
+    </linearGradient>
+
+    <linearGradient id="gRoof" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e6ebf1"/>
+    </linearGradient>
+    <linearGradient id="gNose" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0"   stop-color="#ffffff"/>
+      <stop offset="0.6" stop-color="#eef2f6"/>
+      <stop offset="1"   stop-color="#ccd5df"/>
+    </linearGradient>
+    <!-- side recedes to the LEFT and into shade -->
+    <linearGradient id="gSide" x1="1" y1="0" x2="0" y2="0.25">
+      <stop offset="0" stop-color="#dbe1e8"/>
+      <stop offset="1" stop-color="#9eabb7"/>
+    </linearGradient>
+    <!-- big black cab roof-cap / mask -->
+    <linearGradient id="gMask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3137"/>
+      <stop offset="1" stop-color="#0a0d10"/>
+    </linearGradient>
+    <linearGradient id="gGlass" x1="0.1" y1="0" x2="0.4" y2="1">
+      <stop offset="0"    stop-color="#7e96a6"/>
+      <stop offset="0.45" stop-color="#2a4150"/>
+      <stop offset="1"    stop-color="#0a1118"/>
+    </linearGradient>
+    <linearGradient id="gGlassSide" x1="1" y1="0" x2="0" y2="0.4">
+      <stop offset="0" stop-color="#2e4654"/>
+      <stop offset="1" stop-color="#0a131b"/>
+    </linearGradient>
+
+    <!-- Line 19 magenta / rose livery (Pantone 251C family) -->
+    <linearGradient id="gMag" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"   stop-color="#f06fb0"/>
+      <stop offset="0.55" stop-color="#d23b8e"/>
+      <stop offset="1"   stop-color="#9c2f86"/>
+    </linearGradient>
+    <linearGradient id="gMagSide" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#d23b8e"/>
+      <stop offset="1" stop-color="#86266f"/>
+    </linearGradient>
+
+    <linearGradient id="gSkirt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ccd4dc"/>
+      <stop offset="1" stop-color="#a3aeb8"/>
+    </linearGradient>
+    <linearGradient id="gSkirtSide" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#93a2ac"/>
+      <stop offset="1" stop-color="#69767f"/>
+    </linearGradient>
+
+    <radialGradient id="gLight" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0"   stop-color="#ffffff"/>
+      <stop offset="0.4" stop-color="#dbf2ff"/>
+      <stop offset="1"   stop-color="#7cc4ec" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gCoupler" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a858c"/>
+      <stop offset="1" stop-color="#20262b"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+
+    <!-- near corner of cab is on the LEFT at x=348; side recedes left to x=40 -->
+    <clipPath id="clipSide">
+      <path d="M348,150 L40,232 L40,402 L330,452 Z"/>
+    </clipPath>
+    <clipPath id="clipNose">
+      <path d="M724,300 C 652,212 506,166 348,150 L348,470 C 470,486 580,476 648,452 C 694,436 720,402 724,366 C 726,338 732,322 724,300 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- ===================== DEPOT BACKGROUND (low up-angle, train to the RIGHT) ===================== -->
+  <rect width="820" height="560" fill="url(#hall)"/>
+  <!-- ceiling girders / lighting receding to a left vanishing point -->
+  <g stroke="#aab1b8" stroke-width="3" opacity="0.7">
+    <line x1="0" y1="40"  x2="360" y2="120"/>
+    <line x1="0" y1="92"  x2="360" y2="150"/>
+    <line x1="0" y1="150" x2="360" y2="178"/>
+  </g>
+  <g stroke="#c4332f" stroke-width="2.4" opacity="0.7">
+    <line x1="0" y1="64" x2="360" y2="134"/>
+    <line x1="0" y1="120" x2="360" y2="164"/>
+  </g>
+  <!-- ceiling lamps -->
+  <g fill="#f4f6f8" opacity="0.9">
+    <rect x="60"  y="58"  width="46" height="6"/>
+    <rect x="150" y="92"  width="46" height="6"/>
+    <rect x="240" y="124" width="40" height="6"/>
+  </g>
+  <!-- adjacent train on the left track (parallel, in shade) -->
+  <polygon points="0,250 150,214 150,386 0,420" fill="#c8cfd6"/>
+  <polygon points="20,300 150,276 150,300 20,322" fill="#b65b94" opacity="0.8"/>
+  <polygon points="10,262 150,238 150,300 10,322" fill="#23323c" opacity="0.85"/>
+  <!-- elevated maintenance track (floor + rails) -->
+  <polygon points="0,452 820,402 820,560 0,560" fill="url(#floor)"/>
+  <g stroke="#565c61" stroke-width="2" opacity="0.6">
+    <line x1="0" y1="486" x2="820" y2="438"/>
+    <line x1="0" y1="528" x2="760" y2="478"/>
+  </g>
+  <polygon points="300,508 720,470 720,478 300,516" fill="#828c92"/>
+
+  <!-- ground shadow -->
+  <ellipse cx="430" cy="500" rx="350" ry="30" fill="#2c2731" opacity="0.30" filter="url(#shadow)"/>
+
+  <!-- ===================== ROOF ===================== -->
+  <path d="M724,300
+           C 652,212 506,166 348,150
+           L 40,232
+           C 150,248 300,268 360,282
+           C 470,256 600,246 690,266
+           C 708,272 720,288 724,300 Z"
+        fill="url(#gRoof)" stroke="#2b3a44" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- ===================== SIDE FACE (recedes to the LEFT) ===================== -->
+  <path d="M348,150 L40,232 L40,402 L330,452 Z"
+        fill="url(#gSide)" stroke="#2b3a44" stroke-width="2" stroke-linejoin="round"/>
+  <g clip-path="url(#clipSide)">
+    <polygon points="324,208 56,256 56,312 324,300" fill="url(#gGlassSide)" stroke="#243038" stroke-width="2"/>
+    <polygon points="250,222 241,223 241,305 250,304" fill="url(#gSide)"/>
+    <polygon points="176,236 167,237 167,308 176,307" fill="url(#gSide)"/>
+    <polygon points="110,248 101,249 101,310 110,309" fill="url(#gSide)"/>
+    <!-- magenta lower swoosh, rising toward the rear (left) -->
+    <path d="M330,360 C 250,386 150,392 56,360 L56,344 C 150,376 250,372 326,344 Z" fill="url(#gMagSide)"/>
+  </g>
+  <text x="150" y="378" font-size="15" font-weight="700" fill="#b6307f" transform="rotate(4 150 378)">19 号线 · LINE 19</text>
+  <polygon points="330,392 56,360 56,392 330,452 Z" fill="url(#gSkirtSide)" stroke="#5f6f78" stroke-width="1"/>
+  <ellipse cx="200" cy="412" rx="32" ry="17" fill="#23292e" opacity="0.5"/>
+
+  <!-- ===================== FRONT NOSE (right side, big black cab cap) ===================== -->
+  <path d="M724,300
+           C 652,212 506,166 348,150
+           L 348,470
+           C 470,486 580,476 648,452
+           C 694,436 720,402 724,366
+           C 726,338 732,322 724,300 Z"
+        fill="url(#gNose)" stroke="#2b3a44" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <g clip-path="url(#clipNose)">
+    <!-- large black roof-cap / windscreen mask (dominant, as in photo) -->
+    <path d="M712,300
+             C 648,224 510,186 356,182
+             L 360,372
+             C 470,384 590,380 654,372
+             C 678,369 694,350 696,326
+             C 697,314 700,308 712,300 Z"
+          fill="url(#gMask)"/>
+    <!-- panoramic glass -->
+    <path d="M678,300
+             C 616,246 506,222 372,228
+             L 376,344
+             C 488,352 590,348 640,343
+             C 660,341 670,328 670,314 Z"
+          fill="url(#gGlass)" stroke="#070d12" stroke-width="1"/>
+    <path d="M650,296 C 600,256 520,238 460,232 L 482,350 C 540,350 600,348 640,344 Z" fill="#bfe6f7" opacity="0.08"/>
+    <polygon points="600,344 556,250 540,252 582,348" fill="#ffffff" opacity="0.08"/>
+    <!-- wipers -->
+    <line x1="612" y1="346" x2="540" y2="276" stroke="#0c161c" stroke-width="2.4" stroke-linecap="round"/>
+    <line x1="516" y1="350" x2="450" y2="280" stroke="#0c161c" stroke-width="2.4" stroke-linecap="round"/>
+
+    <!-- 北京 calligraphy + car number on the black cap (right side) -->
+    <text x="640" y="250" text-anchor="end" font-size="34" font-weight="800" fill="#ffffff" font-family="'STKaiti','KaiTi','SimSun',serif">北京</text>
+    <text x="600" y="288" text-anchor="end" font-size="22" font-weight="700" fill="#ffffff" letter-spacing="1">19002</text>
+
+    <!-- magenta lower-body swoosh on the nose, continuous with side -->
+    <path d="M724,408 C 620,392 500,392 348,406 L348,424 C 500,410 620,408 716,420 Z" fill="url(#gMag)"/>
+  </g>
+
+  <!-- LED headlights low on the nose corners -->
+  <path d="M360,392 L438,384 L440,405 L362,413 Z" fill="#10171d"/>
+  <path d="M364,395 L434,388 L436,402 L366,409 Z" fill="url(#gLight)" filter="url(#glow)"/>
+  <path d="M610,392 C 642,386 686,384 716,386 L 714,406 C 686,404 648,406 620,413 C 614,406 610,399 610,392 Z" fill="#10171d"/>
+  <path d="M616,394 C 644,389 684,388 712,389 L 710,402 C 684,401 648,402 622,408 Z" fill="url(#gLight)" filter="url(#glow)"/>
+
+  <!-- exposed front coupler -->
+  <polygon points="470,456 584,466 580,506 466,494" fill="url(#gCoupler)" stroke="#0d141a" stroke-width="1.5"/>
+  <rect x="502" y="470" width="48" height="18" rx="3" fill="#0c1216"/>
+  <line x1="484" y1="474" x2="484" y2="492" stroke="#0c1216" stroke-width="3"/>
+  <line x1="568" y1="474" x2="568" y2="494" stroke="#0c1216" stroke-width="3"/>
+
+  <!-- route roundel -->
+  <circle cx="600" cy="424" r="27" fill="#ffffff" stroke="#c2348a" stroke-width="4"/>
+  <text x="600" y="434" text-anchor="middle" font-size="26" font-weight="800" fill="#a82a7c">19</text>
+
+  <!-- near corner edge (vertical, on the LEFT now) -->
+  <line x1="348" y1="150" x2="348" y2="470" stroke="#ffffff" stroke-width="1.6" opacity="0.5"/>
+  <line x1="348" y1="150" x2="348" y2="470" stroke="#2b3a44" stroke-width="0.9" opacity="0.55"/>
+
+  <!-- caption -->
+  <rect x="362" y="516" width="420" height="30" rx="5" fill="#ffffff" opacity="0.72"/>
+  <text x="374" y="537" font-size="19" font-weight="700" fill="#a82a7c">北京地铁 19 号线 · 车辆段检修库 · 19002</text>
+</svg>
