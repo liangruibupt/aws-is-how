@@ -35,6 +35,9 @@
   - [32. xiaohongshu](#32-xiaohongshu)
   - [33. Quick BMS Demo](#33-quick-bms-demo)
   - [34. Promotion Doc review](#34-promotion-doc-review)
+  - [35. FSI stock exchange demo](#35-fsi-stock-exchange-demo)
+  - [36. AI for SA tech sharing and weekly business review](#36-ai-for-sa-tech-sharing-and-weekly-business-review)
+  - [37.](#37)
 
 ---
 
@@ -450,7 +453,7 @@ _[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey v
 ## Claude Code MBR 基于WBR版本
 Using Agent Teams mode to generate 2026 May Monthly Report 3 projects in parallel. 
 
-You now have the May weekly reports for 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
+You now have the June weekly reports for 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
 
 1. The monthly report format
 
@@ -476,7 +479,7 @@ You now have the May weekly reports for 3 projects under reports/weekly, and I n
 
 2. The monthly report adopts a narrative approach instead of a tabular one. 
 
-3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
+3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Product Selection and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
 
 4. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task.
 
@@ -661,3 +664,37 @@ Use HTML to create an animated diagram of the solar system's orbital motion for 
 
 基于 CSM Role Guideline (L6 expectations) + SA/CSM Promotion Toolkit Q2 2026，从SA Org Leadership视角，进行L6 Data Point评估，区分好 "Business as Usual" vs "Strong L6 Data Point"。
 ```
+
+## 35. FSI stock exchange demo
+```
+根据/Users/ruiliang/Downloads/mac_sync/agent 包含的文档:
+1. API 文档: '/Users/ruiliang/Downloads/mac_sync/agent/SimStock API - Swagger UI.pdf'
+2. Agent接入指南: /Users/ruiliang/Downloads/mac_sync/agent/for_ai_agent.md
+3. 交易规则：/Users/ruiliang/Downloads/mac_sync/agent/交易规则.md
+
+创建
+1. 主 agent 用于进行通盘考虑和协调，API Key: /Users/ruiliang/Downloads/mac_sync/agent/simstock-api-key-138-main-agent.txt，进行交易策略制定，协调 sub agent 进行干活。
+2. 一个 sub-agent exchange agent 用于交易， API Key: /Users/ruiliang/Downloads/mac_sync/agent/simstock-api-key-155-exchange.txt
+3. 一个 Sub-Agent 刷任务榜单：https://simstock.agentnumber47.com/ui/app.html#trophy, API Key: /Users/ruiliang/Downloads/mac_sync/agent/simstock-api-key-151-game-agent.txt
+```
+
+## 36. AI for SA tech sharing and weekly business review
+```
+Task: SA General Manager Erik 要求 SA Directors 讨论AI在我们SA 团队内如何去进一步推广，譬如说：
+1）哪些是你看到的问题
+2）哪些是你最先要去解决的问题
+3）这些问题中，你准备怎么用AI去解决
+4）哪些新的机制你觉得需要引入？
+ 
+Erik 先表达自己的想法，看到的最重要的问题有四个
+1.1）从我个人角度来看，我需要能访问所有一线员工每周的工作纪要，以便在需要的时候能访问这些原始数据，获得最完整的信息
+1.2）我们应该把工作中的所有信息都能存下来让AI可以使用，然后AI来帮我们分析理解这些数据，在这个基础上，我希望做到每周做business review，并且能快速决策。而不是通过MMR/QBR。MMR/QBR的机制并不是因为它们是最合理的，而是受限于过往能力的限制。
+1.3）通过AI去总结各个account里发生的最佳实践，并且最大限度的去分享和复制。这里首先要解决数据和业务脱敏的问题，但我认为这件事情的价值非常大。
+1.4）每个人都在使用AI来改造自己的工作，如何建立一个机制去，认可那些做的好的实践，并且把这些好的实践去让其他人受益？
+
+至于机制，除了需要去重新思考IC KPI setting，Erik 建议SA奖项也要朝AI practice去倾斜。
+
+根据我的 Role 和过往我的工作 scope，你来帮我准备这个讨论，如果需要我补充信息，你可以让我提供。注意你需要给我建议同时也启发我思考。
+```
+
+## 37. 

@@ -540,6 +540,8 @@
     - [DevOps Agent exposed as ACP and MCP](https://docs.aws.amazon.com/devopsagent/latest/userguide/working-with-devops-agent-interfacing-with-the-devops-agent.html)
     - [把 AWS DevOps Agent 连接到部署在 EKS 上的自建 MCP Server，通过 VPC Lattice Private Connection 在私网完成 AWS 中国区以及其他云的管理](https://github.com/warren830/aws-devops-agent)
     - [将阿里云 云效（Yunxiao） 官方 MCP server，以容器形式托管到 Amazon Bedrock AgentCore Runtime，对外暴露为一个受 IAM/SigV4 保护的远程 MCP 端点，供 AWS DevOps Agent 等 MCP 客户端调用](https://github.com/keithyt06/aliyun-yunxiao-mcp-agentcore)
+    - [AWS DevOps Agent adds release management capabilities](https://aws.amazon.com/blogs/aws/aws-devops-agent-adds-release-management-capabilities-to-assess-code-changes-before-production-preview/)
+    - [Automated network incident response with AWS DevOps Agent with SNS and Lambda](https://aws.amazon.com/blogs/networking-and-content-delivery/automated-network-incident-response-with-aws-devops-agent/)
 
 ### Agent workflow and Framework
   - [AWS Multi-Agent-Orchestrator - Agent Squard - Flexible and powerful framework for managing multiple AI](https://github.com/awslabs/multi-agent-orchestrator)
@@ -609,6 +611,7 @@
   - [Bedrock AgentCore]
       - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
       - [New in Amazon Bedrock AgentCore: Build agents with broader knowledge and continuous learning](https://aws.amazon.com/blogs/machine-learning/new-in-amazon-bedrock-agentcore-build-agents-with-broader-knowledge-and-continuous-learning/)
+        - [Amazon Bedrock AgentCore introduces new optimization capabilities to continuously improve agents in production](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-new-optimization-capabilities/)
       - [Agent Core Hands on Lab]
         - [QuickStart](ai-ml/chatgpt/agent/bedrock_agentcore/quickstart/amazon-bedrock-agentcore-quickstart-key-components.md)
           - Above quick start based on [sample-strands-in-5-minutes bedrock-agentcore-integration](https://github.com/aws-samples/sample-strands-in-5-minutes)
@@ -616,12 +619,17 @@
         - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
           - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
       - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
+        - [AgentCore Identity 新增 On-Behalf-Of (OBO) Token Exchange — 多 Agent 链路中代表用户访问下游服务，无需对每个资源单独做 consent flow](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
         - [AgentCore Gateway × Responses API 服务端工具执行](https://aws.amazon.com/about-aws/whats-new/2026/02/amazon-bedrock-server-side-tool-execution-agentcore-gateway/)
       - [Amazon Bedrock AgentCore Memory: Building context-aware agents](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-memory-building-context-aware-agents/)
         - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
-      - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
-      - [Building Agentic Applications with Claude Agent SDK and Amazon Bedrock AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/2ab3895e-8b7c-4f5c-b0c7-8597d6954290/en-US/introduction)
+      - [Amazon Bedrock AgentCore Policy](https://aws.amazon.com/blogs/machine-learning/secure-ai-agents-with-policy-in-amazon-bedrock-agentcore/)
+        - [Amazon Bedrock AgentCore adds quality evaluations and policy controls for deploying trusted AI agents](https://aws.amazon.com/blogs/aws/amazon-bedrock-agentcore-adds-quality-evaluations-and-policy-controls-for-deploying-trusted-ai-agents/)
+        - [Amazon Bedrock AgentCore now supports Bedrock Guardrails in policy](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-policy-guardrails-generally-available/)
+      - [Amazon Bedrock AgentCore Evaluation & Optimization](https://aws.github.io/bedrock-agentcore-starter-toolkit/user-guide/evaluation/quickstart.html)
+        - [AgentCore introduces new optimization capabilities to continuously improve agents in production](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-new-optimization-capabilities/)
+        - [为什么评估（Evaluation）是一切的起点](https://aws.amazon.com/cn/blogs/china/part-1-enterprise-intelligent-why-evaluation/?p=bl_ar_l=1)
       - [Agentic AI基础设施实践经验系列]
         - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
         - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
@@ -632,8 +640,12 @@
         - [Agentic AI基础设施实践经验系列（七）：可观测性在Agent应用的挑战与实践]()
         - [Agentic AI基础设施实践经验系列（八）：Agent应用的隐私和安全](https://aws.amazon.com/cn/blogs/china/privacy-and-security-of-agent-applications)
         - [Agentic AI基础设施实践经验系列（九）：Context Engineering 上下文工程](https://aws.amazon.com/cn/blogs/china/agentic-ai-infrastructure-practice-series-nine-context-engineering/)
-        - [AgentCore Identity 新增 On-Behalf-Of (OBO) Token Exchange — 多 Agent 链路中代表用户访问下游服务，无需对每个资源单独做 consent flow](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
-      - [agentcore-hackathon](https://github.com/Kathy-PJ/ci-agentcore-hackathon/tree/main)
+      - [AgentCore in Practice]
+        - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
+        - [Building Agentic Applications with Claude Agent SDK and Amazon Bedrock AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/2ab3895e-8b7c-4f5c-b0c7-8597d6954290/en-US/introduction)
+        - [agentcore-hackathon](https://github.com/Kathy-PJ/ci-agentcore-hackathon/tree/main)
+        - [AgentCore GUI Studio](https://github.com/ahwing/agentcore-studio)(https://tfpmpe539f.us-east-1.awsapprunner.com/ demo/0bdf9c2fb357591db21e2ce9)
+        - [lark-mcp-on-agentcore](https://github.com/ddpie/lark-mcp-on-agentcore)
 ### Agent Technology
   - [Agent to Agent - A2A]
     - [A2A protocol](https://a2aprotocol.ai/)
@@ -690,8 +702,9 @@
     - [用 Amazon Quick Desktop 实现小红书从选题到发布的全流程自动化](https://events.amazoncloud.cn/labs/cloudlab-quick-rednote)
     - [Amazon Quick Web & Desktop 企业级 Agentic AI 实战工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/1477fb37-26c3-4ccc-ac93-380b5b8e0bed/zh-CN)
     - [Quick 企业版如何配置desktop 和web 使用同一个账号登陆]
-      - [使用 Keycloak 作为 IDP 实现 Amazon Quick SSO 配置指南](https://amzn-chn.feishu.cn/docx/NmKkdOcZAo60DPxRB2zcUnxLnff)
-      - [Okta + IAM Identity Center 配置指南](https://amzn-chn.feishu.cn/docx/UGsOdKOYnoRgqFxfhFpcFljinWf) 
+      - [Amazon Quick 身份体系选型与 SSO 集成完整指南](https://amzn-chn.feishu.cn/docx/ChBUdoenDoKVEvxJ5tZccaOinNd)
+        - [使用 Keycloak 作为 IDP 实现 Amazon Quick SSO 配置指南](https://amzn-chn.feishu.cn/docx/NmKkdOcZAo60DPxRB2zcUnxLnff)
+        - [Okta + IAM Identity Center 配置指南](https://amzn-chn.feishu.cn/docx/UGsOdKOYnoRgqFxfhFpcFljinWf)
   - [Frontier Agent]
     - [introducing-openai-frontier](https://openai.com/index/introducing-openai-frontier/)
 
@@ -1416,6 +1429,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Liftshift web app to serverless - part1](https://aws.amazon.com/blogs/compute/lifting-and-shifting-a-web-application-to-aws-serverless-part-1/)
   - [Liftshift web app to serverless - part2](https://aws.amazon.com/blogs/compute/lifting-and-shifting-a-web-application-to-aws-serverless-part-2/)
   - [lambda extensions](https://github.com/aws-samples/aws-lambda-extensions)
+  - [利用无服务器技术快速构建全球分布式应用 - 将 Lambda URL 作为 CloudFront 的回源地址, 使用 Route 53 和 CloudFront 就近回源请求](https://aws.amazon.com/cn/blogs/china/use-serverless-technology-to-quickly-build-globally-distributed-applications/)
 
 - Lambda cost
   - [使用 Graviton 2优化Serverless车联网架构](https://aws.amazon.com/cn/blogs/china/optimizing-the-architecture-of-serverless-internet-of-vehicles-with-graviton-2/)
@@ -1871,6 +1885,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Management Tool stack workshop](https://workshop.aws-management.tools/)
 
 - [How to make the Trust Advisor Check automatically](devops/trust-advisor)
+- [Create temporary sandbox environments with configurable security and spend monitoring controls](https://docs.aws.amazon.com/zh_cn/solutions/latest/innovation-sandbox-on-aws/solution-overview.html)
 
 [AWS Well-Architected]
   - [AWS Well-Architected labs](https://wellarchitectedlabs.com/)
