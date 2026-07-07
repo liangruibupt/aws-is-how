@@ -37,7 +37,7 @@
   - [34. Promotion Doc review](#34-promotion-doc-review)
   - [35. FSI stock exchange demo](#35-fsi-stock-exchange-demo)
   - [36. AI for SA tech sharing and weekly business review](#36-ai-for-sa-tech-sharing-and-weekly-business-review)
-  - [37.](#37)
+  - [37. SKILL back](#37-skill-back)
 
 ---
 
@@ -406,19 +406,35 @@ RCH-NW 2026 Key Projects
 ## Claude Code WBR
 Using Agent Teams mode run in parallelly to generate ASANA 3 Projects separate report for duration '2026-04-20 to 2026-04-27', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The output is Chinese, do not replace any existed report.
 
-## Claude Code WBR + new added task
-You have generated ASANA 3 Projects separate report for duration '2026-03-15 to 2026-03-22', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. I need you help extract the task create or modifed on 2026-03-23, then update the existed three 03-22 report with new section under '### 本周重点关注' with name '### 03-23新增'. Do not replace or update any existed content. Using Agent Teams mode run in parallelly. The output is Chinese.
+### Create SKILL of WBR
+Each weekly I input the prompt for ASANA projects weekly report. Here is my prompt:
+Using Agent Teams mode run in parallelly to generate ASANA 3 Projects separate report for duration '2026-04-20 to 2026-04-27', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The output is Chinese, do not replace any existed report.
+
+Now I need create the skill for above weekly task, the skill named wbr-data-collection. Next time, I only need call the skill and tell you the #WeekNumber current year, such as week 27, then you convert it to date range from 2026-06-29 to 2026-07-05, then execute the reports generation
 
 将我通过'!!'标记的 items 总结之后，放到 ‘### 本周重点关注’ 下面，表格方式，表头信息：
 ｜ # ｜ 任务 | 客户 | SA | 状态 | 关键信息 |
 |---|------|------|----|------|---------|
 
-## Claude Code MBR 一次生产
-Using Agent Teams mode to generate 2026 Jan Monthly Report 3 projects in parallel.
+### Claude Code WBR + new added task
+You have generated ASANA 3 Projects separate report for duration '2026-03-15 to 2026-03-22', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. I need you help extract the task create or modifed on 2026-03-23, then update the existed three 03-22 report with new section under '### 本周重点关注' with name '### 03-23新增'. Do not replace or update any existed content. Using Agent Teams mode run in parallelly. The output is Chinese.
 
-1. The monthly report adopts a narrative approach instead of a tabular one. 
+## Claude Code WBR - mini MBR SKILL
 
-2. The monthly report format
+By leveraging the Agent, I can Conduct weekly business reviews with monthly business review (MBR) format. It enables rapid decision-making. So I need you create a skill for me named mbr-report-per-week.
+
+Here is workflow logic:
+The first 2 steps are very like wbr-data-collection skill, then the third step used for generate the final review markdown file. 
+
+Step 1: The skill accept my input: Week Number of current year, then convert Week to date range: ISO week, Monday–Sunday, e.g. week 27 → 2026-06-29 to
+  2026-07-05)
+Step 2: Using Agent Teams mode run in parallelly to generate ASANA 3 Projects separate report for date range of specified Week Number of current year. Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The output is Chinese, do not replace any existed report.
+Step 3: Generate new review-report markdown file based on 3 projects weekly reports. The markdown content is English. The naming of markdown file is YYYYMMDD_wbr_RCH_ruiliang-xiangqua.md, date = next week Monday, for example, Week 27 report mardown file is 20260706_wbr_RCH_ruiliang-xiangqua.md.
+
+Here is markdown file content requirements:
+1. The new review-report adopts a narrative approach instead of a tabular one. 
+
+2. The new review-report format
 
 # [Top Business Observations]
 
@@ -440,17 +456,18 @@ Using Agent Teams mode to generate 2026 Jan Monthly Report 3 projects in paralle
 
 # [Customer Lowlights] 
 
+# [Technical assets and good case sharing]
 
-3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Rufus and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
+3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Supply chain agent and Shop Assistant agent fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
 
 4. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task
 
 5. Below are reference example of narrative. 
 
-_[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer)._
+_[AI Coding] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Claude Code and use Bedrock Claude with $7K MRR. [006RU00000NWPalYAH]. (SA: Xia Ning, Yu Tao, Wang Felix)._
 
 
-## Claude Code MBR 基于WBR版本
+## Old-Deprecated: Claude Code MBR 基于WBR版本
 Using Agent Teams mode to generate 2026 May Monthly Report 3 projects in parallel. 
 
 You now have the June weekly reports for 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
@@ -697,4 +714,23 @@ Erik 先表达自己的想法，看到的最重要的问题有四个
 根据我的 Role 和过往我的工作 scope，你来帮我准备这个讨论，如果需要我补充信息，你可以让我提供。注意你需要给我建议同时也启发我思考。
 ```
 
-## 37. 
+## 37. SKILL back
+```
+ What the archive contains — a single tarball with all four skill roots, symlinks preserved so it
+  restores exactly as-is:
+  - ~/.claude/skills — your custom skills (backup-config, mmr-prep, pdf2word, storm-research,
+  sync-feishu-outlook, wbr-data-collection, frontend-slides) plus 52 symlinks
+  - ~/.agents/skills — the shared skill targets those symlinks point to (docx, pptx, pdf, lark-*,
+  frontend-design, etc.)
+  - ~/.claude/plugins/cache + ~/.claude/plugins/marketplaces — the plugin skill bundles
+  (superpowers, claude-for-financial-services, official plugins)
+
+  Bucket security: created fresh with versioning enabled and all public access blocked — so
+  re-running the backup keeps prior versions, and nothing is publicly readable.
+
+  To restore:
+  aws s3 cp s3://claudecode-skills-backup-710299592439/claude-skills-backup-20260706-232708.tar.gz
+  .
+  tar -xzf claude-skills-backup-20260706-232708.tar.gz -C ~
+  The manifest in the bucket documents the full skill inventory and these same restore steps.
+```
