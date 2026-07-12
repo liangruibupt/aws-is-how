@@ -524,6 +524,7 @@
     - [Claude Code Security Reviewer](https://github.com/anthropics/claude-code-security-review)
     - [cc-connect Bridge AI Agents to Chat Platform with ACP](https://github.com/chenhg5/cc-connect)
     - [Remote Claude Control by Feishu and Tmux](https://github.com/w0yne/remote-claude-control)
+    - [A field guide to Claude Fable 5: Finding your unknowns](https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
@@ -610,6 +611,7 @@
     - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
   - [Bedrock AgentCore]
       - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
+      - [AgentCore use case examples](ai-ml/chatgpt/agent/Agent-implement-samples.md)
       - [New in Amazon Bedrock AgentCore: Build agents with broader knowledge and continuous learning](https://aws.amazon.com/blogs/machine-learning/new-in-amazon-bedrock-agentcore-build-agents-with-broader-knowledge-and-continuous-learning/)
         - [Amazon Bedrock AgentCore introduces new optimization capabilities to continuously improve agents in production](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-new-optimization-capabilities/)
       - [Agent Core Hands on Lab]
@@ -622,6 +624,8 @@
         - [AgentCore Identity 新增 On-Behalf-Of (OBO) Token Exchange — 多 Agent 链路中代表用户访问下游服务，无需对每个资源单独做 consent flow](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
         - [AgentCore Gateway × Responses API 服务端工具执行](https://aws.amazon.com/about-aws/whats-new/2026/02/amazon-bedrock-server-side-tool-execution-agentcore-gateway/)
+        - [Introducing Web Search on Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/introducing-web-search-on-amazon-bedrock-agentcore/)
+        - [agentcore-search-mcp](https://github.com/aws-samples/sample-bedrock-api-proxy/blob/main/agentcore-search-mcp/INSTALL_FOR_AGENTS.md)
       - [Amazon Bedrock AgentCore Memory: Building context-aware agents](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-memory-building-context-aware-agents/)
         - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
       - [Amazon Bedrock AgentCore Policy](https://aws.amazon.com/blogs/machine-learning/secure-ai-agents-with-policy-in-amazon-bedrock-agentcore/)
@@ -629,7 +633,10 @@
         - [Amazon Bedrock AgentCore now supports Bedrock Guardrails in policy](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-policy-guardrails-generally-available/)
       - [Amazon Bedrock AgentCore Evaluation & Optimization](https://aws.github.io/bedrock-agentcore-starter-toolkit/user-guide/evaluation/quickstart.html)
         - [AgentCore introduces new optimization capabilities to continuously improve agents in production](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-new-optimization-capabilities/)
-        - [为什么评估（Evaluation）是一切的起点](https://aws.amazon.com/cn/blogs/china/part-1-enterprise-intelligent-why-evaluation/?p=bl_ar_l=1)
+        - [Eval-First: 基于 AgentCore 构建企业级 Agent](https://catalog.us-east-1.prod.workshops.aws/workshops/bdb5c2fd-86cc-4a86-b55f-fbc2a81c001a/zh-CN) (https://github.com/aws-samples/sample-eval-first-building-enterprise-agents-with-agentcore/blob/main/README.zh-CN.md)
+        - [企业智能体之旅：为什么评估（Evaluation）是一切的起点](https://aws.amazon.com/cn/blogs/china/part-1-enterprise-intelligent-why-evaluation/?p=bl_ar_l=1)
+        - [企业智能体之旅: 评估企业级智能体：从原型验证到生产就绪](https://aws.amazon.com/cn/blogs/china/part-2-enterprise-intelligent-validation/?p=bl_ar_l=1)
+        - [企业智能体之旅: 如何在亚马逊云科技上构建企业级智能体](https://aws.amazon.com/cn/blogs/china/part-3-how-to-build-enterprise-intelligent/?p=bl_ar_l=2)
       - [Agentic AI基础设施实践经验系列]
         - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
         - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
@@ -705,6 +712,7 @@
       - [Amazon Quick 身份体系选型与 SSO 集成完整指南](https://amzn-chn.feishu.cn/docx/ChBUdoenDoKVEvxJ5tZccaOinNd)
         - [使用 Keycloak 作为 IDP 实现 Amazon Quick SSO 配置指南](https://amzn-chn.feishu.cn/docx/NmKkdOcZAo60DPxRB2zcUnxLnff)
         - [Okta + IAM Identity Center 配置指南](https://amzn-chn.feishu.cn/docx/UGsOdKOYnoRgqFxfhFpcFljinWf)
+        - [Quick 开通订阅与 Google Workspace SSO 完整手册](https://amzn-chn.feishu.cn/docx/NGWwd9g14o2CpVxXhdxczIx3nxb)
   - [Frontier Agent]
     - [introducing-openai-frontier](https://openai.com/index/introducing-openai-frontier/)
 
@@ -2044,6 +2052,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Moible app development
 - [Tutorial: Intro to React – React](https://reactjs.org/tutorial/tutorial.html)
 - [在中国区 AWS 上使用 Amplify 开发离线应用的使用心得](https://aws.amazon.com/cn/blogs/china/experience-in-using-amplify-developing-offline-applications-on-aws-in-china/)
+- [Amazon Device Farm MCP Server实战指南](https://aws.amazon.com/cn/blogs/china/cloud-ai-mobile-testing-new-era-amazon-device-farm-mcp-server-practical-guide/)
 
 ### GraphQL - AppSync
 - [AppSync-Workshop](database/appsync/AppSync-Workshop.md)

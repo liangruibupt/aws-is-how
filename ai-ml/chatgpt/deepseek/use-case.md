@@ -38,6 +38,7 @@
   - [35. FSI stock exchange demo](#35-fsi-stock-exchange-demo)
   - [36. AI for SA tech sharing and weekly business review](#36-ai-for-sa-tech-sharing-and-weekly-business-review)
   - [37. SKILL back](#37-skill-back)
+  - [38 guide to find your unknowns with Fable](#38-guide-to-find-your-unknowns-with-fable)
 
 ---
 
@@ -733,4 +734,29 @@ Erik 先表达自己的想法，看到的最重要的问题有四个
   .
   tar -xzf claude-skills-backup-20260706-232708.tar.gz -C ~
   The manifest in the bucket documents the full skill inventory and these same restore steps.
+```
+
+## 38 guide to find your unknowns with Fable
+```
+I'm working on adding a new auth provider but I know nothing about the auth modules in this codebase. Can you do a blind spot pass to help me figure out my relevant unknown unknowns and help me prompt you better.
+
+I don’t know what color grading is but I need to grade this video. Can you teach me to understand my unknown unknowns about color grading, so that I can prompt better?
+
+I want a dashboard for this data but I have no visual taste and don't know what's possible. Make me an HTML page with 4 wildly different design directions so I can react to them.
+
+Before wiring anything up, make a single HTML file mocking the new editor toolbar with fake data. I want to react to the layout before you touch the real app.
+
+Here's my rough problem: users churn after onboarding. Search the codebase and brainstorm 10 places we could intervene, from cheapest to most ambitious. I'll tell you which ones resonate.
+
+Interview me one question at a time about anything ambiguous, prioritize questions where my answer would change the architecture.
+
+This Rust crate in vendor/rate-limiter implements the exact backoff behavior I want. Read it and reimplement the same semantics in our TypeScript API client.
+
+Write an implementation plan in HTML, but lead with the decisions I'm most likely to tweak with: data model changes, new type interfaces, and anything user-facing. Bury the mechanical refactoring at the bottom, I trust you on that part.
+
+Keep an implementation-notes.md file. If you hit an edge case that forces you to deviate from the plan, pick the conservative option, log it under 'Deviations', and keep going.
+
+Package the prototype, the spec, and the implementation notes into a single doc I can drop in Slack to get buy-in. Lead with the demo GIF.
+
+I want to make sure I understand everything that's happened in this change. Give me a HTML report on the changes for me to read and understand with context, intuition, what was done, etc. and a quiz at the bottom on the changes that I must pass.
 ```
