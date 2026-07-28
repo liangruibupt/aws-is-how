@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "applicationInfo": {
+    "name": "Threat Model Export",
+    "description": "Internal workforce assistant prototype - an agentic AI application that helps internal employees with daily tasks. Deployed in the public cloud as a non-production prototype. Uses internal corporate data (no PII or regulated data). Authenticates users via federated Identity Provider. Low-criticality system with regional scope serving internal employees only."
+  },
+  "architecture": {
+    "description": ""
+  },
+  "dataflow": {
+    "description": ""
+  },
+  "assumptions": [],
+  "mitigations": [
+    {
+      "id": "78a8fc86-9afb-43dd-9195-5734c7ba9796",
+      "numericId": 1,
+      "status": "mitigationIdentified",
+      "content": "Scope MCP tools to least privilege; require explicit confirmation for state-changing actions; constrain the agent to an allowlist of tools per use case.",
+      "displayOrder": 1,
+      "metadata": []
+    },
+    {
+      "id": "2bcb482c-3038-46f8-92ae-1244aa0d6ed3",
+      "numericId": 2,
+      "status": "mitigationIdentified",
+      "content": "Input and output guardrails (for example, Amazon Bedrock Guardrails); separate trusted system instructions from untrusted user content; constrain tool use so an injected instruction cannot escalate.",
+      "displayOrder": 2,
+      "metadata": []
+    },
+    {
+      "id": "8d82bdb5-9753-4da5-95ec-3a5e20f18fb6",
+      "numericId": 3,
+      "status": "mitigationIdentified",
+      "content": "Enforce per-user authorization on retrieval rather than relying on the prompt to gate access; filter or segment the knowledge base by access level; log and review retrieval.",
+      "displayOrder": 3,
+      "metadata": []
+    }
+  ],
+  "assumptionLinks": [],
+  "mitigationLinks": [
+    {
+      "linkedId": "8a91c223-91bf-4cdf-8d55-4aea54df7f4e",
+      "mitigationId": "78a8fc86-9afb-43dd-9195-5734c7ba9796"
+    },
+    {
+      "linkedId": "cc31e06f-7c0f-4b6b-aa81-8931f91ba68d",
+      "mitigationId": "2bcb482c-3038-46f8-92ae-1244aa0d6ed3"
+    },
+    {
+      "linkedId": "e88754e4-3448-4cc1-80ae-0e8e3f981c8d",
+      "mitigationId": "8d82bdb5-9753-4da5-95ec-3a5e20f18fb6"
+    }
+  ],
+  "threats": [
+    {
+      "id": "8a91c223-91bf-4cdf-8d55-4aea54df7f4e",
+      "numericId": 1,
+      "threatSource": "Misdirected LLM agent",
+      "prerequisites": "Agent has access to MCP tools that perform state-changing actions",
+      "threatAction": "Invokes an MCP tool to perform an action beyond the user's intent or permission",
+      "threatImpact": "Unintended writes or data disclosure via excessive agency",
+      "impactedGoal": [],
+      "impactedAssets": [],
+      "statement": "A Misdirected LLM agent Agent has access to MCP tools that perform state-changing actions can Invokes an MCP tool to perform an action beyond the user's intent or permission, which leads to Unintended writes or data disclosure via excessive agency",
+      "displayOrder": 1,
+      "status": "threatIdentified",
+      "tags": [
+        "LLM06",
+        "Excessive Agency",
+        "OWASP-LLM",
+        "STRIDE-E",
+        "MCP"
+      ],
+      "metadata": []
+    },
+    {
+      "id": "cc31e06f-7c0f-4b6b-aa81-8931f91ba68d",
+      "numericId": 2,
+      "threatSource": "Malicious or curious internal user",
+      "prerequisites": "User has access to the chatbot input interface",
+      "threatAction": "Submits crafted input that overrides the agent's instructions, bypassing guardrails",
+      "threatImpact": "Agent bypasses guardrails or discloses its system context",
+      "impactedGoal": [],
+      "impactedAssets": [],
+      "statement": "A Malicious or curious internal user User has access to the chatbot input interface can Submits crafted input that overrides the agent's instructions, bypassing guardrails, which leads to Agent bypasses guardrails or discloses its system context",
+      "displayOrder": 2,
+      "status": "threatIdentified",
+      "tags": [
+        "LLM01",
+        "Prompt Injection",
+        "OWASP-LLM",
+        "STRIDE-T"
+      ],
+      "metadata": []
+    },
+    {
+      "id": "e88754e4-3448-4cc1-80ae-0e8e3f981c8d",
+      "numericId": 3,
+      "threatSource": "Authenticated internal user with limited access rights",
+      "prerequisites": "Agent has broad retrieval access to the knowledge base without per-user filtering",
+      "threatAction": "Retrieves and reveals knowledge-base content the requesting user is not authorized to access",
+      "threatImpact": "Unauthorized disclosure of internal corporate content beyond the user's access level",
+      "impactedGoal": [],
+      "impactedAssets": [],
+      "statement": "A Authenticated internal user with limited access rights Agent has broad retrieval access to the knowledge base without per-user filtering can Retrieves and reveals knowledge-base content the requesting user is not authorized to access, which leads to Unauthorized disclosure of internal corporate content beyond the user's access level",
+      "displayOrder": 3,
+      "status": "threatIdentified",
+      "tags": [
+        "LLM02",
+        "Sensitive Information",
+        "OWASP-LLM",
+        "STRIDE-I",
+        "RAG"
+      ],
+      "metadata": []
+    }
+  ]
+}

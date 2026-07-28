@@ -501,6 +501,9 @@
 ### AI Coding
   - [Ontoplogy on AI Coding]
     - [GitNexus: The Zero-Server Code Intelligence Engine - GitNexus is a client-side knowledge graph creator that runs entirely in your browser.](https://github.com/abhigyanpatwari/GitNexus)
+  - [Refactor existed code]
+    - [Understand Anything](https://github.com/Egonex-AI/Understand-Anything)
+    - [AI-Ready-Repo Engine — Making Any Codebase Agent-Ready AND Human-Signable](https://github.com/xg-gh-25/SwarmAI/blob/main/docs/AI-Ready-Repo-Engine-Design.md)
   - [Amazon Q Developer/Kiro]
     - [Kiro Community](https://github.com/kiro-community/)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
@@ -637,6 +640,7 @@
         - [企业智能体之旅：为什么评估（Evaluation）是一切的起点](https://aws.amazon.com/cn/blogs/china/part-1-enterprise-intelligent-why-evaluation/?p=bl_ar_l=1)
         - [企业智能体之旅: 评估企业级智能体：从原型验证到生产就绪](https://aws.amazon.com/cn/blogs/china/part-2-enterprise-intelligent-validation/?p=bl_ar_l=1)
         - [企业智能体之旅: 如何在亚马逊云科技上构建企业级智能体](https://aws.amazon.com/cn/blogs/china/part-3-how-to-build-enterprise-intelligent/?p=bl_ar_l=2)
+        - [Agent 优化端到端全流程](https://d3qnw1rhjyi9ke.cloudfront.net/)(f7TmsWkmyqkjp5Brtt5V)
       - [Agentic AI基础设施实践经验系列]
         - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
         - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
@@ -708,11 +712,17 @@
       - [为 Amazon Quick Desktop 提供飞书工具能力的远程 MCP 服务](https://github.com/ddpie/lark-mcp-on-agentcore)
     - [用 Amazon Quick Desktop 实现小红书从选题到发布的全流程自动化](https://events.amazoncloud.cn/labs/cloudlab-quick-rednote)
     - [Amazon Quick Web & Desktop 企业级 Agentic AI 实战工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/1477fb37-26c3-4ccc-ac93-380b5b8e0bed/zh-CN)
+      - [AWS use the Quick for productivity](https://aws.highspot.com/spots/675fe87775c84fc3050351dd?list=6a4f3d1ba1e86e17a6bcadd1&overview=false)
+      - [Amazon Quick 实践经验集合](https://amzn-chn.feishu.cn/docx/PdapdpQsFoxRT9xVcf4cblzqnwd)
     - [Quick 企业版如何配置desktop 和web 使用同一个账号登陆]
       - [Amazon Quick 身份体系选型与 SSO 集成完整指南](https://amzn-chn.feishu.cn/docx/ChBUdoenDoKVEvxJ5tZccaOinNd)
+      - [Amazon Quick IDP 集成概览](https://amzn-chn.feishu.cn/docx/AZkpd4CU1oArdRx41JXcQja7nzg)
         - [使用 Keycloak 作为 IDP 实现 Amazon Quick SSO 配置指南](https://amzn-chn.feishu.cn/docx/NmKkdOcZAo60DPxRB2zcUnxLnff)
         - [Okta + IAM Identity Center 配置指南](https://amzn-chn.feishu.cn/docx/UGsOdKOYnoRgqFxfhFpcFljinWf)
         - [Quick 开通订阅与 Google Workspace SSO 完整手册](https://amzn-chn.feishu.cn/docx/NGWwd9g14o2CpVxXhdxczIx3nxb)
+        - [钉钉 IDaaS 对接 Amazon Quick Desktop OIDC 配置方案](https://amzn-chn.feishu.cn/wiki/Dxi2wyxMjirnVNkE7T5cRLsnnSk)
+        - [Amazon_Quick_Desktop_飞书OIDC对接方案](https://amzn-chn.feishu.cn/wiki/BQZTw5ZkqiK9Mak6LAdcPX9Fnwf)
+        - [Entra ID + IAM Identity Center 配置指南](https://aws.amazon.com/cn/blogs/china/microsoft-entra-id-integration-iam-identity-center-implement/)
   - [Frontier Agent]
     - [introducing-openai-frontier](https://openai.com/index/introducing-openai-frontier/)
 
@@ -801,6 +811,7 @@
       - [Virtualizing Any GPU on AWS with HAMi: Free Memory Isolation](https://dynamia.ai/blog/aws)
   - [推理加速 Inference Accleration]
     - [PD Prefill and Decode 分离的推理加速](https://mp.weixin.qq.com/s/sQdO0z4hnptJs2_zSCn1Rg?scene=334)
+    - [GPU infra as Skills: Claude Code Skills for deploying LLMs on AWS GPU](https://github.com/yuhuiaws/ML-study/tree/main/%E7%94%9F%E6%88%90%E5%BC%8FAI/Claude-code-Skills)
 - [Network of EC2]
   - [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
   - [EC2 network performance](EC2/EC2_Networking_performance.md)

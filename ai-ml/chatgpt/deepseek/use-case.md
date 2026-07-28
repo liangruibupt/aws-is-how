@@ -37,8 +37,9 @@
   - [34. Promotion Doc review](#34-promotion-doc-review)
   - [35. FSI stock exchange demo](#35-fsi-stock-exchange-demo)
   - [36. AI for SA tech sharing and weekly business review](#36-ai-for-sa-tech-sharing-and-weekly-business-review)
-  - [37. SKILL back](#37-skill-back)
+  - [37. SKILL backup](#37-skill-backup)
   - [38 guide to find your unknowns with Fable](#38-guide-to-find-your-unknowns-with-fable)
+- [39 build-your-ai-context](#39-build-your-ai-context)
 
 ---
 
@@ -431,6 +432,7 @@ Step 1: The skill accept my input: Week Number of current year, then convert Wee
   2026-07-05)
 Step 2: Using Agent Teams mode run in parallelly to generate ASANA 3 Projects separate report for date range of specified Week Number of current year. Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The output is Chinese, do not replace any existed report.
 Step 3: Generate new review-report markdown file based on 3 projects weekly reports. The markdown content is English. The naming of markdown file is YYYYMMDD_wbr_RCH_ruiliang-xiangqua.md, date = next week Monday, for example, Week 27 report mardown file is 20260706_wbr_RCH_ruiliang-xiangqua.md.
+Step 4: Help me create the html based on the content of [Doc_Path] # Executive Summary and # Technical Assets and Good Case Sharing, which used for presentation on Erik WBR meeting.
 
 Here is markdown file content requirements:
 1. The new review-report adopts a narrative approach instead of a tabular one. 
@@ -467,6 +469,41 @@ Here is markdown file content requirements:
 
 _[AI Coding] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Claude Code and use Bedrock Claude with $7K MRR. [006RU00000NWPalYAH]. (SA: Xia Ning, Yu Tao, Wang Felix)._
 
+We need to iterate the mbr-report-per-week SKILL to Make your output more readily usable and reduce my manual revisions. My ideas are as follows
+
+1. Compare the file you generated document /Users/ruiliang/Documents/workspaces/asana-project-bot/reports/monthly/W28_2026_wbr_RCH_ruiliang-xiangqua.md with the RCH priority WBR file I filtered using !! mark: /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W28/RCH-TEAM-2026-W28.md. Figure out why I selected these items?
+
+2. I found you just list the cases, you should make the narrative concise with insights, summary the common patterns and trending，and also give the recommendation of next actions. They are most valuable for WBR or MMR summary. For example, **Bedrock Sonnet 5 has 3 win cases**: Trip.com, Heguan and KPay，It should recommend to explore relevant use cases and actively promote Sonnet 5. Other example, you should summary cases 1/ **Nike (XL)** — Graviton adoption PR rose from 21% (Jan) to 27% (Jun), $20K/mo (Opp: 006RU00000OucO9YAJ). 2/ **司顺 Vevor (L)** — self-built database Graviton migration completed; Java application migration to follow, $5K/mo (Opp: 006RU00000R1t69YAB). 3/ **Huolala (XL) Graviton migration**: customer confirmed go-ahead, ~$30K/yr projected savings, $10K/mo `[006RU00000OpDjmYAF]`. From these cases, you should be able to conclude that **Graviton remains the modernization driver**. It is recommended to review other clients in similar sub-industries with comparable scale to promote Graviton, or identify the workloads that should be prioritized for promotion.
+
+I would suggest you study the /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W28/CI-Team-WBR-2026-W28.md and /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W28/LS-Team-WBR-2026-W28.md. These 2 industry WBR doc are more valuable insights.
+
+3. I have manually merged RCH, FSI, CI, LS_HC 4 industry WBR as one /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W28/20260713-WBR-W28-20260713-RuiLiang-RFHC.md to submit to Erik review. It is very important, there are only 5-6 mins for present, so I write down a executive summary for most important issue: common pattern of GenAI use cases or novel GenAI use cases, large migration deal (MRR >30K, or new service such as S3 vectors migration), modernization key update, challenge/risk with big impact and migration out (MRR >30K) call-out.
+
+4. I also modifed the #Technical Assets and Good Case Sharing, you can see my format: 1) Title with Bold text, 2) followed by Why it is important for sharing 3) then the code github link, blog or feishu or sharepoint link, they can read by other colleagues 4) final is SA name with Bold text
+
+mbr-report-per-week can support 1) RCH SA team WBR generation 2) merge the 4 industry team WBR into one with executive summary generation - I can provide the other 3 industry team WBR
+
+AS SOTA LLM Model, you should keep human intentions aligned with the model's execution at all times. So I need you well further polish the mbr-report-per-week SKILL to make the outcome of this skill can generate well usable document for my presentation to Erik WBR. Code delivers determinism and guarantees accuracy, while LLMs/Agents bring critical thinking and insights. Therefore, the workflow of this skill should integrate both. Sometimes, you can give me suprise for the quality of document.
+
+帮我把文档中的 /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W28/20260713-WBR-W28-20260713-RuiLiang-RFHC.md # Executive Summary and #Technical Assets and Good Case Sharing，做一个 html，markdown里面的 link 也需要包含在 html, Executive Summary里面的Migration Large Deals & Modernization 合并在一起。这样方便在 Erik WBR 会上做汇报. 
+HTML move 到/Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W28
+
+1. 保持每周汇总
+2. WBR in Chinese
+3. Executive Summary 需要把 4 个行业重要项目进行汇总，但是各自团队 WBR 放到 Erik 建议的 2, Customer Updates里面。
+保持现状。
+- Erik 建议的1.1, Observations，重点挑选超过 50K MRR 或者 500K ARR Migration/Modernization的动态 和 重要的 Quick/Kiro/AgentCore 产品推广的汇总
+- Erik 建议的1.2, Key Customer Updates，挑选4 个行业，重要的highlights & lowlights
+- Erik 建议的1.3, Risks & Challenges & Blockers & Asks，Tighten Risk/Challenge/Blocker terminology，挑选 4 个团队中，影响超过 50K MRR 或者 500K ARR 的 Risks & Challenges & Blockers & Asks
+4. Title line 是在汇总周报的开头写，Owener 就是 Liang Rui，但是各自团队 WBR的 title 还是保持现状这样
+5. Erik 建议的 2, Customer Updates里面，把当前 4 个行业团队 WBR 汇总到这里
+6. Others - 保持用# Technical Assets and Good Case Sharing
+7. Add ETA / next milestone on key items， 
+8. SA alias mapping: /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/SA_Name_Alias.csv
+9. 文件名格式: 日期_wbr_团队名.md e.g. 20260713_wbr_RFHC.md
+10. 分享时间 10 分钟，目前看内容可以撑起 10 分钟
+11. Exec Summary不是一句话，目前我们insight-first pattern already does this, context/background can be added if there is, but not mandatory. Such as Migration should have migration from where and what's the trigger. GenAI/Agentic AI should have the use case or workloads description
+12. 重点项目，如果有 Next Step，那么下一个周报中最好有更新，以便闭环。
 
 ## Old-Deprecated: Claude Code MBR 基于WBR版本
 Using Agent Teams mode to generate 2026 May Monthly Report 3 projects in parallel. 
@@ -715,7 +752,7 @@ Erik 先表达自己的想法，看到的最重要的问题有四个
 根据我的 Role 和过往我的工作 scope，你来帮我准备这个讨论，如果需要我补充信息，你可以让我提供。注意你需要给我建议同时也启发我思考。
 ```
 
-## 37. SKILL back
+## 37. SKILL backup
 ```
  What the archive contains — a single tarball with all four skill roots, symlinks preserved so it
   restores exactly as-is:
@@ -759,4 +796,22 @@ Keep an implementation-notes.md file. If you hit an edge case that forces you to
 Package the prototype, the spec, and the implementation notes into a single doc I can drop in Slack to get buy-in. Lead with the demo GIF.
 
 I want to make sure I understand everything that's happened in this change. Give me a HTML report on the changes for me to read and understand with context, intuition, what was done, etc. and a quiz at the bottom on the changes that I must pass.
+```
+
+# 39 build-your-ai-context
+```
+Summarize the key risks in my OP1 and suggest mitigations I should raise with my VP.
+
+Draft a 3-bullet status update for my skip-level based on my documents. Executive tone, under 100 words.
+
+What are the gaps between my stated goals and what my documents actually show actual status?
+
+Summarize Q4 for the SVP. Add inline citations to sources for every figure, and flag the one number you're least confident about.
+
+Before I send this, list anything you couldn't verify from the documents, and any context you might be missing.
+
+Here's a prompt I rely on and the output it produced.
+Prompt: [paste your prompt]
+Output: [paste the AI output]
+Spot-check the output (verify the highest-stakes claim, flag what only I would know is missing), then rewrite my prompt so the AI self-checks next time: cite every figure's source, flag its least-confident claim, and list what it couldn't verify.
 ```
