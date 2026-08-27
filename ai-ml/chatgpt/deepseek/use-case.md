@@ -247,6 +247,19 @@ You have checked all the data in the file, give me the total revenue, total comp
 
 根据我 inbox 的 4 个行业 Open Pipeline Report results (CMHK FY26 RCH, CMHK FY26 LS_HC, CMHK FY26 FSI, CMHK FY26 CI) 邮件，总结当前和 IDC Migration 相关的 Opp，输出格式如下
 Account | Opp Nam | Opp ID | Description | ARR | Status
+
+# Migration and Modernization in QBR
+Based on MMR files
+1. Summary the RCH, FSI, CI, LS_HC migration & modernization Initiatives from April to July, then catalog into (1) CSP migration, (2) IDC migration, (3) AI-driven modernization.
+2. The outcome is narrative, not the table. DO Not just list the case, you should make the narrative concise with insights. Focus on Migration driver, why migration, why modernization.
+
+Analyze this migration opportunity files
+1. Aggregate data at least by stage, territory, GenAI vs Non-GenAI, penetration of GenAI in each industry, Top 10 Opps, and you may also conduct analysis from other dimensions. 
+2. Create as html, I can present slide by slide. 
+
+
+总结 April to July MMR 里面共性的Core Services and AI 服务 call-out，输出为 Markdown 文件。如果可以，也请总结，从 一线实践中获得的，GPT 5.6和Opus/Fable的对比，G7相比G6的性价比对比，AgentCore 的 win cases, Quick 推广的场景。注意总结的时候，不要只讲了发生了什么，需要总结为什么会发生，为什么这个时候发生？要有一定细节。
+
 ```
 
 ## 13. Knowledge check
@@ -505,42 +518,7 @@ HTML move 到/Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/20
 11. Exec Summary不是一句话，目前我们insight-first pattern already does this, context/background can be added if there is, but not mandatory. Such as Migration should have migration from where and what's the trigger. GenAI/Agentic AI should have the use case or workloads description
 12. 重点项目，如果有 Next Step，那么下一个周报中最好有更新，以便闭环。
 
-## Old-Deprecated: Claude Code MBR 基于WBR版本
-Using Agent Teams mode to generate 2026 May Monthly Report 3 projects in parallel. 
-
-You now have the June weekly reports for 3 projects under reports/weekly, and I need you to organize a monthly report in the format below.
-
-1. The monthly report format
-
-# [Top Business Observations]
-
-## [Migration and modernization observation, with Opportunity ID]
-### [Migration]
-### [Modernization]
-
-## [Industry Solution]
-
-## [GenAI]
-### [AI Coding]
-### [Agent]
-### [Quick Suite]
-### [GPU]
-
-# [External Blockers, Major Risks and Challenges] 
-
-# [Customer Highlights] 
-
-# [Customer Lowlights] 
-
-2. The monthly report adopts a narrative approach instead of a tabular one. 
-
-3. You can summarize similar content together. For example, Kiro and Claude Code can both be categorized under [AI Coding], while Product Selection and Shop Assistant fall into [Industry Solution]. Other similar categories include [Migration], [Modernization], [Agent], and so on. Put the content into the corresponding Section in accordance with the monthly report format.
-
-4. Each case must have an Opportunity ID, which can be obtained from the SFDC Opp Link, for example, the Opportunity ID of URL 'https://aws-crm.lightning.force.com/lightning/r/Opportunity/006RU00000QWjvtYAD/view' is [006RU00000QWjvtYAD]. You can get the MRR from the SFDC Opp Link or MRR(K) field of each Asana task.
-
-5. Below are reference example of narrative. 
-
-_[Kiro] 1) Trip (XL) has subscribed 188 Kiro Pro after AIDLC workshop and Roey visit, SA spend much time to promote Kiro as Claude code Supplementary, target for 40K MRR [006RU00000O5wAPYAZ]. 2) All SDE of Sinho (L) have subscribed to Kiro Pro, resulting in 92 paying users with an MRR of $4K. The integration of DevLake is being promoted for usage data display [006RU00000KBOLGYA5]. 3) Qunhe (L) plans to purchase 50-100 Kiro Pro $1K MRR and use Bedrock Claude for VoxDeck slide generation with $7K MRR. [006RU00000NWPalYAH][006RU00000P02zVYAR]. 4) Chenbei (XL) VeSync subscribe 20+ Kiro Pro for all SRE team for AWS operation, $1K MRR [006RU00000PYVm9YAH]. (SA: Yu, Tao, Wang, Felix, Weng, Kaer)._
+下面继续 mbr-report-per-week 这个 skill 的 mode2 merge FSI, LS_HC, CI, RCH 的报告为一个完成的用于我上交 Erik 的 WBR。 4 个行业的 WBR 在 /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W31，包括刚才你生产的 RCH 文件。注意有限挑选我用!!标注的条目，其他你觉得重要的条目也可以添加，但是注意我只有 10 分钟做汇报。
 ```
 
 ## 23. Interview summary
@@ -652,6 +630,12 @@ I listed the initiatives
 5. Leverage AI to accelerate Core-services Migration and modernization
 
 So write the initiatives part
+
+
+Base on MMR reports and Erik QBR summary
+1. First consolidate the QBR service-trends as markdown. Summary the common part as bullet points and presentation notes. DO Not just list the case, you should make the narrative concise with insights, focus on Why it happened and why it happened at this time？And also point out the conflict part cross 3 documents
+2. Output as markdown file
+3. Based on the markdown file, please refine the deck of qbr-product-trends/~$qbr-product-service-trends.pptx
 ```
 
 ## 29. Agent Teams
