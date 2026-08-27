@@ -197,9 +197,54 @@ provision_lark() {
   fi
 }
 
+# ========================================================= python sdks ===
+# Install the Python SDKs kirocrew's application code uses for AWS testing:
+#   - boto3   : AWS SDK. Resolves credentials automatically via the EC2
+#               instance role over IMDS (no AWS keys land in the container).
+#   - openai  : OpenAI SDK, used against Amazon Bedrock's OpenAI-compatible
+#               endpoints (Responses API) for GPT models.
+# NOTE: AWS access works because boto3 uses IMDS; do NOT read AWS credentials
+# via shell commands (e.g. `aws sts get-caller-identity`, `env | grep AWS`) —
+# kiro-cli's BUILTIN_DENY_PATTERNS guardrail blocks those. SDK usage is fine.
+provision_python_sdks() {
+  log "Python SDKs provisioning (boto3, openai)"
+
+  if ! crexec 'command -v pip3 >/dev/null 2>&1 || command -v pip >/dev/null 2>&1'; then
+    warn "pip not found in container — skipping Python SDK install"
+    return 0
+  fi
+
+  for pkg in boto3 openai; do
+    if crexec "python3 -c 'import ${pkg}' >/dev/null 2>&1"; then
+      ver="$(cexec "python3 -c 'import ${pkg}; print(${pkg}.__version__)' 2>/dev/null")"
+      ok "${pkg} already installed: ${ver}"
+    else
+      log "installing ${pkg} (pip, global)"
+      crexec "pip3 install --quiet ${pkg} >/dev/null 2>&1 || pip install --quiet ${pkg} >/dev/null 2>&1"
+      if crexec "python3 -c 'import ${pkg}' >/dev/null 2>&1"; then
+        ver="$(cexec "python3 -c 'import ${pkg}; print(${pkg}.__version__)' 2>/dev/null")"
+        ok "${pkg} installed: ${ver}"
+      else
+        warn "${pkg} install failed"
+      fi
+    fi
+  done
+
+  # Verify boto3 can resolve credentials via IMDS (instance role) — SDK path,
+  # not a shell credential read, so it does not trip the guardrail.
+  local out
+  out="$(cexec "AWS_DEFAULT_REGION=\${AWS_DEFAULT_REGION:-us-east-1} python3 -c 'import boto3,sys; c=boto3.Session().get_credentials(); sys.stdout.write(\"iam-role\" if (c and c.method==\"iam-role\") else (c.method if c else \"none\"))' 2>&1")"
+  if [ "$out" = "iam-role" ]; then
+    ok "boto3 resolves instance-role credentials via IMDS (no keys in container)"
+  else
+    warn "boto3 credential resolution: '$out' (expected 'iam-role' — check IMDS hop limit / instance role)"
+  fi
+}
+
 # ================================================================= main ===
 provision_github
 provision_lark
+provision_python_sdks
 
 log "Done. Summary of what kirocrew can now run inside the container:"
 cat <<'USAGE'
@@ -210,5 +255,11 @@ cat <<'USAGE'
     lark-cli docs +create --title "..." --doc-format markdown --content "..." --as bot
     lark-cli docs +fetch  --doc <token|url> --as bot --doc-format markdown
     lark-cli drive +delete --file-token <token> --type docx --as bot --yes
+  AWS (via boto3 + instance role over IMDS — no keys in container):
+    python3 -c "import boto3; boto3.client('bedrock','us-east-1').list_foundation_models()"
+    # Bedrock, AgentCore, S3, RDS/Aurora per the instance role policy.
+    # Do NOT read creds via shell (aws sts / env|grep AWS) — guardrail blocks it.
+  OpenAI SDK (GPT on Bedrock, Responses API):
+    OPENAI_BASE_URL=https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1
 USAGE
 ok "provisioning complete"
