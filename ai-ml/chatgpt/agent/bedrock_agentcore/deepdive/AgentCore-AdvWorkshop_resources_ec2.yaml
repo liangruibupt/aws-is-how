@@ -1,0 +1,2081 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+    Deploy requisite resources for the AgentCore workshop (EC2 Code Editor edition)
+
+Parameters:
+    CodeEditorUser:
+        Type: String
+        Description: Linux username for Code Editor
+        Default: participant
+        AllowedPattern: ^[a-z_][a-z0-9_-]{0,31}$
+        ConstraintDescription: Must be a valid Linux username (1-32 chars, lowercase, starting with a letter or underscore)
+    InstanceName:
+        Type: String
+        Description: Code Editor EC2 instance name
+        Default: CodeEditor
+    InstanceVolumeSize:
+        Type: Number
+        Description: Code Editor EC2 instance volume size in GB
+        Default: 100
+    InstanceType:
+        Description: Code Editor EC2 instance type
+        Type: String
+        Default: m8g.large
+    HomeFolder:
+        Type: String
+        Description: Code Editor participant home folder
+        Default: /home/participant
+        AllowedPattern: ^/[A-Za-z0-9_][A-Za-z0-9_/.-]*$
+        ConstraintDescription: Must be an absolute path starting with / and an alphanumeric or underscore character
+    FeatureDeepDiveFolder:
+        Type: String
+        Description: Folder name (relative to HomeFolder) for the Feature Deep Dive track
+        Default: feature-deep-dive
+        AllowedPattern: ^[A-Za-z0-9_][A-Za-z0-9_.-]*$
+        ConstraintDescription: Must be a relative folder name (alphanumeric, underscore, dash, or dot)
+    BuildWithSkillsFolder:
+        Type: String
+        Description: Folder name (relative to HomeFolder) for the Build with Skills track
+        Default: build-with-skills
+        AllowedPattern: ^[A-Za-z0-9_][A-Za-z0-9_.-]*$
+        ConstraintDescription: Must be a relative folder name (alphanumeric, underscore, dash, or dot)
+    SetupScriptS3Path:
+        Type: String
+        Description: S3 path to setup_workshop_ec2.sh (e.g. bucket-name/path/setup_workshop_ec2.sh)
+        Default: ""
+
+Metadata:
+    AWS::CloudFormation::Interface:
+        ParameterGroups:
+            - Label:
+                  default: Instance Configuration
+              Parameters:
+                  - InstanceName
+                  - InstanceVolumeSize
+                  - InstanceType
+            - Label:
+                  default: Code Editor Configuration
+              Parameters:
+                  - CodeEditorUser
+                  - HomeFolder
+                  - FeatureDeepDiveFolder
+                  - BuildWithSkillsFolder
+                  - SetupScriptS3Path
+        ParameterLabels:
+            CodeEditorUser:
+                default: Code Editor user name
+            InstanceName:
+                default: Instance name
+            InstanceVolumeSize:
+                default: Instance volume size
+            InstanceType:
+                default: Instance type
+            HomeFolder:
+                default: Code Editor home folder
+            FeatureDeepDiveFolder:
+                default: Feature Deep Dive folder name
+            BuildWithSkillsFolder:
+                default: Build with Skills folder name
+            SetupScriptS3Path:
+                default: Setup script S3 path
+
+Mappings:
+    ArmImage:
+        AmazonLinux-2023:
+            ImageId: "{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64}}"
+    AWSRegionsPrefixListID:
+        ap-northeast-1:
+            PrefixList: pl-58a04531
+        ap-northeast-2:
+            PrefixList: pl-22a6434b
+        ap-northeast-3:
+            PrefixList: pl-31a14458
+        ap-south-1:
+            PrefixList: pl-9aa247f3
+        ap-southeast-1:
+            PrefixList: pl-31a34658
+        ap-southeast-2:
+            PrefixList: pl-b8a742d1
+        ca-central-1:
+            PrefixList: pl-38a64351
+        eu-central-1:
+            PrefixList: pl-a3a144ca
+        eu-north-1:
+            PrefixList: pl-fab65393
+        eu-west-1:
+            PrefixList: pl-4fa04526
+        eu-west-2:
+            PrefixList: pl-93a247fa
+        eu-west-3:
+            PrefixList: pl-75b1541c
+        sa-east-1:
+            PrefixList: pl-5da64334
+        us-east-1:
+            PrefixList: pl-3b927c52
+        us-east-2:
+            PrefixList: pl-b6a144df
+        us-west-1:
+            PrefixList: pl-4ea04527
+        us-west-2:
+            PrefixList: pl-82a045eb
+
+Resources:
+    ###########################################################################
+    # Workshop IAM Managed Policies (retained from original template)
+    ###########################################################################
+    WorkshopManagedPolicy1:
+        Type: AWS::IAM::ManagedPolicy
+        # checkov:skip=CKV_AWS_111:S3Access/IAMRoleAccess/IAMPolicyAccess/BedrockAccess/
+        #   RegistryPersonaUsers are already scoped to account-level ARNs (or a workshop-only
+        #   name prefix for RegistryPersonaUsers). MarketplaceAccess and BedrockDeny use
+        #   Resource: * because those actions have no resource type, but MarketplaceAccess is
+        #   constrained by aws:CalledViaLast and BedrockDeny is an explicit Deny (not a write
+        #   grant). See per-statement comments below for the full rationale per action.
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W13
+                      reason: BedrockDeny is a Deny statement (safe). MarketplaceAccess requires Resource * but is constrained by aws:CalledViaLast condition to bedrock.amazonaws.com.
+        Properties:
+            PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Sid: S3Access
+                      Effect: Allow
+                      Action:
+                          - s3:GetObject
+                          - s3:PutObject
+                          - s3:DeleteObject
+                          - s3:ListBucket
+                          - s3:CreateBucket
+                          - s3:DeleteBucket
+                          - s3:PutEncryptionConfiguration
+                          - s3:PutLifecycleConfiguration
+                          - s3:PutBucketVersioning
+                          - s3:PutBucketPublicAccessBlock
+                          - s3:DeleteBucketPolicy
+                          - s3:PutBucketPolicy
+                      Resource: arn:aws:s3:::*
+                    - Sid: IAMRoleAccess
+                      Effect: Allow
+                      Action:
+                          - iam:GetRole
+                          - iam:GetRolePolicy
+                          - iam:PutRolePolicy
+                          - iam:CreateRole
+                          - iam:DeleteRole
+                          - iam:AttachRolePolicy
+                          - iam:CreateServiceLinkedRole
+                          - iam:PassRole
+                          - iam:DetachRolePolicy
+                          - iam:DeleteRolePolicy
+                          - iam:ListAttachedRolePolicies
+                          - iam:TagRole
+                          - iam:ListRolePolicies
+                          - iam:ListInstanceProfilesForRole
+                          - iam:RemoveRoleFromInstanceProfile
+                          - iam:UpdateAssumeRolePolicy
+                      Resource: !Sub arn:aws:iam::${AWS::AccountId}:role/*
+                    - Sid: IAMPolicyAccess
+                      Effect: Allow
+                      Action:
+                          - iam:CreatePolicy
+                          - iam:DeletePolicy
+                          - iam:GetPolicy
+                          - iam:GetPolicyVersion
+                          - iam:ListPolicyVersions
+                      Resource: !Sub arn:aws:iam::${AWS::AccountId}:policy/*
+                    - Sid: BedrockAccess
+                      Effect: Allow
+                      Action:
+                          - bedrock:TagResource
+                          - bedrock:UntagResource
+                          - bedrock:InvokeModel
+                          - bedrock:InvokeModelWithResponseStream
+                      Resource: arn:aws:bedrock:*:*:*
+                    - Sid: BedrockDeny
+                      Effect: Deny
+                      Action:
+                          - bedrock:CreateModelCustomizationJob
+                          - bedrock:StopModelCustomizationJob
+                          - bedrock:GetModelCustomizationJob
+                          - bedrock:ListModelCustomizationJobs
+                      Resource: "*"
+                    # 03-registry/01-registry-end-to-end creates three throwaway IAM personas
+                    # (registry-admin-demo / -publisher-demo / -consumer-demo) to demonstrate
+                    # governance. Scoped to that name prefix so participants cannot mint
+                    # arbitrary IAM users. Note the example grants the personas inline
+                    # policies of its own choosing, so this stays a workshop-only grant.
+                    - Sid: RegistryPersonaUsers
+                      Effect: Allow
+                      Action:
+                          - iam:CreateUser
+                          - iam:DeleteUser
+                          - iam:GetUser
+                          - iam:PutUserPolicy
+                          - iam:DeleteUserPolicy
+                          - iam:GetUserPolicy
+                          - iam:ListUserPolicies
+                          - iam:CreateAccessKey
+                          - iam:DeleteAccessKey
+                          - iam:ListAccessKeys
+                          - iam:TagUser
+                      Resource: !Sub arn:aws:iam::${AWS::AccountId}:user/registry-*-demo
+                    # 02-browser/09-browser-profile deploys a sample storefront fronted by
+                    # CloudFront. CreateDistribution/CreateOriginAccessControl have no ARN
+                    # to scope to at call time (the distribution/OAC ID doesn't exist yet),
+                    # so those two stay Resource: *. Everything else operates on an existing
+                    # distribution/OAC and is scoped to this account.
+                    - Sid: CloudFrontSampleSiteCreate
+                      Effect: Allow
+                      Action:
+                          - cloudfront:CreateDistribution
+                          - cloudfront:CreateOriginAccessControl
+                      Resource: "*"
+                    - Sid: CloudFrontSampleSiteManage
+                      Effect: Allow
+                      Action:
+                          - cloudfront:DeleteDistribution
+                          - cloudfront:GetDistribution
+                          - cloudfront:GetDistributionConfig
+                          - cloudfront:UpdateDistribution
+                          - cloudfront:ListDistributions
+                          - cloudfront:DeleteOriginAccessControl
+                          - cloudfront:GetOriginAccessControl
+                          - cloudfront:ListOriginAccessControls
+                          - cloudfront:TagResource
+                          - cloudfront:ListTagsForResource
+                      Resource: !Sub arn:aws:cloudfront::${AWS::AccountId}:*
+                    # 02-browser/05-domain-filtering fronts the browser VPC with AWS Network
+                    # Firewall to demonstrate egress domain allowlisting. Firewall/policy/
+                    # rule-group resources have ARNs once created, so those actions are
+                    # scoped to this account+region. Subnet association and logging-config
+                    # calls take an EC2/VPC-style resource with no dedicated ARN, so those
+                    # stay Resource: * (region-pinned).
+                    - Sid: NetworkFirewallManage
+                      Effect: Allow
+                      Action:
+                          - network-firewall:CreateFirewall
+                          - network-firewall:DeleteFirewall
+                          - network-firewall:DescribeFirewall
+                          - network-firewall:CreateFirewallPolicy
+                          - network-firewall:DeleteFirewallPolicy
+                          - network-firewall:DescribeFirewallPolicy
+                          - network-firewall:CreateRuleGroup
+                          - network-firewall:DeleteRuleGroup
+                          - network-firewall:DescribeRuleGroup
+                          - network-firewall:UpdateFirewallPolicy
+                          - network-firewall:TagResource
+                      Resource:
+                          - !Sub arn:aws:network-firewall:${AWS::Region}:${AWS::AccountId}:firewall/*
+                          - !Sub arn:aws:network-firewall:${AWS::Region}:${AWS::AccountId}:firewall-policy/*
+                          - !Sub arn:aws:network-firewall:${AWS::Region}:${AWS::AccountId}:stateful-rulegroup/*
+                          - !Sub arn:aws:network-firewall:${AWS::Region}:${AWS::AccountId}:stateless-rulegroup/*
+                    - Sid: NetworkFirewallLogging
+                      Effect: Allow
+                      Action:
+                          - network-firewall:UpdateLoggingConfiguration
+                          - network-firewall:DescribeLoggingConfiguration
+                          - network-firewall:AssociateSubnets
+                          - network-firewall:DisassociateSubnets
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: MarketplaceAccess
+                      Effect: Allow
+                      Action:
+                          - aws-marketplace:Subscribe
+                          - aws-marketplace:Unsubscribe
+                          - aws-marketplace:ViewSubscriptions
+                          - aws-marketplace:ListEntities
+                          - aws-marketplace:DescribeEntity
+                          - aws-marketplace:StartChangeSet
+                          - aws-marketplace:ListChangeSets
+                          - aws-marketplace:DescribeChangeSet
+                          - aws-marketplace:CancelChangeSet
+                          - aws-marketplace:SearchAgreements
+                          - aws-marketplace:DescribeAgreement
+                          - aws-marketplace:GetAgreementTerms
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:CalledViaLast: bedrock.amazonaws.com
+
+    WorkshopManagedPolicy2:
+        Type: AWS::IAM::ManagedPolicy
+        # checkov:skip=CKV_AWS_107:ECRAuthToken (ecr:GetAuthorizationToken) is a documented
+        #   Checkov false positive (bridgecrewio/checkov#988, #1815) -- this action does not
+        #   support resource-level permissions and always requires Resource: *; it is
+        #   constrained here by aws:RequestedRegion. CognitoAccess is Resource: * for the
+        #   same reason (Cognito IDP has no resource-level permissions at all, verified via
+        #   iam:SimulateCustomPolicy -- see inline comment). All other statements in this
+        #   policy are scoped to account-level ARNs.
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W13
+                      reason: ecr:GetAuthorizationToken requires Resource * per AWS API. Constrained by aws:RequestedRegion condition.
+        Properties:
+            PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Sid: LambdaAccess
+                      Effect: Allow
+                      Action:
+                          - lambda:AddPermission
+                          - lambda:CreateFunction
+                          - lambda:DeleteFunction
+                          - lambda:GetFunction
+                          - lambda:InvokeFunction
+                          - lambda:CreateEventSourceMapping
+                          - lambda:GetEventSourceMapping
+                      Resource: !Sub arn:aws:lambda:*:${AWS::AccountId}:function:*
+                    - Sid: DynamoDBAccess
+                      Effect: Allow
+                      Action:
+                          - dynamodb:DescribeTable
+                          - dynamodb:CreateTable
+                          - dynamodb:DeleteTable
+                          - dynamodb:ListTables
+                          - dynamodb:GetItem
+                          - dynamodb:Query
+                          - dynamodb:PutItem
+                          - dynamodb:DeleteItem
+                          - dynamodb:UpdateItem
+                          - dynamodb:Scan
+                      Resource: arn:aws:dynamodb:*:*:table/*
+                    - Sid: CloudFormationAccess
+                      Effect: Allow
+                      Action:
+                          - cloudformation:CreateChangeSet
+                          - cloudformation:ExecuteChangeSet
+                          - cloudformation:DeleteChangeSet
+                          - cloudformation:DeleteStack
+                          - cloudformation:ListStacks
+                          - cloudformation:UpdateStack
+                          - cloudformation:CreateStack
+                          - cloudformation:DescribeStacks
+                          - cloudformation:DescribeStackResource
+                          - cloudformation:GetTemplate
+                      Resource: arn:aws:cloudformation:*:*:stack/*
+                    - Sid: SSMAccess
+                      Effect: Allow
+                      Action:
+                          - ssm:PutParameter
+                          - ssm:GetParameters
+                          - ssm:GetParameter
+                          - ssm:DeleteParameter
+                      Resource: !Sub arn:aws:ssm:*:${AWS::AccountId}:parameter/*
+                    - Sid: ECRAccess
+                      Effect: Allow
+                      Action:
+                          - ecr:PutLifecyclePolicy
+                          - ecr:CreateRepository
+                          - ecr:SetRepositoryPolicy
+                          - ecr:CompleteLayerUpload
+                          - ecr:DescribeImages
+                          - ecr:BatchDeleteImage
+                          - ecr:UploadLayerPart
+                          - ecr:ListImages
+                          - ecr:InitiateLayerUpload
+                          - ecr:DeleteRepository
+                          - ecr:PutImage
+                          - ecr:ListTagsForResource
+                          - ecr:BatchGetImage
+                          - ecr:GetDownloadUrlForLayer
+                          - ecr:BatchCheckLayerAvailability
+                      Resource: arn:aws:ecr:*:*:repository/*
+                    - Sid: ECRAuthToken
+                      Effect: Allow
+                      Action:
+                          - ecr:GetAuthorizationToken
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: SNSAccess
+                      Effect: Allow
+                      Action:
+                          - sns:Publish
+                          - sns:CreateTopic
+                          - sns:DeleteTopic
+                          - sns:ListTopics
+                          - sns:Subscribe
+                          - sns:Unsubscribe
+                      Resource: !Sub arn:aws:sns:*:${AWS::AccountId}:*
+                    - Sid: CodeBuildAccess
+                      Effect: Allow
+                      Action:
+                          - codebuild:CreateProject
+                          - codebuild:StartBuild
+                          - codebuild:UpdateProject
+                          - codebuild:BatchGetBuilds
+                          - codebuild:DeleteProject
+                          - codebuild:BatchGetProjects
+                      Resource: !Sub arn:aws:codebuild:*:${AWS::AccountId}:project/*
+                    # Amazon Cognito User Pools supports NO resource-level permissions:
+                    # every cognito-idp action has an empty resource-type column in
+                    # https://docs.aws.amazon.com/service-authorization/latest/reference/list_cognito-idp.html
+                    # A `userpool/*` ARN therefore matches nothing and silently denies --
+                    # verified with iam:SimulateCustomPolicy, where CreateUserPool and
+                    # InitiateAuth returned implicitDeny against a userpool ARN and
+                    # `allowed` against "*". Scope is enforced by region + account instead.
+                    - Sid: CognitoAccess
+                      Effect: Allow
+                      Action:
+                          - cognito-idp:CreateResourceServer
+                          - cognito-idp:CreateUserPool
+                          - cognito-idp:CreateUserPoolClient
+                          - cognito-idp:CreateUserPoolDomain
+                          - cognito-idp:DeleteResourceServer
+                          - cognito-idp:DeleteUserPool
+                          - cognito-idp:DeleteUserPoolClient
+                          - cognito-idp:DeleteUserPoolDomain
+                          - cognito-idp:DescribeResourceServer
+                          - cognito-idp:DescribeUserPool
+                          - cognito-idp:DescribeUserPoolClient
+                          - cognito-idp:DescribeUserPoolDomain
+                          - cognito-idp:GetUserPoolMfaConfig
+                          - cognito-idp:ListUserPoolClients
+                          - cognito-idp:ListUserPools
+                          - cognito-idp:UpdateUserPool
+                          - cognito-idp:UpdateUserPoolClient
+                          - cognito-idp:AdminCreateUser
+                          - cognito-idp:AdminDeleteUser
+                          - cognito-idp:AdminSetUserPassword
+                          - cognito-idp:InitiateAuth
+                          - cognito-idp:TagResource
+                          - cognito-idp:UntagResource
+                          - cognito-idp:ListTagsForResource
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    # Federated-identity examples (memory/05-security/02-cognito-federated-identity).
+                    # CreateIdentityPool has no ARN at creation time, hence Resource *.
+                    # Everything else operates on an existing pool and is scoped to it.
+                    - Sid: CognitoIdentityCreate
+                      Effect: Allow
+                      Action:
+                          - cognito-identity:CreateIdentityPool
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: CognitoIdentityManage
+                      Effect: Allow
+                      Action:
+                          - cognito-identity:DeleteIdentityPool
+                          - cognito-identity:DescribeIdentityPool
+                          - cognito-identity:SetIdentityPoolRoles
+                          - cognito-identity:GetIdentityPoolRoles
+                          - cognito-identity:GetId
+                          - cognito-identity:GetCredentialsForIdentity
+                          - cognito-identity:GetOpenIdTokenForDeveloperIdentity
+                          - cognito-identity:TagResource
+                      Resource: !Sub arn:aws:cognito-identity:${AWS::Region}:${AWS::AccountId}:identitypool/*
+                    # VPC provisioning for browser (05-domain-filtering, 07/08, 10-proxy) and
+                    # coding-agent (04-coding-agents/01,02) CloudFormation stacks. EC2 network
+                    # APIs are collection-level at create time and admit no resource ARN --
+                    # per the EC2 entry in the IAM service authorization reference, none of
+                    # these actions support resource-level permissions, so an account-scoped
+                    # ARN (e.g. arn:aws:ec2:region:account:vpc/*) cannot be used here even
+                    # for the Describe/Delete calls. These are pinned to the workshop region
+                    # instead, which is the AWS-documented scoping mechanism for this API.
+                    - Sid: VpcProvisioning
+                      Effect: Allow
+                      Action:
+                          - ec2:CreateVpc
+                          - ec2:DeleteVpc
+                          - ec2:ModifyVpcAttribute
+                          - ec2:DescribeVpcAttribute
+                          - ec2:CreateSubnet
+                          - ec2:DeleteSubnet
+                          - ec2:ModifySubnetAttribute
+                          - ec2:CreateRouteTable
+                          - ec2:DeleteRouteTable
+                          - ec2:CreateRoute
+                          - ec2:DeleteRoute
+                          - ec2:AssociateRouteTable
+                          - ec2:DisassociateRouteTable
+                          - ec2:DescribeRouteTables
+                          - ec2:CreateInternetGateway
+                          - ec2:DeleteInternetGateway
+                          - ec2:AttachInternetGateway
+                          - ec2:DetachInternetGateway
+                          - ec2:DescribeInternetGateways
+                          - ec2:CreateNatGateway
+                          - ec2:DeleteNatGateway
+                          - ec2:DescribeNatGateways
+                          - ec2:AllocateAddress
+                          - ec2:ReleaseAddress
+                          - ec2:DescribeAddresses
+                          - ec2:CreateSecurityGroup
+                          - ec2:DeleteSecurityGroup
+                          - ec2:DescribeSecurityGroups
+                          - ec2:AuthorizeSecurityGroupIngress
+                          - ec2:AuthorizeSecurityGroupEgress
+                          - ec2:RevokeSecurityGroupIngress
+                          - ec2:RevokeSecurityGroupEgress
+                          - ec2:CreateVpcEndpoint
+                          - ec2:DeleteVpcEndpoints
+                          - ec2:DescribeVpcEndpoints
+                          - ec2:CreateTags
+                          - ec2:DeleteTags
+                          - ec2:DescribeAvailabilityZones
+                          - ec2:DescribeNetworkInterfaces
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: SecretsManagerAccess
+                      Effect: Allow
+                      Action:
+                          - secretsmanager:CreateSecret
+                          - secretsmanager:DescribeSecret
+                          - secretsmanager:GetSecretValue
+                          - secretsmanager:DeleteSecret
+                          - secretsmanager:PutSecretValue
+                          - secretsmanager:UpdateSecret
+                          - secretsmanager:TagResource
+                          - secretsmanager:UntagResource
+                          - secretsmanager:GetResourcePolicy
+                      Resource: !Sub arn:aws:secretsmanager:*:${AWS::AccountId}:secret:*
+
+    WorkshopManagedPolicy3:
+        Type: AWS::IAM::ManagedPolicy
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W13
+                      reason: ObservabilityAccess requires Resource * for cross-service actions (logs, xray, application-signals). AgentCoreCreateMemory requires Resource * because no ARN exists at creation time. Constrained by aws:RequestedRegion condition where applicable.
+                    - id: F5
+                      reason: Workshop requires full bedrock-agentcore access for participants to explore all AgentCore features. Scoped to account and region via resource ARN.
+            cfn-lint:
+                config:
+                    ignore_checks:
+                        # cfn-lint's bundled IAM action list predates the AgentCore dataset
+                        # APIs. The actions are real: they are listed in the service
+                        # authorization reference and the live API authorizes against
+                        # bedrock-agentcore:CreateDataset (seen in a 403 response body).
+                        - W3037
+        Properties:
+            PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Sid: AgentCoreFullAccess
+                      Effect: Allow
+                      Action:
+                          - bedrock-agentcore:*
+                      Resource:
+                          - !Sub arn:aws:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:*
+                    - Sid: AgentCoreCreateMemory
+                      Effect: Allow
+                      Action:
+                          - bedrock-agentcore:CreateMemory
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                              aws:ResourceAccount: !Ref "AWS::AccountId"
+                    - Sid: ObservabilityAccess
+                      Effect: Allow
+                      Action:
+                          - application-signals:StartDiscovery
+                          - logs:PutLogEvents
+                          - logs:FilterLogEvents
+                          - logs:DescribeLogGroups
+                          - logs:PutDestination
+                          - logs:GetLogEvents
+                          - logs:CreateLogGroup
+                          - logs:CreateLogStream
+                          - logs:PutResourcePolicy
+                          - logs:PutRetentionPolicy
+                          - logs:DescribeLogStreams
+                          - logs:PutDeliveryDestination
+                          - logs:PutDeliverySource
+                          - logs:CreateDelivery
+                          - logs:ListTagsForResource
+                          - logs:GetDeliveryDestination
+                          - logs:GetDeliverySource
+                          - logs:DeleteLogGroup
+                          - logs:DeleteDeliveryDestination
+                          - logs:DeleteDeliverySource
+                          - logs:GetDelivery
+                          - logs:DescribeDeliveries
+                          - logs:DescribeDeliverySources
+                          - logs:DescribeResourcePolicies
+                          - logs:DescribeDeliveryDestinations
+                          - logs:DeleteDelivery
+                          - logs:GetDeliveryDestinationPolicy
+                          - logs:PutDeliveryDestinationPolicy
+                          - logs:DeleteLogStream
+                          - logs:GetQueryResults
+                          - logs:StartQuery
+                          - xray:PutTraceSegments
+                          - xray:PutTelemetryRecords
+                          - xray:GetSamplingRules
+                          - xray:GetSamplingTargets
+                          - xray:GetSamplingStatisticSummaries
+                          - xray:PutResourcePolicy
+                          - xray:GetIndexingRules
+                          - xray:ListResourcePolicies
+                          - xray:UpdateIndexingRule
+                          - xray:UpdateTraceSegmentDestination
+                          - xray:GetTraceSegmentDestination
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: CloudWatchIndexPolicyStatement
+                      Effect: Allow
+                      Action:
+                          - logs:DescribeIndexPolicies
+                          - logs:PutIndexPolicy
+                      Resource:
+                          - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:aws/spans
+                          - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:aws/spans:*
+                    - Sid: AssumePersonaRoles
+                      Effect: Allow
+                      Action:
+                          - sts:AssumeRole
+                      Resource:
+                          - !Sub arn:aws:iam::${AWS::AccountId}:role/admin_persona
+                          - !Sub arn:aws:iam::${AWS::AccountId}:role/publisher_persona
+                          - !Sub arn:aws:iam::${AWS::AccountId}:role/consumer_persona
+                    # 06-observe/02-evaluate/ground-truth-based-evaluation. CreateDataset and
+                    # ListDatasets take no resource type per the authorization reference; the
+                    # rest are scoped to dataset ARNs.
+                    #
+                    # CreateDataset, CreateDatasetVersion and the *DatasetExamples writes are
+                    # additionally blocked by an explicit deny in an Organizations SCP on the
+                    # workshop OU (observed live: "explicit deny in a service control policy:
+                    # arn:aws:organizations::079517013318:policy/o-gs14n03dc1/
+                    # service_control_policy/p-71o63fsc"). No identity policy can override an
+                    # SCP deny -- the SCP owner must amend it. Granted anyway so the examples
+                    # work in accounts outside that OU. Reads are NOT denied by the SCP, so
+                    # ListDatasets/GetDataset do succeed with these grants.
+                    - Sid: AgentCoreDatasetList
+                      Effect: Allow
+                      Action:
+                          - bedrock-agentcore:CreateDataset
+                          - bedrock-agentcore:ListDatasets
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: AgentCoreDatasetManage
+                      Effect: Allow
+                      Action:
+                          - bedrock-agentcore:GetDataset
+                          - bedrock-agentcore:UpdateDataset
+                          - bedrock-agentcore:DeleteDataset
+                          - bedrock-agentcore:CreateDatasetVersion
+                          - bedrock-agentcore:ListDatasetVersions
+                          - bedrock-agentcore:AddDatasetExamples
+                          - bedrock-agentcore:UpdateDatasetExamples
+                          - bedrock-agentcore:DeleteDatasetExamples
+                          - bedrock-agentcore:ListDatasetExamples
+                      Resource: !Sub arn:aws:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:dataset/*
+                    # memory/03-integrations/03-guardrails-integration. Guardrail ARNs do not
+                    # exist before CreateGuardrail, so creation is region-pinned instead.
+                    # Everything else operates on an existing guardrail and is scoped to it.
+                    - Sid: BedrockGuardrailsCreate
+                      Effect: Allow
+                      Action:
+                          - bedrock:CreateGuardrail
+                          - bedrock:CreateGuardrailVersion
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: BedrockGuardrailsManage
+                      Effect: Allow
+                      Action:
+                          - bedrock:GetGuardrail
+                          - bedrock:ListGuardrails
+                          - bedrock:DeleteGuardrail
+                          - bedrock:UpdateGuardrail
+                          - bedrock:ApplyGuardrail
+                      Resource: !Sub arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:guardrail/*
+                    # 03-connect-your-agent-to-anything/04-fmkb-managed-kb reads a Bedrock
+                    # Managed Knowledge Base. Read-only; the KB itself is user-supplied.
+                    # ListKnowledgeBases has no resource type; the rest scope to the KB ARN.
+                    - Sid: BedrockKnowledgeBaseList
+                      Effect: Allow
+                      Action:
+                          - bedrock:ListKnowledgeBases
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: BedrockKnowledgeBaseRead
+                      Effect: Allow
+                      Action:
+                          - bedrock:GetKnowledgeBase
+                          - bedrock:Retrieve
+                          - bedrock:RetrieveAndGenerate
+                      Resource: !Sub arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:knowledge-base/*
+                    # memory/02-long-term-memory/09-record-streaming publishes memory records
+                    # to a Kinesis stream it creates and tears down itself.
+                    - Sid: KinesisStreamAccess
+                      Effect: Allow
+                      Action:
+                          - kinesis:CreateStream
+                          - kinesis:DeleteStream
+                          - kinesis:DescribeStream
+                          - kinesis:DescribeStreamSummary
+                          - kinesis:GetRecords
+                          - kinesis:GetShardIterator
+                          - kinesis:PutRecord
+                          - kinesis:PutRecords
+                          - kinesis:ListStreams
+                          - kinesis:AddTagsToStream
+                      Resource: !Sub arn:aws:kinesis:*:${AWS::AccountId}:stream/*
+                    # memory/05-security/03-kms-encryption provisions a customer-managed key
+                    # for memory encryption. CreateKey/ListKeys/ListAliases have no ARN to
+                    # scope to (CreateKey has no key ID yet; List* are account-wide by
+                    # design). Everything else operates on an existing key and is scoped to it.
+                    - Sid: KmsKeyCreate
+                      Effect: Allow
+                      Action:
+                          - kms:CreateKey
+                          - kms:ListKeys
+                          - kms:ListAliases
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: KmsKeyManage
+                      Effect: Allow
+                      Action:
+                          - kms:CreateAlias
+                          - kms:DeleteAlias
+                          - kms:DescribeKey
+                          - kms:GetKeyPolicy
+                          - kms:PutKeyPolicy
+                          - kms:TagResource
+                          - kms:ScheduleKeyDeletion
+                          - kms:GenerateDataKey
+                          - kms:Decrypt
+                          - kms:Encrypt
+                      Resource:
+                          # kms:CreateAlias/DeleteAlias require permission on both the alias
+                          # and the KMS key it points to -- both ARN types are listed here.
+                          - !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/*
+                          - !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/*
+                    # 14-s3-filesystem discovers the pre-created S3 Files filesystem and
+                    # access point before wiring them into the harness. Read-only: the
+                    # filesystem and its NFS mount target are provisioned out of band.
+                    # ListFileSystems is account-wide with no ARN; the rest scope to the
+                    # filesystem ARN, mirroring the HarnessS3FilesAccess pattern below.
+                    - Sid: S3FilesList
+                      Effect: Allow
+                      Action:
+                          - s3files:ListFileSystems
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: S3FilesDiscovery
+                      Effect: Allow
+                      Action:
+                          - s3files:GetFileSystem
+                          - s3files:ListAccessPoints
+                          - s3files:GetAccessPoint
+                      Resource: !Sub arn:aws:s3files:${AWS::Region}:${AWS::AccountId}:file-system/*
+                    # 01-gateway/04-advanced-concepts/web-application-firewall attaches a
+                    # WAFv2 WebACL to a Gateway. CreateWebACL has no ARN at call time;
+                    # everything else operates on an existing WebACL and is scoped to it.
+                    # GetWebACLForResource/ListResourcesForWebACL take the *protected*
+                    # resource's ARN (the Gateway), not a WAF ARN, so those stay on *
+                    # region-pinned since the Gateway ARN format varies by resource type.
+                    - Sid: Wafv2WebAclCreate
+                      Effect: Allow
+                      Action:
+                          - wafv2:CreateWebACL
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+                    - Sid: Wafv2WebAclManage
+                      Effect: Allow
+                      Action:
+                          - wafv2:DeleteWebACL
+                          - wafv2:GetWebACL
+                          - wafv2:UpdateWebACL
+                          - wafv2:ListWebACLs
+                          - wafv2:AssociateWebACL
+                          - wafv2:DisassociateWebACL
+                          - wafv2:TagResource
+                          - wafv2:ListTagsForResource
+                      Resource: !Sub arn:aws:wafv2:${AWS::Region}:${AWS::AccountId}:regional/webacl/*
+                    - Sid: Wafv2ResourceAssociationLookup
+                      Effect: Allow
+                      Action:
+                          - wafv2:GetWebACLForResource
+                          - wafv2:ListResourcesForWebACL
+                      Resource: "*"
+                      Condition:
+                          StringEquals:
+                              aws:RequestedRegion: !Ref "AWS::Region"
+
+    ###########################################################################
+    # Pre-provisioned AgentCore execution roles
+    #
+    # 01-harness/utils/iam.py::create_harness_role early-returns as soon as a
+    # role named HarnessExecutionRole exists, WITHOUT reconciling its policies.
+    # Its counterpart delete_harness_role() -- called in the cleanup step of
+    # getting_started.py and the 02-use-cases examples -- deletes the inline
+    # HarnessExecutionPolicy and then attempts delete_role. Once 14-s3-filesystem
+    # has added its own HarnessS3FilesAccess policy, that delete_role fails
+    # (the role still has a policy attached), so the role survives while
+    # HarnessExecutionPolicy does not. Every later harness example then reuses a
+    # role that can no longer call bedrock-agentcore:ListEvents, and nothing in
+    # the samples repairs it.
+    #
+    # The permissions are therefore attached as a MANAGED policy: the samples
+    # only ever call delete_role_policy (inline), so they cannot detach it and
+    # the role self-heals across runs.
+    ###########################################################################
+    HarnessExecutionManagedPolicy:
+        Type: AWS::IAM::ManagedPolicy
+        # checkov:skip=CKV_AWS_107:ECRAuthToken (ecr:GetAuthorizationToken/
+        #   ecr-public:GetAuthorizationToken/sts:GetServiceBearerToken) is a documented
+        #   Checkov false positive (bridgecrewio/checkov#988, #1815) -- these actions have
+        #   no resource type and always require Resource: *.
+        # checkov:skip=CKV_AWS_111:BedrockInvokeModel (foundation models have no
+        #   account-owned ARN), Observability (X-Ray puts / initial CreateLogGroup have no
+        #   resource-level permissions per the IAM service authorization reference), and
+        #   S3FilesValidate (s3files:GetAccessPoint has no resource type at harness-create
+        #   time, per inline comment) all require Resource: * by AWS API design, not by
+        #   choice. ECRPull, AgentCore, and S3FilesMount are already scoped to account/
+        #   region ARNs below.
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W13
+                      reason: Mirrors the samples' own HarnessExecutionPolicy; ECR/X-Ray/logs actions require Resource * per AWS API.
+                    - id: F5
+                      reason: Wildcard AgentCore actions match the samples' policy so participants can explore all harness features.
+        Properties:
+            Description: Permissions for the AgentCore Harness execution role (workshop-managed so sample cleanup cannot strip it)
+            PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    # bedrock:InvokeModel has no account-owned resource ARN -- foundation
+                    # models are AWS-owned, not customer resources -- so Resource: * is the
+                    # only valid scoping for this action (mirrors the participant role's own
+                    # BedrockAccess statement above, which uses arn:aws:bedrock:*:*:*).
+                    - Sid: BedrockInvokeModel
+                      Effect: Allow
+                      Action:
+                          - bedrock:InvokeModel
+                          - bedrock:InvokeModelWithResponseStream
+                      Resource: "*"
+                    - Sid: ECRAuthToken
+                      Effect: Allow
+                      Action:
+                          - ecr:GetAuthorizationToken
+                          - ecr-public:GetAuthorizationToken
+                          - sts:GetServiceBearerToken
+                      Resource: "*"
+                    - Sid: ECRPull
+                      Effect: Allow
+                      Action:
+                          - ecr:GetDownloadUrlForLayer
+                          - ecr:BatchGetImage
+                          - ecr:BatchCheckLayerAvailability
+                      Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/*
+                    # X-Ray trace/telemetry puts and CreateLogGroup/CreateLogStream have no
+                    # resource-level permissions for these specific actions per the IAM
+                    # service authorization reference -- Resource: * is required, matching
+                    # the participant role's own ObservabilityAccess statement.
+                    - Sid: Observability
+                      Effect: Allow
+                      Action:
+                          - xray:PutTraceSegments
+                          - xray:PutTelemetryRecords
+                          - logs:CreateLogGroup
+                          - logs:CreateLogStream
+                          - logs:PutLogEvents
+                      Resource: "*"
+                    - Sid: AgentCore
+                      Effect: Allow
+                      Action:
+                          - bedrock-agentcore:*Memory*
+                          - bedrock-agentcore:*Browser*
+                          - bedrock-agentcore:*Gateway*
+                          - bedrock-agentcore:*CodeInterpreter*
+                          - bedrock-agentcore:RetrieveMemoryRecords
+                          - bedrock-agentcore:CreateEvent
+                          - bedrock-agentcore:ListEvents
+                          - bedrock-agentcore:GetEvent
+                          - bedrock-agentcore:GetResourceApiKey
+                      # Scoped to this account+region, matching the AgentCoreFullAccess
+                      # statement granted to the participant role above.
+                      Resource: !Sub arn:aws:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:*
+                    # 14-s3-filesystem mounts an S3 Files access point into the harness
+                    # microVM. GetAccessPoint takes no resource type per the s3files
+                    # service authorization reference and is validated on * at
+                    # harness-create time; ClientMount/ClientWrite require a
+                    # file-system resource, so they are scoped to this account's
+                    # file systems. Mirrors the HarnessS3FilesAccess policy the sample
+                    # attaches at runtime.
+                    - Sid: S3FilesValidate
+                      Effect: Allow
+                      Action:
+                          - s3files:GetAccessPoint
+                      Resource: "*"
+                    - Sid: S3FilesMount
+                      Effect: Allow
+                      Action:
+                          - s3files:ClientMount
+                          - s3files:ClientWrite
+                      Resource: !Sub arn:aws:s3files:${AWS::Region}:${AWS::AccountId}:file-system/*
+
+    HarnessExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+            RoleName: HarnessExecutionRole
+            Description: Execution role for Amazon Bedrock AgentCore Harness
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: bedrock-agentcore.amazonaws.com
+                      Action: sts:AssumeRole
+            ManagedPolicyArns:
+                - !Ref HarnessExecutionManagedPolicy
+
+    # 04-manage-context-of-your-agent/memory. 05-quickstart-agentcore-sdk.py and
+    # the 02-strategy-overrides / 03-self-managed-strategy examples read
+    # MEMORY_EXECUTION_ROLE_ARN and raise if it is unset -- unlike the boto3
+    # variants they have no auto-create fallback. The name matches the one the
+    # boto3 examples create so both paths converge on the same role.
+    AgentCoreMemoryManagedPolicy:
+        Type: AWS::IAM::ManagedPolicy
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W13
+                      reason: bedrock:InvokeModel for memory extraction requires Resource * per AWS API design -- foundation models have no account-owned resource ARN. Matches the workshop's own BedrockAccess statement (arn:aws:bedrock:*:*:*).
+        Properties:
+            Description: Permissions for the AgentCore Memory execution role (memory extraction model invocation)
+            PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Sid: BedrockAccess
+                      Effect: Allow
+                      Action:
+                          - bedrock:InvokeModel
+                          - bedrock:InvokeModelWithResponseStream
+                      Resource: "*"
+
+    AgentCoreMemoryExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+            RoleName: AgentCoreMemoryExecutionRole
+            Description: Execution role for AgentCore Memory
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: bedrock-agentcore.amazonaws.com
+                      Action: sts:AssumeRole
+                      Condition:
+                          StringEquals:
+                              aws:SourceAccount: !Ref "AWS::AccountId"
+            ManagedPolicyArns:
+                - !Ref AgentCoreMemoryManagedPolicy
+
+    ###########################################################################
+    # EC2 Code Editor Infrastructure
+    ###########################################################################
+    CodeEditorSecret:
+        Type: AWS::SecretsManager::Secret
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W77
+                      reason: Default KMS Key is appropriate for this workshop password
+        DeletionPolicy: Delete
+        UpdateReplacePolicy: Delete
+        Properties:
+            Name: !Sub
+                - ${InstanceName}-${RandomGUID}
+                - RandomGUID:
+                      !Select [
+                          0,
+                          !Split [
+                              "-",
+                              !Select [2, !Split ["/", !Ref "AWS::StackId"]],
+                          ],
+                      ]
+            Description: Code Editor user details
+            GenerateSecretString:
+                PasswordLength: 16
+                SecretStringTemplate: !Sub '{"username":"${CodeEditorUser}"}'
+                GenerateStringKey: password
+                ExcludePunctuation: true
+
+    SecretPlaintextLambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: !Sub lambda.${AWS::URLSuffix}
+                      Action: sts:AssumeRole
+            ManagedPolicyArns:
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            Policies:
+                - PolicyName: AwsSecretsManager
+                  PolicyDocument:
+                      Version: 2012-10-17
+                      Statement:
+                          - Effect: Allow
+                            Action:
+                                - secretsmanager:GetSecretValue
+                            Resource: !Ref CodeEditorSecret
+
+    SecretPlaintextLambda:
+        Type: AWS::Lambda::Function
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W58
+                      reason: Role has AWSLambdaBasicExecutionRole which includes CloudWatch Logs
+                    - id: W89
+                      reason: VPC not needed for this custom resource
+                    - id: W92
+                      reason: Reserved concurrency not needed for this custom resource
+        Properties:
+            Description: Return the value of the secret
+            Handler: index.lambda_handler
+            Runtime: python3.13
+            MemorySize: 128
+            Timeout: 10
+            Architectures:
+                - arm64
+            Role: !GetAtt SecretPlaintextLambdaRole.Arn
+            Code:
+                ZipFile: |
+                    import boto3
+                    import json
+                    import cfnresponse
+                    import logging
+
+                    logger = logging.getLogger()
+                    logger.setLevel(logging.INFO)
+
+                    def is_valid_json(json_string):
+                        try:
+                            json.loads(json_string)
+                            return True
+                        except json.JSONDecodeError:
+                            return False
+
+                    def lambda_handler(event, context):
+                        try:
+                            if event['RequestType'] == 'Delete':
+                                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData={}, reason='No action to take')
+                            else:
+                                resource_properties = event['ResourceProperties']
+                                secret_name = resource_properties['SecretArn']
+                                secrets_mgr = boto3.client('secretsmanager')
+                                secret = secrets_mgr.get_secret_value(SecretId=secret_name)
+                                secret_value = secret['SecretString']
+                                responseData = {}
+                                if is_valid_json(secret_value):
+                                    responseData = secret_value
+                                else:
+                                    responseData = {'secret': secret_value}
+                                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData=json.loads(responseData), reason='OK', noEcho=True)
+                        except Exception as e:
+                            logger.error(e)
+                            cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason=str(e))
+
+    SecretPlaintext:
+        Type: Custom::SecretPlaintextLambda
+        Properties:
+            ServiceToken: !GetAtt SecretPlaintextLambda.Arn
+            ServiceTimeout: 15
+            SecretArn: !Ref CodeEditorSecret
+
+    CodeEditorInstanceRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service:
+                              - !Sub ec2.${AWS::URLSuffix}
+                              - !Sub ssm.${AWS::URLSuffix}
+                      Action: sts:AssumeRole
+                    - Effect: Allow
+                      Principal:
+                          Service:
+                              - bedrock.amazonaws.com
+                      Action: sts:AssumeRole
+                    - Effect: Allow
+                      Principal:
+                          Service:
+                              - bedrock-agentcore.amazonaws.com
+                      Action: sts:AssumeRole
+                      Condition:
+                          StringEquals:
+                              aws:SourceAccount: !Sub ${AWS::AccountId}
+                          ArnLike:
+                              aws:SourceArn: !Sub arn:aws:bedrock-agentcore:*:${AWS::AccountId}:*
+            ManagedPolicyArns:
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/CloudWatchAgentServerPolicy
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonS3ReadOnlyAccess
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/AWSLambda_FullAccess
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/BedrockAgentCoreFullAccess
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/CloudWatchFullAccessV2
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/AWSCloudFormationReadOnlyAccess
+                - !Ref WorkshopManagedPolicy1
+                - !Ref WorkshopManagedPolicy2
+                - !Ref WorkshopManagedPolicy3
+
+    CodeEditorInstanceProfile:
+        Type: AWS::IAM::InstanceProfile
+        Properties:
+            Roles:
+                - !Ref CodeEditorInstanceRole
+
+    SecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: F1000
+                      reason: All outbound traffic allowed; instance is in default VPC which already has this egress rule
+        Properties:
+            GroupDescription: Security Group for Code Editor - only allow CloudFront ingress
+            SecurityGroupIngress:
+                - Description: Allow HTTP from com.amazonaws.global.cloudfront.origin-facing
+                  IpProtocol: tcp
+                  FromPort: 80
+                  ToPort: 80
+                  SourcePrefixListId:
+                      !FindInMap [
+                          AWSRegionsPrefixListID,
+                          !Ref "AWS::Region",
+                          PrefixList,
+                      ]
+            Tags:
+                - Key: Name
+                  Value: !Sub ${InstanceName}-sg
+
+    CodeEditorInstance:
+        Type: AWS::EC2::Instance
+        Properties:
+            ImageId: !FindInMap [ArmImage, AmazonLinux-2023, ImageId]
+            InstanceType: !Ref InstanceType
+            BlockDeviceMappings:
+                - DeviceName: /dev/xvda
+                  Ebs:
+                      VolumeSize: !Ref InstanceVolumeSize
+                      VolumeType: gp3
+                      DeleteOnTermination: true
+                      Encrypted: true
+            Monitoring: true
+            SecurityGroupIds:
+                - !Ref SecurityGroup
+            IamInstanceProfile: !Ref CodeEditorInstanceProfile
+            UserData:
+                Fn::Base64: !Sub |
+                    #cloud-config
+                    hostname: ${InstanceName}
+                    runcmd:
+                      - mkdir -p ${HomeFolder} && chown -R ${CodeEditorUser}:${CodeEditorUser} ${HomeFolder}
+            Tags:
+                - Key: Name
+                  Value: !Ref InstanceName
+
+    CodeEditorInstanceEIP:
+        Type: AWS::EC2::EIP
+        Properties:
+            Domain: vpc
+
+    ElasticIPAssociation:
+        Type: AWS::EC2::EIPAssociation
+        Properties:
+            AllocationId: !GetAtt CodeEditorInstanceEIP.AllocationId
+            InstanceId: !Ref CodeEditorInstance
+
+    CodeEditorInstanceCachePolicy:
+        Type: AWS::CloudFront::CachePolicy
+        Properties:
+            CachePolicyConfig:
+                DefaultTTL: 86400
+                MaxTTL: 31536000
+                MinTTL: 1
+                Name: !Sub
+                    - ${InstanceName}-${RandomGUID}
+                    - RandomGUID:
+                          !Select [
+                              0,
+                              !Split [
+                                  "-",
+                                  !Select [
+                                      2,
+                                      !Split ["/", !Ref "AWS::StackId"],
+                                  ],
+                              ],
+                          ]
+                ParametersInCacheKeyAndForwardedToOrigin:
+                    CookiesConfig:
+                        CookieBehavior: all
+                    EnableAcceptEncodingGzip: true
+                    EnableAcceptEncodingBrotli: true
+                    HeadersConfig:
+                        HeaderBehavior: whitelist
+                        Headers:
+                            - Accept-Charset
+                            - Authorization
+                            - Origin
+                            - Accept
+                            - Referer
+                            - Host
+                            - Accept-Language
+                            - Accept-Datetime
+                    QueryStringsConfig:
+                        QueryStringBehavior: all
+
+    CloudFrontDistribution:
+        Type: AWS::CloudFront::Distribution
+        DependsOn: ElasticIPAssociation
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W10
+                      reason: Access logging would require S3 bucket setup adding unnecessary complexity
+                    - id: W70
+                      reason: Workshop Studio does not include a domain for TLS certificate provisioning
+        Properties:
+            DistributionConfig:
+                Enabled: true
+                HttpVersion: http2and3
+                CacheBehaviors:
+                    - AllowedMethods:
+                          - GET
+                          - HEAD
+                          - OPTIONS
+                          - PUT
+                          - PATCH
+                          - POST
+                          - DELETE
+                      CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+                      Compress: false
+                      OriginRequestPolicyId: 216adef6-5c7f-47e4-b989-5492eafa07d3
+                      ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
+                      TargetOriginId: !Sub CloudFront-${AWS::StackName}
+                      ViewerProtocolPolicy: redirect-to-https
+                      PathPattern: "/proxy/*"
+                DefaultCacheBehavior:
+                    AllowedMethods:
+                        - GET
+                        - HEAD
+                        - OPTIONS
+                        - PUT
+                        - PATCH
+                        - POST
+                        - DELETE
+                    CachePolicyId: !Ref CodeEditorInstanceCachePolicy
+                    Compress: true
+                    OriginRequestPolicyId: 216adef6-5c7f-47e4-b989-5492eafa07d3
+                    ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
+                    TargetOriginId: !Sub CloudFront-${AWS::StackName}
+                    ViewerProtocolPolicy: redirect-to-https
+                Origins:
+                    - DomainName: !GetAtt CodeEditorInstance.PublicDnsName
+                      Id: !Sub CloudFront-${AWS::StackName}
+                      CustomOriginConfig:
+                          OriginProtocolPolicy: http-only
+                ViewerCertificate:
+                    CloudFrontDefaultCertificate: true
+                    MinimumProtocolVersion: TLSv1.2_2021
+
+    ###########################################################################
+    # SSM Documents for EC2 Bootstrap
+    ###########################################################################
+    InstallCodeEditorExtensionSSMDoc:
+        Type: AWS::SSM::Document
+        Properties:
+            DocumentType: Command
+            Content:
+                schemaVersion: "2.2"
+                description: Install CodeEditor Extension
+                parameters:
+                    ExtensionId:
+                        type: String
+                    CodeEditorUser:
+                        type: String
+                    MaxRetries:
+                        type: String
+                        default: "3"
+                    FailureReturnValue:
+                        type: String
+                        default: "0"
+                mainSteps:
+                    - name: InstallCodeEditorExtension
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - |
+                                  extension_name="{{ ExtensionId }}"
+                                  max_retries={{ MaxRetries }}
+                                  retry_count=0
+
+                                  while [ $retry_count -lt $max_retries ]; do
+                                    echo "Installing extension: $extension_name (attempt $((retry_count + 1))/$max_retries)"
+
+                                    if ! sudo -i -u {{ CodeEditorUser }} /home/{{ CodeEditorUser }}/.local/bin/code-editor-server --install-extension "$extension_name" --force 2>&1; then
+                                      echo "Failed to install $extension_name on attempt $((retry_count + 1))"
+                                    fi
+
+                                    if sudo -i -u {{ CodeEditorUser }} /home/{{ CodeEditorUser }}/.local/bin/code-editor-server --list-extensions | grep -qi "$extension_name"; then
+                                      echo "Successfully installed $extension_name"
+                                      exit 0
+                                    else
+                                      echo "Extension $extension_name not found in installed list"
+                                    fi
+
+                                    retry_count=$((retry_count + 1))
+                                    if [ $retry_count -lt $max_retries ]; then
+                                      echo "Retrying in 5 seconds..."
+                                      sleep 5
+                                    fi
+                                  done
+
+                                  echo "Failed to install $extension_name after $max_retries attempts"
+                                  exit {{ FailureReturnValue }}
+
+    CodeEditorSSMDoc:
+        Type: AWS::SSM::Document
+        Properties:
+            DocumentType: Command
+            Content:
+                schemaVersion: "2.2"
+                description: Bootstrap Code Editor instance for AgentCore workshop
+                parameters:
+                    CodeEditorPassword:
+                        type: String
+                        default: !Ref "AWS::StackId"
+                mainSteps:
+                    - name: InstallCloudWatchAgent
+                      action: aws:configurePackage
+                      inputs:
+                          name: AmazonCloudWatchAgent
+                          action: Install
+                    - name: ConfigureCloudWatchAgent
+                      action: aws:runDocument
+                      inputs:
+                          documentType: SSMDocument
+                          documentPath: AmazonCloudWatch-ManageAgent
+                          documentParameters:
+                              action: configure
+                              mode: ec2
+                              optionalConfigurationSource: default
+                              optionalRestart: "yes"
+                    - name: InstallBasePackages
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - dnf install -y --allowerasing curl gnupg whois argon2 unzip nginx openssl jq tar gzip
+                    - name: InstallNodejs
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - dnf install -y nodejs22 npm
+                              - echo "Node.js installed"
+                              - node --version
+                              - npm --version
+                    - name: AddUser
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub |
+                                  echo 'Adding user: ${CodeEditorUser}'
+                                  adduser -c '' ${CodeEditorUser} 2>/dev/null || true
+                                  passwd -l ${CodeEditorUser}
+                                  echo "${CodeEditorUser}:{{ CodeEditorPassword }}" | chpasswd
+                                  usermod -aG wheel ${CodeEditorUser}
+                                  sed -i 's/# %wheel/%wheel/g' /etc/sudoers
+                              - echo "User added. Checking configuration"
+                              - !Sub getent passwd ${CodeEditorUser}
+                    - name: UpdateProfile
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - echo LANG=en_US.utf-8 >> /etc/environment
+                              - echo LC_ALL=en_US.UTF-8 >> /etc/environment
+                              - !Sub echo 'PATH=$PATH:/home/${CodeEditorUser}/.local/bin' >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo 'export PATH' >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo 'export AWS_REGION=${AWS::Region}' >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo 'export AWS_DEFAULT_REGION=${AWS::Region}' >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo 'export AWS_ACCOUNTID=${AWS::AccountId}' >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo 'export NEXT_TELEMETRY_DISABLED=1' >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo "alias ll='ls -la'" >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub echo "export PS1='\[\033[01;32m\]\u:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> /home/${CodeEditorUser}/.bashrc
+                              - !Sub chown -R ${CodeEditorUser}:${CodeEditorUser} /home/${CodeEditorUser}
+                    - name: InstallDocker
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - dnf install -y docker
+                              - systemctl enable --now docker
+                              - !Sub usermod -aG docker ${CodeEditorUser}
+                              - echo "Docker installed"
+                              - docker --version
+                    - name: InstallAWSCLI
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub sudo -u ${CodeEditorUser} curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip -o /tmp/aws-cli.zip
+                              - unzip -q -d /tmp /tmp/aws-cli.zip
+                              - sudo /tmp/aws/install --update
+                              - rm -rf /tmp/aws /tmp/aws-cli.zip
+                              - echo "AWS CLI installed"
+                              - aws --version
+                    - name: InstallGit
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - dnf install -y git
+                    - name: ConfigureGit
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 300
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub sudo -u ${CodeEditorUser} git config --global user.email "participant@example.com"
+                              - !Sub sudo -u ${CodeEditorUser} git config --global user.name "Workshop Participant"
+                              - !Sub sudo -u ${CodeEditorUser} git config --global init.defaultBranch "main"
+                              - echo "Git configured"
+                              - git --version
+                    - name: InstallCodeEditor
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 600
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub export CodeEditorUser=${CodeEditorUser}
+                              - curl -fsSL https://code-editor.amazonaws.com/content/code-editor-server/dist/aws-workshop-studio/install.sh | bash -s -- 2>&1 || { echo "Code Editor installation failed"; exit 1; }
+                    - name: ConfigureNginx
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 600
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - echo "Configuring nginx..."
+                              - !Sub |
+                                  tee /etc/nginx/conf.d/code-editor.conf <<EOF
+                                  server {
+                                      listen 80;
+                                      listen [::]:80;
+                                      server_name *.cloudfront.net;
+                                      client_max_body_size 50m;
+                                      proxy_set_header Host \$host;
+                                      proxy_set_header X-Real-IP \$remote_addr;
+                                      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                                      proxy_set_header X-Forwarded-Proto \$scheme;
+                                      proxy_set_header Upgrade \$http_upgrade;
+                                      proxy_set_header Connection "upgrade";
+                                      proxy_buffering off;
+                                      proxy_set_header Accept-Encoding gzip;
+
+                                      location ~ ^/app/(\d+)/(.*) {
+                                          proxy_pass http://127.0.0.1:\$1/\$2\$is_args\$args;
+                                      }
+
+                                      location / {
+                                          proxy_pass http://localhost:8080/;
+                                      }
+                                  }
+                                  EOF
+                              - systemctl enable nginx 2>&1
+                              - systemctl restart nginx
+                              - echo "Nginx configured"
+                              - nginx -t 2>&1
+                              - systemctl status nginx
+
+                    - name: ConfigureWorkshopEnv
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 60
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub |
+                                  tee /etc/profile.d/workshop.sh <<EOF
+                                  export WORKSHOP_URL="https://${CloudFrontDistribution.DomainName}"
+                                  EOF
+                                  chmod 644 /etc/profile.d/workshop.sh
+
+                    - name: ConfigureSudoers
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 60
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - |
+                                  tee /etc/sudoers.d/workshop <<EOF
+                                  participant ALL=(ALL) NOPASSWD: /usr/sbin/nginx -t, /usr/bin/systemctl reload nginx
+                                  EOF
+                                  chmod 440 /etc/sudoers.d/workshop
+                                  visudo -c
+
+                    - name: ConfigureAuthToken
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 600
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub |
+                                  sudo -u ${CodeEditorUser} mkdir -p /home/${CodeEditorUser}/.code-editor-server/data
+                                  sudo -u ${CodeEditorUser} touch /home/${CodeEditorUser}/.code-editor-server/data/token
+                                  echo -n "{{ CodeEditorPassword }}" > /home/${CodeEditorUser}/.code-editor-server/data/token
+                    - name: ConfigureCodeEditor
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 600
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub sudo -i -u ${CodeEditorUser} mkdir -p /home/${CodeEditorUser}/.code-editor-server/data/User
+                              - !Sub sudo -i -u ${CodeEditorUser} touch /home/${CodeEditorUser}/.code-editor-server/data/User/settings.json
+                              - !Sub touch /home/${CodeEditorUser}/.hushlogin
+                              - !Sub mkdir -p ${HomeFolder} && chown -R ${CodeEditorUser}:${CodeEditorUser} ${HomeFolder}
+                              - !Sub |
+                                  tee /home/${CodeEditorUser}/.code-editor-server/data/User/settings.json <<EOF
+                                  {
+                                    "aws.telemetry": false,
+                                    "extensions.autoUpdate": false,
+                                    "extensions.autoCheckUpdates": false,
+                                    "telemetry.telemetryLevel": "off",
+                                    "security.workspace.trust.startupPrompt": "never",
+                                    "security.workspace.trust.enabled": false,
+                                    "security.workspace.trust.banner": "never",
+                                    "security.workspace.trust.emptyWindow": false,
+                                    "workbench.startupEditor": "none",
+                                    "terminal.integrated.cwd": "${HomeFolder}",
+                                    "auto-run-command.rules": [
+                                      {
+                                        "command": "workbench.action.terminal.new"
+                                      }
+                                    ]
+                                  }
+                                  EOF
+                              - !Sub chown -R ${CodeEditorUser}:${CodeEditorUser} /home/${CodeEditorUser}
+                              - !Sub systemctl enable --now code-editor@${CodeEditorUser}
+                              - !Sub systemctl restart code-editor@${CodeEditorUser}
+                              - echo "Code Editor configured"
+                              - !Sub sudo -i -u ${CodeEditorUser} /home/${CodeEditorUser}/.local/bin/code-editor-server -v
+                              - !Sub systemctl status code-editor@${CodeEditorUser}
+                    - name: InstallAWSToolkitExtension
+                      action: aws:runDocument
+                      inputs:
+                          documentType: SSMDocument
+                          documentPath: !Ref InstallCodeEditorExtensionSSMDoc
+                          documentParameters:
+                              ExtensionId: AmazonWebServices.aws-toolkit-vscode
+                              CodeEditorUser: !Ref CodeEditorUser
+                    - name: InstallAutoRunCommandExtension
+                      action: aws:runDocument
+                      inputs:
+                          documentType: SSMDocument
+                          documentPath: !Ref InstallCodeEditorExtensionSSMDoc
+                          documentParameters:
+                              ExtensionId: synedra.auto-run-command
+                              CodeEditorUser: !Ref CodeEditorUser
+                    - name: InstallMermaidExtension
+                      action: aws:runDocument
+                      inputs:
+                          documentType: SSMDocument
+                          documentPath: !Ref InstallCodeEditorExtensionSSMDoc
+                          documentParameters:
+                              ExtensionId: bierner.markdown-mermaid
+                              CodeEditorUser: !Ref CodeEditorUser
+                    - name: InstallPdfExtension
+                      action: aws:runDocument
+                      inputs:
+                          documentType: SSMDocument
+                          documentPath: !Ref InstallCodeEditorExtensionSSMDoc
+                          documentParameters:
+                              ExtensionId: anwar.papyrus-pdf
+                              CodeEditorUser: !Ref CodeEditorUser
+                    - name: InstallTerraformExtension
+                      action: aws:runDocument
+                      inputs:
+                          documentType: SSMDocument
+                          documentPath: !Ref InstallCodeEditorExtensionSSMDoc
+                          documentParameters:
+                              ExtensionId: hashicorp.terraform
+                              CodeEditorUser: !Ref CodeEditorUser
+                    - name: RunWorkshopSetup
+                      action: aws:runShellScript
+                      inputs:
+                          timeoutSeconds: 120
+                          runCommand:
+                              - "#!/bin/bash"
+                              - set -euo pipefail
+                              - !Sub |
+                                  if [[ -z "${SetupScriptS3Path}" ]]; then
+                                    echo "No setup script S3 path provided, skipping"
+                                    exit 0
+                                  fi
+                                  echo "Downloading workshop setup script from s3://${SetupScriptS3Path}..."
+                                  aws s3 cp "s3://${SetupScriptS3Path}" /home/${CodeEditorUser}/setup_workshop_ec2.sh
+                                  chmod +x /home/${CodeEditorUser}/setup_workshop_ec2.sh
+                                  chown ${CodeEditorUser}:${CodeEditorUser} /home/${CodeEditorUser}/setup_workshop_ec2.sh
+                                  echo "Running workshop setup in background..."
+                                  nohup sudo -i -u ${CodeEditorUser} bash /home/${CodeEditorUser}/setup_workshop_ec2.sh > /var/log/workshop_setup.log 2>&1 &
+                                  echo "Workshop setup started in background (PID: $!). Log: /var/log/workshop_setup.log"
+
+    ###########################################################################
+    # SSM Document Execution and Health Check Lambdas
+    ###########################################################################
+    SSMDocLambdaRole:
+        Type: AWS::IAM::Role
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W11
+                      reason: ssm:*CommandInvocation API actions do not support resource-level permissions
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: !Sub lambda.${AWS::URLSuffix}
+                      Action: sts:AssumeRole
+            ManagedPolicyArns:
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            Policies:
+                - PolicyName: SSMDocOnEC2
+                  PolicyDocument:
+                      Version: 2012-10-17
+                      Statement:
+                          - Effect: Allow
+                            Action:
+                                - ssm:SendCommand
+                            Resource:
+                                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:document/${CodeEditorSSMDoc}
+                                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:document/AmazonCloudWatch-ManageAgent
+                                - !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/${CodeEditorInstance}
+                          - Effect: Allow
+                            Action:
+                                - ssm:ListCommandInvocations
+                                - ssm:GetCommandInvocation
+                            Resource: "*"
+
+    RunSSMDocLambda:
+        Type: AWS::Lambda::Function
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W58
+                      reason: Role has AWSLambdaBasicExecutionRole
+                    - id: W89
+                      reason: VPC not needed
+                    - id: W92
+                      reason: Reserved concurrency not needed
+        Properties:
+            Description: Run SSM document on EC2 instance
+            Handler: index.lambda_handler
+            Runtime: python3.13
+            MemorySize: 128
+            Timeout: 600
+            Environment:
+                Variables:
+                    RetrySleep: 2900
+                    AbortTimeRemaining: 5000
+            Architectures:
+                - arm64
+            Role: !GetAtt SSMDocLambdaRole.Arn
+            Code:
+                ZipFile: |
+                    import boto3
+                    import cfnresponse
+                    import logging
+                    import time
+                    import os
+
+                    logger = logging.getLogger()
+                    logger.setLevel(logging.INFO)
+
+                    def lambda_handler(event, context):
+                        if event['RequestType'] != 'Create':
+                            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData={}, reason='No action to take')
+                        else:
+                            sleep_ms = int(os.environ.get('RetrySleep'))
+                            abort_time_remaining_ms = int(os.environ.get('AbortTimeRemaining'))
+                            resource_properties = event['ResourceProperties']
+                            instance_id = resource_properties['InstanceId']
+                            document_name = resource_properties['DocumentName']
+                            cloudwatch_log_group_name = resource_properties['CloudWatchLogGroupName']
+
+                            logger.info(f'Running SSM Document {document_name} on EC2 instance {instance_id}')
+
+                            del resource_properties['ServiceToken']
+                            if 'ServiceTimeout' in resource_properties:
+                                del resource_properties['ServiceTimeout']
+                            del resource_properties['InstanceId']
+                            del resource_properties['DocumentName']
+                            del resource_properties['CloudWatchLogGroupName']
+                            if 'PhysicalResourceId' in resource_properties:
+                                del resource_properties['PhysicalResourceId']
+
+                            parameters = {}
+                            for key, value in resource_properties.items():
+                                parameters[key] = [value]
+
+                            retry = True
+                            attempt_no = 0
+                            time_remaining_ms = context.get_remaining_time_in_millis()
+                            ssm = boto3.client('ssm')
+
+                            while retry:
+                                attempt_no += 1
+                                logger.info(f'Attempt: {attempt_no}. Time Remaining: {time_remaining_ms/1000}s')
+                                try:
+                                    response = ssm.send_command(
+                                        InstanceIds=[instance_id],
+                                        DocumentName=document_name,
+                                        CloudWatchOutputConfig={'CloudWatchLogGroupName': cloudwatch_log_group_name, 'CloudWatchOutputEnabled': True},
+                                        Parameters=parameters
+                                    )
+                                    command_id = response['Command']['CommandId']
+                                    responseData = {'CommandId': command_id}
+                                    cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, reason='OK')
+                                    retry = False
+                                except ssm.exceptions.InvalidInstanceId:
+                                    time_remaining_ms = context.get_remaining_time_in_millis()
+                                    if time_remaining_ms > abort_time_remaining_ms:
+                                        logger.info(f'Instance {instance_id} not ready. Sleeping: {sleep_ms/1000}s')
+                                        time.sleep(sleep_ms/1000)
+                                        retry = True
+                                    else:
+                                        logger.error(f'Instance {instance_id} not ready, timed out.')
+                                        cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason='Timed out waiting for instance')
+                                        retry = False
+                                except Exception as e:
+                                    logger.error(e, exc_info=True)
+                                    cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason=str(e))
+                                    retry = False
+
+    RunCodeEditorSSMDoc:
+        Type: Custom::RunSSMDocLambda
+        Properties:
+            ServiceToken: !GetAtt RunSSMDocLambda.Arn
+            ServiceTimeout: 305
+            InstanceId: !Ref CodeEditorInstance
+            DocumentName: !Ref CodeEditorSSMDoc
+            CloudWatchLogGroupName: !Sub /aws/ssm/${CodeEditorSSMDoc}
+            CodeEditorPassword: !GetAtt SecretPlaintext.password
+
+    CodeEditorHealthCheckLambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: !Sub lambda.${AWS::URLSuffix}
+                      Action: sts:AssumeRole
+            ManagedPolicyArns:
+                - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+    CodeEditorHealthCheckLambda:
+        Type: AWS::Lambda::Function
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W58
+                      reason: Role has AWSLambdaBasicExecutionRole
+                    - id: W89
+                      reason: VPC not needed
+                    - id: W92
+                      reason: Reserved concurrency not needed
+        Properties:
+            Description: Run health check on Code Editor instance
+            Handler: index.lambda_handler
+            Runtime: python3.13
+            MemorySize: 128
+            Timeout: 600
+            Environment:
+                Variables:
+                    RetrySleep: 2900
+                    AbortTimeRemaining: 5000
+            Architectures:
+                - arm64
+            Role: !GetAtt CodeEditorHealthCheckLambdaRole.Arn
+            Code:
+                ZipFile: |
+                    import json
+                    import cfnresponse
+                    import logging
+                    import time
+                    import os
+                    import http.client
+                    from urllib.parse import urlparse
+
+                    logger = logging.getLogger()
+                    logger.setLevel(logging.INFO)
+
+                    def healthURLOk(url):
+                        try:
+                            parsed_url = urlparse(url)
+                            if parsed_url.scheme == 'https':
+                                conn = http.client.HTTPSConnection(parsed_url.netloc)
+                            else:
+                                conn = http.client.HTTPConnection(parsed_url.netloc)
+                            conn.request("GET", parsed_url.path or "/")
+                            response = conn.getresponse()
+                            content = response.read()
+                            if 200 <= response.status < 400:
+                                response_dict = json.loads(content.decode('utf-8'))
+                                if 'hasActiveConnections' in response_dict:
+                                    logger.info('Health check OK.')
+                                    return True
+                                else:
+                                    logger.info(f'Health check failed. Response: {response_dict}')
+                                    return False
+                            else:
+                                logger.info(f'Healthcheck failed. Return code: {response.status}')
+                                return False
+                        except Exception as e:
+                            logger.error(f'Healthcheck failed: {e}')
+                            return False
+                        finally:
+                            if 'conn' in locals():
+                                conn.close()
+
+                    def lambda_handler(event, context):
+                        try:
+                            if event['RequestType'] != 'Create':
+                                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData={}, reason='No action to take')
+                            else:
+                                sleep_ms = int(os.environ.get('RetrySleep'))
+                                abort_time_remaining_ms = int(os.environ.get('AbortTimeRemaining'))
+                                url = event['ResourceProperties']['Url']
+                                logger.info(f'Testing url: {url}')
+                                time_remaining_ms = context.get_remaining_time_in_millis()
+                                attempt_no = 0
+                                health_check = False
+                                while attempt_no == 0 or (time_remaining_ms > abort_time_remaining_ms and not health_check):
+                                    attempt_no += 1
+                                    logger.info(f'Attempt: {attempt_no}. Time Remaining: {time_remaining_ms/1000}s')
+                                    health_check = healthURLOk(url)
+                                    if not health_check:
+                                        time.sleep(sleep_ms/1000)
+                                    time_remaining_ms = context.get_remaining_time_in_millis()
+                                if health_check:
+                                    cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData={}, reason='Code Editor healthcheck successful')
+                                else:
+                                    cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason=f'Health check failed after {attempt_no} attempts')
+                        except Exception as e:
+                            logger.error(e, exc_info=True)
+                            cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason=str(e))
+
+    Healthcheck:
+        Type: Custom::CodeEditorHealthCheckLambda
+        Properties:
+            ServiceToken: !GetAtt CodeEditorHealthCheckLambda.Arn
+            ServiceTimeout: 610
+            Url: !Sub https://${CloudFrontDistribution.DomainName}/healthz
+
+    CheckSSMDocLambda:
+        Type: AWS::Lambda::Function
+        Metadata:
+            cfn_nag:
+                rules_to_suppress:
+                    - id: W58
+                      reason: Role has AWSLambdaBasicExecutionRole
+                    - id: W89
+                      reason: VPC not needed
+                    - id: W92
+                      reason: Reserved concurrency not needed
+        Properties:
+            Description: Check SSM document execution on EC2 instance
+            Handler: index.lambda_handler
+            Runtime: python3.13
+            MemorySize: 128
+            Timeout: 600
+            Environment:
+                Variables:
+                    RetrySleep: 2900
+                    AbortTimeRemaining: 5000
+            Architectures:
+                - arm64
+            Role: !GetAtt SSMDocLambdaRole.Arn
+            Code:
+                ZipFile: |
+                    import boto3
+                    import cfnresponse
+                    import logging
+                    import time
+                    import os
+
+                    logger = logging.getLogger()
+                    logger.setLevel(logging.INFO)
+
+                    def lambda_handler(event, context):
+                        if event['RequestType'] != 'Create':
+                            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData={}, reason='No action to take')
+                        else:
+                            sleep_ms = int(os.environ.get('RetrySleep'))
+                            abort_time_remaining_ms = int(os.environ.get('AbortTimeRemaining'))
+                            resource_properties = event['ResourceProperties']
+                            instance_id = resource_properties['InstanceId']
+                            document_name = resource_properties['DocumentName']
+
+                            logger.info(f'Checking SSM Document {document_name} on EC2 instance {instance_id}')
+
+                            retry = True
+                            attempt_no = 0
+                            time_remaining_ms = context.get_remaining_time_in_millis()
+                            ssm = boto3.client('ssm')
+
+                            while retry:
+                                attempt_no += 1
+                                logger.info(f'Attempt: {attempt_no}. Time Remaining: {time_remaining_ms/1000}s')
+                                try:
+                                    response = ssm.list_command_invocations(InstanceId=instance_id, Details=True)
+                                    for invocation in response['CommandInvocations']:
+                                        if invocation['DocumentName'] == document_name:
+                                            status = invocation['Status']
+                                            if status == 'Success':
+                                                logger.info(f'SSM Document complete. Status: {status}')
+                                                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData={}, reason='OK')
+                                                retry = False
+                                            elif status in ('Failed', 'Cancelled', 'TimedOut'):
+                                                reason = f'SSM Document failed. Status: {status}'
+                                                for step in invocation.get('CommandPlugins', []):
+                                                    if step['Status'] != 'Success':
+                                                        try:
+                                                            step_detail = ssm.get_command_invocation(
+                                                                CommandId=invocation['CommandId'],
+                                                                InstanceId=instance_id,
+                                                                PluginName=step['Name']
+                                                            )
+                                                            reason = f"Step {step['Name']} {step['Status']}: {step_detail['StandardErrorContent']}"
+                                                        except Exception:
+                                                            pass
+                                                        break
+                                                cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason=reason)
+                                                retry = False
+                                            else:
+                                                retry = True
+                                    if retry:
+                                        if time_remaining_ms > abort_time_remaining_ms:
+                                            time.sleep(sleep_ms/1000)
+                                            time_remaining_ms = context.get_remaining_time_in_millis()
+                                        else:
+                                            cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason='Timed out waiting for SSM doc')
+                                            retry = False
+                                except Exception as e:
+                                    logger.error(e, exc_info=True)
+                                    cfnresponse.send(event, context, cfnresponse.FAILED, responseData={}, reason=str(e))
+                                    retry = False
+
+    CheckCodeEditorSSMDoc:
+        Type: Custom::CheckSSMDocLambda
+        DependsOn: Healthcheck
+        Properties:
+            ServiceToken: !GetAtt CheckSSMDocLambda.Arn
+            ServiceTimeout: 610
+            InstanceId: !Ref CodeEditorInstance
+            DocumentName: !Ref CodeEditorSSMDoc
+
+    ###########################################################################
+    # Observability Resources (retained from original template)
+    ###########################################################################
+    LogsResourcePolicy:
+        Type: AWS::Logs::ResourcePolicy
+        Properties:
+            PolicyName: TransactionSearchAccess
+            PolicyDocument: !Sub |
+                {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Sid": "TransactionSearchXRayAccess",
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": "xray.amazonaws.com"
+                      },
+                      "Action": "logs:PutLogEvents",
+                      "Resource": [
+                        "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:aws/spans:*",
+                        "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/application-signals/data:*"
+                      ],
+                      "Condition": {
+                        "ArnLike": {
+                          "aws:SourceArn": "arn:${AWS::Partition}:xray:${AWS::Region}:${AWS::AccountId}:*"
+                        },
+                        "StringEquals": {
+                          "aws:SourceAccount": "${AWS::AccountId}"
+                        }
+                      }
+                    }
+                  ]
+                }
+
+    XRayTransactionSearchConfig:
+        Type: AWS::XRay::TransactionSearchConfig
+        DependsOn:
+            - LogsResourcePolicy
+        Properties:
+            IndexingPercentage: 1
+
+
+Outputs:
+    FeatureDeepDiveCodeEditorURL:
+        Description: Code Editor URL for the Feature Deep Dive track
+        Value: !Sub https://${CloudFrontDistribution.DomainName}/?folder=${HomeFolder}/${FeatureDeepDiveFolder}&tkn=${SecretPlaintext.password}
+    BuildWithSkillsCodeEditorURL:
+        Description: Code Editor URL for the Build with Skills track
+        Value: !Sub https://${CloudFrontDistribution.DomainName}/?folder=${HomeFolder}/${BuildWithSkillsFolder}&tkn=${SecretPlaintext.password}
