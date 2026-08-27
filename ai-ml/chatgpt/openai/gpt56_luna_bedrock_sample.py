@@ -1,38 +1,57 @@
 #!/usr/bin/env python3
 """
-OpenAI GPT-5.5 on Amazon Bedrock — Python sample.
+OpenAI GPT-5.6 Luna on Amazon Bedrock — Python sample.
 
-Based on the AWS News Blog (1 Jun 2026):
-"Get started with OpenAI GPT-5.5, GPT-5.4 models, and Codex on Amazon Bedrock"
-https://aws.amazon.com/blogs/aws/get-started-with-openai-gpt-5-5-gpt-5-4-models-and-codex-on-amazon-bedrock/
+Based on the GPT-5.6 Luna Bedrock model card:
+https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-56-luna.html
 
-KEY FACTS (verified against the blog + the GPT-5.5 Bedrock model card):
-  * GPT-5.5 is called through the OpenAI **Responses API** — NOT the Bedrock
-    Converse / InvokeModel APIs. Use the OpenAI Python SDK pointed at Bedrock's
-    `bedrock-mantle` endpoint.
-  * Model IDs : "openai.gpt-5.5"  |  "openai.gpt-5.4"
-  * Endpoint  : https://bedrock-mantle.{region}.api.aws/openai/v1
-                (the Responses path is .../openai/v1/responses — note the
-                 `openai/v1` prefix, which differs from other Bedrock models)
-  * Regions   : GPT-5.5 -> us-east-2 (Ohio)
-                GPT-5.4 -> us-east-2 (Ohio), us-west-2 (Oregon)
-  * Auth      : a Bedrock API key, passed as the OpenAI api_key.
-  * Context   : 272K tokens. Start GPT-5.5 reasoning effort at "medium".
+KEY FACTS (verified against the GPT-5.6 Luna Bedrock model card):
+  * GPT-5.6 Luna is OpenAI's fast, affordable model — good for high-volume
+    classification, summarization, routing, and real-time apps where latency
+    and cost per token matter most. Launched 2026-07-13.
+  * Called through the OpenAI **Responses API** via the OpenAI Python SDK.
+  * Two endpoints are supported:
+      - bedrock-runtime (RECOMMENDED for new apps):
+          base_url = https://bedrock-runtime.{region}.amazonaws.com/openai/v1
+          model    = a cross-Region inference profile, e.g.
+                     "us.openai.gpt-5.6-luna" or "global.openai.gpt-5.6-luna"
+                     (in-Region inference is NOT available on this endpoint)
+      - bedrock-mantle:
+          base_url = https://bedrock-mantle.{region}.api.aws/openai/v1
+          model    = "openai.gpt-5.6-luna"
+          (served at /openai/v1/responses, not the default /v1/responses)
+  * Context window : 1M tokens (short context 272K / long context 1M pricing).
+  * Modalities     : text/image/audio/speech/video in; text/image/speech/
+                     video/embedding out.
+  * Auth           : a Bedrock API key, passed as the OpenAI api_key.
+  * Service tiers  : Standard (default) | Priority | Flex — set via
+                     `service_tier`. Priority/Flex not supported (Standard only)
+                     per the model card pricing note; leave unset for Standard.
+  * IAM (bedrock-runtime): needs bedrock:InvokeModel on the account default
+    project arn:aws:bedrock:{region}:{account-id}:project/default in addition
+    to the inference profile.
 
 SETUP
     pip install -U openai
 
     # Create a Bedrock API key:
     #   https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html
-    export OPENAI_BASE_URL="https://bedrock-mantle.us-east-2.api.aws/openai/v1"
+
+    # Option A — bedrock-runtime (recommended):
+    export OPENAI_BASE_URL="https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1"
     export OPENAI_API_KEY="<YOUR_BEDROCK_API_KEY>"
-    export BEDROCK_OPENAI_MODEL_ID="openai.gpt-5.5"
+    export BEDROCK_OPENAI_MODEL_ID="us.openai.gpt-5.6-luna"
+
+    # Option B — bedrock-mantle:
+    export OPENAI_BASE_URL="https://bedrock-mantle.us-east-1.api.aws/openai/v1"
+    export OPENAI_API_KEY="<YOUR_BEDROCK_API_KEY>"
+    export BEDROCK_OPENAI_MODEL_ID="openai.gpt-5.6-luna"
 
 USAGE
-    python gpt55_bedrock_sample.py basic      # one-shot completion (blog example)
-    python gpt55_bedrock_sample.py stream     # token-by-token streaming
-    python gpt55_bedrock_sample.py tools      # function / tool calling round-trip
-    python gpt55_bedrock_sample.py "your own prompt here"
+    python gpt56_luna_bedrock_sample.py basic      # one-shot completion
+    python gpt56_luna_bedrock_sample.py stream     # token-by-token streaming
+    python gpt56_luna_bedrock_sample.py tools      # function / tool calling round-trip
+    python gpt56_luna_bedrock_sample.py "your own prompt here"
 """
 
 import argparse
@@ -47,7 +66,7 @@ except ImportError:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Configuration (env-driven, with blog defaults)
+# Configuration (env-driven, with model-card defaults)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _env(name: str, default: str | None = None) -> str | None:
@@ -60,29 +79,35 @@ def _env(name: str, default: str | None = None) -> str | None:
     return val.strip() if isinstance(val, str) else val
 
 
-DEFAULT_REGION = "us-east-2"  # GPT-5.5 GA region (US East / Ohio)
+# GPT-5.6 Luna GA region used in the model card examples (US East / N. Virginia).
+DEFAULT_REGION = "us-east-1"
+# Default to the recommended bedrock-runtime endpoint. Note the `openai/v1`
+# path suffix and that the model must be a cross-Region inference profile here.
 BASE_URL = _env(
     "OPENAI_BASE_URL",
-    f"https://bedrock-mantle.{DEFAULT_REGION}.api.aws/openai/v1",
+    f"https://bedrock-runtime.{DEFAULT_REGION}.amazonaws.com/openai/v1",
 )
-MODEL_ID = _env("BEDROCK_OPENAI_MODEL_ID", "openai.gpt-5.5")
+# On bedrock-runtime, name the cross-Region inference profile as the model.
+# On bedrock-mantle, use the plain model id "openai.gpt-5.6-luna" instead.
+MODEL_ID = _env("BEDROCK_OPENAI_MODEL_ID", "us.openai.gpt-5.6-luna")
 API_KEY = _env("OPENAI_API_KEY")
 
 
 def make_client() -> OpenAI:
-    """Build an OpenAI SDK client pointed at the Bedrock `bedrock-mantle` endpoint."""
+    """Build an OpenAI SDK client pointed at an Amazon Bedrock OpenAI endpoint."""
     if not API_KEY:
         sys.exit(
             "OPENAI_API_KEY is not set. Export your Amazon Bedrock API key first:\n"
             '  export OPENAI_API_KEY="<YOUR_BEDROCK_API_KEY>"'
         )
-    # The OpenAI client speaks the Responses API; pointing base_url at Bedrock's
-    # bedrock-mantle endpoint routes inference through Amazon Bedrock.
+    # The OpenAI client speaks the Responses API; pointing base_url at a Bedrock
+    # OpenAI endpoint (bedrock-runtime or bedrock-mantle) routes inference
+    # through Amazon Bedrock.
     return OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 1) Basic completion — the canonical example from the AWS blog
+# 1) Basic completion — canonical Responses API example
 # ─────────────────────────────────────────────────────────────────────────────
 
 def demo_basic(client: OpenAI, prompt: str | None = None) -> None:
@@ -102,7 +127,7 @@ def demo_basic(client: OpenAI, prompt: str | None = None) -> None:
             },
             {"role": "user", "content": user_msg},
         ],
-        reasoning={"effort": "medium"},  # GPT-5.5 recommended starting point
+        reasoning={"effort": "medium"},
         text={"verbosity": "low"},
     )
 
@@ -228,7 +253,7 @@ def _print_usage(response) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="OpenAI GPT-5.5 on Amazon Bedrock (Responses API) sample.",
+        description="OpenAI GPT-5.6 Luna on Amazon Bedrock (Responses API) sample.",
     )
     parser.add_argument(
         "command",
