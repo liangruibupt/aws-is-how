@@ -1,26 +1,40 @@
 #!/usr/bin/env python3
 """
-GPT-5.5 Streaming Repetition Bug Test Script
+GPT-5.6 Luna Streaming Repetition Bug Test Script
 
-Tests whether the Bedrock GPT-5.5 Responses API streaming has the "cumulative
-repetition" bug — where each delta contains all prior content (snowball pattern)
-or adjacent chunks are duplicated.
+Tests whether the Bedrock GPT-5.6 Luna Responses API streaming has the
+"cumulative repetition" bug — where each delta contains all prior content
+(snowball pattern) or adjacent chunks are duplicated.
+
+Model card:
+  https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-56-luna.html
 
 Tests cover:
   1. stream=True parameter style (short + long output)
   2. client.responses.stream() context manager style
   3. Multi-turn conversation with Chinese output + reasoning replay
+  4. output_item.done message-frame snapshot accumulation
+  5. delta-path bloat discriminator
+
+ENDPOINT (recommended: bedrock-runtime):
+    base_url = https://bedrock-runtime.{region}.amazonaws.com/openai/v1
+    model    = us.openai.gpt-5.6-luna   (cross-Region inference profile)
+  bedrock-mantle alternative:
+    base_url = https://bedrock-mantle.{region}.api.aws/openai/v1
+    model    = openai.gpt-5.6-luna
 
 SETUP:
+    export OPENAI_BASE_URL="https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1"
+    export BEDROCK_OPENAI_MODEL_ID="us.openai.gpt-5.6-luna"
     export OPENAI_API_KEY="<YOUR_BEDROCK_API_KEY>"
     # or
     export AWS_BEARER_TOKEN_BEDROCK="<YOUR_TOKEN>"
 
 USAGE:
-    python gpt55_stream_repetition_test.py          # run all tests
-    python gpt55_stream_repetition_test.py test1    # stream=True short
-    python gpt55_stream_repetition_test.py test2    # context manager
-    python gpt55_stream_repetition_test.py test3    # multi-turn + Chinese
+    python gpt56_luna_stream_repetition_test.py          # run all tests
+    python gpt56_luna_stream_repetition_test.py test1    # stream=True short
+    python gpt56_luna_stream_repetition_test.py test2    # context manager
+    python gpt56_luna_stream_repetition_test.py test3    # multi-turn + Chinese
 """
 
 import os
@@ -37,11 +51,11 @@ except ImportError:
 # Configuration
 # ─────────────────────────────────────────────────────────────────────────────
 
-REGION = os.getenv("AWS_REGION", "us-east-2")
-MODEL_ID = os.getenv("BEDROCK_OPENAI_MODEL_ID", "openai.gpt-5.5")
+REGION = os.getenv("AWS_REGION", "us-east-1")
+MODEL_ID = os.getenv("BEDROCK_OPENAI_MODEL_ID", "us.openai.gpt-5.6-luna")
 BASE_URL = os.getenv(
     "OPENAI_BASE_URL",
-    f"https://bedrock-mantle.{REGION}.api.aws/openai/v1",
+    f"https://bedrock-runtime.{REGION}.amazonaws.com/openai/v1",
 ).strip()
 API_KEY = (
     os.getenv("OPENAI_API_KEY") or os.getenv("AWS_BEARER_TOKEN_BEDROCK") or ""
@@ -635,7 +649,7 @@ def test5_delta_path_bloat_discriminator() -> bool:
         print()
         print("     CONCLUSION: output_text.delta is NOT truly incremental!")
         print("     The delta events are also emitting cumulative snapshots.")
-        print("     This is a bedrock-mantle ENDPOINT BUG affecting ALL paths:")
+        print("     This is a Bedrock OpenAI endpoint BUG affecting ALL paths:")
         print("       - output_text.delta (bloated)")
         print("       - output_item.done message frames (bloated)")
         print("       - final.output_text / SDK reconstruction (bloated)")
@@ -672,8 +686,8 @@ def test5_delta_path_bloat_discriminator() -> bool:
     if bug_detected:
         print("  ⚠️  [test5] SEVERE ENDPOINT BUG CONFIRMED")
         print("     ALL streaming paths (delta, done, SDK) are bloated.")
-        print("     Root cause: bedrock-mantle emits cumulative snapshots,")
-        print("     not true incremental deltas, for long reasoning outputs.")
+        print("     Root cause: the Bedrock OpenAI endpoint emits cumulative")
+        print("     snapshots, not true incremental deltas, for long outputs.")
         print()
         print("     Workaround: consume output_item.done, keep only the LAST")
         print("     message frame as the true final answer.")
