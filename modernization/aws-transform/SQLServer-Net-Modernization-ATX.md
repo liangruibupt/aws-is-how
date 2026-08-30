@@ -271,3 +271,34 @@ SQL Server(RDS `atx-rds-sqlserver` 上的 `BobsUsedBookStore`)→ Aurora Postgre
 - **现状痛点**:本次托管流程从未真正跑到 .NET 代码转换阶段,provider 切换等改造最终由 Kiro 手动补齐。
 - **期望能力**:托管代码转换应自动覆盖 provider 切换(`UseSqlServer`→`UseNpgsql`)、连接串构造器差异(`SqlConnectionStringBuilder`→`NpgsqlConnectionStringBuilder`、`UserID`→`Username`)、`appsettings.*.json`、以及裸 SQL / SQL Server 特有类型特性(nvarchar、datetime2、getdate、NEWID、rowversion 等)的检测与改写。
 - **价值**:让代码转换真正端到端可用,而非仅做评估。
+
+---
+
+## 与跨区 DDL 方案对比([walkley/atx-cross-region-solution](https://github.com/walkley/atx-cross-region-solution))
+
+参考社区的跨境方案仓库(为中国区客户用 us-east-1 Transform 做 SQL Server→Aurora PostgreSQL + .NET 现代化),它在 2026-08-18 跑通了一轮**完整的托管端到端流程**。与本 workshop 的做法对比,关键差异如下。
+
+### 1. 主要依托 Kiro 还是 Transform?
+- **该方案主要依托 AWS Transform 托管流程**,Kiro/MCP 只是"驱动 + 基建"层:CloudFormation 建环境、`accept_connector` 用角色 ARN 零 console 激活连接器、创建 job、提交 HITL。**schema 转换与 .NET 代码改造是 Transform 托管 5 阶段 agent 生成的**(Schema Conversion → Target Provisioning → Schema Deployment → Synthetic Test Data → App Code Transformation),约 86 分钟、仅 2 个 HITL。
+- **本 workshop 正相反**:托管流程 7 次/5 阶段全失败,最终由 **Kiro 直接改 .NET 代码 + 独立 DMS 出 schema** 兜底,Kiro 是实际转换者。
+- 共同点:两者都踩到**代码转换非确定性**——该方案第二次实测漏改 `appsettings.Test.json`(残留 LocalDB/SQL Server 连接串)、多生成冗余 `[Column]`,与本 workshop 里 Kiro 手动补齐的改动同类;因此"build+单测通过"只是必要条件,仍需对照参考 patch 人工验收。
+
+### 2. 数据库转换:existing DB connection 还是 DDL?
+- **该方案是 DDL 驱动,不连源库。** 入口是上传 `database.sql`(DDL)到 S3;**Discovery/Assessment 离线**基于 DDL 运行(故报告里源 SQL Server 版本可能是推断值)。**数据库连接器要到 Target Provisioning 才用,且用在目标端**——Schema Deployment 通过 **RDS Data API**(HTTP endpoint)把 DDL 打进目标 Aurora(实测 51/51 语句成功)。环境里虽有 RDS SQL Server(CodeBuild 用 database.sql 初始化),但 Transform 的发现/转换不连它。这是为跨境合规特意设计:源库/生产数据留中国区,只有 DDL+测试数据+代码出境。
+- **本 workshop 是连活的源 SQL Server**:托管流程走源库连接器 → 托管 DMS 做 schema 转换,而这正是最不稳定的一环;兜底才改用独立 DMS project。
+
+### 3. 差异总表
+| 维度 | walkley 跨区方案 | 本 workshop |
+|---|---|---|
+| schema 转换入口 | **DDL 文件离线**(database.sql,offline Discovery/Assessment) | **连活源 SQL Server**(源库连接器→托管 DMS,最不稳定);兜底独立 DMS |
+| 源库连接器角色 | 仅**目标端**(Target Provisioning 起) | **源端**从头就用 |
+| 源码输入 | **S3 `source-code.zip`**(无 Git) | **GitHub PAT 连接器**(Git) |
+| 连接器激活 | `accept_connector`+角色 ARN → 直接 ACTIVE,**零 console** | console 审批 + 协作者摩擦(workshop-user 403) |
+| 谁做转换 | **Transform 托管 5 阶段全程跑通** | 托管 7 次/5 阶段全挂 → **Kiro 手改 + 独立 DMS** |
+| schema 部署到目标 | **RDS Data API**,51/51 成功 | 未部署(数据迁移=否),只产出 DDL |
+| 结果 | 一轮 clean loop,~2h,~$1.2,2 个 HITL | 托管从未完成,靠绕行达成业务目标 |
+
+### 4. 关键结论
+- **最关键差异**:walkley 方案把 schema 工作改成 **DDL 离线入口**,正好**绕开了本 workshop 里最不稳定的"连活源库 → 托管 DMS schema 转换"路径**(本 workshop 的失败大多聚集在 assess-plan / schema-conversion 这些依赖实时连接的阶段)。再加 S3 源码 + 角色 ARN 激活,消除了 GitHub PAT / console 审批 / 协作者等摩擦点。这很可能是它端到端跑通、而 workshop 反复失败的主因(强相关;仓库只报告单账号一次成功,不构成绝对因果)。
+- **印证本文增强建议 #6**:该方案连接串带 `SearchPath=bobsusedbookstore_dbo` 并把 9 个实体映射到 DMS 的 schema/小写命名,即"代码转换输出与 schema 转换输出对齐",正好补上了本文档记录的 EF `public`/PascalCase vs DMS `bobsusedbookstore_dbo`/小写 的割接鸿沟。
+- **可借鉴**:若重跑托管流程,优先尝试 **DDL 上传入口 + S3 源码 + `accept_connector` 角色 ARN 激活**,而非连活源库,以规避本账号上最不稳定的实时连接阶段。
