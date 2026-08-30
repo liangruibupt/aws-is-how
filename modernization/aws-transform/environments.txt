@@ -1,0 +1,25 @@
+Account Id: 267591443110
+
+源代码库 Connector Type: Personal Access Token (PAT) in AWS Secrets Manager
+- 代码库地址: https://github.com/liangruibupt/bobs-used-bookstore-sample.git
+- PAT 保存在 Secrets Manager
+- Secret name: github-pat-bob-bookstore
+- Secret ARN: arn:aws:secretsmanager:us-east-1:267591443110:secret:github-pat-bob-bookstore-Fp8noP
+
+
+SQL Server 源数据库是否已经满足 Transform 转换的前置条件: 是
+源数据库 SQL Server
+源数据库 Secret ARN: arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-secret-sql-admin-nJL0A0
+
+
+转换目标数据库选择已有的 Aurora Postgresql 数据库: 是, 请不创建新的数据库
+目标Aurora Postgresql 数据库名称: postgres
+目标Aurora Postgresql Secret ARN: arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-secret-aurora-admin-2rpnnm
+
+是否进行代码转换: 是
+Schema 转换完之后, 是否进行数据迁移: 否
+
+是否进行应用发布: 否
+
+
+

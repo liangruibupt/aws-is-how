@@ -1,0 +1,177 @@
+{
+  "phase": "executing",
+  "workload": "sql-server-dotnet-modernization",
+  "orchestratorAgent": "windows-database-agent",
+  "assessment": {
+    "workspaceId": "a8397001-c0a3-4491-9c11-4a00aee4e615",
+    "jobId": "4e4a987a-0c5e-4893-b00d-6c8d90fd4372"
+  },
+  "execution": {
+    "workspaceId": "a8397001-c0a3-4491-9c11-4a00aee4e615",
+    "activeJobIds": ["d22997c6-1788-4e3e-a5e4-0acdb3a7afb3"],
+    "retryJobId": "d22997c6-1788-4e3e-a5e4-0acdb3a7afb3",
+    "retryJobName": "bookstore-sqlserver-to-aurora-pg-retry",
+    "abandonedJobId": "4e4a987a-0c5e-4893-b00d-6c8d90fd4372",
+    "abandonedReason": "Schema conversion failed at export_sql_source (transient DMS); control_job restart broke orchestrator DMS tools. Created fresh retry job."
+  },
+  "decisions": {
+    "accountId": "267591443110",
+    "region": "us-east-1",
+    "sourceCodeRepo": "https://github.com/liangruibupt/bobs-used-bookstore-sample.git",
+    "sourceCodeConnectorType": "GitHub PAT",
+    "githubPatSecretArn": "arn:aws:secretsmanager:us-east-1:267591443110:secret:github-pat-bob-bookstore-Fp8noP",
+    "sourceSqlSecretArn": "arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-secret-sql-admin-nJL0A0",
+    "targetAuroraUseExisting": true,
+    "targetAuroraDbName": "postgres",
+    "targetAuroraSecretArn": "arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-secret-aurora-admin-2rpnnm",
+    "doCodeTransformation": true,
+    "doDataMigration": false,
+    "doAppDeployment": false
+  },
+  "connectors": {
+    "sourceSqlServer": {
+      "connectorId": "9313d893-3e85-4c54-b6e7-8627a9289be7",
+      "connectorType": "dotnet_modernization|database|2",
+      "status": "ACTIVE",
+      "configKey": "databaseConnectionArn"
+    },
+    "sourceCodeGithub": {
+      "connectorId": "2f80b115-c904-4404-af51-fb49293df12b",
+      "connectorType": "platform|secretsmanager|1",
+      "status": "ACTIVE",
+      "configKey": "secretArn"
+    }
+  },
+  "retryJobProgress": "d22997c6: prereqs APPROVED, DB connector 9313d893 submitted, code-transform=true, connector-type=PAT, PAT setup confirmed, source-code connector 2f80b115 submitted, validation PASSED (no errors). Now in Discovery.",
+  "completedDecisions": {
+    "connectToDatabase": true,
+    "codeTransformationEnabled": true,
+    "sourceCodeConnectorType": "platform|secretsmanager|1 (PAT in Secrets Manager)"
+  },
+  "assessmentResult": {
+    "db": "BobsUsedBookStore complexity=1, 9 tables, 0 sprocs, target Aurora",
+    "repo": "bobs-used-bookstore-sample branch MAM303, .NET8, 1 sln/5 projects, 9678 LOC, complexity=14, EF Core SqlServer, supported",
+    "sourceCodeArtifactId": "f33d69c2-b9af-4b88-a4bd-7f9f9cf4795d",
+    "dmsProjectArn": "arn:aws:dms:us-east-1:267591443110:migration-project:SGRGAU2OHBCAJEU5YNJ7X2MB3E"
+  },
+  "targetConfig": {
+    "useExistingCluster": true,
+    "clusterIdentifier": "atx-aurora-pg-cluster",
+    "clusterArn": "arn:aws:rds:us-east-1:267591443110:cluster:atx-aurora-pg-cluster",
+    "instanceIdentifier": "atx-aurora-pg-instance",
+    "databaseName": "postgres",
+    "targetSecretArn": "arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-secret-aurora-admin-2rpnnm",
+    "createNew": false
+  },
+  "schemaConversionRootCause": {
+    "symptom": "Transform schema conversion failed instantly (job FAILED) both jobs; DMS metadata import via --refresh returned 'Unexpected application error'; conversion returned 'No metadata models matched'.",
+    "CORRECTED_rootCause": "The ONLY deterministic root cause was the SELECTION RULE: rule-action=explicit with schema-name='%'. Under 'explicit', '%' is a LITERAL (not a wildcard), so it matched nothing -> 'No metadata models matched'. Correct rule: explicit + server-name + database-name (omit schema-name = entire DB), OR rule-action=include + wildcard '%'. This was a mistake in my hand-written CLI rule.",
+    "RETRACTED_publicIpClaim": "I WRONGLY blamed the public instance profile (PubliclyAccessible=true). CONTROLLED TEST DISPROVED IT: import on the ORIGINAL public-IP project WGX5 with the CORRECT rule = SUCCESS (req ad142e22). The public instance profile is NOT a blocker. The private instance profile atx-sc-clean-ip I created was UNNECESSARY.",
+    "transientErrorNote": "The early 'Unexpected application error' failures (and likely Transform's 18:07 schema-conversion failure) were most likely TRANSIENT DMS SC hiccups, not caused by public-accessibility. DMS SC layer is proven healthy: import+convert+export succeed on BOTH the public-IP project (WGX5) and the private-IP project (PFT4).",
+    "provenRecipe": "import: start-metadata-model-import --origin SOURCE --refresh --selection-rules explicit{server-name=6D7G6KUCUJENHCQN3UYSMDDXJU,database-name=BobsUsedBookStore}; then start-metadata-model-conversion same rules; then start-metadata-model-export-as-script --origin TARGET include{server-name=YQBSHX7FUBDK7KY5FZSF5DDNXM,schema-name=%}.",
+    "convertedArtifactS3": "s3://atx-db-modernization-267591443110-us-east-1/atx-sqlserver-sc-clean-retry/bobsusedbookstore-converted.sql.zip",
+    "convertedArtifactLocal": "modernization/aws-transform/artifacts/bobsusedbookstore-converted-postgres.sql",
+    "convertedResult": "9 tables converted, 459 lines PostgreSQL DDL, schema bobsusedbookstore_dbo, correct type mappings (IDENTITY, TEXT, TIMESTAMP(6), NUMERIC(18,2), INTEGER)."
+  },
+  "cleanScProject": {
+    "migrationProjectArn": "arn:aws:dms:us-east-1:267591443110:migration-project:PFT4N6A4WFE3JCPCYKFWTY6G44",
+    "instanceProfileArn": "arn:aws:dms:us-east-1:267591443110:instance-profile:IVHNHXNZIJHJ7LHWLHKYC4CW5E",
+    "importReq": "35dcf9ca-1c79-40c3-b470-86c0a11a769f SUCCESS",
+    "conversionReq": "df4c971d-97e0-4da9-88b4-868341a2dd2b SUCCESS",
+    "exportReq": "7938165d-c437-4be5-af10-6f183881b45b SUCCESS"
+  },
+  "route3_thirdRetry": {
+    "startedAt": "2026-08-28 21:17 (control_job start on d22997c6 → welcome menu → re-drive)",
+    "newDmsProjectThisRun": "arn:aws:dms:us-east-1:267591443110:migration-project:7NVNS3STSRBBDL3VM7H4ZWMWJY",
+    "newInstanceProfileThisRun": "arn:aws:dms:us-east-1:267591443110:instance-profile:HXWEHQBUP5FKVLVZ6XJVBTBCHM",
+    "sourceDataProvider": "arn:aws:dms:us-east-1:267591443110:data-provider:6D7G6KUCUJENHCQN3UYSMDDXJU",
+    "targetDataProvider": "arn:aws:dms:us-east-1:267591443110:data-provider:YQBSHX7FUBDK7KY5FZSF5DDNXM",
+    "sourceSecret": "arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-secret-sql-admin-nJL0A0",
+    "autoTargetSecret": "arn:aws:secretsmanager:us-east-1:267591443110:secret:atx-db-modernization-atx-db-modernization-secret-sql-admin-target-IL82Zl",
+    "subnets": "subnet-0c96da928a0552878,subnet-0c34c1cc2b3f78429,subnet-09d97d33b5d658ed9,subnet-041a966d9d40a8d57",
+    "sg": "sg-07699334757d13e9b",
+    "vpc": "vpc-0d78028a619962ebb",
+    "progress": "Re-drove all HITL (prereqs, DB conn 9313d893, code-xform=true, PAT type, PAT setup, source conn 2f80b115). Validation PASSED 21:29. Subnets auto-completed 21:32. Discovery done 21:37. Resource selection (task 6236193f) SUBMITTED/CLOSED ~21:40 (DB BobsUsedBookStore + repo bobs-used-bookstore-sample@MAM303). Assessment now starting — THIS is where run 2 died in ~20s. Monitoring.",
+    "targetForSchemaConv": "Existing Aurora atx-aurora-pg-cluster; when SchemaConversionTargets appears use create_new=false, cluster_arn arn:aws:rds:us-east-1:267591443110:cluster:atx-aurora-pg-cluster, instance atx-aurora-pg-instance, database_name=postgres, target_secret_arn ...aurora-admin-2rpnnm, port 5432, dms_project_arn 7NVNS3STSRBBDL3VM7H4ZWMWJY — but READ FRESH from that task's artifact.",
+    "drive4_outcome": "FAILED at 'Assess and plan waves' (0008-0de7e07e) 23:06:40, ~20s after resource selection — SAME failure mode as run 2. So across 4 attempts: run1 schema-conversion fail; run2 assess-plan fail; run3 assess-plan PASSED but wave-confirm HITL stalled/never materialized; run4 assess-plan fail again. Managed DB-mod orchestration is non-deterministically flaky on this account — 4 attempts, 3 distinct failure modes, 0 completions. CONCLUSION: stop managed-path retries; pivot to direct .NET code transformation (schema conversion already delivered via Route 1).",
+    "drive4_arns": "This drive's DMS project=arn:aws:dms:us-east-1:267591443110:migration-project:RWQPZYBKNJFRVCHT5OIVPX2XSU, instance-profile=536NRQ3TVBF45GV4YQIWUTJQMI. Resource selection task 015c7377 SUBMITTED ~23:05. Assessment running. Next: Assess HITL → wave plan → Confirm wave plan (the stuck point last drive). If it stalls again, pivot to direct code transformation.",
+    "drive4_note": "User chose B (restart). Creds refreshed (atx-wworkshop valid, acct 267591443110). Confirmed wave-confirm step 0006-26c224e2 was stuck (no HITL task, no worklog since 22:06) — API confirm impossible (nothing to submit). Stopped+started job d22997c6; welcome menu at 22:45; sent 'Connect to database' 22:47 (msg 01bdde08). Re-driving all HITLs AGAIN. This drive will create a NEW DMS project + instance profile — MUST read fresh ARNs at resource-selection/assess/schema-conv steps. Field values known: prereqs APPROVE empty; DB conn {connectorId 9313d893-3e85-4c54-b6e7-8627a9289be7}; code {is_code_transformation_enabled:'true'}; conn type {CONNECTOR_TYPE:'platform|secretsmanager|1'}; token {token_setup_confirmed:'confirmed'}; PAT conn {connectorId 2f80b115-c904-4404-af51-fb49293df12b}. If wave-confirm stalls again, pivot to direct code transformation.",
+    "progressUpdate_2215": "PAST run-2 failure. Assess submitted (70ca7993). Wave plan generated 22:06 (Wave 1, High complexity, DB BobsUsedBookStore + repo bobs-used-bookstore-sample@MAM303). Plan step 'Confirm wave plan' (0006-26c224e2) IN_PROGRESS. BLOCKER: the new ModernizationWaves confirm HITL is NOT surfacing via MCP API (API only returns stale run-2 task 5d5b4dde which is CLOSED; complete_task on it fails 'status:CLOSED'). Chat nudge (msg 40a2affc) timed out (agent 'not able to generate a response on time'). Waiting on user to click Confirm on the wave plan in the webapp, OR for the fresh task to materialize. NEXT after wave confirm: Deploy transformed apps=false → SchemaConversionTargets (CRITICAL, existing Aurora) → schema conversion → .NET code transformation."
+  },
+  "route2_inProgress": {
+    "goal": "Re-drive Transform job d22997c6 through to schema conversion, betting the earlier 18:07 conversion failure was a transient DMS SC hiccup (root cause was NOT config/network/public-IP; it was my CLI selection-rule mistake, which Transform does not make since it builds its own rules).",
+    "jobId": "d22997c6-1788-4e3e-a5e4-0acdb3a7afb3",
+    "newDmsProjectThisRun": "arn:aws:dms:us-east-1:267591443110:migration-project:MKGLULMJWBBRVLYW7QLZTLSC7M (Transform recreated atx-wsmod-atx-rds-sqlserver; old WGX5 deleted by Transform)",
+    "submittedSoFar": "welcome=Connect to database; prereqs APPROVED; DB connector 9313d893 submitted; code-transform=true; connector-type=PAT; PAT setup confirmed; source connector 2f80b115 submitted; validation PASSED (no errors); DB discovery IN PROGRESS ('up to 20 minutes') as of 19:55.",
+    "nextHitlSequence": [
+      "Select subnets -> submit all 4 subnets (field name: subnets_arn:...secret-sql-admin-nJL0A0). Subnets: subnet-0c96da928a0552878,subnet-0c34c1cc2b3f78429,subnet-09d97d33b5d658ed9,subnet-041a966d9d40a8d57",
+      "Select discovered resources (DBModDiscoveredResources) -> DB BobsUsedBookStore + repo liangruibupt/bobs-used-bookstore-sample assessment_branch MAM303",
+      "Assess (RepoDbSelection, auto/confirm) -> BobsUsedBookStore complexity1/9 tables/0 sprocs; repo complexity14/9678 LOC",
+      "Confirm wave plan (ModernizationWaves) -> Wave 1 = DB + repo",
+      "Deploy transformed apps (AutoForm is_deploy_enabled) -> false (no deploy)",
+      "Data strategy (if shown) -> Skip and leave empty (no data migration)",
+      "Schema conversion targets (SchemaConversionTargets CRITICAL) -> create_new=false, existing cluster atx-aurora-pg-cluster (cluster_arn arn:aws:rds:us-east-1:267591443110:cluster:atx-aurora-pg-cluster), instance atx-aurora-pg-instance, database_name=postgres, target_secret_arn ...secret-aurora-admin-2rpnnm, port 5432; use NEW dms_project_arn MKGLUL... and the run's data provider/instance-profile/subnets/sg from the task artifact (do NOT hardcode old ARNs — read them fresh from the SchemaConversionTargets agentArtifactContent).",
+      "MONITOR schema conversion. If it FAILS again transiently, retry; DMS SC layer is proven healthy."
+    ],
+    "resumeHowTo": "On resume: list_resources tasks taskStatus=AWAITING_HUMAN_INPUT (and all statuses) for job d22997c6; get_resource task for the pending one; submit per nextHitlSequence with correct params read fresh from each task's agentArtifactContent."
+  },
+  "backupProof": "Standalone clean DMS project atx-sqlserver-sc-clean-retry (PFT4N6A4WFE3JCPCYKFWTY6G44) already converted BobsUsedBookStore successfully; converted PostgreSQL DDL at s3://atx-db-modernization-267591443110-us-east-1/atx-sqlserver-sc-clean-retry/bobsusedbookstore-converted.sql.zip and local modernization/aws-transform/artifacts/bobsusedbookstore-converted-postgres.sql (9 tables, 459 lines). This is the fallback (Route 2c) if Transform's conversion keeps failing.",
+  "route2_outcome": {
+    "result": "FAILED",
+    "jobEndTime": "2026-08-28 20:02:22+08:00",
+    "failedStep": "Assess and plan waves (0004-737e9171-0dd6-4563-8b0d-ad3c4fa3a3b2)",
+    "detail": "This re-drive got MUCH further than run 1: prereqs, DB connector 9313d893, PAT, source connector 2f80b115, validation (no errors), source-code discovery (48 repos), and DB discovery all SUCCEEDED. Fresh DMS project MKGLULMJWBBRVLYW7QLZTLSC7M created, BobsUsedBookStore discovered. I submitted 'Select discovered resources' (task a93bc4ee) at 20:02:02; accepted/CLOSED 20:02:03; then 'Assess and plan waves' FAILED ~19s later at 20:02:22 with only the generic worklog 'AWS Transform has failed during assessment and planning.' Agent now unreachable (job terminal FAILED), so no finer error obtainable via send_message.",
+    "note": "Run 1 (17:xx) PASSED this same assess/plan phase (produced wave plan) and only failed later at schema conversion (18:07 export_sql_source). So Transform's managed DB-mod orchestration has now failed at TWO DIFFERENT phases across two runs on this account — pattern = flaky/opaque managed orchestration, not a single fixable config error. Per 'failed twice -> change approach', stopping blind Transform retries.",
+    "twoFailures": true
+  },
+  "phaseProgress": "ROUTE 1 DONE (schema conversion proven, artifact intact locally: modernization/aws-transform/artifacts/bobsusedbookstore-converted-postgres.sql, 9 tables/459 lines). ROUTE 2 (Transform managed job d22997c6) FAILED at 'Assess and plan waves' after resource selection — 2nd Transform failure at a different phase than run 1. Presenting user a pivot decision for the remaining .NET code transformation rather than a 3rd blind retry.",
+  "route5_newJob": {
+    "jobId": "2433d963-403e-4c14-85ba-ffb20de5c92f",
+    "jobName": "bookstore-mssql-aurorapg-v2",
+    "orchestrator": "windows-database-agent",
+    "startedAt": "2026-08-28 23:18 (fresh job per user request)",
+    "drive": "welcome 'Connect to database' 23:20; prereqs task 7ef757ae APPROVED 23:21; DB connector task ad0f2fe1 submitted {connectorId 9313d893} 23:23:30.",
+    "outcome": "FAILED at the DB-connector step — earliest failure yet. Task ad0f2fe1 never left SUBMITTED; NO validation/discovery/assess tasks were ever created; job flipped to FAILED (restartable:true) with no error task. The 'stall' observed while polling was the job dying.",
+    "conclusion": "5th consecutive failure of managed DB-mod orchestration across 4 DISTINCT failure points (schema-conversion, assess-plan x2, wave-confirm stall, DB-connector). Managed path is non-deterministically broken in this workshop account. STOP restarting. Pivot to direct IDE .NET code transformation to complete the remaining goal. Schema conversion already delivered via Route 1."
+  },
+  "directCodeTransformation": {
+    "status": "DONE + VERIFIED",
+    "reason": "Managed Transform DB-mod flow failed 5x (4 distinct failure points). Pivoted to direct IDE code transformation per user approval (chose option A). Schema conversion already delivered via Route 1.",
+    "repoClone": "/Users/ruiliang/Documents/workspaces/bobs-used-bookstore-sample @MAM303 (public)",
+    "architecture": "EF Core 8.0.11; ApplicationDbContext (Bookstore.Data); EnsureCreatedAsync() at startup (MiddlewareSetup.cs) - NO migrations; seed via HasData (SeedData.cs). DbSets: Address,Book,Customer,Orders,ShoppingCart,ShoppingCartItem,OrderItem,Offer,ReferenceData.",
+    "filesChanged": [
+      "app/Bookstore.Data/Bookstore.Data.csproj: Microsoft.EntityFrameworkCore.SqlServer 8.0.11 -> Npgsql.EntityFrameworkCore.PostgreSQL 8.0.11",
+      "app/Bookstore.Web/Bookstore.Web.csproj: Microsoft.EntityFrameworkCore.SqlServer 8.0.11 -> Npgsql.EntityFrameworkCore.PostgreSQL 8.0.11",
+      "app/Bookstore.Web/Startup/ServicesSetup.cs: using Microsoft.Data.SqlClient -> using Npgsql; option.UseSqlServer -> option.UseNpgsql; SqlConnectionStringBuilder -> NpgsqlConnectionStringBuilder; secrets conn string 'Server=..,..;Initial Catalog=BobsUsedBookStore;MultipleActiveResultSets=true;Integrated Security=false;TrustServerCertificate=true' -> 'Host=..;Port=..;Database=postgres;SSL Mode=Require;Trust Server Certificate=true'; UserID->Username",
+      "app/Bookstore.Web/appsettings.Test.json: LocalDB MSSQL conn string -> Npgsql (Host=localhost;Port=5432;Database=BobsUsedBookStore;Username/Password=postgres)"
+    ],
+    "notChanged": "app/Bookstore.Cdk/DatabaseStack.cs still provisions SQL Server RDS (infra IaC, not part of running app; no deploy per constraints). Sqlite pkg ref in Web left as-is (unused, harmless). No EF migrations or raw SQL existed to convert. Domain entities clean: no HasColumnType/nvarchar/datetime2/getdate/NEWID/FromSql/rowversion.",
+    "verification": {
+      "how": "Console harness /Users/ruiliang/Documents/workspaces/bobs-verify (Program.cs + bobs-verify.csproj) referencing Bookstore.Data+Domain; built Bookstore.Web (Release) + ran harness in docker mcr.microsoft.com/dotnet/sdk:8.0 against docker postgres:16-alpine (container bobs-pg, network bobsverify).",
+      "buildResult": "Build succeeded. Bookstore.Web.dll produced. NO compile errors. 940 warnings = pre-existing Magick.NET NU19xx advisories only.",
+      "runtimeResult": "Provider=Npgsql.EntityFrameworkCore.PostgreSQL; CanConnect=True; EnsureCreated=True (schema generated on PG16.15); ReferenceData=24, Book=8 (seed intact); runtime Customer INSERT/SELECT/DELETE OK; RESULT: VERIFICATION_OK.",
+      "log": "/Users/ruiliang/Documents/workspaces/bobs-verify/verify.log"
+    },
+    "cutoverNote": "Verified path uses EF EnsureCreated -> tables created by EF in 'public' schema with EF (PascalCase, quoted) naming. The DMS-converted DDL (Route 1) creates schema 'bobsusedbookstore_dbo' with lowercase names. For a real cutover reusing the DMS schema, either (a) let EF own the schema (EnsureCreated/migrations, drop DMS DDL), or (b) add HasDefaultSchema('bobsusedbookstore_dbo') + explicit lowercase table/column mappings to match DMS output (PG is case-sensitive on quoted identifiers, unlike SQL Server)."
+  },
+  "notes": "create_connector configuration must be non-empty. DB connector type=dotnet_modernization|database|2 config={databaseConnectionArn:<secret arn>}. Code connector type=platform|secretsmanager|1 config={secretArn:<pat secret arn>}. Schema conversion targets task=SchemaConversionTargets(CRITICAL) submitted create_new=false with existing cluster atx-aurora-pg-cluster + db postgres + aurora-admin secret. Wave1 single wave: DB BobsUsedBookStore + repo bobs-used-bookstore-sample.",
+  "routeA_freshDrive": {
+    "startedAt": "2026-08-30 09:00",
+    "reason": "User chose Route A: re-drive the managed AWS Transform flow with a brand-new job (not a restart of the 3 terminal jobs).",
+    "jobId": "77e89442-d3ed-4f96-a8e7-c112913fbe39",
+    "jobName": "bookstore-sqlserver-aurorapg-routeA",
+    "orchestrator": "windows-database-agent",
+    "reusedConnectors": {
+      "sourceSqlServer": "9313d893-3e85-4c54-b6e7-8627a9289be7 (ACTIVE)",
+      "sourceCodeGithub": "2f80b115-c904-4404-af51-fb49293df12b (ACTIVE)"
+    },
+    "welcomeChoice": "Connect to database (sent 09:00, msg 3ed9300c)",
+    "progress_0913": "prereqs CLOSED, DB conn 9313d893 CLOSED, code-xform=true CLOSED, conn-type PAT CLOSED, PAT setup confirmed CLOSED, source conn 2f80b115 CLOSED, validation PASSED (no errors) 09:08, source-code discovery 48 repos 09:10, subnets (all 4) CLOSED 09:11. New DMS project this run: arn:aws:dms:us-east-1:267591443110:migration-project:UUISXVZRU5HQVKFR6WEAMMPYHM. DB discovery 'up to 20 min' running as of 09:12.",
+    "progress_0917": "DB discovery COMPLETE 09:15 (BobsUsedBookStore). Resource-selection task 8fd80e12 SUBMITTED/CLOSED 09:17. Run-this-drive ARNs: instance_profile JICBRN7CGNHDFO3MERKI5LJOIY, source data-provider 6D7G6KUCUJENHCQN3UYSMDDXJU, target data-provider YQBSHX7FUBDK7KY5FZSF5DDNXM, dms_project UUISXVZRU5HQVKFR6WEAMMPYHM, s3 atx-db-modernization-267591443110-us-east-1, sg sg-07699334757d13e9b, vpc vpc-0d78028a619962ebb, auto target secret ...target-IL82Zl.",
+    "progress_0938": "PASSED prior failure point. DB assessment COMPLETE 09:21. Source-code assessment SUCCEEDED 09:28 (MAM303, complexity14/9678 LOC/5 projects). Pipeline+infra assessment COMPLETE 09:36. Assess review c0d95ec9 CLOSED 09:38.",
+    "progress_0939_MILESTONE": "*** CONFIRM WAVE PLAN task 08e74206 (ModernizationWaves) SURFACED at 09:39 and was SUBMITTED — this is the exact HITL that STALLED/never-materialized in run 3. Route A is now PAST all 4 historical failure points. *** Wave 1 (Low): DB BobsUsedBookStore(→Aurora) + repo bobs-used-bookstore-sample@MAM303. source_code_artifact_id a3aaeb30-b206-4615-9c43-9764b84381df. NEXT: deploy option (=false), data strategy (=skip/no-migration), SchemaConversionTargets (CRITICAL: create_new=false existing cluster atx-aurora-pg-cluster db=postgres aurora-admin secret ...2rpnnm), schema conversion, code transformation.",
+    "decisions": "code-transform=true, data-migration=false, app-deploy=false, target=existing Aurora atx-aurora-pg-cluster db=postgres (create_new=false), aurora secret ...aurora-admin-2rpnnm",
+    "hitlPlaybook": "prereqs APPROVE(empty); DB conn {connectorId 9313d893}; code {is_code_transformation_enabled:'true'}; conn-type {CONNECTOR_TYPE:'platform|secretsmanager|1'}; PAT {token_setup_confirmed:'confirmed'}; source conn {connectorId 2f80b115}; subnets: subnet-0c96da928a0552878,subnet-0c34c1cc2b3f78429,subnet-09d97d33b5d658ed9,subnet-041a966d9d40a8d57; resource-select DB BobsUsedBookStore + repo bobs-used-bookstore-sample@MAM303; deploy=false; data-strategy=skip; SchemaConversionTargets create_new=false existing cluster (READ fresh ARNs from task artifact)."
+  },
+  "updatedAt": "2026-08-30"
+}

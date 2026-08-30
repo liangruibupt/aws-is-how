@@ -120,6 +120,9 @@
     - [Cross Cloud Migration](#cross-cloud-migration)
     - [File migration](#file-migration)
     - [VMware migration](#vmware-migration)
+  - [Modernization](#modernization)
+    - [Database Modernization](#database-modernization)
+    - [AWS Transform](#aws-transform)
   - [Storage](#storage)
     - [S3 cross region or cross cloud OSS](#s3-cross-region-or-cross-cloud-oss)
     - [S3](#s3)
@@ -187,6 +190,7 @@
   - [Retail and ECommerce](#retail-and-ecommerce)
     - [快时尚电商行业智能体设计思路与应用实践](#快时尚电商行业智能体设计思路与应用实践)
     - [E-Commerce 选品和设计](#e-commerce-选品和设计)
+    - [Amazon Global Selling](#amazon-global-selling)
     - [导购和客服](#导购和客服)
     - [物流和供应链](#物流和供应链)
   - [FSI](#fsi)
@@ -528,6 +532,7 @@
     - [配置 kiro 使用企业单点登录系统](https://mp.weixin.qq.com/s/qFiUSz0GOAIv2Ekh4aXtbA?clicktag=bar_share&scene=294&clickpos=0&from_safari=1)
       - [Kiro 通过AWS Identity Center 认证，所以实际上是 Identity Center 和企业做 SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source-idp.html)
     - [通过ACP协议，使用api调用kiro cli - 把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
+    - [Benchmarking Kiro CLI coding-agent performance and cost across multiple models, replicating the Artificial Analysis Coding Agent Index methodology](https://github.com/JoeShi/coding-agent-benchmark)
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
@@ -547,7 +552,6 @@
       - [AI Ops Sample](https://amzn-chn.feishu.cn/wiki/BYmAwDtnWiOfqak9y51cbvrHn1g)
     - [BMW genai-assistant agent for Infra optimization](https://aws.amazon.com/cn/blogs/industries/bmw-group-develops-a-genai-assistant-to-accelerate-infrastructure-optimization-on-aws/)
     - [K8S GPT with bedrock practice](https://aws.amazon.com/blogs/machine-learning/use-k8sgpt-and-amazon-bedrock-for-simplified-kubernetes-cluster-maintenance/)
-    - [RDS to DynamoDB migration assistant agent](https://github.com/aws-samples/sample-ai-assisted-rds-to-dynamodb-migration)
     - [低成本RDS/Aurora MySQL审计日志管理方案](https://github.com/aws-samples/sample-rds-mysql-audit-serverless-solution)
   - [SDE Agent and DevOps Agent]
     - [MultiAgent - ChatDev on Claude 3 一句话实现一个软件需求](https://mp.weixin.qq.com/s/2abckTrOJ0yHap9KaRmC0g?poc_token=HP1aaGajxZFbzHee6Im6R_NVDMmJEKGHLB-rcEa7)
@@ -1581,6 +1585,12 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### VMware migration
 [Accelerating Migration Evaluator discovery for VMware environment](https://aws.amazon.com/cn/blogs/migration-and-modernization/accelerating-migration-evaluator-discovery-for-vmware-environment/)
 
+## Modernization
+### Database Modernization
+  - [RDS to DynamoDB migration assistant agent](https://github.com/aws-samples/sample-ai-assisted-rds-to-dynamodb-migration)
+### AWS Transform
+  - [Accelerating .NET and SQL Server Modernization using Agentic AI](https://catalog.workshops.aws/atx-sql-server-mod)
+    - [Workshop execution record]
 ## Storage
 
 ### S3 cross region or cross cloud OSS
@@ -2265,6 +2275,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [阿尔特携手 Amazon AgentCore ，打造懂你的AI，智能搜索成本降低34%](https://aws.amazon.com/cn/blogs/china/arte-partners-with-amazon-agentcore/)
 - [垂直电商以图搜图再升级：DINO 模型带来精准匹配体验](https://aws.amazon.com/cn/blogs/china/vertical-e-commerce-image-search-upgraded-dino-model-brings-accurate-matching-experience/)
 - [图片侵权检测](https://eric-bot.com/)
+### Amazon Global Selling
+- [Amazon SP API MCP](https://github.com/amzn/selling-partner-api-samples/blob/main/use-cases/sp-api-dev-mcp)
 
 ### 导购和客服
 - [How Amazon is using generative and agentic AI to transform the shopping experience](https://www.aboutamazon.com/news/retail/amazon-agentic-ai-gen-ai-shopping)  
