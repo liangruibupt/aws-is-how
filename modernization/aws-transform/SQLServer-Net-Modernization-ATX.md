@@ -7,14 +7,15 @@
 > **结论(2026-08-30 结项)**:**AWS Transform 托管流程对 .NET + SQL Server 的现代化转换目前不成熟,不建议用于生产。** 依据:两天内用相同且正确的输入驱动托管流程,累计 **7 次失败 / 分布在 5 个不同阶段**(DB-connector、assess-plan、wave-confirm 卡死、schema-conversion 执行等),每次死在不同地方,呈服务端非确定性故障,客户端无法修复或规避。业务目标最终由**绕开托管编排的两条确定性路径**达成:独立 DMS project 完成 schema 转换(9 表 / 459 行 DDL)+ Kiro 直接改 .NET 代码(SqlServer→Npgsql,build 0 错误、Docker 中 PG16 运行验证通过)。托管流程本轮**主动停止,不再重跑**。
 
 ## 前提
-1. 装好 Kiro 以及 Transform Power。
-2. 准备好本 Workshop 的实验环境：
+1. [用 Kiro + Transform Power 完成 Transform Workshop](https://ws-eval.100.notnot.top/workshops/transform-kiro.html)
+2. 装好 Kiro 以及 Transform Power。
+3. 准备好本 Workshop 的实验环境：
 - 在 [Workshop Studio](https://studio.us-east-1.prod.workshops.aws/workshops/public) 中搜索 Accelerating .NET and SQL Server Modernization using Agentic AI。
 - 点进去，点击 Create Event，然后选择 Test Event 类型即可。
-3. 已启用 Transform Web Application。具体操作如下：
+1. 已启用 Transform Web Application。具体操作如下：
 - 参考 [Enable AWS Transform](https://catalog.workshops.aws/atx-sql-server-mod/en-US/create-transformation-job/enable-aws-transform)，完成设置以及添加 workshop-user 这个 IdC 用户。
 - 参考 [User Authentication](https://catalog.workshops.aws/atx-sql-server-mod/en-US/getting-started-aws-event/user-authentication)，用 workshop-user 这个用户登录 Secrets Manager 中获取的 startUrl 链接。
-4. [Web UI 版本参考](https://catalog.workshops.aws/atx-sql-server-mod)
+1. [Web UI 版本参考](https://catalog.workshops.aws/atx-sql-server-mod)
 
 ## 使用 Kiro 驱动 Transform
 1. 启动 Transform 任务
