@@ -194,7 +194,8 @@
     - [导购和客服](#导购和客服)
     - [物流和供应链](#物流和供应链)
   - [FSI](#fsi)
-    - [Online Banking](#online-banking)
+    - [Banking \& Online Banking](#banking--online-banking)
+    - [Payment](#payment)
   - [Hospitality](#hospitality)
 
 ## [常见故障排除及支持手册](https://amazonaws-china.com/cn/premiumsupport/knowledge-center/?nc1=h_ls&from=timeline&isappinstalled=0)
@@ -288,6 +289,9 @@
     - [Qwen3-VL视觉Agent能力](https://mp.weixin.qq.com/s/c2UA8-WUxFo-Gyiru1nu7g)
     - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
     - [story2video 生视频](https://github.com/qingyuan18/open_vibe_video.git)
+    - [MiniMax H3 on g7e（RTX PRO 6000 Blackwell Server Edition）](https://github.com/whn09/minimax_h3_g7e)
+    - [MiniMax H3 use case and prompt guide](https://vrfi1sk8a0.feishu.cn/wiki/VavPwU0XmiidWhkdGjtcbMHInKf)
+    - [MiniMax H3 Enterprise Solution](https://vrfi1sk8a0.feishu.cn/wiki/DZGGwe9DaidFyQkcjg1c3hgSnbh)
   
 ### Audio in GenAI
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
@@ -630,6 +634,15 @@
     - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
   - [FlexAI - Architect and deploy advanced Agentic AI platforms on Amazon EKS](https://catalog.us-east-1.prod.workshops.aws/workshops/26ab2b07-9621-4e0c-bc44-3f7fef388cb7/en-US)
     - [GenAI on EKS Starter Kit](https://github.com/aws-samples/sample-genai-on-eks-starter-kit)
+  - [Lambda MicroVM]
+    - [Lambda MicroVMs 适用场景与 Samples 总结](ai-ml/chatgpt/agent/lambdaMicroVM/Lambda-MicroVM-Use-Cases.md)
+    - [AWS Lambda MicroVMs core concepts](https://docs.aws.amazon.com/lambda/latest/dg/microvms-how-it-works.html) (https://aws.amazon.com/blogs/aws/run-isolated-sandboxes-with-full-lifecycle-control-aws-lambda-introduces-microvms/)
+    - [Claude Self-Hosted Sandboxes on AWS Lambda MicroVMs](https://github.com/aws-samples/sample-lambda-microvm-claude-managed-agents)
+    - [sample-multi-tenant-ai-agents-on-lambda-microvm] (https://github.com/aws-samples/sample-multi-tenant-ai-agents-on-lambda-microvm) 
+    - [sample-multi-tenant-openclaw-on-firecracker](https://github.com/aws-samples/sample-multi-tenant-openclaw-on-firecracker)
+  - [Firecracker]
+    - [hyperscale pool of AI agents on AWS — one tenant, one independent kernel, isolated by Firecracker microVMs](https://github.com/aws-samples/sample-multi-tenant-openclaw-on-firecracker/tree/gateway/)
+    - [AWS Self-Hosted AI Agent Sandbox Platform](https://github.com/aws-samples/sample-aws-self-hosted-sandbox/tree/main)
   - [Bedrock AgentCore]
       - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
       - [AgentCore use case examples](ai-ml/chatgpt/agent/Agent-implement-samples.md)
@@ -642,6 +655,10 @@
           - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
         - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
           - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
+      - [Migrate to AgentCore]
+        - [将 Dify 工作流 运行至 Amazon Bedrock AgentCore 的实践与验证](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-agentcore-practice-validation/)
+        - [Migrate agentic workloads to Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/migrate-agentic-workloads-to-amazon-bedrock-agentcore/)
+        - [Modernize your applications using Amazon Bedrock AgentCore Gateway and Kiro powers](https://aws.amazon.com/tr/blogs/migration-and-modernization/modernize-your-applications-using-amazon-bedrock-agentcore-gateway-and-kiro-powers/)
       - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
         - [AgentCore Identity 新增 On-Behalf-Of (OBO) Token Exchange — 多 Agent 链路中代表用户访问下游服务，无需对每个资源单独做 consent flow](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
@@ -666,8 +683,6 @@
         - [Agent 优化端到端全流程](https://d3qnw1rhjyi9ke.cloudfront.net/)(f7TmsWkmyqkjp5Brtt5V)
       - [AgentCore Harness - Go from idea to production-grade agent in minutes](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-harness-is-now-generally-available-go-from-idea-to-production-grade-agent-in-minutes/)
         - [取之有度，用之有节——从 Harness 视角破解 Agent 应用 Token 爆炸难题](https://aws.amazon.com/cn/blogs/china/harness-agent-application-token/)
-      - [Agents that transact: Introducing Amazon Bedrock AgentCore payments, built with Coinbase and Stripe](https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/)
-        - [基于Amazon Bedrock AgentCore与 x402 的Agentic Payment 方案](https://aws.amazon.com/cn/blogs/china/ai-agent-based-on-amazon-bedrock-agentcore-x402-agentic-payment-solution/)
       - [Agentic AI基础设施实践经验系列]
         - [Agentic AI基础设施实践经验系列（一）：Agent应用开发与落地实践思考](https://aws.amazon.com/cn/blogs/china/agentive-ai-infrastructure-practice-series-1)
         - [Agentic AI基础设施实践经验系列（二）：专用沙盒环境的必要性与实践方案](https://aws.amazon.com/cn/blogs/china/agentic-ai-sandbox-practice/)
@@ -723,6 +738,7 @@
     - [junior](https://junior.so/)
     - [moxt](moxt)
     - [kirocrew](https://kiro.dev/blog/introducing-kiro-crew/)
+    - [ABE - AI 后端工程师](https://appcts-eu.gofoexpress.com/api/v1/content/app_9961d922d82291/html-62eb8921eddd/?share_link_id=7f8KqA7K1tp_D_OsvYxOK6PRk8-TDz0E)
 
 ### GenAI Business Application
   - [Quick Suite]
@@ -732,8 +748,8 @@
   - [Quick Desktop]
     - [quick-dingtalk-mcp](https://github.com/keithyt06/quick-dingtalk-mcp)
     - [feishu-quick-mcp](https://amzn-chn.feishu.cn/wiki/GHWLwdSv4ipMyUkA71vcHhxFnfh)
-      - `lark-cli auth login --scope "im:message im:message.send_as_user im:message:readonly im:message.group_msg:get_as_user im:message.p2p_msg:get_as_user im:chat:read search:message contact:user:search contact:user.base:readonly docx:document:create docx:document:readonly docx:document:write_only search:docs:read"`
-      - [为 Amazon Quick Desktop 提供飞书工具能力的远程 MCP 服务](https://github.com/ddpie/lark-mcp-on-agentcore)
+      - [lark-cli 本地 Stdio MCP](https://github.com/zhuermu/lark-cli-mcp)
+      - [为 Amazon Quick Desktop 提供飞书工具能力的远程 MCP 服务](https://aws.amazon.com/cn/blogs/china/amazon-quick-build-mcp-service-design-practice/)
     - [用 Amazon Quick Desktop 实现小红书从选题到发布的全流程自动化](https://events.amazoncloud.cn/labs/cloudlab-quick-rednote)
     - [Amazon Quick Web & Desktop 企业级 Agentic AI 实战工作坊](https://catalog.us-east-1.prod.workshops.aws/workshops/1477fb37-26c3-4ccc-ac93-380b5b8e0bed/zh-CN)
       - [AWS use the Quick for productivity](https://aws.highspot.com/spots/675fe87775c84fc3050351dd?list=6a4f3d1ba1e86e17a6bcadd1&overview=false)
@@ -823,6 +839,7 @@
 
 
 - [GPU Daily usage]
+  - [GPU Onboarding 知识中枢](https://tiny.amazon.com/18klxjenl/GPUKnowledgeHub)
   - [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
   - [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
   - [GPU Perf - LLM GPU推理性能可视化平台](https://github.com/yytdfc/llm-performance-viz)
@@ -1086,7 +1103,6 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Glue Studio supports Redshift Serverless](https://aws.amazon.com/about-aws/whats-new/2023/07/aws-glue-studio-amazon-redshift-serverless/)
   - [Redshift auto mounting Glue Catalog](https://aws.amazon.com/about-aws/whats-new/2023/07/amazon-redshift-automatic-mounting-aws-glue-data-catalog/)
   - [Iceberg table support on Redshift](https://aws.amazon.com/about-aws/whats-new/2023/07/amazon-redshift-querying-apache-iceberg-tables/)
-  - [Zero-ETL 在支付业务离线数据上的实践](https://aws.amazon.com/cn/blogs/china/zero-etl-practice-on-offline-payment-business-data/)
   
 - [Redshift performance]
   - [使用 Amazon Glue 来调度 Amazon Redshift 跑 TPC-DS Benchmark](https://aws.amazon.com/cn/blogs/china/use-amazon-glue-to-schedule-amazon-redshift-run-tpc-ds-benchmark/)
@@ -2291,8 +2307,14 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Amazon Location Service Proxy](https://github.com/aws-samples/sample-api-proxy-for-multi-region-location-service)
   
 ## FSI
-### Online Banking
+### Banking & Online Banking
 - [Claude for Financial Services 中文全解](https://mp.weixin.qq.com/s/w-4hoSO-j0Uy_uw2KcwkEw)
+- [Agentic Fraud Detection on AWS](https://catalog.us-east-1.prod.workshops.aws/workshops/027b661c-4083-431d-8357-147bee42e867/en-US)
+
+### Payment
+- [Agents that transact: Introducing Amazon Bedrock AgentCore payments, built with Coinbase and Stripe](https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/)
+  - [基于Amazon Bedrock AgentCore与 x402 的Agentic Payment 方案](https://aws.amazon.com/cn/blogs/china/ai-agent-based-on-amazon-bedrock-agentcore-x402-agentic-payment-solution/)
+- [Zero-ETL 在支付业务离线数据上的实践](https://aws.amazon.com/cn/blogs/china/zero-etl-practice-on-offline-payment-business-data/)
 
 ## Hospitality
 - [travel concierge agent](https://github.com/awslabs/amazon-bedrock-agentcore-samples/tree/main/05-blueprints/travel-concierge-agent)

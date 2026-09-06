@@ -389,21 +389,8 @@ Give me a briefing about best next engagement action solution
 汇总时按客户分组，突出显示项目状态变化、里程碑达成、风险问题等关键信息。
 如果发现项目长时间未更新，请在报告中标注提醒。
 
-# Chat Agent User prompt
+## Chat Agent User prompt
 从Asana Project = "RCH-NW 2026 Key Projects"中，汇总 Duration = "2026年1月19日 - 2026年1月25日" 所有 Assignee 的客户项目进展情况，从Task的Comments和Description中提取最新进展信息，尽可能的包含详细的信息，包括每一个 Assignee 负责的项目最新进展、遇到的问题和下一步计划。不要遗漏某个Assignee, 如果last modified on 不在指定Duration，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
-
-Feb01 version
-从Asana Project = "RCH East Ecommerce SA weekly update"中, 汇总 last modified on 在 "2026年2月2日 - 2026年2月9日" 的 tasks。新创建的 task 从 Description 和最新的Task Comments中提取最新进展信息；已有的 task，提取在"2026年2月2日 - 2026年2月9日" 添加的Task Comments 的作为最新进展信息。确保你检查了所有 Assignee 和 Section，不要遗漏。 如果last modified on 不在 "2026年2月2日 - 2026年2月9日" ，可以忽略该 Task 更新。按照以下分类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
-
-Project=‘RCH East Ecommerce SA weekly update’，Section=‘SkyScanner’，在2026年1月25日 - 2026年2月1日的更新总结。 新创建的 task 从 Description 中提取最新进展信息；已有的 task，提取添加和修改时间"2026年1月25日 - 2026年2月1日"之间的Task Comments作为最新进展信息，不要遗漏。
-
-# Flow
-我需要汇总指定时间段，Asana中指定项目中，所有SA的客户项目进展情况，有两个输入，输入一是Asana Project，输入二是汇总 Duration。调用 chat agent 'RCH SA项目进展汇总助手' 抓取信息和汇总，最后创建一个 Asana 指定Project的 Task，名称是Weekly Status Update，内容是编辑后的汇总信息，Assignee是我自己
-
-## Flow Call Agent
-使用RCH SA项目进展汇总助手来汇总 #输入Asana项目名称 项目中, #输入汇总时间段 时间段内所有 Assignee 和 Section 进展情况。新创建的 Task 从 Description 中提取最新进展信息；Existed 的 Task，提取添加和修改时间在 #输入汇总时间段 之间的Task Comments作为最新进展信息，不要遗漏。确保你检查了所有 Assignee 和 Section。 如果last modified on 不在 #输入汇总时间段，可以忽略该 Task 更新。
-
-按照以下类进行汇总：1. Retail and E-Commerce Industry Solutions, 2.Migration, 3. Generative AI, 4. Challenges / Risks / Issues, 5.Customer Highlights, 6.Customer Lowlights
 
 ## Create Asana Task
 在Asana的
@@ -414,27 +401,8 @@ Project=‘RCH East Ecommerce SA weekly update’，Section=‘SkyScanner’，�
 RCH-NW 2026 Key Projects
 RCH East Ecommerce SA weekly update
 
-2026年1月1日 - 2026年1月11日
 
-RCH-NW 2026 Key Projects
-
-## Claude Code WBR
-Using Agent Teams mode run in parallelly to generate ASANA 3 Projects separate report for duration '2026-04-20 to 2026-04-27', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The output is Chinese, do not replace any existed report.
-
-### Create SKILL of WBR
-Each weekly I input the prompt for ASANA projects weekly report. Here is my prompt:
-Using Agent Teams mode run in parallelly to generate ASANA 3 Projects separate report for duration '2026-04-20 to 2026-04-27', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. The output is Chinese, do not replace any existed report.
-
-Now I need create the skill for above weekly task, the skill named wbr-data-collection. Next time, I only need call the skill and tell you the #WeekNumber current year, such as week 27, then you convert it to date range from 2026-06-29 to 2026-07-05, then execute the reports generation
-
-将我通过'!!'标记的 items 总结之后，放到 ‘### 本周重点关注’ 下面，表格方式，表头信息：
-｜ # ｜ 任务 | 客户 | SA | 状态 | 关键信息 |
-|---|------|------|----|------|---------|
-
-### Claude Code WBR + new added task
-You have generated ASANA 3 Projects separate report for duration '2026-03-15 to 2026-03-22', Check the SFDC Opp Link, fill the MRR(K) and enrich the report with SFDC Opportunity information. I need you help extract the task create or modifed on 2026-03-23, then update the existed three 03-22 report with new section under '### 本周重点关注' with name '### 03-23新增'. Do not replace or update any existed content. Using Agent Teams mode run in parallelly. The output is Chinese.
-
-## Claude Code WBR - mini MBR SKILL
+# Claude Code WBR - mini MBR SKILL
 
 By leveraging the Agent, I can Conduct weekly business reviews with monthly business review (MBR) format. It enables rapid decision-making. So I need you create a skill for me named mbr-report-per-week.
 
@@ -519,6 +487,34 @@ HTML move 到/Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/20
 12. 重点项目，如果有 Next Step，那么下一个周报中最好有更新，以便闭环。
 
 下面继续 mbr-report-per-week 这个 skill 的 mode2 merge FSI, LS_HC, CI, RCH 的报告为一个完成的用于我上交 Erik 的 WBR。 4 个行业的 WBR 在 /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/W31，包括刚才你生产的 RCH 文件。注意有限挑选我用!!标注的条目，其他你觉得重要的条目也可以添加，但是注意我只有 10 分钟做汇报。
+
+## Create MBR from WBR
+Update the mbr-report-per-week SKILL to add the 3rd mode: Create the Monthly Business Review (MBR) Report specific industry
+
+1. Allow user pick up the industry: RCH (default), FSI, LS_HC, CI. Each time run only one industry MBR, no need for all 4 industry.
+2. Calculate the right weeks duration for specific month, for example, 2026 Aug is W32 to W35
+3. Then pick up the right weeks duration exited WBR files under /Users/ruiliang/Library/CloudStorage/WorkDocsDrive-Documents/Mgr/2026/2x2/WBR/ 
+4. Select topics within the WBR files that deserve call‑outs to GCR leadership (upper level of Erik SA Org, Opp ≥$50K MRR / $500K ARR, cross weeks and multiple customers as month trend), and organize them in accordance with the format below.
+5. Bold one-sentence viewpoint + numbered evidence + （SA @alias） per entry. Keep with SFDC Opp ID and MRR/ARR in USD for each evidence.
+6. English narrative output.
+
+# [Migration and modernization observation, with Opportunity ID]
+## [Migration]
+
+## [Modernization]
+
+## [Industry Update]
+### [Industry Solution Win]
+### [Bedrock & AI Coding]
+### [Agent - AgentCore, DevOps Agent, Security Agent]
+### [Quick Desktop and Quick Suite]
+### [GPU]
+
+# [External Blockers, Major Risks and Challenges] 
+
+# [Customer Highlights] 
+
+# [Customer Lowlights] 
 ```
 
 ## 23. Interview summary
@@ -695,6 +691,8 @@ From [CMHK PPL 01] Pipeline & Inputs Management Dashboard → 1. Creation, help 
 接入 LLM 后端实现真实对话, 添加故障诊断引擎, 导出为可分享的 HTML 文件, 对接真实 BMS 数据源的参考代码
 
 Use HTML to create an animated diagram of the solar system's orbital motion for middle school classroom teaching.
+
+Use HTML to create an animated diagram to describe the architectural features of ancient Chinese buildings from different dynasties (Tang, Song, Liao, Jin, Yuan and Ming). Select one most representative building as an example for each period. Supports clicking to construct buildings, enabling in‑depth viewing and disassembly of architectural structural details such as eaves, window mullions, bracket sets, beams, inclined supports, and columns, with accompanying textual explanations. This material is designed for senior high‑school teaching.
 ```
 
 ## 34. Promotion Doc review
