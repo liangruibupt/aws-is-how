@@ -122,8 +122,9 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(body);
     } catch (err) {
+      console.error('bedrock-openai-adapter request failed:', err);
       res.writeHead(502, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: { message: String(err && err.message || err) } }));
+      return res.end(JSON.stringify({ error: { message: 'Upstream request failed' } }));
     }
   }
   res.writeHead(404, { 'Content-Type': 'application/json' });
