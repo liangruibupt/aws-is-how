@@ -1,0 +1,7 @@
+# Copy to terraform.tfvars (gitignored) and fill in.
+region                       = "us-east-1"
+image_uri                    = "<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/studylens:latest"
+bedrock_inference_profile_id = "us.openai.gpt-5.6-luna"
+basic_auth_user              = "liang"
+# Prefer: export TF_VAR_basic_auth_pass=... (do not commit the real password)
+basic_auth_pass              = "change-me"

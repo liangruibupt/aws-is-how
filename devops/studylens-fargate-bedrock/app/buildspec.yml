@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to ECR $ECR_URI"
+      - REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - ACCOUNT=$(echo "$ECR_URI" | cut -d. -f1)
+      - aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com"
+  build:
+    commands:
+      - echo "Building image"
+      - docker build -t "$ECR_URI:latest" .
+  post_build:
+    commands:
+      - echo "Pushing image"
+      - docker push "$ECR_URI:latest"
+      - echo "Done -> $ECR_URI:latest"
