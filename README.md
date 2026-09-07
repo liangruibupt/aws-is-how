@@ -4,6 +4,7 @@
   - [AWS Skill builder](#aws-skill-builder)
   - [freeCodeCamp](#freecodecamp)
   - [Architecture Design](#architecture-design)
+  - [Hands-on Labs (自建实验)](#hands-on-labs-自建实验)
   - [Introducing the AWS Product Lifecycle page and AWS service availability updates](#introducing-the-aws-product-lifecycle-page-and-aws-service-availability-updates)
   - [AI/ML](#aiml)
     - [ML Study](#ml-study)
@@ -209,6 +210,15 @@
 - [Building hexagonal architectures on AWS](https://docs.aws.amazon.com/prescriptive-guidance/latest/hexagonal-architectures/welcome.html)
 - [Service Screener is a tool that runs automated checks on AWS environments and provides recommendations based on AWS and community best practices](https://github.com/aws-samples/service-screener-v2)
   
+## Hands-on Labs (自建实验)
+
+本人与 Kiro Crew agent 一起动手完成、验证过的端到端实验（均含可复现资产 / IaC / 实测记录）：
+
+- **[Lambda MicroVMs Lab](https://github.com/liangruibupt/lambda-microvm-lab)** — AWS Lambda MicroVMs（Firecracker 隔离的 serverless，2026-06 GA）动手实验。单 Flask MicroVM 生命周期（create-image → run → connect → suspend/resume，验证快照状态存活）+ 多租户 aws-sample 端到端部署；实测记录、连接契约（443 + `X-aws-proxy-auth` + `X-aws-proxy-port`）、跨代状态丢失的 mount-namespace 根因分析，findings 已回报 aws-samples 上游 issue。
+- **[DuckDB Scenarios Explorer](https://github.com/liangruibupt/duckdb-scenarios-explorer)** — DuckDB 7 个场景（NYC 出租车分析、httpfs/S3 远程 Parquet、CSV→Parquet ETL、NL→DuckDB Chat BI、Pandas 零拷贝、日志分析、多 agent AgentCore 设计），spec 驱动 + 34 用例 pytest + CI；场景 04+07 真实部署到 Bedrock AgentCore Runtime（embedded DuckDB 读 S3 hive-partitioned Parquet）验证后清零。
+- **[COD-Commerce Agent](https://github.com/liangruibupt/cod-agent-commerce)** — 对话式电商 agent：Bedrock AgentCore Runtime 编排（Luna→Claude→规则链 + 工具）、三层记忆（短期事件 / Aurora 确认偏好 / AgentCore USER_PREFERENCE 推断层）、Aurora Serverless v2 + pgvector、S3+CloudFront 前端；含 VPC/Aurora terraform、E2E 测试 + CI 与完整实验日志。
+- **[StudyLens on ECS Fargate + EFS + ALB + CloudFront](devops/studylens-fargate-bedrock/)** — 把有状态 npm 应用部署为免运维、低成本、手机/iPad 可访问的服务；容器内 adapter 将 OpenAI 兼容调用转成 Bedrock Converse（`us.openai.gpt-5.6-luna`，凭 task role 免密钥），CloudFront 提供免域名可信 HTTPS。含完整 Terraform IaC、架构说明与部署/运维/拆除文档。
+
 ## [Introducing the AWS Product Lifecycle page and AWS service availability updates](https://aws.amazon.com/blogs/aws/introducing-the-aws-product-lifecycle-page-and-aws-service-availability-updates/)
 
 ## AI/ML
