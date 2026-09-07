@@ -430,6 +430,8 @@
     - [GPT OSS models from OpenAI are now available on SageMaker JumpStart](https://aws.amazon.com/cn/blogs/machine-learning/gpt-oss-models-from-openai-are-now-available-on-sagemaker-jumpstart/)
   - [GPT 闭源模型]
     - [OpenAI Chat Completions ↔️ Bedrock Responses API Adapter](https://github.com/wwwenwei-commits/bedrock_chat_adapter)
+    - [GPT-6 Astra: 20 Real Examples From Useful to Almost Impossible](ai-ml/chatgpt/openai/gpt6_astra_20example.md)
+    - [GPT 5.6 code example](ai-ml/chatgpt/openai/gpt56_luna_bedrock_sample.py)
 
 #### Llama
   - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
@@ -457,10 +459,14 @@
   - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
   - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
   - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+  - []
 #### More Open-Source Model
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   - [Gemma]
     - [Google DeepMind’s DiffusionGemma for Local AI](https://blogs.nvidia.com/blog/rtx-ai-garage-local-gemma-diffusion/) (https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/)
+  - [Grok]
+    - [Grok 4.3 Example](ai-ml/chatgpt/openai/grok43_bedrock_mantle.py)
+    - [Grok 4.6 Example](ai-ml/chatgpt/openai/grok46_bedrock.py)
 #### vllm and ollma
   - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
   - [lightweight tool designed to simplify models deployment](https://github.com/aws-samples/easy-model-deployer)
