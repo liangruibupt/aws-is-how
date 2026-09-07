@@ -2320,7 +2320,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### 物流和供应链
 - [物流数据湖构建与分析中台转型案例分析](https://aws.amazon.com/cn/blogs/china/logistics-data-lake-construction-and-analytics-middle-office-transformation-case-study/)
-- [Amazon Location Service Proxy](https://github.com/aws-samples/sample-api-proxy-for-multi-region-location-service)
+- [Amazon Location Service Proxy - 实时地图本土语言跟随, 多区域ALS 支持，地图瓦片拖拽交互](https://github.com/aws-samples/sample-api-proxy-for-multi-region-location-service)
   
 ## FSI
 ### Banking & Online Banking
