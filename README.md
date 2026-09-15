@@ -196,6 +196,7 @@
     - [物流和供应链](#物流和供应链)
   - [FSI](#fsi)
     - [Banking \& Online Banking](#banking--online-banking)
+    - [撮合](#撮合)
     - [Payment](#payment)
   - [Hospitality](#hospitality)
 
@@ -542,6 +543,7 @@
     - [AI-Ready-Repo Engine — Making Any Codebase Agent-Ready AND Human-Signable](https://github.com/xg-gh-25/SwarmAI/blob/main/docs/AI-Ready-Repo-Engine-Design.md)
   - [Amazon Q Developer/Kiro]
     - [Kiro Community](https://github.com/kiro-community/)
+      - [开源 Kiroro Bot](https://github.com/kiro-community/kiroro)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
     - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
     - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
@@ -891,6 +893,7 @@
   - [Porting Advisor for Graviton](https://github.com/aws/porting-advisor-for-graviton)
   - [AWS Graviton4 加速 Apache APISIX 消息处理](https://aws.amazon.com/cn/blogs/china/aws-graviton4-accelerates-apache-apisix-message-processing/)
   - [Q CLI for Aurora Graviton4 upgrade](https://aws.amazon.com/cn/blogs/china/q-cli-helps-intsig-achieve-aurora-upgrade-and-operations/)
+  - [Graviton 官方有个 Kiro Power 做兼容性扫描和出报告](https://github.com/kirodotdev/powers/tree/main/aws-graviton-migration)
 
 - [Operation]
   - [What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
@@ -2326,6 +2329,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Banking & Online Banking
 - [Claude for Financial Services 中文全解](https://mp.weixin.qq.com/s/w-4hoSO-j0Uy_uw2KcwkEw)
 - [Agentic Fraud Detection on AWS](https://catalog.us-east-1.prod.workshops.aws/workshops/027b661c-4083-431d-8357-147bee42e867/en-US)
+### 撮合
+- [Aeron – the global technology standard for high-throughput, low-latency, fault-tolerant trading systems](https://aeron.io/)
+  - [standby Cluster improved availability, disaster recovery, and load management](https://aeron.io/premium-docs/aeron-cluster-standby/standby-overview.html)
 
 ### Payment
 - [Agents that transact: Introducing Amazon Bedrock AgentCore payments, built with Coinbase and Stripe](https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/)
