@@ -7,6 +7,14 @@ GA 2026-08-31), plus a self-contained visualization of the value story.
 Everything here was **verified live** on 2026-09-16 in account
 `747411437379` / `us-east-1`.
 
+> **Source / further reading:** this lab and the diagrams below follow the AWS
+> announcement post
+> [Manage agents, tools and skills at scale with AWS Agent Registry](https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/)
+> (Chaitra Mathur, Anubhav Mangal, Amanda Lester — 31 Aug 2026). Each workflow
+> section maps to a figure in that post (Figures 1–5). See also the
+> [AWS Agent Registry Developer Guide](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry.html)
+> and the [agentcore-samples repo](https://github.com/awslabs/agentcore-samples).
+
 ---
 
 ## What Agent Registry is (30-second version)
@@ -24,6 +32,150 @@ It runs across **two planes**:
 
 Record **lifecycle**: `DRAFT → PENDING_APPROVAL → APPROVED / REJECTED → DEPRECATED`
 Record **types**: `MCP`, `AGENT`, `SKILL`, `CUSTOM`.
+
+---
+
+## Architecture & workflows (mapped to the blog's figures)
+
+The following five sections follow the diagrams in the
+[AWS Agent Registry announcement post](https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/).
+Each mermaid diagram reproduces the corresponding figure; the ⭐ notes tie every
+step back to the real API calls this lab makes.
+
+### 1. Overview architecture (Figure 1 — capabilities & access surfaces)
+
+Agent Registry is one governed catalog exposed through two planes and reachable
+from several access surfaces (Console, CLI/SDK, IDEs via MCP+DCR, Amazon Quick,
+and the Search API — itself exposed as an MCP server).
+
+```mermaid
+flowchart TB
+    subgraph Surfaces["Access surfaces"]
+        Console["AWS Console"]
+        CLI["CLI / SDK (boto3)"]
+        IDE["IDEs — Kiro, Claude Code (MCP + DCR)"]
+        Quick["Amazon Quick"]
+    end
+
+    subgraph Registry["AWS Agent Registry"]
+        direction TB
+        GP["Governance Plane\n(authoritative store — ALL states,\ncompliance signals, custom metadata,\ndiscovery policies)"]
+        DP["Discovery Plane\n(curated view — APPROVED only,\nsemantic + lexical search,\nhigh-throughput, exposed as MCP server)"]
+        GP -- "APPROVED records published to" --> DP
+    end
+
+    subgraph Records["Record types"]
+        MCP["MCP server\n(tools/resources/prompts)"]
+        AGENT["Agent\n(A2A agent card)"]
+        SKILL["Skill\n(markdown + code)"]
+        CUSTOM["Custom\n(any valid JSON)"]
+    end
+
+    Console --> GP
+    CLI --> GP
+    CLI --> DP
+    IDE --> DP
+    Quick --> DP
+    Records --> GP
+```
+
+> ⭐ In this lab: the **Governance Plane** = boto3 client `agent-registry-control`;
+> the **Discovery Plane** = client `agent-registry`, op
+> `search_discoverable_registry_records`. All four record types are supported;
+> the lab uses `CUSTOM` for portability.
+
+### 2. Administrator approval workflow (Figure 2 — 7 steps)
+
+How an admin sets up the registry and wires the approval workflow that gates
+what reaches the discovery plane.
+
+```mermaid
+flowchart TD
+    S1["1. CRUD Registry\n(Admin sets up / maintains the registry\nvia Console, CLI, or SDK)"]
+    S2["2. Create & administer approval workflow\n(security scans, de-duplication, validation checks)"]
+    S3["3. Publish records\n(direct, or via active endpoints the\nregistry pulls metadata from)"]
+    S4["4. Amazon EventBridge trigger\n(fires when a record is PENDING_APPROVAL)"]
+    S5["5. Approval workflow\n(checks & balances decide broad discovery)"]
+    S6["6. Approval & discovery\n(status → APPROVED, published to discovery plane)"]
+    S7["7. Discovery by consumers\n(record now findable via semantic/lexical search)"]
+
+    S1 --> S3
+    S2 --> S4
+    S3 --> S4 --> S5 --> S6 --> S7
+```
+
+> ⭐ In this lab: step 1 = `01_create_registry.py`; steps 3–4 =
+> `02_publish_records.py` + `03_submit_for_approval.py`; steps 5–6 =
+> `04_curator_approve.py` (`UpdateRegistryRecordStatus`, which **requires**
+> `statusReason`); step 7 = `05_consumer_search.py`. EventBridge + the workflow
+> engine (steps 2, 4, 5) are org hooks you configure — the lab plays the
+> human-curator role directly.
+
+### 3. Publishing workflow from CI/CD (Figure 3)
+
+A developer's pipeline packages an agent/tool and pushes a record into the
+registry, then it flows through the same approval gate.
+
+```mermaid
+flowchart LR
+    D1["1. Discover the Registry\n(dev uses IDE + SDK; checks what already exists)"]
+    D2["2. Dev-controlled CI/CD pipeline\n(packages the agent/tool)"]
+    D3["3. Generate Agent Card OR\nMCP server + endpoint URL"]
+    D4["4. Submit & create registry record\n(CreateRegistryRecord → Submit…ForApproval)"]
+    D5["5–8. Approval workflow\n(→ APPROVED / REJECTED, as in Figure 2)"]
+
+    D1 --> D2 --> D3 --> D4 --> D5
+```
+
+> ⭐ In this lab: step 4 = `create_registry_record` +
+> `submit_registry_record_for_approval`. Publishers can also let the registry
+> **synchronize** metadata directly from external MCP/A2A servers (OAuth / IAM /
+> unauthenticated) instead of hand-authoring records.
+
+### 4. Discovery & access flow for consumers (Figure 4 — 5 steps)
+
+How a consumer (developer or autonomous agent) finds and then actually calls a
+resource.
+
+```mermaid
+flowchart TD
+    C1["1. Search the Registry\n(query for agents/tools/skills by intent)"]
+    C2["2. Receive auth info & URIs\n(registry returns authorization details + endpoint URIs)"]
+    C3["3. Request access\n(onboard to the A2A / MCP servers)"]
+    C4["4. Provide credentials\n(clientID/secret, API key, or IAM access)"]
+    C5["5. Call resources with auth\n(agent invokes the tool/agent with the creds)"]
+
+    C1 --> C2 --> C3 --> C4 --> C5
+```
+
+> ⭐ In this lab: step 1 = `search_discoverable_registry_records` (returns only
+> APPROVED records). Steps 2–5 are the onboarding + authenticated-call path to
+> the underlying tool; the lab's records point at placeholder ARNs, so it
+> demonstrates discovery (step 1) rather than a live tool invocation.
+> From an IDE (Kiro, Claude Code) this is a natural-language MCP query wired up
+> via Dynamic Client Registration (DCR) — no pre-provisioned OAuth.
+
+### 5. Record lifecycle state transitions (Figure 5)
+
+```mermaid
+stateDiagram-v2
+    [*] --> DRAFT: Publisher creates / updates record
+    DRAFT --> PENDING_APPROVAL: Publisher submits for approval
+    PENDING_APPROVAL --> APPROVED: Approver approves\n(or auto_approve = true)
+    PENDING_APPROVAL --> REJECTED: Approver rejects
+    PENDING_APPROVAL --> DRAFT: Publisher updates (optional loop)
+    APPROVED --> DRAFT: Publisher updates (optional loop)
+    APPROVED --> DEPRECATED: Curator deprecates
+    REJECTED --> [*]
+    DEPRECATED --> [*]
+```
+
+> ⭐ In this lab: `CreateRegistryRecord` → `DRAFT`;
+> `SubmitRegistryRecordForApproval` → `PENDING_APPROVAL`;
+> `UpdateRegistryRecordStatus(status=APPROVED|REJECTED, statusReason=…)` →
+> `APPROVED`/`REJECTED`. `auto_approve` and `DEPRECATED` are supported by the
+> API but not exercised by the numbered scripts. Only `APPROVED` records are
+> ever returned on the discovery plane.
 
 ---
 
