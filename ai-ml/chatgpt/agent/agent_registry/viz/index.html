@@ -133,8 +133,9 @@
   <div class="log" id="log"></div>
   <div class="footer">
     Data is simulated but shaped to the live API (verified 2026-09-16, us-east-1). Governance plane holds
-    <b>all</b> states; discovery plane returns <b>APPROVED only</b>. Semantic search returns nearest neighbors —
-    there is no hard relevance cutoff, so an unrelated query still returns the closest approved record.
+    <b>all</b> states; discovery plane returns <b>APPROVED only</b>, and only records that clear a
+    relevance floor — an unrelated query returns nothing rather than a zero-score record.
+    (Note: the real API ranks by embedding similarity; this demo approximates it with keyword scoring.)
   </div>
 </div>
 
@@ -246,16 +247,26 @@ function runSearch(){
     $("#results").innerHTML = `<div class="result none">No approved records in the registry yet — approve one as the Curator first.</div>`;
     return;
   }
-  const ranked = visible.map(r=>({r,s:score(q,r)})).sort((a,b)=>b.s-a.s);
-  // semantic search always returns nearest neighbours (no hard cutoff)
-  $("#results").innerHTML = ranked.map(({r,s})=>`
+  // Rank, then apply a RELEVANCE FLOOR: a record that scores 0 is not a match
+  // and must not be shown. (Real semantic search ranks by embedding similarity;
+  // here we approximate with keyword scoring and a threshold.)
+  const MIN_RELEVANCE = 2;
+  const matches = visible.map(r=>({r,s:score(q,r)}))
+                         .filter(x=>x.s>=MIN_RELEVANCE)
+                         .sort((a,b)=>b.s-a.s);
+  if(!matches.length){
+    $("#results").innerHTML = `<div class="result none">No matching approved capability in the registry for that query.</div>`;
+    log(`↳ 0 records cleared the relevance floor — nothing returned`);
+    return;
+  }
+  $("#results").innerHTML = matches.map(({r,s})=>`
     <div class="result">
       <b>${r.name}</b> <span class="type">${r.recordType} · APPROVED</span>
       <div class="hint">${r.desc}</div>
       <div class="hint">relevance ≈ ${s}</div>
     </div>`).join("");
   const rejected = records.find(r=>r.status==="REJECTED");
-  if(rejected && score(q,rejected)>=2){
+  if(rejected && score(q,rejected)>=MIN_RELEVANCE){
     log(`↳ note: "${rejected.name}" would match this query but was REJECTED — governance filters it out`);
   }
 }
