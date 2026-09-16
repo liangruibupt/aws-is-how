@@ -717,6 +717,9 @@
         - [agentcore-hackathon](https://github.com/Kathy-PJ/ci-agentcore-hackathon/tree/main)
         - [AgentCore GUI Studio](https://github.com/ahwing/agentcore-studio)(https://tfpmpe539f.us-east-1.awsapprunner.com/ demo/0bdf9c2fb357591db21e2ce9)
         - [lark-mcp-on-agentcore](https://github.com/aws-samples/sample-lark-mcp-on-agentcore)
+      - [Agent Registry]
+        - [https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/](https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/)
+        - [AWS Agent Registry Hub](https://registry.aws.dev/hub)
 ### Agent Technology
   - [Agent to Agent - A2A]
     - [A2A protocol](https://a2aprotocol.ai/)
