@@ -765,6 +765,7 @@
   - [Quick Suite]
     - [A Complete Guide to Amazon Quick Suite - HR scenario](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
       - [规模化HR团队（SSC/HRBP/COE）Quick Desktop workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/57d4c79a-b861-4b25-b1bd-645561005bef/zh-CN)
+      - [HR 全流程 AI 实践素材包，覆盖候选人分析、岗位调研与面试准备、简历结构化与人才库分析、人才成长可视化及市场人才趋势研究五大场景](https://github.com/wanglingxiao123/HR-Quick-Workshop)
       - [Quick Flow workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a8484e57-2e30-40ee-bd98-0122f0d05acc/en-US)
   - [Quick Desktop]
     - [quick-dingtalk-mcp](https://github.com/keithyt06/quick-dingtalk-mcp)
