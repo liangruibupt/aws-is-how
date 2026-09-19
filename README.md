@@ -457,17 +457,21 @@
     - [本地 671B DeepSeek-Coder-V3/R1: 仅使用 14GB 显存和 382GB 内存运行其 Q4_K_M 版本](https://github.com/kvcache-ai/ktransformers/blob/main/doc/zh/DeepseekR1_V3_tutorial_zh.md)
     - [Hosting DeepSeek-R1 on Amazon EKS](https://github.com/aws-samples/deepseek-using-vllm-on-eks)
 #### China otherLLM
-  - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
-  - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
-  - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+  - [Baichuan on Sagemaker](ai-ml/chatgpt/OpenWeights/baichuan/baichuan-7b-cn.ipynb)
+  - [ChatGLM on SageMaker](ai-ml/chatgpt/OpenWeights/chatglm/sagemaker-inference-chatglm.ipynb)
+  - [ChatYuan on SageMaker](ai-ml/chatgpt/OpenWeights/chatyuan/chatyuan_sagemaker_byos.ipynb)
   - []
 #### More Open-Source Model
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   - [Gemma]
     - [Google DeepMind’s DiffusionGemma for Local AI](https://blogs.nvidia.com/blog/rtx-ai-garage-local-gemma-diffusion/) (https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/)
   - [Grok]
-    - [Grok 4.3 Example](ai-ml/chatgpt/openai/grok43_bedrock_mantle.py)
-    - [Grok 4.6 Example](ai-ml/chatgpt/openai/grok46_bedrock.py)
+    - [Grok 4.3 Example](ai-ml/chatgpt/OpenWeights/Grok/grok43_bedrock_mantle.py)
+    - [Grok 4.6 Example](ai-ml/chatgpt/OpenWeights/Grok/grok46_bedrock.py)
+  - [Kimi]
+    - [Kimi K3 on Amazon Bedrock Example](ai-ml/chatgpt/OpenWeights/Kimi/kimi_k3_bedrock.py) 
+    - [用 Kimi K3 做 Coding Assistant: 单文件登月游戏实战](ai-ml/chatgpt/OpenWeights/Kimi/kimi_k3_coding_assistant_moon_lander.md) - OpenCode/OpenAI 兼容端点接入、提示词与迭代过程、Converse API 坑、无头验证脚本
+      - [moon_lander.html 游戏本体](ai-ml/chatgpt/OpenWeights/Kimi/moon_lander.html) - 单文件无依赖，方向键控制姿态与升降，需在崎岖月面选择平坦着陆点并保持箭体直立
 #### vllm and ollma
   - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
   - [lightweight tool designed to simplify models deployment](https://github.com/aws-samples/easy-model-deployer)
