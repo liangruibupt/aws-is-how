@@ -30,3 +30,6 @@ credentials.json
 # Python
 __pycache__/
 *.pyc
+
+# Playwright MCP browser-tool session artifacts
+.playwright-mcp/
