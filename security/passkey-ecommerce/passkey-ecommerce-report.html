@@ -133,7 +133,7 @@
   <div class="grid2">
     <div class="card">
       <h3>路线 A — 国际标准 Passkey</h3>
-      <p>FIDO2 = <b>WebAuthn</b>(浏览器/RP API) + <b>CTAP2</b>(平台/漫游认证器)。用户设备生成非对称密钥对，私钥留在设备/云同步（iCloud Keychain、Google Password Manager、1Password），公钥交给 RP。登录时本地生物识别/PIN 解锁私钥，对 RP 挑战签名。<b>抗钓鱼</b>来自密钥与 origin(rp.id) 强绑定。</p>
+      <p>FIDO2 = <b>WebAuthn</b>(浏览器/RP API) + <b>CTAP2</b>(平台/漫游认证器)。用户设备生成非对称密钥对，私钥留在设备/云同步（iCloud Keychain、Google Password Manager、1Password），公钥交给 <b>RP</b>（Relying Party，依赖方——即你要登录的网站/服务的后端，本文语境下就是电商平台自身；它保存公钥并用公钥验签来确认用户身份）。登录时本地生物识别/PIN 解锁私钥，对 RP 挑战签名。<b>抗钓鱼</b>来自密钥与 origin(rp.id) 强绑定。</p>
       <div class="pill-row"><span class="pill">凭证=公私钥对</span><span class="pill">origin 绑定</span><span class="pill">跨厂商可移植</span></div>
     </div>
     <div class="card">
