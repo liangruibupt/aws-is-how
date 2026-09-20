@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主流电商 Passkey 使用姿势调研与最佳实践 · 含 AWS 服务映射与实现架构</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2333; --border:#2d333b;
+    --fg:#e6edf3; --muted:#9aa7b4; --accent:#4493f8; --accent2:#3fb950;
+    --warn:#d29922; --danger:#f85149; --purple:#bc8cff; --cyan:#39c5cf;
+    --chip:#21262d;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:linear-gradient(180deg,#0d1117,#0b0f14);color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65;font-size:15px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+  header.hero{padding:64px 24px 40px;text-align:center;border-bottom:1px solid var(--border);
+    background:radial-gradient(1200px 400px at 50% -80px,rgba(68,147,248,.18),transparent)}
+  .hero h1{font-size:32px;margin:0 0 10px;letter-spacing:.5px}
+  .hero p{color:var(--muted);max-width:820px;margin:0 auto;font-size:15px}
+  .hero .meta{margin-top:18px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .badge{background:var(--chip);border:1px solid var(--border);color:var(--muted);
+    padding:4px 12px;border-radius:999px;font-size:12px}
+  nav.toc{position:sticky;top:0;z-index:20;background:rgba(13,17,23,.9);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);padding:10px 24px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  nav.toc a{color:var(--muted);text-decoration:none;font-size:13px;padding:5px 11px;border-radius:7px;transition:.15s}
+  nav.toc a:hover{color:var(--fg);background:var(--chip)}
+  section{margin-top:52px;scroll-margin-top:60px}
+  h2{font-size:23px;border-left:4px solid var(--accent);padding-left:12px;margin:0 0 6px}
+  h2 .sub{display:block;font-size:13px;color:var(--muted);font-weight:400;padding-top:4px}
+  h3{font-size:17px;margin:28px 0 10px;color:var(--cyan)}
+  h4{font-size:15px;margin:18px 0 6px;color:var(--purple)}
+  p{margin:8px 0}
+  a{color:var(--accent)}
+  code{background:var(--chip);border:1px solid var(--border);border-radius:5px;padding:1px 6px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;color:#ffd9a0}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;overflow:hidden;border-radius:10px}
+  th,td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:var(--fg);font-weight:600}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+  .t-yes{background:rgba(63,185,80,.15);color:var(--accent2);border:1px solid rgba(63,185,80,.4)}
+  .t-partial{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid rgba(210,153,34,.4)}
+  .t-no{background:rgba(248,81,73,.15);color:var(--danger);border:1px solid rgba(248,81,73,.4)}
+  .callout{border-left:4px solid var(--warn);background:rgba(210,153,34,.08);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.good{border-color:var(--accent2);background:rgba(63,185,80,.08)}
+  .callout.bad{border-color:var(--danger);background:rgba(248,81,73,.08)}
+  .callout.info{border-color:var(--accent);background:rgba(68,147,248,.08)}
+  ul,ol{margin:8px 0;padding-left:22px}
+  li{margin:5px 0}
+  .funnel{display:flex;flex-direction:column;gap:6px;margin:16px 0}
+  .funnel .bar{position:relative;background:var(--panel2);border-radius:8px;overflow:hidden;height:44px;border:1px solid var(--border)}
+  .funnel .fill{height:100%;display:flex;align-items:center;padding-left:14px;font-weight:600;font-size:13px;
+    background:linear-gradient(90deg,var(--accent),#2d6fc4);white-space:nowrap}
+  .funnel .lbl{position:absolute;right:12px;top:0;height:100%;display:flex;align-items:center;color:var(--muted);font-size:12px}
+  .kpi{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0}
+  .kpi .box{flex:1;min-width:150px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+  .kpi .num{font-size:26px;font-weight:700;color:var(--accent2)}
+  .kpi .cap{font-size:12px;color:var(--muted);margin-top:4px}
+  .arch{background:#0b0f14;border:1px solid var(--border);border-radius:12px;padding:22px;overflow-x:auto}
+  .arch pre{margin:0;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;color:#cdd9e5;line-height:1.5}
+  .flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}
+  .flow .node{background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:9px 13px;font-size:12.5px}
+  .flow .node b{color:var(--cyan)}
+  .flow .arr{color:var(--accent);font-size:18px}
+  .src{font-size:12px;color:var(--muted)}
+  .src a{color:#79c0ff}
+  footer{margin-top:60px;border-top:1px solid var(--border);padding-top:22px;color:var(--muted);font-size:12.5px}
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .pill{background:var(--chip);border:1px solid var(--border);border-radius:7px;padding:5px 10px;font-size:12px;font-family:"SF Mono",monospace}
+  .disclaimer{font-size:12px;color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>🔐 主流电商 Passkey 使用姿势调研与最佳实践</h1>
+  <p>覆盖国际（Amazon / eBay / PayPal / Shopify / Best Buy / Target）与中国及亚太（阿里 / 京东 / 拼多多 / 支付宝 / 微信）的落地姿势，产品 UX 与技术实现并重，并给出 Passkey 方案在 AWS 上的服务映射与参考实现架构。</p>
+  <div class="meta">
+    <span class="badge">调研日期 2026-09-19</span>
+    <span class="badge">FIDO2 · WebAuthn · CTAP2</span>
+    <span class="badge">产品UX + 技术实现 + AWS 架构</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#tldr">摘要</a>
+  <a href="#landscape">全球格局</a>
+  <a href="#intl">国际电商姿势</a>
+  <a href="#cn">中国·亚太姿势</a>
+  <a href="#ux">产品/UX 最佳实践</a>
+  <a href="#tech">技术实现</a>
+  <a href="#recovery">账户恢复</a>
+  <a href="#pitfalls">常见坑</a>
+  <a href="#aws">AWS 服务映射</a>
+  <a href="#aws-arch">AWS 参考架构</a>
+  <a href="#checklist">落地清单</a>
+  <a href="#sources">来源</a>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= TL;DR ================= -->
+<section id="tldr">
+  <h2>执行摘要 <span class="sub">Executive Summary</span></h2>
+  <div class="card">
+    <ol>
+      <li><b>国际主流电商/支付已全面拥抱标准 Passkey（FIDO2/WebAuthn）。</b>PayPal（2022 起）、Amazon、eBay、Best Buy、Target、Shopify（Shop Pay）均已上线，抗钓鱼、免密、跨设备是共同价值主张。</li>
+      <li><b>真正的瓶颈从"注册"转向"使用率"。</b>PayPal 公布的漏斗显示：eligible→enroll→login 逐级衰减，端到端实际使用约 <b>8%</b>——"utilization, not enrollment, is the next problem"。</li>
+      <li><b>中国走的是另一条路：IFAA/IIFAA + TEE/SE 本地生物识别授权 + 服务端风控 + 实名绑定</b>，而非标准 WebAuthn。技术上是"match-on-device 解锁设备密钥"，但凭证体系、监管（实名/支付合规）与国际 passkey 不同源。出海时需要两套心智。</li>
+      <li><b>技术落地的三大生死线：</b><code>rp.id</code> 用可注册域（eTLD+1）、账户恢复不能弱于 passkey、<code>signCount</code> 不能再用于克隆检测（synced passkey 恒为 0）。</li>
+      <li><b>AWS 落地：</b>Amazon Cognito 已原生支持 passkey（WebAuthn）作为托管 RP；自建 RP 则用 API Gateway + Lambda + DynamoDB（凭证存储）+ KMS，配 WAF/Fraud Detector 做风控，形成"抗钓鱼登录 + 服务端风控"的完整闭环。</li>
+    </ol>
+  </div>
+  <div class="kpi">
+    <div class="box"><div class="num">~8%</div><div class="cap">PayPal 端到端 passkey 使用率（88%×48%×20% 漏斗）</div></div>
+    <div class="box"><div class="num">+10%</div><div class="cap">PayPal 登录成功率提升（2023）</div></div>
+    <div class="box"><div class="num">−70%</div><div class="cap">PayPal 账户接管（ATO）下降</div></div>
+    <div class="box"><div class="num">6× / 数倍</div><div class="cap">passkey 登录较密码+OTP 提速（行业普遍观测）</div></div>
+  </div>
+  <p class="disclaimer">注：部分平台运营指标来自厂商博客/行业调查，已在正文与来源处标注置信度；PayPal 漏斗与安全指标为其官方公开披露，置信度较高。</p>
+</section>
+
+<!-- ================= LANDSCAPE ================= -->
+<section id="landscape">
+  <h2>全球格局：两条技术路线 <span class="sub">Standard WebAuthn vs. IFAA/TEE 本地授权</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>路线 A — 国际标准 Passkey</h3>
+      <p>FIDO2 = <b>WebAuthn</b>(浏览器/RP API) + <b>CTAP2</b>(平台/漫游认证器)。用户设备生成非对称密钥对，私钥留在设备/云同步（iCloud Keychain、Google Password Manager、1Password），公钥交给 RP。登录时本地生物识别/PIN 解锁私钥，对 RP 挑战签名。<b>抗钓鱼</b>来自密钥与 origin(rp.id) 强绑定。</p>
+      <div class="pill-row"><span class="pill">凭证=公私钥对</span><span class="pill">origin 绑定</span><span class="pill">跨厂商可移植</span></div>
+    </div>
+    <div class="card">
+      <h3>路线 B — 中国 IFAA/IIFAA + TEE</h3>
+      <p>IFAA（互联网金融身份认证联盟，2015-06 蚂蚁牵头，后演进为 IIFAA）：生物特征模板与匹配全在设备 <b>TEE/SE</b> 内完成（<b>match-on-device，模板不出端</b>），本地授权后解锁设备侧密钥；再叠加<b>强制服务端风控</b>与<b>实名绑定</b>。是"金融级可互操作认证"，但不是标准 WebAuthn 凭证体系。</p>
+      <div class="pill-row"><span class="pill">match-on-device</span><span class="pill">TEE/SE</span><span class="pill">+ 服务端风控 + 实名</span></div>
+    </div>
+  </div>
+  <div class="callout info">
+    <b>为什么中国走了不同的路？</b> 时间上 IFAA(2015) 早于 FIDO2/WebAuthn 大规模落地；监管上支付需实名与强风控，"纯凭证抗钓鱼"不足以满足合规；生态上 iOS/Android + 国产 ROM 的 TEE 能力被支付宝/微信直接调用，形成事实标准。近年 IIFAA 也在向 FIDO/passkey 靠拢（互操作性演进），但存量仍以本地生物识别授权为主。
+    <div class="src">来源：ITU/IFAA 演讲材料、IFAA 指纹支付专利 CN107133794、阿里云 IDaaS(IFAA SDK) 文档。</div>
+  </div>
+</section>
+
+<!-- ================= INTL ================= -->
+<section id="intl">
+  <h2>国际电商/支付平台的使用姿势 <span class="sub">Amazon · eBay · PayPal · Shopify · Best Buy · Target</span></h2>
+  <table>
+    <thead><tr><th>平台</th><th>Passkey 状态</th><th>注册引导姿势</th><th>登录 UX</th><th>降级/恢复</th><th>公开效果</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>PayPal</b></td>
+        <td><span class="tag t-yes">早期大规模</span> 2022 起，iOS→全平台</td>
+        <td>登录后/结账后弹"更快更安全登录"引导；设置内可管理</td>
+        <td>Conditional UI 自动填充；跨设备 hybrid</td>
+        <td>密码 + PSD2/SCA 强认证兜底</td>
+        <td><b>+10% 登录成功率、−70% ATO</b>；披露 8% 端到端使用漏斗</td>
+      </tr>
+      <tr>
+        <td><b>Amazon</b></td>
+        <td><span class="tag t-yes">已上线</span> 2023-10 起</td>
+        <td>账户设置内 opt-in；移动端优先引导</td>
+        <td>autofill 优先；密码仍并存</td>
+        <td>密码 + OTP + 现有账户恢复流程</td>
+        <td>大体量推广（厂商称亿级用户可用，置信度中）</td>
+      </tr>
+      <tr>
+        <td><b>eBay</b></td>
+        <td><span class="tag t-yes">已上线</span></td>
+        <td>登录页引导；账户安全设置</td>
+        <td>iOS 采用比例最高（厂商观测约 60%，中置信度）；<code>residentKey</code> 倾向 discouraged 的实现细节因平台而异</td>
+        <td>密码 + email/OTP</td>
+        <td>移动端登录时延显著下降</td>
+      </tr>
+      <tr>
+        <td><b>Shopify (Shop Pay)</b></td>
+        <td><span class="tag t-yes">已上线</span></td>
+        <td>Shop App / Shop Pay 结账流内引导；SMS OTP 到 passkey 迁移</td>
+        <td>结账加速为核心卖点（accelerated checkout）</td>
+        <td>SMS OTP 兜底（Shop Pay 传统身份即手机号）</td>
+        <td>结账转化/复购是主要收益指标</td>
+      </tr>
+      <tr>
+        <td><b>Best Buy</b></td>
+        <td><span class="tag t-yes">已上线</span></td>
+        <td>账户设置 opt-in</td>
+        <td>autofill；密码并存</td>
+        <td>密码 + OTP</td>
+        <td>减少密码重置与客服工单</td>
+      </tr>
+      <tr>
+        <td><b>Target</b></td>
+        <td><span class="tag t-yes">已上线</span></td>
+        <td>移动 App 引导为主</td>
+        <td>App 内平台认证器</td>
+        <td>密码 + OTP</td>
+        <td>App 登录留存/速度</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>PayPal 采用漏斗（行业最有价值的公开数据）</h3>
+  <div class="funnel">
+    <div class="bar"><div class="fill" style="width:100%">Eligible 设备/浏览器支持 · 100%</div></div>
+    <div class="bar"><div class="fill" style="width:88%">看到引导并被提示 · 88%<span class="lbl">prompt</span></div></div>
+    <div class="bar"><div class="fill" style="width:42%">完成注册 enroll · ~48% of prompted</div></div>
+    <div class="bar"><div class="fill" style="width:8%">实际用 passkey 登录 · ~20% of enrolled → <b>≈8% 端到端</b></div></div>
+  </div>
+  <div class="callout">
+    <b>洞见：</b>"注册"不是终点，"持续使用"才是。多数用户注册后仍回退到熟悉的密码/OTP。产品侧要在<b>每次登录时优先呈现 passkey</b>（conditional UI 默认聚焦），而非把它藏进设置页。
+    <div class="src">来源：Corbado 对 PayPal passkey 的公开分析、PayPal 官方博客/大会披露。</div>
+  </div>
+
+  <h3>跨平台的产品共识</h3>
+  <ul>
+    <li><b>不强制、可并存：</b>passkey 与密码/OTP 长期共存，opt-in 引导，绝不断掉旧路径。</li>
+    <li><b>时机要对：</b>成功登录后、结账后、或安全提醒后引导，转化最高；冷启动强弹易被忽略。</li>
+    <li><b>价值话术具体化：</b>"更快""不用记密码""更安全"，而非讲 WebAuthn 术语。</li>
+    <li><b>移动优先：</b>平台认证器（Face ID/指纹）+ App 内注册是主战场。</li>
+  </ul>
+</section>
+
+<!-- ================= CN ================= -->
+<section id="cn">
+  <h2>中国及亚太的使用姿势 <span class="sub">阿里 · 京东 · 拼多多 · 支付宝 · 微信 · 日本/东南亚</span></h2>
+  <table>
+    <thead><tr><th>厂商/场景</th><th>技术路线</th><th>产品 UX 姿势</th><th>与标准 passkey 关系</th></tr></thead>
+    <tbody>
+      <tr><td><b>支付宝</b></td><td>IFAA/IIFAA 指纹·刷脸免密支付（TEE/SE 本地授权）</td><td>小额免密额度分级；刷脸风控；大额/异常升级验证（密码/短信）</td><td><span class="tag t-partial">非标准</span> 本地生物识别 + 服务端风控 + 实名</td></tr>
+      <tr><td><b>微信支付</b></td><td>指纹/刷脸免密 + 软 token(soft cert)</td><td>免密代扣、指纹支付；风控驱动的分级授权</td><td><span class="tag t-partial">非标准</span></td></tr>
+      <tr><td><b>淘宝/天猫（阿里）</b></td><td>依托支付宝身份 + IFAA 生态</td><td>App 内生物识别登录/支付；扫码登录 Web</td><td><span class="tag t-partial">非标准为主</span></td></tr>
+      <tr><td><b>京东</b></td><td>指纹/刷脸免密 + 短信/密码</td><td>App 内生物识别；小额免密</td><td><span class="tag t-partial">非标准为主</span></td></tr>
+      <tr><td><b>拼多多</b></td><td>手机号 + 短信为主，生物识别辅助</td><td>极简登录，OTP 主导</td><td><span class="tag t-no">以 OTP 为主</span></td></tr>
+      <tr><td><b>银联云闪付</b></td><td>IFAA/TEE + 银行卡绑定</td><td>指纹/刷脸支付授权</td><td><span class="tag t-partial">非标准</span></td></tr>
+      <tr><td><b>日本（乐天/PayPay）</b></td><td>逐步引入标准 passkey</td><td>App + Web passkey 登录</td><td><span class="tag t-yes">标准 passkey 采用中</span></td></tr>
+      <tr><td><b>东南亚（Shopee/Grab）</b></td><td>OTP 为主，passkey/生物识别探索中</td><td>手机号 + OTP 主导</td><td><span class="tag t-partial">探索中</span></td></tr>
+    </tbody>
+  </table>
+  <div class="callout good">
+    <b>对出海/国际化电商的启示：</b>
+    <ul>
+      <li>面向<b>海外市场</b>直接上<b>标准 FIDO2/WebAuthn passkey</b>——这是 Apple/Google/微软生态的默认能力，兼容成本最低。</li>
+      <li>面向<b>中国市场</b>则复用支付宝/微信的<b>本地生物识别 + 免密协议</b>，并满足<b>实名与支付合规</b>，不能简单套用 WebAuthn。</li>
+      <li>两套心智：国际是"抗钓鱼凭证"，中国是"本地授权 + 服务端风控 + 实名"。<b>服务端风控（设备指纹、行为、限额、异常升级）在两条路线里都不可省。</b></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= UX ================= -->
+<section id="ux">
+  <h2>产品 / UX 最佳实践 <span class="sub">注册引导 · 登录体验 · 跨设备 · 降级</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>注册引导（Enrollment）</h4>
+      <ul>
+        <li><b>时机：</b>成功登录后 / 结账后 / 安全提醒后，弹一次性引导；可跳过、不阻断。</li>
+        <li><b>渐进式：</b>先在移动 App（平台认证器）落地，再扩到 Web。</li>
+        <li><b>入口常驻：</b>账户安全设置里能随时添加/命名/删除 passkey（用 AAGUID 显示 provider 名）。</li>
+        <li><b>excludeCredentials：</b>注册时排除已有凭证，避免同设备重复注册。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>登录体验（Sign-in）</h4>
+      <ul>
+        <li><b>Conditional UI（autofill）：</b><code>mediation:"conditional"</code> + <code>autocomplete="username webauthn"</code>，让 passkey 出现在账号自动填充里——<b>先做 feature-detect</b>。</li>
+        <li><b>默认优先：</b>每次登录默认呈现 passkey，而非藏进"更多方式"。</li>
+        <li><b>多 passkey 管理：</b>允许多设备/多 provider 各存一个。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>跨设备（Cross-device / Hybrid）</h4>
+      <ul>
+        <li><b>CTAP2 hybrid：</b>手机扫 Web 端二维码，<b>蓝牙做邻近性校验</b>防远程中继；凭证仍绑 origin。</li>
+        <li>用于"新电脑上用手机 passkey 登录"这种典型场景。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>企业 / 共享设备</h4>
+      <ul>
+        <li>共享/公用机器<b>不建本地平台 passkey</b>，改用 hybrid（个人手机作认证器）。</li>
+        <li>高权限账户用 <b>device-bound 硬件 key</b>（AAL3）。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TECH ================= -->
+<section id="tech">
+  <h2>技术实现要点 <span class="sub">WebAuthn 参数 · synced vs device-bound · 数据模型</span></h2>
+
+  <h3>WebAuthn 关键参数决策（电商 consumer 默认）</h3>
+  <table>
+    <thead><tr><th>参数</th><th>推荐值</th><th>为什么 / 注意</th></tr></thead>
+    <tbody>
+      <tr><td><code>rp.id</code></td><td><b>可注册域 eTLD+1</b>（如 <code>shop.com</code>）</td><td>用 <code>www.shop.com</code> 会导致子域间 passkey 失效——<b>生产最常见的"登录突然坏掉"根因</b>。</td></tr>
+      <tr><td><code>userVerification</code></td><td>登录 <code>preferred</code>；支付/敏感操作 <code>required</code>（step-up）</td><td>required 会强制生物识别/PIN，用于高价值操作。</td></tr>
+      <tr><td><code>residentKey</code> / discoverable</td><td><code>preferred</code>（或全现代平台用 <code>required</code>）</td><td>要"无需先输用户名"的真 passkey 体验就得 discoverable；Google/Amazon/Stripe 倾向 required。</td></tr>
+      <tr><td><code>attestation</code></td><td>消费级 <code>none</code></td><td>仅高保证/强制硬件 key 场景用 <code>direct</code>；消费级开 direct 只会增加摩擦和隐私顾虑。</td></tr>
+      <tr><td><code>pubKeyCredParams</code></td><td><code>[-7 (ES256), -257 (RS256)]</code></td><td>ES256 首选，RS256 兼容。</td></tr>
+      <tr><td><code>excludeCredentials</code></td><td>注册时带上已有凭证</td><td>防同设备重复注册。</td></tr>
+      <tr><td>Conditional UI</td><td>开启但 <b>feature-detect</b></td><td>只对 discoverable 有效，受 OS 门控（老 Windows/webview 无效）。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Synced vs Device-bound Passkey</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>Synced（iCloud / Google / 1Password）</h4>
+      <p>可用性与恢复最好（换机自动带过去），但<b>安全边界集中到 provider 云账户</b>；<code>signCount</code> 恒为 0；无法做设备克隆检测。适合<b>普通消费者（AAL2）</b>。</p>
+    </div>
+    <div class="card">
+      <h4>Device-bound（硬件 key / 平台绑定）</h4>
+      <p>保证最高（AAL3），私钥不离设备；丢设备即丢凭证，需备用 key。适合<b>管理员 / 高权限账户</b>。</p>
+    </div>
+  </div>
+  <div class="callout"><b>attestation 用不用？</b>消费级识别 provider 只需 <b>AAGUID</b>（16 字节型号标识，<b>仅注册时出现，assertion 里没有</b>——注册时必须抓取存下），不必开 attestation；只有需要证明"确实是某型号合规硬件"时才用 direct attestation。</div>
+
+  <h3>后端持久化数据模型（注册时写入）</h3>
+  <table>
+    <thead><tr><th>字段</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td><code>credential_id</code></td><td>唯一索引（查询主键之一）</td></tr>
+      <tr><td><code>public_key</code></td><td>COSE 格式公钥，验签用</td></tr>
+      <tr><td><code>sign_count</code></td><td>存下但<b>不用于硬拒登</b>（synced passkey 恒 0）</td></tr>
+      <tr><td><code>aaguid</code></td><td><b>仅注册可得</b>，映射 provider 名用于管理 UI</td></tr>
+      <tr><td><code>transports</code></td><td>usb/nfc/ble/internal/hybrid，优化后续 UX</td></tr>
+      <tr><td><code>user_handle</code></td><td>随机、稳定、<b>非 PII</b> 的用户标识</td></tr>
+      <tr><td><code>backup_eligible</code> / <code>backup_state</code></td><td>判断是否 synced（是否会被云同步/已备份）</td></tr>
+      <tr><td><code>created_at</code> / <code>last_used_at</code> / <code>nickname</code></td><td>管理与审计</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= RECOVERY ================= -->
+<section id="recovery">
+  <h2>账户恢复：最容易被忽视的最弱环节 <span class="sub">Account Recovery</span></h2>
+  <div class="callout bad">
+    <b>核心命题：</b>系统的<b>实际安全 = 恢复路径中最弱的一环</b>。主凭证是抗钓鱼 passkey，但恢复却靠 email / SMS OTP，攻击者会<b>直接打恢复通道</b>接管账户——passkey 的抗钓鱼优势被绕过。
+  </div>
+  <h4>推荐设计</h4>
+  <ul>
+    <li><b>多 passkey 优先：</b>鼓励用户注册多个（多设备 + 多 provider），把"恢复"变成"再用另一个 passkey 登录"。</li>
+    <li><b>受控 OTP 兜底：</b>保留 email/OTP 但加限速、异地/异常延时、二次确认。</li>
+    <li><b>高价值操作多因素/延时：</b>改密、绑卡、大额支付触发 step-up + 通知窗口。</li>
+    <li><b>synced 的隐性依赖：</b>要意识到 synced passkey 的恢复其实依赖 iCloud/Google 账户安全——那才是真正的信任根。</li>
+  </ul>
+</section>
+
+<!-- ================= PITFALLS ================= -->
+<section id="pitfalls">
+  <h2>常见坑 / 反模式 <span class="sub">Anti-patterns</span></h2>
+  <div class="grid2">
+    <div class="card"><h4>❌ 1. 用 signCount 做克隆检测</h4><p>synced passkey 计数恒为 0，"signCount is dead"。存但<b>别据此拒登</b>。</p></div>
+    <div class="card"><h4>❌ 2. rp.id 设成完整主机名</h4><p><code>www.shop.com</code> 而非 <code>shop.com</code> → 子域间失效。</p></div>
+    <div class="card"><h4>❌ 3. 忘存 AAGUID / transports</h4><p>AAGUID 仅注册可得，事后无法补；影响管理 UI 与 UX 优化。</p></div>
+    <div class="card"><h4>❌ 4. 恢复通道弱于 passkey</h4><p>OTP 恢复直接抵消抗钓鱼价值。</p></div>
+    <div class="card"><h4>❌ 5. 消费级强开 direct attestation</h4><p>增加摩擦与隐私顾虑，多数场景无必要。</p></div>
+    <div class="card"><h4>❌ 6. 不做 conditional-UI feature-detect</h4><p>老 OS/webview 不支持时体验崩坏。</p></div>
+    <div class="card"><h4>❌ 7. 缺 excludeCredentials</h4><p>同设备重复注册，管理混乱。</p></div>
+    <div class="card"><h4>❌ 8. 把 passkey 藏进设置页</h4><p>注册后不在登录时优先呈现 → 使用率停在个位数。</p></div>
+  </div>
+</section>
+
+<!-- ================= AWS MAPPING ================= -->
+<section id="aws">
+  <h2>Passkey 方案在 AWS 上的服务映射 <span class="sub">托管 RP vs 自建 RP</span></h2>
+  <p>WebAuthn 里 RP（Relying Party，依赖方）就是电商后端。在 AWS 上落地有两条路：用 <b>Amazon Cognito 作为托管 RP</b>（最快），或<b>自建 RP</b>（最大控制力）。下面把 passkey 方案的每个职责映射到具体 AWS 服务。</p>
+  <table>
+    <thead><tr><th>Passkey 职责</th><th>托管方案（Cognito）</th><th>自建方案（Custom RP）</th></tr></thead>
+    <tbody>
+      <tr><td>RP 身份/用户目录</td><td><b>Amazon Cognito User Pools</b>（原生支持 passkey / WebAuthn 作为一等认证因子，含 MFA/passwordless）</td><td>DynamoDB/Aurora 存用户 + 自建 WebAuthn 服务（如 SimpleWebAuthn/py_webauthn 库）</td></tr>
+      <tr><td>WebAuthn 挑战/验签 API</td><td>Cognito 托管（<code>InitiateAuth</code>/<code>WebAuthn</code> 相关 API）</td><td><b>API Gateway</b> + <b>Lambda</b>（<code>/register/options</code>、<code>/register/verify</code>、<code>/login/options</code>、<code>/login/verify</code>）</td></tr>
+      <tr><td>凭证存储（credential_id/public_key/aaguid…）</td><td>Cognito 内部托管</td><td><b>DynamoDB</b>（PK=user_handle，SK=credential_id；GSI on credential_id）</td></tr>
+      <tr><td>挑战 nonce / 会话临时态</td><td>Cognito 托管</td><td><b>DynamoDB TTL</b> 或 <b>ElastiCache</b> 存 challenge（短 TTL）</td></tr>
+      <tr><td>密钥/加密</td><td>Cognito + AWS 托管密钥</td><td><b>AWS KMS</b> 加密敏感字段，凭证签名密钥/会话 JWT 签名</td></tr>
+      <tr><td>会话令牌</td><td>Cognito 签发 ID/Access/Refresh Token（OIDC）</td><td>自签 JWT（KMS 非对称密钥）或用 Cognito 联合</td></tr>
+      <tr><td>抗钓鱼之外的服务端风控</td><td><b>Cognito Advanced Security</b>（自适应认证、泄露凭证检测）</td><td><b>Amazon Fraud Detector</b> + 自研规则；设备指纹入 DynamoDB</td></tr>
+      <tr><td>边缘防护 / 限速</td><td colspan="2"><b>AWS WAF</b>（限速、Bot Control）+ <b>CloudFront</b>（就近、TLS、静态前端）</td></tr>
+      <tr><td>账户恢复（受控 OTP 兜底）</td><td>Cognito 内置（email/SMS via SNS）</td><td><b>Amazon SES</b>(email) / <b>SNS</b>(SMS) + 限速 + step-up</td></tr>
+      <tr><td>审计 / 监控</td><td colspan="2"><b>CloudTrail</b>（审计）+ <b>CloudWatch</b>（登录成功率/时延指标、异常告警）</td></tr>
+      <tr><td>AAGUID → provider 名映射</td><td colspan="2">静态映射表（S3/DynamoDB），来源 FIDO MDS + 社区 AAGUID 列表</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good"><b>选型建议：</b>想最快上线、且接受托管 RP 语义 → <b>Cognito</b>（原生 passkey）。需要完全控制 WebAuthn 参数（<code>rp.id</code>、residentKey、attestation 策略）、自定义凭证数据模型、或已有自建身份体系 → <b>自建 RP（API GW + Lambda + DynamoDB + KMS）</b>。两者都应挂 <b>WAF + Fraud Detector 做服务端风控</b>——这是国际路线里对齐"中国式服务端风控"的关键补齐。</div>
+</section>
+
+<!-- ================= AWS ARCH ================= -->
+<section id="aws-arch">
+  <h2>AWS 参考实现架构 <span class="sub">Reference Architectures</span></h2>
+
+  <h3>架构 A — Amazon Cognito 托管 RP（最快落地）</h3>
+  <div class="flow">
+    <span class="node"><b>Browser/App</b><br>WebAuthn API</span><span class="arr">→</span>
+    <span class="node"><b>CloudFront + WAF</b><br>TLS/限速/Bot</span><span class="arr">→</span>
+    <span class="node"><b>Amazon Cognito</b><br>User Pool · Passkey · Adaptive Auth</span><span class="arr">→</span>
+    <span class="node"><b>OIDC Token</b><br>ID/Access/Refresh</span><span class="arr">→</span>
+    <span class="node"><b>App/API</b><br>受保护资源</span>
+  </div>
+  <div class="arch"><pre>
+                        ┌──────────────────────────────────────────┐
+   [用户设备]           │                AWS Cloud                   │
+  Face ID/指纹          │                                            │
+  平台认证器            │   ┌────────────┐      ┌─────────────────┐  │
+      │  WebAuthn       │   │ CloudFront │──────│ Amazon Cognito  │  │
+      ▼  (navigator.    │   │  + AWS WAF │      │  User Pool      │  │
+  ┌─────────┐ credentials│  └────────────┘      │  · Passkey(FIDO2)│ │
+  │ Web/App │────────────┼──────────▲           │  · Adaptive Auth │ │
+  └─────────┘            │          │           │  · 泄露凭证检测   │ │
+       ▲                 │          │ OIDC      └────────┬────────┘  │
+       │ ID/Access Token │          └────────────────────┘           │
+       │                 │   ┌──────────────┐   ┌──────────────┐     │
+       └─────────────────┼───│ API Gateway  │───│ Lambda(业务) │     │
+                         │   └──────────────┘   └──────┬───────┘     │
+                         │        Amazon SES/SNS(恢复) ▼             │
+                         │   CloudTrail(审计) · CloudWatch(指标)      │
+                         └──────────────────────────────────────────┘
+  </pre></div>
+  <p class="src">要点：Cognito 直接充当 WebAuthn RP，托管凭证与挑战；业务层只消费 OIDC token。风控用 Cognito Advanced Security，边缘用 WAF。</p>
+
+  <h3>架构 B — 自建 RP（最大控制力）</h3>
+  <div class="flow">
+    <span class="node"><b>Browser/App</b></span><span class="arr">→</span>
+    <span class="node"><b>CloudFront + WAF</b></span><span class="arr">→</span>
+    <span class="node"><b>API Gateway</b></span><span class="arr">→</span>
+    <span class="node"><b>Lambda</b><br>WebAuthn 验签</span><span class="arr">→</span>
+    <span class="node"><b>DynamoDB</b><br>凭证/挑战</span>
+  </div>
+  <div class="arch"><pre>
+  [用户设备]                         AWS Cloud
+ Face ID/指纹     ┌───────────┐   ┌──────────────┐   ┌────────────────────────┐
+  平台/漫游认证器  │CloudFront │   │ API Gateway  │   │  Lambda (RP core)       │
+      │           │  + WAF    │──▶│ /register/*  │──▶│  · options: 生成 challenge│
+      ▼ WebAuthn  │ (限速/Bot) │   │ /login/*     │   │  · verify : 验签 + 反重放 │
+  ┌─────────┐     └───────────┘   └──────────────┘   └───────┬─────────┬──────┘
+  │ Web/App │◀───────── JWT (KMS 非对称签名) ─────────────────┘         │
+  └─────────┘                                                          ▼
+      ▲                    ┌─────────────────────────────────────────────────┐
+      │  step-up / 恢复     │ DynamoDB: credentials(PK=user_handle,SK=cred_id, │
+      │                    │   public_key, aaguid, sign_count, transports,    │
+      │                    │   backup_eligible…) + challenges(TTL)            │
+      │                    ├─────────────────────────────────────────────────┤
+      │                    │ KMS(字段/JWT 密钥) · Fraud Detector(风控)         │
+      │                    │ SES/SNS(受控 OTP 恢复) · CloudTrail · CloudWatch  │
+      └────────────────────┴─────────────────────────────────────────────────┘
+  </pre></div>
+  <div class="grid2">
+    <div class="card"><h4>关键设计点</h4>
+      <ul>
+        <li><code>rp.id</code> = 站点 eTLD+1，与 CloudFront 域一致。</li>
+        <li>challenge 存 DynamoDB（TTL 短，如 120s），verify 时校验并删除（防重放）。</li>
+        <li>凭证表 GSI on <code>credential_id</code>（登录时按凭证反查用户）。</li>
+        <li>验签用成熟库（SimpleWebAuthn / py_webauthn），别手写 CBOR/COSE 解析。</li>
+      </ul>
+    </div>
+    <div class="card"><h4>风控闭环（对齐"服务端风控"路线）</h4>
+      <ul>
+        <li>WAF：登录端点限速 + AWS Managed Bot Control。</li>
+        <li>Fraud Detector：设备/行为/地理特征打分，高风险触发 step-up。</li>
+        <li>敏感操作（改密、绑卡、大额）强制 <code>userVerification=required</code> + 通知窗口。</li>
+        <li>CloudWatch 指标：passkey 登录成功率、时延、回退率、ATO 事件。</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>混合建议（生产推荐）</h3>
+  <div class="callout info">大多数电商可以 <b>Cognito 做身份与 passkey RP</b>（省掉 WebAuthn 验签的自研与合规负担），<b>再叠加 WAF + Fraud Detector</b> 做服务端风控、用 <b>Lambda + DynamoDB</b> 承接业务侧的设备指纹/限额/审计扩展。只有当你需要精细控制 WebAuthn 协议参数或已有自建 IdP 时，才走全自建 RP。</div>
+</section>
+
+<!-- ================= CHECKLIST ================= -->
+<section id="checklist">
+  <h2>落地检查清单 <span class="sub">Consumer 电商默认值</span></h2>
+  <div class="card">
+    <div class="pill-row">
+      <span class="pill">rp.id = eTLD+1</span>
+      <span class="pill">UV = preferred（支付=required）</span>
+      <span class="pill">residentKey = preferred</span>
+      <span class="pill">attestation = none</span>
+      <span class="pill">pubKeyCredParams = [-7,-257]</span>
+      <span class="pill">带 excludeCredentials</span>
+      <span class="pill">Conditional UI + feature-detect</span>
+      <span class="pill">多 passkey 优先恢复</span>
+      <span class="pill">signCount 存但不硬拒</span>
+      <span class="pill">注册即抓 AAGUID</span>
+      <span class="pill">恢复通道 ≥ passkey 强度</span>
+      <span class="pill">WAF + Fraud Detector 风控</span>
+      <span class="pill">登录默认呈现 passkey</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOURCES ================= -->
+<section id="sources">
+  <h2>主要来源 <span class="sub">Sources</span></h2>
+  <div class="card src">
+    <p><b>规范/技术：</b>
+      <a href="https://www.w3.org/TR/webauthn-3/">W3C WebAuthn Level 3</a> ·
+      <a href="https://fidoalliance.org/">FIDO Alliance</a> ·
+      <a href="https://passkeys.dev/">passkeys.dev</a> ·
+      <a href="https://web.dev/articles/webauthn-aaguid">web.dev — WebAuthn AAGUID</a> ·
+      <a href="https://developers.yubico.com/Passkeys/Passkey_relying_party_implementation_guidance/Attestation/">Yubico — Attestation guidance</a> ·
+      <a href="https://github.com/passkeydeveloper/passkey-authenticator-aaguids">passkey-authenticator-aaguids</a>
+    </p>
+    <p><b>实践/UX/反模式：</b>
+      <a href="https://www.corbado.com/blog/passkeys-cheat-sheet">Corbado — Passkeys cheat sheet</a> ·
+      <a href="https://www.corbado.com/blog/webauthn-resident-key-discoverable-credentials-passkeys">Corbado — residentKey/discoverable</a> ·
+      <a href="https://www.corbado.com/blog/passkey-fallback-recovery">Corbado — fallback & recovery</a> ·
+      <a href="https://mojoauth.com/blog/signcount-is-dead-why-passkey-clone-detection-doesnt-work-anymore">MojoAuth — signCount is dead</a> ·
+      <a href="https://mojoauth.com/blog/what-to-store-when-you-register-a-passkey">MojoAuth — what to store</a> ·
+      <a href="https://mojoauth.com/blog/conditional-ui-browser-support-passkey-autofill">MojoAuth — Conditional UI 支持</a>
+    </p>
+    <p><b>平台案例/数据：</b>PayPal 官方博客与大会披露（passkey 采用漏斗 88%×48%×20%、+10% 登录成功率、−70% ATO） · Corbado 对 PayPal/Amazon/eBay/Target/Best Buy 的公开分析（平台运营指标为中置信度，需官方交叉验证）。</p>
+    <p><b>中国/亚太：</b>ITU/IFAA 演讲材料 · IFAA 指纹支付专利 CN107133794 · 阿里云 IDaaS（IFAA SDK）文档 · 支付宝/微信免密支付公开说明。</p>
+    <p><b>AWS：</b>Amazon Cognito passkey/WebAuthn 文档 · AWS WAF / Fraud Detector / KMS / DynamoDB / API Gateway / Lambda 官方文档。</p>
+  </div>
+  <footer>
+    <p>本报告由 Kiro 综合 3 路并行调研（国际电商 / 中国及亚太 / 技术规范）+ AWS 架构补齐生成，2026-09-19。产品运营指标已按置信度标注；PayPal 漏斗/安全指标为官方公开披露。AWS 架构为参考实现，落地前请结合具体合规与流量规模评审。</p>
+  </footer>
+</section>
+
+</div>
+</body>
+</html>

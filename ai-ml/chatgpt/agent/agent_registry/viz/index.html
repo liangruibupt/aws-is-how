@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AWS Agent Registry — Interactive Walkthrough</title>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#131a2e; --panel2:#1a2440; --ink:#e8ecf6; --muted:#9aa6c2;
+    --line:#28324f; --brand:#ff9900; --brand2:#ffb84d;
+    --draft:#8a93ad; --pending:#e0a800; --approved:#2ec26b; --rejected:#e5484d; --deprecated:#6b7280;
+    --shadow:0 8px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b1020,#0d1428 60%,#0b1020);
+    color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{padding:26px 28px 10px;border-bottom:1px solid var(--line)}
+  h1{margin:0;font-size:22px;letter-spacing:.2px}
+  h1 .amz{color:var(--brand)}
+  .sub{color:var(--muted);margin-top:6px;max-width:900px}
+  .wrap{padding:20px 28px 60px;max-width:1280px;margin:0 auto}
+  .lifecycle{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 8px}
+  .state{padding:6px 12px;border-radius:20px;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--panel2)}
+  .state.on{box-shadow:0 0 0 2px var(--brand) inset}
+  .s-DRAFT{color:var(--draft)} .s-PENDING_APPROVAL{color:var(--pending)}
+  .s-APPROVED{color:var(--approved)} .s-REJECTED{color:var(--rejected)} .s-DEPRECATED{color:var(--deprecated)}
+  .arrow{color:var(--muted)}
+  .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:1000px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .card h2{margin:0;padding:14px 16px;font-size:15px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:8px;background:var(--panel2)}
+  .role-badge{font-size:11px;padding:2px 8px;border-radius:10px;background:#0e1526;color:var(--brand2);border:1px solid var(--line)}
+  .card .body{padding:14px 16px}
+  .rec{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:#0f1728}
+  .rec .name{font-weight:600}
+  .rec .type{font-size:11px;color:var(--muted);margin-left:6px}
+  .rec .desc{color:var(--muted);font-size:13px;margin:4px 0 8px}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid var(--line)}
+  .pill.DRAFT{color:var(--draft)} .pill.PENDING_APPROVAL{color:var(--pending);border-color:#4a3d10;background:#241d05}
+  .pill.APPROVED{color:var(--approved);border-color:#12331f;background:#0c1f14}
+  .pill.REJECTED{color:var(--rejected);border-color:#3a1416;background:#210b0c}
+  button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--ink);
+    border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600}
+  button:hover{border-color:var(--brand)}
+  button.primary{background:var(--brand);color:#1a1200;border-color:var(--brand)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .search-box{display:flex;gap:8px;margin-bottom:10px}
+  .search-box input{flex:1;background:#0f1728;border:1px solid var(--line);color:var(--ink);
+    border-radius:8px;padding:9px 11px;font-size:14px}
+  .hint{font-size:12px;color:var(--muted)}
+  .result{border:1px solid #12331f;background:#0c1f14;border-radius:10px;padding:9px 12px;margin-bottom:8px}
+  .result.none{border-color:#3a1416;background:#1b0d0e;color:var(--rejected)}
+  .contrast{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  @media(max-width:1000px){.contrast{grid-template-columns:1fr}}
+  .contrast .card h2{font-size:14px}
+  .bad h2{color:var(--rejected)} .good h2{color:var(--approved)}
+  ul.tight{margin:8px 0;padding-left:18px} ul.tight li{margin:4px 0;color:var(--muted)}
+  .log{margin-top:24px;background:#080d1a;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7c2e0;max-height:200px;overflow:auto}
+  .log .t{color:var(--brand2)}
+  .footer{margin-top:22px;color:var(--muted);font-size:12px}
+  code{background:#0f1728;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
+  .queries{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .queries button{font-size:12px;padding:5px 9px}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="amz">AWS</span> Agent Registry — Interactive Walkthrough</h1>
+  <div class="sub">A single, governed, searchable catalog for an organization's Agents, Tools (MCP), Skills, and Custom resources.
+  This visualization mirrors the <b>real API contract</b> (client <code>agent-registry-control</code> for governance,
+  <code>agent-registry</code> / <code>search_discoverable_registry_records</code> for discovery). Drive the flow below —
+  publish a tool, watch a curator gate it, then search as a consumer.</div>
+</header>
+
+<div class="wrap">
+  <div class="lifecycle" id="lifecycle"></div>
+  <div class="hint">Record lifecycle — the highlighted state is where the selected record is right now.</div>
+
+  <div class="cols">
+    <!-- PUBLISHER -->
+    <div class="card">
+      <h2>📤 Publisher <span class="role-badge">creates &amp; submits</span></h2>
+      <div class="body" id="pub"></div>
+    </div>
+    <!-- CURATOR -->
+    <div class="card">
+      <h2>🛡️ Curator <span class="role-badge">approves / rejects</span></h2>
+      <div class="body" id="cur"></div>
+    </div>
+    <!-- CONSUMER -->
+    <div class="card">
+      <h2>🔎 Consumer <span class="role-badge">semantic search</span></h2>
+      <div class="body" id="con">
+        <div class="queries" id="queries"></div>
+        <div class="search-box">
+          <input id="q" placeholder="Describe what you need in plain language…"/>
+          <button class="primary" onclick="runSearch()">Search</button>
+        </div>
+        <div class="hint">Consumers only ever see <b>APPROVED</b> records. Try the sentiment query — its record was rejected.</div>
+        <div id="results" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contrast">
+    <div class="card bad">
+      <h2>❌ Before — no registry</h2>
+      <div class="body">
+        <ul class="tight">
+          <li>No authoritative inventory — nobody knows what exists or who owns it.</li>
+          <li>Teams rebuild tools that already exist → duplicated effort &amp; cost.</li>
+          <li>No review gate — unvetted, shadow agents run in production.</li>
+          <li>No audit trail — can't trace a failure to a version or owner.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card good">
+      <h2>✅ After — with Agent Registry</h2>
+      <div class="body">
+        <ul class="tight">
+          <li>One governed catalog; every record has an owner &amp; lineage.</li>
+          <li>Consumers find approved capabilities by <i>intent</i> in seconds.</li>
+          <li>Curator approval gate + <code>statusReason</code> on every transition.</li>
+          <li>Full CloudTrail audit; EventBridge fires the approval workflow.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="log" id="log"></div>
+  <div class="footer">
+    Data is simulated but shaped to the live API (verified 2026-09-16, us-east-1). Governance plane holds
+    <b>all</b> states; discovery plane returns <b>APPROVED only</b>, and only records that clear a
+    relevance floor — an unrelated query returns nothing rather than a zero-score record.
+    (Note: the real API ranks by embedding similarity; this demo approximates it with keyword scoring.)
+  </div>
+</div>
+
+<script>
+// ---- Simulated catalog, shaped to the real CUSTOM-record contract ----------
+const STATES = ["DRAFT","PENDING_APPROVAL","APPROVED","REJECTED","DEPRECATED"];
+let records = [
+  { recordId:"1FQ5wKe7YOXH", name:"invoice-ocr-tool", recordType:"CUSTOM", status:"DRAFT",
+    desc:"Extracts line items, totals, tax and vendor details from scanned invoices and PDF receipts.",
+    kw:["ocr","invoice","totals","tax","receipt","accounts payable","supplier","bill","document"] },
+  { recordId:"FhX7rVmjBwrX", name:"customer-sentiment-agent", recordType:"CUSTOM", status:"DRAFT",
+    desc:"Reads support tickets and chat transcripts; returns sentiment, urgency and churn-risk scoring.",
+    kw:["sentiment","support","customer","angry","churn","urgency","nlp","ticket","chat"] },
+  { recordId:"oynI5y9fKae3", name:"s3-cost-explorer-skill", recordType:"CUSTOM", status:"DRAFT",
+    desc:"Analyses S3 storage classes and lifecycle rules; recommends cost-saving tiering changes.",
+    kw:["s3","storage","cost","cloud","bill","finops","tiering","savings","optimization"] },
+];
+let selected = records[0].recordId;
+
+const $ = s => document.querySelector(s);
+function log(msg){ const l=$("#log"); const t=new Date().toLocaleTimeString();
+  l.innerHTML += `<div><span class="t">[${t}]</span> ${msg}</div>`; l.scrollTop=l.scrollHeight; }
+
+function rec(id){ return records.find(r=>r.recordId===id); }
+
+function renderLifecycle(){
+  const cur = rec(selected);
+  $("#lifecycle").innerHTML = STATES.map((s,i)=>{
+    const on = cur && cur.status===s ? "on":"";
+    const sep = i<STATES.length-1 ? '<span class="arrow">→</span>' : '';
+    return `<span class="state s-${s} ${on}">${s.replace("_"," ")}</span>${sep}`;
+  }).join("");
+}
+
+function pill(s){ return `<span class="pill ${s}">${s.replace("_"," ")}</span>`; }
+
+function renderPublisher(){
+  $("#pub").innerHTML = records.map(r=>{
+    const canSubmit = r.status==="DRAFT";
+    return `<div class="rec" onclick="select('${r.recordId}')">
+      <div><span class="name">${r.name}</span><span class="type">${r.recordType} · ${r.recordId}</span></div>
+      <div class="desc">${r.desc}</div>
+      ${pill(r.status)}
+      <div class="row">
+        <button ${canSubmit?"":"disabled"} onclick="event.stopPropagation();submit('${r.recordId}')">Submit for approval</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderCurator(){
+  const queue = records.filter(r=>r.status==="PENDING_APPROVAL");
+  if(!queue.length){ $("#cur").innerHTML = `<div class="hint">Approval queue is empty. Submit a record from the Publisher column.</div>`; return; }
+  $("#cur").innerHTML = queue.map(r=>`
+    <div class="rec">
+      <div><span class="name">${r.name}</span><span class="type">${r.recordType}</span></div>
+      <div class="desc">${r.desc}</div>
+      ${pill(r.status)}
+      <div class="row">
+        <button class="primary" onclick="decide('${r.recordId}','APPROVED')">Approve</button>
+        <button onclick="decide('${r.recordId}','REJECTED')">Reject</button>
+      </div>
+    </div>`).join("");
+}
+
+function select(id){ selected=id; renderLifecycle(); }
+function submit(id){
+  const r=rec(id); r.status="PENDING_APPROVAL"; selected=id;
+  log(`Publisher → <code>SubmitRegistryRecordForApproval</code>(recordId=${id}) · ${r.name} is now PENDING_APPROVAL`);
+  renderAll();
+}
+function decide(id, decision){
+  const r=rec(id); r.status=decision; selected=id;
+  const reason = decision==="APPROVED" ? "metadata complete, safe to publish" : "does not meet review bar";
+  log(`Curator → <code>UpdateRegistryRecordStatus</code>(status=${decision}, statusReason="${reason}") · ${r.name}`);
+  if(decision==="APPROVED") log(`↳ published to discovery plane — now searchable by consumers`);
+  else log(`↳ stays in governance plane only — invisible to consumers`);
+  renderAll();
+}
+
+// ---- Consumer semantic search (simulated nearest-neighbour over keywords) ---
+const SAMPLE_QUERIES = [
+  "pull totals and tax off a scanned supplier bill",
+  "cut down my cloud storage bill",
+  "gauge how angry our support customers are",
+  "send SMS text messages"
+];
+function renderQueries(){
+  $("#queries").innerHTML = SAMPLE_QUERIES.map(q=>
+    `<button onclick="setQ('${q.replace(/'/g,"\\'")}')">${q}</button>`).join("");
+}
+function setQ(q){ $("#q").value=q; runSearch(); }
+
+function score(query, r){
+  const q = query.toLowerCase();
+  let s=0;
+  r.kw.forEach(k=>{ if(q.includes(k)) s+=2; });
+  // soft token overlap
+  q.split(/\W+/).forEach(tok=>{ if(tok.length>3 && r.kw.some(k=>k.includes(tok))) s+=1; });
+  return s;
+}
+function runSearch(){
+  const q = $("#q").value.trim();
+  if(!q){ return; }
+  // DISCOVERY PLANE: only APPROVED records are visible.
+  const visible = records.filter(r=>r.status==="APPROVED");
+  log(`Consumer → <code>search_discoverable_registry_records</code>(searchQuery="${q}") · ${visible.length} approved record(s) in index`);
+  if(!visible.length){
+    $("#results").innerHTML = `<div class="result none">No approved records in the registry yet — approve one as the Curator first.</div>`;
+    return;
+  }
+  // Rank, then apply a RELEVANCE FLOOR: a record that scores 0 is not a match
+  // and must not be shown. (Real semantic search ranks by embedding similarity;
+  // here we approximate with keyword scoring and a threshold.)
+  const MIN_RELEVANCE = 2;
+  const matches = visible.map(r=>({r,s:score(q,r)}))
+                         .filter(x=>x.s>=MIN_RELEVANCE)
+                         .sort((a,b)=>b.s-a.s);
+  if(!matches.length){
+    $("#results").innerHTML = `<div class="result none">No matching approved capability in the registry for that query.</div>`;
+    log(`↳ 0 records cleared the relevance floor — nothing returned`);
+    return;
+  }
+  $("#results").innerHTML = matches.map(({r,s})=>`
+    <div class="result">
+      <b>${r.name}</b> <span class="type">${r.recordType} · APPROVED</span>
+      <div class="hint">${r.desc}</div>
+      <div class="hint">relevance ≈ ${s}</div>
+    </div>`).join("");
+  const rejected = records.find(r=>r.status==="REJECTED");
+  if(rejected && score(q,rejected)>=MIN_RELEVANCE){
+    log(`↳ note: "${rejected.name}" would match this query but was REJECTED — governance filters it out`);
+  }
+}
+
+function renderAll(){ renderLifecycle(); renderPublisher(); renderCurator(); }
+renderQueries(); renderAll();
+log("Ready. Try the full flow: Submit a record → Approve/Reject as Curator → Search as Consumer.");
+log("Tip: submit + REJECT 'customer-sentiment-agent', then run the sentiment query — it won't appear.");
+</script>
+</body>
+</html>
