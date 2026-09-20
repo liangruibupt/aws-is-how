@@ -1,13 +1,73 @@
 # MiniMax-H3 prompt examples
 
 MiniMax-H3 generates **video + synchronized audio** from one prompt, so a good prompt describes four
-things: the subject and scene, the motion, the camera, and the **sound**. Prompts that leave sound
-out still get a soundtrack, but a less controlled one.
+things: the subject and scene, the motion, the camera, and the **sound**.
 
-Every prompt below was run on the g7e deployment in this folder (480p, 16:9, 5 s, 20 steps) unless
-noted. Seeds are given so results can be reproduced bit-for-bit on a single GPU.
+## Important: what the model actually expects
 
-## Anatomy of a prompt
+The official online product runs your free-form prompt through **H3-Context-IR**, a hosted rewriter
+that is *not* open-sourced. What the open **H3-Base** we deploy here expects is Context-IR's
+*output* format — three named fields ([official guide](official_prompt_guide/VIDEO_PROMPT_WRITING_GUIDE_base_en.md)):
+
+```
+integrated_multimodal_description: [Shot 1] <style>, <framing> ... actions, camera, speakers, dialogue along the timeline.
+[Shot 2] At 00:04.500, the camera cuts to ...
+
+overall_soundscape: 1–4 sentences: ambience, physical sounds, non-verbal human sounds. (No dialogue here.)
+
+non_diegetic_music: 1–3 sentences on instrumentation/tempo/dynamics, or N/A.
+```
+
+Free-form prompts (like the ones in the next sections, or the 【主题/主体/…】 template in
+`sample_h3_prompt.md`) still work — the text encoder is Qwen3-VL-32B and understands them — but the
+model was trained on the structured form, so **for anything needing precise control (narration,
+dialogue timing, cuts, camera moves) write the structured form**. Casual prompts are fine for quick
+exploration.
+
+## Narration / voice-over (旁白)
+
+From §4.4 of the official guide, the rules are exact:
+
+1. Give the speaker a stable ID `(S1)` and describe the voice **outside** the `<d>` tag: gender,
+   age, timbre, pace, on/off-screen.
+2. Use the literal phrase **`says in an off-screen voiceover`**.
+3. Put the spoken words inside `<d>[Language] ...</d>` — verbatim, with the language tag
+   (`[Chinese]`, `[English]`, …; 11 languages are stable).
+4. **Immediately after the `<d>` block, state that the on-screen character's lips remain closed** —
+   otherwise the model may lip-sync a visible person to the narration.
+5. Anchor timing with `Beginning at 00:01.000 …` / `ends by 00:07.000` so the speech fits the clip.
+6. Keep dialogue **out of** `overall_soundscape`; keep any score in `non_diegetic_music` quiet
+   ("very quiet beneath the voiceover") so it doesn't compete.
+
+Tested on this deployment (t2va, 480p, 8 s, 20 steps):
+
+**Chinese voice-over** — seed 201
+```
+integrated_multimodal_description: [Shot 1] Live-action, cinematic, a wide shot frames a narrow canal in a Jiangnan water town at dawn, thin mist hanging over the water, whitewashed walls and dark tiled roofs on both banks, a stone arch bridge reflected in the still surface. An elderly boatman in a dark blue cotton jacket and a bamboo hat stands at the stern of a small wooden boat, slowly pushing a long oar; the bow parts the mist as the camera pushes in with small amplitude at slow speed toward him. Beginning at 00:01.000, a calm middle-aged man with a low, warm, unhurried voice (S1) says in an off-screen voiceover: <d>[Chinese] 天还没亮透，河面上只有一条船。老李已经在这条水路上摇了四十年。</d> while the boatman on screen keeps his lips completely closed and continues rowing. The voiceover ends by 00:07.000 and the boat glides under the bridge as the shot holds.
+
+overall_soundscape: Water laps softly against the wooden hull and the oar dips into the canal with a slow, steady rhythm. Distant birdsong drifts across the water and the town is otherwise silent.
+
+non_diegetic_music: A single guzheng plays sparse, slow notes with long sustain, very quiet beneath the voiceover, fading out over the last second.
+```
+
+**English voice-over, no person on screen** — seed 202
+```
+integrated_multimodal_description: [Shot 1] Live-action, cinematic, an aerial wide shot drifts forward over a misty pine forest at dawn, golden light breaking through the treetops and a river glinting far below; the camera pushes in with small amplitude at slow speed along the valley. Beginning at 00:01.000, a calm adult woman with a soft, clear, measured voice (S1) says in an off-screen voiceover: <d>[English] Every morning the forest wakes slowly, one bird at a time, long before the sun reaches the river.</d> No person is visible on screen. The voiceover ends by 00:07.000 as the camera continues its slow drift and the light widens across the canopy.
+
+overall_soundscape: A soft wind moves through the pines with a gentle, continuous rustle. Distant birdsong is scattered and sparse, and the river murmurs faintly far below.
+
+non_diegetic_music: N/A
+```
+
+Related patterns from the guide:
+- **On-screen dialogue** (lip-synced): `The young woman with a quiet, breathy voice (S1) says: <d>[English] I get off at the next station.</d>` — no "off-screen", no lips-closed clause.
+- **Two speakers together**: `The two children (S1,S2) shout together, <d>[English] Wait for us!</d>`
+- **Line crossing a cut**: put `<scenetrans>` at the join in both shots and say the audio "continues seamlessly across the cut".
+- **Speech cut off by the end**: `<cutoff>`.
+- **Clone a narrator's voice** (Ref2VA only): upload an audio clip and define `<Audio 1> is the voice-timbre reference for <Subject 1> (S1).` — see the [Ref2VA guide](official_prompt_guide/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md) §2.4.
+- **Pacing rule of thumb**: ~2.5–3 Chinese characters/s or ~2.5 English words/s of speech; a 5 s clip carries one short sentence, 8 s two, 15 s a short paragraph.
+
+## Anatomy of a casual prompt (quick exploration)
 
 ```
 [subject + scene]  A red vintage car drives along a coastal road at sunset,

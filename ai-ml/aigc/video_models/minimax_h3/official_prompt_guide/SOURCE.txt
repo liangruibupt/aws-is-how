@@ -1,0 +1,1 @@
+source: https://github.com/MiniMax-AI/MiniMax-H3/tree/d21241f/skills/h3-prompt-writing (2026-08-15)
