@@ -530,6 +530,7 @@
 
 #### LLM based KB
 - [karpathy A pattern for building personal knowledge bases using LLMs - LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+- [WeKnora — 让文档活起来：RAG、Agent 推理与自动 Wiki 一体化的知识框架](https://github.com/Tencent/WeKnora/blob/main/README_CN.md)
 
 ### Deep Research
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
@@ -1263,6 +1264,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
 - [BMW automation compliance-at-scale](https://aws.amazon.com/blogs/mt/how-bmw-group-uses-automation-to-achieve-end-to-end-compliance-at-scale-on-aws/)
 - [Automated Security Response on AWS](https://aws.amazon.com/solutions/implementations/automated-security-response-on-aws/)
+- [Security For AI and AI For Security]
+  - [Security Agent Workshop](https://workshop-eval.gcr.aws.dev/events/aiforsecurity-workshop-20260918)
+    - [Security Agent Workshop 总结](security/security-agent/AWS-Security-Agent-实验总结.md)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
