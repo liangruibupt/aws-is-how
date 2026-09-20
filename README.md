@@ -302,6 +302,7 @@
     - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
     - [story2video 生视频](https://github.com/qingyuan18/open_vibe_video.git)
     - [MiniMax H3 on g7e（RTX PRO 6000 Blackwell Server Edition）](https://github.com/whn09/minimax_h3_g7e)
+    - [MiniMax-H3 on B300（p6-b300.48xlarge，8×B300 SXM6 275 GB）](https://github.com/whn09/minimax_h3_b300)
     - [MiniMax H3 use case and prompt guide](https://vrfi1sk8a0.feishu.cn/wiki/VavPwU0XmiidWhkdGjtcbMHInKf)
     - [MiniMax H3 Enterprise Solution](https://vrfi1sk8a0.feishu.cn/wiki/DZGGwe9DaidFyQkcjg1c3hgSnbh)
   
@@ -654,6 +655,7 @@
   - [E2B]
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
+    - [E2B 与 AgentCore Runtime API 对照：管理层与运行时调用](https://pippin.amazon.dev/docs/fdHU84jSgFH96Y/e2b-agentcore-runtime-api)
   - [Kata Container]
     - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
   - [FlexAI - Architect and deploy advanced Agentic AI platforms on Amazon EKS](https://catalog.us-east-1.prod.workshops.aws/workshops/26ab2b07-9621-4e0c-bc44-3f7fef388cb7/en-US)
