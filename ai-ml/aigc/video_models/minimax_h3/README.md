@@ -21,6 +21,8 @@ One sglang process serves one partition, so all three tasks at once needs 2 GPUs
 | `g7e_hunt.sh` | Launches the first `g7e.12xlarge` it can get across regions (spot first, on-demand fallback), creating a locked-down SG per region. Writes `/tmp/h3_instance`. |
 | `tunnel_webui.sh` | SSM port-forward → `http://localhost:7860` (corp network blocks direct EC2 access). |
 | `minimax_h3_webui/` | FastAPI + single-page console: 3 tabs, uploads → `data:` URIs, job polling, in-page playback w/ audio, history gallery. `run_webui.sh` installs deps into the DLAMI venv and runs it on :7860. |
+| `prompt_examples.md` | Prompts actually run on this deployment (with seeds/timings) plus prompt-writing tips for a video+audio model. |
+| `sample_h3_prompt.md` | Structured 【主题/主体/场景/镜头/光线/色彩/声音/节奏/画质/基调】 prompt template with six worked examples (中文). |
 
 ## Deploy (what was done, in order)
 
