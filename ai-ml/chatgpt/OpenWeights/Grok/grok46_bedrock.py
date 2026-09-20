@@ -24,6 +24,9 @@ KEY FACTS (verified against the model card):
           model    = xai.grok-4.6   (us-west-2 only)
   * APIs: Responses, Chat Completions, Converse. This file uses Responses.
   * Context window: 500K tokens.
+  * Image input: NOT documented in the card's usage notes, but VERIFIED working
+    on the Responses API via a base64 data URL — see the `vision` demo below.
+    There is no `detail` fidelity control.
   * Reasoning is ALWAYS ON; configure depth with reasoning={"effort": ...}:
         "low" (default) | "medium" | "high" | "xhigh".
     Reasoning content is ENCRYPTED — only the Responses API can return it via
@@ -48,6 +51,7 @@ Usage:
   python grok46_bedrock.py basic      # same as above
   python grok46_bedrock.py stream     # streaming Responses demo
   python grok46_bedrock.py tools      # tool-use (function calling) loop demo
+  python grok46_bedrock.py vision IMAGE [QUESTION ...]   # image + text input
   python grok46_bedrock.py "your question here"   # basic demo, your prompt
 
 Prereqs:
@@ -55,8 +59,11 @@ Prereqs:
 """
 
 import argparse
+import base64
 import json
+import mimetypes
 import os
+import sys
 
 from openai import OpenAI
 
@@ -219,6 +226,70 @@ def tool_use_example() -> str:
             )
 
 
+# ---------------------------------------------------------------------------
+# vision: image + text input on the Responses API
+# ---------------------------------------------------------------------------
+# NOTE ON SUPPORT: the Grok 4.6 model card lists Image among the input
+# modalities, but the checkmark column does not survive text extraction, and
+# unlike some other models the card's Usage Considerations say NOTHING about
+# image handling (no ordering advice, no `detail` control, no note on video).
+# So treat image support as empirically determined rather than documented —
+# run this mode and see.
+#
+# VERIFIED BY RUNNING (2026-09, us.xai.grok-4.6, us-east-1): image input WORKS
+# on the Responses API with a base64 data URL. Asked to transcribe a dense
+# hand-drawn conference slide (dark background, sketch lettering, ~60 labels),
+# it returned every year, the 1993 UDA -> 2003 CG -> 2006 CUDA chain, all five
+# scale-curve library names, both nine-item text clusters, and the funnel's
+# $100T plus four layers — scored 58/58 expected facts with zero invented
+# items, and it even preserved the right-to-left arrow direction of the middle
+# row. Cost 1,684 input / 2,112 output tokens, of which 1,904 were reasoning.
+#
+# Unlike Kimi K3, there is no documented `detail` control for image fidelity
+# here, and the Responses API does not take one — so there is no low-detail
+# mode to trade accuracy for cost.
+
+VISION_QUESTION = (
+    "Describe this image. If it contains a diagram, screenshot or scanned "
+    "text, transcribe the key content and explain what it shows."
+)
+
+
+def _encode_image(image_path: str) -> str:
+    """Read a local image and return it as an OpenAI-style data URL."""
+    if not os.path.isfile(image_path):
+        sys.exit(f"vision: no such image file: {image_path}")
+    mime = mimetypes.guess_type(image_path)[0] or "image/png"
+    with open(image_path, "rb") as handle:
+        encoded = base64.b64encode(handle.read()).decode("utf-8")
+    return f"data:{mime};base64,{encoded}"
+
+
+def responses_vision_example(image_path: str, question: str | None = None) -> str:
+    """Send a local image plus a question through the Responses API."""
+    response = client.responses.create(
+        model=MODEL_ID,
+        input=[
+            {
+                "role": "user",
+                # Image block first, then the text block.
+                "content": [
+                    {"type": "input_image", "image_url": _encode_image(image_path)},
+                    {"type": "input_text", "text": question or VISION_QUESTION},
+                ],
+            }
+        ],
+        # Same reasoning setup as the other demos in this file.
+        reasoning={"effort": "high"},
+        include=["reasoning.encrypted_content"],
+    )
+
+    print("[ResponsesVision]", response.output_text)
+    print("[ResponsesVision] status:", response.status)
+    print("[ResponsesVision] usage:", response.usage)
+    return response.output_text
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="xAI Grok 4.6 on Amazon Bedrock (bedrock-runtime, Responses API)."
@@ -227,10 +298,16 @@ def main() -> None:
         "mode",
         nargs="?",
         default="basic",
-        help="One of: basic | stream | tools. "
+        help="One of: basic | stream | tools | vision. "
              "Anything else is treated as a prompt for the 'basic' demo.",
     )
-    mode = parser.parse_args().mode
+    parser.add_argument(
+        "extra",
+        nargs="*",
+        help="For 'vision': IMAGE_PATH [QUESTION ...].",
+    )
+    args = parser.parse_args()
+    mode = args.mode
 
     print(f"# model={MODEL_ID}  endpoint={BASE_URL}")
 
@@ -240,9 +317,13 @@ def main() -> None:
         stream_responses_example()
     elif mode == "tools":
         tool_use_example()
+    elif mode == "vision":
+        if not args.extra:
+            sys.exit("vision: usage: grok46_bedrock.py vision IMAGE_PATH [QUESTION]")
+        responses_vision_example(args.extra[0], " ".join(args.extra[1:]) or None)
     else:
         # Treat the whole argument as a custom prompt for the basic demo.
-        responses_example(mode)
+        responses_example(" ".join([mode, *args.extra]))
 
 
 if __name__ == "__main__":

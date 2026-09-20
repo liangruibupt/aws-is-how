@@ -84,6 +84,10 @@ Usage:
   python kimi_k3_bedrock.py responses-tools       # function-calling loop
   python kimi_k3_bedrock.py responses-vision IMAGE [Q...]
   python kimi_k3_bedrock.py structured            # structured output (JSON schema)
+  python kimi_k3_bedrock.py vision-eval [IMAGE]   # GRADE the vision output against
+                                                  # hand-checked ground truth for
+                                                  # media/GTC-2024.png; compares
+                                                  # detail=low vs high vs Responses
 
   # Explicit prompt caching (Responses API)
   python kimi_k3_bedrock.py cache                 # same as: cache prefix
@@ -105,6 +109,7 @@ import base64
 import json
 import mimetypes
 import os
+import re
 import sys
 
 from openai import OpenAI
@@ -283,8 +288,8 @@ def tool_use_example() -> str:
             )
 
 
-def vision_example(image_path: str, question: str | None = None) -> str:
-    """Local image + question on Chat Completions. Image block goes BEFORE text."""
+def _chat_vision(image_path: str, question: str, detail: str = "high") -> tuple[str, object]:
+    """Chat Completions vision call. Image block goes BEFORE the text."""
     response = client.chat.completions.create(
         model=MODEL_ID,
         messages=[
@@ -299,18 +304,22 @@ def vision_example(image_path: str, question: str | None = None) -> str:
                             # "detail" is honored only on Chat Completions:
                             # "low" is cheaper, "high" is higher fidelity.
                             # (On the Responses API images are always high.)
-                            "detail": "high",
+                            "detail": detail,
                         },
                     },
-                    {"type": "text", "text": question or VISION_QUESTION},
+                    {"type": "text", "text": question},
                 ],
             }
         ],
     )
+    return response.choices[0].message.content, response.usage
 
-    text = response.choices[0].message.content
+
+def vision_example(image_path: str, question: str | None = None, detail: str = "high") -> str:
+    """Local image + question on Chat Completions."""
+    text, usage = _chat_vision(image_path, question or VISION_QUESTION, detail)
     print("[Vision]", text)
-    print("[Vision] usage:", response.usage)
+    print("[Vision] usage:", usage)
     return text
 
 
@@ -397,8 +406,8 @@ def responses_tool_use_example() -> str:
             )
 
 
-def responses_vision_example(image_path: str, question: str | None = None) -> str:
-    """Local image + question on the Responses API (always high detail)."""
+def _responses_vision(image_path: str, question: str) -> tuple[str, object]:
+    """Responses API vision call (images always processed at high detail)."""
     response = client.responses.create(
         model=MODEL_ID,
         input=[
@@ -408,15 +417,20 @@ def responses_vision_example(image_path: str, question: str | None = None) -> st
                 # No `detail` field here: the Responses API always uses high.
                 "content": [
                     {"type": "input_image", "image_url": _encode_image(image_path)},
-                    {"type": "input_text", "text": question or VISION_QUESTION},
+                    {"type": "input_text", "text": question},
                 ],
             }
         ],
     )
+    return response.output_text, response.usage
 
-    print("[ResponsesVision]", response.output_text)
-    print("[ResponsesVision] usage:", response.usage)
-    return response.output_text
+
+def responses_vision_example(image_path: str, question: str | None = None) -> str:
+    """Local image + question on the Responses API (always high detail)."""
+    text, usage = _responses_vision(image_path, question or VISION_QUESTION)
+    print("[ResponsesVision]", text)
+    print("[ResponsesVision] usage:", usage)
+    return text
 
 
 def structured_output_example() -> dict:
@@ -455,6 +469,188 @@ def structured_output_example() -> dict:
     parsed = json.loads(response.output_text)
     print("[Structured]", json.dumps(parsed, indent=2, ensure_ascii=False))
     return parsed
+
+
+# ===========================================================================
+# Vision evaluation — score the model's transcription against ground truth
+# ===========================================================================
+# The vision demos above only PRINT what Kimi K3 says, which proves the request
+# works but says nothing about whether the answer is right. This harness grades
+# the output against a hand-checked fact list for the bundled test image, and
+# compares the two APIs plus both Chat Completions `detail` settings.
+#
+# What it measures: RECALL of expected facts (did the transcription mention
+# each one) and HALLUCINATIONS (did it assert something that is not on the
+# slide, drawn from a list of plausible wrong answers).
+# What it does NOT measure: semantic correctness. A sentence containing the
+# right keywords in a wrong claim still scores as a hit, and only the listed
+# traps are detected — this is a regression check, not a grader.
+
+DEFAULT_EVAL_IMAGE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  "media", "GTC-2024.png")
+
+# Ground truth for media/GTC-2024.png — NVIDIA's hand-drawn GTC 2024 timeline
+# slide, read and transcribed by hand. Each entry is (label, regex) matched
+# case-insensitively against the normalized answer.
+GTC_SLIDE_FACTS = [
+    # (section, label, pattern)
+    ("timeline", "1964", r"\b1964\b"),
+    ("timeline", "IBM S/360", r"ibm\s*s\s*/?\s*360"),
+    ("timeline", "1995", r"\b1995\b"),
+    ("timeline", "Windows 95", r"windows\s*95"),
+    ("timeline", "Pentium", r"pentium"),
+    ("timeline", "CPU vs DATA curves", r"\bcpu\b"),
+    ("timeline", "accelerated computing", r"accelerated\s+computing"),
+    ("timeline", "1993 UDA", r"1993|(?<![a-z])uda(?![a-z])"),
+    ("timeline", "2003 CG", r"\b2003\b"),
+    ("timeline", "2006 CUDA", r"\b2006\b"),
+    ("timeline", "CUDA", r"cuda"),
+    ("timeline", "2012", r"\b2012\b"),
+    ("timeline", "AlexNet", r"alexnet"),
+    ("timeline", "First Contact", r"first\s+contact"),
+    ("timeline", "doubling every 6 months", r"doubling\s+every\s+6\s+months"),
+    ("timeline", "2016", r"\b2016\b"),
+    ("timeline", "DGX-1", r"dgx\s*-?\s*1\b"),
+    ("timeline", "2017", r"\b2017\b"),
+    ("timeline", "Transformer", r"transformer"),
+    ("timeline", "2022", r"\b2022\b"),
+    ("timeline", "OpenAI ChatGPT", r"open\s*ai|chatgpt"),
+    ("timeline", "Generative AI", r"generative\s+ai"),
+    ("timeline", "Startups", r"startups?"),
+    ("timeline", "A New Industrial Revolution", r"new\s+industrial\s+revolution"),
+
+    ("scale curve", "TensorRT", r"tensor\s*rt"),
+    ("scale curve", "Megatron", r"megatron"),
+    ("scale curve", "NCCL", r"nccl"),
+    ("scale curve", "GPU-Direct", r"gpu\s*-?\s*direct"),
+    ("scale curve", "cuDNN", r"cu\s*dnn"),
+    ("scale curve", "RNN", r"\brnn\b"),
+    ("scale curve", "GAN", r"\bgan\b"),
+    ("scale curve", "CNN", r"\bcnn\b"),
+    ("scale curve", "LSTM", r"\blstm\b"),
+    ("scale curve", "VAE", r"\bvae\b"),
+
+    ("learn everything", "learn everything", r"learn\s+everything"),
+    ("learn everything", "protein", r"protein"),
+    ("learn everything", "language", r"language"),
+    ("learn everything", "sound", r"sound"),
+    ("learn everything", "physics", r"physics"),
+    ("learn everything", "3D", r"\b3\s*d\b"),
+    ("learn everything", "video", r"video"),
+    ("learn everything", "manipulation", r"manipulation"),
+    ("learn everything", "images", r"images?"),
+    ("learn everything", "gesture", r"gesture"),
+
+    ("techniques", "fine tuning", r"fine\s*-?\s*tuning"),
+    ("techniques", "guardrailing", r"guardrail"),
+    ("techniques", "alignment", r"alignment"),
+    ("techniques", "prompt engineering", r"prompt\s+engineering"),
+    ("techniques", "vector DB", r"vector\s*db"),
+    ("techniques", "RAG", r"\brag\b"),
+    ("techniques", "multi-modal", r"multi\s*-?\s*modal"),
+    ("techniques", "CoT & ToT", r"cot|chain\s+of\s+thought"),
+    ("techniques", "agents", r"agents?"),
+
+    ("funnel", "$100T", r"\$?\s*100\s*t\b"),
+    ("funnel", "AI co-pilots", r"ai\s+co\s*-?\s*pilots?"),
+    ("funnel", "AI factory", r"ai\s+factory"),
+    ("funnel", "enterprise IT", r"enterprise\s+it"),
+    ("funnel", "datacenters", r"data\s*centers?"),
+]
+
+# Plausible-but-absent items. Anything matched here was invented: none of these
+# appear anywhere on the slide.
+GTC_SLIDE_TRAPS = [
+    ("H100", r"\bh100\b"),
+    ("A100", r"\ba100\b"),
+    ("Blackwell", r"blackwell"),
+    ("Hopper", r"hopper"),
+    ("Grace", r"\bgrace\b"),
+    ("DGX-2", r"dgx\s*-?\s*2\b"),
+    ("BERT", r"\bbert\b"),
+    ("GPT-4", r"gpt\s*-?\s*4"),
+    ("Volta", r"volta"),
+    ("2020", r"\b2020\b"),
+]
+
+TRANSCRIBE_PROMPT = (
+    "Transcribe this slide completely and literally. List every year label, "
+    "every arrow step in order, every word in each text cluster, the labels on "
+    "each chart, and the text inside the funnel. Do not add anything that is "
+    "not written on the slide."
+)
+
+
+def _normalize(text: str) -> str:
+    """Flatten the cosmetic variation a model puts in prose before matching."""
+    lowered = text.lower()
+    # Unicode dashes/quotes/non-breaking hyphens -> ASCII, markdown -> nothing.
+    for src, dst in (("\u2011", "-"), ("\u2013", "-"), ("\u2014", "-"),
+                     ("\u2212", "-"), ("\u2018", "'"), ("\u2019", "'"),
+                     ("\u201c", '"'), ("\u201d", '"'), ("\u00a0", " ")):
+        lowered = lowered.replace(src, dst)
+    for ch in "*_`#":
+        lowered = lowered.replace(ch, "")
+    return re.sub(r"\s+", " ", lowered)
+
+
+def _score(answer: str) -> dict:
+    """Grade one transcription against the slide's fact list and traps."""
+    norm = _normalize(answer)
+    hits, misses = [], []
+    for section, label, pattern in GTC_SLIDE_FACTS:
+        (hits if re.search(pattern, norm) else misses).append((section, label))
+    invented = [label for label, pattern in GTC_SLIDE_TRAPS if re.search(pattern, norm)]
+    total = len(GTC_SLIDE_FACTS)
+    return {
+        "recall": len(hits) / total,
+        "hits": len(hits),
+        "total": total,
+        "misses": misses,
+        "hallucinations": invented,
+        "chars": len(answer),
+    }
+
+
+def vision_eval_example(image_path: str | None = None) -> dict:
+    """Run the same transcription three ways and grade each answer.
+
+    Rows: Chat Completions at detail=low, Chat Completions at detail=high, and
+    the Responses API (which ignores detail and always uses high). Comparing
+    row 1 against row 2 is how you check whether `detail` is doing anything for
+    your own workload.
+    """
+    image = image_path or DEFAULT_EVAL_IMAGE
+    if os.path.abspath(image) != os.path.abspath(DEFAULT_EVAL_IMAGE):
+        print("! The fact list is hand-written for media/GTC-2024.png. Scores "
+              "against any other image are meaningless.\n")
+
+    runs = []
+    for label, call in (
+        ("chat/detail=low", lambda: _chat_vision(image, TRANSCRIBE_PROMPT, "low")),
+        ("chat/detail=high", lambda: _chat_vision(image, TRANSCRIBE_PROMPT, "high")),
+        ("responses", lambda: _responses_vision(image, TRANSCRIBE_PROMPT)),
+    ):
+        answer, usage = call()
+        result = _score(answer)
+        result["label"] = label
+        result["usage"] = usage
+        runs.append(result)
+        print(f"[{label}] recall {result['hits']}/{result['total']} "
+              f"({result['recall'] * 100:.0f}%), "
+              f"hallucinations {len(result['hallucinations'])}, "
+              f"{result['chars']} chars")
+        if result["misses"]:
+            print(f"[{label}] missed: " +
+                  ", ".join(f"{s}/{l}" for s, l in result["misses"]))
+        if result["hallucinations"]:
+            print(f"[{label}] INVENTED: " + ", ".join(result["hallucinations"]))
+
+    best = max(runs, key=lambda r: (r["recall"], -len(r["hallucinations"])))
+    print(f"\nbest: {best['label']} at {best['recall'] * 100:.0f}% recall")
+    print("Reminder: this checks whether expected strings appear, not whether "
+          "the surrounding claims are true.")
+    return {"runs": runs, "best": best["label"]}
 
 
 # ===========================================================================
@@ -529,8 +725,9 @@ def _report(label: str, response: object, show_text: bool = False) -> tuple[int,
 def _estimate_cost(total_in: int, cached: int, written: int, out: int) -> tuple[float, float]:
     """Return (actual_cost, no_cache_cost) in USD for one request.
 
-    Assumes the OpenAI-compatible convention that input_tokens is the TOTAL
-    prompt size, with cached_tokens and cache_write_tokens as subsets of it.
+    input_tokens is the TOTAL prompt size, with cached_tokens and
+    cache_write_tokens as subsets of it — measured on a real call as
+    input=3511 / cached=3478, the delta being the uncached tail.
     (Converse/Invoke differ: there, inputTokens EXCLUDES cache read/write
     tokens, so you must add the three together to get the true total.)
     """
@@ -636,6 +833,11 @@ def cache_implicit_scenario() -> None:
     served from cache. explicit uses only your breakpoints, which is what you
     want in an agent loop where the tail changes every turn and you don't want
     automatic writes consuming cache-write budget.
+
+    Measured: implicit call 1 read the 3,478-token prefix and additionally WROTE
+    24 tokens (the question, via the automatic breakpoint); call 2 then read
+    3,502 = prefix + question. In explicit mode both calls read 3,478 and wrote
+    nothing.
     """
     print("--- scenario: implicit vs explicit mode ---")
     question = "Review plan C: DynamoDB global tables with on-demand capacity."
@@ -735,7 +937,7 @@ def main() -> None:
         default="basic",
         help="Chat Completions: basic | stream | tools | vision. "
              "Responses: responses | responses-stream | responses-tools | "
-             "responses-vision | structured. Caching: cache. "
+             "responses-vision | structured | vision-eval. Caching: cache. "
              "Anything else is treated as a prompt for the 'basic' demo.",
     )
     parser.add_argument(
@@ -772,6 +974,8 @@ def main() -> None:
         responses_vision_example(*_image_args())
     elif args.mode == "structured":
         structured_output_example()
+    elif args.mode == "vision-eval":
+        vision_eval_example(args.extra[0] if args.extra else None)
     elif args.mode == "cache":
         prompt_cache_example(args.extra[0] if args.extra else "prefix")
     else:

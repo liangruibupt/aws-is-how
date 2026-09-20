@@ -182,6 +182,17 @@ Kimi K3's **explicit prompt caching** targets: mark the end of the stable prefix
 the ≥30-minute TTL read the prefix at the discounted cache rate without counting against your
 input-tokens-per-minute quota. Runnable scenarios: `python kimi_k3_bedrock.py cache agent`.
 
+Measured on a 4-turn loop with a ~3.5k-token prefix: turn 1 wrote 3,478 tokens to cache, turns
+2–4 each read 3,478 — but total list-price savings were only ~13.6%, because output tokens at
+$15/1M dominated. The saving scales with how large the reused prefix is relative to the output,
+so a real coding agent resending tens of thousands of prefix tokens per turn benefits far more
+than this demo does.
+
+One cost surprise worth planning for: Kimi K3 spends heavily on reasoning tokens, which are
+billed as output. A single "design an architecture" answer measured 4,617 output tokens of which
+2,513 were reasoning; an image transcription used 3,868 reasoning tokens of 4,196. Reasoning is
+where the money goes in a coding session, not the prompt.
+
 ## Files
 
 | File | What it is |
