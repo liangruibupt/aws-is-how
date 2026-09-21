@@ -42,6 +42,7 @@ Official 2K canvases: 1:1 2048², 4:3 2400×1792, 3:4 1792×2400, 3:2 2528×1696
 | `webui/static/index.html` | Two-tab console (Text → Image, Edit/Reference → Image), 1K/2K tiers, RGBA toggle with checkerboard preview, multi-image previews, history gallery, "use as reference" chaining. |
 | `webui/run_server.sh` | start / stop / logs on :7861, pinned to `GPU=1` by default. Sets the `LD_LIBRARY_PATH` fix below. |
 | `prompt_examples.md` | Prompts run on this deployment + the official RGBA phrasing and editing patterns. |
+| `sample_qwen-image_prompt.md` | 中文长提示词示例（人物与静物），展示官方 prompt-rewriter 风格的高细节描述写法。 |
 
 ## Deploy
 
