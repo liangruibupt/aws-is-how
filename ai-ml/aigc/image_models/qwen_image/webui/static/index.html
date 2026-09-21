@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qwen-Image-2.1 · console</title>
+<style>
+  :root {
+    --bg: #0b0e14; --panel: #12161f; --edge: #232a38; --ink: #e7ecf3; --dim: #8b96a8;
+    --accent: #f59e0b; --ok: #3ddc97; --bad: #ff6b6b; --warn: #ffc857;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 14px/1.5 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+           padding: 14px 22px; border-bottom: 1px solid var(--edge); }
+  header h1 { margin: 0; font-size: 16px; letter-spacing: .04em; }
+  header h1 span { color: var(--dim); font-weight: 400; }
+  .health { font-size: 12px; color: var(--dim); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background: var(--dim); }
+  .dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); } .dot.warn { background: var(--warn); }
+  main { display: grid; grid-template-columns: 440px 1fr; gap: 18px; padding: 18px 22px; max-width: 1500px; margin: 0 auto; }
+  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--edge); border-radius: 12px; padding: 16px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tabs button { flex: 1; padding: 9px 6px; border-radius: 8px; border: 1px solid var(--edge);
+                 background: transparent; color: var(--dim); cursor: pointer; font: inherit; }
+  .tabs button.active { background: #1a2130; color: var(--ink); border-color: var(--accent); }
+  label { display: block; font-size: 12px; color: var(--dim); margin: 10px 0 4px; }
+  textarea, input[type=text], input[type=number], select {
+    width: 100%; background: #0d1119; color: var(--ink); border: 1px solid var(--edge); border-radius: 8px; padding: 8px 10px; font: inherit; }
+  textarea { min-height: 110px; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; cursor: pointer; }
+  .check input { width: 16px; height: 16px; accent-color: var(--accent); }
+  .drop { border: 1px dashed var(--edge); border-radius: 8px; padding: 10px; color: var(--dim); text-align: center;
+          cursor: pointer; position: relative; min-height: 64px; }
+  .drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .drop.filled { border-style: solid; border-color: var(--accent); }
+  .refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .refs .r { position: relative; width: 72px; height: 72px; border-radius: 6px; overflow: hidden; border: 1px solid var(--edge); }
+  .refs .r img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .refs .r span { position: absolute; left: 3px; top: 2px; font-size: 10px; background: rgba(0,0,0,.65); padding: 0 4px; border-radius: 3px; }
+  .refs .r b { position: absolute; right: 2px; top: 1px; cursor: pointer; font-size: 12px; background: rgba(0,0,0,.65); border-radius: 3px; padding: 0 4px; }
+  .hint { font-size: 11px; color: var(--dim); margin-top: 4px; }
+  .primary { width: 100%; margin-top: 16px; padding: 12px; border-radius: 10px; border: 0; background: var(--accent); color: #0b0e14;
+             font: inherit; font-weight: 600; cursor: pointer; }
+  .primary:disabled { opacity: .5; cursor: wait; }
+  .status { margin-top: 12px; font-size: 13px; color: var(--dim); min-height: 20px; }
+  .status.bad { color: var(--bad); } .status.ok { color: var(--ok); }
+  .bar { height: 4px; background: var(--edge); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .bar i { display: block; height: 100%; width: 30%; background: var(--accent); animation: slide 1.2s infinite ease-in-out; }
+  @keyframes slide { 0% { margin-left: -30%; } 100% { margin-left: 100%; } }
+  .viewer { border-radius: 10px; overflow: hidden; min-height: 320px; display: flex; align-items: center; justify-content: center;
+            color: var(--dim); background: #000; }
+  .viewer.checker { background-color: #777;
+    background-image: linear-gradient(45deg, #999 25%, transparent 25%), linear-gradient(-45deg, #999 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #999 75%), linear-gradient(-45deg, transparent 75%, #999 75%);
+    background-size: 24px 24px; background-position: 0 0, 0 12px, 12px -12px, -12px 0; }
+  .viewer img { max-width: 100%; max-height: 70vh; display: block; }
+  .strip { display: flex; gap: 6px; margin-top: 8px; }
+  .strip img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; background: #000; }
+  .strip img.sel { border-color: var(--accent); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; font-size: 12px; color: var(--dim); }
+  .meta b { color: var(--ink); font-weight: 500; }
+  .actions { display: flex; gap: 8px; margin-top: 10px; }
+  .actions a, .actions button { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--edge); background: transparent; color: var(--ink);
+                                text-decoration: none; font: inherit; cursor: pointer; font-size: 13px; }
+  h2 { font-size: 13px; color: var(--dim); margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .08em; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .thumb { background: #0d1119; border: 1px solid var(--edge); border-radius: 8px; padding: 6px; cursor: pointer; }
+  .thumb:hover { border-color: var(--accent); }
+  .thumb img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: #000; display: block; }
+  .thumb .t { font-size: 11px; color: var(--dim); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .thumb .t b { color: var(--ink); font-weight: 500; }
+  .pill { display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 10px; background: #1a2130; color: var(--accent); margin-right: 4px; }
+  details { margin-top: 12px; color: var(--dim); font-size: 12px; }
+  summary { cursor: pointer; color: var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Qwen-Image-2.1 <span>· text-to-image · editing · native RGBA · 2K</span></h1>
+  <div class="health"><i class="dot" id="hdot"></i><span id="htext">connecting…</span></div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="tabs">
+      <button data-mode="t2i" class="active">Text → Image</button>
+      <button data-mode="edit">Edit / Reference → Image</button>
+    </div>
+    <form id="form">
+      <label>Prompt</label>
+      <textarea id="prompt" placeholder="Describe the image…">A neon shop sign that reads "QWEN IMAGE 2.1", rainy night, reflections on wet pavement</textarea>
+
+      <div id="refbox" hidden>
+        <label>Reference images <span style="opacity:.6">(1–10; the first one is &lt;image1&gt;)</span></label>
+        <div class="drop" id="drop"><input type="file" id="refs" accept="image/*" multiple><span>Click or drop images</span></div>
+        <div class="refs" id="refstrip"></div>
+        <div class="hint">Single image: edit it ("change the background to…", "remove the watch"). Several: compose them ("these three characters sit around a campfire"). Circle or paint the region to edit directly on the image for local edits.</div>
+      </div>
+
+      <label class="check"><input type="checkbox" id="transparent"> Transparent background (RGBA output)</label>
+
+      <div class="row3">
+        <div><label>Aspect</label>
+          <select id="aspect">
+            <option>1:1</option><option>16:9</option><option>9:16</option><option>4:3</option><option>3:4</option><option>3:2</option><option>2:3</option>
+            <option value="auto" id="opt-auto" hidden>auto (follow reference)</option>
+          </select></div>
+        <div><label>Resolution</label>
+          <select id="tier"><option value="1k">1K — ~10 s</option><option value="2k">2K native — ~50 s</option></select></div>
+        <div><label>Steps</label><input type="number" id="steps" value="40" min="1" max="100"></div>
+      </div>
+      <div class="row3">
+        <div><label>Seed (-1 random)</label><input type="number" id="seed" value="-1"></div>
+        <div><label>Images</label><input type="number" id="num_images" value="1" min="1" max="4"></div>
+        <div><label>CFG (true_cfg_scale)</label><input type="number" id="true_cfg_scale" value="1.0" step="0.5" min="1" max="10"></div>
+      </div>
+      <details><summary>Advanced</summary>
+        <label>Negative prompt <span style="opacity:.6">(only used when CFG &gt; 1)</span></label>
+        <input type="text" id="negative_prompt" placeholder="blurry, low quality, watermark">
+        <label>Exact size (overrides aspect; multiples of 16)</label>
+        <div class="row"><input type="number" id="width" placeholder="width" step="16"><input type="number" id="height" placeholder="height" step="16"></div>
+        <p>The model is CFG-distilled: CFG 1.0 (default) is fastest and what the release was tuned for. Raising it enables the negative prompt at ~2× cost. 20 steps is a decent draft; 40 is the reference setting.</p>
+      </details>
+
+      <button class="primary" id="go" type="submit">Generate</button>
+      <div class="status" id="status"></div>
+      <div class="bar" id="bar" hidden><i></i></div>
+    </form>
+  </section>
+
+  <section>
+    <div class="card">
+      <div class="viewer" id="viewer">Generated image will appear here.</div>
+      <div class="strip" id="strip"></div>
+      <div class="meta" id="meta"></div>
+      <div class="actions" id="actions" hidden>
+        <a id="dl" download>Download PNG</a>
+        <button id="reuse" type="button">Reuse settings</button>
+        <button id="useasref" type="button">Use as reference</button>
+      </div>
+    </div>
+    <h2>History</h2>
+    <div class="grid" id="history"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const $ = s => document.querySelector(s);
+  let mode = 't2i', refFiles = [], current = null, pollTimer = null;
+  const fmt = s => s < 60 ? s.toFixed(1) + ' s' : Math.floor(s / 60) + ' m ' + (s % 60).toFixed(0) + ' s';
+
+  async function health() {
+    try {
+      const h = await (await fetch('/api/health')).json();
+      const ready = h.status === 'ready';
+      $('#hdot').className = 'dot ' + (ready ? 'ok' : 'warn');
+      $('#htext').textContent = ready ? `model ready · ${h.gpu} · ${h.vram_gib} GiB · queue ${h.queue}` : 'model loading…';
+      $('#go').disabled = !ready && !$('#bar').hidden === false ? false : !ready;
+    } catch { $('#hdot').className = 'dot bad'; $('#htext').textContent = 'server unreachable'; }
+  }
+  health(); setInterval(health, 5000);
+
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.mode;
+    document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
+    $('#refbox').hidden = mode !== 'edit';
+    $('#opt-auto').hidden = mode !== 'edit';
+    if (mode === 'edit') $('#aspect').value = 'auto'; else if ($('#aspect').value === 'auto') $('#aspect').value = '1:1';
+  }));
+
+  // ---- reference images ----
+  function addFiles(list) {
+    for (const f of list) if (f.type.startsWith('image/') && refFiles.length < 10) refFiles.push(f);
+    renderRefs();
+  }
+  function renderRefs() {
+    const s = $('#refstrip'); s.innerHTML = '';
+    refFiles.forEach((f, i) => {
+      const d = document.createElement('div'); d.className = 'r';
+      const img = document.createElement('img'); img.src = URL.createObjectURL(f);
+      const tag = document.createElement('span'); tag.textContent = `image${i + 1}`;
+      const x = document.createElement('b'); x.textContent = '×'; x.onclick = () => { refFiles.splice(i, 1); renderRefs(); };
+      d.append(img, tag, x); s.appendChild(d);
+    });
+    $('#drop').classList.toggle('filled', refFiles.length > 0);
+  }
+  $('#refs').addEventListener('change', e => { addFiles(e.target.files); e.target.value = ''; });
+  const drop = $('#drop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--accent)'; });
+  drop.addEventListener('dragleave', () => drop.style.borderColor = '');
+  drop.addEventListener('drop', e => { e.preventDefault(); addFiles(e.dataTransfer.files); });
+
+  // ---- submit ----
+  $('#form').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (mode === 'edit' && refFiles.length === 0) { setBusy(false, 'Add at least one reference image for edit mode.', 'bad'); return; }
+    const fd = new FormData();
+    fd.append('prompt', $('#prompt').value);
+    fd.append('transparent', $('#transparent').checked);
+    for (const id of ['aspect', 'tier', 'steps', 'seed', 'num_images', 'true_cfg_scale', 'negative_prompt'])
+      fd.append(id, $('#' + id).value);
+    if ($('#width').value && $('#height').value) { fd.append('width', $('#width').value); fd.append('height', $('#height').value); }
+    if (mode === 'edit') for (const f of refFiles) fd.append('ref_images', f);
+    setBusy(true, 'Uploading and queuing…');
+    try {
+      const r = await fetch('/api/generate', { method: 'POST', body: fd });
+      if (!r.ok) throw new Error((await r.text()).slice(0, 600));
+      current = await r.json(); poll();
+    } catch (err) { setBusy(false, 'Error: ' + err.message, 'bad'); }
+  });
+
+  function setBusy(on, msg, cls) {
+    $('#go').disabled = on; $('#bar').hidden = !on;
+    const s = $('#status'); s.textContent = msg || ''; s.className = 'status ' + (cls || '');
+  }
+
+  async function poll() {
+    clearTimeout(pollTimer);
+    const j = await (await fetch('/api/jobs/' + current.job_id)).json();
+    if (j.status === 'completed') { setBusy(false, `Done · generation ${fmt(j.gen_s)} · total ${fmt(j.wall_s)}`, 'ok'); show(j); loadHistory(); }
+    else if (j.status === 'failed') { setBusy(false, 'Failed: ' + j.error, 'bad'); loadHistory(); }
+    else {
+      const est = (j.params.tier === '2k' ? 52 : 10) * (j.params.steps / 40) * j.params.num_images * (j.params.true_cfg_scale > 1 ? 1.9 : 1);
+      setBusy(true, `${j.status}${j.queue_position ? ` (queue ${j.queue_position})` : ''} · ${fmt(j.elapsed)} elapsed · typical ≈ ${fmt(est)}`);
+      pollTimer = setTimeout(poll, 800);
+    }
+  }
+
+  // ---- viewer ----
+  function show(j, idx = 0) {
+    const v = $('#viewer'); v.innerHTML = ''; v.classList.toggle('checker', !!j.params.transparent);
+    const img = document.createElement('img'); img.src = `/api/images/${j.images[idx]}`; v.appendChild(img);
+    const strip = $('#strip'); strip.innerHTML = '';
+    if (j.images.length > 1) j.images.forEach((n, i) => {
+      const t = document.createElement('img'); t.src = `/api/images/${n}`; t.className = i === idx ? 'sel' : '';
+      t.onclick = () => show(j, i); strip.appendChild(t);
+    });
+    const p = j.params;
+    $('#meta').innerHTML = [
+      ['mode', j.mode + (p.num_refs ? ` (${p.num_refs} ref)` : '')], ['size', j.size ? j.size.join('×') : '—'],
+      ['steps', p.steps], ['seed', p.seed], ['cfg', p.true_cfg_scale], ['alpha', p.transparent ? 'yes' : 'no'],
+      ['gen', j.gen_s ? fmt(j.gen_s) : '—'], ['peak VRAM', j.peak_vram_gib ? j.peak_vram_gib + ' GiB' : '—'],
+      ['prompt', j.prompt],
+    ].map(([k, val]) => `<span>${k}: <b>${String(val).replace(/</g, '&lt;')}</b></span>`).join('');
+    $('#actions').hidden = false;
+    $('#dl').href = `/api/images/${j.images[idx]}`; $('#dl').download = `qwen_image_${j.job_id}_${idx}.png`;
+    $('#reuse').onclick = () => {
+      $('#prompt').value = j.prompt; $('#transparent').checked = !!p.transparent;
+      for (const k of ['aspect', 'tier', 'steps', 'seed', 'num_images', 'true_cfg_scale', 'negative_prompt']) if (p[k] !== undefined && p[k] !== null) $('#' + k).value = p[k];
+    };
+    $('#useasref').onclick = async () => {
+      const blob = await (await fetch(`/api/images/${j.images[idx]}`)).blob();
+      refFiles.push(new File([blob], `${j.job_id}_${idx}.png`, { type: 'image/png' })); renderRefs();
+      document.querySelector('[data-mode=edit]').click(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  }
+
+  async function loadHistory() {
+    const jobs = await (await fetch('/api/history')).json();
+    const g = $('#history'); g.innerHTML = '';
+    for (const j of jobs) {
+      const ok = j.status === 'completed' && j.images?.length;
+      const d = document.createElement('div'); d.className = 'thumb';
+      d.innerHTML = `${ok ? `<img src="/api/images/${j.images[0]}" loading="lazy">` : '<div style="aspect-ratio:1"></div>'}
+        <div class="t"><span class="pill">${j.mode}</span><span class="pill">${j.params.tier}</span>${j.params.transparent ? '<span class="pill">rgba</span>' : ''}
+        <span class="pill" style="color:${ok ? 'var(--ok)' : j.status === 'failed' ? 'var(--bad)' : 'var(--warn)'}">${j.status}</span></div>
+        <div class="t" title="${(j.prompt || '').replace(/"/g, '&quot;')}"><b>${(j.prompt || '').replace(/</g, '&lt;')}</b></div>
+        <div class="t">${new Date(j.submitted_at * 1000).toLocaleString()}${j.gen_s ? ' · ' + fmt(j.gen_s) : ''}</div>`;
+      if (ok) d.onclick = () => { show(j); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+      g.appendChild(d);
+    }
+  }
+  loadHistory();
+})();
+</script>
+</body>
+</html>
