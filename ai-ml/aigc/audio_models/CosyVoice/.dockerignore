@@ -1,0 +1,9 @@
+.git
+__pycache__
+.venv
+.env*
+deployment.json
+verification.json
+outputs
+models
+*.tgz
