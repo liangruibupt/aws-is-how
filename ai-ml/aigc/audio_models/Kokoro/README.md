@@ -45,18 +45,75 @@ IMAGE_URI=<from step 1> BUCKET=<your-bucket> ./deploy.sh
 
 ## Use
 
-```bash
-./tts.sh zm_yunjian intro.mp3 "大家好，欢迎观看本次演示。"
-./tts.sh am_michael intro_en.mp3 script_en.txt          # long scripts from a file
-SPEED=1.1 ./tts.sh bm_george intro_uk.wav script_en.txt
+The function has no public HTTP endpoint; call it with IAM credentials (`lambda:InvokeFunction` on the alias).
+Always invoke the **`kokoro-tts:live` alias** — that is the SnapStart-enabled version. Invoking the bare function
+name hits `$LATEST`, which has no snapshot and cold-starts in ~50 s.
 
-# raw invoke
-aws lambda invoke --function-name kokoro-tts:live --cli-binary-format raw-in-base64-out \
-  --payload '{"text":"...","voice":"zm_yunjian","format":"mp3"}' out.json
+### Option 1: `tts.sh` (text in, audio file out on your laptop)
+
+```bash
+export AWS_PROFILE=<profile> REGION=us-east-1
+./tts.sh zm_yunjian intro.mp3 "大家好，欢迎观看本次演示。"
+./tts.sh am_michael intro_en.mp3 script_en.txt          # long scripts from a .txt file
+SPEED=1.1 ./tts.sh bm_george intro_uk.wav script_en.txt  # output format follows the file extension
 ```
 
-Event schema: `text` (or `text_s3_uri`), `voice` (default `zm_yunjian`), `speed` (1.0), `format` (`wav`|`mp3`),
-`output_key` (optional). Response: `s3_uri`, `presigned_url` (24 h), `duration_sec`, `synth_sec`.
+The script invokes the Lambda, downloads the result from S3, prints `<duration_sec> <synth_sec>` on stderr and the
+output path on stdout. Env vars: `REGION`, `FUNC` (default `kokoro-tts:live`), `SPEED`.
+
+### Option 2: AWS CLI
+
+```bash
+aws lambda invoke --region us-east-1 --function-name kokoro-tts:live \
+  --cli-binary-format raw-in-base64-out --cli-read-timeout 900 \
+  --payload '{"text":"大家好，欢迎观看本次演示。","voice":"zm_yunjian","format":"mp3"}' \
+  out.json
+
+cat out.json
+# {"s3_uri":"s3://<bucket>/tts-out/zm_yunjian-1790235000.mp3","presigned_url":"https://...","voice":"zm_yunjian","duration_sec":4.5,"synth_sec":1.9}
+
+aws s3 cp s3://<bucket>/tts-out/zm_yunjian-1790235000.mp3 .
+```
+
+`--cli-read-timeout 900` stops the CLI from dropping the connection on multi-minute scripts. The `presigned_url`
+is valid for 24 h and can be shared directly.
+
+### Option 3: Python (boto3)
+
+```python
+import json
+import boto3
+
+lam = boto3.client("lambda", region_name="us-east-1")
+resp = lam.invoke(
+    FunctionName="kokoro-tts:live",
+    Payload=json.dumps({
+        "text": "大家好，欢迎观看本次演示。",
+        "voice": "zm_yunjian",             # zm_* Chinese, am_* US English, bm_* UK English
+        "speed": 1.0,
+        "format": "mp3",                   # or "wav"
+        "output_key": "tts-out/scene1.mp3",  # optional, defaults to tts-out/<voice>-<epoch>.<fmt>
+    }),
+)
+result = json.loads(resp["Payload"].read())
+print(result["s3_uri"], result["duration_sec"], "s")
+```
+
+### Request / response
+
+Request (JSON event):
+
+| Field | Required | Default | Notes |
+|---|---|---|---|
+| `text` | one of `text` / `text_s3_uri` | | Script to synthesize; a few minutes of narration fits in one call |
+| `text_s3_uri` | | | `s3://<bucket>/tts-in/<file>.txt` for long scripts |
+| `voice` | no | `zm_yunjian` | Language is inferred from the first letter: `a` US, `b` UK, `z` Chinese |
+| `speed` | no | `1.0` | 0.8-1.2 is the usable range |
+| `format` | no | `wav` | `wav` (24 kHz) or `mp3` (LAME `-q:a 2`) |
+| `output_key` | no | `tts-out/<voice>-<epoch>.<fmt>` | Must stay under the `tts-out/` prefix the role can write to |
+
+Response: `s3_uri`, `presigned_url` (24 h), `voice`, `duration_sec` (audio length), `synth_sec` (compute time).
+Errors come back as a standard Lambda `errorMessage` payload (bad voice prefix, bad format, missing text).
 
 Then mux the audio into your screen recording:
 
