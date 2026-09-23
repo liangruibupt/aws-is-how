@@ -312,6 +312,7 @@
   - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN) and [Amazon Bedrock的实时语音解决方案](https://aws.amazon.com/cn/blogs/china/building-an-end-to-end-real-time-voice-assistant-on-amazon-bedrock/)
   - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
   - [MiniMax Speech 2.5 3秒Clone你的声音，40种语言完美还原](https://mp.weixin.qq.com/s/Jqzrj5-V70LgPaP_ionBBQ)
+  - [Kokoro-82M 开源 TTS on Lambda SnapStart — 免费男声配音生成](ai-ml/aigc/audio_models/Kokoro/README.md)
 - [Content Moderation]
   - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
    
