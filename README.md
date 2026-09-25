@@ -302,6 +302,7 @@
     - [使用Amazon Nova模型实现自动化视频高光剪辑](https://aws.amazon.com/cn/blogs/china/automated-video-highlight-clipping-using-amazon-nova-model/)
     - [story2video 生视频](https://github.com/qingyuan18/open_vibe_video.git)
     - [MiniMax H3 on g7e（RTX PRO 6000 Blackwell Server Edition）](https://github.com/whn09/minimax_h3_g7e)
+    - [MiniMax-H3 on B300（p6-b300.48xlarge，8×B300 SXM6 275 GB）](https://github.com/whn09/minimax_h3_b300)
     - [MiniMax H3 use case and prompt guide](https://vrfi1sk8a0.feishu.cn/wiki/VavPwU0XmiidWhkdGjtcbMHInKf)
     - [MiniMax H3 Enterprise Solution](https://vrfi1sk8a0.feishu.cn/wiki/DZGGwe9DaidFyQkcjg1c3hgSnbh)
   
@@ -311,6 +312,7 @@
   - [基于Amazon Bedrock 构建端到端实时语音助手](https://catalog.us-east-1.prod.workshops.aws/workshops/5a9a9de1-6dd7-43b1-ba60-fc3792d99c40/zh-CN) and [Amazon Bedrock的实时语音解决方案](https://aws.amazon.com/cn/blogs/china/building-an-end-to-end-real-time-voice-assistant-on-amazon-bedrock/)
   - [new-alexa-generative-AI](https://www.aboutamazon.com/news/devices/new-alexa-generative-artificial-intelligence)
   - [MiniMax Speech 2.5 3秒Clone你的声音，40种语言完美还原](https://mp.weixin.qq.com/s/Jqzrj5-V70LgPaP_ionBBQ)
+  - [Kokoro-82M 开源 TTS on Lambda SnapStart — 免费男声配音生成](ai-ml/aigc/audio_models/Kokoro/README.md)
 - [Content Moderation]
   - [nova-lite for video-moderation](https://aws.amazon.com/cn/blogs/china/using-amazon-nova-lite-to-implement-efficient-and-cost-effective-video-moderation/)
    
@@ -458,17 +460,21 @@
     - [本地 671B DeepSeek-Coder-V3/R1: 仅使用 14GB 显存和 382GB 内存运行其 Q4_K_M 版本](https://github.com/kvcache-ai/ktransformers/blob/main/doc/zh/DeepseekR1_V3_tutorial_zh.md)
     - [Hosting DeepSeek-R1 on Amazon EKS](https://github.com/aws-samples/deepseek-using-vllm-on-eks)
 #### China otherLLM
-  - [Baichuan on Sagemaker](ai-ml/chatgpt/baichuan/baichuan-7b-cn.ipynb)
-  - [ChatGLM on SageMaker](ai-ml/chatgpt/chatglm/sagemaker-inference-chatglm.ipynb)
-  - [ChatYuan on SageMaker](ai-ml/chatgpt/chatyuan/chatyuan_sagemaker_byos.ipynb)
+  - [Baichuan on Sagemaker](ai-ml/chatgpt/OpenWeights/baichuan/baichuan-7b-cn.ipynb)
+  - [ChatGLM on SageMaker](ai-ml/chatgpt/OpenWeights/chatglm/sagemaker-inference-chatglm.ipynb)
+  - [ChatYuan on SageMaker](ai-ml/chatgpt/OpenWeights/chatyuan/chatyuan_sagemaker_byos.ipynb)
   - []
 #### More Open-Source Model
   - [ColossalAI for LLM quick training](https://github.com/hpcaitech/ColossalAI)
   - [Gemma]
     - [Google DeepMind’s DiffusionGemma for Local AI](https://blogs.nvidia.com/blog/rtx-ai-garage-local-gemma-diffusion/) (https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/)
   - [Grok]
-    - [Grok 4.3 Example](ai-ml/chatgpt/openai/grok43_bedrock_mantle.py)
-    - [Grok 4.6 Example](ai-ml/chatgpt/openai/grok46_bedrock.py)
+    - [Grok 4.3 Example](ai-ml/chatgpt/OpenWeights/Grok/grok43_bedrock_mantle.py)
+    - [Grok 4.6 Example](ai-ml/chatgpt/OpenWeights/Grok/grok46_bedrock.py)
+  - [Kimi]
+    - [Kimi K3 on Amazon Bedrock Example](ai-ml/chatgpt/OpenWeights/Kimi/kimi_k3_bedrock.py) 
+    - [用 Kimi K3 做 Coding Assistant: 单文件登月游戏实战](ai-ml/chatgpt/OpenWeights/Kimi/kimi_k3_coding_assistant_moon_lander.md) - OpenCode/OpenAI 兼容端点接入、提示词与迭代过程、Converse API 坑、无头验证脚本
+      - [moon_lander.html 游戏本体](ai-ml/chatgpt/OpenWeights/Kimi/moon_lander.html) - 单文件无依赖，方向键控制姿态与升降，需在崎岖月面选择平坦着陆点并保持箭体直立
 #### vllm and ollma
   - [vllm_quickstart](ai-ml/chatgpt/vllm_ollama/vllm_quickstart.md)
   - [lightweight tool designed to simplify models deployment](https://github.com/aws-samples/easy-model-deployer)
@@ -527,6 +533,7 @@
 
 #### LLM based KB
 - [karpathy A pattern for building personal knowledge bases using LLMs - LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+- [WeKnora — 让文档活起来：RAG、Agent 推理与自动 Wiki 一体化的知识框架](https://github.com/Tencent/WeKnora/blob/main/README_CN.md)
 
 ### Deep Research
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
@@ -556,6 +563,9 @@
       - [Kiro 通过AWS Identity Center 认证，所以实际上是 Identity Center 和企业做 SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source-idp.html)
     - [通过ACP协议，使用api调用kiro cli - 把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
     - [Benchmarking Kiro CLI coding-agent performance and cost across multiple models, replicating the Artificial Analysis Coding Agent Index methodology](https://github.com/JoeShi/coding-agent-benchmark)
+  - [Kiro Crew](https://kiro.dev/crew/)(https://github.com/kirodotdev/kirocrew)
+    - [KiroCrew introduction](https://kiro.dev/blog/introducing-kiro-crew/)
+    - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
@@ -649,6 +659,7 @@
   - [E2B]
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
+    - [E2B 与 AgentCore Runtime API 对照：管理层与运行时调用](https://pippin.amazon.dev/docs/fdHU84jSgFH96Y/e2b-agentcore-runtime-api)
   - [Kata Container]
     - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
   - [FlexAI - Architect and deploy advanced Agentic AI platforms on Amazon EKS](https://catalog.us-east-1.prod.workshops.aws/workshops/26ab2b07-9621-4e0c-bc44-3f7fef388cb7/en-US)
@@ -766,6 +777,7 @@
   - [Quick Suite]
     - [A Complete Guide to Amazon Quick Suite - HR scenario](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
       - [规模化HR团队（SSC/HRBP/COE）Quick Desktop workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/57d4c79a-b861-4b25-b1bd-645561005bef/zh-CN)
+      - [HR 全流程 AI 实践素材包，覆盖候选人分析、岗位调研与面试准备、简历结构化与人才库分析、人才成长可视化及市场人才趋势研究五大场景](https://github.com/wanglingxiao123/HR-Quick-Workshop)
       - [Quick Flow workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/a8484e57-2e30-40ee-bd98-0122f0d05acc/en-US)
   - [Quick Desktop]
     - [quick-dingtalk-mcp](https://github.com/keithyt06/quick-dingtalk-mcp)
@@ -1259,6 +1271,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
 - [BMW automation compliance-at-scale](https://aws.amazon.com/blogs/mt/how-bmw-group-uses-automation-to-achieve-end-to-end-compliance-at-scale-on-aws/)
 - [Automated Security Response on AWS](https://aws.amazon.com/solutions/implementations/automated-security-response-on-aws/)
+- [Security For AI and AI For Security]
+  - [Security Agent Workshop](https://workshop-eval.gcr.aws.dev/events/aiforsecurity-workshop-20260918)
+    - [Security Agent Workshop 总结](security/security-agent/AWS-Security-Agent-实验总结.md)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)

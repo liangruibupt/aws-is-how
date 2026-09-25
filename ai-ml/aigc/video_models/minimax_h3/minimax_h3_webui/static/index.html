@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniMax-H3 · video + audio console</title>
+<style>
+  :root {
+    --bg: #0b0e14; --panel: #12161f; --edge: #232a38; --ink: #e7ecf3; --dim: #8b96a8;
+    --accent: #7c9cff; --ok: #3ddc97; --bad: #ff6b6b; --warn: #ffc857;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 14px/1.5 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+           padding: 14px 22px; border-bottom: 1px solid var(--edge); }
+  header h1 { margin: 0; font-size: 16px; letter-spacing: .04em; }
+  header h1 span { color: var(--dim); font-weight: 400; }
+  .health { display: flex; gap: 10px; font-size: 12px; color: var(--dim); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px;
+         background: var(--dim); }
+  .dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); }
+  main { display: grid; grid-template-columns: 420px 1fr; gap: 18px; padding: 18px 22px;
+         max-width: 1400px; margin: 0 auto; }
+  @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--edge); border-radius: 12px; padding: 16px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tabs button { flex: 1; padding: 9px 6px; border-radius: 8px; border: 1px solid var(--edge);
+                 background: transparent; color: var(--dim); cursor: pointer; font: inherit; }
+  .tabs button.active { background: #1a2130; color: var(--ink); border-color: var(--accent); }
+  .tabs button:disabled { opacity: .4; cursor: not-allowed; }
+  label { display: block; font-size: 12px; color: var(--dim); margin: 10px 0 4px; }
+  textarea, input[type=text], input[type=number], select {
+    width: 100%; background: #0d1119; color: var(--ink); border: 1px solid var(--edge);
+    border-radius: 8px; padding: 8px 10px; font: inherit; }
+  textarea { min-height: 96px; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .file { border: 1px dashed var(--edge); border-radius: 8px; padding: 10px; text-align: center;
+          color: var(--dim); cursor: pointer; position: relative; min-height: 70px;
+          display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .file img, .file video { max-height: 120px; max-width: 100%; border-radius: 6px; }
+  .file.filled { border-style: solid; border-color: var(--accent); }
+  .hint { font-size: 11px; color: var(--dim); margin-top: 4px; }
+  .primary { width: 100%; margin-top: 16px; padding: 12px; border-radius: 10px; border: 0;
+             background: var(--accent); color: #0b0e14; font: inherit; font-weight: 600;
+             cursor: pointer; }
+  .primary:disabled { opacity: .5; cursor: wait; }
+  .status { margin-top: 12px; font-size: 13px; color: var(--dim); min-height: 20px; }
+  .status.bad { color: var(--bad); } .status.ok { color: var(--ok); }
+  .bar { height: 4px; background: var(--edge); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .bar i { display: block; height: 100%; width: 30%; background: var(--accent);
+           animation: slide 1.2s infinite ease-in-out; }
+  @keyframes slide { 0% { margin-left: -30%; } 100% { margin-left: 100%; } }
+  .player { background: #000; border-radius: 10px; overflow: hidden; min-height: 300px;
+            display: flex; align-items: center; justify-content: center; color: var(--dim); }
+  video.main { width: 100%; max-height: 62vh; display: block; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; font-size: 12px;
+          color: var(--dim); }
+  .meta b { color: var(--ink); font-weight: 500; }
+  .actions { display: flex; gap: 8px; margin-top: 10px; }
+  .actions a, .actions button { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--edge);
+                                background: transparent; color: var(--ink); text-decoration: none;
+                                font: inherit; cursor: pointer; font-size: 13px; }
+  h2 { font-size: 13px; color: var(--dim); margin: 18px 0 8px; text-transform: uppercase;
+       letter-spacing: .08em; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .thumb { background: #0d1119; border: 1px solid var(--edge); border-radius: 8px; padding: 8px;
+           cursor: pointer; }
+  .thumb:hover { border-color: var(--accent); }
+  .thumb video { width: 100%; border-radius: 6px; background: #000; }
+  .thumb .t { font-size: 11px; color: var(--dim); margin-top: 6px; white-space: nowrap;
+              overflow: hidden; text-overflow: ellipsis; }
+  .thumb .t b { color: var(--ink); font-weight: 500; }
+  .pill { display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 10px;
+          background: #1a2130; color: var(--accent); margin-right: 4px; }
+  details { margin-top: 12px; color: var(--dim); font-size: 12px; }
+  summary { cursor: pointer; color: var(--ink); }
+  code { background: #0d1119; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>MiniMax-H3 <span>· 33B joint video + audio generation on g7e</span></h1>
+  <div class="health" id="health">
+    <span><i class="dot" id="h-fl2va"></i>FL2VA server (t2va + fl2va)</span>
+    <span><i class="dot" id="h-ref2va"></i>Ref2VA server (ref2va)</span>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button data-task="t2va" class="active" title="Text to video+audio">Text → Video</button>
+      <button data-task="fl2va" title="First/last frame image to video+audio">Image → Video</button>
+      <button data-task="ref2va" title="Reference image/video/audio to video+audio">Reference → Video</button>
+    </div>
+
+    <form id="form">
+      <label>Prompt</label>
+      <textarea id="prompt" placeholder="Describe the scene, motion, camera and sound…">A golden retriever puppy runs through a sunlit meadow toward the camera, ears flapping, birds chirping and grass rustling in the breeze. Shallow depth of field, warm afternoon light.</textarea>
+
+      <div id="cond-fl2va" class="cond" hidden>
+        <div class="row">
+          <div><label>First frame image</label>
+            <div class="file" id="f-first"><input type="file" name="first_image" accept="image/*"><span>Click or drop an image</span></div></div>
+          <div><label>Last frame image <span style="opacity:.6">(optional)</span></label>
+            <div class="file" id="f-last"><input type="file" name="last_image" accept="image/*"><span>Click or drop an image</span></div></div>
+        </div>
+        <div class="hint">The output starts on the first frame (and ends on the last frame if given). The prompt drives motion and sound.</div>
+      </div>
+
+      <div id="cond-ref2va" class="cond" hidden>
+        <div class="row3">
+          <div><label>Reference image</label>
+            <div class="file" id="f-refimg"><input type="file" name="ref_image" accept="image/*"><span>Subject image</span></div></div>
+          <div><label>Reference video</label>
+            <div class="file" id="f-refvid"><input type="file" name="ref_video" accept="video/*"><span>Style / motion clip</span></div></div>
+          <div><label>Reference audio</label>
+            <div class="file" id="f-refaud"><input type="file" name="ref_audio" accept="audio/*"><span>Soundtrack</span></div></div>
+        </div>
+        <div class="hint">Give at least one. With only a video/audio reference, the clip duration follows the reference and the duration field is ignored.</div>
+      </div>
+
+      <div class="row3">
+        <div><label>Resolution (short edge)</label>
+          <select id="short_edge"><option value="480">480p — fast (~30 s)</option><option value="768">768p — best (~2 min)</option></select></div>
+        <div><label>Aspect ratio</label>
+          <select id="aspect_ratio"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option><option>3:4</option><option>21:9</option></select></div>
+        <div><label>Duration (s, 4–15)</label>
+          <input type="number" id="duration" value="5" min="4" max="15" step="1"></div>
+      </div>
+      <div class="row3">
+        <div><label>Steps</label><input type="number" id="steps" value="20" min="4" max="50"></div>
+        <div><label>Seed (-1 = random)</label><input type="number" id="seed" value="-1"></div>
+        <div><label>Flow shift</label><input type="number" id="flow_shift" value="12" step="0.5"></div>
+      </div>
+      <details><summary>Advanced</summary>
+        <label>Audio flow shift</label><input type="number" id="audio_flow_shift" value="3" step="0.5">
+        <p>Longer clips and 768p grow super-linearly in time (attention is O(n²) in tokens). 30 steps improves quality ~1.5× cost. Same seed + same inputs reproduce bit-identically on one GPU.</p>
+      </details>
+
+      <button class="primary" id="go" type="submit">Generate</button>
+      <div class="status" id="status"></div>
+      <div class="bar" id="bar" hidden><i></i></div>
+    </form>
+  </section>
+
+  <section>
+    <div class="card">
+      <div class="player" id="player">Generated video will play here (with audio).</div>
+      <div class="meta" id="meta"></div>
+      <div class="actions" id="actions" hidden>
+        <a id="dl" download>Download mp4</a>
+        <button id="reuse" type="button">Reuse these settings</button>
+      </div>
+    </div>
+    <h2>History</h2>
+    <div class="grid" id="history"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s) => document.querySelector(s);
+  let task = 't2va';
+  let currentJob = null;
+  let pollTimer = null;
+
+  // ---- health ------------------------------------------------------------
+  async function health() {
+    try {
+      const h = await (await fetch('/api/health')).json();
+      for (const k of ['fl2va', 'ref2va']) {
+        const d = $('#h-' + k); d.className = 'dot ' + (h[k]?.ok ? 'ok' : 'bad');
+      }
+      $('[data-task=ref2va]').disabled = !h.ref2va?.ok;
+      $('[data-task=t2va]').disabled = $('[data-task=fl2va]').disabled = !h.fl2va?.ok;
+    } catch {}
+  }
+  health(); setInterval(health, 15000);
+
+  // ---- tabs --------------------------------------------------------------
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+    task = b.dataset.task;
+    document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
+    document.querySelectorAll('.cond').forEach(c => c.hidden = c.id !== 'cond-' + task);
+  }));
+
+  // ---- file pickers with preview ----------------------------------------
+  document.querySelectorAll('.file').forEach(box => {
+    const input = box.querySelector('input');
+    const show = () => {
+      const f = input.files[0];
+      box.classList.toggle('filled', !!f);
+      const old = box.querySelector('img,video,audio'); old && old.remove();
+      const span = box.querySelector('span');
+      if (!f) { span.hidden = false; return; }
+      span.hidden = true;
+      const url = URL.createObjectURL(f);
+      let el;
+      if (f.type.startsWith('image/')) { el = document.createElement('img'); }
+      else if (f.type.startsWith('video/')) { el = document.createElement('video'); el.muted = true; el.loop = true; el.autoplay = true; }
+      else { el = document.createElement('audio'); el.controls = true; el.style.width = '100%'; }
+      el.src = url; box.appendChild(el);
+    };
+    input.addEventListener('change', show);
+    box.addEventListener('dragover', e => { e.preventDefault(); box.style.borderColor = 'var(--accent)'; });
+    box.addEventListener('dragleave', () => box.style.borderColor = '');
+    box.addEventListener('drop', e => { e.preventDefault(); input.files = e.dataTransfer.files; show(); });
+  });
+
+  // ---- submit ------------------------------------------------------------
+  const fmt = (s) => s < 60 ? s.toFixed(0) + ' s' : Math.floor(s / 60) + ' m ' + (s % 60).toFixed(0) + ' s';
+
+  $('#form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData();
+    fd.append('task', task);
+    fd.append('prompt', $('#prompt').value);
+    for (const id of ['short_edge', 'aspect_ratio', 'duration', 'steps', 'seed', 'flow_shift', 'audio_flow_shift'])
+      fd.append(id, $('#' + id).value);
+    const condBox = $('#cond-' + task);
+    if (condBox) for (const inp of condBox.querySelectorAll('input[type=file]'))
+      if (inp.files[0]) fd.append(inp.name, inp.files[0]);
+
+    setBusy(true, 'Uploading and queuing…');
+    try {
+      const r = await fetch('/api/generate', { method: 'POST', body: fd });
+      if (!r.ok) throw new Error((await r.text()).slice(0, 600));
+      currentJob = await r.json();
+      poll();
+    } catch (err) {
+      setBusy(false, 'Error: ' + err.message, 'bad');
+    }
+  });
+
+  function setBusy(on, msg, cls) {
+    $('#go').disabled = on; $('#bar').hidden = !on;
+    const s = $('#status'); s.textContent = msg || ''; s.className = 'status ' + (cls || '');
+  }
+
+  async function poll() {
+    clearTimeout(pollTimer);
+    const j = await (await fetch('/api/jobs/' + currentJob.job_id)).json();
+    if (j.status === 'completed') {
+      setBusy(false, `Done in ${fmt(j.wall_s)}`, 'ok'); showJob(j); loadHistory();
+    } else if (j.status === 'failed') {
+      setBusy(false, 'Failed: ' + JSON.stringify(j.error).slice(0, 600), 'bad'); loadHistory();
+    } else {
+      const el = (Date.now() / 1000) - j.submitted_at;
+      const est = j.params.short_edge == 768 ? 115 : 32;
+      const scale = (j.params.steps / 20) * Math.pow(j.params.duration / 5, 1.4) * (j.task === 'ref2va' ? 1.15 : 1);
+      setBusy(true, `${j.status}… ${fmt(el)} elapsed (typical ≈ ${fmt(est * scale)})`);
+      pollTimer = setTimeout(poll, 1500);
+    }
+  }
+
+  // ---- player ------------------------------------------------------------
+  function showJob(j) {
+    const p = $('#player'); p.innerHTML = '';
+    const v = document.createElement('video');
+    v.className = 'main'; v.controls = true; v.autoplay = true; v.src = `/api/jobs/${j.job_id}/video`;
+    p.appendChild(v);
+    const pr = j.params;
+    $('#meta').innerHTML = [
+      ['task', j.task], ['short edge', pr.short_edge + 'p'], ['aspect', pr.aspect_ratio],
+      ['duration', pr.duration + ' s'], ['steps', pr.steps], ['seed', pr.seed],
+      ['wall', j.wall_s ? fmt(j.wall_s) : '—'],
+      ['prompt', j.prompt],
+    ].map(([k, val]) => `<span>${k}: <b>${String(val).replace(/</g, '&lt;')}</b></span>`).join('');
+    $('#actions').hidden = false;
+    $('#dl').href = `/api/jobs/${j.job_id}/video`; $('#dl').download = `h3_${j.task}_${pr.short_edge}p_${j.job_id}.mp4`;
+    $('#reuse').onclick = () => {
+      $('#prompt').value = j.prompt;
+      for (const k of ['short_edge', 'aspect_ratio', 'duration', 'steps', 'seed', 'flow_shift', 'audio_flow_shift'])
+        if (pr[k] !== undefined) $('#' + k).value = pr[k];
+      document.querySelector(`[data-task=${j.task}]`).click();
+    };
+  }
+
+  // ---- history -----------------------------------------------------------
+  async function loadHistory() {
+    const jobs = await (await fetch('/api/history')).json();
+    const g = $('#history'); g.innerHTML = '';
+    for (const j of jobs) {
+      const d = document.createElement('div'); d.className = 'thumb';
+      const ok = j.status === 'completed';
+      d.innerHTML = `${ok ? `<video src="/api/jobs/${j.job_id}/video#t=0.5" preload="metadata" muted></video>` : ''}
+        <div class="t"><span class="pill">${j.task}</span><span class="pill">${j.params.short_edge}p</span>
+        <span class="pill" style="color:${ok ? 'var(--ok)' : j.status === 'failed' ? 'var(--bad)' : 'var(--warn)'}">${j.status}</span></div>
+        <div class="t" title="${j.prompt.replace(/"/g, '&quot;')}"><b>${j.prompt.replace(/</g, '&lt;')}</b></div>
+        <div class="t">${new Date(j.submitted_at * 1000).toLocaleString()}${j.wall_s ? ' · ' + fmt(j.wall_s) : ''}</div>`;
+      if (ok) d.addEventListener('click', () => { showJob(j); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      g.appendChild(d);
+    }
+  }
+  loadHistory();
+})();
+</script>
+</body>
+</html>

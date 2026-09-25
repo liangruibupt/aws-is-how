@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lunar Lander — land the rocket upright</title>
+<style>
+  :root {
+    --ink: #e8ecf4;
+    --dim: #93a1b8;
+    --ok: #4ade80;
+    --bad: #f87171;
+    --warn: #fbbf24;
+    --panel: rgba(12, 18, 32, 0.82);
+    --edge: rgba(148, 178, 220, 0.28);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #05070d;
+    color: var(--ink);
+    font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-weight: 600;
+  }
+  #stage {
+    position: relative;
+    width: min(100%, 960px);
+    aspect-ratio: 960 / 600;
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 1px solid var(--edge);
+    border-radius: 10px;
+    background: #05070d;
+    touch-action: none;
+  }
+  canvas:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 3px; }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    pointer-events: none;
+  }
+  .card {
+    max-width: 30em;
+    padding: 18px 22px;
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(3px);
+  }
+  .card h2 { margin: 0 0 8px; font-size: 18px; }
+  .card p { margin: 6px 0; color: var(--dim); }
+  .card[hidden] { display: none; }
+  .verdict-ok h2 { color: var(--ok); }
+  .verdict-bad h2 { color: var(--bad); }
+
+  #hud {
+    width: min(100%, 960px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 8px;
+  }
+  .gauge {
+    padding: 8px 10px;
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    border-radius: 8px;
+  }
+  .gauge dt {
+    margin: 0 0 2px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .gauge dd { margin: 0; font-size: 17px; font-variant-numeric: tabular-nums; }
+  .is-ok { color: var(--ok); }
+  .is-bad { color: var(--bad); }
+  .is-warn { color: var(--warn); }
+
+  #controls {
+    width: min(100%, 960px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+  button {
+    font: inherit;
+    color: var(--ink);
+    background: #16203a;
+    border: 1px solid var(--edge);
+    border-radius: 8px;
+    padding: 9px 14px;
+    cursor: pointer;
+    min-width: 48px;
+    min-height: 44px;
+  }
+  button:hover { background: #1e2b4d; }
+  button:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 2px; }
+  button[aria-pressed="true"] { background: #2b3f70; border-color: #7dd3fc; }
+  .pad {
+    display: grid;
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(3, auto);
+    gap: 6px;
+  }
+  /* Explicit placement, otherwise auto-flow puts Left beside Up. */
+  .pad [data-key="ArrowUp"] { grid-area: 1 / 2; }
+  .pad [data-key="ArrowLeft"] { grid-area: 2 / 1; }
+  .pad [data-key="ArrowDown"] { grid-area: 2 / 2; }
+  .pad [data-key="ArrowRight"] { grid-area: 2 / 3; }
+  .pad [data-key="RotLeft"] { grid-area: 3 / 1; }
+  .pad [data-key="RotRight"] { grid-area: 3 / 3; }
+
+  details {
+    width: min(100%, 960px);
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    border-radius: 8px;
+    color: var(--dim);
+  }
+  summary { cursor: pointer; color: var(--ink); }
+  details ul { margin: 8px 0 0; padding-left: 1.3em; }
+  kbd {
+    padding: 1px 5px;
+    border: 1px solid var(--edge);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    canvas { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lunar Lander</h1>
+
+<div id="stage">
+  <canvas id="game" width="960" height="600" tabindex="0"
+          aria-label="Lunar lander game. Arrow keys move the rocket left, right, up and down; Shift plus left or right rotates it. Land upright on flat ground."></canvas>
+  <div class="overlay">
+    <div class="card" id="message" hidden></div>
+  </div>
+</div>
+
+<dl id="hud">
+  <div class="gauge"><dt>Altitude</dt><dd id="g-alt">—</dd></div>
+  <div class="gauge"><dt>Descent</dt><dd id="g-vy">—</dd></div>
+  <div class="gauge"><dt>Drift</dt><dd id="g-vx">—</dd></div>
+  <div class="gauge"><dt>Tilt</dt><dd id="g-tilt">—</dd></div>
+  <div class="gauge"><dt>Ground slope</dt><dd id="g-slope">—</dd></div>
+  <div class="gauge"><dt>Fuel</dt><dd id="g-fuel">—</dd></div>
+</dl>
+
+<div id="controls">
+  <div class="pad" role="group" aria-label="Touch controls">
+    <button type="button" data-key="ArrowUp" aria-label="Main engine (ascend)">▲</button>
+    <button type="button" data-key="ArrowLeft" aria-label="Move left">◀</button>
+    <button type="button" data-key="ArrowDown" aria-label="Descent thruster">▼</button>
+    <button type="button" data-key="ArrowRight" aria-label="Move right">▶</button>
+    <button type="button" data-key="RotLeft" aria-label="Rotate left (attitude)">↺</button>
+    <button type="button" data-key="RotRight" aria-label="Rotate right (attitude)">↻</button>
+  </div>
+  <button type="button" id="btn-restart">Restart <kbd>R</kbd></button>
+  <button type="button" id="btn-terrain">New terrain <kbd>N</kbd></button>
+  <button type="button" id="btn-pause" aria-pressed="false">Pause <kbd>P</kbd></button>
+</div>
+
+<details>
+  <summary>How to land (and how it is scored)</summary>
+  <ul>
+    <li><kbd>←</kbd> <kbd>→</kbd> fire the side thrusters to move left/right. <kbd>Shift</kbd>+<kbd>←</kbd>/<kbd>→</kbd> adjust attitude (rotate the rocket). <kbd>↑</kbd> fires the main engine to climb, <kbd>↓</kbd> fires the descent thruster to drop faster. All burn fuel.</li>
+    <li>The surface is rugged. Find a flat spot: touching down on a slope steeper than <strong>10°</strong> topples the rocket.</li>
+    <li>A landing counts only if the rocket stays <strong>upright</strong>: tilt under <strong>10°</strong>, descent under <strong>25&nbsp;px/s</strong>, drift under <strong>12&nbsp;px/s</strong>.</li>
+    <li>Touch down harder than that and it crashes; land tilted or on a slope and it tips over — both are failures.</li>
+    <li>Gauges turn <span class="is-ok">green</span> when a value is inside the landing limit, <span class="is-bad">red</span> when it is not. Ground slope appears below 150&nbsp;px altitude.</li>
+  </ul>
+</details>
+
+<p class="sr-only" id="live" role="status" aria-live="polite"></p>
+
+<script>
+(() => {
+  'use strict';
+
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+
+  // ---- tunables ------------------------------------------------------------
+  const GRAVITY = 26;          // px/s^2 downward (scaled "lunar" feel)
+  const MAIN_THRUST = 62;      // px/s^2 along the rocket's own axis
+  const DESCENT_THRUST = 20;   // px/s^2 straight down (world space)
+  const TORQUE = 2.4;          // rad/s^2 from Shift + left/right keys
+  const LATERAL_THRUST = 34;   // px/s^2 sideways from the left/right keys
+  const SPIN_DAMP = 0.94;      // per-second angular damping factor
+  const FUEL_MAIN = 11;        // fuel units per second, main engine
+  const FUEL_RCS = 4;          // fuel units per second, rotation / descent
+  const FUEL_START = 100;
+
+  // Landing limits — mirrored in the instructions above.
+  const MAX_TILT = 10 * Math.PI / 180;
+  const MAX_SLOPE = 10 * Math.PI / 180;
+  const MAX_VY = 25;
+  const MAX_VX = 12;
+
+  const BODY_W = 13;           // half-width of the hull
+  const BODY_H = 21;           // half-height of the hull
+  const LEG_SPAN = 16;         // half-distance between the two footpads
+
+  // ---- terrain -------------------------------------------------------------
+  const STEP = 8;                       // px between height samples
+  const COLS = Math.floor(W / STEP) + 1;
+  let heights = new Float32Array(COLS);
+  let seed = (Math.random() * 1e9) | 0;
+
+  // Small deterministic PRNG so a seed reproduces a surface exactly.
+  function makeRng(s) {
+    let state = s >>> 0 || 1;
+    return () => {
+      state ^= state << 13; state >>>= 0;
+      state ^= state >> 17;
+      state ^= state << 5;  state >>>= 0;
+      return state / 4294967296;
+    };
+  }
+
+  function buildTerrain(s) {
+    const rng = makeRng(s);
+    const base = H * 0.78;
+    // Layered sine ridges with random phases: cheap, reliably rugged.
+    const waves = [
+      { amp: 52, len: 620 }, { amp: 30, len: 250 },
+      { amp: 15, len: 110 }, { amp: 7,  len: 47 },
+    ].map(w => ({ ...w, phase: rng() * Math.PI * 2 }));
+
+    for (let i = 0; i < COLS; i++) {
+      const x = i * STEP;
+      let y = base;
+      for (const w of waves) y += Math.sin(x / w.len * Math.PI * 2 + w.phase) * w.amp;
+      heights[i] = y;
+    }
+
+    // Carve 3 flat pads so a clean landing is always possible. They are not
+    // marked on screen — reading the surface is part of the game.
+    const pads = 3;
+    for (let p = 0; p < pads; p++) {
+      const width = 7 + Math.floor(rng() * 5);                 // 56..96 px
+      const start = 3 + Math.floor(rng() * (COLS - width - 6));
+      const level = heights[start];
+      for (let i = start; i < start + width; i++) heights[i] = level;
+      // Feather the pad edges so plateaus do not look pasted on.
+      if (start > 0) heights[start - 1] = (heights[start - 1] + level) / 2;
+      const end = start + width;
+      if (end < COLS) heights[end] = (heights[end] + level) / 2;
+    }
+
+    for (let i = 0; i < COLS; i++) {
+      heights[i] = Math.max(H * 0.42, Math.min(H - 12, heights[i]));
+    }
+  }
+
+  function groundAt(x) {
+    const clamped = Math.max(0, Math.min(W - 0.001, x));
+    const i = Math.floor(clamped / STEP);
+    const t = (clamped - i * STEP) / STEP;
+    const a = heights[i];
+    const b = heights[Math.min(COLS - 1, i + 1)];
+    return a + (b - a) * t;
+  }
+
+  // ---- stars (static backdrop) --------------------------------------------
+  const stars = Array.from({ length: 90 }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H * 0.62,
+    r: Math.random() * 1.2 + 0.3,
+    a: Math.random() * 0.5 + 0.35,
+  }));
+
+  // ---- state ---------------------------------------------------------------
+  const keys = new Set();
+  let rocket, particles, phase, verdict, paused, elapsed;
+
+  function reset(newTerrain) {
+    if (newTerrain) { seed = (Math.random() * 1e9) | 0; }
+    buildTerrain(seed);
+    rocket = {
+      x: W * (0.16 + Math.random() * 0.18),
+      y: 70,
+      vx: 10 + Math.random() * 16,
+      vy: 4,
+      angle: (Math.random() - 0.5) * 0.28,   // 0 = upright, + = nose right
+      spin: 0,
+      fuel: FUEL_START,
+      pivot: null,                            // set while toppling
+    };
+    particles = [];
+    phase = 'flying';                         // flying | toppling | done
+    verdict = null;
+    paused = false;
+    elapsed = 0;
+    showMessage(null);
+    setPressed('btn-pause', false);
+    announce('New flight. Altitude ' + Math.round(groundAt(rocket.x) - rocket.y) + ' pixels.');
+  }
+
+  // ---- geometry ------------------------------------------------------------
+  // Footpad positions in world space for a given rocket pose.
+  function feet(r) {
+    const s = Math.sin(r.angle), c = Math.cos(r.angle);
+    const pt = (lx, ly) => ({ x: r.x + lx * c - ly * s, y: r.y + lx * s + ly * c });
+    return [pt(-LEG_SPAN, BODY_H), pt(LEG_SPAN, BODY_H)];
+  }
+
+  function hullPoints(r) {
+    const s = Math.sin(r.angle), c = Math.cos(r.angle);
+    const pt = (lx, ly) => ({ x: r.x + lx * c - ly * s, y: r.y + lx * s + ly * c });
+    // The hull bottom sits ABOVE the footpads (BODY_H - 6 vs BODY_H) so the
+    // legs always make contact first. Without that clearance a hull strike and
+    // a leg touchdown land on the same frame and every tilted landing reads as
+    // a crash instead of a tip-over.
+    const floor = BODY_H - 6;
+    return [pt(-BODY_W, -BODY_H - 10), pt(BODY_W, -BODY_H - 10), pt(BODY_W, floor), pt(-BODY_W, floor)];
+  }
+
+  function altitude(r) {
+    return Math.min(...feet(r).map(f => groundAt(f.x) - f.y));
+  }
+
+  // Terrain slope across the footprint, which is what decides a tip-over.
+  function slopeUnder(r) {
+    const gl = groundAt(r.x - LEG_SPAN);
+    const gr = groundAt(r.x + LEG_SPAN);
+    return Math.atan2(gr - gl, LEG_SPAN * 2);
+  }
+
+  // ---- simulation ----------------------------------------------------------
+  function update(dt) {
+    if (phase === 'done') { updateParticles(dt); return; }
+    elapsed += dt;
+    const r = rocket;
+
+    if (phase === 'flying') {
+      const wantMain = keys.has('ArrowUp') && r.fuel > 0;
+      const wantDown = keys.has('ArrowDown') && r.fuel > 0;
+      const attitudeMode = keys.has('Shift');   // Shift + left/right rotates
+      // Rotation is requested by Shift+arrow (keyboard) or the rotate pad buttons.
+      const wantRotLeft = ((attitudeMode && keys.has('ArrowLeft')) || keys.has('RotLeft')) && r.fuel > 0;
+      const wantRotRight = ((attitudeMode && keys.has('ArrowRight')) || keys.has('RotRight')) && r.fuel > 0;
+      // Lateral translation: plain left/right arrows (no Shift).
+      const wantLeft = !attitudeMode && keys.has('ArrowLeft') && r.fuel > 0;
+      const wantRight = !attitudeMode && keys.has('ArrowRight') && r.fuel > 0;
+
+      // Attitude control: rotate the rocket about its own centre.
+      if (wantRotLeft) { r.spin -= TORQUE * dt; r.fuel -= FUEL_RCS * dt; }
+      if (wantRotRight) { r.spin += TORQUE * dt; r.fuel -= FUEL_RCS * dt; }
+      r.spin *= Math.pow(SPIN_DAMP, dt * 60 / 60);
+      r.angle += r.spin * dt;
+
+      // Main engine pushes along the hull axis, so attitude steers the thrust.
+      r.vy += GRAVITY * dt;
+      if (wantMain) {
+        r.vx += Math.sin(r.angle) * MAIN_THRUST * dt;
+        r.vy -= Math.cos(r.angle) * MAIN_THRUST * dt;
+        r.fuel -= FUEL_MAIN * dt;
+        spawnExhaust(r);
+      }
+      // Lateral thrusters: move the rocket left/right in world space.
+      if (wantLeft) { r.vx -= LATERAL_THRUST * dt; r.fuel -= FUEL_RCS * dt; spawnRcs(r, 1); }
+      if (wantRight) { r.vx += LATERAL_THRUST * dt; r.fuel -= FUEL_RCS * dt; spawnRcs(r, -1); }
+      if (wantDown) {
+        r.vy += DESCENT_THRUST * dt;
+        r.fuel -= FUEL_RCS * dt;
+      }
+      r.fuel = Math.max(0, r.fuel);
+
+      r.x += r.vx * dt;
+      r.y += r.vy * dt;
+
+      // Walls: bleed off horizontal speed instead of teleporting.
+      if (r.x < BODY_W) { r.x = BODY_W; r.vx = Math.abs(r.vx) * 0.4; }
+      if (r.x > W - BODY_W) { r.x = W - BODY_W; r.vx = -Math.abs(r.vx) * 0.4; }
+      if (r.y < -60) { r.y = -60; r.vy = Math.max(r.vy, 0); }
+
+      checkContact();
+    } else if (phase === 'toppling') {
+      // Rotate about the planted footpad until the hull hits the ground.
+      r.spin += Math.sign(r.spin || 1) * 3.2 * dt;
+      r.angle += r.spin * dt;
+      const pad = feet(r)[r.pivot];
+      const target = { x: pad.x, y: groundAt(pad.x) };
+      r.x += target.x - pad.x;
+      r.y += target.y - pad.y;
+      if (Math.abs(r.angle) > 1.05) {            // ~60 degrees: it is over
+        finish(false, 'The rocket toppled over.',
+               'It came to rest on its side — the surface was too steep or the hull was tilted at touchdown.');
+        burst(r.x, r.y, 26);
+      }
+    }
+    updateParticles(dt);
+  }
+
+  function checkContact() {
+    const r = rocket;
+    const pads = feet(r);
+    const touching = pads.map(p => p.y >= groundAt(p.x) - 0.5);
+    const legDown = touching[0] || touching[1];
+    const hullDown = hullPoints(r).some(p => p.y >= groundAt(p.x));
+
+    if (!legDown && !hullDown) return;
+
+    const speedVy = r.vy;
+    const speedVx = Math.abs(r.vx);
+    const tilt = Math.abs(normalizeAngle(r.angle));
+    const slope = Math.abs(slopeUnder(r));
+
+    // Hull reached the surface while neither leg did: nose-in or belly flop.
+    if (!legDown) {
+      settleOnGround(r);
+      finish(false, 'Crashed into the surface.',
+             'The hull struck the ground before the landing legs. Come down flatter and slower.');
+      burst(r.x, r.y, 34);
+      return;
+    }
+    if (speedVy > MAX_VY * 2.4 || speedVx > MAX_VX * 2.4) {
+      settleOnGround(r);
+      finish(false, 'Crashed on impact.',
+             `Touchdown at ${speedVy.toFixed(0)} px/s descent and ${speedVx.toFixed(0)} px/s drift — far above the limits.`);
+      burst(r.x, r.y, 34);
+      return;
+    }
+
+    // Survivable contact. Does it stay upright?
+    const tiltBad = tilt > MAX_TILT;
+    const slopeBad = slope > MAX_SLOPE;
+    const hardBad = speedVy > MAX_VY || speedVx > MAX_VX;
+
+    if (tiltBad || slopeBad) {
+      // Plant the lower footpad and let it tip: that is a failed landing.
+      settleOnGround(r);
+      const planted = feet(r);   // recompute: settleOnGround moved the hull
+      r.pivot = planted[0].y - groundAt(planted[0].x) > planted[1].y - groundAt(planted[1].x) ? 0 : 1;
+      const dir = slopeBad ? Math.sign(slopeUnder(r)) : Math.sign(normalizeAngle(r.angle));
+      r.spin = (dir || 1) * 1.2;
+      r.vx = r.vy = 0;
+      phase = 'toppling';
+      announce('Touchdown unstable — the rocket is tipping over.');
+      return;
+    }
+    if (hardBad) {
+      settleOnGround(r);
+      finish(false, 'Landing legs collapsed.',
+             `Descent ${speedVy.toFixed(0)} px/s, drift ${speedVx.toFixed(0)} px/s. Stay under ${MAX_VY} and ${MAX_VX} px/s.`);
+      burst(r.x, r.y, 20);
+      return;
+    }
+
+    // Clean landing: flat ground, upright hull, gentle contact.
+    settleOnGround(r);
+    r.angle = slopeUnder(r);
+    r.vx = r.vy = r.spin = 0;
+    const score = Math.round(r.fuel * 6 + Math.max(0, (MAX_VY - speedVy)) * 14 + Math.max(0, 40 - elapsed) * 3);
+    finish(true, 'Touchdown — the rocket is upright.',
+           `Descent ${speedVy.toFixed(1)} px/s, drift ${speedVx.toFixed(1)} px/s, tilt ${(tilt * 180 / Math.PI).toFixed(1)}°, `
+           + `fuel left ${r.fuel.toFixed(0)}. Score ${score}.`);
+  }
+
+  // Drop the rocket so its lowest footpad rests exactly on the surface.
+  function settleOnGround(r) {
+    const pads = feet(r);
+    const sink = Math.max(...pads.map(p => p.y - groundAt(p.x)));
+    if (sink > 0) r.y -= sink;
+  }
+
+  function normalizeAngle(a) {
+    let x = (a + Math.PI) % (Math.PI * 2);
+    if (x < 0) x += Math.PI * 2;
+    return x - Math.PI;
+  }
+
+  function finish(ok, title, detail) {
+    phase = 'done';
+    verdict = { ok, title, detail };
+    showMessage(verdict);
+    announce((ok ? 'Success. ' : 'Failed. ') + title + ' ' + detail + ' Press R to fly again.');
+  }
+
+  // ---- particles -----------------------------------------------------------
+  function spawnExhaust(r) {
+    const s = Math.sin(r.angle), c = Math.cos(r.angle);
+    const nozzle = { x: r.x + s * BODY_H, y: r.y + c * BODY_H };
+    for (let i = 0; i < 2; i++) {
+      particles.push({
+        x: nozzle.x + (Math.random() - 0.5) * 5,
+        y: nozzle.y + (Math.random() - 0.5) * 5,
+        vx: s * 70 + (Math.random() - 0.5) * 26 + rocket.vx * 0.3,
+        vy: c * 70 + (Math.random() - 0.5) * 26 + rocket.vy * 0.3,
+        life: 0.34 + Math.random() * 0.22,
+        age: 0,
+        hue: 28 + Math.random() * 26,
+      });
+    }
+  }
+
+  // Side thruster puff: dir = +1 means gas vents to the rocket's right
+  // (pushing it left), dir = -1 vents left (pushing it right).
+  function spawnRcs(r, dir) {
+    const s = Math.sin(r.angle), c = Math.cos(r.angle);
+    // Vent port near the top of the hull, offset to the venting side.
+    const ox = dir * BODY_W, oy = -BODY_H * 0.4;
+    const port = { x: r.x + ox * c - oy * s, y: r.y + ox * s + oy * c };
+    // Gas jets outward along the hull's local x axis (perpendicular to thrust).
+    const jx = dir * c, jy = dir * s;
+    for (let i = 0; i < 2; i++) {
+      particles.push({
+        x: port.x,
+        y: port.y,
+        vx: jx * 55 + (Math.random() - 0.5) * 20 + r.vx * 0.3,
+        vy: jy * 55 + (Math.random() - 0.5) * 20 + r.vy * 0.3,
+        life: 0.22 + Math.random() * 0.14,
+        age: 0,
+        hue: 200 + Math.random() * 20,
+      });
+    }
+  }
+
+  function burst(x, y, n) {    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 40 + Math.random() * 150;
+      particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp - 20,
+        life: 0.6 + Math.random() * 0.7,
+        age: 0,
+        hue: 12 + Math.random() * 40,
+      });
+    }
+  }
+
+  function updateParticles(dt) {
+    for (const p of particles) {
+      p.age += dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += GRAVITY * 0.55 * dt;
+    }
+    particles = particles.filter(p => p.age < p.life);
+  }
+
+  // ---- rendering -----------------------------------------------------------
+  function draw() {
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#04060c');
+    sky.addColorStop(1, '#0b1226');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    for (const s of stars) {
+      ctx.globalAlpha = s.a;
+      ctx.fillStyle = '#dbeafe';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // Earth, for scale and a bit of flavour.
+    ctx.save();
+    ctx.globalAlpha = 0.9;
+    const earth = ctx.createRadialGradient(W - 128, 96, 6, W - 128, 96, 34);
+    earth.addColorStop(0, '#7dd3fc');
+    earth.addColorStop(0.6, '#2563eb');
+    earth.addColorStop(1, '#0b2a6b');
+    ctx.fillStyle = earth;
+    ctx.beginPath();
+    ctx.arc(W - 128, 96, 26, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    drawTerrain();
+    drawParticles();
+    drawRocket(rocket);
+    drawTelemetryOverlay();
+  }
+
+  function drawTerrain() {
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for (let i = 0; i < COLS; i++) ctx.lineTo(i * STEP, heights[i]);
+    ctx.lineTo(W, H);
+    ctx.closePath();
+    const rock = ctx.createLinearGradient(0, H * 0.4, 0, H);
+    rock.addColorStop(0, '#39425c');
+    rock.addColorStop(1, '#141a2b');
+    ctx.fillStyle = rock;
+    ctx.fill();
+
+    ctx.beginPath();
+    for (let i = 0; i < COLS; i++) {
+      const x = i * STEP, y = heights[i];
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.strokeStyle = '#9fb3d9';
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Highlight the flat stretches the rocket is currently over — only close
+    // in, so choosing a site from altitude still takes judgement.
+    if (phase === 'flying' && altitude(rocket) < 150) {
+      for (let i = 1; i < COLS; i++) {
+        const x = i * STEP;
+        if (Math.abs(x - rocket.x) > 90) continue;
+        if (Math.abs(heights[i] - heights[i - 1]) / STEP > Math.tan(MAX_SLOPE)) continue;
+        ctx.strokeStyle = 'rgba(74, 222, 128, 0.75)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x - STEP, heights[i - 1]);
+        ctx.lineTo(x, heights[i]);
+        ctx.stroke();
+      }
+    }
+  }
+
+  function drawParticles() {
+    for (const p of particles) {
+      const k = 1 - p.age / p.life;
+      ctx.globalAlpha = Math.max(0, k);
+      ctx.fillStyle = `hsl(${p.hue}, 95%, ${45 + k * 35}%)`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 1 + k * 2.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawRocket(r) {
+    ctx.save();
+    ctx.translate(r.x, r.y);
+    ctx.rotate(r.angle);
+
+    // Legs
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    ctx.moveTo(-BODY_W + 2, BODY_H - 6); ctx.lineTo(-LEG_SPAN, BODY_H);
+    ctx.moveTo(BODY_W - 2, BODY_H - 6);  ctx.lineTo(LEG_SPAN, BODY_H);
+    ctx.moveTo(-LEG_SPAN - 4, BODY_H);   ctx.lineTo(-LEG_SPAN + 4, BODY_H);
+    ctx.moveTo(LEG_SPAN - 4, BODY_H);    ctx.lineTo(LEG_SPAN + 4, BODY_H);
+    ctx.stroke();
+
+    // Hull
+    const hull = ctx.createLinearGradient(-BODY_W, 0, BODY_W, 0);
+    hull.addColorStop(0, '#94a3b8');
+    hull.addColorStop(0.45, '#f1f5f9');
+    hull.addColorStop(1, '#64748b');
+    ctx.fillStyle = hull;
+    ctx.beginPath();
+    ctx.moveTo(0, -BODY_H - 10);
+    ctx.lineTo(BODY_W, -BODY_H + 5);
+    ctx.lineTo(BODY_W, BODY_H - 4);
+    ctx.lineTo(-BODY_W, BODY_H - 4);
+    ctx.lineTo(-BODY_W, -BODY_H + 5);
+    ctx.closePath();
+    ctx.fill();
+
+    // Window
+    ctx.fillStyle = '#0ea5e9';
+    ctx.beginPath();
+    ctx.arc(0, -BODY_H + 12, 4.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Engine bell + flame
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(-5, BODY_H - 5, 10, 6);
+    if (phase === 'flying' && keys.has('ArrowUp') && r.fuel > 0) {
+      const flame = 16 + Math.random() * 12;
+      ctx.beginPath();
+      ctx.moveTo(-5, BODY_H + 1);
+      ctx.lineTo(5, BODY_H + 1);
+      ctx.lineTo(0, BODY_H + flame);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.92)';
+      ctx.fill();
+    }
+    if (phase === 'flying' && keys.has('ArrowDown') && r.fuel > 0) {
+      ctx.fillStyle = 'rgba(147, 197, 253, 0.85)';
+      ctx.beginPath();
+      ctx.moveTo(-4, -BODY_H - 4);
+      ctx.lineTo(4, -BODY_H - 4);
+      ctx.lineTo(0, -BODY_H - 14);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Drop-line to the surface so the player can judge the site below.
+  function drawTelemetryOverlay() {
+    if (phase !== 'flying') return;
+    const r = rocket;
+    const gy = groundAt(r.x);
+    ctx.save();
+    ctx.setLineDash([4, 6]);
+    ctx.strokeStyle = 'rgba(159, 179, 217, 0.45)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(r.x, r.y + BODY_H);
+    ctx.lineTo(r.x, gy);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ---- HUD -----------------------------------------------------------------
+  const gauges = {
+    alt: document.getElementById('g-alt'),
+    vy: document.getElementById('g-vy'),
+    vx: document.getElementById('g-vx'),
+    tilt: document.getElementById('g-tilt'),
+    slope: document.getElementById('g-slope'),
+    fuel: document.getElementById('g-fuel'),
+  };
+
+  function setGauge(el, text, cls) {
+    el.textContent = text;
+    el.className = cls || '';
+  }
+
+  function updateHud() {
+    const r = rocket;
+    const alt = Math.max(0, altitude(r));
+    const tiltDeg = normalizeAngle(r.angle) * 180 / Math.PI;
+    const slopeDeg = slopeUnder(r) * 180 / Math.PI;
+
+    setGauge(gauges.alt, alt.toFixed(0) + ' px');
+    setGauge(gauges.vy, r.vy.toFixed(1), r.vy <= MAX_VY ? 'is-ok' : 'is-bad');
+    setGauge(gauges.vx, r.vx.toFixed(1), Math.abs(r.vx) <= MAX_VX ? 'is-ok' : 'is-bad');
+    setGauge(gauges.tilt, tiltDeg.toFixed(1) + '°',
+             Math.abs(tiltDeg) <= MAX_TILT * 180 / Math.PI ? 'is-ok' : 'is-bad');
+    setGauge(gauges.slope,
+             alt < 150 ? slopeDeg.toFixed(1) + '°' : '—',
+             alt < 150 ? (Math.abs(slopeDeg) <= MAX_SLOPE * 180 / Math.PI ? 'is-ok' : 'is-bad') : '');
+    setGauge(gauges.fuel, r.fuel.toFixed(0),
+             r.fuel > 30 ? 'is-ok' : (r.fuel > 0 ? 'is-warn' : 'is-bad'));
+  }
+
+  const messageEl = document.getElementById('message');
+  function showMessage(v) {
+    if (!v) { messageEl.hidden = true; messageEl.textContent = ''; return; }
+    messageEl.hidden = false;
+    messageEl.className = 'card ' + (v.ok ? 'verdict-ok' : 'verdict-bad');
+    messageEl.innerHTML = '';
+    const h = document.createElement('h2');
+    h.textContent = (v.ok ? '✔ ' : '✖ ') + v.title;
+    const p = document.createElement('p');
+    p.textContent = v.detail;
+    const hint = document.createElement('p');
+    hint.textContent = 'Press R to fly again, N for new terrain.';
+    messageEl.append(h, p, hint);
+  }
+
+  const liveEl = document.getElementById('live');
+  function announce(text) { liveEl.textContent = text; }
+
+  // ---- input ---------------------------------------------------------------
+  const ARROWS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Shift') { keys.add('Shift'); return; }
+    if (ARROWS.has(e.key)) { keys.add(e.key); e.preventDefault(); return; }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { reset(false); e.preventDefault(); }
+    else if (k === 'n') { reset(true); e.preventDefault(); }
+    else if (k === 'p') { togglePause(); e.preventDefault(); }
+  });
+  window.addEventListener('keyup', (e) => {
+    if (e.key === 'Shift') { keys.delete('Shift'); return; }
+    if (ARROWS.has(e.key)) { keys.delete(e.key); e.preventDefault(); }
+  });
+  window.addEventListener('blur', () => keys.clear());
+
+  // Touch / mouse pad: press and hold behaves like holding the key.
+  for (const btn of document.querySelectorAll('.pad button')) {
+    const key = btn.dataset.key;
+    const press = (e) => { e.preventDefault(); keys.add(key); btn.setAttribute('aria-pressed', 'true'); };
+    const release = () => { keys.delete(key); btn.setAttribute('aria-pressed', 'false'); };
+    btn.addEventListener('pointerdown', press);
+    btn.addEventListener('pointerup', release);
+    btn.addEventListener('pointerleave', release);
+    btn.addEventListener('pointercancel', release);
+    // Keyboard users get the same effect from a click (one short pulse).
+    btn.addEventListener('click', () => {
+      keys.add(key);
+      setTimeout(() => keys.delete(key), 180);
+    });
+  }
+
+  function setPressed(id, on) {
+    document.getElementById(id).setAttribute('aria-pressed', String(on));
+  }
+  function togglePause() {
+    if (phase === 'done') return;
+    paused = !paused;
+    setPressed('btn-pause', paused);
+    announce(paused ? 'Paused.' : 'Resumed.');
+  }
+
+  document.getElementById('btn-restart').addEventListener('click', () => { reset(false); canvas.focus(); });
+  document.getElementById('btn-terrain').addEventListener('click', () => { reset(true); canvas.focus(); });
+  document.getElementById('btn-pause').addEventListener('click', () => { togglePause(); canvas.focus(); });
+
+  // ---- main loop -----------------------------------------------------------
+  let last = performance.now();
+  function frame(now) {
+    // Clamp dt so a backgrounded tab cannot teleport the rocket through terrain.
+    const dt = Math.min(0.033, (now - last) / 1000);
+    last = now;
+    if (!paused) update(dt);
+    draw();
+    updateHud();
+    requestAnimationFrame(frame);
+  }
+
+  reset(true);
+  requestAnimationFrame(frame);
+  canvas.focus();
+
+  // Debug handle: lets you inspect and poke the simulation from the console,
+  // e.g. lander.set({ x: 400, y: 300, vy: 4, angle: 0 }). Not used by the game.
+  window.lander = {
+    state: () => ({ ...rocket, phase, verdict, seed }),
+    reset,
+    groundAt,
+    terrain: () => Array.from(heights),
+    step: STEP,
+    limits: { MAX_TILT, MAX_SLOPE, MAX_VY, MAX_VX },
+    set: (patch) => Object.assign(rocket, patch),
+  };
+})();
+</script>
+</body>
+</html>
