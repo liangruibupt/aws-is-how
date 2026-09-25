@@ -563,7 +563,8 @@
       - [Kiro 通过AWS Identity Center 认证，所以实际上是 Identity Center 和企业做 SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source-idp.html)
     - [通过ACP协议，使用api调用kiro cli - 把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
     - [Benchmarking Kiro CLI coding-agent performance and cost across multiple models, replicating the Artificial Analysis Coding Agent Index methodology](https://github.com/JoeShi/coding-agent-benchmark)
-  - [Kiro Crew](https://kiro.dev/crew/)
+  - [Kiro Crew](https://kiro.dev/crew/)(https://github.com/kirodotdev/kirocrew)
+    - [KiroCrew introduction](https://kiro.dev/blog/introducing-kiro-crew/)
     - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
