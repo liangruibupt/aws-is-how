@@ -5,8 +5,12 @@ RTX PRO 6000 Blackwell (96 GB) of a `g7e` instance, with a small web console for
 model does **text-to-image, image editing with up to 10 reference images, and native transparent
 (RGBA) output**, at native 2K.
 
-Links: [blog](https://qwen.ai/blog?id=qwen-image-2.1) · [GitHub](https://github.com/QwenLM/Qwen-Image-2.1) ·
-[HF](https://huggingface.co/Qwen/Qwen-Image-2.1) · [ModelScope](https://www.modelscope.cn/models/Qwen/Qwen-Image-2.1)
+Links:
+
+- [blog](https://qwen.ai/blog?id=qwen-image-2.1)
+- [GitHub](https://github.com/QwenLM/Qwen-Image-2.1)
+- [HF](https://huggingface.co/Qwen/Qwen-Image-2.1)
+- [ModelScope](https://www.modelscope.cn/models/Qwen/Qwen-Image-2.1)
 
 ## Model facts
 
