@@ -50,8 +50,8 @@ while True:
                 conn.commit()
 
                 # Select and print the latest row with milliseconds
-                cursor.execute("SELECT id, DATE_FORMAT(ts, '%Y-%m-%d %H:%i:%s.%f') AS formatted_time FROM time_table ORDER
- BY id DESC LIMIT 1")
+                cursor.execute("SELECT id, DATE_FORMAT(ts, '%Y-%m-%d %H:%i:%s.%f') AS formatted_time "
+                               "FROM time_table ORDER BY id DESC LIMIT 1")
                 result = cursor.fetchone()
                 if result:
                     print(f"ID: {result[0]}, Time: {result[1]}")
