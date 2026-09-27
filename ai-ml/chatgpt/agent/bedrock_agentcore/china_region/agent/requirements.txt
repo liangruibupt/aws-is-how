@@ -1,0 +1,9 @@
+# Versions tested with this sample (installed as linux/arm64 wheels by deploy.py)
+bedrock-agentcore==1.2.0
+strands-agents==1.44.0
+mcp==1.28.0
+playwright==1.57.0
+openai==2.40.0
+httpx==0.28.1
+boto3==1.43.34
+botocore==1.43.34
