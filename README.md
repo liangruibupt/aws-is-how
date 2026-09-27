@@ -428,6 +428,7 @@
     - [From developer desks to the whole organization: Running Claude Cowork in Amazon Bedrock](https://aws.amazon.com/cn/blogs/machine-learning/from-developer-desks-to-the-whole-organization-running-claude-cowork-in-amazon-bedrock/)
     - [Claude Platform on AWS: Anthropic’s native platform, through your AWS account](https://aws.amazon.com/blogs/machine-learning/introducing-claude-platform-on-aws-anthropics-native-platform-through-your-aws-account/)
     - [斯坦福 STORM 方法：怎样让 Claude 在几分钟内像博士一样做研究](ai-ml/chatgpt/claude/Claude-with-STORM-Research.md)
+    - [Claude Opus 5.5 Showcase：HTML 动画与视频制作能力验证（临《兰亭集序》逐笔动画等）](ai-ml/chatgpt/claude/opus55-showcase/README.md)
 #### OpenAI GPT
   - [GPT-OSS]
     - [Fine-tune OpenAI GPT-OSS models on Amazon SageMaker AI using Hugging Face libraries](https://aws.amazon.com/blogs/machine-learning/fine-tune-openai-gpt-oss-models-on-amazon-sagemaker-ai-using-hugging-face-libraries/)
