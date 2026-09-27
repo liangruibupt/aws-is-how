@@ -156,6 +156,8 @@ let records = [
 let selected = records[0].recordId;
 
 const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// `msg` may contain trusted markup (<code>); interpolate untrusted values via esc().
 function log(msg){ const l=$("#log"); const t=new Date().toLocaleTimeString();
   l.innerHTML += `<div><span class="t">[${t}]</span> ${msg}</div>`; l.scrollTop=l.scrollHeight; }
 
@@ -224,8 +226,13 @@ const SAMPLE_QUERIES = [
   "send SMS text messages"
 ];
 function renderQueries(){
-  $("#queries").innerHTML = SAMPLE_QUERIES.map(q=>
-    `<button onclick="setQ('${q.replace(/'/g,"\\'")}')">${q}</button>`).join("");
+  const box = $("#queries"); box.textContent = "";
+  SAMPLE_QUERIES.forEach(q=>{
+    const b = document.createElement("button");
+    b.textContent = q;
+    b.addEventListener("click", ()=>setQ(q));
+    box.appendChild(b);
+  });
 }
 function setQ(q){ $("#q").value=q; runSearch(); }
 
@@ -242,7 +249,7 @@ function runSearch(){
   if(!q){ return; }
   // DISCOVERY PLANE: only APPROVED records are visible.
   const visible = records.filter(r=>r.status==="APPROVED");
-  log(`Consumer → <code>search_discoverable_registry_records</code>(searchQuery="${q}") · ${visible.length} approved record(s) in index`);
+  log(`Consumer → <code>search_discoverable_registry_records</code>(searchQuery="${esc(q)}") · ${visible.length} approved record(s) in index`);
   if(!visible.length){
     $("#results").innerHTML = `<div class="result none">No approved records in the registry yet — approve one as the Curator first.</div>`;
     return;

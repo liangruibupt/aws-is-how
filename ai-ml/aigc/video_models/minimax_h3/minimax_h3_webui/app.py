@@ -19,7 +19,9 @@ from __future__ import annotations
 
 import base64
 import json
+import logging
 import os
+import re
 import time
 import uuid
 from pathlib import Path
@@ -37,6 +39,7 @@ JOB_DIR = Path(os.environ.get("H3_JOB_DIR", "/opt/dlami/nvme/out/webui_jobs"))
 JOB_DIR.mkdir(parents=True, exist_ok=True)
 
 HERE = Path(__file__).resolve().parent
+log = logging.getLogger("h3_console")
 app = FastAPI(title="MiniMax-H3 console")
 app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 
@@ -64,8 +67,24 @@ async def to_data_uri(f: Optional[UploadFile]) -> Optional[str]:
     return f"data:{media};base64,{base64.b64encode(raw).decode('ascii')}"
 
 
+_JOB_ROOT = os.path.normpath(str(JOB_DIR.resolve()))
+_VIDEO_ROOT = os.path.normpath(str(VIDEO_DIR.resolve()))
+_JOB_ID_RE = re.compile(r"[0-9a-f]{12}")
+_VIDEO_NAME_RE = re.compile(r"[A-Za-z0-9._-]{1,200}\.mp4")
+
+
+def safe_child(root: str, filename: str) -> Path:
+    """Resolve `filename` inside `root`, rejecting anything that escapes it."""
+    full = os.path.normpath(os.path.join(root, filename))
+    if not full.startswith(root + os.sep):
+        raise HTTPException(400, "bad name")
+    return Path(full)
+
+
 def job_path(job_id: str) -> Path:
-    return JOB_DIR / f"{job_id}.json"
+    if not _JOB_ID_RE.fullmatch(job_id):
+        raise HTTPException(404, "unknown job")
+    return safe_child(_JOB_ROOT, f"{job_id}.json")
 
 
 def save_job(job: dict) -> None:
@@ -201,8 +220,9 @@ async def job_status(job_id: str):
     try:
         r = await client.get(f"{base}/v1/videos/{job['video_id']}")
         st = r.json()
-    except Exception as e:  # noqa: BLE001
-        return {**job, "status": "unknown", "error": f"status poll failed: {e}"}
+    except Exception:  # noqa: BLE001
+        log.exception("status poll failed for job %s", job["job_id"])
+        return {**job, "status": "unknown", "error": "status poll failed; see server log"}
     status = st.get("status", "unknown")
     job["status"] = status
     job["elapsed"] = time.time() - job["submitted_at"]
@@ -262,9 +282,9 @@ async def files(limit: int = 50):
 
 @app.get("/api/files/{name}")
 async def file_content(name: str):
-    if "/" in name or ".." in name or not name.endswith(".mp4"):
+    if not _VIDEO_NAME_RE.fullmatch(name) or ".." in name:
         raise HTTPException(400, "bad name")
-    p = VIDEO_DIR / name
+    p = safe_child(_VIDEO_ROOT, name)
     if not p.exists():
         raise HTTPException(404)
     return FileResponse(p, media_type="video/mp4")

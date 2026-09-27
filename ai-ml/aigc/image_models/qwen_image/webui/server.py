@@ -21,6 +21,7 @@ import io
 import json
 import os
 import queue
+import re
 import threading
 import time
 import traceback
@@ -76,8 +77,23 @@ jobs_lock = threading.Lock()
 work_q: "queue.Queue[str]" = queue.Queue()
 
 
+_OUT_ROOT = os.path.normpath(str(OUT_DIR.resolve()))
+_JOB_ID_RE = re.compile(r"[0-9a-f]{12}")
+_IMAGE_NAME_RE = re.compile(r"[A-Za-z0-9_-]{1,128}\.png")
+
+
+def safe_out_path(filename: str) -> Path:
+    """Resolve `filename` inside OUT_DIR, rejecting anything that escapes it."""
+    full = os.path.normpath(os.path.join(_OUT_ROOT, filename))
+    if not full.startswith(_OUT_ROOT + os.sep):
+        raise HTTPException(400, "bad name")
+    return Path(full)
+
+
 def job_file(job_id: str) -> Path:
-    return OUT_DIR / f"{job_id}.json"
+    if not _JOB_ID_RE.fullmatch(job_id):
+        raise HTTPException(404, "unknown job")
+    return safe_out_path(f"{job_id}.json")
 
 
 def persist(job: dict) -> None:
@@ -268,9 +284,9 @@ async def job_status(job_id: str):
 
 @app.get("/api/images/{name}")
 async def image_file(name: str):
-    if "/" in name or ".." in name or not name.endswith(".png"):
+    if not _IMAGE_NAME_RE.fullmatch(name):
         raise HTTPException(400, "bad name")
-    p = OUT_DIR / name
+    p = safe_out_path(name)
     if not p.exists():
         raise HTTPException(404)
     return FileResponse(p, media_type="image/png")

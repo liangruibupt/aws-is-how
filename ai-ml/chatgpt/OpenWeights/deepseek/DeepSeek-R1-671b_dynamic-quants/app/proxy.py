@@ -1,9 +1,11 @@
 import json
+import logging
 
 from aiohttp import web
 import aiohttp
 
 base_url = "http://127.0.0.1:8000"
+logger = logging.getLogger("proxy")
 
 async def chat_completion_handler(request):
     try:
@@ -37,10 +39,11 @@ async def chat_completion_handler(request):
                 await response.write_eof()
                 return response
 
-    except aiohttp.ClientError as e:
+    except aiohttp.ClientError:
+        logger.exception("upstream request to %s failed", target_url)
         return web.Response(
             status=502,
-            text=f"Proxy Error: {str(e)}"
+            text="Proxy Error: upstream unavailable"
         )
 
 async def health_check_handler(request):
@@ -62,10 +65,11 @@ async def health_check_handler(request):
                     headers=response.headers
                 )
 
-    except aiohttp.ClientError as e:
+    except aiohttp.ClientError:
+        logger.exception("upstream request to %s failed", target_url)
         return web.Response(
             status=502,
-            text=f"Proxy Error: {str(e)}"
+            text="Proxy Error: upstream unavailable"
         )
 
 

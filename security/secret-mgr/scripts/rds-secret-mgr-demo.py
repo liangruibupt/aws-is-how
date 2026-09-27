@@ -93,7 +93,7 @@ def query_user(db):
     except Exception as e:
         logging.error('执行异常' + str(e))
         pass
-    logging.info(result_info)
+    logging.info("fetched %d rows", len(result_info))
     return result_info
 
 
@@ -126,7 +126,7 @@ def query_employee(db):
     except Exception as e:
         logging.error('执行异常' + str(e))
         pass
-    logging.info(result_info)
+    logging.info("fetched %d rows", len(result_info))
     return result_info
 
 
@@ -157,7 +157,7 @@ def query_employee_user(db):
     except Exception as e:
         logging.error('执行异常' + str(e))
         pass
-    logging.info(result_info)
+    logging.info("fetched %d rows", len(result_info))
     return result_info
 
 
@@ -216,7 +216,7 @@ def exec_query(db, table_sql):
     except Exception as e:
         logging.error('执行异常' + str(e))
         pass
-    logging.info(result_info)
+    logging.info("fetched %d rows", len(result_info))
     return result_info
 
 

@@ -185,7 +185,9 @@ class SynthesisRequest(BaseModel):
 
 @app.post("/v1/jobs", status_code=202)
 def create_job(body: SynthesisRequest):
-    if not (DATA/"voices"/f"{body.voice}.json").is_file():
+    voices_root = os.path.normpath(str((DATA/"voices").resolve()))
+    voice_file = os.path.normpath(os.path.join(voices_root, f"{body.voice}.json"))
+    if not voice_file.startswith(voices_root + os.sep) or not os.path.isfile(voice_file):
         raise HTTPException(404, "Unknown voice")
     job_id = uuid.uuid4().hex
     with database() as db:
