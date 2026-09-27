@@ -1,16 +1,10 @@
 """Verify private origins, public HTTPS authentication, and real GPU-generated audio."""
-import array
-from datetime import datetime, timezone
-import hashlib
-import io
 import json
-import math
 from pathlib import Path
+import shlex
 import time
-import wave
 
 import boto3
-import httpx
 
 ROOT = Path(__file__).resolve().parent
 state = json.loads((ROOT/"deployment.json").read_text())
@@ -40,58 +34,39 @@ assert config["DefaultCacheBehavior"]["ViewerProtocolPolicy"] == "https-only"
 assert config["DefaultCacheBehavior"]["CachePolicyId"] == "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
 assert config["WebACLId"] == state["edgeOutputs"]["WebACLArn"]
 domain = distribution["DomainName"]
-token = session.client("secretsmanager").get_secret_value(SecretId=out["SecretArn"])["SecretString"]
-with httpx.Client(base_url="https://"+domain, timeout=60, follow_redirects=False) as api:
-    ready_deadline = time.monotonic()+900
-    while time.monotonic() < ready_deadline:
-        health = api.get("/healthz")
-        if health.status_code == 200:
-            break
-        assert health.status_code in {502, 503, 504}, (health.status_code, health.text[:200])
-        print(json.dumps({"waitingForModel": health.status_code}), flush=True)
-        time.sleep(15)
-    else:
-        raise TimeoutError("Model not ready after 15 minutes; inspect SSM logs")
-    unauthorized = api.get("/v1/voices")
-    assert unauthorized.status_code == 401, unauthorized.status_code
-    assert unauthorized.headers.get("cache-control") == "no-store"
-    api.headers["Authorization"] = "Bearer "+token
-    voices = api.get("/v1/voices")
-    assert voices.status_code == 200
-    request = api.post("/v1/jobs", json={"text": "欢迎收看本次演示。现在，让我们一起了解模型的细节。",
-                                        "voice": "upstream-demo", "format": "wav"})
-    assert request.status_code == 202, (request.status_code, request.text[:200])
-    job_id = request.json()["id"]
-    deadline = time.monotonic()+900
-    while time.monotonic() < deadline:
-        response = api.get(f"/v1/jobs/{job_id}")
-        response.raise_for_status()
-        job = response.json()
-        if job["status"] == "completed":
-            break
-        if job["status"] == "failed":
-            raise RuntimeError(job)
-        time.sleep(3)
-    else:
-        raise TimeoutError(job_id)
-    response = api.get(f"/v1/jobs/{job_id}/audio")
-    response.raise_for_status()
-    audio = response.content
-    assert hashlib.sha256(audio).hexdigest() == job["sha256"]
-    with wave.open(io.BytesIO(audio)) as wav:
-        assert wav.getsampwidth() == 2 and wav.getnchannels() == 1
-        rate, frames = wav.getframerate(), wav.getnframes()
-        samples = array.array("h", wav.readframes(frames))
-    rms = math.sqrt(sum(float(x)*x for x in samples)/len(samples))/32768
-    assert rate == job["sample_rate"] and 1 < frames/rate < 60 and rms > .001
-    (ROOT/"outputs").mkdir(exist_ok=True)
-    (ROOT/"outputs/cloud-smoke.wav").write_bytes(audio)
-    report = {"status": "PASS", "checkedAtUTC": datetime.now(timezone.utc).isoformat(),
-              "endpoint": "https://"+domain, "instance": out["InstanceId"],
-              "publicEC2IP": False, "internalALB": True, "originRestrictedToCloudFrontSG": True,
-              "gpuRestrictedToALBSG": True, "IMDSv2": True, "httpsOnly": True,
-              "WAF": True, "cacheDisabled": True, "unauthorizedHTTP": unauthorized.status_code,
-              "job": job, "wavSeconds": frames/rate, "rms": rms,
-              "note": "Upstream reference voice is for installation QA, not a selected male voice."}
-    (ROOT/"verification.json").write_text(json.dumps(report, indent=2)+"\n")
-    print(json.dumps(report, indent=2))
+ssm = session.client("ssm")
+command = ssm.send_command(
+    InstanceIds=[out["InstanceId"]], DocumentName="AWS-RunShellScript",
+    Parameters={"commands": [
+        "docker run --rm --cap-drop ALL --security-opt no-new-privileges "
+        "--read-only --tmpfs /tmp:rw,noexec,nosuid,nodev,size=536870912 --env-file /etc/cosyvoice3.env "
+        "-e VERIFY_ENDPOINT=" + shlex.quote("https://" + domain) +
+        " cosyvoice3:local python /app/verify_api.py"
+    ], "executionTimeout": ["3000"]},
+)["Command"]["CommandId"]
+print(json.dumps({"verificationCommand": command, "execution": "EC2"}), flush=True)
+deadline = time.monotonic() + 3100
+while time.monotonic() < deadline:
+    try:
+        invocation = ssm.get_command_invocation(CommandId=command, InstanceId=out["InstanceId"])
+    except ssm.exceptions.InvocationDoesNotExist:
+        time.sleep(5)
+        continue
+    if invocation["Status"] not in {"Pending", "InProgress", "Delayed"}:
+        if invocation["Status"] != "Success":
+            raise RuntimeError(f"EC2 verification {invocation['Status']}: "
+                               f"{invocation['StandardErrorContent']}")
+        report = json.loads(invocation["StandardOutputContent"])
+        assert report["status"] == "PASS"
+        break
+    time.sleep(10)
+else:
+    raise TimeoutError(f"EC2 verification did not complete: {command}")
+report.update(
+    instance=out["InstanceId"], verificationCommand=command,
+    publicEC2IP=False, internalALB=True, originRestrictedToCloudFrontSG=True,
+    gpuRestrictedToALBSG=True, IMDSv2=True, httpsOnly=True, WAF=True, cacheDisabled=True,
+    note="Upstream reference voice is for installation QA, not a selected male voice.",
+)
+(ROOT/"verification.json").write_text(json.dumps(report, indent=2)+"\n")
+print(json.dumps(report, indent=2))

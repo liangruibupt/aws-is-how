@@ -12,6 +12,7 @@ from botocore.config import Config
 from botocore.exceptions import ClientError
 
 from infra import edge_template, service_template
+from release import build_archive
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT/"deployment.json"
@@ -131,12 +132,7 @@ else:
         client("s3").put_bucket_encryption(Bucket=bucket, ServerSideEncryptionConfiguration={
             "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]})
         client("s3").put_bucket_tagging(Bucket=bucket, Tagging={"TagSet": TAGS})
-    files = ["Dockerfile", "requirements.txt", "app.py", "download_model.py", "bootstrap.sh"]
-    buffer = io.BytesIO()
-    with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
-        for name in files:
-            archive.add(ROOT/name, arcname=name)
-    package = buffer.getvalue()
+    package = build_archive(ROOT)
     digest = hashlib.sha256(package).hexdigest()
     key = f"release/{digest}.tgz"
     client("s3").put_object(Bucket=state["artifactBucket"], Key=key, Body=package,

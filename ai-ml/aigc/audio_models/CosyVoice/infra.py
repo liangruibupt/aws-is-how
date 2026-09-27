@@ -116,7 +116,7 @@ bash /opt/cosyvoice/release/bootstrap.sh
                                "GroupSet": [gpu_sg], "DeleteOnTermination": True}],
         "MetadataOptions": {"HttpTokens": "required", "HttpEndpoint": "enabled", "HttpPutResponseHopLimit": 1},
         "BlockDeviceMappings": [{"DeviceName": "/dev/sda1",
-                                "Ebs": {"VolumeSize": 100, "VolumeType": "gp3", "Encrypted": True,
+                                "Ebs": {"VolumeSize": 150, "VolumeType": "gp3", "Encrypted": True,
                                         "DeleteOnTermination": True}}],
         "UserData": {"Fn::Base64": sub(user_data)},
         "Tags": tags+[{"Key": "Name", "Value": "cosyvoice3-private-gpu"}],

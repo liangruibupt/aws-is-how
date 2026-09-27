@@ -147,7 +147,7 @@ app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None
 async def guard(request: Request, call_next):
     if request.url.path != "/healthz":
         authorization = request.headers.get("authorization", "")
-        if not secrets.compare_digest(authorization, "Bearer "+TOKEN):
+        if not secrets.compare_digest(authorization.encode("utf-8"), ("Bearer "+TOKEN).encode("utf-8")):
             return JSONResponse({"error": "Unauthorized"}, status_code=401,
                                 headers={"Cache-Control": "no-store"})
     if request.method == "POST":

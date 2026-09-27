@@ -1,0 +1,28 @@
+# Inference runtime only. Regenerate the hashed Linux/CUDA lock.
+torch==2.14.0+cu126
+torchaudio==2.11.0+cu126
+numpy==1.26.4
+# ONNX Runtime 1.27+ defaults to CUDA 13; this runtime uses CUDA 12.6.
+onnxruntime-gpu==1.26.0
+conformer==0.3.2
+diffusers==0.40.0
+HyperPyYAML>=1.2.3
+omegaconf>=2.3.0
+inflect>=7.3.1
+librosa>=0.11.0
+openai-whisper>=20250625
+soundfile>=0.13.1
+transformers==5.17.0
+x-transformers==2.11.24
+huggingface-hub>=1.5,<2
+fastapi==0.141.1
+uvicorn>=0.41,<1
+python-multipart==0.0.32
+pydantic>=2.13.5,<3
+typing-extensions>=4.16.0
+anyio>=4.14.2,<5
+protobuf>=5.29.6
+pip-audit>=2.10,<3
+pip>=26.0
+setuptools>=82.0
+wheel>=0.46

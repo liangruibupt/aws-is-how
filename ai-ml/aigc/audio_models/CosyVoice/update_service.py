@@ -8,6 +8,7 @@ import tarfile
 import time
 
 import boto3
+from release import build_archive
 
 ROOT = Path(__file__).resolve().parent
 state = json.loads((ROOT/"deployment.json").read_text())
@@ -23,11 +24,7 @@ if args.log:
     print(json.dumps({key: response[key] for key in ["Status", "StandardOutputContent", "StandardErrorContent"]},
                      indent=2))
 else:
-    buffer = io.BytesIO()
-    with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
-        for name in ["Dockerfile", "requirements.txt", "app.py", "download_model.py", "bootstrap.sh"]:
-            archive.add(ROOT/name, arcname=name)
-    content = buffer.getvalue()
+    content = build_archive(ROOT)
     digest = hashlib.sha256(content).hexdigest()
     key = f"release/{digest}.tgz"
     session.client("s3").put_object(Bucket=state["artifactBucket"], Key=key, Body=content,
@@ -60,7 +57,6 @@ else:
         raise TimeoutError("SSM agent did not return online")
     bucket, secret = state["artifactBucket"], state["outputs"]["SecretArn"]
     script = f"""set -euo pipefail
-systemctl stop cosyvoice3 2>/dev/null || true
 aws --region {state['region']} s3 cp s3://{bucket}/{key} /opt/cosyvoice/release.tgz
 echo '{digest}  /opt/cosyvoice/release.tgz' | sha256sum -c -
 tar --no-same-owner -xzf /opt/cosyvoice/release.tgz -C /opt/cosyvoice/release
