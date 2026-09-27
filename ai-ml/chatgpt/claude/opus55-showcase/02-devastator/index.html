@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>大力神 · 挖地虎合体</title>
+  <meta name="description" content="Three.js 实时渲染：六名挖地虎——铲土机、搅拌机、拖斗、吊钩、清扫机、推土机——合体为大力神。" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/zcool-qingke-huangyou@5/index.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/chakra-petch@5/600.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5/500.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-label="大力神合体三维动画"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- 片头 -->
+  <header class="mast">
+    <div class="mast-sig" aria-hidden="true"><svg viewBox="-50 -50 100 100"><use href="#sig" /></svg></div>
+    <div>
+      <h1>大力神<span>合体</span></h1>
+      <p>DEVASTATOR · CONSTRUCTICONS COMBINE</p>
+    </div>
+  </header>
+
+  <!-- 当前镜头 / 章节 -->
+  <div class="chapter" id="chapter"><small id="chapNo">00</small><b id="chapName">——</b></div>
+
+  <!-- 成员名册 -->
+  <aside class="roster" id="roster" aria-label="挖地虎成员">
+    <header><span>CONSTRUCTICONS</span><em>挖地虎 · 6</em></header>
+    <ol id="rosterList"></ol>
+  </aside>
+
+  <!-- 合体示意图 -->
+  <aside class="schema" aria-label="合体进度">
+    <header><span>LINK STATUS</span><em id="linkPct">0%</em></header>
+    <svg id="schemaSvg" viewBox="0 0 160 220" role="img" aria-label="大力神部位示意"></svg>
+  </aside>
+
+  <!-- 字幕 -->
+  <div class="callout" id="callout" aria-live="polite">
+    <div class="co-tag" id="coTag"></div>
+    <div class="co-main" id="coMain"></div>
+    <div class="co-sub" id="coSub"></div>
+  </div>
+
+  <!-- 控制条 -->
+  <nav class="bar" aria-label="播放控制">
+    <button class="play" id="play" title="播放 / 暂停（空格）"><i></i></button>
+    <div class="bar-mid">
+      <div class="scrub" id="scrub">
+        <div class="scrub-track"><i id="scrubFill"></i></div>
+        <div class="scrub-ticks" id="ticks"></div>
+        <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="时间轴" />
+      </div>
+      <div class="bar-row">
+        <span class="clock"><b id="tNow">00.0</b><em>/ <span id="tEnd">00.0</span> s</em></span>
+        <span class="sep"></span>
+        <div class="seg" id="speed" role="group" aria-label="速度">
+          <button data-v="0.5">0.5×</button><button data-v="1" class="on">1×</button><button data-v="1.5">1.5×</button><button data-v="2">2×</button>
+        </div>
+        <span class="sep"></span>
+        <div class="tools">
+          <button id="camBtn" aria-pressed="false" title="自由视角（C）">自由视角</button>
+          <button id="xrayBtn" aria-pressed="false" title="成员识别色（X）">识别</button>
+          <button id="soundBtn" aria-pressed="true" title="声音（M）">声音</button>
+          <button id="hqBtn" aria-pressed="true" title="高画质（Q）">高画质</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 开场 -->
+  <section class="intro" id="intro">
+    <div class="intro-inner">
+      <div class="intro-sig" aria-hidden="true"><svg viewBox="-50 -50 100 100"><use href="#sig" /></svg></div>
+      <h2 class="intro-title">大力神</h2>
+      <p class="intro-en">DEVASTATOR</p>
+      <p class="intro-text">
+        铲土机、搅拌机、拖斗、吊钩、清扫机、推土机——六台工程车驶入机库，逐一变形、对接、锁定，合成霸天虎的巨型战士。
+        全部模型、材质、纹理、音效与配乐均由代码程序生成，实时渲染。
+      </p>
+      <button class="start" id="start" disabled><span class="grind"></span><span id="startTxt">装载中</span></button>
+      <p class="keys">空格 播放/暂停 · ← → 前后 5 秒 · 1–6 跳到成员 · C 自由视角 · X 识别 · M 声音</p>
+    </div>
+  </section>
+
+  <noscript><div class="noscript">此页面需要 JavaScript 与 WebGL。</div></noscript>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs><g id="sig" /></defs>
+  </svg>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
