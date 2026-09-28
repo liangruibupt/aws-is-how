@@ -217,6 +217,7 @@
 
 - **[Lambda MicroVMs Lab](https://github.com/liangruibupt/lambda-microvm-lab)** — AWS Lambda MicroVMs（Firecracker 隔离的 serverless，2026-06 GA）动手实验。单 Flask MicroVM 生命周期（create-image → run → connect → suspend/resume，验证快照状态存活）+ 多租户 aws-sample 端到端部署；实测记录、连接契约（443 + `X-aws-proxy-auth` + `X-aws-proxy-port`）、跨代状态丢失的 mount-namespace 根因分析，findings 已回报 aws-samples 上游 issue。
 - **[DuckDB Scenarios Explorer](https://github.com/liangruibupt/duckdb-scenarios-explorer)** — DuckDB 7 个场景（NYC 出租车分析、httpfs/S3 远程 Parquet、CSV→Parquet ETL、NL→DuckDB Chat BI、Pandas 零拷贝、日志分析、多 agent AgentCore 设计），spec 驱动 + 34 用例 pytest + CI；场景 04+07 真实部署到 Bedrock AgentCore Runtime（embedded DuckDB 读 S3 hive-partitioned Parquet）验证后清零。
+  - [Data Agent on DuckDB](https://github.com/aws-samples/sample-data-agent-on-duckdb)
 - **[COD-Commerce Agent](https://github.com/liangruibupt/cod-agent-commerce)** — COD（Cash on Delivery / 货到付款）单页电商的对话式购物 agent：Bedrock AgentCore Runtime 编排（Luna→Claude→规则链 + 工具）、三层记忆（短期事件 / Aurora 确认偏好 / AgentCore USER_PREFERENCE 推断层）、Aurora Serverless v2 + pgvector、S3+CloudFront 单页前端；含 VPC/Aurora terraform、E2E 测试 + CI 与完整实验日志。
 - **[StudyLens on ECS Fargate + EFS + ALB + CloudFront](devops/studylens-fargate-bedrock/)** — 把有状态 npm 应用部署为免运维、低成本、手机/iPad 可访问的服务；容器内 adapter 将 OpenAI 兼容调用转成 Bedrock Converse（`us.openai.gpt-5.6-luna`，凭 task role 免密钥），CloudFront 提供免域名可信 HTTPS。含完整 Terraform IaC、架构说明与部署/运维/拆除文档。
 - **[AWS Agent Registry Hands-on Lab](ai-ml/chatgpt/agent/agent_registry/)** — AWS Agent Registry（Amazon Bedrock AgentCore 能力，2026-08-31 GA）动手实验：对**真实 API** 跑通完整生命周期（create → publish → submit → approve/reject → 语义搜索 → teardown 清零）。含 6 个编号脚本 + 一键 `end_to_end.py` + 自包含可视化 SPA（Publisher/Curator/Consumer 三列 + 状态机 + 治理前后对比）。实测记录并纠正了两个 API 契约坑：治理面用 client `agent-registry-control`，发现面必须用 GA 的 `agent-registry` client + `search_discoverable_registry_records`（旧 preview 的 `bedrock-agentcore` namespace 会对 GA registry 报 404）；`UpdateRegistryRecordStatus` 强制要求 `statusReason`。被 Curator 拒绝的记录对 Consumer 搜索不可见——治理价值的核心演示。
@@ -674,6 +675,14 @@
   - [Firecracker]
     - [hyperscale pool of AI agents on AWS — one tenant, one independent kernel, isolated by Firecracker microVMs](https://github.com/aws-samples/sample-multi-tenant-openclaw-on-firecracker/tree/gateway/)
     - [AWS Self-Hosted AI Agent Sandbox Platform](https://github.com/aws-samples/sample-aws-self-hosted-sandbox/tree/main)
+  - [RSI](https://tcnqqhascf7s.feishu.cn/docx/AoCXdzWZUoXKrDxpSDqcDRMUnje)
+    - [RSI的核心 - AI 改善自己的研究能力，用改善后的能力继续研究自身]
+      - 检验新版能力回流之后，能否在公平预算与独立评测下，提高后续自我改进的效率；再观察这种收益能否跨代持续，甚至形成加速
+      - 可信评测决定它是不是真的进步；资源与研究难度决定循环能跑多快；目标和权限约束决定它朝什么方向改进。
+      - 递归闭环是机制，持续收益是实验结果，智能爆炸则是需要更多条件支持的推断: 跨任务泛化、完整资源成本，以及改进效率是否持续上升
+      - 闭环不等于收益。 改进成果回流到下一轮，就形成了递归机制；泛化能力、资源成本和改进效率，用来判断这个机制是否真的有效。
+      - 收益不等于加速。 如果研究能力提升得比下一次突破的难度更快，循环可能加速；反之，就可能放缓、停滞，甚至退化。还记得那道题：研究能力翻倍，研究工作量变成三倍，升级反而更慢
+    - [智谱RSI最新进展](https://mp.weixin.qq.com/s/DYb3h90ulTXEEdXsjg-L6g)
   - [Bedrock AgentCore]
       - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
       - [AgentCore use case examples](ai-ml/chatgpt/agent/Agent-implement-samples.md)
