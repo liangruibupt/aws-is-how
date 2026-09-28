@@ -7,7 +7,7 @@
 import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { ROOT } from './lib/serve.mjs';
-import { parseArgs } from './lib/args.mjs';
+import { parseArgs, isMain } from './lib/args.mjs';
 import { pool } from './lib/jobs.mjs';
 import { measure } from './lib/ffmpeg.mjs';
 import { expandJobs } from './engine/variant.js';
@@ -104,7 +104,7 @@ async function generate(film, o) {
   return bad.length || long.length ? 1 : 0;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname)) {
+if (isMain(import.meta.url)) {
   const { pos: [name], o } = parseArgs(process.argv.slice(2));
   if (!name || !fs.existsSync(path.join(ROOT, name, 'film.js'))) { console.error('usage: node factory/vo.mjs <film-dir> [--audition] [--force] [--dry] [--out dir]'); process.exit(2); }
   const film = (await import(path.join(ROOT, name, 'film.js'))).default;

@@ -4,6 +4,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isMain } from './args.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const MIME = {
@@ -46,7 +47,7 @@ export function serve(root = ROOT, port = 0) {
   });
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   const s = await serve(ROOT, +(process.argv[2] ?? 8765));
   console.log(`serving ${ROOT}\n  ${s.url}/`);
 }
