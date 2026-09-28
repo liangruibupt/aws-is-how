@@ -5,6 +5,8 @@ import { LAYOUTS } from './layouts.js';
 import { fontsFor } from './captions.js';
 import { buildBottle, logoMask } from './js/bottle.js';
 import { createGlass } from './js/glass.js';
+import { createDrop } from './js/drop.js';
+import { createSpray } from './js/spray.js';
 import { envMap } from './js/worlds/common.js';
 import { SHOTS } from './js/shots.js';
 
@@ -22,16 +24,18 @@ export default {
     ctx.world = await (await WORLDS[id]()).build(ctx);
     ctx.scene.environment = envMap(ctx.renderer, ctx.world.env);     // 世界只描述反射环境，这里才生成（世界的测试在 Node 里建，没有渲染器）
     ctx.postDefaults = ctx.world.post ?? {};
-    const bottle = buildBottle(ctx, sku, { logo: await logoMask() });
-    ctx.scene.add(bottle.root);
-    ctx.subjects = { bottle, glass: createGlass(ctx, bottle, sku) };
+    const bottle = buildBottle(ctx, sku, { logo: await logoMask() }), drop = createDrop(ctx, sku), spray = createSpray(ctx, bottle);
+    bottle.root.add(drop.mesh);
+    ctx.scene.add(bottle.root, spray.root);
+    ctx.subjects = { bottle, drop, spray, glass: createGlass(ctx, bottle, sku) };
   },
   /** 每次求值镜头前复位所有逐帧可变的状态：跳着看和顺序播放得到同一帧 */
   reset(ctx) {
-    ctx.subjects.bottle.pose();
+    const { bottle, drop, spray } = ctx.subjects;
+    bottle.pose(); drop.pose(); spray.update();
     ctx.world.reset?.();
   },
-  /** 场景目标里分三遍画：世界 → 液体 → 玻璃（js/glass.js） */
+  /** 场景目标里分四遍画：世界 → 液体 → 玻璃 → 挡在瓶子前面的喷雾（js/glass.js） */
   render(ctx, target) { ctx.subjects.glass.render(target); },
   shots: SHOTS,
 };

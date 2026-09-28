@@ -1,17 +1,21 @@
 // glass.js — 玻璃与液体的分层折射 + 地面焦散
-// 折射：场景目标里先画世界（第 0 层），再画液体（第 1 层，采样世界），最后画玻璃（第 2 层，采样世界 + 液体）。
+// 折射：场景目标里先画世界（第 0 层），再画液体（第 1 层，采样世界），再画玻璃（第 2 层，采样世界 + 液体），最后画挡在瓶子前面的半透明东西（第 3 层，比如喷雾）。
 //   每一遍 three 都把多重采样缓冲解析到 target.texture / depthTexture（见 post.js），下一遍的着色器就采样它当作“背后的画面”。
-//   光在玻璃和液体里走的路程按 bottle.js 导出的 SHAPE（凸八角棱柱）解析求出：比尔–朗伯吸收、一次全反射、玻璃三色色散、磨砂 logo 模糊。
+//   第 0 层画完还缩成四分之一存一份带 mip 的：光路出了画面（没有颜色可取）时取它糊开的颜色。
+//   光在玻璃和液体里走的路程按 bottle.js 导出的 SHAPE（凸八角棱柱）解析求出：比尔–朗伯吸收、出口按菲涅耳分成透出去和反射回来的两份
+//   （临界角上画面不断开）、玻璃三色色散、磨砂 logo 模糊。
+//   透过光面玻璃看进内腔的地方，玻璃写的是背后那样东西的深度：景深按看到的东西虚化（对焦在瓶里的水滴上时，前壁不会把它糊掉）。
 // 焦散：从主光方向打一张光线网格穿过瓶子（玻璃 → 空气 / 液面 → 液体 → 玻璃），落到瓶子站的平面上；
 //   每个网格三角形的亮度 = 出发面积 / 落地面积（光被汇聚处更亮），按 RGB 三种折射率各画一遍。瓶子的影子由一个只投影的替身给出
 import * as THREE from 'three';
+import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { SHAPE, GLASS as G, RIPPLE } from './bottle.js';
 import { DIMS } from '../meta.js';
 
 // 玻璃折射率、液体折射率、玻璃吸收（1/米，略偏绿的高白料）、三色折射率差、磨砂模糊半径（画面高度的比例）、磨砂处混入的漫反射、
-// 焦散网格分辨率、焦散亮度倍数、四个界面的总透过率
-export const OPTICS = { glassIor: 1.5, liquidIor: 1.36, glassAbsorb: [1.6, 0.5, 1.2], dispersion: 0.012, frostBlur: 0.012, frostDiffuse: 0.4, causticGrid: 256, causticGain: 1, interfaces: 0.85 };
-export const LAYER = { liquid: 1, glass: 2 };
+// 焦散网格分辨率、焦散亮度倍数、四个界面的总透过率、光路出了画面时取的糊开的世界（四分之一分辨率的第几级 mip）
+export const OPTICS = { glassIor: 1.5, liquidIor: 1.36, glassAbsorb: [1.6, 0.5, 1.2], dispersion: 0.012, frostBlur: 0.012, frostDiffuse: 0.4, causticGrid: 256, causticGain: 1, interfaces: 0.85, lowLod: 3.5 };
+export const LAYER = { liquid: 1, glass: 2, over: 3 };
 const CAP_R = 0.019;                                                  // 颈圈 + 喷头 + 瓶盖挡光的圆柱半径（瓶盖半宽 18 毫米）
 
 const f = x => x.toFixed(6);
@@ -49,46 +53,83 @@ vec2 enterP(vec3 p, vec3 d, vec3 P[8], vec2 Y, out vec3 n) {
 
 const PARS = /* glsl */`
 uniform mat4 projectionMatrix;                                          // 片元着色器默认没有声明
-uniform sampler2D tScene, tDepth; uniform vec2 res; uniform float uNear, uFar, uBlur;
+uniform sampler2D tScene, tDepth, tLow; uniform vec2 res; uniform float uNear, uFar, uBlur;
 uniform mat4 uV2B, uB2V; uniform vec3 uAbsorb; uniform float uDisp;
 ${PRISM}
 float gBlur = 0.0;                                                      // 本片元的磨砂模糊半径（像素）
+vec2 gUv = vec2(0.0);                                                   // behind 最后取色的屏幕位置
+float gZin = 0.0;                                                       // 视线进瓶（进液体）那一点的视空间 z
 vec2 toScreen(vec3 q) { vec4 c = projectionMatrix * (uB2V * vec4(q, 1.0)); return c.xy / c.w * 0.5 + 0.5; }
-vec3 fetch(vec2 uv) {
+vec3 fetchR(vec2 uv, float R) {
   vec3 c = texture2D(tScene, uv).rgb;
-  if (gBlur < 0.5) return c;
+  if (R < 0.5) return c;
   for (int i = 0; i < 12; i++) {                                        // 磨砂：中心 + 两圈各 6 个点
     float a = float(i) * 1.0472 + (i < 6 ? 0.0 : 0.5236), r = i < 6 ? 0.5 : 1.0;
-    c += texture2D(tScene, uv + vec2(cos(a), sin(a)) * r * gBlur / res).rgb;
+    c += texture2D(tScene, uv + vec2(cos(a), sin(a)) * r * R / res).rgb;
   }
   return c / 13.0;
 }
-// 光线从 q 沿 d 离开瓶子后落到的画面：用深度图估计背后的东西有多远，再把那一点投回屏幕
-vec3 behind(vec3 q, vec3 d) {
-  vec2 uv = toScreen(q);
-  float zb = perspectiveDepthToViewZ(texture2D(tDepth, uv).x, uNear, uFar), zq = (uB2V * vec4(q, 1.0)).z;
-  float s = min(max(zq - zb, 0.0) / max(-(mat3(uB2V) * d).z, 0.25), 0.3);
-  return fetch(toScreen(q + d * s));
+vec3 fetch(vec2 uv) { return fetchR(uv, gBlur); }
+float viewZ(vec2 uv) { return perspectiveDepthToViewZ(texture2D(tDepth, uv).x, uNear, uFar); }
+// uv 处是挡在进瓶点前面的东西（比如从液面后方看回去的水滴）：它不在这条光路上，取它周围两圈里在后面的画面
+vec3 around(vec2 uv) {
+  vec3 c = vec3(0.0); float n = 0.0;
+  for (int i = 0; i < 16; i++) {
+    float a = float(i) * 0.785398 + (i < 8 ? 0.0 : 0.392699), r = i < 8 ? 0.1 : 0.18;
+    vec2 u = clamp(uv + vec2(cos(a) * res.y / res.x, sin(a)) * r, 0.0, 1.0);
+    if (viewZ(u) < gZin + 5e-4) { c += texture2D(tScene, u).rgb; n += 1.0; }
+  }
+  return n > 0.0 ? c / n : texture2D(tScene, uv).rgb;
 }
-// 在棱柱里从 p 沿 d 走到出口再折射出去（出口全反射就在里面反射再走，最多四段：45° 切角里要来回几次），返回背后的颜色；L 累计路程
+bool onScreen(vec2 uv) { return all(greaterThanEqual(uv, vec2(0.0))) && all(lessThanEqual(uv, vec2(1.0))); }
+// 光线从 q 沿 d 离开瓶子后落到的画面：用深度图估计背后的东西有多远，再把那一点投回屏幕。
+// 投到画面外时（从液面斜看下去，光从后壁很低的地方出去）：画面外没有深度也没有颜色，就从本像素朝那一点走到画面边上，
+// 取那里的世界大范围糊开的颜色（tLow 的粗 mip）。它随像素连续变化：不拉出一道道边上的像素
+vec3 behind(vec3 q, vec3 d) {
+  vec2 uq = toScreen(q);
+  float zq = (uB2V * vec4(q, 1.0)).z, s = onScreen(uq) ? min(max(zq - viewZ(uq), 0.0) / max(-(mat3(uB2V) * d).z, 0.25), 0.3) : 0.05;
+  gUv = toScreen(q + d * s);
+  if (onScreen(gUv)) {                                                  // 靠近画面边时渐渐换成 tLow：光路出画面的那一刻颜色不跳
+    vec2 e = min(gUv, 1.0 - gUv) * vec2(res.x / res.y, 1.0);
+    vec3 c = viewZ(gUv) > gZin + 5e-4 ? around(gUv) : fetch(gUv);
+    return mix(textureLod(tLow, gUv, ${f(OPTICS.lowLod)}).rgb, c, smoothstep(0.0, 0.06, min(e.x, e.y)));
+  }
+  vec2 f = gl_FragCoord.xy / res, v = gUv - f, m = 1.5 / res, b = mix(m, 1.0 - m, step(0.0, v));
+  vec2 t = mix(vec2(1e6), (b - f) / v, step(1e-6, abs(v)));             // 每个方向走到边上要走多远
+  gUv = f + v * min(t.x, t.y);
+  return textureLod(tLow, gUv, ${f(OPTICS.lowLod)}).rgb;
+}
+// 从折射率 eta 的介质沿 d 出到空气时的反射率（非偏振的菲涅耳，n 是外法线；全反射为 1）
+float fresnelOut(vec3 d, vec3 n, float eta) {
+  float ci = dot(d, n), st2 = eta * eta * (1.0 - ci * ci);
+  if (st2 >= 1.0) return 1.0;
+  float ct = sqrt(1.0 - st2), rs = (eta * ci - ct) / (eta * ci + ct), rp = (ci - eta * ct) / (ci + eta * ct);
+  return 0.5 * (rs * rs + rp * rp);
+}
+// 在棱柱里从 p 沿 d 走到出口，出去的那份按菲涅耳透过率取背后的颜色，反射回来的那份接着在里面走（最多四段：45° 切角里要来回几次）。
+// 接近全反射的角度上两份此消彼长，画面不会在临界角上断开；平常出口的反射只有几个百分点，直接出去。L 是按份额平均的路程
 vec3 through(vec3 p, vec3 d, vec3 P[8], vec2 Y, float eta, inout float L) {
+  vec3 c = vec3(0.0); float w = 1.0, Lw = 0.0;
   for (int k = 0; k < 4; k++) {
     vec3 n; float t = exitP(p, d, P, Y, n);
     p += d * t; L += t;
-    vec3 o = refract(d, -n, eta);
-    if (dot(o, o) > 0.0) return behind(p, o);
+    float a = w * (1.0 - fresnelOut(d, n, eta));
+    if (a > 0.0) { c += a * behind(p, refract(d, -n, eta)); Lw += a * L; w -= a; }
+    if (w < 0.1) { L = Lw / (1.0 - w); return c / (1.0 - w); }
     d = reflect(d, n);
   }
-  return fetch(toScreen(p));                                              // 还困在里面：取这一点正后方的画面
+  L = Lw + w * L;
+  return c + w * fetch(toScreen(p));                                      // 还困在里面的那份：取这一点正后方的画面
 }
 `;
 
 const MAIN = /* glsl */`
   vec3 bp = (uV2B * vec4(-vViewPosition, 1.0)).xyz, I = normalize(bp - uV2B[3].xyz), N = normalize(mat3(uV2B) * normal);
+  gZin = -vViewPosition.z;
   if (dot(N, I) > 0.0) N = -N;
   vec3 seen;
   #ifdef GLASS_PASS
-    float frost = smoothstep(0.1, 0.45, roughnessFactor);
+    float frost = smoothstep(0.1, 0.45, roughnessFactor), zSeen = gl_FragCoord.z;
     gBlur = uBlur * frost;
     for (int c = 0; c < 3; c++) {                                        // 三色各走一遍：色散只在厚底和棱边上看得出
       float eta = ior + float(c - 1) * uDisp, L = 0.0;
@@ -96,11 +137,15 @@ const MAIN = /* glsl */`
       vec2 h = enterP(bp, d, uCav, uCavY, nc);
       vec3 d2 = refract(d, nc, eta);
       if (bp.y > uOutY.y + 1e-4) { L = ${f(2 * G.wall)}; col = behind(bp, I); }            // 瓶颈：薄壁管，光基本直穿
-      else if (h.x > 0.0 && h.x < h.y && dot(d2, d2) > 0.0) { L = 2.0 * h.x; col = behind(bp + d * h.x, d2) * 0.92; }   // 穿过侧壁进内腔：后壁按同样厚度算
+      else if (h.x > 0.0 && h.x < h.y && dot(d2, d2) > 0.0) {            // 穿过侧壁进内腔：后壁按同样厚度算
+        L = 2.0 * h.x; col = behind(bp + d * h.x, d2) * 0.92;
+        if (c == 1) zSeen = texture2D(tDepth, gUv).x;                    // 看到的那样东西的深度（绿色通道的光路）
+      }
       else col = through(bp, d, uOut, uOutY, eta, L);                    // 实心玻璃（厚底、肩、棱）：可能全反射
       seen[c] = col[c] * exp(-uAbsorb[c] * L);
     }
     seen = mix(seen, totalDiffuse, frost * ${f(OPTICS.frostDiffuse)});    // 磨砂面散射：带一点被灯照亮的白
+    gl_FragDepth = frost < 0.5 ? max(gl_FragCoord.z, zSeen) : gl_FragCoord.z;   // 不比玻璃自己近：玻璃前面的东西照样挡住它
   #else
     float L = 0.0;
     seen = through(bp, refract(I, N, 1.0 / ior), uLiq, uLiqY, ior, L) * exp(-uAbsorb * L);
@@ -114,15 +159,17 @@ uniform vec3 uL, uC, uE1, uE2; uniform vec2 uExt; uniform float uEg, uEl, uGa, u
 ${PRISM}
 varying vec2 vSrc, vDst; varying vec3 vIn; varying vec4 vPath; varying float vOk, vT;
 float fid(vec3 n) { return n.y > 0.5 ? 8.0 : n.y < -0.5 ? 9.0 : floor(mod(atan(n.z, n.x) / 0.785398 + 8.5, 8.0)); }
-// 与 bottle.js 的 rippleHeight 同一公式
+// 与 bottle.js 的 rippleHeight 同一公式；r 从落点 RIPPLE.at 量起
+const vec2 AT = vec2(${f(RIPPLE.at[0])}, ${f(RIPPLE.at[1])});
 float rip(float r) {
   float b = ${f(RIPPLE.c)} * uAge - r;
   if (uAge <= 0.0 || b <= 0.0) return 0.0;
   return ${f(RIPPLE.amp)} * exp(${f(-RIPPLE.decay)} * uAge) * sqrt(${f(RIPPLE.r0)} / (r + ${f(RIPPLE.r0)})) * sin(${f(RIPPLE.k)} * b) * min(1.0, b / 0.003);
 }
 vec3 surfaceNormal(vec2 xz) {
-  float r = length(xz), g = (rip(r + 1e-4) - rip(max(r - 1e-4, 0.0))) / 2e-4;
-  vec2 u = r > 1e-6 ? xz / r : vec2(0.0);
+  vec2 q = xz - AT;
+  float r = length(q), g = (rip(r + 1e-4) - rip(max(r - 1e-4, 0.0))) / 2e-4;
+  vec2 u = r > 1e-6 ? q / r : vec2(0.0);
   return normalize(vec3(-g * u.x, 1.0, -g * u.y));
 }
 void main() {
@@ -230,7 +277,7 @@ export function createGlass(ctx, bottle, sku) {
   const { renderer, scene, camera } = ctx, { glass, liquid } = bottle.parts, V2 = (a, b) => new THREE.Vector2(a, b);
   const planes = S => S.planes.map(([nx, nz, d]) => new THREE.Vector3(nx, nz, d));
   const U = {
-    tScene: { value: null }, tDepth: { value: null }, res: { value: V2(1, 1) }, uNear: { value: 0.01 }, uFar: { value: 100 }, uBlur: { value: 0 },
+    tScene: { value: null }, tDepth: { value: null }, tLow: { value: null }, res: { value: V2(1, 1) }, uNear: { value: 0.01 }, uFar: { value: 100 }, uBlur: { value: 0 },
     uV2B: { value: new THREE.Matrix4() }, uB2V: { value: new THREE.Matrix4() }, uDisp: { value: OPTICS.dispersion },
     uOut: { value: planes(SHAPE.outer) }, uCav: { value: planes(SHAPE.cavity) }, uLiq: { value: planes(SHAPE.liquid) },
     uOutY: { value: V2(...SHAPE.outer.y) }, uCavY: { value: V2(...SHAPE.cavity.y) }, uLiqY: { value: V2(...SHAPE.liquid.y) },
@@ -258,6 +305,15 @@ export function createGlass(ctx, bottle, sku) {
   S.uAlb.value.copy(gm ? gm.color : new THREE.Color(0.2, 0.2, 0.2)).multiplyScalar(1 - metal);
   if (gm?.isMeshStandardMaterial) S.uF0.value.setScalar(0.04).lerp(gm.color, metal); else S.uF0.value.setScalar(0);   // 和 three 一样：非金属 F0 = 0.04
   S.uRough.value = gm?.isMeshStandardMaterial ? Math.max(gm.roughness, 0.0525) : 1;
+
+  // 第 0 层画完缩成四分之一存一份带 mip 的：光路出了画面时（behind）取它的粗 mip
+  const low = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+  const shrink = new FullScreenQuad(new THREE.ShaderMaterial({
+    uniforms: { t: { value: null } }, depthTest: false, depthWrite: false,
+    vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader: 'uniform sampler2D t; varying vec2 vUv; void main() { gl_FragColor = texture2D(t, vUv); }',
+  }));
+  U.tLow.value = low.texture;
 
   const _m = new THREE.Matrix4(), _a = new THREE.Vector3(), _b = new THREE.Vector3(), _c = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
   const box = [0, 1].flatMap(i => [0, 1].flatMap(j => [0, 1].map(k => new THREE.Vector3((i - 0.5) * DIMS.w, j * DIMS.body, (k - 0.5) * DIMS.d))));
@@ -290,8 +346,10 @@ export function createGlass(ctx, bottle, sku) {
         U.res.value.set(target.width, target.height); U.uBlur.value = OPTICS.frostBlur * target.height;
         U.uNear.value = camera.near; U.uFar.value = camera.far;
         U.tScene.value = target.texture; U.tDepth.value = target.depthTexture;
-        scene.background = null; renderer.autoClear = false; renderer.shadowMap.autoUpdate = false;   // 后两遍叠在第一遍上：不清屏、不重画阴影
-        for (const layer of [LAYER.liquid, LAYER.glass]) { camera.layers.set(layer); renderer.render(scene, camera); }
+        low.setSize(Math.ceil(target.width / 4), Math.ceil(target.height / 4));
+        shrink.material.uniforms.t.value = target.texture; renderer.setRenderTarget(low); shrink.render(renderer); renderer.setRenderTarget(target);
+        scene.background = null; renderer.autoClear = false; renderer.shadowMap.autoUpdate = false;   // 后三遍叠在第一遍上：不清屏、不重画阴影
+        for (const layer of [LAYER.liquid, LAYER.glass, LAYER.over]) { camera.layers.set(layer); renderer.render(scene, camera); }
       } finally { scene.background = bg; renderer.autoClear = ac; renderer.shadowMap.autoUpdate = su; camera.layers.mask = mask; }
     },
   };

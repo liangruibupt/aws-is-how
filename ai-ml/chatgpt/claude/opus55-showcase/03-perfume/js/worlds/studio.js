@@ -1,5 +1,6 @@
 // studio.js — 中性影棚：无缝背景弯、两侧长条柔光、一盏主光。单独调瓶子和玻璃时用（?world=studio），也是还没做世界的香型的替身
 import * as THREE from 'three';
+import { haze } from './common.js';
 
 /** 背景弯：地面 → 圆弧 → 背墙，一张弯曲的平面 */
 function sweep({ width = 14, floor = 3, R = 0.8, wall = 3, z0 = 1.2 }) {
@@ -36,7 +37,11 @@ export async function build(ctx) {
   drop.position.set(0, 0.0245, 0);
   macro.add(pebble, drop); scene.add(macro);
 
+  // 影棚的“天色”：暗灰的房间，太阳就是主光（落进瓶里的水滴、喷雾按它着色）
+  const hz = haze({ zenith: '#3b3e45', horizon: '#56585e', mist: '#26272b', sun: { dir: key.position.toArray(), color: '#fff3e6', glow: 0.8 } });
+
   return {
+    haze: hz,
     env: {
       base: '#17181b',
       fill(add, B) {

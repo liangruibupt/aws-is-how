@@ -5,12 +5,12 @@ import { buildBottle, SHAPE } from '../js/bottle.js';
 import { createGlass, OPTICS, LAYER } from '../js/glass.js';
 import { SKUS } from '../skus.js';
 
-// 假的渲染器：只记下每一遍画的时候相机开了哪些层、背景、autoClear、阴影是否更新
+// 假的渲染器：只记下每一遍画到哪个目标、用哪台相机、相机开了哪些层、背景、autoClear、阴影是否更新
 function fakeRenderer({ failOn = -1 } = {}) {
-  const r = { autoClear: true, shadowMap: { autoUpdate: true }, calls: [], setRenderTarget() {}, clear() {} };
+  const r = { autoClear: true, shadowMap: { autoUpdate: true }, calls: [], target: null, setRenderTarget(t) { r.target = t; }, clear() {} };
   r.render = (scene, camera) => {
     if (r.calls.length === failOn) throw new Error('lost context');
-    r.calls.push({ mask: camera.layers.mask, bg: scene.background, autoClear: r.autoClear, shadows: r.shadowMap.autoUpdate });
+    r.calls.push({ target: r.target, camera, mask: camera.layers.mask, bg: scene.background, autoClear: r.autoClear, shadows: r.shadowMap.autoUpdate });
   };
   return r;
 }
@@ -43,6 +43,7 @@ test('glass and liquid get the layered-refraction shader; a three without the tr
     const sh = { fragmentShader: THREE.ShaderLib.physical.fragmentShader, uniforms: {} };
     m.onBeforeCompile(sh);
     assert.ok(!sh.fragmentShader.includes('#include <transmission_fragment>') && sh.fragmentShader.includes('uniform mat4 projectionMatrix;'));
+    assert.match(sh.fragmentShader, /#ifdef GLASS_PASS[^#]*gl_FragDepth = [^#]*#else/);   // 只有玻璃改写深度：透过它看到的东西按自己的远近虚化
     for (const [k, S] of [['uOut', SHAPE.outer], ['uCav', SHAPE.cavity], ['uLiq', SHAPE.liquid]]) near(sh.uniforms[k].value.flatMap(v => v.toArray()), S.planes.flat());
     assert.throws(() => m.onBeforeCompile({ fragmentShader: 'void main() {}', uniforms: {} }), /three shader chunk not found/);
   }
@@ -72,22 +73,28 @@ test('the caustic lands on the ground under the bottle, not on whatever sat at t
   assert.equal(metal.uRough.value, 0.0525);                            // 和 three 一样把粗糙度夹到 0.0525 以上
 });
 
-test('render: world, liquid, glass into one target, then the renderer is put back — even when a pass throws', () => {
+test('render: world, a mipmapped quarter-size copy of it, liquid, glass, then what floats in front; the renderer is put back — even when a pass throws', () => {
   const w = world(), { renderer, scene, camera } = w.ctx, bg = scene.background;
   camera.layers.enable(5);
   const mask = camera.layers.mask;
   w.glass.render(target);
-  assert.deepEqual(renderer.calls.map(c => c.mask), [1 << 0, 1 << LAYER.liquid, 1 << LAYER.glass]);
-  assert.equal(renderer.calls[0].bg, bg);
-  for (const c of renderer.calls.slice(1)) assert.ok(c.bg === null && !c.autoClear && !c.shadows);   // 后两遍叠在第一遍上，不清屏、不重画阴影
+  const passes = renderer.calls.filter(c => c.camera === camera), [copy] = renderer.calls.filter(c => c.camera !== camera);
+  assert.deepEqual(passes.map(c => c.mask), [1 << 0, 1 << LAYER.liquid, 1 << LAYER.glass, 1 << LAYER.over]);
+  assert.ok(passes.every(c => c.target === target) && renderer.calls.length === 5 && renderer.calls[1] === copy);
+  assert.equal(passes[0].bg, bg);
+  for (const c of passes.slice(1)) assert.ok(c.bg === null && !c.autoClear && !c.shadows);   // 后三遍叠在第一遍上，不清屏、不重画阴影
   assert.ok(scene.background === bg && renderer.autoClear && renderer.shadowMap.autoUpdate && camera.layers.mask === mask);
-  assert.ok(w.key.layers.isEnabled(LAYER.liquid) && w.key.layers.isEnabled(LAYER.glass));
+  assert.ok([LAYER.liquid, LAYER.glass, LAYER.over].every(l => w.key.layers.isEnabled(l)));
   const U = w.bottle.parts.glass.material, sh = { fragmentShader: THREE.ShaderLib.physical.fragmentShader, uniforms: {} };
   U.onBeforeCompile(sh);
   assert.ok(sh.uniforms.tScene.value === target.texture && sh.uniforms.tDepth.value === target.depthTexture);
   assert.equal(sh.uniforms.uBlur.value, OPTICS.frostBlur * target.height);
+  // 光路出了画面时取的糊开的世界：第 0 层画完后缩成四分之一的那份，带 mip
+  const low = copy.target, T = sh.uniforms.tLow.value;
+  assert.ok(T === low.texture && T.generateMipmaps && T.minFilter === THREE.LinearMipmapLinearFilter);
+  assert.deepEqual([low.width, low.height], [270, 480]);
 
-  for (const failOn of [0, 1]) {
+  for (const failOn of [0, 1, 3]) {
     const f = world({ failOn });
     f.ctx.camera.layers.enable(5);
     const m = f.ctx.camera.layers.mask;

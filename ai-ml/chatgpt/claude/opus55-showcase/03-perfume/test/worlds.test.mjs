@@ -6,6 +6,8 @@ import { LAYOUTS } from '../layouts.js';
 import { SKUS } from '../skus.js';
 import { CUTS, BOX, DIMS } from '../meta.js';
 import { buildBottle } from '../js/bottle.js';
+import { createDrop } from '../js/drop.js';
+import { createSpray } from '../js/spray.js';
 import { ASPECTS, parseVariant } from '../../factory/engine/variant.js';
 import { solvePose, applyPose, project } from '../../factory/engine/framing.js';
 import { buildCut } from '../../factory/engine/timeline.js';
@@ -19,16 +21,17 @@ const box3 = ([a, b]) => new THREE.Box3(new THREE.Vector3(...a), new THREE.Vecto
 const frustum = cam => new THREE.Frustum().setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse));
 const hit = (a, b) => a[0] < b[0] + b[2] && b[0] < a[0] + a[2] && a[1] < b[1] + b[3] && b[1] < a[1] + a[3];
 
-/** 和 film.setup 一样搭起来（瓶子不带 logo、不换玻璃：镜头只用到它的 pose 和 anchor） */
+/** 和 film.setup 一样搭起来（瓶子不带 logo、不换玻璃：镜头只用到它的 pose 和 anchor；水滴和喷雾按世界的 haze 着色） */
 const cache = {};
 function load(id) {
   return (cache[id] ??= (async () => {
     const scene = new THREE.Scene(), variant = parseVariant(film, { sku: 'whitetea' });
     const ctx = { scene, renderer: null, variant, params: new URLSearchParams(), W: 1080, H: 1920 };
     ctx.world = await (await WORLDS[id]()).build(ctx);
-    const bottle = buildBottle(ctx, SKUS[variant.sku]);
-    scene.add(bottle.root);
-    ctx.subjects = { bottle };
+    const sku = SKUS[variant.sku], bottle = buildBottle(ctx, sku), drop = createDrop(ctx, sku), spray = createSpray(ctx, bottle);
+    bottle.root.add(drop.mesh);
+    scene.add(bottle.root, spray.root);
+    ctx.subjects = { bottle, drop, spray };
     scene.updateMatrixWorld(true);
     return ctx;
   })());
@@ -64,12 +67,13 @@ function snapshot(scene) {
 }
 
 for (const id of ids) {
-  test(`${id}: builds without a renderer and returns env, post and a macro set in the scene`, async () => {
+  test(`${id}: builds without a renderer and returns haze, env, post and a macro set in the scene`, async () => {
     const { scene, world } = await load(id);
     assert.ok(world.env && typeof world.env === 'object', 'world.env is missing');
     if (world.env.fill) assert.equal(typeof world.env.fill, 'function');
     assert.ok(world.env.base === null || world.env.base === undefined || typeof world.env.base === 'string');
     assert.equal(typeof (world.post ?? {}), 'object');
+    assert.ok(world.haze?.uniforms?.hSunDir?.value?.isVector3 && world.haze.glsl?.includes('vec3 haze('), 'world.haze is not a haze()');   // 水滴、喷雾按它着色
     let o = world.macro.root;
     while (o.parent) o = o.parent;
     assert.equal(o, scene, 'macro.root is not in the scene');

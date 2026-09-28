@@ -2,8 +2,8 @@
 
 export const BAR = 3.0, GRID = 1.5;                    // 一小节 3 秒；命中点都落在 1.5 秒网格上
 export const SHOTS = ['macro', 'drop', 'hero', 'anatomy', 'spray', 'end'];
-// 镜头内部的事件（镜头本地秒）：水滴落进液面、光带扫过峰值
-export const EV = { land: 0.75, streak: 1.5 };
+// 镜头内部的事件（镜头本地秒）：水滴落进液面（drop）、光带扫过峰值（hero）、瓶盖浮起、按下喷头、瓶盖落回（spray）
+export const EV = { land: 0.75, streak: 1.5, lift: 0.05, spray: 0.4, seat: 1.45 };
 
 export const CUTS = {
   15: {

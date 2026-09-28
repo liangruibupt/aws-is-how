@@ -12,8 +12,8 @@ import { clamp, ss } from '../../factory/engine/ease.js';
 // 外形：八角切角 chamfer（沿轴量）、竖棱圆角 round、上下棱倒圆 bevel；内腔：侧壁 wall、厚底 base、肩厚 shoulder、液体转角圆角 inner；
 // 静止液面高 fill，贴壁处弯月面再高 meniscus；瓶颈外半径 neck
 export const GLASS = { chamfer: 0.013, round: 0.0018, bevel: 0.0016, wall: 0.0045, base: 0.018, shoulder: 0.011, inner: 0.0012, fill: 0.074, meniscus: 0.0012, neck: 0.0085 };
-// 落滴涟漪：振幅、波数、波前速度（米/秒）、时间衰减（1/秒）、距离衰减尺度（米）
-export const RIPPLE = { amp: 0.0008, k: (2 * Math.PI) / 0.0075, c: 0.055, decay: 1.6, r0: 0.004 };
+// 落滴涟漪：振幅、波数、波前速度（米/秒）、时间衰减（1/秒）、距离衰减尺度（米）、落点 [x, z]（偏在左前：躲开正中的吸管和泵室）
+export const RIPPLE = { amp: 0.0008, k: (2 * Math.PI) / 0.0075, c: 0.055, decay: 1.6, r0: 0.004, at: [-0.012, 0.006] };
 
 // ── 八角形 { a 半宽, b 半深, k 切角 }（x-z 平面）──
 const S2 = Math.SQRT1_2;
@@ -122,12 +122,12 @@ function liquidBody(B, y0, y1, near) {
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); g.setIndex(idx);
   return g;
 }
-/** 液面：中心点 + RINGS 圈（每圈是轮廓按比例缩小，越靠壁越密：弯月面只有一两毫米宽）；r 离中心的距离，dw 离壁的距离 */
+/** 液面：中心点 + RINGS 圈（每圈是轮廓按比例缩小，越靠壁越密：弯月面只有一两毫米宽）；r 离落点 RIPPLE.at 的距离，dw 离壁的距离 */
 function liquidSurface(B) {
-  const n = B.length, pos = [0, 0, 0], r = [0], dw = [Infinity], idx = [];
+  const n = B.length, [ax, az] = RIPPLE.at, pos = [0, 0, 0], r = [Math.hypot(ax, az)], dw = [Infinity], idx = [];
   for (let j = 1; j <= RINGS; j++) {
     const s = 1 - (1 - j / RINGS) ** 2;
-    for (const [x, z] of B) { pos.push(x * s, 0, z * s); r.push(Math.hypot(x, z) * s); dw.push(Math.hypot(x, z) * (1 - s)); }
+    for (const [x, z] of B) { pos.push(x * s, 0, z * s); r.push(Math.hypot(x * s - ax, z * s - az)); dw.push(Math.hypot(x, z) * (1 - s)); }
   }
   const at = (j, i) => 1 + (j - 1) * n + (i % n);
   for (let i = 0; i < n; i++) idx.push(0, at(1, i + 1), at(1, i));
@@ -157,10 +157,11 @@ function buildPump() {
   const stemL = ACT.y + 0.003, stem = new THREE.Mesh(new THREE.CylinderGeometry(0.0018, 0.0018, stemL, 16), chrome);
   stem.position.y = -stemL / 2;                                     // 跟着按钮走，按下时滑进泵室
   act.add(button, nozzle, stem); act.position.y = ACT.y;
-  const chamber = new THREE.Mesh(new THREE.CylinderGeometry(0.0042, 0.0038, 0.015, 32), plastic);
-  chamber.position.y = -0.0085;
+  // 泵室整个藏在厚肩里（底面在内腔顶上 0.25 毫米）：瓶里的特写只看得到透明吸管
+  const chamber = new THREE.Mesh(new THREE.CylinderGeometry(0.0042, 0.0038, 0.0095, 32), plastic);
+  chamber.position.y = -0.006;
   const drop = DIMS.body - GLASS.base - 0.0025;                     // 吸管底离内腔底 2.5 毫米
-  const path = new THREE.CatmullRomCurve3([[0, -0.016, 0], [0, -drop * 0.55, 0.0006], [0.0035, -drop, 0.0022]].map(p => new THREE.Vector3(...p)));
+  const path = new THREE.CatmullRomCurve3([[0, -0.0105, 0], [0, -drop * 0.55, 0.0006], [0.0035, -drop, 0.0022]].map(p => new THREE.Vector3(...p)));
   // 吸管是透明塑料：半透明、不投影（不透明的白管从正面磨砂 logo 后面穿过，会把字母“切断”）
   const clear = new THREE.MeshPhysicalMaterial({ color: '#f4f3ee', roughness: 0.2, transparent: true, opacity: 0.35, depthWrite: false });
   const tube = new THREE.Mesh(new THREE.TubeGeometry(path, 64, 0.0011, 10), clear);

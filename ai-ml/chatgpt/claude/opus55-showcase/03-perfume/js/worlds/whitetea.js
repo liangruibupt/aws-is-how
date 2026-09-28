@@ -2,6 +2,7 @@
 // 低太阳在左后方，光束斜穿雾气。特写是「一芽二叶」：带白毫的芽头、两片锯齿嫩叶，叶尖挂着一颗渐渐长大的露珠
 import * as THREE from 'three';
 import { haze, sky, dewMaterial, driftField, puffAtlas, billboards, NOISE } from './common.js';
+import { DROP, fallen, stretch } from '../drop.js';
 import { rand } from '../../../factory/engine/rng.js';
 import { lerp, ss, clamp, easeInOut } from '../../../factory/engine/ease.js';
 
@@ -280,7 +281,8 @@ function bud(len, R) {
 }
 /**
  * 一芽二叶 + 叶尖一颗露珠 + 后面虚掉的茶蓬。返回 root（整枝）、frame（取景盒，世界坐标；深度以露珠为中心，对焦 'target' 就落在露珠上）、
- * dir(yaw, pitch)（相机方向，按嫩枝坐标的方位 / 仰角，度）、drop(R)（按半径摆露珠：顶端始终挂在叶尖上）
+ * dir(yaw, pitch)（相机方向，按嫩枝坐标的方位 / 仰角，度）、drop(R, tau)（按半径摆露珠：挂着时顶端扎在叶尖上，松开前 0.3 秒被坠长；
+ * tau > 0 是松开后的秒数，和瓶里的水滴走同一条下落曲线）
  */
 function macroSprig(hz) {
   const root = new THREE.Group();
@@ -312,7 +314,11 @@ function macroSprig(hz) {
   root.add(dew);
   root.updateMatrixWorld(true);                                          // 先在嫩枝坐标里量叶尖和取景盒，再整枝搬过去
   const tip = new THREE.Vector3(0.052, -0.6 * 0.052, 0).applyMatrix4(leaf2.matrix);                     // 叶尖（嫩枝坐标）
-  const drop = R => { dew.scale.set(R, 1.2 * R, R); dew.position.set(tip.x, tip.y - R, tip.z); dew.updateMatrix(); };   // 顶端在叶尖上方 0.2R：叶尖扎进水珠一点
+  const drop = (R, tau = -1) => {
+    if (tau > 0) { const sy = stretch(tau), w = R * Math.sqrt(1.4 / sy); dew.scale.set(w, sy * R, w); dew.position.set(tip.x, tip.y - 1.2 * R - fallen(tau), tip.z); }
+    else { const sy = 1.2 + 0.2 * ss(-0.3, 0, tau); dew.scale.set(R, sy * R, R); dew.position.set(tip.x, tip.y + 0.2 * R - sy * R, tip.z); }   // 顶端在叶尖上方 0.2R：叶尖扎进水珠一点
+    dew.updateMatrix();
+  };
   drop(0.003);
   const frame = new THREE.Box3();
   for (const o of [b, leaf1, leaf2, dew]) frame.expandByObject(o, true);
@@ -347,6 +353,7 @@ export async function build(ctx) {
   const sprig = macroSprig(hz); scene.add(sprig.root);
 
   return {
+    haze: hz,
     env: { base: null, fill: (add, B, es) => es.add(sky(hz, { R: 15 })) },
     post: { exposure: 1.1, aperture: 0.25, bloom: { strength: 0.3, threshold: 0.9 }, saturation: 1, lift: [0.01, 0.012, 0.01], vignette: 0.18, grain: 0.025 },
     macro: {
@@ -358,7 +365,8 @@ export async function build(ctx) {
     update(ctx, s) {
       hz.uniforms.hTime.value = s.t;
       mist.update(s.t); leaves.update(s.t);
-      if (s.name === 'macro') sprig.drop(lerp(0.0016, 0.003, ss(0, 1, s.u)));   // 露珠慢慢长大
+      const rel = s.dur - DROP.pre;                                       // 特写最后 DROP.pre 秒露珠松开：硬切到 drop，瓶里的水滴接着落
+      if (s.name === 'macro') sprig.drop(lerp(0.0016, 0.003, ss(0, rel - 0.3, s.lt)), s.lt - rel);   // 先慢慢长大
     },
     reset() { sprig.drop(0.003); },
   };
