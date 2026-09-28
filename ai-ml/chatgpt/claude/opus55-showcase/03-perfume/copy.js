@@ -38,15 +38,15 @@ function enNum(n) {
 export const sayNum = (n, lang) => (lang === 'zh' ? zhNum(n) : enNum(n));
 
 // ── 配音 ──
-export const VOICE = { zh: 'zm_yunjian', en: 'am_michael' };           // Task 16 试听后定稿
+export const VOICE = { zh: 'zm_yunxi', en: 'bf_emma' };               // 试听（node factory/vo.mjs 03-perfume --audition）后选定
 export const AUDITION = { zh: ['zf_xiaoxiao', 'zf_xiaoyi', 'zm_yunjian', 'zm_yunxi'], en: ['af_heart', 'bf_emma', 'am_michael', 'bm_george'] };
 export const SPEED = { zh: 1, en: 1 };
-// 时段（成片秒）：[开始, 最长]
-export const SLOTS = { 15: { hero: [4.6, 2.8], notes: [7.7, 2.6], end: [12.3, 2.6] }, 6: { one: [1.1, 3.7] } };
+// 时段（成片秒）：[开始, 最长]；每句在成片最后 0.3 秒的淡出之前念完
+export const SLOTS = { 15: { hero: [4.6, 2.8], notes: [7.7, 2.6], end: [12.3, 2.4] }, 6: { one: [1.1, 3.7] } };
 
 const END = {
   zh: { none: (k, d) => `闻境${k.name.zh}，闻香入境。`, 1111: (k, d) => `双十一，到手${d}元。`, launch: k => `闻境新品，${k.name.zh}首发。` },
-  en: { none: k => `Wenjing ${k.name.en}. Breathe in.`, 1111: (k, d) => `Eleven-eleven price: ${d} dollars.`, launch: k => `New from Wenjing: ${k.name.en}.` },
+  en: { none: k => `Wenjing ${k.name.en}. Breathe in.`, 1111: (k, d) => `Eleven-eleven: ${d} dollars.`, launch: k => `New from Wenjing: ${k.name.en}.` },
 };
 const ONE = {
   zh: { none: k => `闻境${k.name.zh}，${k.image.zh}。`, 1111: (k, d) => `闻境${k.name.zh}，双十一到手${d}元。`, launch: k => `闻境新品，${k.name.zh}首发。` },

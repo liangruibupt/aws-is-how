@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { pluck, noise, impulse, mtof, SR, VOICES, BUSES } from '../engine/audio.js';
+import { pluck, noise, impulse, mtof, SR, VOICES, BUSES, VO, duck, voPlan } from '../engine/audio.js';
 
 const rms = (y, t0, t1) => { let a = 0; const i0 = Math.round(t0 * SR), i1 = Math.round(t1 * SR); for (let i = i0; i < i1; i++) a += y[i] * y[i]; return Math.sqrt(a / (i1 - i0)); };
 const dB = x => 20 * Math.log10(x);
@@ -66,4 +66,30 @@ test('impulse: stereo, silent pre-delay, decays about 60 dB over its length, cha
 test('voices and buses the scores may use', () => {
   assert.deepEqual(Object.keys(VOICES).sort(), ['bell', 'click', 'flute', 'noise', 'pad', 'plink', 'pluck']);
   assert.deepEqual(BUSES, ['music', 'sfx']);
+});
+
+test('duck: each line dips the music from attack before it to release after it', () => {
+  const o = { depth: -9, attack: 0.12, release: 0.3 }, g = Math.pow(10, -9 / 20);
+  const same = (a, b) => { assert.equal(a.length, b.length, JSON.stringify(a)); a.forEach(([t, v], i) => assert.ok(Math.abs(t - b[i][0]) < 1e-9 && Math.abs(v - b[i][1]) < 1e-9, `point ${i}: ${[t, v]} ≠ ${b[i]}`)); };
+  same(duck([], o), [[0, 1]]);
+  same(duck([{ at: 4.6, dur: 2 }], o), [[0, 1], [4.48, 1], [4.6, g], [6.6, g], [6.9, 1]]);
+  same(duck([{ at: 5, dur: 1 }, { at: 1, dur: 1 }], o), [[0, 1], [0.88, 1], [1, g], [2, g], [2.3, 1], [4.88, 1], [5, g], [6, g], [6.3, 1]]);
+  // 两句之间来不及回来（7.58 < 7.4 + 0.3）：一直压着
+  same(duck([{ at: 4.6, dur: 2.8 }, { at: 7.7, dur: 2.6 }], o), [[0, 1], [4.48, 1], [4.6, g], [10.3, g], [10.6, 1]]);
+  // 一开头就有配音
+  same(duck([{ at: 0, dur: 1 }], o), [[0, g], [1, g], [1.3, 1]]);
+  same(duck([{ at: 0.06, dur: 1 }], o), [[0, 1 + (g - 1) / 2], [0.06, g], [1.06, g], [1.36, 1]]);
+  assert.equal(duck([{ at: 2, dur: 1 }])[2][1], Math.pow(10, VO.duck / 20));
+});
+
+test('voPlan: every line needs a clip made from its current text, voice and speed, no longer than its slot', () => {
+  const film = { id: 'demo', voLines: v => (v.vo === 'off' ? [] : [{ id: 'a', text: 'Hello.', voice: 'af_heart', speed: 1, at: 1, max: 2 }]) };
+  const ok = { a: { text: 'Hello.', voice: 'af_heart', speed: 1, rate: 1, dur: 1.5, lufs: -20 } }, on = { vo: 'on' };
+  assert.deepEqual(voPlan(film, on, ok), [{ id: 'a', at: 1, dur: 1.5, file: 'a.mp3' }]);
+  assert.deepEqual(voPlan(film, { vo: 'off' }, {}), []);
+  assert.deepEqual(voPlan({ id: 'mute' }, on, {}), []);
+  assert.throws(() => voPlan(film, on, {}), /voice-over clip missing: a \(run: node factory\/vo\.mjs demo\)/);
+  for (const k of [{ text: 'Hi.' }, { voice: 'bf_emma' }, { speed: 1.1 }]) assert.throws(() => voPlan(film, on, { a: { ...ok.a, ...k } }), /voice-over clip out of date: a/);
+  assert.throws(() => voPlan(film, on, { a: { ...ok.a, dur: 2.2 } }), /a is 2\.2 s, longer than its 2 s slot/);
+  assert.throws(() => voPlan(film, on, { a: { ...ok.a, dur: undefined } }), /longer than its 2 s slot/);
 });

@@ -10,6 +10,7 @@ import { createSpray } from './js/spray.js';
 import { envMap } from './js/worlds/common.js';
 import { SHOTS } from './js/shots.js';
 import { score } from './js/score.js';
+import { voLines, AUDITION } from './copy.js';
 
 const studio = () => import('./js/worlds/studio.js');
 // 各香型的世界；还没做的先用中性影棚。?world=studio 可强制影棚，单独调瓶子和玻璃
@@ -41,4 +42,7 @@ export default {
   shots: SHOTS,
   /** 配乐与音效的音符表（js/score.js），由 factory/engine/audio.js 合成 */
   score,
+  /** 配音台词（copy.js）：factory/vo.mjs 按它生成 assets/vo/，引擎按它把片段排进混音 */
+  voLines,
+  audition: AUDITION,
 };

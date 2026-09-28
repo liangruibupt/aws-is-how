@@ -70,7 +70,7 @@ test('voice-over lines: no digits, inside the cut, no overlaps, stable ids', () 
     assert.equal(lines.length, Object.keys(SLOTS[v.cut]).length);
     lines.forEach((l, i) => {
       assert.doesNotMatch(l.text, /\d/, `${l.id}: spell numbers out`);
-      assert.ok(l.at >= 0 && l.at + l.max <= dur, `${l.id} slot leaves the cut`);
+      assert.ok(l.at >= 0 && l.at + l.max <= dur - 0.3 + 1e-9, `${l.id} slot runs into the last 0.3 s of the cut (the fade-out)`);
       if (i) assert.ok(lines[i - 1].at + lines[i - 1].max <= l.at, `${l.id} overlaps the previous line`);
       assert.ok(l.voice && l.speed > 0);
       if (byId.has(l.id)) assert.equal(byId.get(l.id), l.text, `${l.id} means two different lines`); else byId.set(l.id, l.text);

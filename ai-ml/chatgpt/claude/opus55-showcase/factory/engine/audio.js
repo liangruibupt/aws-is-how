@@ -1,10 +1,11 @@
 // audio.js — 声音：合成音色、整段离线混音（OfflineAudioContext，48 kHz 立体声）、预览时跟着画面播放
 // 音符表来自 film.score(v, built)；整段先离线渲染成一块缓冲，预览播放的和导出写进 WAV 的是同一块，所以预览里听到的就是成片的声音
 // 音色里的"随机"（拨弦的激励、噪声、混响的尾巴）都取自 rng.js；多路信号汇到一处时两两相加（sum）：同一变体渲染两遍逐采样相同
+// 配音片段（factory/vo.mjs 生成，在成片页面旁边的 assets/vo/）按 film.voLines(v) 排进混音，配乐在每句下面让开
 import { rand } from './rng.js';
 
 export const SR = 48000;
-export const BUSES = ['music', 'sfx'];                         // music：配乐（Task 16 起在配音下压低）；sfx：音效和品牌动机，不压
+export const BUSES = ['music', 'sfx'];                         // 音符走的母线。music：配乐，在配音下压低；sfx：音效和品牌动机，不压
 export const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
 const FADE = 0.3;                                              // 结尾淡出（秒）：成片最后一帧不会切在余音中间
 
@@ -164,13 +165,68 @@ export const VOICES = {
   },
 };
 
+// ── 配音 ──
+/** 配音进混音的增益：片段已统一到 −20 LUFS 单声道，放到两个声道上是 −17 LUFS，× 0.6 后约 −21.4 LUFS，比压低后的配乐和音效高 8–13 dB；
+ *  配乐在每句下面压低 duck dB，提前 attack 秒开始压，句末 release 秒回来 */
+export const VO = { gain: 0.6, duck: -9, attack: 0.12, release: 0.3 };
+
+/** 片段还能用：它是按这句现在的文字、音色、语速生成的（factory/vo.mjs 用同一个判断决定要不要重新生成） */
+export const fresh = (e, l) => !!e && e.text === l.text && e.voice === l.voice && e.speed === l.speed;
+
+/** 变体的台词 × 片段索引（assets/vo/index.json）→ [{ id, at, dur, file }]。缺片段、片段过期、比时段长都直接报错：成片不会悄悄少一句 */
+export function voPlan(film, v, index) {
+  const fix = `run: node factory/vo.mjs ${film.id}`;
+  return (film.voLines?.(v) ?? []).map(l => {
+    const e = index[l.id];
+    if (!e) throw new Error(`voice-over clip missing: ${l.id} (${fix})`);
+    if (!fresh(e, l)) throw new Error(`voice-over clip out of date: ${l.id} was made from "${e.text}" (${e.voice}, speed ${e.speed}) (${fix})`);
+    if (!(e.dur <= l.max)) throw new Error(`voice-over clip ${l.id} is ${e.dur} s, longer than its ${l.max} s slot`);
+    return { id: l.id, at: l.at, dur: e.dur, file: `${l.id}.mp3` };
+  });
+}
+
+/** 配乐让位：spans = [{ at, dur }] → music 母线的增益折线 [[t, g], …]（线性增益，从 t = 0 开始，点之间线性过渡）。
+ *  每句前 attack 秒开始压到 depth dB，句末 release 秒回到 1；两句挨得太近、中间来不及回来的，合成一段一直压着 */
+export function duck(spans, { depth = VO.duck, attack = VO.attack, release = VO.release } = {}) {
+  const g = Math.pow(10, depth / 20), runs = [];
+  for (const { at, dur } of [...spans].sort((a, b) => a.at - b.at)) {
+    const last = runs.at(-1);
+    if (last && at - attack <= last[1] + release) last[1] = Math.max(last[1], at + dur);
+    else runs.push([at, at + dur]);
+  }
+  const pts = [[0, 1]];
+  for (const [a, b] of runs) {
+    if (a > attack) pts.push([a - attack, 1]); else pts[0][1] = 1 + (g - 1) * (1 - a / attack);   // 一开头就有配音：从压到一半（或压满）开始
+    if (a > 0) pts.push([a, g]);
+    pts.push([b, g], [b + release, 1]);
+  }
+  return pts;
+}
+
+const decoded = new Map();                                     // 解码过的片段（48 kHz 的 AudioBuffer 不属于某个上下文，可以反复用）：url + 索引条目 → Promise
+/** 当前变体的配音片段 → [{ id, at, dur, buffer }]；ac 用来解码（decodeAudioData 顺便重采样到 48 kHz） */
+async function voClips(film, v, ac) {
+  if (!film.voLines?.(v).length) return [];
+  const base = new URL('assets/vo/', document.baseURI), res = await fetch(new URL('index.json', base));
+  if (!res.ok) throw new Error(`voice-over index missing: ${res.url} (run: node factory/vo.mjs ${film.id})`);
+  const index = await res.json();
+  return Promise.all(voPlan(film, v, index).map(async c => {
+    const url = new URL(c.file, base).href, key = `${url} ${JSON.stringify(index[c.id])}`;
+    if (!decoded.has(key)) {
+      decoded.set(key, fetch(url).then(r => { if (!r.ok) throw new Error(`voice-over clip missing: ${url}`); return r.arrayBuffer(); })
+        .then(b => ac.decodeAudioData(b)).catch(e => { decoded.delete(key); throw e; }));
+    }
+    return { ...c, buffer: await decoded.get(key) };
+  }));
+}
+
 // ── 混音 ──
-/** 整段混音 → AudioBuffer（立体声 48 kHz，长度 = 成片时长）：每个事件经声像接到它的母线，两条母线共用一个混响，结尾 0.3 秒淡出。
- *  同一变体渲染两遍逐采样相同（见 sum） */
+/** 整段混音 → AudioBuffer（立体声 48 kHz，长度 = 成片时长）：每个事件经声像接到它的母线，两条母线共用一个混响；
+ *  配音片段不进混响，放在正中，每句下面 music 母线按 duck 压低；结尾 0.3 秒淡出。同一变体渲染两遍逐采样相同（见 sum） */
 export async function renderMix(film, v, built) {
   if (!film.score) throw new Error('film has no score(v, built)');
   const { notes, reverb = {} } = film.score(v, built), dur = built.duration;
-  const ac = new OfflineAudioContext(2, Math.ceil(dur * SR), SR), master = gainNode(ac, 1, ac.destination);
+  const ac = new OfflineAudioContext(2, Math.ceil(dur * SR), SR), master = gainNode(ac, 1, ac.destination), clips = await voClips(film, v, ac);
   master.gain.setValueAtTime(1, dur - FADE); master.gain.linearRampToValueAtTime(0, dur);
   const verb = ac.createConvolver(), ir = impulse(reverb.decay ?? 2), irb = ac.createBuffer(2, ir[0].length, SR);
   ir.forEach((x, c) => irb.copyToChannel(x, c));
@@ -188,7 +244,12 @@ export async function renderMix(film, v, built) {
     voice(ac, { ...e, p: e.p ?? {}, seed: i + 1 }, p, kit);
   });
   for (const name of BUSES) sum(ac, feeds[name], bus[name]);
-  sum(ac, [...BUSES.map(name => bus[name]), verb], master);
+  const [p0, ...pts] = duck(clips), mg = bus.music.gain;
+  mg.setValueAtTime(p0[1], 0);
+  for (const [t, g] of pts) mg.linearRampToValueAtTime(g, t);
+  const vo = gainNode(ac, VO.gain);
+  sum(ac, clips.map(c => { const s = ac.createBufferSource(); s.buffer = c.buffer; s.start(c.at); return s; }), vo);   // 单声道接进立体声：两个声道各一份
+  sum(ac, [...BUSES.map(name => bus[name]), verb, ...(clips.length ? [vo] : [])], master);
   return ac.startRendering();
 }
 
