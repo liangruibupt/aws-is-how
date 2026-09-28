@@ -4,6 +4,7 @@ import { SKUS } from './skus.js';
 import { LAYOUTS } from './layouts.js';
 import { fontsFor } from './captions.js';
 import { buildBottle, logoMask } from './js/bottle.js';
+import { createGlass } from './js/glass.js';
 import { SHOTS } from './js/shots.js';
 
 const studio = () => import('./js/worlds/studio.js');
@@ -21,12 +22,14 @@ export default {
     ctx.postDefaults = ctx.world.post ?? {};
     const bottle = buildBottle(ctx, sku, { logo: await logoMask() });
     ctx.scene.add(bottle.root);
-    ctx.subjects = { bottle };
+    ctx.subjects = { bottle, glass: createGlass(ctx, bottle, sku) };
   },
   /** 每次求值镜头前复位所有逐帧可变的状态：跳着看和顺序播放得到同一帧 */
   reset(ctx) {
     ctx.subjects.bottle.pose();
     ctx.world.reset?.();
   },
+  /** 场景目标里分三遍画：世界 → 液体 → 玻璃（js/glass.js） */
+  render(ctx, target) { ctx.subjects.glass.render(target); },
   shots: SHOTS,
 };

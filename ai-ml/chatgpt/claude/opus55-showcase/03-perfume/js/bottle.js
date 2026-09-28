@@ -161,9 +161,11 @@ function buildPump() {
   chamber.position.y = -0.0085;
   const drop = DIMS.body - GLASS.base - 0.0025;                     // 吸管底离内腔底 2.5 毫米
   const path = new THREE.CatmullRomCurve3([[0, -0.016, 0], [0, -drop * 0.55, 0.0006], [0.0035, -drop, 0.0022]].map(p => new THREE.Vector3(...p)));
-  const tube = new THREE.Mesh(new THREE.TubeGeometry(path, 64, 0.0011, 10), plastic);
+  // 吸管是透明塑料：半透明、不投影（不透明的白管从正面磨砂 logo 后面穿过，会把字母“切断”）
+  const clear = new THREE.MeshPhysicalMaterial({ color: '#f4f3ee', roughness: 0.2, transparent: true, opacity: 0.35, depthWrite: false });
+  const tube = new THREE.Mesh(new THREE.TubeGeometry(path, 64, 0.0011, 10), clear);
   g.add(act, chamber, tube);
-  g.traverse(m => { if (m.isMesh) m.castShadow = true; });
+  g.traverse(m => { if (m.isMesh) m.castShadow = m !== tube; });
   return { g, act };
 }
 
@@ -239,7 +241,7 @@ export function buildBottle(ctx, sku, { logo = null } = {}) {
   const ANCHOR = { cap: [cap, [0, DIMS.cap / 2, 0]], collar: [coll, [0, CH / 2, 0]], liquid: [liquid, [0, (GLASS.base + GLASS.fill) / 2, 0]], nozzle: [act, [-(ACT.r + 0.0006), ACT.h * 0.65, 0]] };
   const _v = new THREE.Vector3();
   const bottle = {
-    root, parts,
+    root, parts, posed: null,                                        // posed：最近一次 pose 的完整参数（glass.js 读涟漪）
     /** explode 0..1 分解程度；capLift 瓶盖额外上抬（米）；press 喷头按下 0..1；ripple 水滴落进液面后的秒数（≤ 0 = 静止）。每次都是完整姿态，没写的量回到默认 */
     pose({ explode = 0, capLift = 0, press = 0, ripple = 0 } = {}) {
       coll.position.y = body + EXPLODE.collar * explode;
@@ -247,6 +249,7 @@ export function buildBottle(ctx, sku, { logo = null } = {}) {
       act.position.y = ACT.y - ACT.travel * press;
       cap.position.y = body + CH + EXPLODE.cap * explode + capLift;
       shapeSurface(ripple);
+      bottle.posed = { explode, capLift, press, ripple };
       root.updateMatrixWorld(true);
     },
     /** 端点的世界坐标：'cap' | 'collar' | 'liquid' | 'nozzle' */
