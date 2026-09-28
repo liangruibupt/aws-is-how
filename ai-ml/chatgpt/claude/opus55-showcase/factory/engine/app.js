@@ -5,7 +5,7 @@ import { parseVariant, ASPECTS, MIN_TEXT } from './variant.js';
 import { buildCut, resolve } from './timeline.js';
 import { solvePose, applyPose, projectPoint } from './framing.js';
 import { prepareLayer, drawLayer, canvasMeasure, fontStr } from './text.js';
-import { createPost, mergePost } from './post.js';
+import { createPost, mergePost, focusOn } from './post.js';
 import { clamp } from './ease.js';
 import { safeOverlay, sheetPlan, showSheet } from './sheet.js';
 import { createExporter } from './exporter.js';
@@ -105,13 +105,14 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
     const s = { name: e.shot, lt, dur: e.dur, u: clamp(lt / e.dur), from: e.from, t, row };
     film.reset(ctx);
     const o = film.shots[e.shot](ctx, s);
-    applyPose(camera, solvePose(o.camera, row, ctx.W / ctx.H), ctx.W, ctx.H);
+    const pose = solvePose(o.camera, row, ctx.W / ctx.H);
+    applyPose(camera, pose, ctx.W, ctx.H);
     const text = (o.text ?? []).map(L => {
       const P = prepareLayer(L, { lt, zones: row.zones, W: ctx.W, H: ctx.H, minFrac: MIN_TEXT[ctx.ar], preview });
       if (L.leader?.world) { const [x, y] = projectPoint(camera, L.leader.world); P.leader = { ...L.leader, at: [x * ctx.W, y * ctx.H] }; }
       return P;
     });
-    return { s, text, post: mergePost(ctx.postDefaults, o.post) };
+    return { s, text, post: focusOn(mergePost(ctx.postDefaults, o.post), pose) };
   }
   function renderShot(E, target, mix = {}) {
     if (film.render) film.render(ctx, post.sceneRT);

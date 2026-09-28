@@ -5,11 +5,12 @@ import { LAYOUTS } from './layouts.js';
 import { fontsFor } from './captions.js';
 import { buildBottle, logoMask } from './js/bottle.js';
 import { createGlass } from './js/glass.js';
+import { envMap } from './js/worlds/common.js';
 import { SHOTS } from './js/shots.js';
 
 const studio = () => import('./js/worlds/studio.js');
 // 各香型的世界；还没做的先用中性影棚。?world=studio 可强制影棚，单独调瓶子和玻璃
-const WORLDS = { studio, whitetea: studio, osmanthus: studio, seasalt: studio, rose: studio };
+export const WORLDS = { studio, whitetea: () => import('./js/worlds/whitetea.js'), osmanthus: studio, seasalt: studio, rose: studio };
 
 export default {
   ...META,
@@ -19,6 +20,7 @@ export default {
     const sku = SKUS[ctx.variant.sku], id = ctx.params.get('world') ?? sku.world;
     if (!WORLDS[id]) throw new Error(`unknown world: ${id} (expected ${Object.keys(WORLDS).join(' | ')})`);
     ctx.world = await (await WORLDS[id]()).build(ctx);
+    ctx.scene.environment = envMap(ctx.renderer, ctx.world.env);     // 世界只描述反射环境，这里才生成（世界的测试在 Node 里建，没有渲染器）
     ctx.postDefaults = ctx.world.post ?? {};
     const bottle = buildBottle(ctx, sku, { logo: await logoMask() });
     ctx.scene.add(bottle.root);

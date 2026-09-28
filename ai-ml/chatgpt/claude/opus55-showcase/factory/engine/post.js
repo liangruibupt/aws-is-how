@@ -7,13 +7,15 @@ import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 
 export const POST_DEFAULTS = {
   exposure: 1,
-  focus: 0.5, aperture: 0, maxBlur: 0.012,          // 对焦距离（米）；景深强度（0 = 关）；最大弥散圆半径（画面短边比例）
+  focus: 'target', aperture: 0, maxBlur: 0.012,     // 对焦距离（米，'target' = 相机注视点）；景深强度（0 = 关）；最大弥散圆半径（画面短边比例）
   bloom: { strength: 0.22, radius: 0.45, threshold: 0.85 },
   lift: [0, 0, 0], gamma: [1, 1, 1], gain: [1, 1, 1], saturation: 1,
   vignette: 0.22, grain: 0.03, flashColor: [1, 0.98, 0.94],
 };
 /** 后期参数逐层覆盖：默认 → 世界 → 镜头；bloom 按字段合并 */
 export const mergePost = (...xs) => xs.reduce((a, x) => (x ? { ...a, ...x, bloom: { ...a.bloom, ...x.bloom } } : a), POST_DEFAULTS);
+/** focus: 'target' 换成取景解出的相机到注视点的距离：同一个镜头在三种比例下相机远近不同，焦点都落在主体上 */
+export const focusOn = (P, pose) => (P.focus === 'target' ? { ...P, focus: Math.hypot(...pose.position.map((x, i) => x - pose.target[i])) } : P);
 
 const VERT = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
 const quad = (fragmentShader, uniforms) => new FullScreenQuad(new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader, uniforms, depthTest: false, depthWrite: false }));

@@ -1,6 +1,5 @@
 // studio.js — 中性影棚：无缝背景弯、两侧长条柔光、一盏主光。单独调瓶子和玻璃时用（?world=studio），也是还没做世界的香型的替身
 import * as THREE from 'three';
-import { envMap } from './common.js';
 
 /** 背景弯：地面 → 圆弧 → 背墙，一张弯曲的平面 */
 function sweep({ width = 14, floor = 3, R = 0.8, wall = 3, z0 = 1.2 }) {
@@ -18,13 +17,7 @@ function sweep({ width = 14, floor = 3, R = 0.8, wall = 3, z0 = 1.2 }) {
 }
 
 export async function build(ctx) {
-  const { scene, renderer } = ctx;
-  scene.environment = envMap(renderer, { base: '#17181b' }, (add, B) => {
-    add(8, 5, [0, 5, 12], B('#fff6ec', 1.4));                 // 正面大柔光
-    add(3, 8, [-10, 3, 6], B('#dfe8ff', 2.2));                // 左前冷光
-    add(3, 8, [10, 3, 6], B('#ffe8d2', 1.8));                 // 右前暖光
-  });
-  scene.environmentIntensity = 1;
+  const { scene } = ctx;
   scene.background = new THREE.Color('#0f1012');
   const bg = new THREE.Mesh(sweep({}), new THREE.MeshStandardMaterial({ color: '#2b2d31', roughness: 0.82, side: THREE.DoubleSide }));
   bg.receiveShadow = true; scene.add(bg);
@@ -35,8 +28,8 @@ export async function build(ctx) {
   scene.add(key, key.target);
   const rim = new THREE.DirectionalLight('#dfe9ff', 1.2); rim.position.set(0.6, 0.5, -0.8); scene.add(rim);
 
-  // 特写的替身：一块卵石顶着一颗水珠
-  const macro = new THREE.Group(); macro.position.set(0.5, 0, -0.3);
+  // 特写的替身：一块卵石顶着一颗水珠。放在瓶子左边 3 米：不进任何瓶子镜头，也在主光的阴影盒外面
+  const M = [-3, 0, 0], macro = new THREE.Group(); macro.position.set(...M);
   const pebble = new THREE.Mesh(new THREE.IcosahedronGeometry(0.02, 3), new THREE.MeshStandardMaterial({ color: '#8a8478', roughness: 0.6 }));
   pebble.scale.set(1.4, 0.6, 1); pebble.position.y = 0.012; pebble.castShadow = true;
   const drop = new THREE.Mesh(new THREE.SphereGeometry(0.004, 32, 16), new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.02, transmission: 1, thickness: 0.004, ior: 1.33 }));
@@ -44,10 +37,18 @@ export async function build(ctx) {
   macro.add(pebble, drop); scene.add(macro);
 
   return {
+    env: {
+      base: '#17181b',
+      fill(add, B) {
+        add(8, 5, [0, 5, 12], B('#fff6ec', 1.4));             // 正面大柔光
+        add(3, 8, [-10, 3, 6], B('#dfe8ff', 2.2));            // 左前冷光
+        add(3, 8, [10, 3, 6], B('#ffe8d2', 1.8));             // 右前暖光
+      },
+    },
     post: { exposure: 1.0, aperture: 0, vignette: 0.25, grain: 0.025 },
     macro: {
       root: macro,
-      camera: s => ({ type: 'free', position: [0.5 + 0.05 * Math.sin(0.3 + 0.2 * s.lt), 0.045, -0.3 + 0.09], target: [0.5, 0.02, -0.3], fov: 24, fovAxis: 'short' }),
+      camera: s => ({ type: 'free', position: [M[0] + 0.05 * Math.sin(0.3 + 0.2 * s.lt), 0.045, M[2] + 0.09], target: [M[0], 0.02, M[2]], fov: 24, fovAxis: 'short' }),
       post: { aperture: 0.6, maxBlur: 0.01 },
     },
     update() {},
