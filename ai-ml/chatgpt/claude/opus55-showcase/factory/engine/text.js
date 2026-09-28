@@ -44,13 +44,13 @@ export const canvasMeasure = ctx => (s, font, tracking = 0) => { ctx.font = font
 
 export function layout(measure, o) {
   const { text, lang, font, zone, lineHeight = 1.25, maxLines = Infinity, tracking = 0 } = o;
-  const zw = zone[2], zh = zone[3], min = o.min ?? o.size / 2;
+  const zw = zone[2], zh = zone[3], min = o.min ?? o.size / 2, padK = o.box ? (o.box.pad ?? 0.35) : 0;
   for (let size = Math.max(o.size, min); ; size = Math.max(min, size * 0.96)) {
-    const f = fontStr(font, size), tr = tracking * size, fits = s => measure(s, f, tr) <= zw;
-    const lines = wrap(tokenize(text, lang), fits, lang);
+    const f = fontStr(font, size), tr = tracking * size, pad = padK * size, room = zw - 2 * pad, fits = s => measure(s, f, tr) <= room;
+    const lines = wrap(tokenize(text, lang), fits, lang);                 // 带底色块的图层：字宽 + 两边的衬边都要放进区里
     const width = Math.max(0, ...lines.map(l => measure(l, f, tr))), height = size * lineHeight * lines.length;
-    const ok = width <= zw + 0.5 && height <= zh + 0.5 && lines.length <= maxLines;
-    if (ok || size <= min + 1e-9) return { size, font: f, tracking: tr, lines, width, height, overflow: !ok };
+    const ok = width <= room + 0.5 && height <= zh + 0.5 && lines.length <= maxLines;
+    if (ok || size <= min + 1e-9) return { size, font: f, tracking: tr, pad, lines, width, height, overflow: !ok };
   }
 }
 
@@ -76,11 +76,11 @@ function roundRect(ctx, x, y, w, h, r) {
 export function drawLayer(ctx, L, measure) {
   const r = layout(measure, L), [zx, zy, zw, zh] = L.zone, lh = r.size * (L.lineHeight ?? 1.25), n = r.lines.length, bh = lh * n;
   const y0 = L.valign === 'bottom' ? zy + zh - bh : L.valign === 'middle' ? zy + (zh - bh) / 2 : zy;
-  const xOf = w => (L.align === 'center' ? zx + (zw - w) / 2 : L.align === 'right' ? zx + zw - w : zx);
+  const pad = r.pad, xOf = w => (L.align === 'center' ? zx + (zw - w) / 2 : L.align === 'right' ? zx + zw - w - pad : zx + pad);   // 左 / 右对齐时底色块的边贴着区的边
   const rev = L.reveal ?? 1, a = L.alpha ?? 1;
   ctx.save();
   if (L.box && rev > 0) {                                                  // 角标底色块
-    const pad = (L.box.pad ?? 0.35) * r.size, x = xOf(r.width) - pad;
+    const x = xOf(r.width) - pad;
     ctx.globalAlpha = a * smooth(rev * 2); ctx.fillStyle = L.box.fill;
     roundRect(ctx, x, y0 - pad * 0.4, r.width + 2 * pad, bh + pad * 0.8, (L.box.radius ?? 0.25) * r.size); ctx.fill();
   }

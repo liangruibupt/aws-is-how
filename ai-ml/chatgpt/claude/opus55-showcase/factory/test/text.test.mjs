@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { NO_START, NO_END, fontStr, tokenize, wrap, layout, approxMeasure as M, prepareLayer } from '../engine/text.js';
+import { NO_START, NO_END, fontStr, tokenize, wrap, layout, approxMeasure as M, prepareLayer, drawLayer } from '../engine/text.js';
 
 const F = { family: 'Test', weight: 600 };
 const near = (a, b, e = 1e-6) => assert.ok(Math.abs(a - b) < e, `${a} ≠ ${b}`);
+// 记录绘制调用的假画布：方法调用记进 calls，属性照常存取
+const rec = () => { const calls = []; return { calls, ctx: new Proxy({}, { get: (o, k) => (k in o ? o[k] : (...a) => calls.push([k, ...a])), set: (o, k, v) => ((o[k] = v), true) }) }; };
 
 test('fontStr and approxMeasure', () => {
   assert.equal(fontStr(F, 40), 'normal 600 40.00px "Test", serif');
@@ -65,4 +67,20 @@ test('prepareLayer: pixels, min size rule, reveal and fade windows', () => {
 test('layout starts at the minimum when the requested size is smaller', () => {
   const r = layout(M, { text: 'a', lang: 'en', font: F, zone: [0, 0, 500, 500], size: 10, min: 37.8 });
   near(r.size, 37.8);
+});
+
+test('a boxed layer fits its text and padding in the zone width; left or right, the box edge sits on the zone edge', () => {
+  const L = { text: 'Global Shopping Festival', lang: 'en', font: F, zone: [100, 0, 400, 80], size: 40, min: 10, maxLines: 1, box: { fill: '#e1251b', pad: 0.5 } };
+  const r = layout(M, L);
+  near(r.pad, 0.5 * r.size);
+  assert.ok(r.width + 2 * r.pad <= 400.5 && !r.overflow, `${r.width} + 2 × ${r.pad}`);
+  assert.ok(layout(M, { ...L, box: undefined }).size > r.size);               // 不带底色块时字可以更大：衬边也要占地方
+  assert.equal(layout(M, { ...L, box: undefined }).pad, 0);
+  for (const [align, x] of [['left', 100], ['right', 500 - r.width - 2 * r.pad], ['center', 300 - r.width / 2 - r.pad]]) {
+    const { ctx, calls } = rec();
+    drawLayer(ctx, { ...L, align, valign: 'middle' }, M);
+    const arcs = calls.filter(c => c[0] === 'arcTo'), [, text, tx] = calls.find(c => c[0] === 'fillText');
+    near(arcs[2][1], x); near(arcs[0][1], x + r.width + 2 * r.pad);           // 底色块的左、右边
+    assert.equal(text, L.text); near(tx, x + r.pad, 1e-6);                        // 字在块里，两边各留 pad
+  }
 });
