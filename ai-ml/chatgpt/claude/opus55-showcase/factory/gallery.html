@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>成片画廊</title>
+  <link rel="icon" href="data:," />
+  <!-- gallery.html — 批量出片的成片画廊：?film=03-perfume 读 <film>/out/index.json；按场景轴分组，每格按真实比例显示封面；
+       按轴筛选（写进网址，可分享）；鼠标悬停静音预览，点击带声音播放；每格标出文件大小、时长、响度 -->
+  <style>
+    :root { color-scheme: dark; --ui: #d9d6cf; --dim: #8a877f; --line: #34332f; --gold: #c9a45c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 18px 22px 40px; background: #111110; color: var(--ui); font: 13px/1.4 system-ui, -apple-system, "PingFang SC", sans-serif; }
+    header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin-bottom: 12px; }
+    h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .sum { color: var(--dim); }
+    .failed { color: #ff8a80; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 18px; }
+    .axis { display: inline-flex; align-items: center; gap: 4px; }
+    .axis b { margin-right: 4px; color: var(--dim); font-weight: 500; }
+    .axis button { background: #1d1c1a; color: var(--ui); border: 1px solid var(--line); border-radius: 4px; padding: 2px 9px; font: inherit; cursor: pointer; }
+    .axis button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+    section { margin-bottom: 26px; }
+    h2 { margin: 0 0 10px; font-size: 15px; font-weight: 600; }
+    h2 small { margin-left: 8px; color: var(--dim); font-weight: 400; }
+    .grid { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px; }
+    .tile { display: flex; flex-direction: column; gap: 5px; padding: 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+    .frame { position: relative; height: 240px; overflow: hidden; background: #000; border-radius: 3px; box-shadow: 0 6px 20px #0007; }
+    .frame img, .frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .frame video { opacity: 0; transition: opacity 0.15s; }
+    .tile:hover .frame video.on, .tile:focus-visible .frame video.on { opacity: 1; }
+    .tile:focus-visible .frame { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .cap { max-width: 100%; font-size: 12px; }
+    .cap .v { color: var(--ui); }
+    .cap .m { color: var(--dim); font-variant-numeric: tabular-nums; }
+    .empty { margin-top: 40px; color: var(--dim); white-space: pre-wrap; }
+    dialog { padding: 0; background: #000; border: 0; border-radius: 4px; color: var(--ui); }
+    dialog::backdrop { background: #000c; }
+    dialog video { display: block; max-width: 92vw; max-height: 84vh; }
+    dialog p { margin: 0; padding: 8px 12px; background: #161614; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header><h1 id="title">成片画廊</h1><span class="sum" id="sum"></span><span class="failed" id="failed"></span></header>
+  <div class="filters" id="filters"></div>
+  <main id="groups"></main>
+  <dialog id="player"><video controls playsinline></video><p></p></dialog>
+  <script type="module">
+    const q = new URLSearchParams(location.search), film = q.get('film') ?? '03-perfume', base = `../${film}/out/`;
+    const $ = id => document.getElementById(id);
+    const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+    const mb = b => `${(b / 1e6).toFixed(1)} MB`;
+    const loud = m => (!m.audio ? '无音轨' : m.lufs == null ? '— LUFS' : `${m.lufs.toFixed(1)} LUFS`);
+
+    let index;
+    try {
+      const r = await fetch(`${base}index.json`, { cache: 'no-store' });
+      if (!r.ok) throw new Error(`${r.status}`);
+      index = await r.json();
+    } catch (e) {
+      $('groups').append(el('p', { className: 'empty', textContent: `还没有 ${film}/out/index.json（${e.message}）。\n先出片：node factory/render.mjs ${film}` }));
+      throw e;
+    }
+    const { videos, axes } = index, group = index.group ?? Object.keys(axes)[0];
+    $('title').textContent = `${index.film ?? film} · 成片画廊`;
+    document.title = $('title').textContent;
+
+    // 筛选：每个轴只列出成片里出现过的值；选中状态写进网址
+    const shown = Object.keys(axes).filter(k => k !== group).sort((a, b) => (b === 'ar') - (a === 'ar')).map(k => [k, axes[k].filter(x => videos.some(v => String(v.variant[k]) === String(x))).map(String)]).filter(([, vals]) => vals.length);
+    const pick = Object.fromEntries(shown.map(([k, vals]) => [k, vals.includes(q.get(k)) ? q.get(k) : null]));
+    for (const [k, vals] of shown) {
+      const box = el('span', { className: 'axis' }, el('b', { textContent: k }));
+      for (const x of [null, ...vals]) {
+        const b = el('button', { textContent: x ?? '全部' });
+        b.onclick = () => { pick[k] = x; render(); };
+        b.dataset.axis = k; b.dataset.value = x ?? '';
+        box.append(b);
+      }
+      $('filters').append(box);
+    }
+
+    const player = $('player'), pv = player.querySelector('video');
+    player.addEventListener('click', e => { if (e.target === player) player.close(); });
+    player.addEventListener('close', () => { pv.pause(); pv.removeAttribute('src'); pv.load(); });
+    function open(m) {
+      pv.src = base + m.file; pv.muted = false;
+      player.querySelector('p').textContent = `${m.name}  ·  ${m.width}×${m.height}  ·  ${m.duration} s  ·  ${mb(m.bytes)}  ·  ${loud(m)}`;
+      player.showModal(); pv.play().catch(() => {});
+    }
+
+    function tile(m) {
+      const frame = el('div', { className: 'frame' }, el('img', { src: base + m.cover, alt: m.name, loading: 'lazy' }));
+      frame.style.aspectRatio = `${m.width} / ${m.height}`;
+      const t = el('button', { className: 'tile', title: m.name }, frame,
+        el('div', { className: 'cap' },
+          el('div', { className: 'v', textContent: shown.map(([k]) => m.variant[k]).join(' · ') }),
+          el('div', { className: 'm', textContent: `${mb(m.bytes)} · ${m.duration} s · ${loud(m)}` })));
+      t.querySelector('.cap').style.width = `${Math.round(240 * m.width / m.height)}px`;
+      let v = null;
+      const start = () => {                                              // 第一次悬停才加载视频
+        if (!v) { v = el('video', { src: base + m.file, muted: true, loop: true, playsInline: true, preload: 'auto' }); frame.append(v); v.addEventListener('playing', () => v.classList.add('on')); }
+        v.play().catch(() => {});
+      };
+      const stop = () => { if (v) { v.pause(); v.currentTime = 0; v.classList.remove('on'); } };
+      t.addEventListener('mouseenter', start); t.addEventListener('focus', start);
+      t.addEventListener('mouseleave', stop); t.addEventListener('blur', stop);
+      t.onclick = () => { stop(); open(m); };
+      return t;
+    }
+
+    function render() {
+      const u = new URL(location.href);
+      for (const [k, x] of Object.entries(pick)) x == null ? u.searchParams.delete(k) : u.searchParams.set(k, x);
+      history.replaceState(null, '', u);
+      for (const b of $('filters').querySelectorAll('button')) b.setAttribute('aria-pressed', String((pick[b.dataset.axis] ?? '') === b.dataset.value));
+      const list = videos.filter(m => Object.entries(pick).every(([k, x]) => x == null || String(m.variant[k]) === x));
+      $('sum').textContent = `${list.length} / ${videos.length} 条 · ${mb(list.reduce((s, m) => s + m.bytes, 0))} · ${list.reduce((s, m) => s + m.duration, 0)} s`;
+      $('failed').textContent = index.failed?.length ? `上次出片失败 ${index.failed.length} 条：${index.failed.map(f => `${f.name}（${f.error}）`).join('；')}` : '';
+      const groups = $('groups'); groups.replaceChildren();
+      for (const g of axes[group] ?? [...new Set(list.map(m => m.variant[group]))]) {
+        const items = list.filter(m => String(m.variant[group]) === String(g));
+        if (!items.length) continue;
+        groups.append(el('section', {}, el('h2', { textContent: g }, el('small', { textContent: `${group} · ${items.length} 条` })), el('div', { className: 'grid' }, ...items.map(tile))));
+      }
+      if (!list.length) groups.append(el('p', { className: 'empty', textContent: '没有符合筛选条件的成片。' }));
+    }
+    render();
+  </script>
+</body>
+</html>
