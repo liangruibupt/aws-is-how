@@ -2,13 +2,13 @@
 // 声音：页面把整段混音交成一个 WAV（临时文件），encodeAudio 把它编成 −14 LUFS 的 AAC，出片时原样拷进去；成片量一遍响度，不达标算失败
 //   node factory/render.mjs 03-perfume [--all] [--<axis> v1,v2 | '*'] [--fps 30] [--workers 2] [--force] [--dry] [--out 目录]
 // 命令行写了轴就只出这些轴的网格（没写的轴取第一个值；和 --all 合用时没写的轴取全部）；
-// 已做完（.mp4 与 .json 都在）的跳过，除非 --force；有一条失败就以状态码 1 结束
+// 已做完（.mp4 与 .json 都在，且输入指纹没变：成片目录、factory/engine、factory/lib、本文件与 --fps）的跳过，除非 --force；有一条失败就以状态码 1 结束
 import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path'; import { pathToFileURL } from 'node:url';
 import { serve, ROOT } from './lib/serve.mjs';
 import { launch, openFilm } from './lib/browser.mjs';
 import { parseArgs } from './lib/args.mjs';
 import { encodeArgs, startEncode, probe, checkProbe, hasFfmpeg, measure, encodeAudio, checkLoudness } from './lib/ffmpeg.mjs';
-import { pickJobs, outPaths, isDone, resetJob, finishJob, writeIndex, pool } from './lib/jobs.mjs';
+import { pickJobs, outPaths, isDone, resetJob, finishJob, writeIndex, pool, inputsHash } from './lib/jobs.mjs';
 import { ASPECTS, allAxes, variantQuery } from './engine/variant.js';
 
 const { pos: [film], o } = parseArgs(process.argv.slice(2));
@@ -24,13 +24,14 @@ console.log(`${film}: ${jobs.length} videos, ${total} frames at ${fps} fps, ${wo
 if (o.dry) { for (const v of jobs) console.log(`  ${META.fileName(v)}  (${frames(v)} frames)`); process.exit(0); }
 if (!hasFfmpeg()) { console.error('ffmpeg / ffprobe not found on PATH (brew install ffmpeg)'); process.exit(2); }
 fs.mkdirSync(outDir, { recursive: true });
+const inputs = inputsHash(ROOT, [film, 'factory/engine', 'factory/lib', 'factory/render.mjs'], `fps ${fps}`);
 
 const b64 = url => Buffer.from(url.slice(url.indexOf(',') + 1), 'base64');
 const srv = await serve(ROOT), browser = await launch();
 
 async function renderJob(v, k) {
   const name = META.fileName(v), p = outPaths(outDir, name), tag = `[${k + 1}/${jobs.length}] ${name}`;
-  if (!o.force && isDone(p)) { console.log(`${tag}  skip (done)`); return { name, skipped: true }; }
+  if (!o.force && isDone(p, inputs)) { console.log(`${tag}  skip (done)`); return { name, skipped: true }; }
   resetJob(p);
   const t0 = Date.now(), [W, H] = ASPECTS[v.ar];
   let page = null, enc = null, wav = null, aac = null;
@@ -62,7 +63,7 @@ async function renderJob(v, k) {
     finishJob(p, {
       name, file: path.basename(p.mp4), cover: path.basename(p.cover), variant: v,
       duration: job.duration, width: W, height: H, fps, frames: pr.frames, bytes: pr.bytes,
-      audio: !!wav, lufs: loud ? Math.round(loud.I * 10) / 10 : null, tp: loud ? Math.round(loud.TP * 10) / 10 : null, renderMs: ms,
+      audio: !!wav, lufs: loud ? Math.round(loud.I * 10) / 10 : null, tp: loud ? Math.round(loud.TP * 10) / 10 : null, renderMs: ms, inputs,
     });
     console.log(`${tag}  ${pr.frames} frames  ${(ms / 1000).toFixed(1)} s (${(pr.frames / (ms / 1000)).toFixed(1)} fps)  ${(pr.bytes / 1e6).toFixed(1)} MB`);
     return { name };

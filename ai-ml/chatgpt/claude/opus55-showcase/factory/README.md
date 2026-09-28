@@ -239,7 +239,7 @@ done 2, skipped 0, failed 0  ·  0.2 min  ·  99-demo/out/index.json
 { "name": "demo_teal_3s_1x1_zh", "file": "demo_teal_3s_1x1_zh.mp4", "cover": "demo_teal_3s_1x1_zh_cover.jpg",
   "variant": { "color": "teal", "lang": "zh", "cut": 3, "ar": "1x1", "vo": "on" },
   "duration": 3, "width": 1080, "height": 1080, "fps": 30, "frames": 90, "bytes": 2871074,
-  "audio": true, "lufs": -14, "tp": -2.7, "renderMs": 11996 }
+  "audio": true, "lufs": -14, "tp": -2.7, "renderMs": 11996, "inputs": "9c41…（sha256，64 位）" }
 ```
 
 没有音轨的片子，`audio` 为 `false`，`lufs`、`tp` 为 `null`。`index.json` 为 `{ film, group, axes, failed, videos }`：
@@ -249,7 +249,8 @@ done 2, skipped 0, failed 0  ·  0.2 min  ·  99-demo/out/index.json
 - `videos` 是目录里所有 `.mp4` 还在的说明文件。
 
 **断点续做**：
-- `.mp4` 和 `.json` 都在，才算做完。重跑时跳过已做完的，打印 `skip (done)`。
+- `.mp4` 和 `.json` 都在，且 `.json` 里的 `inputs` 和这一次算出的一致，才算做完。重跑时跳过已做完的，打印 `skip (done)`。
+- `inputs` 是出片输入的指纹（sha256）：成片目录里的全部文件（不含 `out/`、`test/`、`*.md`、`manifest.json` 和点文件），加上 `factory/engine/`、`factory/lib/`、`factory/render.mjs` 和 `--fps`。改了镜头、文案、配音或引擎，重跑时会全部重出，不会留着旧片。CDN 上的 three 与字体、Chromium、ffmpeg 的版本不在指纹里，升级它们之后要加 `--force`。
 - 一条任务开始前，先删掉它上次留下的 `.part`、`.mp4`、`.json` 和封面。编码写到 `.part`，全部校验通过才改名，最后写 `.json`（先写临时文件再改名）。所以中断、重跑都不会把半截文件当成品。
 - `index.json` 每次运行结束都重写。它收录目录里的全部成片，所以分几次出的片会累积在一起；`failed` 只记最近一次运行。
 - 要从头来，删掉 `out/` 或加 `--force`。

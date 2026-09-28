@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path';
-import { pickJobs, outPaths, isDone, resetJob, finishJob, writeIndex, pool } from '../lib/jobs.mjs';
+import { pickJobs, outPaths, isDone, resetJob, finishJob, writeIndex, pool, inputsHash } from '../lib/jobs.mjs';
 
 const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'jobs-'));
+const put = (d, f, s) => { fs.mkdirSync(path.dirname(path.join(d, f)), { recursive: true }); fs.writeFileSync(path.join(d, f), s); };
 
 test('pickJobs: axis flags make a grid, --all fills in the rest, no flags read the manifest', () => {
   const film = { axes: { sku: ['a', 'b'], cut: [15, 6] }, fileName: v => `${v.sku}_${v.cut}_${v.ar}_${v.vo}` };
@@ -20,17 +21,40 @@ test('outPaths: mp4, part, sidecar and cover next to each other', () => {
   assert.deepEqual(outPaths('/o', 'a_15s'), { mp4: '/o/a_15s.mp4', part: '/o/a_15s.mp4.part', json: '/o/a_15s.json', cover: '/o/a_15s_cover.jpg' });
 });
 
-test('isDone: a half-written or unverified video never counts as done', () => {
+test('isDone: a half-written, unverified or stale video never counts as done', () => {
   const d = tmp(), p = outPaths(d, 'v');
   assert.equal(isDone(p), false);
   fs.writeFileSync(p.part, 'half');                            // 编码到一半被打断
   assert.equal(isDone(p), false);
   fs.writeFileSync(p.mp4, 'x');                                // 改了名但说明文件还没写
   assert.equal(isDone(p), false);
-  fs.writeFileSync(p.json, '{}');
-  assert.equal(isDone(p), true);
+  fs.writeFileSync(p.json, '{}');                              // 早先没记输入指纹的说明文件
+  assert.equal(isDone(p, 'h1'), false);
+  fs.writeFileSync(p.json, '{"inputs":"h0"}');                 // 做完之后成片、引擎或配音改过
+  assert.equal(isDone(p, 'h1'), false);
+  fs.writeFileSync(p.json, '{"inputs":');                      // 说明文件坏了
+  assert.equal(isDone(p, 'h1'), false);
+  fs.writeFileSync(p.json, '{"inputs":"h1"}');
+  assert.equal(isDone(p, 'h1'), true);
   resetJob(p);
   for (const f of Object.values(p)) assert.equal(fs.existsSync(f), false);
+});
+
+test('inputsHash: any input file, file name or the extra string changes it; out/, test/, docs and the manifest do not', () => {
+  const d = tmp(), h = (extra = 'fps 30') => inputsHash(d, ['film', 'eng', 'render.mjs'], extra);
+  put(d, 'film/copy.js', 'a'); put(d, 'film/assets/vo/x.wav', 'w'); put(d, 'eng/app.js', 'e'); put(d, 'render.mjs', 'r');
+  const h0 = h();
+  assert.match(h0, /^[0-9a-f]{64}$/);
+  put(d, 'film/out/v.mp4', 'x'); put(d, 'film/test/t.test.mjs', 't'); put(d, 'film/README.md', '#'); put(d, 'film/manifest.json', '{}');
+  put(d, 'film/.DS_Store', 'f'); put(d, 'other/z.js', 'z');
+  assert.equal(h(), h0);
+  assert.notEqual(h('fps 60'), h0);
+  for (const [f, s] of [['film/assets/vo/x.wav', 'w2'], ['eng/app.js', 'e2'], ['render.mjs', 'r2'], ['film/js/new.js', 'n']]) {
+    const before = h(); put(d, f, s); assert.notEqual(h(), before, f);
+  }
+  const before = h();
+  fs.renameSync(path.join(d, 'film/copy.js'), path.join(d, 'film/copy2.js'));
+  assert.notEqual(h(), before);
 });
 
 test('finishJob renames the part and writes the sidecar; writeIndex collects finished videos only', () => {

@@ -100,11 +100,12 @@ When all shots are in, run `node factory/check.mjs NN-name`. Pay particular atte
 
 ```bash
 node factory/render.mjs NN-name --dry    # always first: check the list and the count
-node factory/render.mjs NN-name          # the manifest; resumable, skips finished videos
+node factory/render.mjs NN-name          # the manifest; resumable, skips finished videos whose inputs are unchanged
 npm run serve                            # then open http://127.0.0.1:8765/factory/gallery.html?film=NN-name
 ```
 
 - A misspelt `--<axis>` name on the command line is ignored silently. If no valid axis is left, the script falls back to the manifest. The `--dry` count catches this.
+- A video counts as finished only if its sidecar's `inputs` fingerprint matches: editing the film folder, the engine, `factory/lib/`, `render.mjs` or `--fps` re-renders it. Upgrading three, the fonts, Chromium or ffmpeg does not, so use `--force` then.
 - Each video is checked after encoding: duration, size, frame count, audio, −14 ± 1 LUFS and true peak ≤ −1 dBTP. Failures are listed at the end and in the gallery.
 - Review the gallery with the user: every group, every filter, and a few videos played with sound.
 

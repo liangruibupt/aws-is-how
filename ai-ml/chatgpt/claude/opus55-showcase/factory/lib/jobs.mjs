@@ -1,7 +1,9 @@
 // jobs.mjs — 批量出片的记账：输出路径、完成标记、索引、并发池
-// 先编码到 <名>.mp4.part，校验通过才改名成 .mp4，再写 <名>.json；两个都在才算做完，所以中断或重跑都不会把半截文件当成品
+// 先编码到 <名>.mp4.part，校验通过才改名成 .mp4，再写 <名>.json；两个都在、且说明文件里的输入指纹和现在的一致才算做完，
+// 所以中断或重跑都不会把半截文件当成品，改了成片、引擎或配音之后也不会留着旧片
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { allAxes, expandJobs } from '../engine/variant.js';
 
 /** 命令行选项 → 变体列表：写了轴（--sku a,b）就出这些轴的网格，没写的轴取第一个值，加 --all 时取全部；只写 --all 出全部（旁白只出 on）；都没写就读清单 */
@@ -18,7 +20,25 @@ export const outPaths = (dir, name) => ({
   json: path.join(dir, `${name}.json`), cover: path.join(dir, `${name}_cover.jpg`),
 });
 
-export const isDone = p => fs.existsSync(p.mp4) && fs.existsSync(p.json);
+// 不算输入的：成品、测试、文档、清单（只决定出哪些片，不改变某一条片的内容）
+const NOT_INPUT = f => f === 'out' || f === 'test' || f === 'node_modules' || f === 'manifest.json' || f.startsWith('.') || f.endsWith('.md');
+
+/** 输入指纹：base 下这些目录（或文件）里每个文件的相对路径与内容，加上 extra（如 fps）→ sha256 */
+export function inputsHash(base, roots, extra = '') {
+  const h = crypto.createHash('sha256').update(`${extra}\0`);
+  const walk = rel => {
+    const abs = path.join(base, rel);
+    if (fs.statSync(abs).isDirectory()) for (const f of fs.readdirSync(abs).sort()) { if (!NOT_INPUT(f)) walk(path.join(rel, f)); }
+    else h.update(`${rel.split(path.sep).join('/')}\0`).update(fs.readFileSync(abs)).update('\0');
+  };
+  for (const r of roots) walk(r);
+  return h.digest('hex');
+}
+
+export function isDone(p, inputs) {
+  if (!fs.existsSync(p.mp4) || !fs.existsSync(p.json)) return false;
+  try { return JSON.parse(fs.readFileSync(p.json, 'utf8')).inputs === inputs; } catch { return false; }
+}
 
 /** 清掉上一次没做完留下的文件 */
 export function resetJob(p) {
