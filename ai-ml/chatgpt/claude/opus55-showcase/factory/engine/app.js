@@ -50,7 +50,7 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
   const post = createPost(renderer);
   const ctx = { THREE, renderer, scene, camera, variant: null, W: 0, H: 0, ar: null, post, clips: null, world: null, subjects: {}, postDefaults: {}, built: null, mode, params };
   const listeners = { variant: [], time: [] }, emit = (ev, x) => listeners[ev].forEach(f => f(x));
-  let sceneKey = null, fonts = [], clock = clamp(+(params.get('t') ?? 0) || 0, 0, 1e9), playing = false, dirty = true, hq = true, last = null;
+  let sceneKey = null, drawable = false, fonts = [], clock = clamp(+(params.get('t') ?? 0) || 0, 0, 1e9), playing = false, dirty = true, hq = true, last = null;
 
   // ── 尺寸：导出时正好是成片尺寸；预览时按舞台大小缩小 ──
   function size() {
@@ -81,20 +81,21 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
   }
 
   async function load(v) {
+    drawable = false;                                              // 换变体期间主循环不画：场景可能拆了一半、字体还没到
     ctx.variant = v; ctx.ar = v.ar; ctx.built = buildCut(film.cuts[v.cut]);
     size();
     const fontsP = loadFonts(v), key = film.sceneAxes.map(k => v[k]).join('|');
     if (key !== sceneKey) {
       ctx.world?.dispose?.(); disposeTree(scene); scene.clear();
       scene.environment?.dispose(); scene.environment = null; scene.background = null;
-      ctx.subjects = {}; ctx.world = null;
+      ctx.subjects = {}; ctx.world = null; sceneKey = null;         // 重建失败时下次必须再建
       await film.setup(ctx);
       sceneKey = key;
       await renderer.compileAsync(scene, camera);
     }
     fonts = await fontsP;
     for (const e of ctx.built.entries) draw(e.start + (e.end - e.start) / 2);   // 每个镜头先画一帧：编译只在某些镜头出现的着色器
-    clock = clamp(clock, 0, ctx.built.duration); dirty = true;
+    clock = clamp(clock, 0, ctx.built.duration); dirty = true; drawable = true;
     emit('variant', v);
   }
 
@@ -137,10 +138,10 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
   }
 
   function loop(now) {
+    requestAnimationFrame(loop);                                   // 先排下一帧：这一帧抛错也不会让预览停住
     if (last != null && playing) { clock += (now - last) / 1000; if (clock >= ctx.built.duration) clock %= ctx.built.duration; dirty = true; }
     last = now;
-    if (dirty && ctx.built) { size(); draw(clock); dirty = false; emit('time', clock); }
-    requestAnimationFrame(loop);
+    if (dirty && drawable) { dirty = false; size(); draw(clock); emit('time', clock); }
   }
 
   let chain = Promise.resolve();
@@ -155,8 +156,8 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
     play() { playing = true; }, pause() { playing = false; }, toggle() { playing = !playing; },
     setHQ(on) { hq = on; ctx.W = 0; size(); },
     redraw() { dirty = true; },
-    /** 换变体：场景轴（如香型）变了才重建场景，其余即时切换；调用按顺序排队 */
-    setVariant(patch) { chain = chain.then(() => load(parseVariant(film, { ...ctx.variant, ...patch }))); return chain; },
+    /** 换变体：场景轴（如香型）变了才重建场景，其余即时切换；调用按顺序排队，前一个失败不挡后一个 */
+    setVariant(patch) { chain = chain.catch(() => {}).then(() => load(parseVariant(film, { ...ctx.variant, ...patch }))); return chain; },
   };
   app.exporter = createExporter(app);
   app.ready = (async () => {
