@@ -1,5 +1,9 @@
 // exporter.js — 导出：按固定帧间隔逐帧出图（t = i / fps），不依赖实时帧率；封面取剪辑表里的 cover 时刻
 // 帧数 = 时长 × fps；每帧返回合成后的 PNG（3D + 字幕），由 render.mjs 经管道送进 ffmpeg
+// 声音整段离线混音成一个 WAV（和预览播放的是同一块缓冲），render.mjs 把它和画面一起交给 ffmpeg
+import { renderMix, peak } from './audio.js';
+import { wavFloat32 } from './mix.js';
+
 export function createExporter(app) {
   let fps = 30, i = 0, n = 0;
   return {
@@ -19,6 +23,14 @@ export function createExporter(app) {
     cover(q = 0.92) {
       const t = app.film.cuts[app.ctx.variant.cut].cover, d = app.draw(t);
       return { t, overflow: d.overflow, url: app.jpeg(q) };
+    },
+    /** 整段混音 → 32 位浮点 WAV 的 data URL → { url, sr, duration, peak }；成片没有 score 就返回 null（无声出片） */
+    async audio() {
+      if (!app.film.score) return null;
+      const b = await renderMix(app.film, app.ctx.variant, app.ctx.built);
+      const wav = new Blob([wavFloat32([0, 1].map(c => b.getChannelData(c)), b.sampleRate)], { type: 'audio/wav' });
+      const url = await new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = () => no(r.error); r.readAsDataURL(wav); });
+      return { url, sr: b.sampleRate, duration: b.length / b.sampleRate, peak: peak(b) };
     },
   };
 }

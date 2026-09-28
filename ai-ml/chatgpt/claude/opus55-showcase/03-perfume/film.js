@@ -9,6 +9,7 @@ import { createDrop } from './js/drop.js';
 import { createSpray } from './js/spray.js';
 import { envMap } from './js/worlds/common.js';
 import { SHOTS } from './js/shots.js';
+import { score } from './js/score.js';
 
 const studio = () => import('./js/worlds/studio.js');
 // 各香型的世界；还没做的先用中性影棚。?world=studio 可强制影棚，单独调瓶子和玻璃
@@ -38,4 +39,6 @@ export default {
   /** 场景目标里分四遍画：世界 → 液体 → 玻璃 → 挡在瓶子前面的喷雾（js/glass.js） */
   render(ctx, target) { ctx.subjects.glass.render(target); },
   shots: SHOTS,
+  /** 配乐与音效的音符表（js/score.js），由 factory/engine/audio.js 合成 */
+  score,
 };

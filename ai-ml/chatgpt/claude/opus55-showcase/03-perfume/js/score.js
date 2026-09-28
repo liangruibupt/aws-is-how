@@ -1,0 +1,117 @@
+// score.js — 配乐与音效（纯数据，浏览器与 Node 测试共用）：score(v, built) → { notes, reverb }，由 factory/engine/audio.js 合成
+// 每个香型一份编曲，15 秒和 6 秒各写一版（6 秒不是截短的 15 秒）；音效和品牌动机四个香型共用，时刻从剪辑表和 EV 算出来
+// 一小节固定 3 秒、四拍（80 bpm）：命中点（水滴落下、光带峰值、品牌动机）都在小节的第一拍上；配乐的起音都在十六分音符的格子上
+import { BAR, EV } from '../meta.js';
+import { SKUS } from '../skus.js';
+import { shotAt } from '../../factory/engine/timeline.js';
+import { mtof } from '../../factory/engine/audio.js';
+
+export const BEAT = BAR / 4, STEP = BEAT / 4;             // 一拍 0.75 秒，十六分音符 0.1875 秒
+export const LOGO = [2, 7, 12];                           // 品牌动机：主音之上的大二度、纯五度、八度，各香型的调式里都有；落在第 0、½、1 拍，最后一个音延长
+
+/** 一组音：rows = [[拍, MIDI 音高, 时值（拍）, 力度], …]，拍从 t0 算起 */
+const seq = (voice, t0, rows, p = {}, bus = 'music') => rows.map(([b, m, d, v]) => ({ t: t0 + b * BEAT, voice, f: mtof(m), d: d * BEAT, v, bus, p }));
+
+// ── 各香型的编曲 ──
+// 白茶：D 宫调五声（D E F# A B），古琴般的拨弦、带气声的长笛、空灵的铺底
+const WT = { pluck: { t60: 2.2, bright: 0.35 }, soft: { t60: 1.6, bright: 0.2 }, low: { t60: 3.5, bright: 0.25 }, pad: { a: 1.2, r: 1, cut: 2.5, air: 0.3 } };
+const whitetea = {
+  tonic: 62,                                               // D4
+  reverb: { decay: 3.2, music: 0.4, sfx: 0.25 },
+  bed: { type: 'bandpass', f: 900, q: 0.6, a: 0.4, r: 1.2, wander: 0.8, v: 0.35 },  // 山间的雾和风
+  m15: () => [
+    // 0–2.25 微距：D3 + A3 的铺底慢慢升起，拨弦稀疏，像露水将落未落
+    ...seq('pad', 0, [[0, 50, 3.6, 0.8], [0, 57, 3.6, 0.55]], { ...WT.pad, a: 1 }),
+    ...seq('pluck', 0, [[0, 74, 3, 0.3], [1, 69, 3, 0.4], [1.5, 71, 2, 0.3], [2, 69, 3, 0.35], [2.5, 66, 3, 0.3]], WT.pluck),
+    // 2.25–3 落下：气流上升，十六分音符下行 B4 A4 F#4 E4，落进 3.0 的命中
+    { t: 2.25, voice: 'noise', f: 500, d: 0.75, v: 0.5, bus: 'music', p: { type: 'bandpass', q: 1.5, sweep: 7, a: 0.7, r: 0.05 } },
+    ...seq('pluck', 2.25, [[0, 71, 1, 0.35], [0.25, 69, 1, 0.4], [0.5, 66, 1, 0.45], [0.75, 64, 1, 0.5]], WT.soft),
+    // 3.0 命中：低音 D3、钟声 D5、铺底涨起来；之后稀疏的回声
+    ...seq('pluck', 3, [[0, 50, 4, 0.6], [0, 62, 3, 0.35]], WT.low),
+    ...seq('bell', 3, [[0, 74, 3.2, 0.6], [1.5, 81, 1.6, 0.2]], { bright: 0.6 }),
+    ...seq('pad', 3, [[0, 50, 1.6, 1], [0, 57, 1.6, 0.7], [0, 64, 1.6, 0.4]], { ...WT.pad, a: 0.15 }),
+    ...seq('pluck', 3, [[1, 69, 2, 0.25], [1.5, 74, 2, 0.2]], WT.soft),
+    // 4.5 正面：长笛主题 D5 → E5 → F#5，6.0 落到 A5
+    ...seq('flute', 4.5, [[0, 74, 0.9, 0.8], [1, 76, 0.45, 0.7], [1.5, 78, 0.45, 0.75]]),
+    ...seq('pad', 4.5, [[0, 50, 1.6, 0.8], [0, 57, 1.6, 0.6], [0, 66, 1.6, 0.35]], WT.pad),
+    ...seq('pluck', 4.5, [[0, 62, 2, 0.4], [1, 66, 2, 0.3]], WT.pluck),
+    // 6.0 命中：D4 + A4 双音、钟声闪一下，铺底换到 Bm7 的颜色；主题落到 A5 再回 F#5、E5
+    ...seq('pluck', 6, [[0, 62, 3, 0.55], [0, 69, 3, 0.45], [0, 47, 3, 0.45]], WT.low),
+    ...seq('bell', 6, [[0, 86, 1.6, 0.35], [0.25, 81, 1.2, 0.2]], { bright: 0.8 }),
+    ...seq('flute', 6, [[0, 81, 0.9, 0.85], [1, 78, 0.45, 0.6], [1.5, 76, 0.9, 0.55]]),
+    ...seq('pad', 6, [[0, 47, 1.7, 0.8], [0, 54, 1.7, 0.55], [0, 57, 1.7, 0.4], [0, 62, 1.7, 0.35]], { ...WT.pad, a: 0.3 }),
+    // 7.5–10.5 分解：八分音符的轻脉动，配音在这里讲香调
+    ...seq('pluck', 7.5, [[0, 62, 1, 0.3], [0.5, 69, 1, 0.2], [1, 66, 1, 0.25], [1.5, 69, 1, 0.2], [2, 64, 1, 0.28], [2.5, 69, 1, 0.2], [3, 66, 1, 0.25], [3.5, 71, 1, 0.2],
+      [4, 62, 1, 0.3], [4.5, 69, 1, 0.2], [5, 66, 1, 0.25], [5.5, 69, 1, 0.2], [6, 64, 1, 0.28], [6.5, 71, 1, 0.2], [7, 69, 1, 0.22], [7.5, 74, 1, 0.2]], WT.soft),
+    ...seq('pad', 7.5, [[0, 50, 3.4, 0.7], [0, 57, 3.4, 0.5], [0, 64, 3.4, 0.3]], WT.pad),
+    ...seq('pluck', 7.5, [[0, 50, 3, 0.45], [2, 45, 3, 0.4]], WT.low),
+    // 10.5–12 喷雾：一口气，笛子轻轻吹一个长音，铺底停在 E + B 上
+    ...seq('flute', 10.5, [[0, 69, 1.6, 0.45]], { a: 0.25, r: 0.4, breath: 0.6 }),
+    ...seq('pad', 10.5, [[0, 52, 1.6, 0.6], [0, 59, 1.6, 0.45]], { ...WT.pad, a: 0.5 }),
+    // 12.0 片尾：品牌动机（共用），D add9 的铺底和低音 D 收住
+    ...seq('pad', 12, [[0, 50, 3, 0.8], [0, 57, 3, 0.6], [0, 64, 3, 0.35], [0, 66, 3, 0.25]], { ...WT.pad, a: 0.4, r: 0.8 }),
+    ...seq('pluck', 12, [[0, 38, 4, 0.6], [0, 50, 4, 0.35]], WT.low),
+  ],
+  m6: () => [
+    // 0 命中：水滴落下就开始，低音 D、钟声、铺底
+    ...seq('pluck', 0, [[0, 50, 3, 0.5], [0, 62, 2, 0.3]], WT.low),
+    ...seq('bell', 0, [[0, 74, 2.4, 0.55]], { bright: 0.6 }),
+    ...seq('pad', 0, [[0, 50, 1.8, 0.9], [0, 57, 1.8, 0.65]], { ...WT.pad, a: 0.2 }),
+    // 0.375–1.5 八分音符上行 F#4 A4 B4 D5
+    ...seq('pluck', 0, [[0.5, 66, 1, 0.35], [1, 69, 1, 0.38], [1.5, 71, 1, 0.4], [1.75, 74, 1, 0.3]], WT.pluck),
+    // 1.5 正面：长笛 A4 B4，2.25 光带峰值落在 D5 上，再到 E5
+    ...seq('flute', 1.5, [[0, 69, 0.45, 0.7], [0.5, 71, 0.45, 0.7], [1, 74, 0.45, 0.85], [1.5, 76, 0.5, 0.65]]),
+    ...seq('bell', 2.25, [[0, 86, 1.4, 0.3]], { bright: 0.8 }),
+    ...seq('pad', 1.5, [[0, 47, 1.8, 0.7], [0, 54, 1.8, 0.5], [0, 62, 1.8, 0.3]], { ...WT.pad, a: 0.3 }),
+    ...seq('pluck', 1.5, [[0, 47, 2, 0.5]], WT.low),
+    // 3.0 片尾：品牌动机（共用），D add9 收住
+    ...seq('pad', 3, [[0, 50, 3, 0.8], [0, 57, 3, 0.6], [0, 64, 3, 0.35], [0, 66, 3, 0.25]], { ...WT.pad, a: 0.4, r: 0.8 }),
+    ...seq('pluck', 3, [[0, 38, 4, 0.6], [0, 50, 4, 0.35]], WT.low),
+  ],
+};
+
+// 桂花、海盐、玫瑰在 Tasks 17–19 写自己的编曲；在那之前先用白茶的
+export const SCORES = { whitetea, osmanthus: whitetea, seasalt: whitetea, rose: whitetea };
+
+// ── 共用 ──
+/** 品牌动机：拨弦 + 高八度的钟声，走 sfx 母线（配音压低的是 music 母线，片尾的配音盖不住它） */
+export function logo(tonic, t) {
+  const rows = LOGO.map((k, i) => [i * 0.5, tonic + k, i === LOGO.length - 1 ? 4 : 1.5, i === LOGO.length - 1 ? 0.8 : 0.65]);
+  return [
+    ...seq('pluck', t, rows, { t60: 2.5, bright: 0.45 }, 'sfx'),
+    ...seq('bell', t, rows.map(([b, m, d, v]) => [b, m + 12, d, v * 0.5]), { bright: 0.5 }, 'sfx'),
+  ];
+}
+
+/** 画面上的声音：水滴、转场、瓶盖和喷雾、整段的环境声；时刻都从剪辑表算 */
+export function sfx(built, bed) {
+  const out = [], at = (e, lt) => e.start + lt - e.from, add = (t, voice, f, d, v, p = {}, pan = 0) => out.push({ t, voice, f, d, v, pan, bus: 'sfx', p });
+  const { f, v, ...p } = bed;
+  add(0, 'noise', f, built.duration, v, p);
+  const drop = shotAt(built, 'drop');
+  if (drop) {
+    const t = at(drop, EV.land);                                               // 水滴落进液面：一声向上滑的水滴声，三圈涟漪跟着变小，再加一层很轻的高频
+    add(t, 'plink', mtof(81), 0.35, 0.6, { up: mtof(86) / mtof(81) });
+    [[0.14, 1.3, 0.45, 0.3], [0.33, 0.92, 0.3, -0.2], [0.6, 1.18, 0.18, 0.35]].forEach(([dt, k, v, pan]) => add(t + dt, 'plink', mtof(81) * k, 0.25, v, { up: 1.4 }, pan));
+    add(t, 'noise', 7000, 0.8, 0.12, { type: 'highpass', q: 0.5, a: 0.01, r: 0.7 });
+  }
+  const spray = shotAt(built, 'spray');
+  if (spray) {
+    add(at(spray, EV.lift), 'bell', 2400, 0.35, 0.5, { ratios: [1, 2.32, 4.25, 6.63], bright: 0.8 }, 0.2);   // 瓶盖离开颈圈：玻璃轻碰一声
+    add(at(spray, EV.spray), 'noise', 6000, 0.7, 0.8, { type: 'bandpass', q: 0.9, sweep: 4000 / 6000, a: 0.02, r: 0.45 }, -0.3);   // 喷雾：滤波噪声，向左喷
+    add(at(spray, EV.seat), 'click', 3200, 0.04, 0.3, {}, 0.2);                // 瓶盖落座
+  }
+  built.entries.forEach((e, i) => {                                            // 每个叠化、闪白一声气流，峰值在转场中点
+    if (e.transition.type === 'cut') return;
+    const mid = e.start + e.transition.dur / 2;
+    add(mid - 0.4, 'noise', 450, 0.65, 0.45, { type: 'bandpass', q: 0.8, sweep: 5, a: 0.4, r: 0.25 }, i % 2 ? 0.25 : -0.25);
+  });
+  return out;
+}
+
+export function score(v, built) {
+  const s = SCORES[SKUS[v.sku].score], arrange = { 15: s.m15, 6: s.m6 }[v.cut];
+  if (!arrange) throw new Error(`score: no arrangement for the ${v.cut} s cut`);
+  const notes = [...arrange(), ...logo(s.tonic, built.hits.logo), ...sfx(built, s.bed)].sort((a, b) => a.t - b.t);
+  return { notes, reverb: s.reverb };
+}
