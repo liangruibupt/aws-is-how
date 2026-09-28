@@ -7,13 +7,17 @@ import { solvePose, applyPose, projectPoint } from './framing.js';
 import { prepareLayer, drawLayer, canvasMeasure, fontStr } from './text.js';
 import { createPost, mergePost } from './post.js';
 import { clamp } from './ease.js';
+import { safeOverlay, sheetPlan, showSheet } from './sheet.js';
 
-/** 页面入口：film.js 的默认导出 → window.__app；预览模式再挂上播放器 */
+/** 页面入口：film.js 的默认导出 → window.__app；预览模式再挂上播放器，?sheet 拼联系表（window.__sheet），?safe 叠安全区 */
 export function boot(film) {
-  const params = new URLSearchParams(location.search);
+  let params = new URLSearchParams(location.search), plan = null;
+  if (params.has('sheet') && !params.has('render')) ({ params, plan } = sheetPlan(film, params));
   const app = createApp(film, { params });
   window.__app = app;
-  if (app.mode === 'live') import('./player.js').then(m => m.createPlayer(app));
+  if (params.has('safe')) app.overlays.push(safeOverlay);
+  if (plan) window.__sheet = app.ready.then(() => showSheet(app, plan));
+  else if (app.mode === 'live') import('./player.js').then(m => m.createPlayer(app));
   return app;
 }
 
@@ -28,9 +32,9 @@ function disposeTree(root) {
 }
 
 export function createApp(film, { params = new URLSearchParams(), root = document.getElementById('stage') } = {}) {
-  const mode = params.has('render') ? 'render' : 'live';
+  const mode = params.has('render') ? 'render' : params.has('sheet') ? 'sheet' : 'live';
   document.documentElement.dataset.mode = mode;
-  const preview = mode === 'live' || params.has('sheet');
+  const preview = mode !== 'render';                               // 预览和联系表里溢出画红框；导出时溢出只报错
   const gl = Object.assign(document.createElement('canvas'), { className: 'gl' });
   const out = Object.assign(document.createElement('canvas'), { className: 'out' });
   root.append(gl, out);
@@ -126,7 +130,7 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
     const overflow = [];
     if (prev) for (const L of prev.text) drawLayer(g, { ...L, alpha: L.alpha * (1 - r.prev.k) }, measure);
     for (const L of cur.text) if (drawLayer(g, L, measure).overflow) overflow.push(`${r.shot}.${L.id}`);
-    for (const f of app.overlays) f(g, ctx);
+    for (const f of app.overlays) f(g, ctx, { t, shot: r.shot, row: film.layouts[ctx.ar]?.[r.shot] ?? {} });
     return { t, shot: r.shot, overflow };
   }
 
@@ -139,7 +143,7 @@ export function createApp(film, { params = new URLSearchParams(), root = documen
 
   let chain = Promise.resolve();
   const app = {
-    ctx, film, mode, gpu, overlays: [],
+    ctx, film, mode, gpu, overlays: [], canvas: out,
     get t() { return clock; }, get playing() { return playing; }, get hq() { return hq; }, get fonts() { return fonts; },
     draw, size,
     png: () => out.toDataURL('image/png'),

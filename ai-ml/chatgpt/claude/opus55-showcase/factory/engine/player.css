@@ -1,4 +1,4 @@
-/* player.css — 预览页：画面居中按比例缩放，下方是播放器；导出模式（?render）只留画面 */
+/* player.css — 预览页：画面居中按比例缩放，下方是播放器；导出模式（?render）只留画面；联系表模式（?sheet）只留拼图 */
 :root { color-scheme: dark; --ui: #d9d6cf; --dim: #8a877f; --line: #34332f; }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: #111110; color: var(--ui); font: 13px/1.4 system-ui, -apple-system, "PingFang SC", sans-serif; }
@@ -24,3 +24,7 @@ body { display: flex; flex-direction: column; align-items: center; }
 html[data-mode="render"], html[data-mode="render"] body { overflow: hidden; background: #000; }
 html[data-mode="render"] body { display: block; }
 html[data-mode="render"] #stage { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; margin: 0; box-shadow: none; }
+
+/* ?sheet：舞台移出视野继续渲染，只显示拼好的联系表 */
+html[data-mode="sheet"] #stage { position: absolute; left: -100000px; top: 0; margin: 0; }
+img.sheet { display: block; max-width: 98vw; height: auto; margin: 12px auto; }

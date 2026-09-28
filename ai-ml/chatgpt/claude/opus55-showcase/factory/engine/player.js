@@ -1,5 +1,6 @@
-// player.js — 预览播放器：各轴的变体选择、播放 / 暂停、按镜头分段的时间轴、高画质开关、快捷键；变体写回地址栏，刷新后保持
+// player.js — 预览播放器：各轴的变体选择、播放 / 暂停、按镜头分段的时间轴、高画质与安全区开关、快捷键；变体写回地址栏，刷新后保持
 import { allAxes } from './variant.js';
+import { safeOverlay } from './sheet.js';
 
 const FRAME = 1 / 30;
 
@@ -15,7 +16,7 @@ export function createPlayer(app) {
       <output class="time">0.00 s</output>
       <label class="hq" title="高画质（Q）"><input type="checkbox" checked /> HQ</label>
     </div>
-    <p class="keys">空格 播放 · ← → 0.5 秒 · Shift + ← → 一帧 · 1–9 跳到第 n 个镜头 · Q 高画质</p>
+    <p class="keys">空格 播放 · ← → 0.5 秒 · Shift + ← → 一帧 · 1–9 跳到第 n 个镜头 · S 安全区 · Q 高画质</p>
     <p class="err" hidden></p>`;
   document.body.append(bar);
   const $ = s => bar.querySelector(s), scrub = $('.scrub'), time = $('.time'), play = $('.play'), hq = $('.hq input'), err = $('.err');
@@ -49,6 +50,12 @@ export function createPlayer(app) {
   app.on('time', onTime);
   app.ready.then(() => { onVariant(app.ctx.variant); onTime(app.t); }, fail);
 
+  function toggleSafe() {                                       // 安全区叠加层开关，同步到地址栏的 ?safe
+    const i = app.overlays.indexOf(safeOverlay), q = new URLSearchParams(location.search);
+    if (i < 0) { app.overlays.push(safeOverlay); q.set('safe', ''); } else { app.overlays.splice(i, 1); q.delete('safe'); }
+    history.replaceState(null, '', `?${q}`); app.redraw();
+  }
+
   play.onclick = () => { app.toggle(); onTime(app.t); };
   scrub.oninput = () => { app.pause(); app.seek(+scrub.value); };
   hq.onchange = () => app.setHQ(hq.checked);
@@ -59,6 +66,7 @@ export function createPlayer(app) {
     else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { app.pause(); app.seek(app.t + (e.key === 'ArrowLeft' ? -1 : 1) * (e.shiftKey ? FRAME : 0.5)); }
     else if (/^[1-9]$/.test(e.key) && b.entries[+e.key - 1]) { app.pause(); app.seek(b.entries[+e.key - 1].start); }
     else if (e.key === 'q' || e.key === 'Q') { hq.checked = !hq.checked; app.setHQ(hq.checked); }
+    else if (e.key === 's' || e.key === 'S') toggleSafe();
   });
   return { bar, fail };
 }
