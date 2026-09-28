@@ -171,10 +171,10 @@ def ensure_api_key_provider(ctx: Ctx, key: str | None) -> str | None:
     if key:
         if exists:
             cp.update_api_key_credential_provider(name=API_KEY_PROVIDER, apiKey=key)
-            print(f"  updated API-key provider {API_KEY_PROVIDER}")
+            print("  updated the LLM API-key provider")
         else:
             cp.create_api_key_credential_provider(name=API_KEY_PROVIDER, apiKey=key)
-            print(f"  created API-key provider {API_KEY_PROVIDER}")
+            print("  created the LLM API-key provider")
         return API_KEY_PROVIDER
     if exists:
         return API_KEY_PROVIDER

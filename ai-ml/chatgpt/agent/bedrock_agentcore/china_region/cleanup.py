@@ -38,7 +38,7 @@ def main():
                 time.sleep(5)
         quiet(f"gateway {gid}", cp.delete_gateway, gatewayIdentifier=gid)
     if state.get("api_key_provider"):
-        quiet(f"API-key provider {API_KEY_PROVIDER}", cp.delete_api_key_credential_provider, name=API_KEY_PROVIDER)
+        quiet("LLM API-key provider", cp.delete_api_key_credential_provider, name=API_KEY_PROVIDER)
     quiet(f"lambda {LAMBDA_NAME}", ctx.client("lambda").delete_function, FunctionName=LAMBDA_NAME)
 
     s3 = ctx.client("s3")
