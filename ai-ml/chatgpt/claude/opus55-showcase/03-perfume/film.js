@@ -3,7 +3,7 @@ import { META } from './meta.js';
 import { SKUS } from './skus.js';
 import { LAYOUTS } from './layouts.js';
 import { fontsFor } from './captions.js';
-import { buildBottle } from './js/bottle.js';
+import { buildBottle, logoMask } from './js/bottle.js';
 import { SHOTS } from './js/shots.js';
 
 const studio = () => import('./js/worlds/studio.js');
@@ -19,7 +19,7 @@ export default {
     if (!WORLDS[id]) throw new Error(`unknown world: ${id} (expected ${Object.keys(WORLDS).join(' | ')})`);
     ctx.world = await (await WORLDS[id]()).build(ctx);
     ctx.postDefaults = ctx.world.post ?? {};
-    const bottle = buildBottle(ctx, sku);
+    const bottle = buildBottle(ctx, sku, { logo: await logoMask() });
     ctx.scene.add(bottle.root);
     ctx.subjects = { bottle };
   },

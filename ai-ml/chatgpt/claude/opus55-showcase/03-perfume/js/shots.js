@@ -1,7 +1,7 @@
 // shots.js — 六个镜头：每个镜头只由镜头本地时间 s.lt 决定相机意图、瓶子姿态、字幕与后期
 // 框取对象、仰角、方位角都写在 meta.js 的 VIEW 表里（layouts 测试也用它），这里只管随时间怎么动
 import * as THREE from 'three';
-import { VIEW, BOX, viewDir } from '../meta.js';
+import { VIEW, BOX, EV, viewDir } from '../meta.js';
 import { layersFor } from '../captions.js';
 import { lerp, easeInOut, ss } from '../../factory/engine/ease.js';
 
@@ -25,6 +25,7 @@ export const SHOTS = {
   },
   drop(ctx, s) {
     world(ctx, s);
+    ctx.subjects.bottle.pose({ ripple: s.lt - EV.land });           // 水滴在 EV.land 落进液面
     return { camera: fit('drop', s), text: text(ctx, s) };
   },
   hero(ctx, s) {
