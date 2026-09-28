@@ -14,7 +14,7 @@ import { voLines, AUDITION } from './copy.js';
 
 const studio = () => import('./js/worlds/studio.js');
 // 各香型的世界；还没做的先用中性影棚。?world=studio 可强制影棚，单独调瓶子和玻璃
-export const WORLDS = { studio, whitetea: () => import('./js/worlds/whitetea.js'), osmanthus: studio, seasalt: studio, rose: studio };
+export const WORLDS = { studio, whitetea: () => import('./js/worlds/whitetea.js'), osmanthus: () => import('./js/worlds/osmanthus.js'), seasalt: studio, rose: studio };
 
 export default {
   ...META,
