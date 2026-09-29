@@ -48,7 +48,7 @@
 
 
 
-Three ways to build it:
+Three ways to build it (the option One has been used for this Video Factory):
 
   1. Three.js page + Node/Playwright/ffmpeg script ⭐ recommended
      - The stack from 02: no build step, and the same code serves preview and rendering.
