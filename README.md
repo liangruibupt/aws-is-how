@@ -568,6 +568,8 @@
   - [Kiro Crew](https://kiro.dev/crew/)(https://github.com/kirodotdev/kirocrew)
     - [KiroCrew introduction](https://kiro.dev/blog/introducing-kiro-crew/)
     - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
+    - [Frontier engineering](https://kiro.dev/topics/frontier-engineering/)
+    - [Frontier engineering teams - for manager](https://kiro.dev/topics/frontier-teams/)
   - [Claude Code]
     - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
