@@ -1,5 +1,5 @@
 { "jobs": [
-  { "sku": ["*"], "ar": ["*"],            "lang": ["zh"], "cut": [15], "promo": ["none"]   },
-  { "sku": ["*"], "ar": ["9x16", "1x1"],  "lang": ["zh"], "cut": [6],  "promo": ["1111"]   },
-  { "sku": ["*"], "ar": ["16x9"],         "lang": ["en"], "cut": [15], "promo": ["launch"] }
+  { "sku": ["*"], "ar": ["16x9"], "lang": ["zh"], "cut": [15], "promo": ["none"]   },
+  { "sku": ["*"], "ar": ["16x9"], "lang": ["en"], "cut": [15], "promo": ["launch"] },
+  { "sku": ["*"], "ar": ["1x1"],  "lang": ["zh"], "cut": [6],  "promo": ["1111"]   }
 ] }
