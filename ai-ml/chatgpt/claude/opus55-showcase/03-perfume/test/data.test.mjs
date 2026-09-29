@@ -19,13 +19,12 @@ test('file names', () => {
   assert.equal(META.fileName({ ...v, promo: 'none', vo: 'on' }), 'wenjing_rose_6s_1x1_en');
 });
 
-test('default manifest = 24 jobs using every axis value; --all = 144', () => {
+test('default manifest = every sku × (16:9 15 s zh, 16:9 15 s en launch, 1:1 6 s zh 1111) = 12 jobs; --all = 144', () => {
   const jobs = expandJobs(META, manifest);
-  assert.equal(jobs.length, 24);
-  for (const [k, list] of Object.entries(allAxes(META))) {
-    if (k === 'vo') continue;
-    for (const x of list) assert.ok(jobs.some(j => j[k] === x), `default batch never uses ${k}=${x}`);
-  }
+  assert.equal(jobs.length, 12);
+  const kinds = new Set(jobs.map(j => `${j.ar} ${j.cut} ${j.lang} ${j.promo} ${j.vo}`));
+  assert.deepEqual([...kinds].sort(), ['16x9 15 en launch on', '16x9 15 zh none on', '1x1 6 zh 1111 on']);
+  for (const s of allAxes(META).sku) assert.equal(jobs.filter(j => j.sku === s).length, 3, `sku ${s}`);
   assert.equal(every().length, 144);
 });
 

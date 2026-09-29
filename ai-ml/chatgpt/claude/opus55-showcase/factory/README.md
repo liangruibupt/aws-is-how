@@ -204,12 +204,13 @@ done 2, skipped 0, failed 0  ·  0.2 min  ·  99-demo/out/index.json
 
 ## 清单
 
-`<film>/manifest.json` 列出默认要出的片。每条 job 是一个网格，展开成各轴取值的全部组合：
+`<film>/manifest.json` 列出默认要出的片。每条 job 是一个网格，展开成各轴取值的全部组合。下面是 03 的清单，每款香型出三条，这也是各部片默认交付的三类片：16:9 15 秒中文、16:9 15 秒英文、1:1 6 秒中文双11：
 
 ```json
 { "jobs": [
-  { "sku": ["*"], "ar": ["*"],           "lang": ["zh"], "cut": [15], "promo": ["none"]   },
-  { "sku": ["*"], "ar": ["9x16", "1x1"], "lang": ["zh"], "cut": [6],  "promo": ["1111"]   }
+  { "sku": ["*"], "ar": ["16x9"], "lang": ["zh"], "cut": [15], "promo": ["none"]   },
+  { "sku": ["*"], "ar": ["16x9"], "lang": ["en"], "cut": [15], "promo": ["launch"] },
+  { "sku": ["*"], "ar": ["1x1"],  "lang": ["zh"], "cut": [6],  "promo": ["1111"]   }
 ] }
 ```
 
@@ -224,7 +225,7 @@ done 2, skipped 0, failed 0  ·  0.2 min  ·  99-demo/out/index.json
 
 ```
 <film>/out/
-├── <名>.mp4            成片；<名> = film.fileName(v)，如 wenjing_whitetea_15s_9x16_zh
+├── <名>.mp4            成片；<名> = film.fileName(v)，如 wenjing_whitetea_15s_16x9_zh
 ├── <名>_cover.jpg      封面：剪辑的 cover 时刻，JPEG 质量 92
 ├── <名>.json           说明文件
 ├── <名>.mp4.part       正在编码的（做完就改名）
