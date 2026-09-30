@@ -1,0 +1,4 @@
+{
+  "app": { "host": "d111111abcdef8.cloudfront.net", "home": "/", "authPrefix": "/_auth", "cookiePath": "/", "api": ["/api/"], "spa": true },
+  "deck": { "host": "d222222abcdef8.cloudfront.net", "home": "/deck/", "authPrefix": "/deck/_auth", "cookiePath": "/deck/" }
+}

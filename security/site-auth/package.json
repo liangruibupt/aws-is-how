@@ -1,0 +1,20 @@
+{
+  "name": "site-auth",
+  "private": true,
+  "type": "module",
+  "description": "Cognito login in front of CloudFront distributions: one user pool and one shared Lambda@Edge viewer-request function",
+  "scripts": {
+    "build": "esbuild edge/index.mjs --bundle --platform=node --target=node22 --format=cjs --outfile=edge/dist/index.js",
+    "test": "node --test edge/*.test.mjs",
+    "deploy": "scripts/deploy.sh"
+  },
+  "dependencies": {
+    "aws-jwt-verify": "^5.2.1"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.1024.0",
+    "aws-cdk-lib": "^2.271.0",
+    "constructs": "^10.4.2",
+    "esbuild": "^0.25.0"
+  }
+}

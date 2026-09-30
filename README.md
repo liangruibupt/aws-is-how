@@ -1287,6 +1287,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [AWS Security Hands on Lab - URL need whitelist](http://security.bwcx.me/)
 - [AWS Security Hands on Lab2](https://seclab.cloudguru.run/1.introduction/)
 - [Public Access Consideration](security/Public_Access_Consideration.md)
+- [site-auth：给 CloudFront 站点加 Cognito 登录（Lambda@Edge）](security/site-auth/README.md)
 - [Curated list of links, references, books videos, tutorials, Exploit, CTFs, Hacking Practices etc. which are related to AWS Security](https://github.com/jassics/awesome-aws-security)
 - [An AWS Pentesting tool that lets you use one-liner commands to backdoor an AWS account's resources](https://endgame.readthedocs.io/en/latest/)
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
