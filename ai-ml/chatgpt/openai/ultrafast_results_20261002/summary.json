@@ -1,0 +1,78 @@
+{
+  "pairs": [
+    {
+      "route": "runtime-us",
+      "workload": "portfolio",
+      "round": 1,
+      "elapsed_speedup": 2.8169983541267394,
+      "latency_reduction_pct": 64.50122171583601,
+      "ttft_s_speedup": 2.7448854990894103,
+      "effective_output_tps_speedup": 2.8227518756037404,
+      "visible_decode_tps_approx_speedup": 3.4125655818031384,
+      "visible_token_ratio_ultrafast_default": 1.0214132762312633
+    },
+    {
+      "route": "runtime-us",
+      "workload": "scheduler",
+      "round": 1,
+      "elapsed_speedup": 2.75776800207331,
+      "latency_reduction_pct": 63.73879168776371,
+      "ttft_s_speedup": 2.112489371781555,
+      "effective_output_tps_speedup": 2.797663939301913,
+      "visible_decode_tps_approx_speedup": 6.741185426703756,
+      "visible_token_ratio_ultrafast_default": 0.9382194033356824
+    },
+    {
+      "route": "runtime-us",
+      "workload": "portfolio",
+      "round": 2,
+      "elapsed_speedup": 2.7962751432314366,
+      "latency_reduction_pct": 64.2381400692788,
+      "ttft_s_speedup": 2.76178934571026,
+      "effective_output_tps_speedup": 2.791500966420058,
+      "visible_decode_tps_approx_speedup": 3.628212366979039,
+      "visible_token_ratio_ultrafast_default": 1.0380383527192707
+    },
+    {
+      "route": "runtime-us",
+      "workload": "scheduler",
+      "round": 2,
+      "elapsed_speedup": 2.6727102900603055,
+      "latency_reduction_pct": 62.58479627519089,
+      "ttft_s_speedup": 2.3069110673555593,
+      "effective_output_tps_speedup": 2.7493586873412252,
+      "visible_decode_tps_approx_speedup": 3.839133431035181,
+      "visible_token_ratio_ultrafast_default": 0.9865287466923262
+    }
+  ],
+  "by_workload": {
+    "portfolio": {
+      "pairs": 2,
+      "median_elapsed_speedup": 2.8066367486790877,
+      "median_latency_reduction_pct": 64.3696808925574,
+      "median_ttft_s_speedup": 2.7533374223998353,
+      "median_effective_output_tps_speedup": 2.8071264210118994,
+      "median_visible_decode_tps_approx_speedup": 3.5203889743910888,
+      "median_visible_token_ratio_ultrafast_default": 1.029725814475267
+    },
+    "scheduler": {
+      "pairs": 2,
+      "median_elapsed_speedup": 2.715239146066808,
+      "median_latency_reduction_pct": 63.1617939814773,
+      "median_ttft_s_speedup": 2.209700219568557,
+      "median_effective_output_tps_speedup": 2.773511313321569,
+      "median_visible_decode_tps_approx_speedup": 5.290159428869468,
+      "median_visible_token_ratio_ultrafast_default": 0.9623740750140043
+    }
+  },
+  "benchmark_samples": 8,
+  "eligible_samples": 8,
+  "matched_pairs": 4,
+  "geomean_elapsed_speedup": 2.760380986600789,
+  "estimated_cost": {
+    "formal_estimated_usd": 18.153817,
+    "probes_estimated_usd": 0.041844,
+    "recorded_pilot_estimated_usd": 7.48264,
+    "caveat": "Published short-context list-price estimate, not a bill. Unrecorded interrupted requests and one-off exploratory calls are excluded."
+  }
+}

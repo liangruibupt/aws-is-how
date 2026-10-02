@@ -1,0 +1,50 @@
+{
+  "mode": "benchmark",
+  "route": "runtime-us",
+  "probe_routes": [
+    "runtime-us",
+    "runtime-global",
+    "mantle-east",
+    "mantle-west"
+  ],
+  "probe_apis": [
+    "responses",
+    "responses-stream",
+    "chat",
+    "chat-stream"
+  ],
+  "workloads": [
+    "portfolio",
+    "scheduler"
+  ],
+  "repeats": 2,
+  "effort": "high",
+  "max_output_tokens": 24576,
+  "min_visible_tokens": 1000,
+  "timeout": 600,
+  "cooldown": 2,
+  "converse": false,
+  "out": "/private/tmp/bedrock-ultrafast-20261002/formal",
+  "credential_source": "AWS_BEARER_TOKEN_BEDROCK",
+  "started_at": "2026-10-02T01:34:39.239022+00:00",
+  "openai_version": "2.40.0",
+  "script_sha256": "4ee8b8c63eadcc957e88d246f4c2c6d2b2016c83e2594e9419e883c14489fa4a",
+  "routes": {
+    "runtime-us": {
+      "base_url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1",
+      "model": "us.openai.gpt-6-astra"
+    },
+    "runtime-global": {
+      "base_url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1",
+      "model": "global.openai.gpt-6-astra"
+    },
+    "mantle-east": {
+      "base_url": "https://bedrock-mantle.us-east-1.api.aws/openai/v1",
+      "model": "openai.gpt-6-astra"
+    },
+    "mantle-west": {
+      "base_url": "https://bedrock-mantle.us-west-2.api.aws/openai/v1",
+      "model": "openai.gpt-6-astra"
+    }
+  }
+}
