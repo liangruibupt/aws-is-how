@@ -29,6 +29,7 @@ swap the model for [CosyVoice 3](https://github.com/FunAudioLLM/CosyVoice) or Qw
 | `deploy.sh` | Create/update the function, enable SnapStart, publish a version, point alias `live` at it, delete stale versions. |
 | `tts.sh` | Client: text or `.txt` script in, `.mp3`/`.wav` out on your laptop. |
 | `ec2_user_data.sh` | Alternative: a start/stop-on-demand EC2 with Kokoro installed (also the Docker build host). |
+| `Dockerfile.arm64` / `build-arm64.sh` / `deploy-arm64.sh` | **arm64 (Graviton) variant, no SnapStart.** Build natively on an arm64 host, deploy on `--architectures arm64`, invoke `$LATEST`. Near-zero idle cost; ~50 s cold start. See the arm64 subsection below. |
 
 ## Deploy
 
@@ -39,6 +40,34 @@ ACCOUNT=<acct> REGION=us-east-1 ./build.sh          # prints IMAGE_URI=...@sha25
 # 2. Deploy the Lambda (6 GB memory, 900 s timeout, SnapStart on published versions, alias "live")
 IMAGE_URI=<from step 1> BUCKET=<your-bucket> ./deploy.sh
 ```
+
+### arm64 (Graviton), no SnapStart — cheapest idle
+
+For near-zero idle cost (no SnapStart snapshot cache), build and run on Graviton and
+invoke `$LATEST`. Build **natively on an arm64 host** (no cross-emulation needed):
+
+```bash
+# 1. Build arm64 + push (Docker v2 manifest — see gotcha below)
+ACCOUNT=<acct> REGION=us-east-1 ./build-arm64.sh    # prints IMAGE_URI=...@sha256:...
+
+# 2. Deploy arm64, no SnapStart (invoke the bare function name, not :live)
+IMAGE_URI=<from step 1> BUCKET=<your-bucket> ./deploy-arm64.sh
+```
+
+Two things that bite:
+
+- **Lambda rejects OCI image manifests** (`image manifest ... is not supported`). `docker
+  buildx` defaults to OCI, so `build-arm64.sh` forces the Docker v2 schema-2 manifest with
+  `--provenance=false --output type=docker`. Verify with
+  `aws ecr batch-get-image ... --query 'images[0].imageManifest'` → mediaType must be
+  `application/vnd.docker.distribution.manifest.v2+json`.
+- **`iam:PassRole`**: the principal running `deploy-arm64.sh` needs `iam:PassRole` on
+  `KokoroTTS-LambdaRole` with `iam:PassedToService=lambda.amazonaws.com`. `PowerUserAccess`
+  does **not** include PassRole; add a scoped inline grant with an admin principal first.
+
+Trade-off vs `deploy.sh`: no SnapStart means a ~50 s cold start (minutes on the very first
+pull of the ~1 GB image), but zero snapshot-cache charges. Warm invokes are a few seconds.
+Verified live: zh `zm_yunjian`, 6144 MB, synth ≈ 2× real time.
 
 `deploy.sh` grants the function `s3:PutObject/GetObject` only on `s3://BUCKET/tts-out/*` and `GetObject` on
 `s3://BUCKET/tts-in/*`. Nothing is exposed publicly — invoke with IAM credentials.
