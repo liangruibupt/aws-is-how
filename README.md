@@ -429,8 +429,8 @@
 ### Agent database
   - [DuckDB]
     - [MotherDuck as an AI Agent Data Layer: How to Power LLM Workflows with DuckDB and the MCP Server](https://motherduck.com/learn/motherduck-ai-agent-data-layer/)
-  - [DB9]
-    - 
+  - [DB9](https://db9.ai/)
+    - [DB9 Demo](https://github.com/liangruibupt/db9-agentcore-demo)
 ### LLM Models
 #### Claude
   - [Claude Workshop]
