@@ -222,6 +222,7 @@
 - **[StudyLens on ECS Fargate + EFS + ALB + CloudFront](devops/studylens-fargate-bedrock/)** — 把有状态 npm 应用部署为免运维、低成本、手机/iPad 可访问的服务；容器内 adapter 将 OpenAI 兼容调用转成 Bedrock Converse（`us.openai.gpt-5.6-luna`，凭 task role 免密钥），CloudFront 提供免域名可信 HTTPS。含完整 Terraform IaC、架构说明与部署/运维/拆除文档。
 - **[AWS Agent Registry Hands-on Lab](ai-ml/chatgpt/agent/agent_registry/)** — AWS Agent Registry（Amazon Bedrock AgentCore 能力，2026-08-31 GA）动手实验：对**真实 API** 跑通完整生命周期（create → publish → submit → approve/reject → 语义搜索 → teardown 清零）。含 6 个编号脚本 + 一键 `end_to_end.py` + 自包含可视化 SPA（Publisher/Curator/Consumer 三列 + 状态机 + 治理前后对比）。实测记录并纠正了两个 API 契约坑：治理面用 client `agent-registry-control`，发现面必须用 GA 的 `agent-registry` client + `search_discoverable_registry_records`（旧 preview 的 `bedrock-agentcore` namespace 会对 GA registry 报 404）；`UpdateRegistryRecordStatus` 强制要求 `statusReason`。被 Curator 拒绝的记录对 Consumer 搜索不可见——治理价值的核心演示。
 - **[Beyond Text · Frontier Model Showcase](https://github.com/liangruibupt/beyond-text-frontier-model-showcase)** — 用前沿模型（Claude Opus 5.5 / GPT-6 Astra / Claude Fable 5）做文字以外的东西：网页动画（临《兰亭集序》逐笔书写）、实时 3D（Three.js / WebGL 2 大力神合体、中国古建筑）、商品视频工厂（香水、年度购物报告、液态玻璃主题，GLSL + Canvas 2D + Web Audio 配乐 + Kokoro 配音，Node + Playwright + ffmpeg 按比例 / 语言 / 长度 / 活动批量出片，EC2 g5 GPU 实测出片）、原画动画（清明上河图）与课堂演示（太阳系）。
+  	- [video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft)
 - **[Jev Lab · TypeSafe Jev 可视化案例](https://github.com/liangruibupt/jev-interest-cases)** — TypeSafe **Jev**（只回答类型化问题 Choice / Score / Noul，~100ms 返回校准概率）的学习路径与可运行 Web 应用：13 个场景（原语实验室、工单分流、一致性与校准对比、护栏 + 模型路由、引用核验、RAG 守门、智能家居 function calling，以及教育 / 医疗 / 金融 / 能源行业判断、语义音乐盒），每个场景展示原始问题、概率、延迟与费用，并与 Claude（Bedrock）做成本基线对比；实测判断步骤便宜 50–635×，端到端省 29–87%。CDK 部署为 CloudFront → S3（OAC）+ API Gateway → Lambda（Hono）。在线：https://dsctx8euz6le2.cloudfront.net/ （需登录）
 - **[Exam Question Bank · 考试题集](https://github.com/liangruibupt/exam-question-bank)**（private repo）— 给中小学生用的各学科题库 Web 应用（iPad / iPhone Safari PWA）：拍照录入 → Claude 识别公式与分类 → AI 老师讲解并点评解答 → 自然语言搜题 → 易错点分析 + 巩固练习（联网搜题 + AI 出题 + 旧错题）→ 拍照作答 AI 批改 → 错题导出 Word（原生可编辑公式）/ 打印。全 Serverless CDK：CloudFront + S3（OAC）+ Lambda Function URL（IAM + OAC 签名）+ Cognito 登录 + DynamoDB + Bedrock（Opus 5.5 / Sonnet 5 / Cohere embed-v4），SSE 流式与断线恢复、每日调用上限。
 - **[Mechanical Atelier · Blender Metro Demo](https://github.com/liangruibupt/blender-metro-demo)** — Blender 脚本化建模 + Three.js 交互浏览的两个机械设计研究：原创岛式站台与 M01 单节地铁（站台 / 乘客 / 司机视角漫游、开关门动画、Cycles 渲染、80 秒分镜预览 MP4），以及 G1 风格擎天柱（机器人与卡车共用一套关节网格的变形研究）；含可复现构建脚本、`.blend` 交付物、部署校验与 QA 记录。
@@ -427,6 +428,8 @@
 ### Agent database
   - [DuckDB]
     - [MotherDuck as an AI Agent Data Layer: How to Power LLM Workflows with DuckDB and the MCP Server](https://motherduck.com/learn/motherduck-ai-agent-data-layer/)
+  - [DB9]
+    - 
 ### LLM Models
 #### Claude
   - [Claude Workshop]
@@ -1780,6 +1783,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Amazon Aurora的读写能力扩展之ShardingSphere-Proxy篇](https://aws.amazon.com/cn/blogs/china/make-further-progress-shardingsphere-proxy-chapter-of-amazon-auroras-reading-and-writing-ability-expansion/)
   - [拓展 Aurora的读写能力之Gaea篇](https://aws.amazon.com/cn/blogs/china/make-further-progress-gaea-chapter-on-expanding-auroras-reading-and-writing-ability/)
 
+- [Bytebase 是一个数据库 DevOps / CI/CD 协作平台（Database DevOps / Schema Change & Migration Platform）](https://bytebase.com/)
+  	- [Bytebase 一体化平台（Dev/Sec/Ops）](https://www.bytebase.com/database-devsecops/)
+  	- [Bytebase - Database as Code（schema 存 Git、CI/CD 发布）](https://www.bytebase.com/database-as-code/)
 #### RDS Cross region, cross account, data replication and backup
 - [MySQL Cross Region Replica](database/rds/mysql/Cross-region-replica.md)
 
@@ -2365,6 +2371,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [How Rufus scales conversational shopping experiences to millions of Amazon customers](https://aws.amazon.com/blogs/machine-learning/how-rufus-scales-conversational-shopping-experiences-to-millions-of-amazon-customers-with-amazon-bedrock/)
   - [Amazon’s new AI-powered shopping feature ‘Help Me Decide’ makes it easy to quickly pick the right product](https://www.aboutamazon.com/news/retail/amazon-things-to-buy-help-me-decide-gen-ai)
   - [Introducing Amazon Lens Live: Instant scanning, real-time product matches, and insights from Amazon's AI Shopping Assistant](https://www.aboutamazon.com/news/retail/search-image-amazon-lens-live-shopping-rufus)
+  - [Introducing seven new features of the Agentic Shopping Assistant on AWS](https://aws.amazon.com/blogs/industries/introducing-seven-new-features-of-the-agentic-shopping-assistant-on-aws/)
 - [Visa Intelligent Commerce on AWS: Enabling agentic commerce with Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/introducing-visa-intelligent-commerce-on-aws-enabling-agentic-commerce-with-amazon-bedrock-agentcore/)
 
 ### 物流和供应链
