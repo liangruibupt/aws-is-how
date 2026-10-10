@@ -591,6 +591,9 @@
     - [cc-connect Bridge AI Agents to Chat Platform with ACP](https://github.com/chenhg5/cc-connect)
     - [Remote Claude Control by Feishu and Tmux](https://github.com/w0yne/remote-claude-control)
     - [A field guide to Claude Fable 5: Finding your unknowns](https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns)
+  - [Codex]
+  - [Remote agent runner]
+    - [Run Claude Code, Codex, and any other coding agent in parallel, each in its own worktree. Terminals, diffs, a browser, and a CLI, in one app built for agents](https://www.onorca.dev/)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
     - [AI 云运维入门](https://catalog.us-east-1.prod.workshops.aws/workshops/449f939b-3480-44eb-a864-6abe94d03b82/zh-CN)
     - [The open source AIOps and Alert platform](https://www.keephq.dev/)
@@ -1260,6 +1263,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ### IoT Timeseries
 - [IoT Time-series Forecasting for Predictive Maintenance](https://github.com/aws-samples/amazon-sagemaker-aws-greengrass-custom-timeseries-forecasting)
+- [Timestream Data Lab- Analytics using Amazon Timestream for InfluxDB](https://catalog.workshops.aws/workshops/18c320c6-bd72-4a95-9e93-c7d98f6d4c4f/en-US)
+- [Edge Digital Operations Workshop](https://aws-samples.github.io/sample-edge-to-cloud-digital-ops-workshop/)
 
 ### OEE
 - [AWS IoT SiteWise Workshop](https://iot-sitewise.workshop.aws/)
