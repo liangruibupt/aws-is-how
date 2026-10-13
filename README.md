@@ -704,7 +704,8 @@
   - [Bedrock AgentCore]
       - [introducing-amazon-bedrock-agentcore](https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/)
       - [AgentCore use case examples](ai-ml/chatgpt/agent/Agent-implement-samples.md)
-      - [AgentCore Launch Pad](https://agentcore-launchpad.chuanxie.people.aws.dev/)
+      - [AgentCore Launch Pad](https://github.com/aws-samples/sample-agentcore-launchpad/tree/console-v3)
+        - [Workshop](https://yourlin.github.io/agent-dlc-workshop/)
       - [New in Amazon Bedrock AgentCore: Build agents with broader knowledge and continuous learning](https://aws.amazon.com/blogs/machine-learning/new-in-amazon-bedrock-agentcore-build-agents-with-broader-knowledge-and-continuous-learning/)
         - [Amazon Bedrock AgentCore introduces new optimization capabilities to continuously improve agents in production](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-new-optimization-capabilities/)
       - [Agent Core Hands on Lab]
