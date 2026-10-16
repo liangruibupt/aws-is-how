@@ -216,6 +216,7 @@
 本人与 Kiro Crew, Codex, Claude Code 等 Coding agent 一起动手完成、验证过的端到端实验（均含可复现资产 / IaC / 实测记录）：
 
 - **[Lambda MicroVMs Lab](https://github.com/liangruibupt/lambda-microvm-lab)** — AWS Lambda MicroVMs（Firecracker 隔离的 serverless，2026-06 GA）动手实验。单 Flask MicroVM 生命周期（create-image → run → connect → suspend/resume，验证快照状态存活）+ 多租户 aws-sample 端到端部署；实测记录、连接契约（443 + `X-aws-proxy-auth` + `X-aws-proxy-port`）、跨代状态丢失的 mount-namespace 根因分析，findings 已回报 aws-samples 上游 issue。
+- **[Lambda Web Functions Lab](lambda/lambda-web-functions-lab/README.md)** — AWS Lambda Web Functions（2026-10 发布，标准 Node.js HTTP Server 原样上 Lambda，单环境多并发 + 按活跃 CPU 计费）深度调研与实测：规格/时长/`/tmp`/共享存储/是否需要 ALB/CloudFront OAC 集成逐条拆解，Event Functions vs Web Functions vs MicroVMs 对比表；一个无 adapter 的 Express 应用 + 压测脚本，实测爬坡 400 并发仅用 9 个环境、冷突发 429、worker_threads 用满 2 vCPU、300 MB 流式上下行、Bedrock SSE、revision 90/10 灰度、rateLimit、MultiRegion/PerRegion、CloudFront + OAC + IamAuth，以及基于 CloudWatch 的账单估算（全套实验 ≈ $0.02）。
 - **[DuckDB Scenarios Explorer](https://github.com/liangruibupt/duckdb-scenarios-explorer)** — DuckDB 7 个场景（NYC 出租车分析、httpfs/S3 远程 Parquet、CSV→Parquet ETL、NL→DuckDB Chat BI、Pandas 零拷贝、日志分析、多 agent AgentCore 设计），spec 驱动 + 34 用例 pytest + CI；场景 04+07 真实部署到 Bedrock AgentCore Runtime（embedded DuckDB 读 S3 hive-partitioned Parquet）验证后清零。
   - [Data Agent on DuckDB](https://github.com/aws-samples/sample-data-agent-on-duckdb)
 - **[db9 × AgentCore Demo](https://github.com/liangruibupt/db9-agentcore-demo)** — 调研 [db9.ai](https://db9.ai/)（PingCAP 团队面向 AI Agent 的闭源 Serverless Postgres：Rust SQL 引擎 + TiKV，库内可 SQL 查询的文件系统 fs9、内置 `embedding()` / HNSW / `CHUNK_TEXT`、秒级建库、表+文件整体分支），并与 Aurora / DynamoDB / Neon / Turso 等对比。Strands Agents + Bedrock Claude Sonnet 4.6 的多店 SaaS 客服 Copilot（每家店一个 db9 库，知识库 / 记忆 / 订单 / JSONL 轨迹同库），01–05 基础能力（一条 SQL 完成 RAG 入库、跨会话记忆、分支沙箱、每租户一库、自带 Titan v2 向量）+ 深挖场景：07 帮用户生成应用的 Agent 平台（每应用一库、分支迁移 + 向后兼容门禁）、08 τ-bench 式 Agent 评测 / RL 环境（每任务一库、LLM 顾客模拟、SQL 打分，8/8）。boto3 直接部署到 Bedrock AgentCore Runtime，端到端集成测试 22/22 后全部拆除；README 附「db9 真正不可替代的场景」分析与 AWS 原生方案对照。
@@ -1541,6 +1542,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Lambda 10 Years](https://www.allthingsdistributed.com/2024/11/aws-lambda-turns-10-a-rare-look-at-the-doc-that-started-it.html)
 
 ### Function as Service - Lambda
+- Lambda Web Functions
+  - [Lambda Web Functions 深度调研 + 实测 Lab（含 Event / Web / MicroVMs 对比）](lambda/lambda-web-functions-lab/README.md)
+  - [Announcing AWS Lambda Web Functions](https://aws.amazon.com/blogs/aws/announcing-aws-lambda-web-functions-for-fast-consistent-web-app-performance-anywhere/)
+  - [Lambda Web Functions developer guide](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)
+
 - Lambda integration
   - [Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
   - [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
