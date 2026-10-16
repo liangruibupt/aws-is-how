@@ -200,9 +200,9 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## Storage
 
-[How to sync S3 bucket data between global region and China region](storage/Sync-Global-S3bucket-2-China.md)
+[How to sync S3 bucket data between global region and China region](storage/S3/data-transfer/Sync-Global-S3bucket-2-China.md)
 
-[Cross region S3 file download and upload](storage/crr-s3-download-upload.py)
+[Cross region S3 file download and upload](storage/S3/data-transfer/scripts/crr-s3-download-upload.py)
 
 [S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
 
@@ -218,7 +218,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Amazon FSx for Lustre or Amazon FSx for Windows File Server Workshop](storage/FSx/README.md)
 
-[S3 Web Explorer](storage/s3explorer)
+[S3 Web Explorer](storage/S3/object-access/s3explorer/README.md)
 
 [Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-file-shares.html) You can mount an Amazon FSx for Windows File Server file share on an Amazon EC2 Linux instance that is either joined to your Active Directory or not joined. 
 

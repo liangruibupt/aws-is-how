@@ -126,7 +126,10 @@
     - [AWS Transform](#aws-transform)
   - [Storage](#storage)
     - [S3 cross region or cross cloud OSS](#s3-cross-region-or-cross-cloud-oss)
-    - [S3](#s3)
+    - [S3 security and data protection](#s3-security-and-data-protection)
+    - [S3 storage management](#s3-storage-management)
+    - [S3 object access](#s3-object-access)
+    - [S3 updates](#s3-updates)
     - [EBS](#ebs)
     - [Storage Gatewway](#storage-gatewway)
     - [EFS and FSx or other shared file system](#efs-and-fsx-or-other-shared-file-system)
@@ -1687,53 +1690,47 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Workshop execution record]
 ## Storage
 
+S3 本地笔记按类型整理在 [storage/S3](storage/S3/README.md)：data-transfer / security / storage-management / object-access。
+
 ### S3 cross region or cross cloud OSS
-- [How to sync S3 bucket data between global region and China region](storage/S3/Sync-Global-S3bucket-2-China.md)
-
-- [Cross region S3 file download and upload](storage/S3/crr-s3-download-upload.py)
-
+- [How to sync S3 bucket data between global region and China region](storage/S3/data-transfer/Sync-Global-S3bucket-2-China.md)
+  - [Data Transfer Hub: cross region / cross cloud OSS sync to S3](storage/S3/data-transfer/aws-data-replication-hub.md)
+  - [S3 large files split and combine with DTH](storage/S3/data-transfer/s3_split_combine_DTH.md)
+  - [Directly copy using aws S3 CLI](storage/S3/data-transfer/Directly-copy-using-aws-S3-CLI.md)
+  - [amazon-s3-resumable-upload](storage/S3/data-transfer/amazon-s3-resumable-upload.md)
+- [Cross region S3 file download and upload](storage/S3/data-transfer/scripts/crr-s3-download-upload.py)
+- [RClone Quickstart](storage/S3/data-transfer/RClone-Quick-Start.md)
 - [S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
-
 - [s3-benchmark-testing](https://github.com/liangruibupt/s3-benchmark-testing)
-
-- [Cross cloud OSS sync to S3](storage/S3/aws-data-replication-hub.md)
-
-- [RClone Quickstart](storage/S3/RClone-Quick-Start.md)
-
 - [Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
+- [将Amazon EC2到Amazon S3的数据传输推向100Gbps线速](https://aws.amazon.com/cn/blogs/china/pushing-the-data-transfer-from-amazon-ec2-to-amazon-s3-to-100gbps-line-speed/)
 
-### S3
-- [S3 Web Explorer](storage/S3/s3explorer/README.md)
+### S3 security and data protection
+- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3/security/S3-Disable-TLS1.1-Access.md)
+- [S3 Protection](storage/S3/security/S3_protection.md)
+- [How to Check S3 object integrity](storage/S3/security/check-integrity-of-s3-object.md)
+- [How Trend Micro uses Amazon S3 Object Lambda to help keep sensitive data secure](https://aws.amazon.com/cn/blogs/storage/how-trend-micro-uses-amazon-s3-object-lambda-to-help-keep-sensitive-data-secure/)
+- [通过 STS Session Tags 来对 AWS 资源进行更灵活的权限控制 - 但是需要一个认证机制去确保userid可信的](https://aws.amazon.com/cn/blogs/china/use-sts-session-tags-to-perform-more-flexible-permission-control-on-aws-resources/)
 
-- [S3-Presign-URL](storage/S3/S3-Presign-URL.md)
-  - [Embeded the image in html with S3-Presign-URL](storage/S3/scripts/s3_image_display.html)
+### S3 storage management
+- [Using S3 Intelligent-Tiering](storage/S3/storage-management/S3_Intelligent-Tiering.md)
+- [S3 inventory usage](storage/S3/storage-management/s3-inventory.md)
+- [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
+- [如何在短时间里遍历 Amazon S3 亿级对象桶（原理篇）](https://aws.amazon.com/cn/blogs/china/how-to-traverse-amazon-s3-billion-object-buckets-in-a-short-time-principle/)
 
+### S3 object access
+- [S3 Web Explorer](storage/S3/object-access/s3explorer/README.md)
+- [S3-Presign-URL](storage/S3/object-access/S3-Presign-URL.md)
+  - [Embeded the image in html with S3-Presign-URL](storage/S3/object-access/scripts/s3_image_display.html)
+- [S3 URI parse utility](storage/S3/object-access/scripts/s3uri_parse_utility.py)
 - [Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
-
-- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3/S3-Disable-TLS1.1-Access.md)
-
 - [使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
 - [Hosting Internal HTTPS Static Websites with ALB, S3, and PrivateLink](https://aws.amazon.com/blogs/networking-and-content-delivery/hosting-internal-https-static-websites-with-alb-s3-and-privatelink/)
 
-- [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
-
-- [S3 inventory usage](storage/S3/s3-inventory.md)
-
-- [How Trend Micro uses Amazon S3 Object Lambda to help keep sensitive data secure](https://aws.amazon.com/cn/blogs/storage/how-trend-micro-uses-amazon-s3-object-lambda-to-help-keep-sensitive-data-secure/)
-
-- [Using S3 Intelligent-Tiering](storage/S3/S3_Intelligent-Tiering.md)
-
-- [How to Check S3 object integrity](storage/S3/check-integrity-of-s3-object.md)
-
-- [通过 STS Session Tags 来对 AWS 资源进行更灵活的权限控制 - 但是需要一个认证机制去确保userid可信的](https://aws.amazon.com/cn/blogs/china/use-sts-session-tags-to-perform-more-flexible-permission-control-on-aws-resources/)
-
-- [将Amazon EC2到Amazon S3的数据传输推向100Gbps线速](https://aws.amazon.com/cn/blogs/china/pushing-the-data-transfer-from-amazon-ec2-to-amazon-s3-to-100gbps-line-speed/)
-- [如何在短时间里遍历 Amazon S3 亿级对象桶（原理篇）](https://aws.amazon.com/cn/blogs/china/how-to-traverse-amazon-s3-billion-object-buckets-in-a-short-time-principle/)
-- [Hosting Internal HTTPS Static Websites with ALB, S3, and PrivateLink](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/hosting-internal-https-static-websites-with-alb-s3-and-privatelink/)
+### S3 updates
 - [2024 reInvent S3 udpate](https://www.youtube.com/watch?v=pbsIVmWqr2M)
 - [S3 support the dedicated local zone](https://aws.amazon.com/about-aws/whats-new/2024/12/amazon-s3-storage-classes-dedicated-local-zones/)
-- [S3 Protection](storage/S3/S3_protection.md)
-  
+
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
