@@ -23,23 +23,23 @@
 ## Cost
 [AWS China region network cost details](https://github.com/nwcdlabs/aws-region-info)
 
-[Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
+[Simple generate a report using the AWS Cost Explorer API](cost/cost-analysis/cost-expoler-api.md)
 
-[Cost and Usage Report analysis](cost/analysis-cost-usage-report.md)
+[Cost and Usage Report analysis](cost/cost-analysis/analysis-cost-usage-report.md)
 
 ## Computing
 
-[Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
+[Amazon Linux how to support chinese](EC2/instance-operations/Amazon-Linux-AMI-support-chinese.md)
 
-[How to connect to Windows EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
+[How to connect to Windows EC2 via NICE DCV Client](EC2/graphics-remote-desktop/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
 
-[How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
+[How to connect to Linux EC2 via NICE DCV Client](EC2/graphics-remote-desktop/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
 
-[How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
+[How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/graphics-remote-desktop/Windows-Graphics-Workstation-on-Amazon-EC2.md)
 
 [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
 
-[ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+[ALB and NLB Route Traffic to Peering VPC](EC2/networking/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
 [Query for AWS Regions, Endpoints, and More Using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/aws/new-query-for-aws-regions-endpoints-and-more-using-aws-systems-manager-parameter-store/)
 
@@ -51,7 +51,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
 
-[What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
+[What does :-1 mean in python](EC2/instance-operations/What-does-list-indexing-in-python.md)
 
 ## Analytics
 
@@ -103,37 +103,37 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## Security
 
-[Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
+[Share-CMK-across-multiple-AWS-accounts](security/data-protection/kms/Share-CMK-across-multiple-AWS-accounts.md)
 
-[Secret Manager quick start demo](security/secret-mgr/README.md)
+[Secret Manager quick start demo](security/data-protection/secret-mgr/README.md)
 
-[Upload-SSL-Certificate](security/Upload-SSL-Certificate.md)
+[Upload-SSL-Certificate](security/data-protection/acm/Upload-SSL-Certificate.md)
 
-[How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
+[How to use the RDK for AWS Config Automation](security/threat-detection-and-compliance/aws-config/GetStartConfigRDS.md)
 
-[Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
+[Connect to Your Existing AD Infrastructure](security/identity-and-access/Connect-to-Existing-AD-Infrastructure.md)
 
-[How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
+[How to bootstrap sensitive data in EC2 User Data](security/data-protection/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
 
-[Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
+[Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/identity-and-access/sso/Using-ADFS-SSO.md)
 
-[GuardDuty Simulator](security/guard-duty/README.md)
+[GuardDuty Simulator](security/threat-detection-and-compliance/guard-duty/README.md)
 
-[Create certificate using openssl](security/acm/create-certificate-openssl.md)
+[Create certificate using openssl](security/data-protection/acm/create-certificate-openssl.md)
 
 [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
 
-[Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
+[Okta-OpenID-AWS-in-the-Browser](security/identity-and-access/sso/Okta-OpenID-AWS-in-the-Browser.md)
 
-[Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
+[Enabling custom identity broker access to the AWS console](security/identity-and-access/sso/Customer_Idp_Broker_access_aws_console.md)
 
 ## Network
 
-[How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
+[How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/private-access/Access-S3-via-VPC-endpoint.md)
 
 [Why can’t I connect to an S3 bucket using a gateway VPC endpoint?](https://amazonaws-china.com/premiumsupport/knowledge-center/connect-s3-vpc-endpoint/)
 
-[The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/SSM-VPC-Endpoint-In-China-Region.md)
+[The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/private-access/SSM-VPC-Endpoint-In-China-Region.md)
 
 [How I can setup transparent proxy - squid](network/squid/Squid-proxy.md)
 
@@ -151,7 +151,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [Using Amazon Global Accelerator to improve cross board request improvement](network/aga/README.md)
 
-[AWS WAF-Workshop](security/waf/WAF-Workshop.md)
+[AWS WAF-Workshop](security/network-and-app-protection/waf/WAF-Workshop.md)
 
 ## DNS
 
@@ -161,7 +161,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [AWS Serverless Day](https://serverlessday.cbuilder.tech/index.html)
 
-[Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
+[Schedule-Invoke-Lambda](lambda/event-sources/Schedule-Invoke-Lambda.md)
 
 [hello-cdk](https://github.com/liangruibupt/hello-cdk)
 
@@ -169,15 +169,15 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [SAM templates and lightweight web frameworks](https://53ningen.com/sam-web-fw/)
 
-[Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
+[Using AWS Lambda with Amazon Kinesis](lambda/event-sources/kinesis-lambda)
 
-[AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+[AWS Lambda Custom Runtime for PHP](lambda/runtimes-web/lambda4php/README.md)
 
 [How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
 
-[How to get the lambda public IP address](lambda/lambda-access-internet.py)
+[How to get the lambda public IP address](lambda/service-integration/scripts/lambda-access-internet.py)
 
-[How to retrieve the System Manager Parameter Store](lambda/lambda-ssm-variables.py)
+[How to retrieve the System Manager Parameter Store](lambda/service-integration/scripts/lambda-ssm-variables.py)
 
 [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
 
@@ -192,7 +192,7 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 ## Migration
 
-[How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
+[How to migrate your on-premises domain to AWS Managed AD?](security/identity-and-access/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
 
 [How to migrate MySQL to Amazon Aurora by Physical backup](database/rds/mysql/MySQL_Migrate_Aurora.md)
 
@@ -246,15 +246,15 @@ Use EMR notebooks to prepare data for machine learning and call SageMaker from t
 
 [ECS workshop for china region](https://github.com/liangruibupt/aws-ecs-workshop-gcr)
 
-[ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
+[ECR Sync up from global from China and ECS Service Discovery](container/ecs/ECR-Sync-and-ECS-Service-Discovery.md)
 
-[How can I create an Application Load Balancer and then register Amazon ECS tasks automatically](container/ECS-Dynamic-Port-Mapping.md)
+[How can I create an Application Load Balancer and then register Amazon ECS tasks automatically](container/ecs/ECS-Dynamic-Port-Mapping.md)
 
-[How can I a ECS service serve traffic from multiple port?](container/ECS-Dynamic-Port-Mapping.md)
+[How can I a ECS service serve traffic from multiple port?](container/ecs/ECS-Dynamic-Port-Mapping.md)
 
-[How to launch tomcat server on ECS](container/tomcat)
+[How to launch tomcat server on ECS](container/ecs/tomcat)
 
-[Windows pod in EKS](container/Windows-pod-EKS.md)
+[Windows pod in EKS](container/eks-cluster/Windows-pod-EKS.md)
 
 ## DevOps
 
