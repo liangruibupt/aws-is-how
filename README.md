@@ -126,7 +126,10 @@
     - [AWS Transform](#aws-transform)
   - [Storage](#storage)
     - [S3 cross region or cross cloud OSS](#s3-cross-region-or-cross-cloud-oss)
-    - [S3](#s3)
+    - [S3 security and data protection](#s3-security-and-data-protection)
+    - [S3 storage management](#s3-storage-management)
+    - [S3 object access](#s3-object-access)
+    - [S3 updates](#s3-updates)
     - [EBS](#ebs)
     - [Storage Gatewway](#storage-gatewway)
     - [EFS and FSx or other shared file system](#efs-and-fsx-or-other-shared-file-system)
@@ -216,7 +219,7 @@
 本人与 Kiro Crew, Codex, Claude Code 等 Coding agent 一起动手完成、验证过的端到端实验（均含可复现资产 / IaC / 实测记录）：
 
 - **[Lambda MicroVMs Lab](https://github.com/liangruibupt/lambda-microvm-lab)** — AWS Lambda MicroVMs（Firecracker 隔离的 serverless，2026-06 GA）动手实验。单 Flask MicroVM 生命周期（create-image → run → connect → suspend/resume，验证快照状态存活）+ 多租户 aws-sample 端到端部署；实测记录、连接契约（443 + `X-aws-proxy-auth` + `X-aws-proxy-port`）、跨代状态丢失的 mount-namespace 根因分析，findings 已回报 aws-samples 上游 issue。
-- **[Lambda Web Functions Lab](lambda/lambda-web-functions-lab/README.md)** — AWS Lambda Web Functions（2026-10 发布，标准 Node.js HTTP Server 原样上 Lambda，单环境多并发 + 按活跃 CPU 计费）深度调
+- **[Lambda Web Functions Lab](lambda/runtimes-web/lambda-web-functions-lab/README.md)** — AWS Lambda Web Functions（2026-10 发布，标准 Node.js HTTP Server 原样上 Lambda，单环境多并发 + 按活跃 CPU 计费）深度调
 研与实测：规格/时长/`/tmp`/共享存储/是否需要 ALB/CloudFront OAC 集成逐条拆解，Event Functions vs Web Functions vs MicroVMs 对比表；一个无 adapter 的 Express 应用 + 压测脚本，实测爬坡 400 并发仅用 9 个环境、冷突发 429、worker_threads 用满 2 vCPU、300 MB 流式上下行、Bedrock SSE、revision 90/10 灰度、rateLimit、MultiRegion/PerRegion、CloudFront + OAC + IamAuth，以及基于 CloudWatch 的账单估算（全
 套实验 ≈ $0.02）。
 - **[DuckDB Scenarios Explorer](https://github.com/liangruibupt/duckdb-scenarios-explorer)** — DuckDB 7 个场景（NYC 出租车分析、httpfs/S3 远程 Parquet、CSV→Parquet ETL、NL→DuckDB Chat BI、Pandas 零拷贝、日志分析、多 agent AgentCore 设计），spec 驱动 + 34 用例 pytest + CI；场景 04+07 真实部署到 Bedrock AgentCore Runtime（embedded DuckDB 读 S3 hive-partitioned Parquet）验证后清零。
@@ -850,16 +853,18 @@
 - [Accelerate Physical AI Development from Prototype to Production with Amazon Kiro](https://aws.amazon.com/blogs/physical-ai/accelerate-physical-ai-development-from-prototype-to-production-with-amazon-kiro/)
 
 ## Cost
-### Cost Explorer
-- [Simple generate a report using the AWS Cost Explorer API](cost/cost-expoler-api.md)
+本地笔记按类型整理在 [cost](cost/README.md)：cost-analysis / pricing。
 
-- [Cost and Usage Report analysis](cost/analysis-cost-usage-report.md)
+### Cost Explorer
+- [Simple generate a report using the AWS Cost Explorer API](cost/cost-analysis/cost-expoler-api.md)
+
+- [Cost and Usage Report analysis](cost/cost-analysis/analysis-cost-usage-report.md)
 
 - [Price Calculator](https://calculator.aws/#/estimate)
 
-- [Price List API](cost/price-list-api.md)
+- [Price List API](cost/pricing/price-list-api.md)
 
-- [Get the spot instance price](EC2/How-to-Get-Spot-Price.md)
+- [Get the spot instance price](EC2/capacity-and-pricing/How-to-Get-Spot-Price.md)
 
 - [Cloud Intelligence Dashboards](https://www.wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/)
 (https://github.com/aws-samples/aws-cudos-framework-deployment)
@@ -891,11 +896,13 @@
 
 ## Computing
 ### EC2
+本地笔记按类型整理在 [EC2](EC2/README.md)：graphics-remote-desktop / networking / instance-operations / capacity-and-pricing / hpc-and-enclaves。
+
 - [Linux Daily usage]
-  - [How to connect to Linux EC2 via NICE DCV Client](EC2/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
+  - [How to connect to Linux EC2 via NICE DCV Client](EC2/graphics-remote-desktop/Linux-NICE-DCV-Servers-on-Amazon-EC2.md)
     - [install GUI (graphical desktop) on Amazon EC2 instances running Ubuntu Linux](https://repost.aws/articles/ARJtZxRiOURwWI2qSWjl4AaQ/how-do-i-install-gui-graphical-desktop-on-amazon-ec2-instances-running-ubuntu-linux)
-  - [Amazon Linux how to support chinese](EC2/Amazon-Linux-AMI-support-chinese.md)
-  - [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/Upgrade-C4-CentOS-instance-to-C5-instance.md)
+  - [Amazon Linux how to support chinese](EC2/instance-operations/Amazon-Linux-AMI-support-chinese.md)
+  - [Upgrade-C4-CentOS-instance-to-C5-instance](EC2/instance-operations/Upgrade-C4-CentOS-instance-to-C5-instance.md)
 
 
 - [Performance]
@@ -903,13 +910,13 @@
   
 
 - [Windows Daily usage]
-  - [How to connect to Windows EC2 via NICE DCV Client](EC2/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
+  - [How to connect to Windows EC2 via NICE DCV Client](EC2/graphics-remote-desktop/Windows-NICE-DCV-Servers-on-Amazon-EC2.md)
   - [Amazon EC2 針對 Windows Server 2012/R2 EOL](https://aws.amazon.com/tw/events/taiwan/techblogs/Amazon-EC2-end-of-support-guidelines-for-Windows-server/)
 
 
 - [GPU Daily usage]
   - [GPU Onboarding 知识中枢](https://tiny.amazon.com/18klxjenl/GPUKnowledgeHub)
-  - [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/Windows-Graphics-Workstation-on-Amazon-EC2.md)
+  - [How to build Graphics Workstation on Amazon EC2 G4 Instances](EC2/graphics-remote-desktop/Windows-Graphics-Workstation-on-Amazon-EC2.md)
   - [Deploying Unreal Engine Pixel Streaming Server on EC2](https://github.com/aws-samples/deploying-unreal-engine-pixel-streaming-server-on-ec2)
   - [GPU Perf - LLM GPU推理性能可视化平台](https://github.com/yytdfc/llm-performance-viz)
   - [Chip and Morta - AWS Chip Strategy](https://www.airealist.ai/p/chip-and-mortar)
@@ -927,10 +934,10 @@
     - [kimi-k3-sglang](https://github.com/whn09/kimi-k3-sglang)
 - [Network of EC2]
   - [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
-  - [EC2 network performance](EC2/EC2_Networking_performance.md)
-  - [How to get the IP address under my account](EC2/Get-all-IP.md)
+  - [EC2 network performance](EC2/networking/EC2_Networking_performance.md)
+  - [How to get the IP address under my account](EC2/networking/Get-all-IP.md)
   - [How can I connect to my Amazon EC2 instance if I lost my SSH key pair after its initial launch](https://aws.amazon.com/premiumsupport/knowledge-center/user-data-replace-key-pair-ec2/)
-  - [Keep EC2 primary private IP for a 'new' instance](EC2/Keep_EC2_primary_private_IP.md)
+  - [Keep EC2 primary private IP for a 'new' instance](EC2/networking/Keep_EC2_primary_private_IP.md)
 
 - [Graviton]
   - [Graviton 2 workshop](https://graviton2-workshop.workshop.aws/) (https://github.com/aws-samples/graviton2-workshop)
@@ -947,26 +954,26 @@
   - [Graviton 官方有个 Kiro Power 做兼容性扫描和出报告](https://github.com/kirodotdev/powers/tree/main/aws-graviton-migration)
 
 - [Operation]
-  - [What does :-1 mean in python](EC2/What-does-list-indexing-in-python.md)
-  - [Change EC2 Time-Zone](EC2/Change-TimeZone.md)
+  - [What does :-1 mean in python](EC2/instance-operations/What-does-list-indexing-in-python.md)
+  - [Change EC2 Time-Zone](EC2/instance-operations/Change-TimeZone.md)
   - [How can I set up a CloudWatch alarm to automatically recover my EC2 instance?](https://aws.amazon.com/premiumsupport/knowledge-center/automatic-recovery-ec2-cloudwatch/)
   - [Move EC2 instance to other AZ](https://aws.amazon.com/cn/premiumsupport/knowledge-center/move-ec2-instance/)
   - [Best practices for handling EC2 Spot Instance interruptions](https://aws.amazon.com/blogs/compute/best-practices-for-handling-ec2-spot-instance-interruptions/)
-  - [How to share the EC2 AMI](EC2/How-to-share-ami.md)
+  - [How to share the EC2 AMI](EC2/instance-operations/How-to-share-ami.md)
   - [Copy AMI from global to China](https://github.com/zhiyanliu/aws-cp-ww-ami-to-cn)
   - [How to handle EC2 detected degradation](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-degraded-hardware/)
-  - [Check if a reboot is required after installing Linux updates](ec2/Does_instance_need_restart_for_upgrade.md)
+  - [Check if a reboot is required after installing Linux updates](EC2/instance-operations/Does_instance_need_restart_for_upgrade.md)
 
 - [Nitro]
   -[在 AWS Nitro Enclaves 中运行传统 Web 应用迁移实践](https://aws.amazon.com/cn/blogs/china/running-traditional-web-application-migration-practices-in-aws-nitro-enclaves/)
-  - [Introduce the nitro-enclaves](EC2/nitro-enclaves.md)
+  - [Introduce the nitro-enclaves](EC2/hpc-and-enclaves/nitro-enclaves.md)
   
 ### Load Balancer
-- [ALB and NLB Route Traffic to Peering VPC](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+- [ALB and NLB Route Traffic to Peering VPC](EC2/networking/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
 - [Domain and Host based routing for ALB](https://aws.amazon.com/blogs/aws/new-host-based-routing-support-for-aws-application-load-balancers/)
 
-- [ALB Redirect Domain](EC2/ALB_Redirect_Domain.md)
+- [ALB Redirect Domain](EC2/networking/ALB_Redirect_Domain.md)
 
 - [Hostname-as-Target for Network Load Balancers](https://aws.amazon.com/blogs/networking-and-content-delivery/hostname-as-target-for-network-load-balancers/)
 
@@ -985,7 +992,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [ssm-connection-lost-status](https://aws.amazon.com/premiumsupport/knowledge-center/ssm-connection-lost-status/)
 
-- [Session-manager QuickStart](EC2/Session-manager.md)
+- [Session-manager QuickStart](EC2/instance-operations/Session-manager.md)
 
 - [Manage private EC2 instances without internet access](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/?nc1=h_ls)
 
@@ -1270,7 +1277,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [AWS IoT Events Quick Start](iot/IoT-Events)
 
-- [Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/lambda-write-postgresql/lambda-write-postgreSQL.md)
+- [Ingest data to IoT core and using lambda write date to RDS PostgreSQL](lambda/databases/lambda-write-postgresql/lambda-write-postgreSQL.md)
 
 - [IoT DR solution](https://aws.amazon.com/solutions/implementations/disaster-recovery-for-aws-iot/)
 
@@ -1301,11 +1308,13 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [制造业端到端(AIOT)动手训练营](https://www.mfgee.ml/)
 
 ## Security
+本地笔记按类型整理在 [security](security/README.md)：identity-and-access / data-protection / threat-detection-and-compliance / network-and-app-protection / secure-development。
+
 
 - [AWS Security Hands on Lab - URL need whitelist](http://security.bwcx.me/)
 - [AWS Security Hands on Lab2](https://seclab.cloudguru.run/1.introduction/)
-- [Public Access Consideration](security/Public_Access_Consideration.md)
-- [site-auth：给 CloudFront 站点加 Cognito 登录（Lambda@Edge）](security/site-auth/README.md)
+- [Public Access Consideration](security/network-and-app-protection/Public_Access_Consideration.md)
+- [site-auth：给 CloudFront 站点加 Cognito 登录（Lambda@Edge）](security/identity-and-access/site-auth/README.md)
 - [Curated list of links, references, books videos, tutorials, Exploit, CTFs, Hacking Practices etc. which are related to AWS Security](https://github.com/jassics/awesome-aws-security)
 - [An AWS Pentesting tool that lets you use one-liner commands to backdoor an AWS account's resources](https://endgame.readthedocs.io/en/latest/)
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
@@ -1313,24 +1322,24 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Automated Security Response on AWS](https://aws.amazon.com/solutions/implementations/automated-security-response-on-aws/)
 - [Security For AI and AI For Security]
   - [Security Agent Workshop](https://workshop-eval.gcr.aws.dev/events/aiforsecurity-workshop-20260918)
-    - [Security Agent Workshop 总结](security/security-agent/AWS-Security-Agent-实验总结.md)
+    - [Security Agent Workshop 总结](security/secure-development/security-agent/AWS-Security-Agent-实验总结.md)
 
 ### Encryption - KMS
-- [Share-CMK-across-multiple-AWS-accounts](security/kms/Share-CMK-across-multiple-AWS-accounts.md)
-- [Using-SM-Key-Algorithm-in-China](security/kms/Using-SM-Key-Algorithm-in-China.md)
+- [Share-CMK-across-multiple-AWS-accounts](security/data-protection/kms/Share-CMK-across-multiple-AWS-accounts.md)
+- [Using-SM-Key-Algorithm-in-China](security/data-protection/kms/Using-SM-Key-Algorithm-in-China.md)
 - [Demystifying KMS keys operations, bring your own key (BYOK), custom key store, and ciphertext portability](https://aws.amazon.com/blogs/security/demystifying-kms-keys-operations-bring-your-own-key-byok-custom-key-store-and-ciphertext-portability/)
 - [bring your own key to AWS KMS](https://aws.amazon.com/blogs/security/how-to-byok-bring-your-own-key-to-aws-kms-for-less-than-15-00-a-year-using-aws-cloudhsm/)
 - [Multi-Region keys in AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html)
 
 ### Credential - Secret Manager
-- [Secret Manager quick start demo](security/secret-mgr/README.md)
+- [Secret Manager quick start demo](security/data-protection/secret-mgr/README.md)
 
-- [Cross-Accounts-Secrets](security/secret-mgr/Cross-Accounts-Secrets.md)
+- [Cross-Accounts-Secrets](security/data-protection/secret-mgr/Cross-Accounts-Secrets.md)
 - 
 ### Certificate - Certificate Manager
-- [Upload-SSL-Certificate](security/acm/Upload-SSL-Certificate.md)
+- [Upload-SSL-Certificate](security/data-protection/acm/Upload-SSL-Certificate.md)
 
-- [Create certificate using openssl](security/acm/create-certificate-openssl.md)
+- [Create certificate using openssl](security/data-protection/acm/create-certificate-openssl.md)
 
 - [Free SSL certificate](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
 
@@ -1342,25 +1351,25 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Troubleshooting acm certificate email validation](https://aws.amazon.com/premiumsupport/knowledge-center/acm-email-validation-custom/?nc1=h_ls)
 
 ### Asset Management and Compliance
-- [How to use the RDK for AWS Config Automation](security/aws-config/GetStartConfigRDS.md)
+- [How to use the RDK for AWS Config Automation](security/threat-detection-and-compliance/aws-config/GetStartConfigRDS.md)
 - [select * from cloud](https://steampipe.io/)
 
 ### AuthN and AuthZ
-- [Connect to Your Existing AD Infrastructure](security/Connect-to-Existing-AD-Infrastructure.md)
+- [Connect to Your Existing AD Infrastructure](security/identity-and-access/Connect-to-Existing-AD-Infrastructure.md)
 
 - [Cognito User Pool alternative solution - Authing demo](https://github.com/aws-samples/aws-authing-demo)
 - [Cognito with WeChat integration](https://aws.amazon.com/cn/blogs/china/amazon-cognito-wechat-deployment-1/)
 - [使用 AWS Lambda 和 API Gateway 实现微信小程序后端服务](https://aws.amazon.com/cn/blogs/china/use-aws-lambda-and-api-gateway-to-implement-wechat-mini-program-backend-services/)
 - [integrate Amazon SES with an Amazon Cognito user pool](https://repost.aws/knowledge-center/cognito-user-pool-ses-integration)
   
-- [Summary the Single-Sign-On cases](security/sso/SSO-OnePage.md)
-    - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/sso/Using-ADFS-SSO.md)
+- [Summary the Single-Sign-On cases](security/identity-and-access/sso/SSO-OnePage.md)
+    - [Enabling Federation to AWS console using Windows Active Directory, ADFS, and SAML 2.0](security/identity-and-access/sso/Using-ADFS-SSO.md)
     - [Using IAM federation and Switch role to implement the Single Sign On multiple AWS Accounts](https://amazonaws-china.com/cn/blogs/china/enable-single-sign-on-sso-and-aws-multi-account-management-for-enterprise-users-with-aws-federation-authentication/)
-    - [Okta-OpenID-AWS-in-the-Browser](security/sso/Okta-OpenID-AWS-in-the-Browser.md)
-    - [Enabling custom identity broker access to the AWS console](security/sso/Customer_Idp_Broker_access_aws_console.md)
+    - [Okta-OpenID-AWS-in-the-Browser](security/identity-and-access/sso/Okta-OpenID-AWS-in-the-Browser.md)
+    - [Enabling custom identity broker access to the AWS console](security/identity-and-access/sso/Customer_Idp_Broker_access_aws_console.md)
     - [Grant my Active Directory users access to the API or AWS CLI with AD FS](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
-    - [Using-temporary-credentials-with-AWS-resources](security/Using-temporary-credentials-with-AWS-resources.md)
-    - [Okta - AWS China multi-account console integration](security/sso/Okta-multiple-accounts-integration.md)
+    - [Using-temporary-credentials-with-AWS-resources](security/identity-and-access/Using-temporary-credentials-with-AWS-resources.md)
+    - [Okta - AWS China multi-account console integration](security/identity-and-access/sso/Okta-multiple-accounts-integration.md)
     - [Keycloak on aws](https://github.com/aws-samples/keycloak-on-aws)
     - [Keycloak with Okta OpenID Connect Provider](https://ultimatesecurity.pro/post/okta-oidc/)
     - [Managing temporary elevated access just-in-time access to your AWS environment](https://aws.amazon.com/cn/blogs/security/managing-temporary-elevated-access-to-your-aws-environment/)
@@ -1373,18 +1382,18 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Extend AWS IAM roles to workloads outside of AWS with IAM Roles Anywhere](https://aws.amazon.com/blogs/security/extend-aws-iam-roles-to-workloads-outside-of-aws-with-iam-roles-anywhere/)
   
 ### Sentitive Data
-- [How to bootstrap sensitive data in EC2 User Data](security/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
+- [How to bootstrap sensitive data in EC2 User Data](security/data-protection/How-to-bootstrap-sensitive-data-in-EC2-userdata.md)
 
 ### Threat detection - GuardDuty
-- [GuardDuty Simulator](security/guard-duty/README.md)
+- [GuardDuty Simulator](security/threat-detection-and-compliance/guard-duty/README.md)
 
 ### WAF
 - [aws-deployment-with-fortiweb-waf](https://www.amazonaws.cn/en/solutions/waf-using-fortiweb/?nc2=h_ql_sol_for) [Source Code](https://github.com/aws-samples/aws-deployment-with-fortiweb-waf)
 - [WAF Agent Bot](https://github.com/aws-samples/sample-building-a-conversational-ai-agent-for-aws-waf-analysis-with-agentcore)
-- [AWS WAF-Workshop](security/waf/WAF-Workshop.md)
-- [WAF-Simulation-With-DVWA](security/waf/WAF-Simulation-With-DVWA.md)
+- [AWS WAF-Workshop](security/network-and-app-protection/waf/WAF-Workshop.md)
+- [WAF-Simulation-With-DVWA](security/network-and-app-protection/waf/WAF-Simulation-With-DVWA.md)
 - [使用 Amazon WAF 进行 Captcha人机验证](https://aws.amazon.com/cn/blogs/china/use-amazon-waf-for-captcha-man-machine-verification/)
-- [WAF的托管规则说明](security/waf/WAF的托管规则说明.md)
+- [WAF的托管规则说明](security/network-and-app-protection/waf/WAF的托管规则说明.md)
 - [中国区抗DDoS方案](https://www.nwcdcloud.cn/articledetail.aspx?id=63)
 - [Strengthen Your Web Application Defenses with AWS WAF](https://catalog.us-east-1.prod.workshops.aws/workshops/81e94a4b-b47f-4acc-a284-914c4514d50f/zh-CN)
 - [AWS WAF AntiDDoS - Global Region](https://aws.amazon.com/cn/blogs/china/new-aws-waf-antiddos-managed-rules/)
@@ -1408,8 +1417,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Share a subnet with other account](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-share-subnet-with-another-account/)
 
 ### SIEM and SOC
-- [Security Hub quick start](security/security-hub/securityhub_customer_findings.md)
-- [Customer security findings for security hub](security/security-hub/securityhub_customer_findings.md)
+- [Security Hub quick start](security/threat-detection-and-compliance/security-hub/securityhub_customer_findings.md)
+- [Customer security findings for security hub](security/threat-detection-and-compliance/security-hub/securityhub_customer_findings.md)
 - [SIEM on Amazon OpenSearch Service](https://github.com/aws-samples/siem-on-amazon-opensearch-service)
 
 ### Vulnerability Assessment - Inspector and Alternative
@@ -1424,19 +1433,21 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Check the ip](https://checkip.amazonaws.com/)
   
 ### VPC
+本地笔记按类型整理在 [vpc](vpc/README.md)：private-access / connectivity / observability。
+
 - [How to solve private ip exhaustion with private nat solution](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/how-to-solve-private-ip-exhaustion-with-private-nat-solution/)
 - [How do I troubleshoot network performance issues between EC2 and on-premises host over the internet gateway](https://aws.amazon.com/premiumsupport/knowledge-center/network-issue-vpc-onprem-ig/)
 - [How do I modify the IPv4 CIDR block of my Amazon VPC](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-ip-address-range/)
   - [How can I modify the CIDR block on my VPC to accommodate more hosts](https://aws.amazon.com/premiumsupport/knowledge-center/vpc-modify-cidr-more-hosts/)
 
 ### Keep private - VPC Endpoint and PrivateLink
-- [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/Access-S3-via-VPC-endpoint.md)
+- [How to verify EC2 access S3 via VPC S3 Endpoint?](vpc/private-access/Access-S3-via-VPC-endpoint.md)
 
 - [Why can’t I connect to an S3 bucket using a gateway VPC endpoint?](https://amazonaws-china.com/premiumsupport/knowledge-center/connect-s3-vpc-endpoint/)
 
-- [The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/SSM-VPC-Endpoint-In-China-Region.md)
+- [The customer have a private subnet without NAT and want to use ssm vpc endpoint to connected to SSM service](vpc/private-access/SSM-VPC-Endpoint-In-China-Region.md)
 
-- [Using VPC PrivateLink to do cross VPC traffic](EC2/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
+- [Using VPC PrivateLink to do cross VPC traffic](EC2/networking/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
 
 - [Cross region VPC endpoint access](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-access-to-vpc-private-endpoints.html#cross-region-endpoint-access)
 - [How do I configure cross-Region Amazon VPC interface endpoints to access AWS PrivateLink resources?](https://repost.aws/knowledge-center/vpc-endpoints-cross-region-aws-services)
@@ -1479,7 +1490,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Cross accounts and Cross VPCs - TGW
 - [TGW cross account sharing and inter-connection testing](network/tgw-workshop)
 
-- [VPC-Cross-Account-Connection](vpc/VPC-Cross-Account-Connection.md)
+- [VPC-Cross-Account-Connection](vpc/connectivity/VPC-Cross-Account-Connection.md)
 
 - [Building a Solution for China Cross-Border VPC Connection](https://aws.amazon.com/cn/blogs/apn/building-a-solution-for-china-cross-border-vpc-connection/)
 
@@ -1509,7 +1520,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [Transit Gateway Connect 集成FortiGate安全服务](network/tgw-workshop/TGW-Connect.md)
 
-- [How to check the Internet Traffic with VPC Flow?](vpc/VPC-Flowlogs-Analysis.md)
+- [How to check the Internet Traffic with VPC Flow?](vpc/observability/VPC-Flowlogs-Analysis.md)
 
 - [Traffic Mirror]
   - [Using VPC Traffic Mirroring to monitor and secure your VPC](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/using-vpc-traffic-mirroring-to-monitor-and-secure-your-aws-infrastructure/)
@@ -1519,15 +1530,17 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 ## DNS
 ### Route 53
+本地笔记按类型整理在 [R53](R53/README.md)：hosted-zone-records / faq / resolver-multi-account。
+
 - [Route53 in China region](R53/README.md)
 
 - [How do I troubleshoot Route53 geolocation routing issues](https://aws.amazon.com/premiumsupport/knowledge-center/troubleshoot-route53-geolocation/)
 
 - [Route53 Routing Policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
 
-- [Route53 Resolver](R53/R53-Resolver.md)
+- [Route53 Resolver](R53/resolver-multi-account/R53-Resolver.md)
 
-- [Route53 cross-account-dns](R53/cross-account-dns.md)
+- [Route53 cross-account-dns](R53/resolver-multi-account/cross-account-dns.md)
 
 ### HTTPDNS
 [DNS hijacked using http dns bypass](https://zhuanlan.zhihu.com/p/380524458?utm_medium=social&utm_oi=713845518471532544&utm_psn=1604820811101130752&utm_source=wechat_session)
@@ -1546,25 +1559,27 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Lambda 10 Years](https://www.allthingsdistributed.com/2024/11/aws-lambda-turns-10-a-rare-look-at-the-doc-that-started-it.html)
 
 ### Function as Service - Lambda
+本地笔记按类型整理在 [lambda](lambda/README.md)：packaging-deployment / runtimes-web / databases / event-sources / service-integration。
+
 - Lambda integration
-  - [Using AWS Lambda with Amazon Kinesis](lambda/kinesis-lambda)
+  - [Using AWS Lambda with Amazon Kinesis](lambda/event-sources/kinesis-lambda)
   - [How to put the S3 event to Kafka using lambda](analytics/msk/kafka-s3-event-processor.py)
   - [Demo how to send the Lambda logs to S3 and ElasticSearch by using Kiensis Firehose](https://github.com/jw1i/logs-api-firehose-layer.git)
   - [Run the serverless wordpress with AWS Lambda and AWS EFS](https://github.com/aws-samples/cdk-serverless-wordpress)
   - [AWS 告警通知到微信](https://mp.weixin.qq.com/s/HGT6u83ChKGT0B0OtGjnfg)
-  - [Lambda write PostgreSQL](lambda/lambda-write-postgreSQL.md)
+  - [Lambda write PostgreSQL](lambda/databases/lambda-write-postgreSQL.md)
   - Lambda sent email
-    - [Using Amazon SES](lambda/scripts/lambda_ses.py)
-    - [Using SendCloud](lambda/scripts/lambda_ses_sendcloud.py)
+    - [Using Amazon SES](lambda/service-integration/scripts/lambda_ses.py)
+    - [Using SendCloud](lambda/service-integration/scripts/lambda_ses_sendcloud.py)
     - [利用 Lambda 调用 smtp](https://gist.github.com/rambabusaravanan/dfa2b80369c89ce7517855f4094367e6)
   - [使用 Lambda 函数URL + CloudFront 实现S3镜像回源](https://mp.weixin.qq.com/s/mzRuFciCJXOfQpN-WV9IyA)
 
 - Lambda usage
-  - [Schedule-Invoke-Lambda](lambda/Schedule-Invoke-Lambda.md)
-  - [AWS Lambda Custom Runtime for PHP](lambda/lambda4php/README.md)
+  - [Schedule-Invoke-Lambda](lambda/event-sources/Schedule-Invoke-Lambda.md)
+  - [AWS Lambda Custom Runtime for PHP](lambda/runtimes-web/lambda4php/README.md)
   - [How to clean up the elastic network interface created by Lambda in VPC mode](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-eni-find-delete/?nc1=h_ls)
-  - [How to get the lambda public IP address](lambda/lambda-access-internet.py)
-  - [How to retrieve the System Manager Parameter Store from lambda](lambda/lambda-ssm-variables.py)
+  - [How to get the lambda public IP address](lambda/service-integration/scripts/lambda-access-internet.py)
+  - [How to retrieve the System Manager Parameter Store from lambda](lambda/service-integration/scripts/lambda-ssm-variables.py)
   - [Understanding the Different Ways to Invoke Lambda Functions](https://aws.amazon.com/blogs/architecture/understanding-the-different-ways-to-invoke-lambda-functions/)
   - [Run web applications on AWS Lambda without changing code](https://github.com/aws-samples/aws-lambda-adapter)
   - [Disney use the open source and serverless](https://aws.amazon.com/cn/blogs/opensource/improving-developer-productivity-at-disney-with-serverless-and-open-source/)
@@ -1613,11 +1628,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Chalice - A framework for writing serverless applications](https://aws.github.io/chalice/)
 
 ### Serverless with AI/ML
-- [Create the pandas layer for lambda ](lambda/create-pandas-layer-4-lambda.md)
+- [Create the pandas layer for lambda ](lambda/packaging-deployment/create-pandas-layer-4-lambda.md)
 
-- [AWS Lambda – Container Image Support](lambda/Lambda-container-image-support.md)
+- [AWS Lambda – Container Image Support](lambda/packaging-deployment/Lambda-container-image-support.md)
 
-- [Lambda invoke AWS Rekgonition](lambda/scripts/call-rekgonition.py)
+- [Lambda invoke AWS Rekgonition](lambda/service-integration/scripts/call-rekgonition.py)
 
 - [Lambda OpenCV](https://github.com/awslabs/lambda-opencv)
 
@@ -1633,7 +1648,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 
 ### Active Directory
-- [How to migrate your on-premises domain to AWS Managed AD?](security/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
+- [How to migrate your on-premises domain to AWS Managed AD?](security/identity-and-access/Migrate_on-premises_domain_to_AWS_Managed_AD.md)
 
 ### Database
 - [aws-database-migration-samples](https://github.com/aws-samples/aws-database-migration-samples)
@@ -1687,53 +1702,47 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
     - [Workshop execution record]
 ## Storage
 
+S3 本地笔记按类型整理在 [storage/S3](storage/S3/README.md)：data-transfer / security / storage-management / object-access。
+
 ### S3 cross region or cross cloud OSS
-- [How to sync S3 bucket data between global region and China region](storage/S3/Sync-Global-S3bucket-2-China.md)
-
-- [Cross region S3 file download and upload](storage/S3/crr-s3-download-upload.py)
-
+- [How to sync S3 bucket data between global region and China region](storage/S3/data-transfer/Sync-Global-S3bucket-2-China.md)
+  - [Data Transfer Hub: cross region / cross cloud OSS sync to S3](storage/S3/data-transfer/aws-data-replication-hub.md)
+  - [S3 large files split and combine with DTH](storage/S3/data-transfer/s3_split_combine_DTH.md)
+  - [Directly copy using aws S3 CLI](storage/S3/data-transfer/Directly-copy-using-aws-S3-CLI.md)
+  - [amazon-s3-resumable-upload](storage/S3/data-transfer/amazon-s3-resumable-upload.md)
+- [Cross region S3 file download and upload](storage/S3/data-transfer/scripts/crr-s3-download-upload.py)
+- [RClone Quickstart](storage/S3/data-transfer/RClone-Quick-Start.md)
 - [S3 trasnfer tool](https://github.com/aws-samples/amazon-s3-resumable-upload)
-
 - [s3-benchmark-testing](https://github.com/liangruibupt/s3-benchmark-testing)
-
-- [Cross cloud OSS sync to S3](storage/S3/aws-data-replication-hub.md)
-
-- [RClone Quickstart](storage/S3/RClone-Quick-Start.md)
-
 - [Synchronize S3 bucket contents with Amazon S3 Batch Replication](https://aws.amazon.com/blogs/aws/new-replicate-existing-objects-with-amazon-s3-batch-replication/)
+- [将Amazon EC2到Amazon S3的数据传输推向100Gbps线速](https://aws.amazon.com/cn/blogs/china/pushing-the-data-transfer-from-amazon-ec2-to-amazon-s3-to-100gbps-line-speed/)
 
-### S3
-- [S3 Web Explorer](storage/S3/s3explorer/README.md)
+### S3 security and data protection
+- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3/security/S3-Disable-TLS1.1-Access.md)
+- [S3 Protection](storage/S3/security/S3_protection.md)
+- [How to Check S3 object integrity](storage/S3/security/check-integrity-of-s3-object.md)
+- [How Trend Micro uses Amazon S3 Object Lambda to help keep sensitive data secure](https://aws.amazon.com/cn/blogs/storage/how-trend-micro-uses-amazon-s3-object-lambda-to-help-keep-sensitive-data-secure/)
+- [通过 STS Session Tags 来对 AWS 资源进行更灵活的权限控制 - 但是需要一个认证机制去确保userid可信的](https://aws.amazon.com/cn/blogs/china/use-sts-session-tags-to-perform-more-flexible-permission-control-on-aws-resources/)
 
-- [S3-Presign-URL](storage/S3/S3-Presign-URL.md)
-  - [Embeded the image in html with S3-Presign-URL](storage/S3/scripts/s3_image_display.html)
+### S3 storage management
+- [Using S3 Intelligent-Tiering](storage/S3/storage-management/S3_Intelligent-Tiering.md)
+- [S3 inventory usage](storage/S3/storage-management/s3-inventory.md)
+- [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
+- [如何在短时间里遍历 Amazon S3 亿级对象桶（原理篇）](https://aws.amazon.com/cn/blogs/china/how-to-traverse-amazon-s3-billion-object-buckets-in-a-short-time-principle/)
 
+### S3 object access
+- [S3 Web Explorer](storage/S3/object-access/s3explorer/README.md)
+- [S3-Presign-URL](storage/S3/object-access/S3-Presign-URL.md)
+  - [Embeded the image in html with S3-Presign-URL](storage/S3/object-access/scripts/s3_image_display.html)
+- [S3 URI parse utility](storage/S3/object-access/scripts/s3uri_parse_utility.py)
 - [Uploading to Amazon S3 directly from a web or mobile application](https://aws.amazon.com/cn/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/)
-
-- [S3 disale TLS1.1 access or enforce TLS1.2 for in-transit encryption](storage/S3/S3-Disable-TLS1.1-Access.md)
-
 - [使用 VPC Endpoint 从 VPC 或 IDC 内访问 S3](https://aws.amazon.com/cn/blogs/china/use-vpc-endpoint-access-from-vpc-or-idc-s3/)
 - [Hosting Internal HTTPS Static Websites with ALB, S3, and PrivateLink](https://aws.amazon.com/blogs/networking-and-content-delivery/hosting-internal-https-static-websites-with-alb-s3-and-privatelink/)
 
-- [Adding and removing object tags with S3 Batch Operations](https://aws.amazon.com/blogs/storage/adding-and-removing-object-tags-with-s3-batch-operations/)
-
-- [S3 inventory usage](storage/S3/s3-inventory.md)
-
-- [How Trend Micro uses Amazon S3 Object Lambda to help keep sensitive data secure](https://aws.amazon.com/cn/blogs/storage/how-trend-micro-uses-amazon-s3-object-lambda-to-help-keep-sensitive-data-secure/)
-
-- [Using S3 Intelligent-Tiering](storage/S3/S3_Intelligent-Tiering.md)
-
-- [How to Check S3 object integrity](storage/S3/check-integrity-of-s3-object.md)
-
-- [通过 STS Session Tags 来对 AWS 资源进行更灵活的权限控制 - 但是需要一个认证机制去确保userid可信的](https://aws.amazon.com/cn/blogs/china/use-sts-session-tags-to-perform-more-flexible-permission-control-on-aws-resources/)
-
-- [将Amazon EC2到Amazon S3的数据传输推向100Gbps线速](https://aws.amazon.com/cn/blogs/china/pushing-the-data-transfer-from-amazon-ec2-to-amazon-s3-to-100gbps-line-speed/)
-- [如何在短时间里遍历 Amazon S3 亿级对象桶（原理篇）](https://aws.amazon.com/cn/blogs/china/how-to-traverse-amazon-s3-billion-object-buckets-in-a-short-time-principle/)
-- [Hosting Internal HTTPS Static Websites with ALB, S3, and PrivateLink](https://aws.amazon.com/cn/blogs/networking-and-content-delivery/hosting-internal-https-static-websites-with-alb-s3-and-privatelink/)
+### S3 updates
 - [2024 reInvent S3 udpate](https://www.youtube.com/watch?v=pbsIVmWqr2M)
 - [S3 support the dedicated local zone](https://aws.amazon.com/about-aws/whats-new/2024/12/amazon-s3-storage-classes-dedicated-local-zones/)
-- [S3 Protection](storage/S3/S3_protection.md)
-  
+
 ### EBS
 - [How do I create a snapshot of an EBS RAID array](https://aws.amazon.com/premiumsupport/knowledge-center/snapshot-ebs-raid-array/)
 
@@ -1918,6 +1927,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Amazon TimeStream Performance Testing](database/timestream/TimeStream-Performance-Testing.md)
 
 ## Container
+本地笔记按类型整理在 [container](container/README.md)：eks-cluster / eks-fargate / eks-security / ecs。
+
 ### EKS
 [Serverless or Kubernetes on AWS](https://aws.amazon.com/architecture/serverless/serverless-or-kubernetes/)
 #### EKS networking
@@ -1943,7 +1954,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [eks-workshop-greater-china](https://github.com/aws-samples/eks-workshop-greater-china)
 
 - [EKS-Workshop-China](https://github.com/liangruibupt/EKS-Workshop-China)
-  - [EKS in Beijing 3 AZ](container/EKS_in_Beijing_3AZ.md)
+  - [EKS in Beijing 3 AZ](container/eks-cluster/EKS_in_Beijing_3AZ.md)
 
 - [Advanced EKS workshop](https://github.com/pahud/amazon-eks-workshop)
   - [EKS Multi-Tatent](https://aws.amazon.com/cn/blogs/china/computing-resources-of-eks-multi-tenant-management/)
@@ -1951,7 +1962,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
 
-- [Windows pod in EKS](container/Windows-pod-EKS.md)
+- [Windows pod in EKS](container/eks-cluster/Windows-pod-EKS.md)
 
 - [Cell-Based Architecture for Amazon EKS](https://aws.amazon.com/solutions/guidance/cell-based-architecture-for-amazon-eks/)
 
@@ -1965,13 +1976,13 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Horizontal Pod Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html)
 
 #### DevOps on EKS
-- [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/Install-SSM-Agent-on-EKS-Worker-Node.md)
+- [Install SSM Agent on Amazon EKS worker nodes by using Kubernetes DaemonSet](container/eks-cluster/Install-SSM-Agent-on-EKS-Worker-Node.md)
 
 - [How can I check, scale, delete, or drain my worker nodes on EKS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-node-actions/)
 - [关于Amazon EKS基于Gitlab的CICD实践](https://aws.amazon.com/cn/blogs/china/about-amazon-eks-gitlab-based-cicd-practice-one-gitlab-deployment-and-configuration/)
 - [DataDog for EKS control plane monitoring](https://docs.datadoghq.com/agent/kubernetes/control_plane/?tab=helm#EKS)
-- [Exclusive Node from EKS ELB](container/Exclusive_Node_from_ELB.md)
-- [Securing Kubernetes with Private CA](container/EKS-Certification.md)
+- [Exclusive Node from EKS ELB](container/eks-cluster/Exclusive_Node_from_ELB.md)
+- [Securing Kubernetes with Private CA](container/eks-security/EKS-Certification.md)
 - [Public container images mirror to China ECR solution](https://github.com/aws-samples/amazon-ecr-replication-for-pub-container-images)
 - [Global to China 跨国企业 Kubernetes 应用跨境复制和部署方案](https://aws.amazon.com/cn/blogs/china/global-to-china-multinational-enterprise-kubernetes-application-cross-border-replication-and-deployment-solution/)
 - [Application first delivery on Kubernetes with Open Application Model](https://aws.amazon.com/blogs/containers/application-first-delivery-on-kubernetes-with-open-application-model/)
@@ -1989,19 +2000,19 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [ECS quick start demo workshop](https://ecs-cats-dogs.workshop.aws/en/)
 
-- [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
+- [ECR Sync up from global from China and ECS Service Discovery](container/ecs/ECR-Sync-and-ECS-Service-Discovery.md)
 
-- [How can I create an Application Load Balancer and then register Amazon ECS tasks automatically](container/ECS-Dynamic-Port-Mapping.md)
+- [How can I create an Application Load Balancer and then register Amazon ECS tasks automatically](container/ecs/ECS-Dynamic-Port-Mapping.md)
 
-- [How can I a ECS service serve traffic from multiple port?](container/ECS-Dynamic-Port-Mapping.md)
+- [How can I a ECS service serve traffic from multiple port?](container/ecs/ECS-Dynamic-Port-Mapping.md)
 
-- [How to launch tomcat server on ECS](container/tomcat)
+- [How to launch tomcat server on ECS](container/ecs/tomcat)
 
 - [graceful-shutdowns-with-ecs](https://aws.amazon.com/blogs/containers/graceful-shutdowns-with-ecs/)
 
 - [Amazon ECS firelens]
     - [firelens examples](https://github.com/aws-samples/amazon-ecs-firelens-examples)
-    - [firelens demo](container/ECS-FireLens.md)
+    - [firelens demo](container/ecs/ECS-FireLens.md)
 
 - [amazon-ecr-cross-region-replication](https://github.com/aws-samples/amazon-ecr-cross-region-replication)
   
@@ -2010,7 +2021,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [aws-fargate-fast-autoscaler](aws-samples/aws-fargate-fast-autoscaler)
 
-- [EKS on Fargate QuickStart](container/EKSonFargate-QuickStart.md)
+- [EKS on Fargate QuickStart](container/eks-fargate/EKSonFargate-QuickStart.md)
 
 - [Run Selenium tests at scale using AWS Fargate](https://aws.amazon.com/cn/blogs/opensource/run-selenium-tests-at-scale-using-aws-fargate/)
 
@@ -2029,7 +2040,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### ECR
 - [ecr-cross-region-replication](https://github.com/aws-samples/amazon-ecr-cross-region-replication)
 
-- [ECR Sync up from global from China and ECS Service Discovery](container/ECR-Sync-and-ECS-Service-Discovery.md)
+- [ECR Sync up from global from China and ECS Service Discovery](container/ecs/ECR-Sync-and-ECS-Service-Discovery.md)
 - 
 ## DevOps
 ### Management
@@ -2123,9 +2134,9 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Community Config Rules](https://github.com/awslabs/aws-config-rules)
   - [AWS Config related blogs](https://aws.amazon.com/blogs/security/tag/aws-config/)
 
-- [Create a Lambda Function for a Cross-Account Config Rule](security/aws-config/Cross-Account-Lambda-Config-Rule.md)
+- [Create a Lambda Function for a Cross-Account Config Rule](security/threat-detection-and-compliance/aws-config/Cross-Account-Lambda-Config-Rule.md)
 
-- [How-to-get-public-resources](security/aws-config/How-to-get-public-resources.md)
+- [How-to-get-public-resources](security/threat-detection-and-compliance/aws-config/How-to-get-public-resources.md)
 
 - [Collecting AWS networking information in large multi-account environments](https://aws.amazon.com/blogs/networking-and-content-delivery/collecting-aws-networking-information-in-large-multi-account-environments/)
 - [Find Public IPs of Resources – Use AWS Config for Vulnerability Assessment](https://aws.amazon.com/blogs/architecture/find-public-ips-of-resources-use-aws-config-for-vulnerability-assessment/)
