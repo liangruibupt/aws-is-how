@@ -2,6 +2,7 @@
 // Nothing here is Lambda-specific except reading AWS_LAMBDA_HTTP_ENDPOINT.
 // Every route is an experiment that makes one Web Functions property visible.
 import express from 'express';
+import { rateLimit } from 'express-rate-limit';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
@@ -137,6 +138,21 @@ function snapshot() {
 const app = express();
 app.disable('x-powered-by');
 
+// Per-environment, per-client limiter for the routes that touch the file system
+// (/tmp writes, /proc reads). It complements -- does not replace -- the
+// endpoint-level `rateLimit`, which Lambda enforces across all environments.
+// Client = last X-Forwarded-For hop (Lambda appends the connecting IP; behind
+// CloudFront that is the edge IP, so this degrades to per-edge limiting).
+const clientKey = (req) => (req.get('x-forwarded-for') || req.socket.remoteAddress || 'unknown').split(',').pop().trim();
+const fsLimiter = rateLimit({
+  windowMs: 60_000,
+  limit: 30,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  keyGenerator: clientKey,
+  validate: { xForwardedForHeader: false, ip: false },
+});
+
 // Per-request accounting + identity headers on every response.
 app.use((req, res, next) => {
   stats.served++;
@@ -241,7 +257,7 @@ app.get('/api/cache', async (req, res) => {
 
 // 4) Streaming request body -> /tmp, hashed on the fly. No 6 MB payload cap:
 //    the body is streamed to the app as it arrives.
-app.post('/api/upload', async (req, res) => {
+app.post('/api/upload', fsLimiter, async (req, res) => {
   const file = path.join(os.tmpdir(), `upload-${crypto.randomUUID()}`);
   const hash = crypto.createHash('sha256');
   let bytes = 0;
@@ -354,7 +370,7 @@ function canWrite(dir) {
   const f = path.join(dir, `.probe-${ENV_ID}`);
   try { fs.writeFileSync(f, 'x'); fs.rmSync(f); return true; } catch { return false; }
 }
-app.get('/api/probe', async (req, res) => {
+app.get('/api/probe', fsLimiter, async (req, res) => {
   const tmp = await fsp.statfs(os.tmpdir()).catch(() => null);
   const limits = (readMaybe('/proc/self/limits') || '').split('\n')
     .filter((l) => /open files|processes|address space/i.test(l)).map((l) => l.replace(/\s{2,}/g, ' | '));

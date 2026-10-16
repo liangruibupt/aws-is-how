@@ -256,7 +256,7 @@ node scripts/billing.mjs wf-lab 120
 ./scripts/teardown.sh                              # 删除全部 Lab 资源
 ```
 
-安全说明：`dev`/`prod`/`global`/`regional` endpoint 是 `ApplicationManaged`（公网无鉴权，用于演示）；`/api/chat` 用 `LAB_KEY`（`.lab-key`，已 gitignore）保护以免被刷 Bedrock；`/api/probe` 只输出环境变量名，敏感值脱敏。生产请用 `IamAuth` + CloudFront OAC。
+安全说明：`dev`/`prod`/`global`/`regional` endpoint 是 `ApplicationManaged`（公网无鉴权，用于演示）；`/api/chat` 用 `LAB_KEY`（`.lab-key`，已 gitignore）保护以免被刷 Bedrock；`/api/probe` 只输出环境变量名，敏感值脱敏。`/api/upload`、`/api/probe` 加了 `express-rate-limit`（每环境每客户端 30 次/分钟），这只是单环境内的兜底；跨环境的总量控制靠 endpoint 的 `rateLimit`。生产请用 `IamAuth` + CloudFront OAC。
 
 ---
 
