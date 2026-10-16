@@ -1,0 +1,12 @@
+{
+  "Name": "s3tablescatalog",
+  "CatalogInput": {
+    "FederatedCatalog": {
+      "Identifier": "arn:aws-cn:s3tables:cn-north-1:876820548815:bucket/*",
+      "ConnectionName": "aws:s3tables"
+    },
+    "CreateDatabaseDefaultPermissions": [{"Principal": {"DataLakePrincipalIdentifier": "IAM_ALLOWED_PRINCIPALS"}, "Permissions": ["ALL"]}],
+    "CreateTableDefaultPermissions": [{"Principal": {"DataLakePrincipalIdentifier": "IAM_ALLOWED_PRINCIPALS"}, "Permissions": ["ALL"]}],
+    "AllowFullTableExternalDataAccess": "True"
+  }
+}

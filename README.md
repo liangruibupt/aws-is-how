@@ -1163,6 +1163,8 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 
 - [How to get results from Athena for the past 7 days](analytics/athena-workshop/How_to_query_past_7_days_result.md)
 
+- [China region S3 Tables + Glue + Athena Iceberg demo with Olist e-commerce data](analytics/s3-tables-olist/README.md)
+
 ### Data Warehouse: Redshfit
 - [Usage]
   - [Cross-Account Data Sharing for Amazon Redshift](https://aws.amazon.com/blogs/aws/cross-account-data-sharing-for-amazon-redshift/)
