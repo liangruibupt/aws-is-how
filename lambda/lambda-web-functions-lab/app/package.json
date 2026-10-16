@@ -1,0 +1,17 @@
+{
+  "name": "lambda-web-functions-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "description": "A standard Express server that probes what Lambda Web Functions really are: multi-concurrency, shared in-process state, streaming, worker_threads, /tmp, lifecycle, multi-region, canary.",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "AWS_LAMBDA_HTTP_ENDPOINT=127.0.0.1:3000 node index.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "3.1152.0",
+    "express": "5.3.0",
+    "express-rate-limit": "8.7.1"
+  }
+}
