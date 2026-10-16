@@ -436,6 +436,9 @@
   - [Claude Workshop]
     - [Amazon Bedrock Claude3 Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/en-US)
     - [Claude Artifacts workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/zh-CN/corefeatures/frequently/artifact)
+  - [Cost Optimization]
+    - [maximizing-the-value-of-your-claude-code-sessions](https://claude.com/blog/maximizing-the-value-of-your-claude-code-sessions)
+  - [Usage Performance Optimization]
     - [Fine-tune Anthropic’s Claude 3 Haiku in Amazon Bedrock to boost model accuracy and quality](https://aws.amazon.com/blogs/machine-learning/fine-tune-anthropics-claude-3-haiku-in-amazon-bedrock-to-boost-model-accuracy-and-quality/)
     - [Anthropic API Gateway Proxy: 无需修改代码即可在 Anthropic SDK 中使用 AWS Bedrock 上的各种大语言模型](https://github.com/aws-samples/sample-bedrock-api-proxy)
     - [Opus 4.7 + claude code 问题汇总 2026.04.20](https://amzn-chn.feishu.cn/docx/SA6ddWe4LoLeEsxyGIIcN1cJnpf)
