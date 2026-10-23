@@ -1,7 +1,7 @@
 # Versions tested with this sample (installed as linux/arm64 wheels by deploy.py)
 bedrock-agentcore==1.23.1
 strands-agents==1.44.0
-mcp==1.28.1
+mcp==1.30.0
 playwright==1.57.0
 openai==2.40.0
 httpx==0.28.1
