@@ -1,6 +1,7 @@
 import urllib
 import json
 import sys
+import webbrowser
 import requests  # 'pip install requests'
 import boto3  # AWS SDK for Python (Boto3) 'pip install boto3'
 
@@ -69,5 +70,7 @@ request_parameters += "&Destination=" + \
 request_parameters += "&SigninToken=" + signin_token["SigninToken"]
 request_url = "https://signin.amazonaws.cn/federation" + request_parameters
 
-# Send final URL to stdout
-print(request_url)
+# Open the sign-in URL in the default browser instead of printing it:
+# the URL embeds a live SigninToken that grants console access.
+webbrowser.open(request_url)
+print("Console sign-in URL opened in the default browser (valid for 15 minutes).")

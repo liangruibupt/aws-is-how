@@ -20,7 +20,8 @@ def lambda_handler():
         describe_secret_response = client.describe_secret(
             SecretId=secret_name
         )
-        print ("describe_secret_response %s" % (describe_secret_response) )
+        # Do not log the describe_secret response: it is secret metadata.
+        print ("describe_secret succeeded")
         get_secret_value_response = client.get_secret_value(
             SecretId=describe_secret_response['ARN']
         )
