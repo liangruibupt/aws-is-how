@@ -1,5 +1,16 @@
 import json
 import base64
+try:
+  from urllib.parse import urlparse
+except ImportError:  # Python 2
+  from urlparse import urlparse
+
+
+def is_docker_hub_image(image):
+  # Compare the registry host exactly instead of a substring/prefix match.
+  if '/' not in image:
+    return False
+  return urlparse('//' + image).hostname == 'docker.io'
 
 image_mirrors = {
   'k8s.gcr.io/': '048912060910.dkr.ecr.cn-northwest-1.amazonaws.com.cn/gcr/google_containers/',
@@ -57,8 +68,8 @@ def image_patch(containers, path_prefix):
         image = mirror_image + image[len(orig_image):]
         break
     if "/" in image_mirrors and math_mirror==False:
-      if image.startswith("docker.io/"):
-        image = image_mirrors["/"] + image[len("docker.io/"):]
+      if is_docker_hub_image(image):
+        image = image_mirrors["/"] + image.split("/", 1)[1]
       elif ("." not in image.split("/")[0]) or ("/" not in image):
         image =  image_mirrors["/"] + image
     json_patch.append({'op': 'replace', 'path': '%s/%d/image' % (path_prefix, idx), 'value': image})

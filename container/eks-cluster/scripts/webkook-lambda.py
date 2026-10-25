@@ -1,5 +1,16 @@
 import json
 import base64
+try:
+  from urllib.parse import urlparse
+except ImportError:  # Python 2
+  from urlparse import urlparse
+
+
+def is_docker_hub_image(image):
+  # Compare the registry host exactly instead of a substring/prefix match.
+  if '/' not in image:
+    return False
+  return urlparse('//' + image).hostname == 'docker.io'
 
 image_mirrors = {
   '/': '048912060910.dkr.ecr.cn-northwest-1.amazonaws.com.cn/dockerhub/',
@@ -53,8 +64,11 @@ def dict_get(dictionary, keys, default=None):
 def replace_dockerhub_prfix(image):
   if image.startswith("library/"):
     return image[len("library/"):]
-  elif image.startswith("docker.io/"):
-    return image.replace("docker.io/library/","").replace("docker.io/","")
+  elif is_docker_hub_image(image):
+    image = image.split("/", 1)[1]
+    if image.startswith("library/"):
+      image = image[len("library/"):]
+    return image
 
 def image_patch(containers, path_prefix):
   json_patch = []
@@ -66,7 +80,7 @@ def image_patch(containers, path_prefix):
         math_mirror=True
         image = mirror_image + image[len(orig_image):]
     if "/" in image_mirrors and math_mirror==False:
-      if image.startswith("docker.io/") or image.startswith("library/"):
+      if is_docker_hub_image(image) or image.startswith("library/"):
         image = image_mirrors["/"] + replace_dockerhub_prfix(image)
       elif "." not in image.split("/")[0]:
         image =  image_mirrors["/"] + image
