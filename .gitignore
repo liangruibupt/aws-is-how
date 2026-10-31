@@ -33,3 +33,10 @@ __pycache__/
 
 # Playwright MCP browser-tool session artifacts
 .playwright-mcp/
+.omni/
+.claude/
+.github/
+.cursor/
+.agents/
+.env.omni
+.omni/collector.json
