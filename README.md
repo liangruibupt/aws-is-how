@@ -78,6 +78,7 @@
     - [OTA](#ota)
     - [AIOT](#aiot)
   - [Security](#security)
+    - [Security For AI and AI For Security](#security-for-ai-and-ai-for-security)
     - [Encryption - KMS](#encryption---kms)
     - [Credential - Secret Manager](#credential---secret-manager)
     - [Certificate - Certificate Manager](#certificate---certificate-manager)
@@ -323,7 +324,9 @@
     - [MiniMax-H3 on B300（p6-b300.48xlarge，8×B300 SXM6 275 GB）](https://github.com/whn09/minimax_h3_b300)
     - [MiniMax H3 use case and prompt guide](https://vrfi1sk8a0.feishu.cn/wiki/VavPwU0XmiidWhkdGjtcbMHInKf)
     - [MiniMax H3 Enterprise Solution](https://vrfi1sk8a0.feishu.cn/wiki/DZGGwe9DaidFyQkcjg1c3hgSnbh)
-  
+  - [Coding Video]
+    - [视频生成平台 Coding Video](https://gitlab.aws.dev/aws-gcr-solutions/industry-assets/me_ad/code-based-animation-video)
+    - [Romotion on AWS](https://gitlab.aws.dev/lht/remotion-on-aws)
 ### Audio in GenAI
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
   - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
@@ -578,15 +581,16 @@
       - [开源 Kiroro Bot](https://github.com/kiro-community/kiroro)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
     - [Q Developer Workshop](https://catalog.workshops.aws/q-developer/zh-CN/00-introduction)
-    - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
-    - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
-    - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
+      - [Agentic AI 帮你做应用 —— 从0到1打造自己的智能番茄钟](https://dev.amazoncloud.cn/experience/cloudlab?id=67f49364f0df324eb192e428&visitfrom=1P_aiday_0427&sc_medium=owned&sc_campaign=cloudlab&sc_channel=1P_aiday_0427)
+      - [Agentic AI 帮你做应用 —— BotGroup 吵架机器人](https://catalog.us-east-1.prod.workshops.aws/workshops/dfc5ba98-7750-4e1f-ac1e-43391d3c3f97/zh-CN)
+      - [Amazon Q CLI + MCP 创建 AWS 架构图](https://mp.weixin.qq.com/s/EPqJfffYRxWa2OqCb766uQ)
     - [Prompt Driven Development Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/2a43bf02-09e5-4cb0-9b86-dd61fd285808/zh-CN)
     - [Proxy gateway for Kiro API](https://github.com/jwadow/kiro-gateway)
+      - [通过ACP协议，使用api调用kiro cli - 把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
     - [配置 kiro 使用企业单点登录系统](https://mp.weixin.qq.com/s/qFiUSz0GOAIv2Ekh4aXtbA?clicktag=bar_share&scene=294&clickpos=0&from_safari=1)
       - [Kiro 通过AWS Identity Center 认证，所以实际上是 Identity Center 和企业做 SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source-idp.html)
-    - [通过ACP协议，使用api调用kiro cli - 把 Kiro CLI 当作 Agent SDK：一键订阅即可构建你的Agent应用](https://aws.amazon.com/cn/blogs/china/use-kiro-cli-as-agent-sdk-build-your-agent-app-with-one-click-subscription/)
     - [Benchmarking Kiro CLI coding-agent performance and cost across multiple models, replicating the Artificial Analysis Coding Agent Index methodology](https://github.com/JoeShi/coding-agent-benchmark)
+    - [Kiro 使用效能看板（kiro-usage-dashboard）](https://github.com/szipan/kiro-usage-dashboard)
   - [Kiro Crew](https://kiro.dev/crew/)(https://github.com/kirodotdev/kirocrew)
     - [KiroCrew introduction](https://kiro.dev/blog/introducing-kiro-crew/)
     - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
@@ -738,6 +742,7 @@
         - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
         - [存之有序，治之有矩 - Agent 记忆系统的工程实践与演进](https://aws.amazon.com/cn/blogs/china/agent-system-engineering-practice/)
         - [相得益彰：Mem0 记忆框架与亚马逊云科技的企业级 AI 实践](https://aws.amazon.com/cn/blogs/china/complementary-strengths-mem0-memory-framework-and-amazon-cloud-technologys-enterprise-level-ai-practices/)
+        - [AgentCore Memory 亚马逊云科技的托管记忆解决方案](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-agentcore-memory-amazon-cloud-technologys-managed-memory-solution/)
       - [Amazon Bedrock AgentCore Policy](https://aws.amazon.com/blogs/machine-learning/secure-ai-agents-with-policy-in-amazon-bedrock-agentcore/)
         - [Amazon Bedrock AgentCore adds quality evaluations and policy controls for deploying trusted AI agents](https://aws.amazon.com/blogs/aws/amazon-bedrock-agentcore-adds-quality-evaluations-and-policy-controls-for-deploying-trusted-ai-agents/)
         - [Amazon Bedrock AgentCore now supports Bedrock Guardrails in policy](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-policy-guardrails-generally-available/)
@@ -749,6 +754,7 @@
         - [企业智能体之旅: 评估企业级智能体：从原型验证到生产就绪](https://aws.amazon.com/cn/blogs/china/part-2-enterprise-intelligent-validation/?p=bl_ar_l=1)
         - [企业智能体之旅: 如何在亚马逊云科技上构建企业级智能体](https://aws.amazon.com/cn/blogs/china/part-3-how-to-build-enterprise-intelligent/?p=bl_ar_l=2)
         - [Agent 优化端到端全流程](https://d3qnw1rhjyi9ke.cloudfront.net/)(f7TmsWkmyqkjp5Brtt5V)
+        - [Eval-First: Building Enterprise Agents with AgentCore](https://github.com/weiyuann1/eval-first-building-enterprise-agents-with-agentcore)
       - [AgentCore Harness - Go from idea to production-grade agent in minutes](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-harness-is-now-generally-available-go-from-idea-to-production-grade-agent-in-minutes/)
         - [取之有度，用之有节——从 Harness 视角破解 Agent 应用 Token 爆炸难题](https://aws.amazon.com/cn/blogs/china/harness-agent-application-token/)
       - [Agentic AI基础设施实践经验系列]
@@ -770,6 +776,9 @@
       - [Agent Registry]
         - [https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/](https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/)
         - [AWS Agent Registry Hub](https://registry.aws.dev/hub)
+      - [AgentCore in China Region]
+        - [Evaluation and Optimization](https://github.com/dawei008/agentgate-strands)
+        - [Memeory](https://gitlab.aws.dev/mlil/strandsagent-mem0-aurorapg)
 ### Agent Technology
   - [Agent to Agent - A2A]
     - [A2A protocol](https://a2aprotocol.ai/)
@@ -1054,6 +1063,7 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
   - [Building Python modules for Spark ETL workloads using AWS Glue](analytics/glue-workshop/Glue_with_python_module.md)
 
 - [Workflow]
+  - [Build, Migrate, and Modernize Data Pipelines with AWS Glue 6.0](https://catalog.us-east-1.prod.workshops.aws/workshops/5abee77b-f68b-464c-a10c-fa08220dcc06/en-US)
   - [Amazon Glue ETL 作业调度工具选型初探](https://aws.amazon.com/cn/blogs/china/preliminary-study-on-selection-of-aws-glue-scheduling-tool/)
   - [Airflow and Glue workflow](https://github.com/yizhizoe/airflow_glue_poc)
   - [Deploy an AWS Glue job with an AWS CodePipeline CI/CD pipeline](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/deploy-an-aws-glue-job-with-an-aws-codepipeline-ci-cd-pipeline.htmlhttps://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/deploy-an-aws-glue-job-with-an-aws-codepipeline-ci-cd-pipeline.html)
@@ -1320,9 +1330,11 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
 - [BMW automation compliance-at-scale](https://aws.amazon.com/blogs/mt/how-bmw-group-uses-automation-to-achieve-end-to-end-compliance-at-scale-on-aws/)
 - [Automated Security Response on AWS](https://aws.amazon.com/solutions/implementations/automated-security-response-on-aws/)
-- [Security For AI and AI For Security]
+
+### Security For AI and AI For Security
   - [Security Agent Workshop](https://workshop-eval.gcr.aws.dev/events/aiforsecurity-workshop-20260918)
     - [Security Agent Workshop 总结](security/secure-development/security-agent/AWS-Security-Agent-实验总结.md)
+  - [Break It to Secure It: A Hands-on Agent Governance Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/bf8d9c7e-b59e-4093-bacd-0a473f5ef137/en-US)
 
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/data-protection/kms/Share-CMK-across-multiple-AWS-accounts.md)
