@@ -24,5 +24,7 @@ anyio>=4.14.2,<5
 protobuf>=5.29.6
 pip-audit>=2.10,<3
 pip>=26.0
-setuptools>=82.0
+setuptools>=84.1.0
+# Transitive (librosa, cachecontrol); floor for GHSA msgpack strict_map_key memory leak.
+msgpack>=1.2.3
 wheel>=0.46

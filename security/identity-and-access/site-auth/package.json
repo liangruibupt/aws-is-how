@@ -12,8 +12,8 @@
     "aws-jwt-verify": "^5.2.1"
   },
   "devDependencies": {
-    "aws-cdk": "^2.1024.0",
-    "aws-cdk-lib": "^2.271.0",
+    "aws-cdk": "^2.1147.0",
+    "aws-cdk-lib": "^2.275.0",
     "constructs": "^10.4.2",
     "esbuild": "^0.25.0"
   }
