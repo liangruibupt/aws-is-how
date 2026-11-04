@@ -16,10 +16,8 @@ if [[ -n "${IMAGE_ARN}" && "${IMAGE_ARN}" != "None" ]]; then
   for id in $(aws lambda-microvms list-microvms --query "items[?imageArn=='${IMAGE_ARN}' && state!='TERMINATED'].microvmId" --output text); do
     echo "terminate ${id}"; aws lambda-microvms terminate-microvm --microvm-identifier "${id}" >/dev/null || true
   done
-  for v in $(aws lambda-microvms list-microvm-image-versions --image-identifier "${IMAGE_ARN}" --query 'items[].imageVersion' --output text); do
-    echo "delete image version ${v}"; aws lambda-microvms delete-microvm-image-version --image-identifier "${IMAGE_ARN}" --image-version "${v}" >/dev/null || true
-  done
-  echo "delete image ${IMAGE_ARN}"; aws lambda-microvms delete-microvm-image --image-identifier "${IMAGE_ARN}" >/dev/null || true
+  # delete-microvm-image removes every remaining version (the last version cannot be deleted on its own).
+  echo "delete image ${IMAGE_ARN} (all versions)"; aws lambda-microvms delete-microvm-image --image-identifier "${IMAGE_ARN}" >/dev/null || true
 fi
 
 BUCKET="$(aws cloudformation describe-stacks --stack-name "${STACK_NAME}" \
