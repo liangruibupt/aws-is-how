@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电商 Agentic 方案、案例与发展前瞻</title>
+<style>
+:root{
+  --bg:#f7f8fa; --panel:#ffffff; --text:#1a2332; --muted:#5b6b7f; --border:#e2e8f0;
+  --accent:#2563eb; --accent-soft:#dbeafe; --good:#059669; --warn:#d97706; --bad:#dc2626;
+  --forecast:#7c3aed; --shadow:0 1px 3px rgba(15,23,42,.08); --mono:"SF Mono",Consolas,Menlo,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0f1622; --panel:#182233; --text:#e6edf6; --muted:#93a4ba; --border:#2a3a52;
+  --accent:#60a5fa; --accent-soft:#1e3a5f; --good:#34d399; --warn:#fbbf24; --bad:#f87171;
+  --forecast:#a78bfa; --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1080px;margin:0 auto;padding:0 20px}
+/* header & nav */
+header.top{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.topbar{display:flex;align-items:center;gap:12px;padding:10px 20px;max-width:1280px;margin:0 auto;flex-wrap:wrap}
+.brand{font-weight:700;font-size:15px;white-space:nowrap}
+nav#mainnav{display:flex;gap:2px;overflow-x:auto;flex:1;-webkit-overflow-scrolling:touch}
+nav#mainnav a{padding:6px 10px;border-radius:8px;color:var(--muted);font-size:13.5px;white-space:nowrap}
+nav#mainnav a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+#themeBtn{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px}
+/* hero */
+.hero{padding:52px 0 30px}
+.hero h1{font-size:34px;line-height:1.25;margin:0 0 10px}
+.hero p.sub{color:var(--muted);margin:0 0 14px;font-size:17px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12.5px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+.badge.neutral{background:var(--panel);border:1px solid var(--border);color:var(--muted)}
+/* sections */
+section{padding:34px 0;border-top:1px solid var(--border)}
+h2{font-size:25px;margin:0 0 6px}
+h3{font-size:18px;margin:24px 0 8px}
+.section-note{color:var(--muted);font-size:14px;margin:0 0 18px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.judgment{display:inline-block;font-size:11.5px;font-weight:700;color:var(--forecast);background:color-mix(in srgb,var(--forecast) 12%,transparent);border:1px solid color-mix(in srgb,var(--forecast) 35%,transparent);padding:1px 8px;border-radius:999px;vertical-align:middle}
+/* exec summary */
+ol.exec{counter-reset:item;list-style:none;padding:0;margin:0;display:grid;gap:12px}
+ol.exec li{counter-increment:item;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 16px 16px 58px;position:relative;box-shadow:var(--shadow)}
+ol.exec li::before{content:counter(item);position:absolute;left:16px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+/* layers */
+.layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.layer{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow);border-top:4px solid var(--accent)}
+.layer h4{margin:0 0 4px;font-size:16px}
+.layer .q{color:var(--accent);font-size:13px;font-weight:600;margin:0 0 8px}
+.layer p{font-size:13.5px;margin:0 0 8px;color:var(--muted)}
+.layer .pl{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:8px}
+/* solutions */
+.sol{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.sol-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sol-head h4{margin:0;font-size:17.5px}
+.sol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}
+.sol-cell{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px}
+.sol-cell b{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+/* matrix */
+#matrixWrap{position:relative}
+#matrixTip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:var(--shadow);max-width:260px;display:none;z-index:10}
+.dot{cursor:pointer;transition:opacity .15s}
+.dot:hover{opacity:.85}
+/* cases */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.filters select,.filters input{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:14px}
+.filters input{flex:1;min-width:180px}
+#caseCount{font-size:13px;color:var(--muted);margin-bottom:10px}
+.cases{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.case{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);cursor:pointer}
+.case h4{margin:0 0 6px;font-size:15.5px}
+.case .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tag.region{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.tag.date{background:var(--bg);border:1px solid var(--border);color:var(--muted)}
+.case .detail{display:none;margin-top:10px;border-top:1px dashed var(--border);padding-top:10px;font-size:13.5px}
+.case.open .detail{display:block}
+.case .impact{background:var(--bg);border-left:3px solid var(--warn);padding:8px 10px;border-radius:6px;margin:8px 0;font-size:13px}
+.case .srcs{font-size:12.5px}
+.case .expand-hint{font-size:12px;color:var(--muted)}
+/* protocol table */
+.tablewrap{overflow-x:auto}
+table.proto{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;font-size:13.5px;box-shadow:var(--shadow)}
+table.proto th{background:var(--accent-soft);color:var(--accent);text-align:left;padding:10px 12px;cursor:pointer;user-select:none;white-space:nowrap;font-size:13px}
+table.proto th .arr{opacity:.5;font-size:11px}
+table.proto td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:top}
+table.proto tr:hover td{background:var(--bg)}
+/* timeline */
+.tl{position:relative;margin-left:10px;padding-left:26px;border-left:2px solid var(--border)}
+.tl-item{position:relative;margin-bottom:14px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);cursor:pointer}
+.tl-item::before{content:"";position:absolute;left:-34px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--panel)}
+.tl-item.forecast{border-style:dashed;border-color:var(--forecast)}
+.tl-item.forecast::before{background:var(--forecast)}
+.tl-item .d{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.tl-item h4{margin:2px 0 0;font-size:15.5px;display:inline}
+.tl-item .tl-detail{display:none;margin-top:8px;font-size:13.5px;color:var(--muted)}
+.tl-item.open .tl-detail{display:block}
+.tl-badge{font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.tl-badge.f{background:var(--accent-soft);color:var(--accent)}
+.tl-badge.p{background:color-mix(in srgb,var(--forecast) 14%,transparent);color:var(--forecast)}
+/* simulator */
+.sim{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.sim{grid-template-columns:1fr}}
+.slider-row{margin-bottom:14px}
+.slider-row label{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:4px}
+.slider-row label b{color:var(--accent);font-family:var(--mono)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.sim-out{display:grid;gap:10px;align-content:start}
+.kpi{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+.kpi .k{font-size:12px;color:var(--muted)}
+.kpi .v{font-size:22px;font-weight:700;font-family:var(--mono)}
+.kpi .v.pos{color:var(--good)} .kpi .v.neg{color:var(--bad)}
+.formula{font-family:var(--mono);font-size:12.5px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;overflow-x:auto;white-space:pre-wrap}
+/* scenarios */
+.scn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.scn{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.scn h4{margin:0 0 4px}
+.scn .share{font-size:13px;font-weight:700;color:var(--warn);margin-bottom:8px}
+.scn p{font-size:13.5px;color:var(--muted);margin:0}
+.unc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.unc .u{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13.5px}
+.unc .u b{color:var(--bad)}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.rec{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px}
+.rec h4{margin:0 0 8px;color:var(--accent)}
+.rec ul{margin:0;padding-left:18px;font-size:13.5px}
+.rec li{margin-bottom:6px}
+/* aws arch */
+.arch{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.arch .comp{background:var(--bg);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:13.5px}
+.arch .comp b{display:block}
+.arch .arrow{text-align:center;color:var(--muted);font-size:12px}
+/* footer */
+footer{border-top:1px solid var(--border);padding:30px 0 60px;font-size:13px;color:var(--muted)}
+footer ol{padding-left:20px}
+footer li{margin-bottom:5px;word-break:break-all}
+@media(max-width:640px){
+  .hero h1{font-size:26px}
+  body{font-size:15px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topbar">
+    <span class="brand">电商 Agentic 报告</span>
+    <nav id="mainnav">
+      <a href="#summary">执行摘要</a>
+      <a href="#layers">概念分层</a>
+      <a href="#solutions">方案</a>
+      <a href="#matrix">成熟度矩阵</a>
+      <a href="#aws">AWS 架构</a>
+      <a href="#cases">案例库</a>
+      <a href="#protocols">协议对比</a>
+      <a href="#timeline">时间线</a>
+      <a href="#outlook">发展前瞻</a>
+      <a href="#simulator">情景模拟器</a>
+      <a href="#methodology">方法论</a>
+    </nav>
+    <button id="themeBtn" title="切换深浅色">🌓</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="hero">
+    <h1>电商 Agentic 方案、案例与发展前瞻</h1>
+    <p class="sub">Agentic Commerce：从协议之争、落地架构到 2030 情景 —— 一份基于 27 个实抓来源的可交互分析</p>
+    <div class="badges">
+      <span class="badge neutral">报告日期：2026-11-04</span>
+      <span class="badge" id="statCases"></span>
+      <span class="badge" id="statSources"></span>
+      <span class="badge neutral">事实均可溯源 · 推断均标注「分析判断」</span>
+    </div>
+  </div>
+
+  <section id="summary">
+    <h2>一、执行摘要</h2>
+    <p class="section-note">五条核心结论（事实部分均附来源于对应章节）。</p>
+    <ol class="exec" id="execList"></ol>
+  </section>
+
+  <section id="layers">
+    <h2>二、概念与分层：电商 Agentic 价值链</h2>
+    <p class="section-note">四层结构：谁在用 agent 解决什么问题。</p>
+    <div class="layers" id="layerGrid"></div>
+  </section>
+
+  <section id="solutions">
+    <h2>三、方案：七类解决方案架构</h2>
+    <p class="section-note">每类给出目标、关键能力（工具调用 / 记忆 / 多 Agent 协作 / 人工审批点）、所需数据、典型 KPI 与主要风险。</p>
+    <div id="solList"></div>
+  </section>
+
+  <section id="matrix">
+    <h2>四、方案成熟度矩阵</h2>
+    <p class="section-note">X 轴 = 技术成熟度，Y 轴 = 商业价值，气泡大小 = 落地难度（越大越难）。<b>坐标数值为作者分析判断</b>，非机构数据。悬停查看说明。</p>
+    <div class="panel" id="matrixWrap">
+      <svg id="matrixSvg" width="100%" viewBox="0 0 760 480" role="img" aria-label="方案成熟度矩阵"></svg>
+      <div id="matrixTip"></div>
+    </div>
+  </section>
+
+  <section id="aws">
+    <h2>五、AWS 落地参考架构 <span class="judgment">分析判断</span></h2>
+    <p class="section-note">基于本报告的实际生成环境描述（本报告即由一个 Agent Harness 运行于 AWS 隔离沙箱中产出）。</p>
+    <div class="panel">
+      <div class="arch" id="archList"></div>
+      <div id="awsParas"></div>
+    </div>
+  </section>
+
+  <section id="cases">
+    <h2>六、案例库</h2>
+    <p class="section-note">按方案类别与地区筛选，支持关键词搜索；点击卡片展开详情与来源。</p>
+    <div class="filters">
+      <select id="fCat"><option value="">全部类别</option></select>
+      <select id="fRegion"><option value="">全部地区</option></select>
+      <input id="fSearch" type="search" placeholder="搜索公司 / 关键词…">
+    </div>
+    <div id="caseCount"></div>
+    <div class="cases" id="caseGrid"></div>
+  </section>
+
+  <section id="protocols">
+    <h2>七、协议与支付基础设施对比</h2>
+    <p class="section-note">点击表头排序。</p>
+    <div class="tablewrap">
+      <table class="proto" id="protoTable">
+        <thead><tr>
+          <th data-k="name">协议/框架 <span class="arr">↕</span></th>
+          <th data-k="initiator">发起方 <span class="arr">↕</span></th>
+          <th data-k="positioning">定位 <span class="arr">↕</span></th>
+          <th data-k="mechanism">关键机制 <span class="arr">↕</span></th>
+          <th data-k="openness">开放程度 <span class="arr">↕</span></th>
+          <th data-k="status">状态/时间 <span class="arr">↕</span></th>
+          <th>来源</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <h2>八、时间线：2024 → 2030</h2>
+    <p class="section-note">实线圆点 = 事实类里程碑（附来源）；紫色虚线 = 预测类（分析判断）。点击展开详情。</p>
+    <div class="tl" id="tlList"></div>
+  </section>
+
+  <section id="outlook">
+    <h2>九、发展前瞻：2026–2030</h2>
+    <h3>三种情景 <span class="judgment">分析判断</span></h3>
+    <div class="scn-grid" id="scnGrid"></div>
+    <h3>关键不确定性</h3>
+    <div class="unc" id="uncGrid"></div>
+    <h3>行动建议</h3>
+    <div class="rec-grid" id="recGrid"></div>
+  </section>
+
+  <section id="simulator">
+    <h2>十、情景模拟器：agent 渠道对单个商家的影响</h2>
+    <p class="section-note">拖动滑块实时计算。公式与参数取数逻辑见下方（默认值均为分析判断）。</p>
+    <div class="panel sim">
+      <div id="simControls"></div>
+      <div class="sim-out" id="simOut"></div>
+    </div>
+    <h3>计算公式</h3>
+    <div class="formula" id="simFormula"></div>
+    <p class="section-note" id="simNote" style="margin-top:8px"></p>
+  </section>
+
+  <section id="methodology">
+    <h2>十一、方法论与局限</h2>
+    <div class="panel"><ul id="methList" style="margin:0;padding-left:20px"></ul></div>
+  </section>
+</div>
+
+<footer>
+  <div class="container">
+    <h3>全部参考来源（抓取日期 2026-11-04，同 sources.md）</h3>
+    <ol id="srcList"></ol>
+    <p>本报告为单文件自包含 HTML，不含任何外部 JS/CSS/字体/CDN；所有数据内嵌于 <code>const DATA</code>，并同步导出为 <code>data.json</code>。</p>
+  </div>
+</footer>
+
+<script>
+const DATA = {
+  "meta": {
+    "title": "电商 Agentic 方案、案例与发展前瞻",
+    "subtitle": "Agentic Commerce：从协议之争到落地架构的行业分析",
+    "reportDate": "2026-11-04",
+    "author": "AI 行业分析（由运行于 AWS 沙箱中的 Agent 生成）",
+    "note": "所有事实性陈述均来自 2026-11-04 实际抓取的来源页面（见 sources.md）；标注「分析判断」的内容为作者推断。"
+  },
+  "executiveSummary": [
+    "协议层在 13 个月内快速成型：2025-09-16 Google 发布 AP2、2025-09-29 OpenAI×Stripe 发布 ACP 与 ChatGPT Instant Checkout，2026 年初 Google/Shopify/Walmart 等推出 UCP——电商 Agentic 已从演示进入生产化铺设阶段。",
+    "「信任与授权」是各方争夺的咽喉：AP2 用加密签名 Mandate、Visa 用 Trusted Agent Protocol、Mastercard 用令牌化 Agent Pay + 注册 agent，本质都是在回答「这个 agent 有权花谁的钱」。",
+    "平台封闭与开放协议的张力已经显性化：Amazon 一边自建 Buy for Me 与 Alexa for Shopping，一边对 Perplexity（2026-03 获初步禁令）与 Meta Muse（2026-09 封禁）设防——拥有流量与广告库存的平台不愿把顾客关系让渡给第三方 agent。",
+    "可量化效果目前集中在客服与导购两类：Klarna AI 助手首月承接 2/3 客服会话、预计年利润改善 4000 万美元；Walmart 称 Sparky 用户平均购物篮 +38%；阿里称电商 AI 广告 ROI 初步测试 +12%——均来自企业自述，需谨慎对待。",
+    "对商家而言，2026–2028 的确定性动作是「agent-ready」：结构化目录、接入 UCP/ACP、升级 bot 风控与欺诈模型、并保留人工审批点；远期（2030）agent 渠道份额保守/基准/激进情景分化巨大（分析判断）。"
+  ],
+  "layers": [
+    {
+      "id": "consumer",
+      "name": "消费者侧购物 Agent",
+      "question": "帮用户发现、比较、决策乃至代为购买",
+      "detail": "对话式导购（Rufus/Alexa for Shopping、Sparky）、跨站代理下单（Amazon Buy for Me、Perplexity Comet）、浏览器/操作系统级个人 agent（Meta Muse）。核心资产是对用户意图与偏好的理解。",
+      "players": "Amazon（Alexa for Shopping / Buy for Me）、Walmart（Sparky）、OpenAI（ChatGPT）、Perplexity（Comet）、Meta（Muse）"
+    },
+    {
+      "id": "merchant",
+      "name": "平台与商家侧运营 Agent",
+      "question": "帮商家降本增效：客服、内容、定价、营销、供应链",
+      "detail": "客服与售后 agent（Klarna）、商品内容生成与目录治理、动态定价与广告投放优化（阿里）、需求预测与补货（Walmart 将 Sparky 用于预测与库存）。多运行于商家自有渠道或云平台上。",
+      "players": "Klarna、阿里巴巴、Walmart、Google Cloud Conversational Commerce、Salesforce/各类 SaaS"
+    },
+    {
+      "id": "payment",
+      "name": "支付与信任基础设施",
+      "question": "让「非人发起的交易」可授权、可验证、可追责",
+      "detail": "令牌化支付凭证、agent 身份注册与认证（Web Bot Auth）、授权 Mandate、支出限额与预算控制、拒付与欺诈责任划分。是 agentic 交易规模化的前置条件。",
+      "players": "Visa（Intelligent Commerce / Trusted Agent Protocol）、Mastercard（Agent Pay）、PayPal、Stripe、Coinbase、Cloudflare"
+    },
+    {
+      "id": "protocol",
+      "name": "协议层",
+      "question": "让任意 agent 与任意商家/支付方互操作，避免 N×N 定制集成",
+      "detail": "商务流程协议（ACP、UCP）、支付授权协议（AP2）、agent 通信（A2A）、工具上下文（MCP）、机器支付（x402）。开放程度与治理归属决定生态权力分配。",
+      "players": "OpenAI×Stripe（ACP）、Google/Shopify/Walmart 等（UCP）、Google（AP2/A2A）、Anthropic（MCP）、Coinbase（x402）"
+    }
+  ],
+  "solutions": [
+    {
+      "id": "discovery",
+      "name": "导购与比价 Agent",
+      "goal": "用对话式/目标式交互替代关键词搜索，提升发现效率与转化率",
+      "capabilities": {
+        "tools": "商品目录检索、评论摘要、比价、库存查询（Rufus、Sparky 均已实现评论综合与场景推荐）",
+        "memory": "用户偏好、尺码、预算、历史订单（长期记忆是个性化关键）",
+        "multiAgent": "可选：调用商家侧 agent 确认库存与履约（UCP/A2A 场景）",
+        "humanApproval": "低：仅推荐，不直接交易"
+      },
+      "data": "商品目录、评论、价格、库存、用户行为",
+      "kpis": "转化率、客单价/篮大小（Walmart 称 +38%）、会话时长、搜索→购买路径缩短",
+      "risks": "幻觉推荐、推荐偏置（广告混入）、评论操纵",
+      "matrix": { "tech": 8, "value": 8, "difficulty": 4, "note": "技术最成熟的一类，已在 Amazon/Walmart 规模化；效果数据目前只有平台自述" }
+    },
+    {
+      "id": "checkout",
+      "name": "代理下单与结账",
+      "goal": "agent 在用户授权下完成跨站购买，消除跳转与填单摩擦",
+      "capabilities": {
+        "tools": "ACP/UCP 结账会话、支付令牌传递、订单创建与追踪",
+        "memory": "收货地址、支付偏好、尺码等用户档案",
+        "multiAgent": "买家 agent ↔ 商家 agent ↔ 支付 agent 三方协作（AP2 Mandate 链）",
+        "humanApproval": "高：金额阈值、新商户、非常规品类需人工确认"
+      },
+      "data": "支付凭证（令牌化）、地址、订单、履约状态",
+      "kpis": "结账完成率、支付授权率、拒付率、agent 渠道 GMV",
+      "risks": "未授权交易、欺诈与拒付责任、平台封禁（Amazon v. Perplexity）、凭证泄露",
+      "matrix": { "tech": 6, "value": 9, "difficulty": 8, "note": "价值最高但最依赖协议与信任基础设施；2026 年法律边界刚开始划定" }
+    },
+    {
+      "id": "service",
+      "name": "客服与售后 Agent",
+      "goal": "7×24 自动化处理咨询、退款、退货与纠纷",
+      "capabilities": {
+        "tools": "订单查询、退款/退货执行、物流追踪、知识库检索",
+        "memory": "会话历史与客户档案",
+        "multiAgent": "可升级至人工坐席；与履约系统联动",
+        "humanApproval": "中：大额退款、例外政策需审批"
+      },
+      "data": "订单、物流、政策库、历史工单",
+      "kpis": "自动解决率（Klarna 承接 2/3 会话）、平均处理时长（11→<2 分钟）、重复咨询率（-25%）、CSAT",
+      "risks": "错误退款、政策滥用、用户绕过 agent 套利",
+      "matrix": { "tech": 9, "value": 7, "difficulty": 3, "note": "ROI 证据最充分的一类（Klarna），落地门槛最低" }
+    },
+    {
+      "id": "content",
+      "name": "商品内容生成与目录治理",
+      "goal": "规模化生成/修复标题、描述、属性与图片，让目录对人也可读、对 agent 更可解析",
+      "capabilities": {
+        "tools": "LLM 生成、属性抽取、合规校验、多语言翻译",
+        "memory": "品牌语气与类目规范",
+        "multiAgent": "生成 agent + 审核 agent 分工",
+        "humanApproval": "中：受监管类目（药品、儿童用品）需人工复核"
+      },
+      "data": "原始商品资料、类目规范、搜索词数据",
+      "kpis": "上新周期、属性完整率、搜索匹配率、listing 转化率",
+      "risks": "属性幻觉、知识产权、平台内容政策违规",
+      "matrix": { "tech": 8, "value": 6, "difficulty": 3, "note": "已是生成式 AI 最普及的电商用途；「agent 可读性」（GEO/AEO）成为新目标" }
+    },
+    {
+      "id": "pricing",
+      "name": "动态定价与营销 Agent",
+      "goal": "按需求、竞争与库存实时调价，并自动生成/优化广告投放",
+      "capabilities": {
+        "tools": "竞品价格抓取、广告平台 API、实验平台（A/B）",
+        "memory": "价格弹性模型、活动日历",
+        "multiAgent": "定价 agent 与库存 agent 联动防超卖",
+        "humanApproval": "中高：降价幅度与预算上限需授权"
+      },
+      "data": "交易流水、竞品价格、广告回报、库存",
+      "kpis": "ROAS（阿里初步测试 +12%）、毛利率、库存周转",
+      "risks": "价格战、算法定价合谋的监管风险、广告平台政策",
+      "matrix": { "tech": 6, "value": 7, "difficulty": 6, "note": "效果可测但监管敏感（算法定价）；阿里给出了罕见的正面 ROI 自述" }
+    },
+    {
+      "id": "supply",
+      "name": "供应链与库存补货 Agent",
+      "goal": "需求预测、自动补货、配送路径与异常处理",
+      "capabilities": {
+        "tools": "预测模型、ERP/WMS/TMS API、供应商门户",
+        "memory": "季节性与促销模式",
+        "multiAgent": "预测-补货-履约多 agent 编排",
+        "humanApproval": "高：大额采购单、供应商变更需审批"
+      },
+      "data": "历史销量、在途库存、供应商交期、外部信号（天气/热点）",
+      "kpis": "缺货率、库存周转天数、预测准确率、履约成本",
+      "risks": "预测漂移放大牛鞭效应、错误采购的资金占用",
+      "matrix": { "tech": 5, "value": 8, "difficulty": 7, "note": "价值大但依赖老旧 ERP 集成；Walmart 称已把 Sparky 用于需求预测与配送改道" }
+    },
+    {
+      "id": "storefront",
+      "name": "Agent-ready 店铺与渠道运营",
+      "goal": "让第三方 agent 能发现、解析并安全购买你的商品（UCP/ACP 接入、bot 治理）",
+      "capabilities": {
+        "tools": "UCP/ACP 端点、商品 Feed、MCP 服务器、bot 认证（Web Bot Auth）",
+        "memory": "各 agent 渠道的转化与欺诈画像",
+        "multiAgent": "商家 agent 应答买家 agent 的库存/价格查询",
+        "humanApproval": "低中：渠道准入与费率政策需商家决策"
+      },
+      "data": "目录、价格、库存、渠道订单与欺诈信号",
+      "kpis": "agent 渠道流量/转化、机器人拦截准确率、渠道费率",
+      "risks": "被比价蚕食毛利、恶意 bot 抓取、渠道依赖",
+      "matrix": { "tech": 6, "value": 8, "difficulty": 5, "note": "2026 年商家最现实的切入点；Shopify UCP 工具链显著降低了门槛" }
+    }
+  ],
+  "awsReference": {
+    "title": "AWS 落地参考架构（分析判断，基于本报告生成环境实测描述）",
+    "paragraphs": [
+      "本报告本身即由一个 Agent Harness（DeepSeek Harness，Kimi K3 模型）在 AWS 隔离沙箱中生成，可作为电商 Agentic 工作负载（如目录治理、竞品研究、批量内容生成）的最小可行架构参考。",
+      "会话与租户隔离：每个 agent 会话运行在独立的轻量级隔离环境中（AWS Lambda 的 MicroVM 隔离模型，与 Amazon Bedrock AgentCore Runtime 的「session isolation」理念一致），会话之间文件系统与网络命名空间隔离，任务结束即销毁。",
+      "凭证边界：agent 进程本身不持有任何 AWS 长期凭证；出站调用经由受控代理，由执行角色（execution role）以 SigV4 签名代理到 AWS 服务。模型调用统一走 Amazon Bedrock（本环境为 Kimi K3），工具调用（文件、网络）走独立的受控通道——这与 AgentCore Identity 用 OAuth 凭证代理代替 agent 直接持钥的设计一致。",
+      "成本特征：agent 的工作模式是「爆发式推理 + 长时间挂起等待工具/人工」。挂起-恢复（suspend/resume）意味着等待期间不计费或仅保留状态存储费用，相比常驻容器可显著降低成本；计费以实际推理 token 与沙箱活跃时长为主，适合间歇性、任务制的电商运营负载。",
+      "映射到电商场景：目录治理 agent（沙箱内批量处理 Feed，人工审批点由挂起-恢复天然支持）、竞品情报 agent（受控网络通道抓取公开页面并归档 sources）、营销内容 agent（Bedrock 生成 + 品牌规范校验工具）。"
+    ],
+    "components": [
+      { "name": "Agent Harness（如 DeepSeek Harness）", "role": "编排推理-工具循环、挂起/恢复、人工审批点" },
+      { "name": "隔离沙箱（Lambda MicroVM / AgentCore Runtime）", "role": "每会话独立文件系统与网络，任务级隔离与自动销毁" },
+      { "name": "Amazon Bedrock（Kimi K3 等）", "role": "统一模型调用入口，按 token 计费" },
+      { "name": "凭证代理（执行角色 + SigV4）", "role": "agent 零 AWS 凭证，所有云调用经代理签名" },
+      { "name": "工具层（文件/网络/浏览器/MCP）", "role": "受控工具通道，可审计、可限流" }
+    ]
+  },
+  "cases": [
+    {
+      "id": "c1",
+      "company": "OpenAI × Stripe（Etsy / Shopify）",
+      "region": "us",
+      "category": "checkout",
+      "date": "2025-09-29",
+      "title": "ChatGPT Instant Checkout 与 ACP 发布",
+      "summary": "ChatGPT 美国用户可在聊天中直接购买 Etsy 商家商品，超百万 Shopify 商户（Glossier、Vuori、Spanx、SKIMS 等）宣布即将接入；底层为双方共同开发并开源的 Agentic Commerce Protocol（ACP），商家保留 merchant of record。",
+      "impact": "交易规模未公开；Stripe 称接入面覆盖「超百万 Shopify 商户」的渠道潜力。",
+      "sources": ["https://stripe.com/newsroom/news/stripe-openai-instant-checkout", "https://stripe.com/blog/developing-an-open-standard-for-agentic-commerce", "https://www.agenticcommerce.dev/"]
+    },
+    {
+      "id": "c2",
+      "company": "PayPal × OpenAI",
+      "region": "global",
+      "category": "checkout",
+      "date": "2025-10-28",
+      "title": "PayPal 采用 ACP，接入 ChatGPT 即时结账",
+      "summary": "PayPal 宣布采用 ACP：数千万 PayPal 商户将进入 ChatGPT 可发现网络，ChatGPT 用户可用 PayPal 钱包（多资金来源）完成即时结账。",
+      "impact": "PayPal 自称超 4 亿用户、数千万商户可触达；实际交易数据未公开。",
+      "sources": ["https://newsroom.paypal-corp.com/2025-10-28-OpenAI-and-PayPal-Team-Up-to-Power-Instant-Checkout-and-Agentic-Commerce-in-ChatGPT"]
+    },
+    {
+      "id": "c3",
+      "company": "PayPal × Google Cloud",
+      "region": "global",
+      "category": "discovery",
+      "date": "2025-10-27",
+      "title": "商家自有渠道的对话式商务 agent",
+      "summary": "Google Cloud Conversational Commerce agent + PayPal 支付的组合方案，让商家在自有数字渠道部署 agentic 购物；agent 间经 A2A 通信并集成 AP2，商家保留语气、外观与顾客关系的控制权。",
+      "impact": "未公开。",
+      "sources": ["https://cloud.google.com/blog/topics/financial-services/introducing-an-agentic-commerce-solution-for-merchants-from-paypal-and-google-cloud"]
+    },
+    {
+      "id": "c4",
+      "company": "Amazon",
+      "region": "us",
+      "category": "checkout",
+      "date": "2025-04",
+      "title": "Buy for Me：代顾客到其他品牌官网下单",
+      "summary": "Amazon App 内 beta 功能：当 Amazon 不自营某商品时，agentic AI 代用户到第三方品牌网站下单（传递加密的支付与收货信息）。2026-01 多家品牌投诉未经同意被纳入该计划，需发邮件退出，引发 opt-in/opt-out 争议。",
+      "impact": "交易规模未公开；2026-01 出现商家反弹与信任争议。",
+      "sources": ["https://www.aboutamazon.com/news/retail/amazon-shopping-app-buy-for-me-brands", "https://www.modernretail.co/technology/brands-are-upset-that-buy-for-me-is-featuring-their-products-on-amazon-without-permission/"]
+    },
+    {
+      "id": "c5",
+      "company": "Amazon",
+      "region": "us",
+      "category": "discovery",
+      "date": "2024-02",
+      "title": "Rufus → Alexa for Shopping",
+      "summary": "Rufus 是基于 Amazon 商品目录与全网信息训练的生成式购物助手（问答、比较、推荐），从 beta 逐步推广至全美用户；官方页面注明 2026-05-13 Rufus 更名为 Alexa for Shopping，与 Alexa+ 统一。",
+      "impact": "该官方页面未公开量化效果数据。",
+      "sources": ["https://www.aboutamazon.com/news/retail/amazon-rufus"]
+    },
+    {
+      "id": "c6",
+      "company": "Walmart",
+      "region": "us",
+      "category": "discovery",
+      "date": "2025-06-06",
+      "title": "Sparky：GenAI 购物助手",
+      "summary": "Walmart 发布 Sparky：评论综合、场景化推荐（如「晚餐吃什么」自动生成一周餐单并加购）、派对策划；规划自动复购、服务预订与多模态输入。2026-10 CTO Suresh Kumar 称 Sparky 还被用于需求预测、配送改道与库存管理。",
+      "impact": "CTO 称使用 Sparky 的顾客平均购物篮比普通搜索用户大 38%（2026-10，企业自述）。",
+      "sources": ["https://corporate.walmart.com/news/2025/06/06/walmart-the-future-of-shopping-is-agentic-meet-sparky", "https://www.cnbctv18.com/business/walmarts-shopping-assistant-sparky-lifts-basket-size-38-pc-as-ai-reshapes-retail-and-delivery-20001369.htm"]
+    },
+    {
+      "id": "c7",
+      "company": "Klarna",
+      "region": "global",
+      "category": "service",
+      "date": "2024-02-27",
+      "title": "AI 客服助手（OpenAI 支持）",
+      "summary": "Klarna AI 助手上线首月处理 230 万对话、占全部客服会话 2/3，覆盖 23 个市场、35+ 语言，处理退款退货等售后任务，客户可选择转人工。",
+      "impact": "等同 700 名全职员工工作量；重复咨询 -25%；解决时长 11 分钟 → <2 分钟；预计 2024 年带来 4000 万美元利润改善（企业自述）。",
+      "sources": ["https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/"]
+    },
+    {
+      "id": "c8",
+      "company": "Visa",
+      "region": "global",
+      "category": "payment",
+      "date": "2025",
+      "title": "Visa Intelligent Commerce 与 Trusted Agent Protocol",
+      "summary": "Visa 的 agentic 商务组合：把支付凭证、控制、认证与保护嵌入 AI 发起的购买；Trusted Agent Protocol 基于 Web Bot Auth 验证注册 agent、拦截恶意 bot，并与 OpenAI 建立合作。",
+      "impact": "规模数据为 Visa 网络基本面：48 亿支付凭证、超 1.75 亿受理点、年 3000 亿+ 交易；agentic 交易量未公开。",
+      "sources": ["https://corporate.visa.com/en/products/intelligent-commerce.html", "https://blog.cloudflare.com/secure-agentic-commerce/"]
+    },
+    {
+      "id": "c9",
+      "company": "Mastercard",
+      "region": "global",
+      "category": "payment",
+      "date": "2025 / 2026-10",
+      "title": "Agent Pay：令牌化 agent 支付",
+      "summary": "Mastercard Agent Pay 以令牌化凭证支持 agentic 支付，已被 Shopify Shop Pay 采用；2026-10 演示 Agent Pay for Machines（基于 x402）：一个批准预算内跨两家服务商完成 9 笔支付，并开放开发者早期接入；2026-11 与 OpenAI 达成含 Agent Pay 的战略合作。",
+      "impact": "未公开交易量；CEO 称消费者信任与「注册 agent」是规模化前提。",
+      "sources": ["https://fintechnews.sg/139360/ai/mastercard-agent-pay-2/", "https://www.pymnts.com/partnerships/2026/mastercard-forms-openai-and-tencent-partnerships-to-drive-agentic-commerce/", "https://thepaypers.com/payments/news/alchemy-adds-mastercard-agent-pay-to-agentcard", "https://blog.cloudflare.com/secure-agentic-commerce/"]
+    },
+    {
+      "id": "c10",
+      "company": "Amazon v. Perplexity",
+      "region": "us",
+      "category": "boundary",
+      "date": "2026-03-10",
+      "title": "首例 agentic 商务司法禁令",
+      "summary": "旧金山联邦法官批准 Amazon 初步禁令，禁止 Perplexity 用 Comet 浏览器 agent 访问 Amazon 登录区代购；法官认为 Amazon 在《计算机欺诈与滥用法》（CFAA）主张上可能胜诉；Perplexity 辩称 Amazon 意在保护广告收入。",
+      "impact": "法律里程碑：平台可依法阻挡「伪装成人类浏览器」的第三方 agent，倒逼 agent 身份透明化（Web Bot Auth 等）。",
+      "sources": ["https://www.geekwire.com/2026/judge-blocks-perplexitys-ai-bot-from-shopping-on-amazon-in-early-test-of-agentic-commerce/"]
+    },
+    {
+      "id": "c11",
+      "company": "Amazon × Meta",
+      "region": "us",
+      "category": "boundary",
+      "date": "2026-09-21",
+      "title": "Amazon 封禁 Meta Muse 购物 agent",
+      "summary": "Amazon 在要求 Meta 停止未果后，封禁其个人 AI agent Muse 访问 Amazon 商店；尝试访问的用户被告知「未经授权的 AI agent」违反使用条款。",
+      "impact": "平台对第三方 agent 的封堵从法律手段扩展到技术封锁，「agent 准入」成为平台新权力。",
+      "sources": ["https://www.theregister.com/ai-and-ml/2026/09/21/amazon-shows-metas-muse-ai-shopping-agent-the-door/5297777"]
+    },
+    {
+      "id": "c12",
+      "company": "Shopify",
+      "region": "global",
+      "category": "storefront",
+      "date": "2025-08 起",
+      "title": "UCP 合规的商家 agent 工具链",
+      "summary": "Shopify 开发者文档以 UCP（Universal Commerce Protocol）为中心：提供 UCP CLI 与符合 UCP 的 MCP 服务器，支持 agent 完成目录搜索、建购物车、创建结账、订单追踪，Shop Pay 支持 UCP 结算。",
+      "impact": "未公开；工具链面向 Claude Code、Codex、Cursor 等主流 agent 环境分发。",
+      "sources": ["https://shopify.dev/docs/agents"]
+    },
+    {
+      "id": "c13",
+      "company": "AWS",
+      "region": "us",
+      "category": "infra",
+      "date": "2025-07-16 / 2026-05-07",
+      "title": "Bedrock AgentCore 及 agent 支付能力",
+      "summary": "AgentCore 预览版提供会话隔离的 serverless Runtime、Memory、Identity（OAuth 凭证代理）、Gateway（API/Lambda 转 MCP 工具）、Browser 等；2026-05 新增与 Coinbase/Stripe 共建的 agent 钱包支付（稳定币或法币充值，多层护栏+显式用户授权）。",
+      "impact": "未公开；为电商运营类 agent 提供托管基础设施样板。",
+      "sources": ["https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/", "https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/"]
+    },
+    {
+      "id": "c14",
+      "company": "阿里巴巴",
+      "region": "cn",
+      "category": "pricing",
+      "date": "2025-10-16",
+      "title": "淘宝/天猫电商 AI 投入回本",
+      "summary": "阿里副总裁张凯夫称电商 AI 投入已实现回本，应用覆盖个性化搜索、虚拟试穿等；此前阿里宣布三年投入 3800 亿元（530 亿美元）于 AI 与云基础设施。",
+      "impact": "初步测试显示广告投入回报（ROAS）提升 12%，张凯夫称「双位数变化很罕见」；预计对当年双 11 GMV 有「非常显著」正面影响（企业自述）。",
+      "sources": ["https://www.cnbc.com/2025/10/16/alibaba-says-ai-spending-for-e-commerce-taobao-tmall-is-breaking-even.html"]
+    },
+    {
+      "id": "c15",
+      "company": "Adobe Analytics（行业数据）",
+      "region": "us",
+      "category": "data",
+      "date": "2025-03-17",
+      "title": "生成式 AI 来源零售流量 +1200%",
+      "summary": "基于超 1 万亿次美国零售站点访问的分析：2025-02 来自生成式 AI 来源的流量较 2024-07 增长 1200%；2024 假日季同比增长 1300%（网一当天 +1950%），约每两个月翻一倍。",
+      "impact": "AI 导购已成为零售流量的真实（尽管仍小于付费搜索/邮件）且高速增长的入口。",
+      "sources": ["https://blog.adobe.com/en/publish/2025/03/17/adobe-analytics-traffic-to-us-retail-websites-from-generative-ai-sources-jumps-1200-percent"]
+    }
+  ],
+  "categoryLabels": {
+    "discovery": "导购与比价",
+    "checkout": "代理下单与结账",
+    "service": "客服与售后",
+    "content": "内容与目录",
+    "pricing": "定价与营销",
+    "supply": "供应链与补货",
+    "storefront": "Agent-ready 店铺",
+    "payment": "支付与信任基础设施",
+    "boundary": "平台治理与法律边界",
+    "infra": "Agent 基础设施",
+    "data": "行业数据"
+  },
+  "regionLabels": { "us": "美国", "cn": "中国", "global": "全球/多市场" },
+  "protocols": [
+    {
+      "name": "ACP（Agentic Commerce Protocol）",
+      "initiator": "OpenAI × Stripe",
+      "positioning": "买家-AI agent-商家之间的结账与订单交互标准",
+      "mechanism": "结账会话 API（REST/MCP）、委托支付令牌、商家保留 merchant of record",
+      "openness": "开源（Apache 2.0），OpenAI/Stripe 治理",
+      "status": "2025-09-29 发布 Beta；规范迭代至 2026-04-17（购物车、Feed、订单、认证、MCP）",
+      "sources": ["https://www.agenticcommerce.dev/", "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol", "https://stripe.com/blog/developing-an-open-standard-for-agentic-commerce"]
+    },
+    {
+      "name": "UCP（Universal Commerce Protocol）",
+      "initiator": "Google、Shopify、Etsy、Wayfair、Target、Walmart 等",
+      "positioning": "覆盖发现→结账→订单全旅程的商务互操作标准",
+      "mechanism": "标准化 API 原语，构建于 REST/JSON-RPC/MCP/A2A 之上，内建 AP2 支持；Shopify 提供合规 MCP 服务器",
+      "openness": "开放标准（ucp.dev + GitHub 开源实现），60+ 机构背书",
+      "status": "2026 年初公开；Shopify 已提供工具链",
+      "sources": ["https://a2aprotocol.ai/blog/2026-universal-commerce-protocol", "https://shopify.dev/docs/agents"]
+    },
+    {
+      "name": "AP2（Agent Payments Protocol）",
+      "initiator": "Google + 60 余家机构",
+      "positioning": "agent 主导支付的授权与问责框架（支付方式的无关层）",
+      "mechanism": "加密签名的 Mandate（防篡改数字合同）+ 可验证凭证（VC），证明用户授权；作为 A2A/MCP 扩展",
+      "openness": "开放协议",
+      "status": "2025-09-16 发布；被 UCP 与 PayPal×Google Cloud 方案集成",
+      "sources": ["https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol"]
+    },
+    {
+      "name": "A2A（Agent2Agent）",
+      "initiator": "Google",
+      "positioning": "agent 之间通信、协作与任务委托",
+      "mechanism": "开放标准，agent 间安全通信；AP2 构建于其之上",
+      "openness": "开放标准",
+      "status": "被 PayPal×Google Cloud 商家方案采用",
+      "sources": ["https://cloud.google.com/blog/topics/financial-services/introducing-an-agentic-commerce-solution-for-merchants-from-paypal-and-google-cloud"]
+    },
+    {
+      "name": "MCP（Model Context Protocol）",
+      "initiator": "Anthropic",
+      "positioning": "agent 连接工具与数据的通用上下文协议",
+      "mechanism": "工具/资源标准化暴露；ACP、UCP、AgentCore Gateway 均兼容 MCP",
+      "openness": "开放协议",
+      "status": "事实上的工具层标准，被各方引用",
+      "sources": ["https://www.agenticcommerce.dev/", "https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/"]
+    },
+    {
+      "name": "x402",
+      "initiator": "Coinbase",
+      "positioning": "面向机器支付的 HTTP 402 协议（按调用计费）",
+      "mechanism": "服务端返回 402 → agent 生成签名支付凭证 → 验证后交付；支持批量离线结算；稳定币/法币",
+      "openness": "开放协议",
+      "status": "Mastercard Agent Pay for Machines 基于其构建；AWS AgentCore 支付引用",
+      "sources": ["https://fintechnews.sg/139360/ai/mastercard-agent-pay-2/", "https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/"]
+    },
+    {
+      "name": "Visa Intelligent Commerce / Trusted Agent Protocol",
+      "initiator": "Visa",
+      "positioning": "卡组织级 agent 交易信任框架（商业产品组合）",
+      "mechanism": "Trusted Agent Protocol 基于 Web Bot Auth 验证注册 agent；令牌化凭证嵌入 agent 购买",
+      "openness": "商业框架（非开源协议），与 Cloudflare 等协作",
+      "status": "2025 年推出；与 OpenAI 合作",
+      "sources": ["https://corporate.visa.com/en/products/intelligent-commerce.html", "https://blog.cloudflare.com/secure-agentic-commerce/"]
+    },
+    {
+      "name": "Mastercard Agent Pay",
+      "initiator": "Mastercard",
+      "positioning": "卡组织级令牌化 agent 支付（商业产品）",
+      "mechanism": "令牌化 + 注册 agent（Web Bot Auth）；Agent Pay for Machines 构建于 x402，支持单一预算多商户结算",
+      "openness": "商业框架，开发者早期接入计划",
+      "status": "Shop Pay 已采用；2026-10 演示多商户支付并开放早期接入；2026-11 与 OpenAI 合作",
+      "sources": ["https://www.pymnts.com/partnerships/2026/mastercard-forms-openai-and-tencent-partnerships-to-drive-agentic-commerce/", "https://fintechnews.sg/139360/ai/mastercard-agent-pay-2/", "https://blog.cloudflare.com/secure-agentic-commerce/"]
+    }
+  ],
+  "timeline": [
+    { "date": "2024-02", "sortKey": "2024-02-01", "title": "Amazon 发布 Rufus（beta）", "desc": "基于商品目录与全网信息训练的对话式购物助手上线测试。", "type": "fact", "sources": ["https://www.aboutamazon.com/news/retail/amazon-rufus"] },
+    { "date": "2024-02-27", "sortKey": "2024-02-27", "title": "Klarna AI 客服首月成绩单", "desc": "230 万对话、占客服 2/3、预计年利润改善 4000 万美元——客服成为最早验证 ROI 的电商 agent 场景。", "type": "fact", "sources": ["https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/"] },
+    { "date": "2025-03-17", "sortKey": "2025-03-17", "title": "Adobe：AI 来源零售流量 +1200%", "desc": "AI 导购作为流量入口开始被行业量化追踪。", "type": "fact", "sources": ["https://blog.adobe.com/en/publish/2025/03/17/adobe-analytics-traffic-to-us-retail-websites-from-generative-ai-sources-jumps-1200-percent"] },
+    { "date": "2025-04", "sortKey": "2025-04-03", "title": "Amazon Buy for Me 上线 beta", "desc": "首次有大型平台用 agentic AI 代用户到其他品牌官网下单。", "type": "fact", "sources": ["https://www.aboutamazon.com/news/retail/amazon-shopping-app-buy-for-me-brands"] },
+    { "date": "2025-06-06", "sortKey": "2025-06-06", "title": "Walmart 发布 Sparky", "desc": "「电商的未来是 agentic」——综合评论、场景推荐、餐单自动加购。", "type": "fact", "sources": ["https://corporate.walmart.com/news/2025/06/06/walmart-the-future-of-shopping-is-agentic-meet-sparky"] },
+    { "date": "2025-07-16", "sortKey": "2025-07-16", "title": "AWS 发布 Bedrock AgentCore（预览）", "desc": "云厂商开始提供 agent 托管基础设施：会话隔离 Runtime、Identity、Gateway、Memory。", "type": "fact", "sources": ["https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/"] },
+    { "date": "2025-09-16", "sortKey": "2025-09-16", "title": "Google 发布 AP2", "desc": "以签名 Mandate 解决 agent 支付授权，60+ 支付与科技公司参与。", "type": "fact", "sources": ["https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol"] },
+    { "date": "2025-09-29", "sortKey": "2025-09-29", "title": "ChatGPT Instant Checkout + ACP", "desc": "OpenAI×Stripe 发布 ACP 并在 ChatGPT 内上线 Etsy 购买，Shopify 百万商户宣布接入。", "type": "fact", "sources": ["https://stripe.com/newsroom/news/stripe-openai-instant-checkout"] },
+    { "date": "2025-10-24", "sortKey": "2025-10-24", "title": "Cloudflare×Visa×Mastercard：Web Bot Auth", "desc": "Trusted Agent Protocol 与 Agent Pay 采用 Web Bot Auth 作为 agent 认证层。", "type": "fact", "sources": ["https://blog.cloudflare.com/secure-agentic-commerce/"] },
+    { "date": "2025-10-27/28", "sortKey": "2025-10-28", "title": "PayPal 双线落子", "desc": "PayPal 既与 Google Cloud 推商家 agent 方案（A2A+AP2），又宣布采用 ACP 接入 ChatGPT。", "type": "fact", "sources": ["https://cloud.google.com/blog/topics/financial-services/introducing-an-agentic-commerce-solution-for-merchants-from-paypal-and-google-cloud", "https://newsroom.paypal-corp.com/2025-10-28-OpenAI-and-PayPal-Team-Up-to-Power-Instant-Checkout-and-Agentic-Commerce-in-ChatGPT"] },
+    { "date": "2026-01", "sortKey": "2026-01-06", "title": "UCP 公开；Buy for Me 商家反弹", "desc": "Google/Shopify/Walmart 等的 UCP 进入公众视野；Amazon Buy for Me 因「未经同意上架」遭品牌投诉。", "type": "fact", "sources": ["https://a2aprotocol.ai/blog/2026-universal-commerce-protocol", "https://www.modernretail.co/technology/brands-are-upset-that-buy-for-me-is-featuring-their-products-on-amazon-without-permission/"] },
+    { "date": "2026-03-10", "sortKey": "2026-03-10", "title": "Amazon v. Perplexity 初步禁令", "desc": "法院禁止 Comet agent 访问 Amazon 登录区——agentic 商务首个重要司法判例雏形。", "type": "fact", "sources": ["https://www.geekwire.com/2026/judge-blocks-perplexitys-ai-bot-from-shopping-on-amazon-in-early-test-of-agentic-commerce/"] },
+    { "date": "2026-04-17", "sortKey": "2026-04-17", "title": "ACP 规范大幅扩展", "desc": "新增购物车、商品 Feed、订单、认证与 MCP 支持，从「单次结账」走向完整商务会话。", "type": "fact", "sources": ["https://github.com/agentic-commerce-protocol/agentic-commerce-protocol"] },
+    { "date": "2026-05-07", "sortKey": "2026-05-07", "title": "AWS AgentCore 支付（Coinbase/Stripe）", "desc": "云厂商给 agent 发「钱包」：稳定币/法币充值、多层护栏、显式用户授权。", "type": "fact", "sources": ["https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/"] },
+    { "date": "2026-05-13", "sortKey": "2026-05-13", "title": "Rufus 更名 Alexa for Shopping", "desc": "Amazon 统一购物 agent 与语音助手品牌。", "type": "fact", "sources": ["https://www.aboutamazon.com/news/retail/amazon-rufus"] },
+    { "date": "2026-09-21", "sortKey": "2026-09-21", "title": "Amazon 封禁 Meta Muse", "desc": "平台对第三方 agent 的技术封锁常态化。", "type": "fact", "sources": ["https://www.theregister.com/ai-and-ml/2026/09/21/amazon-shows-metas-muse-ai-shopping-agent-the-door/5297777"] },
+    { "date": "2026-10", "sortKey": "2026-10-01", "title": "Sparky 篮大小 +38%；Mastercard 演示一预算九笔支付", "desc": "导购 agent 出现首个平台自述的量化效果；Agent Pay for Machines 展示机器间批量支付。", "type": "fact", "sources": ["https://www.cnbctv18.com/business/walmarts-shopping-assistant-sparky-lifts-basket-size-38-pc-as-ai-reshapes-retail-and-delivery-20001369.htm", "https://fintechnews.sg/139360/ai/mastercard-agent-pay-2/"] },
+    { "date": "2026-11-02", "sortKey": "2026-11-02", "title": "Mastercard × OpenAI 战略合作", "desc": "卡组织与头部 AI 平台深度绑定，agent 支付进入主流化谈判桌。", "type": "fact", "sources": ["https://www.pymnts.com/partnerships/2026/mastercard-forms-openai-and-tencent-partnerships-to-drive-agentic-commerce/"] },
+    { "date": "2027（预测）", "sortKey": "2027-06-01", "title": "ACP 与 UCP 互通或收敛", "desc": "分析判断：双协议竞争将通过互操作层或合并解决，商家不愿长期维护两套端点。", "type": "forecast", "sources": [] },
+    { "date": "2027–2028（预测）", "sortKey": "2027-12-01", "title": "首例大规模 agent 欺诈事件与监管指引", "desc": "分析判断：未授权交易/拒付责任争议将触发监管（参照现有银行卡拒付框架扩展）。", "type": "forecast", "sources": [] },
+    { "date": "2028（预测）", "sortKey": "2028-06-01", "title": "agent 渠道占线上零售低个位数百分比", "desc": "分析判断（基准情景）：协议成熟+巨头接入后，agent 介导交易进入可统计规模。", "type": "forecast", "sources": [] },
+    { "date": "2029（预测）", "sortKey": "2029-06-01", "title": "广告预算向「agent 可见性」（GEO/AEO）迁移", "desc": "分析判断：当比价 agent 绕过展示广告，零售媒体网络被迫重构计费模式。", "type": "forecast", "sources": [] },
+    { "date": "2030（预测）", "sortKey": "2030-06-01", "title": "情景分叉点", "desc": "分析判断：保守/基准/激进三情景下 agent 介导 GMV 占比分化（详见情景章节）。", "type": "forecast", "sources": [] }
+  ],
+  "outlook": {
+    "scenarios": [
+      {
+        "id": "conservative",
+        "name": "保守情景",
+        "share": "2030 年 agent 介导交易占线上零售 2–4%（分析判断）",
+        "desc": "平台封闭主导：Amazon 等以技术与法律手段限制第三方 agent，消费者信任因几起欺诈事件受损，协议碎片化长期存在。agent 价值主要沉淀在商家侧（客服、内容、定价）而非跨平台代购。"
+      },
+      {
+        "id": "baseline",
+        "name": "基准情景",
+        "share": "2030 年 agent 介导交易占线上零售 8–12%（分析判断）",
+        "desc": "ACP/UCP 共存且互操作，卡组织的注册 agent 体系成为信任底座；头部平台与 AI 助手达成商业分成；消费者在高意向品类（3C、旅行、补货）普遍接受 agent 代购。"
+      },
+      {
+        "id": "aggressive",
+        "name": "激进情景",
+        "share": "2030 年 agent 介导交易占线上零售 20%+（分析判断）",
+        "desc": "开放协议胜出+监管明确责任划分，「agent 优先」成为电商默认入口；搜索与展示广告预算大规模迁移至 agent 可见性优化；出现 agent 原生零售商（无传统 storefront）。"
+      }
+    ],
+    "uncertainties": [
+      { "name": "信任与欺诈", "desc": "agent 被注入恶意指令（如伪装页面诱导下单）或未授权交易的规模与赔付机制，将直接决定消费者采纳速度。Amazon v. Perplexity 案只是开端。" },
+      { "name": "责任归属", "desc": "agent 买错/买贵时，责任在模型方、协议方、支付方还是商家？AP2 Mandate 与卡组织规则正在抢占解释权。" },
+      { "name": "平台封闭 vs 开放协议", "desc": "拥有流量与广告库存的平台（Amazon）倾向封闭；挑战者（OpenAI、Google、Perplexity）推动开放。UCP 由 Walmart/Shopify 参与共同开发，说明零售方也在对冲。" },
+      { "name": "监管", "desc": "算法定价合谋、agent 歧视性推荐、跨境数据与支付合规都可能引来监管介入。" },
+      { "name": "广告模式被颠覆", "desc": "当 agent 替用户「看」页面，展示广告与零售媒体的曝光逻辑失效——Perplexity 已公开指称 Amazon 的诉讼动机是保护广告收入。" }
+    ],
+    "recommendations": [
+      { "audience": "零售商", "actions": ["把目录与库存 API 化、agent 可读化（UCP/ACP 双兼容）", "部署 bot 治理：区分注册 agent 与恶意爬虫（Web Bot Auth）", "在客服/内容等低风险场景先落地并建立 KPI 基线", "为 agent 渠道设计独立的欺诈与拒付监控"] },
+      { "audience": "品牌", "actions": ["明确对平台代购功能（如 Buy for Me）的 opt-in/opt-out 立场与监控", "投资 GEO/AEO：确保 agent 答案中的品牌呈现准确", "保留 DTC 数据资产，避免完全被平台 agent 中介化"] },
+      { "audience": "平台", "actions": ["制定公开的第三方 agent 准入政策（认证、费率、责任）而非个案封杀", "自建购物 agent 与开放接入并行，避免监管关注的自我优待", "把广告产品向「agent 可理解的结构化供给」演进"] },
+      { "audience": "支付机构", "actions": ["推动注册 agent + 令牌化 + Mandate 的三件套成为行业默认", "明确 agent 交易的拒付与责任规则，抢在监管之前", "布局机器支付（x402 类）以覆盖 agent 间微支付场景"] }
+    ]
+  },
+  "simulator": {
+    "title": "情景模拟器：agent 渠道对单个商家的影响",
+    "formula": "增量收入 = 年GMV × agent渗透率 × (转化率提升 + 客单价变化)；agent 订单数 = 年GMV × agent渗透率 ÷ 客单价；推理成本 = agent订单数 × 每单推理成本；净增益 = 增量收入 − 推理成本",
+    "defaults": { "gmv": 100000000, "aov": 300, "penetration": 5, "convUplift": 8, "aovChange": 3, "inferenceCost": 0.5 },
+    "ranges": {
+      "gmv": { "min": 1000000, "max": 10000000000, "step": 1000000, "unit": "¥" },
+      "aov": { "min": 50, "max": 2000, "step": 10, "unit": "¥" },
+      "penetration": { "min": 0, "max": 40, "step": 0.5, "unit": "%" },
+      "convUplift": { "min": 0, "max": 20, "step": 0.5, "unit": "%" },
+      "aovChange": { "min": -10, "max": 20, "step": 0.5, "unit": "%" },
+      "inferenceCost": { "min": 0, "max": 5, "step": 0.05, "unit": "¥/单" }
+    },
+    "note": "参数默认值参考公开自述数据（如 Walmart +38% 篮大小、阿里 +12% ROAS）的保守化取数，均为分析判断，不构成经营预测。"
+  },
+  "methodology": {
+    "points": [
+      "本报告于 2026-11-04 通过 Hacker News Algolia 搜索 API 发现线索，再用 curl/web_fetch 实际抓取 27 个原始页面（官方博客、新闻稿、开发者文档、媒体报道），全部来源记录于 sources.md。",
+      "报告中的事实性陈述均可追溯到已抓取页面；无法抓到一手来源的内容已删除或标注「分析判断」。",
+      "成熟度矩阵坐标、情景份额预测、模拟器参数为作者分析判断，非任何机构数据。",
+      "企业自述的效果数据（Klarna、Walmart、阿里等）未经独立审计，存在幸存者偏差与宣传动机。",
+      "局限：中文一手来源覆盖有限（京东、拼多多、抖音电商的 agentic 进展未能获取可引用来源）；部分页面（OpenAI 官网、Mastercard 新闻稿、AP News、WSJ）因反爬未能抓取，相关信息改由可抓取的二手来源支撑；2026 年的部分报道（如 UCP 细节）来自单一来源，准确性有待交叉验证。"
+    ]
+  },
+  "sources": [
+    { "id": 1, "url": "https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol", "title": "Powering AI commerce with the new Agent Payments Protocol (AP2)", "publisher": "Google Cloud Blog", "date": "2025-09-16", "fetched": "2026-11-04" },
+    { "id": 2, "url": "https://www.agenticcommerce.dev/", "title": "Agentic Commerce Protocol 官方站", "publisher": "OpenAI × Stripe", "date": "", "fetched": "2026-11-04" },
+    { "id": 3, "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol", "title": "Agentic Commerce Protocol GitHub 仓库", "publisher": "OpenAI & Stripe", "date": "2025-09-29 起", "fetched": "2026-11-04" },
+    { "id": 4, "url": "https://stripe.com/blog/developing-an-open-standard-for-agentic-commerce", "title": "Developing an open standard for agentic commerce", "publisher": "Stripe Blog", "date": "2025-09-29", "fetched": "2026-11-04" },
+    { "id": 5, "url": "https://stripe.com/newsroom/news/stripe-openai-instant-checkout", "title": "Stripe powers Instant Checkout in ChatGPT", "publisher": "Stripe Newsroom", "date": "2025-09-29", "fetched": "2026-11-04" },
+    { "id": 6, "url": "https://a2aprotocol.ai/blog/2026-universal-commerce-protocol", "title": "Universal Commerce Protocol (UCP): The Complete 2026 Guide", "publisher": "a2aprotocol.ai", "date": "2026-01-12", "fetched": "2026-11-04" },
+    { "id": 7, "url": "https://shopify.dev/docs/agents", "title": "Shopify Developer Docs: Agentic commerce", "publisher": "Shopify", "date": "", "fetched": "2026-11-04" },
+    { "id": 8, "url": "https://developers.openai.com/commerce/", "title": "Agentic Commerce Protocol Documentation", "publisher": "OpenAI Developers", "date": "", "fetched": "2026-11-04" },
+    { "id": 9, "url": "https://corporate.visa.com/en/products/intelligent-commerce.html", "title": "Visa Intelligent Commerce", "publisher": "Visa", "date": "", "fetched": "2026-11-04" },
+    { "id": 10, "url": "https://blog.cloudflare.com/secure-agentic-commerce/", "title": "Securing agentic commerce: helping AI Agents transact with Visa and Mastercard", "publisher": "Cloudflare Blog", "date": "2025-10-24", "fetched": "2026-11-04" },
+    { "id": 11, "url": "https://www.pymnts.com/partnerships/2026/mastercard-forms-openai-and-tencent-partnerships-to-drive-agentic-commerce/", "title": "Mastercard Forms OpenAI and Tencent Partnerships to Drive Agentic Commerce", "publisher": "PYMNTS", "date": "2026-11-02", "fetched": "2026-11-04" },
+    { "id": 12, "url": "https://fintechnews.sg/139360/ai/mastercard-agent-pay-2/", "title": "Mastercard Shows How AI Agents Can Pay Multiple Providers With One Budget", "publisher": "Fintech News Singapore", "date": "2026-10", "fetched": "2026-11-04" },
+    { "id": 13, "url": "https://thepaypers.com/payments/news/alchemy-adds-mastercard-agent-pay-to-agentcard", "title": "Alchemy adds Mastercard Agent Pay to AgentCard", "publisher": "The Paypers", "date": "2026-09-21", "fetched": "2026-11-04" },
+    { "id": 14, "url": "https://newsroom.paypal-corp.com/2025-10-28-OpenAI-and-PayPal-Team-Up-to-Power-Instant-Checkout-and-Agentic-Commerce-in-ChatGPT", "title": "OpenAI and PayPal Team Up to Power Instant Checkout and Agentic Commerce in ChatGPT", "publisher": "PayPal Newsroom", "date": "2025-10-28", "fetched": "2026-11-04" },
+    { "id": 15, "url": "https://cloud.google.com/blog/topics/financial-services/introducing-an-agentic-commerce-solution-for-merchants-from-paypal-and-google-cloud", "title": "An agentic commerce solution for merchants from PayPal and Google Cloud", "publisher": "Google Cloud Blog", "date": "2025-10-27", "fetched": "2026-11-04" },
+    { "id": 16, "url": "https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/", "title": "Agents that transact: Introducing Amazon Bedrock AgentCore payments", "publisher": "AWS ML Blog", "date": "2026-05-07", "fetched": "2026-11-04" },
+    { "id": 17, "url": "https://www.aboutamazon.com/news/retail/amazon-shopping-app-buy-for-me-brands", "title": "Amazon's new 'Buy for Me' feature", "publisher": "About Amazon", "date": "2025-04", "fetched": "2026-11-04" },
+    { "id": 18, "url": "https://www.modernretail.co/technology/brands-are-upset-that-buy-for-me-is-featuring-their-products-on-amazon-without-permission/", "title": "Brands are upset that 'Buy For Me' is featuring their products on Amazon without permission", "publisher": "Modern Retail", "date": "2026-01-06", "fetched": "2026-11-04" },
+    { "id": 19, "url": "https://www.aboutamazon.com/news/retail/amazon-rufus", "title": "Amazon announces Rufus", "publisher": "About Amazon", "date": "2024-02", "fetched": "2026-11-04" },
+    { "id": 20, "url": "https://corporate.walmart.com/news/2025/06/06/walmart-the-future-of-shopping-is-agentic-meet-sparky", "title": "Walmart: The Future of Shopping Is Agentic. Meet Sparky.", "publisher": "Walmart Corporate", "date": "2025-06-06", "fetched": "2026-11-04" },
+    { "id": 21, "url": "https://www.cnbctv18.com/business/walmarts-shopping-assistant-sparky-lifts-basket-size-38-pc-as-ai-reshapes-retail-and-delivery-20001369.htm", "title": "Walmart says AI shopping assistant Sparky lifts average basket size by 38%", "publisher": "CNBC-TV18", "date": "2026-10-01", "fetched": "2026-11-04" },
+    { "id": 22, "url": "https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/", "title": "Klarna AI assistant handles two-thirds of customer service chats in its first month", "publisher": "Klarna Press", "date": "2024-02-27", "fetched": "2026-11-04" },
+    { "id": 23, "url": "https://www.cnbc.com/2025/10/16/alibaba-says-ai-spending-for-e-commerce-taobao-tmall-is-breaking-even.html", "title": "Alibaba says its AI spending in e-commerce is already breaking even", "publisher": "CNBC", "date": "2025-10-16", "fetched": "2026-11-04" },
+    { "id": 24, "url": "https://www.geekwire.com/2026/judge-blocks-perplexitys-ai-bot-from-shopping-on-amazon-in-early-test-of-agentic-commerce/", "title": "Judge blocks Perplexity's AI bot from shopping on Amazon", "publisher": "GeekWire", "date": "2026-03-10", "fetched": "2026-11-04" },
+    { "id": 25, "url": "https://www.theregister.com/ai-and-ml/2026/09/21/amazon-shows-metas-muse-ai-shopping-agent-the-door/5297777", "title": "Amazon shows Meta's Muse AI shopping agent the door", "publisher": "The Register", "date": "2026-09-21", "fetched": "2026-11-04" },
+    { "id": 26, "url": "https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/", "title": "Introducing Amazon Bedrock AgentCore", "publisher": "AWS News Blog", "date": "2025-07-16", "fetched": "2026-11-04" },
+    { "id": 27, "url": "https://blog.adobe.com/en/publish/2025/03/17/adobe-analytics-traffic-to-us-retail-websites-from-generative-ai-sources-jumps-1200-percent", "title": "Traffic to U.S. retail websites from Generative AI sources jumps 1,200 percent", "publisher": "Adobe Blog", "date": "2025-03-17", "fetched": "2026-11-04" },
+    { "id": 28, "url": "https://hn.algolia.com/api/v1/search?query=agentic%20commerce", "title": "Hacker News Algolia 搜索 API（检索入口）", "publisher": "HN Algolia", "date": "", "fetched": "2026-11-04" }
+  ]
+};
+</script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const link=u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.length>70?u.slice(0,67)+'…':u)}</a>`;
+
+/* theme */
+const root=document.documentElement;
+try{const t=localStorage.getItem('theme'); if(t) root.dataset.theme=t;}catch(e){}
+$('#themeBtn').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('theme',root.dataset.theme)}catch(e){}};
+
+/* stats */
+$('#statCases').textContent=DATA.cases.length+' 个真实案例';
+$('#statSources').textContent=DATA.sources.length+' 个来源';
+
+/* exec summary */
+$('#execList').innerHTML=DATA.executiveSummary.map(x=>`<li>${esc(x)}</li>`).join('');
+
+/* layers */
+$('#layerGrid').innerHTML=DATA.layers.map(l=>`
+  <div class="layer"><h4>${esc(l.name)}</h4><p class="q">${esc(l.question)}</p>
+  <p>${esc(l.detail)}</p><div class="pl"><b>代表方：</b>${esc(l.players)}</div></div>`).join('');
+
+/* solutions */
+$('#solList').innerHTML=DATA.solutions.map(s=>`
+  <div class="sol"><div class="sol-head"><h4>${esc(s.name)}</h4><span class="judgment">矩阵坐标为分析判断</span></div>
+  <p style="margin:6px 0 0;font-size:14px"><b>目标：</b>${esc(s.goal)}</p>
+  <div class="sol-grid">
+    <div class="sol-cell"><b>工具调用</b>${esc(s.capabilities.tools)}</div>
+    <div class="sol-cell"><b>记忆</b>${esc(s.capabilities.memory)}</div>
+    <div class="sol-cell"><b>多 Agent 协作</b>${esc(s.capabilities.multiAgent)}</div>
+    <div class="sol-cell"><b>人工审批点</b>${esc(s.capabilities.humanApproval)}</div>
+    <div class="sol-cell"><b>所需数据</b>${esc(s.data)}</div>
+    <div class="sol-cell"><b>典型 KPI</b>${esc(s.kpis)}</div>
+    <div class="sol-cell"><b>主要风险</b>${esc(s.risks)}</div>
+  </div></div>`).join('');
+
+/* matrix */
+(function(){
+  const svg=$('#matrixSvg'), tip=$('#matrixTip'), W=760,H=480,P={l:60,r:30,t:30,b:50};
+  const x=v=>P.l+(W-P.l-P.r)*(v/10), y=v=>H-P.b-(H-P.t-P.b)*(v/10);
+  let h='';
+  for(let i=0;i<=10;i+=2){
+    h+=`<line x1="${x(i)}" y1="${y(0)}" x2="${x(i)}" y2="${y(10)}" stroke="var(--border)" stroke-width="1"/>`;
+    h+=`<line x1="${x(0)}" y1="${y(i)}" x2="${x(10)}" y2="${y(i)}" stroke="var(--border)" stroke-width="1"/>`;
+    h+=`<text x="${x(i)}" y="${y(0)+18}" font-size="11" fill="var(--muted)" text-anchor="middle">${i}</text>`;
+    h+=`<text x="${x(0)-10}" y="${y(i)+4}" font-size="11" fill="var(--muted)" text-anchor="end">${i}</text>`;
+  }
+  h+=`<text x="${(P.l+W-P.r)/2}" y="${H-8}" font-size="13" fill="var(--muted)" text-anchor="middle">技术成熟度 →</text>`;
+  h+=`<text x="16" y="${(P.t+H-P.b)/2}" font-size="13" fill="var(--muted)" text-anchor="middle" transform="rotate(-90 16 ${(P.t+H-P.b)/2})">商业价值 →</text>`;
+  const colors=['#2563eb','#059669','#d97706','#dc2626','#7c3aed','#0891b2','#db2777'];
+  DATA.solutions.forEach((s,i)=>{
+    const r=6+s.matrix.difficulty*2.6;
+    h+=`<circle class="dot" data-i="${i}" cx="${x(s.matrix.tech)}" cy="${y(s.matrix.value)}" r="${r}" fill="${colors[i%colors.length]}" fill-opacity="0.45" stroke="${colors[i%colors.length]}" stroke-width="2"/>`;
+    h+=`<text x="${x(s.matrix.tech)}" y="${y(s.matrix.value)-r-5}" font-size="12" fill="var(--text)" text-anchor="middle" font-weight="600">${esc(s.name)}</text>`;
+  });
+  svg.innerHTML=h;
+  svg.addEventListener('mousemove',e=>{
+    const c=e.target.closest('.dot');
+    if(!c){tip.style.display='none';return;}
+    const s=DATA.solutions[+c.dataset.i];
+    const rect=$('#matrixWrap').getBoundingClientRect();
+    tip.innerHTML=`<b>${esc(s.name)}</b><br>技术成熟度 ${s.matrix.tech}/10 · 商业价值 ${s.matrix.value}/10 · 落地难度 ${s.matrix.difficulty}/10<br><span style="color:var(--muted)">${esc(s.matrix.note)}</span>`;
+    tip.style.display='block';
+    tip.style.left=Math.min(e.clientX-rect.left+14,rect.width-270)+'px';
+    tip.style.top=(e.clientY-rect.top+10)+'px';
+  });
+  svg.addEventListener('mouseleave',()=>tip.style.display='none');
+})();
+
+/* aws */
+$('#archList').innerHTML=DATA.awsReference.components.map((c,i)=>
+  (i?'<div class="arrow">↓</div>':'')+`<div class="comp"><b>${esc(c.name)}</b>${esc(c.role)}</div>`).join('');
+$('#awsParas').innerHTML='<h3 style="margin-top:18px">'+esc(DATA.awsReference.title)+'</h3>'+
+  DATA.awsReference.paragraphs.map(p=>`<p style="font-size:14px">${esc(p)}</p>`).join('');
+
+/* cases */
+const catSel=$('#fCat'), regSel=$('#fRegion');
+Object.entries(DATA.categoryLabels).forEach(([k,v])=>catSel.insertAdjacentHTML('beforeend',`<option value="${k}">${esc(v)}</option>`));
+Object.entries(DATA.regionLabels).forEach(([k,v])=>regSel.insertAdjacentHTML('beforeend',`<option value="${k}">${esc(v)}</option>`));
+function renderCases(){
+  const c=catSel.value,r=regSel.value,q=$('#fSearch').value.trim().toLowerCase();
+  const list=DATA.cases.filter(x=>(!c||x.category===c)&&(!r||x.region===r)&&
+    (!q||(x.company+x.title+x.summary+x.impact).toLowerCase().includes(q)));
+  $('#caseCount').textContent=`共 ${list.length} 个案例（库内总计 ${DATA.cases.length} 个）`;
+  $('#caseGrid').innerHTML=list.map(x=>`
+    <div class="case" data-id="${x.id}">
+      <h4>${esc(x.title)}</h4>
+      <div class="meta">
+        <span class="tag">${esc(DATA.categoryLabels[x.category]||x.category)}</span>
+        <span class="tag region">${esc(DATA.regionLabels[x.region]||x.region)}</span>
+        <span class="tag date">${esc(x.date)}</span>
+      </div>
+      <div style="font-size:13.5px;color:var(--muted)">${esc(x.company)}</div>
+      <div class="detail">
+        <p style="margin:6px 0">${esc(x.summary)}</p>
+        <div class="impact"><b>效果数据：</b>${esc(x.impact)}</div>
+        <div class="srcs"><b>来源：</b>${x.sources.map(link).join('<br>')}</div>
+      </div>
+      <div class="expand-hint">点击展开详情与来源 ▾</div>
+    </div>`).join('');
+  $$('#caseGrid .case').forEach(el=>el.onclick=()=>el.classList.toggle('open'));
+}
+[catSel,regSel,$('#fSearch')].forEach(el=>el.addEventListener('input',renderCases));
+renderCases();
+
+/* protocol table sort */
+let sortKey='name',sortAsc=true;
+function renderProto(){
+  const rows=[...DATA.protocols].sort((a,b)=>{
+    const va=a[sortKey]||'',vb=b[sortKey]||'';
+    return sortAsc?String(va).localeCompare(String(vb),'zh'):String(vb).localeCompare(String(va),'zh');
+  });
+  $('#protoTable tbody').innerHTML=rows.map(p=>`<tr>
+    <td><b>${esc(p.name)}</b></td><td>${esc(p.initiator)}</td><td>${esc(p.positioning)}</td>
+    <td>${esc(p.mechanism)}</td><td>${esc(p.openness)}</td><td>${esc(p.status)}</td>
+    <td style="font-size:12px;min-width:140px">${p.sources.map(link).join('<br>')}</td></tr>`).join('');
+}
+$$('#protoTable th[data-k]').forEach(th=>th.onclick=()=>{
+  const k=th.dataset.k;
+  if(sortKey===k)sortAsc=!sortAsc;else{sortKey=k;sortAsc=true;}
+  renderProto();
+});
+renderProto();
+
+/* timeline */
+const tl=[...DATA.timeline].sort((a,b)=>a.sortKey<b.sortKey?-1:1);
+$('#tlList').innerHTML=tl.map((t,i)=>`
+  <div class="tl-item ${t.type==='forecast'?'forecast':''}" data-i="${i}">
+    <span class="d">${esc(t.date)}</span>
+    <span class="tl-badge ${t.type==='forecast'?'p':'f'}">${t.type==='forecast'?'预测 · 分析判断':'事实'}</span>
+    <h4>${esc(t.title)}</h4>
+    <div class="tl-detail">${esc(t.desc)}${t.sources.length?'<div style="margin-top:6px;font-size:12.5px"><b>来源：</b>'+t.sources.map(link).join('<br>')+'</div>':''}</div>
+  </div>`).join('');
+$$('#tlList .tl-item').forEach(el=>el.onclick=()=>el.classList.toggle('open'));
+
+/* outlook */
+$('#scnGrid').innerHTML=DATA.outlook.scenarios.map(s=>`
+  <div class="scn"><h4>${esc(s.name)}</h4><div class="share">${esc(s.share)}</div><p>${esc(s.desc)}</p></div>`).join('');
+$('#uncGrid').innerHTML=DATA.outlook.uncertainties.map(u=>`
+  <div class="u"><b>${esc(u.name)}</b> — ${esc(u.desc)}</div>`).join('');
+$('#recGrid').innerHTML=DATA.outlook.recommendations.map(r=>`
+  <div class="rec"><h4>${esc(r.audience)}</h4><ul>${r.actions.map(a=>`<li>${esc(a)}</li>`).join('')}</ul></div>`).join('');
+
+/* simulator */
+(function(){
+  const S=DATA.simulator, state={...S.defaults};
+  const labels={gmv:'年 GMV',aov:'客单价',penetration:'Agent 渗透率',convUplift:'转化率提升',aovChange:'客单价变化',inferenceCost:'每单模型推理成本'};
+  const fmt=v=>v>=1e8?'¥'+(v/1e8).toFixed(2)+' 亿':v>=1e4?'¥'+(v/1e4).toFixed(1)+' 万':'¥'+Math.round(v).toLocaleString();
+  const ctl=$('#simControls');
+  ctl.innerHTML=Object.keys(S.ranges).map(k=>{
+    const r=S.ranges[k];
+    return `<div class="slider-row"><label><span>${labels[k]}</span><b id="v_${k}"></b></label>
+      <input type="range" id="s_${k}" min="${r.min}" max="${r.max}" step="${r.step}" value="${state[k]}"></div>`;
+  }).join('');
+  function showVal(k){
+    const v=state[k], r=S.ranges[k];
+    $('#v_'+k).textContent = k==='gmv'?fmt(v) : (r.unit==='¥'?'¥'+v : v+r.unit);
+  }
+  function calc(){
+    const p=state.penetration/100, c=state.convUplift/100, a=state.aovChange/100;
+    const incRev=state.gmv*p*(c+a);
+    const orders=state.gmv*p/state.aov;
+    const cost=orders*state.inferenceCost;
+    const net=incRev-cost;
+    $('#simOut').innerHTML=`
+      <div class="kpi"><div class="k">增量收入（年）</div><div class="v pos">${fmt(incRev)}</div></div>
+      <div class="kpi"><div class="k">agent 渠道订单数（年）</div><div class="v">${Math.round(orders).toLocaleString()} 单</div></div>
+      <div class="kpi"><div class="k">模型推理成本（年）</div><div class="v neg">${fmt(cost)}</div></div>
+      <div class="kpi"><div class="k">净增益（增量收入 − 推理成本）</div><div class="v ${net>=0?'pos':'neg'}">${fmt(net)}</div></div>`;
+  }
+  Object.keys(S.ranges).forEach(k=>{
+    showVal(k);
+    $('#s_'+k).addEventListener('input',e=>{state[k]=parseFloat(e.target.value);showVal(k);calc();});
+  });
+  $('#simFormula').textContent=S.formula;
+  $('#simNote').textContent=S.note;
+  calc();
+})();
+
+/* methodology */
+$('#methList').innerHTML=DATA.methodology.points.map(p=>`<li style="margin-bottom:8px">${esc(p)}</li>`).join('');
+
+/* footer sources */
+$('#srcList').innerHTML=DATA.sources.map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a> — ${esc(s.publisher)}${s.date?'，'+esc(s.date):''}（抓取 ${esc(s.fetched)}）</li>`).join('');
+
+/* scrollspy */
+const navLinks=$$('#mainnav a');
+const secs=navLinks.map(a=>$(a.getAttribute('href'))).filter(Boolean);
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+},{rootMargin:'-30% 0px -60% 0px'});
+secs.forEach(s=>io.observe(s));
+})();
+</script>
+</body>
+</html>

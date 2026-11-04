@@ -1,0 +1,64 @@
+# DeepSeek Harness profile overlay: route the agent to Kimi K3 on Amazon Bedrock.
+#
+# Passed to every dsh process with `--patch`, after the shipped bundle layers and
+# the profile's own cordis.patch.yml. The provider speaks OpenAI Chat Completions
+# (the API the Kimi K3 model card recommends over Converse) to the in-VM SigV4
+# proxy, which signs each request with the MicroVM execution role and forwards it
+# to bedrock-runtime /openai/v1. No AWS credential or Bedrock API key ever reaches
+# the dsh process.
+
+- id: llm-pi-ai
+  config:
+    providers:
+      bedrock-kimi:
+        displayName: Amazon Bedrock (Kimi K3)
+        api: openai-completions
+        baseURL: http://127.0.0.1:8787/openai/v1
+        # pi-ai needs a credential reference; the proxy ignores its value.
+        apiKeyEnv: BEDROCK_PROXY_API_KEY
+        reasoning: high
+        timeoutMs: 900000
+        streamIdleTimeoutMs: 300000
+        # Same wire shape pi-ai's catalog uses for Moonshot's own kimi-k3, which
+        # Bedrock's Chat Completions surface accepts (verified: streaming tool
+        # calls, reasoning_content replay, reasoning_effort).
+        compat:
+          supportsStore: false
+          supportsDeveloperRole: false
+          supportsReasoningEffort: true
+          supportsUsageInStreaming: true
+          maxTokensField: max_tokens
+          supportsStrictMode: false
+          thinkingFormat: openai
+          requiresReasoningContentOnAssistantMessages: true
+        models:
+          - id: us.moonshotai.kimi-k3
+            name: Kimi K3 (Bedrock US CRIS)
+            contextWindow: 1048576
+            maxTokens: 64000
+            input: [text, image]
+            reasoningEfforts:
+              'off': none
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
+              max: max
+          - id: global.moonshotai.kimi-k3
+            name: Kimi K3 (Bedrock Global CRIS)
+            contextWindow: 1048576
+            maxTokens: 64000
+            input: [text, image]
+            reasoningEfforts:
+              'off': none
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
+              max: max
+
+# New sessions start on Kimi K3 instead of the shipped deepseek-official route.
+- id: agent-default-model
+  config:
+    provider: bedrock-kimi
+    model: us.moonshotai.kimi-k3

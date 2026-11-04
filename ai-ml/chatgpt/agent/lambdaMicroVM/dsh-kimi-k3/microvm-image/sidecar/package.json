@@ -1,0 +1,16 @@
+{
+  "name": "dsh-microvm-sidecar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Root sidecar for DeepSeek Harness on Lambda MicroVMs: lifecycle hooks, HTTPS-ingress gateway, Bedrock SigV4 proxy, agent supervisor.",
+  "main": "server.mjs",
+  "engines": {
+    "node": ">=24.9.0"
+  },
+  "dependencies": {
+    "@aws-crypto/sha256-js": "5.2.0",
+    "@aws-sdk/credential-providers": "3.1161.0",
+    "@smithy/signature-v4": "5.7.5"
+  }
+}
