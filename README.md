@@ -301,6 +301,7 @@
   - [understand The tokenize](https://huggingface.co/spaces/Xenova/the-tokenizer-playground)
   - [图解AI三大核心技术：RAG、大模型、智能体](https://mp.weixin.qq.com/s/pe2Rn6O_1KyqfFbCtMpqiw)
   - [红杉 AI Ascent 2026 主题演讲全文译](https://mp.weixin.qq.com/s/rUdF81Reofw7ZbojM0zZwg?scene=334), [2026红杉美国年度分享：AGI已经到来，重新定义AI革命](https://mp.weixin.qq.com/s/kZ-9O-tGMcgoCXEZ897o4Q?scene=334)
+  - [An update from Amazon engineering leadership on the role of the developer in the age of AI](https://www.aboutamazon.com/news/company-news/amazon-software-engineer-role-guideline-ai)
 
 ### Promote-Engineering
   - [Prompt engineering techniques and best practices with Claude3](https://aws.amazon.com/blogs/machine-learning/prompt-engineering-techniques-and-best-practices-learn-by-doing-with-anthropics-claude-3-on-amazon-bedrock/)
@@ -608,7 +609,12 @@
     - [cc-connect Bridge AI Agents to Chat Platform with ACP](https://github.com/chenhg5/cc-connect)
     - [Remote Claude Control by Feishu and Tmux](https://github.com/w0yne/remote-claude-control)
     - [A field guide to Claude Fable 5: Finding your unknowns](https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns)
+    - [Building agents: When to fold subagents into your main agent loop](https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop)
+      - 上下文膨胀导致性能下降：单个 Agent 循环因上下文过长，出现了可测量的性能衰退。
+      - 高并发且上下文独立：多个任务需要并行处理，且每个任务只需要一个用完即弃的全新上下文窗口。
+      - 工具过载或指令冲突：单个 Agent 难以在海量工具中做出正确选择，或者系统提示词中的指令开始相互打架。
   - [Codex]
+    - [在智能体优先的世界中利用 Codex](https://openai.com/zh-Hans-CN/index/harness-engineering/)
   - [Remote agent runner]
     - [Run Claude Code, Codex, and any other coding agent in parallel, each in its own worktree. Terminals, diffs, a browser, and a CLI, in one app built for agents](https://www.onorca.dev/)
   - [GenDev for SRE - AIOPs Agent or SRE Agent]
@@ -738,23 +744,25 @@
         - [Introducing Web Search on Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/introducing-web-search-on-amazon-bedrock-agentcore/)
         - [agentcore web search mcp for other agent](https://github.com/aws-samples/sample-bedrock-api-proxy/blob/main/agentcore-search-mcp/INSTALL_FOR_AGENTS.md)
         - [agentcore web search benchmark](https://amzn-chn.feishu.cn/drive/folder/HI6xf0N3pleNC1df0OdcRTb9nVW?from=from_copylink)
+        - [AgentCore Gateway + Identity：端到端传递终端用户的 OIDC 身份（token exchange）](https://github.com/aws-samples/sample-agentcore-oidc-token-exchange)
       - [Amazon Bedrock AgentCore Memory: Building context-aware agents](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-memory-building-context-aware-agents/)
         - [Building smart agent - AgentCore Long-Term memory deep dive](https://aws.amazon.com/blogs/machine-learning/building-smarter-ai-agents-agentcore-long-term-memory-deep-dive/)
         - [存之有序，治之有矩 - Agent 记忆系统的工程实践与演进](https://aws.amazon.com/cn/blogs/china/agent-system-engineering-practice/)
         - [相得益彰：Mem0 记忆框架与亚马逊云科技的企业级 AI 实践](https://aws.amazon.com/cn/blogs/china/complementary-strengths-mem0-memory-framework-and-amazon-cloud-technologys-enterprise-level-ai-practices/)
         - [AgentCore Memory 亚马逊云科技的托管记忆解决方案](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-agentcore-memory-amazon-cloud-technologys-managed-memory-solution/)
+        - [customerized Memory strategy](https://github.com/qingyuan18/demo_memory_customerized_strategy)
       - [Amazon Bedrock AgentCore Policy](https://aws.amazon.com/blogs/machine-learning/secure-ai-agents-with-policy-in-amazon-bedrock-agentcore/)
         - [Amazon Bedrock AgentCore adds quality evaluations and policy controls for deploying trusted AI agents](https://aws.amazon.com/blogs/aws/amazon-bedrock-agentcore-adds-quality-evaluations-and-policy-controls-for-deploying-trusted-ai-agents/)
         - [Amazon Bedrock AgentCore now supports Bedrock Guardrails in policy](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-policy-guardrails-generally-available/)
         - [Securing AI agents with temporal policies in Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/securing-ai-agents-with-temporal-policies-in-amazon-bedrock-agentcore/)
       - [Amazon Bedrock AgentCore Evaluation & Optimization](https://aws.github.io/bedrock-agentcore-starter-toolkit/user-guide/evaluation/quickstart.html)
         - [AgentCore introduces new optimization capabilities to continuously improve agents in production](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-new-optimization-capabilities/)
-        - [Eval-First: 基于 AgentCore 构建企业级 Agent](https://catalog.us-east-1.prod.workshops.aws/workshops/bdb5c2fd-86cc-4a86-b55f-fbc2a81c001a/zh-CN) (https://github.com/aws-samples/sample-eval-first-building-enterprise-agents-with-agentcore/blob/main/README.zh-CN.md)
+        - [Eval-First: 基于 AgentCore 构建企业级 Agent](https://catalog.us-east-1.prod.workshops.aws/workshops/bdb5c2fd-86cc-4a86-b55f-fbc2a81c001a/zh-CN)
+          - [Eval-First: Building Enterprise Agents with AgentCore](https://github.com/aws-samples/sample-eval-first-building-enterprise-agents-with-agentcore/blob/main/README.zh-CN.md)
         - [企业智能体之旅：为什么评估（Evaluation）是一切的起点](https://aws.amazon.com/cn/blogs/china/part-1-enterprise-intelligent-why-evaluation/?p=bl_ar_l=1)
         - [企业智能体之旅: 评估企业级智能体：从原型验证到生产就绪](https://aws.amazon.com/cn/blogs/china/part-2-enterprise-intelligent-validation/?p=bl_ar_l=1)
         - [企业智能体之旅: 如何在亚马逊云科技上构建企业级智能体](https://aws.amazon.com/cn/blogs/china/part-3-how-to-build-enterprise-intelligent/?p=bl_ar_l=2)
         - [Agent 优化端到端全流程](https://d3qnw1rhjyi9ke.cloudfront.net/)(f7TmsWkmyqkjp5Brtt5V)
-        - [Eval-First: Building Enterprise Agents with AgentCore](https://github.com/weiyuann1/eval-first-building-enterprise-agents-with-agentcore)
       - [AgentCore Harness - Go from idea to production-grade agent in minutes](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-harness-is-now-generally-available-go-from-idea-to-production-grade-agent-in-minutes/)
         - [取之有度，用之有节——从 Harness 视角破解 Agent 应用 Token 爆炸难题](https://aws.amazon.com/cn/blogs/china/harness-agent-application-token/)
       - [Agentic AI基础设施实践经验系列]
@@ -976,6 +984,7 @@
 - [Nitro]
   -[在 AWS Nitro Enclaves 中运行传统 Web 应用迁移实践](https://aws.amazon.com/cn/blogs/china/running-traditional-web-application-migration-practices-in-aws-nitro-enclaves/)
   - [Introduce the nitro-enclaves](EC2/hpc-and-enclaves/nitro-enclaves.md)
+  - [AWS Nitro Isolation Engine: Formally verifying the hypervisor in the AWS Nitro System](https://aws.amazon.com/blogs/compute/aws-nitro-isolation-engine-formally-verifying-the-hypervisor-in-the-aws-nitro-system/)
   
 ### Load Balancer
 - [ALB and NLB Route Traffic to Peering VPC](EC2/networking/ALB-NLB-Route-Traffic-to-Peering-VPC.md)
