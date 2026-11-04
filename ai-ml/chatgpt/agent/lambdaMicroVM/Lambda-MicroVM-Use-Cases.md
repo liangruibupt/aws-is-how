@@ -85,7 +85,9 @@ aws lambda-microvms create-microvm-image \
 
 2. **[sample-lambda-microvm-claude-managed-agents](https://github.com/aws-samples/sample-lambda-microvm-claude-managed-agents)** — 用 Lambda MicroVMs 作为 Claude Managed Agents 的沙箱。每个 MicroVM 是 Firecracker 隔离的虚拟机,快照秒级启动,最长运行 8 小时,会话结束即终止,会话间不共享状态。
 
-3. **[sample-multi-tenant-openclaw-on-firecracker](https://github.com/aws-samples/sample-multi-tenant-openclaw-on-firecracker)** — 用 EC2 嵌套虚拟化直接跑 KVM + Firecracker 的多租户 AI agent 平台(注意这是自建 Firecracker,不是托管的 Lambda MicroVMs,适合想了解底层原理的场景)。支持 Intel(c8i / m8i / r8i)和 Graviton(ARM64)实例。
+3. **[dsh-kimi-k3](dsh-kimi-k3/README.md)**(本仓库实测)— 把 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 部署进 Lambda MicroVM,主模型用 Amazon Bedrock 上的 Kimi K3(走 Chat Completions)。机内有一个 SigV4 代理,用执行角色签名;agent 以非 root 运行,没有 AWS 凭证,IMDS 也被封掉。支持浏览器 Web UI 和 headless 任务 API 两种用法。README 里记录了 10 个测试场景(SigV4、agent 循环兼容性、镜像构建、启动、挂起/恢复、隔离探针、Web UI、长任务报告),还附带一份用这套架构生成的电商 Agentic 可交互报告。
+
+4. **[sample-multi-tenant-openclaw-on-firecracker](https://github.com/aws-samples/sample-multi-tenant-openclaw-on-firecracker)** — 用 EC2 嵌套虚拟化直接跑 KVM + Firecracker 的多租户 AI agent 平台(注意这是自建 Firecracker,不是托管的 Lambda MicroVMs,适合想了解底层原理的场景)。支持 Intel(c8i / m8i / r8i)和 Graviton(ARM64)实例。
 
 ## 参考链接
 

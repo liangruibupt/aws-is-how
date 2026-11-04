@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  DeepSeek Harness + Kimi K3 (Amazon Bedrock) on AWS Lambda MicroVMs - artifact bucket,
+  image build role and MicroVM execution role. The MicroVM image itself is built with the
+  lambda-microvms CLI (scripts/deploy.sh) because CloudFormation has no resource for it yet.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: dsh-kimi
+    AllowedPattern: "[a-z][a-z0-9-]{1,20}"
+  ImageName:
+    Type: String
+    Default: dsh-kimi-k3
+    Description: MicroVM image name; build and runtime logs go to /aws/lambda/microvms/<ImageName>.
+
+Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      BucketName: !Sub "${ProjectName}-microvm-artifacts-${AWS::AccountId}-${AWS::Region}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-old-artifacts
+            Status: Enabled
+            ExpirationInDays: 30
+
+  ArtifactBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ArtifactBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:*"
+            Resource:
+              - !GetAtt ArtifactBucket.Arn
+              - !Sub "${ArtifactBucket.Arn}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+  BuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-microvm-build-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: ["sts:AssumeRole", "sts:TagSession"]
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: read-artifact
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "s3:GetObject"
+                Resource: !Sub "${ArtifactBucket.Arn}/images/*"
+        - PolicyName: build-logs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/microvms/${ImageName}*"
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/microvms/${ImageName}*:*"
+
+  # Assumed by each running MicroVM. Only the root sidecar can reach IMDS (the agent uid is
+  # policy-routed away from it), and this role can do exactly two things: invoke Kimi K3 and
+  # write its own logs.
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-microvm-execution-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: ["sts:AssumeRole", "sts:TagSession"]
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: invoke-kimi-k3
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: KimiK3CrossRegionProfiles
+                Effect: Allow
+                Action: ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/us.moonshotai.kimi-k3"
+                  - !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/global.moonshotai.kimi-k3"
+              - Sid: KimiK3FoundationModelInDestinationRegions
+                Effect: Allow
+                Action: ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:bedrock:*::foundation-model/moonshotai.kimi-k3"
+                  - !Sub "arn:${AWS::Partition}:bedrock:::foundation-model/moonshotai.kimi-k3"
+        - PolicyName: runtime-logs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/microvms/${ImageName}*"
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/microvms/${ImageName}*:*"
+
+Outputs:
+  ArtifactBucketName:
+    Value: !Ref ArtifactBucket
+  BuildRoleArn:
+    Value: !GetAtt BuildRole.Arn
+  ExecutionRoleArn:
+    Value: !GetAtt ExecutionRole.Arn
+  ImageName:
+    Value: !Ref ImageName

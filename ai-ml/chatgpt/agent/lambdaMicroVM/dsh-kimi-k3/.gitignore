@@ -1,0 +1,5 @@
+# per-run state written by scripts/run.sh
+.microvm.env
+# raw task outputs (incl. third-party pages the agent fetched); curated results live in report/
+outputs/
+microvm-image/sidecar/node_modules/
