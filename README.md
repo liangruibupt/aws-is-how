@@ -328,6 +328,8 @@
   - [Coding Video]
     - [视频生成平台 Coding Video](https://gitlab.aws.dev/aws-gcr-solutions/industry-assets/me_ad/code-based-animation-video)
     - [Romotion on AWS](https://gitlab.aws.dev/lht/remotion-on-aws)
+    - [SenseNova-6.8-Code2Video](https://github.com/OpenSenseNova/SenseNova-6.8-Code2Video/)
+    - [Lin Ye kiloframe-genai-creative-studio](https://gitlab.aws.dev/linyesh/sample-kiloframe-genai-creative-studio)
 ### Audio in GenAI
   - [构建文生音场景定制化人声解决方案](https://aws.amazon.com/cn/blogs/china/build-a-customized-human-voice-solution-for-text-generation-audio-scenes/)
   - [构建实时音视频交互解决方案-TEN-Agent and Nova](https://mp.weixin.qq.com/s/u0AHpNuForY_9UjjjJiwiA)
@@ -571,6 +573,9 @@
     - [AIPLC hands on](https://github.com/zoeylan/aiplc-handson)
     - [AIPLC skill](https://amzn-chn.feishu.cn/docx/NRxMdMCJAopDPCxjUDKcte1unLg)
     - [Skills For Real Engineers](https://github.com/mattpocock/skills/tree/main)
+    - [AIDLC Collaborative 总结](https://aws-samples.github.io/sample-collaborative-ai-dlc/)
+    - [ai-for-software-engineering-on-aws](https://github.com/aws-samples/sample-ai-for-software-engineering-on-aws)
+    - [qoderwake](https://qoder.cn/qoderwake)
   - [Ontoplogy on AI Coding]
     - [GitNexus: The Zero-Server Code Intelligence Engine - GitNexus is a client-side knowledge graph creator that runs entirely in your browser.](https://github.com/abhigyanpatwari/GitNexus)
     - [CodeKB is code intelligence for your repositories — search, trace, and reason about any codebase](https://w.amazon.com/bin/viewrev/CodeKB/WebHome?rev=123.1)
@@ -781,6 +786,7 @@
         - [agentcore-hackathon](https://github.com/Kathy-PJ/ci-agentcore-hackathon/tree/main)
         - [AgentCore GUI Studio](https://github.com/ahwing/agentcore-studio)(https://tfpmpe539f.us-east-1.awsapprunner.com/ demo/0bdf9c2fb357591db21e2ce9)
         - [lark-mcp-on-agentcore](https://github.com/aws-samples/sample-lark-mcp-on-agentcore)
+        - [IM MCP on AgentCore](https://github.com/keithyt06/sample-gcr-im-mcp-on-agentcore/blob/main/README.zh-CN.md)
       - [Agent Registry]
         - [https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/](https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/)
         - [AWS Agent Registry Hub](https://registry.aws.dev/hub)
