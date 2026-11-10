@@ -91,6 +91,7 @@ aws lambda-microvms create-microvm-image \
 
 ## 参考链接
 
+- [Nitro Sandboxes 与 Lambda MicroVMs、Firecracker、AgentCore 的对比](Nitro-Sandboxes-vs-Lambda-MicroVMs-Firecracker-AgentCore.md)（2026-11-09 新发布的 Nitro Sandboxes on EKS/ECS/EC2）
 - [AWS Lambda MicroVMs 官方文档](https://docs.aws.amazon.com/lambda/latest/dg/lambda-microvms-guide.html)
 - [How Lambda MicroVMs work](https://docs.aws.amazon.com/lambda/latest/dg/microvms-how-it-works.html)
 - [Using Lambda MicroVMs as a sandbox for Claude Managed Agents](https://docs.aws.amazon.com/lambda/latest/dg/microvms-integrations-claude-managed-agents.html)
