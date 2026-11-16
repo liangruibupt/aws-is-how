@@ -20,6 +20,7 @@
     - [Vector database](#vector-database)
     - [Agent database](#agent-database)
     - [LLM Models](#llm-models)
+      - [LLM Foundation](#llm-foundation)
       - [Claude](#claude)
       - [OpenAI GPT](#openai-gpt)
       - [Llama](#llama)
@@ -444,6 +445,10 @@
   - [DB9](https://db9.ai/)
     - [DB9 Demo](https://github.com/liangruibupt/db9-agentcore-demo)
 ### LLM Models
+#### LLM Foundation
+  - [KV Cache]
+    - [Tiered KV cache for large LLMs on Amazon SageMaker HyperPod with Curvine](https://aws.amazon.com/blogs/machine-learning/tiered-kv-cache-for-large-llms-on-amazon-sagemaker-hyperpod-with-curvine/)
+      - Curvine, a lightweight distributed cache filesystem, as the shared L2 tier (GPU to CPU to shared NVMe). Achieved up to a 100 percent cross-Pod cache hit rate, up to a 2.7x TTFT improvement, and cross-node L2 read latency of about 56 ms for a approximately 1,900-token prompt
 #### Claude
   - [Claude Workshop]
     - [Amazon Bedrock Claude3 Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/17879811-bd5c-4530-8b85-f0042472f2a1/en-US)
