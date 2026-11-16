@@ -1,3 +1,5 @@
+# Requires: pip install "aws_sdk_bedrock_runtime>=0.1.1,<0.10" pyaudio
+# (aws_sdk_bedrock_runtime 0.10.0+ removed the Config/BedrockRuntimeClient API used below.)
 import os
 import asyncio
 import base64
@@ -7,9 +9,13 @@ import pyaudio
 from aws_sdk_bedrock_runtime.client import BedrockRuntimeClient, InvokeModelWithBidirectionalStreamOperationInput
 from aws_sdk_bedrock_runtime.models import InvokeModelWithBidirectionalStreamInputChunk, BidirectionalInputPayloadPart
 from aws_sdk_bedrock_runtime.config import Config, HTTPAuthSchemeResolver, SigV4AuthScheme
-from smithy_aws_core.credentials_resolvers.environment import EnvironmentCredentialsResolver
+from smithy_aws_core.identity import EnvironmentCredentialsResolver
 
 AWS_REGION = "us-east-1"
+# amazon.nova-sonic-v1:0 reached end-of-life on 14 September 2026 and calls to it fail.
+# Nova 2.5 Sonic is the latest Active speech-to-speech model (us-east-1, us-west-2, eu-north-1, ap-northeast-1).
+# Use 'amazon.nova-2-sonic-v1:0' (Nova 2 Sonic) if you need the previous generation.
+MODEL_ID = "amazon.nova-2-5-sonic"
 
 # Audio configuration
 INPUT_SAMPLE_RATE = 16000
@@ -19,7 +25,7 @@ FORMAT = pyaudio.paInt16
 CHUNK_SIZE = 1024
 
 class SimpleNovaSonic:
-    def __init__(self, model_id='amazon.nova-sonic-v1:0', region=AWS_REGION):
+    def __init__(self, model_id=MODEL_ID, region=AWS_REGION):
         self.model_id = model_id
         self.region = region
         self.client = None
@@ -38,8 +44,8 @@ class SimpleNovaSonic:
             endpoint_uri=f"https://bedrock-runtime.{self.region}.amazonaws.com",
             region=self.region,
             aws_credentials_identity_resolver=EnvironmentCredentialsResolver(),
-            http_auth_scheme_resolver=HTTPAuthSchemeResolver(),
-            http_auth_schemes={"aws.auth#sigv4": SigV4AuthScheme()}
+            auth_scheme_resolver=HTTPAuthSchemeResolver(),
+            auth_schemes={"aws.auth#sigv4": SigV4AuthScheme(service="bedrock")}
         )
         self.client = BedrockRuntimeClient(config=config)
 
