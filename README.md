@@ -608,7 +608,7 @@
     - [Frontier engineering](https://kiro.dev/topics/frontier-engineering/)
     - [Frontier engineering teams - for manager](https://kiro.dev/topics/frontier-teams/)
   - [Claude Code]
-    - [Claude3 code assistant](https://github.com/aws-samples/bedrock-claude-codecoach)
+    - [Claude3 code assistant - deprecated](https://github.com/aws-samples/bedrock-claude-codecoach)
     - [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide?lang=en)
       - [claudecode-bedrock-proxy for prompt cache](https://github.com/KevinZhao/claudecode-bedrock-proxy)
     - [autoresearch 方法，把 skill 通过率从 50% 提到了 90%](https://mp.weixin.qq.com/s/ourgjuzpj6uJb3W73c6Y-g)
@@ -623,7 +623,8 @@
       - 上下文膨胀导致性能下降：单个 Agent 循环因上下文过长，出现了可测量的性能衰退。
       - 高并发且上下文独立：多个任务需要并行处理，且每个任务只需要一个用完即弃的全新上下文窗口。
       - 工具过载或指令冲突：单个 Agent 难以在海量工具中做出正确选择，或者系统提示词中的指令开始相互打架。
-  - [Codex]
+    - [pstack - skill for ship high quality code and fearless parallelism](https://github.com/cursor/plugins/tree/main/pstack)
+  - [Codex and Cursor]
     - [在智能体优先的世界中利用 Codex](https://openai.com/zh-Hans-CN/index/harness-engineering/)
   - [Remote agent runner]
     - [Run Claude Code, Codex, and any other coding agent in parallel, each in its own worktree. Terminals, diffs, a browser, and a CLI, in one app built for agents](https://www.onorca.dev/)
@@ -709,6 +710,7 @@
     - [e2b-dev Github](https://github.com/e2b-dev/E2B)
     - [E2B on AWS](https://github.com/aws-samples/sample-e2b-on-aws)
     - [E2B 与 AgentCore Runtime API 对照：管理层与运行时调用](https://pippin.amazon.dev/docs/fdHU84jSgFH96Y/e2b-agentcore-runtime-api)
+      - [AgentCore provider for the official E2B SDK](https://github.com/vokako/e2b-agentcore)
   - [Kata Container]
     - [Kata Container - a secure container runtime with lightweight virtual machines that feel and perform like containers, but provide stronger workload isolation using hardware virtualization technology as a second layer of defense](https://katacontainers.io/)
   - [FlexAI - Architect and deploy advanced Agentic AI platforms on Amazon EKS](https://catalog.us-east-1.prod.workshops.aws/workshops/26ab2b07-9621-4e0c-bc44-3f7fef388cb7/en-US)
@@ -747,6 +749,8 @@
         - [将 Dify 工作流 运行至 Amazon Bedrock AgentCore 的实践与验证](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-agentcore-practice-validation/)
         - [Migrate agentic workloads to Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/migrate-agentic-workloads-to-amazon-bedrock-agentcore/)
         - [Modernize your applications using Amazon Bedrock AgentCore Gateway and Kiro powers](https://aws.amazon.com/tr/blogs/migration-and-modernization/modernize-your-applications-using-amazon-bedrock-agentcore-gateway-and-kiro-powers/)
+      - [AgentCore Runtime](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agents-tools-runtime.html)
+        - [Architecture patterns for fast session startup on Amazon Bedrock AgentCore runtime](https://aws.amazon.com/blogs/machine-learning/architecture-patterns-for-fast-session-startup-on-amazon-bedrock-agentcore-runtime/)
       - [Introducing Amazon Bedrock AgentCore Identity: Securing agentic AI at scale](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/)
         - [AgentCore Identity 新增 On-Behalf-Of (OBO) Token Exchange — 多 Agent 链路中代表用户访问下游服务，无需对每个资源单独做 consent flow](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
       - [Introducing Amazon Bedrock AgentCore Gateway: Transforming enterprise AI agent tool development](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/)
