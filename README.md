@@ -39,8 +39,6 @@
       - [LLM based KB](#llm-based-kb)
     - [Vector database](#vector-database)
     - [Deep Research](#deep-research)
-    - [RLHF](#rlhf)
-    - [RSI](#rsi)
     - [GenAI Business Application](#genai-business-application)
   - [Agentic AI](#agentic-ai)
     - [Agent Harness](#agent-harness)
@@ -55,9 +53,12 @@
       - [Agent Skill](#agent-skill)
       - [Agent Client Protocol (ACP)](#agent-client-protocol-acp)
       - [MCP](#mcp)
+    - [RLHF](#rlhf)
+    - [RSI](#rsi)
     - [Agent Infra](#agent-infra)
     - [Agent database](#agent-database)
     - [AI Coding](#ai-coding)
+    - [Agent Harness Provider](#agent-harness-provider)
     - [OpenClaw](#openclaw)
     - [Digital Human Agent](#digital-human-agent)
   - [Cost](#cost)
@@ -590,22 +591,6 @@
 ### Deep Research
   - [deep-research-system-card](https://cdn.openai.com/deep-research-system-card.pdf)
 
-### RLHF
-  - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
-  - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
-  - [Residual Connections Are Getting an Upgrade (mHC)](https://www.youtube.com/watch?v=jYn_1PpRzxI&t=165s)
-  - [agentic-Reinforce-Learning](https://liangruibupt.github.io/agentic-rl-learning/index.html)
-
-### RSI
-  - [什么是 RSI](https://tcnqqhascf7s.feishu.cn/docx/AoCXdzWZUoXKrDxpSDqcDRMUnje)
-    - [RSI的核心 - AI 改善自己的研究能力，用改善后的能力继续研究自身]
-      - 检验新版能力回流之后，能否在公平预算与独立评测下，提高后续自我改进的效率；再观察这种收益能否跨代持续，甚至形成加速
-      - 可信评测决定它是不是真的进步；资源与研究难度决定循环能跑多快；目标和权限约束决定它朝什么方向改进。
-      - 递归闭环是机制，持续收益是实验结果，智能爆炸则是需要更多条件支持的推断: 跨任务泛化、完整资源成本，以及改进效率是否持续上升
-      - 闭环不等于收益。 改进成果回流到下一轮，就形成了递归机制；泛化能力、资源成本和改进效率，用来判断这个机制是否真的有效。
-      - 收益不等于加速。 如果研究能力提升得比下一次突破的难度更快，循环可能加速；反之，就可能放缓、停滞，甚至退化。还记得那道题：研究能力翻倍，研究工作量变成三倍，升级反而更慢
-  - [智谱RSI最新进展](https://mp.weixin.qq.com/s/DYb3h90ulTXEEdXsjg-L6g)
-
 ### GenAI Business Application
   - [Quick Suite]
     - [A Complete Guide to Amazon Quick Suite - HR scenario](https://catalog.us-east-1.prod.workshops.aws/workshops/119307ce-4c43-4e96-887c-cd8454b3d229/en-US) 
@@ -736,6 +721,20 @@
   - [Use Case]
     - [从零构建 MCP 架构下的 Agentic RAG 系统](https://mp.weixin.qq.com/s/11jlAQkL008Tuq_vEyjjTg)
     - [飞书 Remote MCP 配置](https://amzn-chn.feishu.cn/wiki/B5aawkRUdiusxgkvtkNcXAfDnkd) 
+### RLHF
+  - [Align Meta Llama 3 to human preferences with DPO](https://aws.amazon.com/blogs/machine-learning/align-meta-llama-3-to-human-preferences-with-dpo-amazon-sagemaker-studio-and-amazon-sagemaker-ground-truth/)
+  - [Thinking-Claude make Claude as GPTo1](https://github.com/richards199999/Thinking-Claude/tree/main)
+  - [Residual Connections Are Getting an Upgrade (mHC)](https://www.youtube.com/watch?v=jYn_1PpRzxI&t=165s)
+  - [agentic-Reinforce-Learning](https://liangruibupt.github.io/agentic-rl-learning/index.html)
+### RSI
+  - [什么是 RSI](https://tcnqqhascf7s.feishu.cn/docx/AoCXdzWZUoXKrDxpSDqcDRMUnje)
+    - [RSI的核心 - AI 改善自己的研究能力，用改善后的能力继续研究自身]
+      - 检验新版能力回流之后，能否在公平预算与独立评测下，提高后续自我改进的效率；再观察这种收益能否跨代持续，甚至形成加速
+      - 可信评测决定它是不是真的进步；资源与研究难度决定循环能跑多快；目标和权限约束决定它朝什么方向改进。
+      - 递归闭环是机制，持续收益是实验结果，智能爆炸则是需要更多条件支持的推断: 跨任务泛化、完整资源成本，以及改进效率是否持续上升
+      - 闭环不等于收益。 改进成果回流到下一轮，就形成了递归机制；泛化能力、资源成本和改进效率，用来判断这个机制是否真的有效。
+      - 收益不等于加速。 如果研究能力提升得比下一次突破的难度更快，循环可能加速；反之，就可能放缓、停滞，甚至退化。还记得那道题：研究能力翻倍，研究工作量变成三倍，升级反而更慢
+  - [智谱RSI最新进展](https://mp.weixin.qq.com/s/DYb3h90ulTXEEdXsjg-L6g)
 
 ### Agent Infra
   - [E2B]
@@ -836,7 +835,9 @@
   - [Refactor existed code]
     - [Understand Anything](https://github.com/Egonex-AI/Understand-Anything)
     - [AI-Ready-Repo Engine — Making Any Codebase Agent-Ready AND Human-Signable](https://github.com/xg-gh-25/SwarmAI/blob/main/docs/AI-Ready-Repo-Engine-Design.md)
-  - [Amazon Q Developer/Kiro]
+
+### Agent Harness Provider
+  - [Kiro]
     - [Kiro Community](https://github.com/kiro-community/)
       - [开源 Kiroro Bot](https://github.com/kiro-community/kiroro)
     - [Amazon Q & CodeWhisperer for VS Code](https://community.aws/content/2bkRYdezub3elzHazdWWtEXqSf9/aws-toolkit-for-visual-studio-code---amazon-q-amazon-codewhisperer-and-more?lang=en)
