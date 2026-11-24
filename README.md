@@ -377,6 +377,8 @@
     - [OpenAI Chat Completions ↔️ Bedrock Responses API Adapter](https://github.com/wwwenwei-commits/bedrock_chat_adapter)
     - [GPT-6 Astra: 20 Real Examples From Useful to Almost Impossible](ai-ml/chatgpt/openai/gpt6_astra_20example.md)
     - [GPT 5.6 code example](ai-ml/chatgpt/openai/gpt56_luna_bedrock_sample.py)
+  - [OpenAI Research]
+    - [困惑度与智能 - Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence/) 预训练模型在留出数据集上的困惑度（即交叉熵损失）作为跨开发者比较进展、制定共享安全标准的指标
 
 #### Llama
   - [Use Llama 3.1 405B for synthetic data generation and distillation to fine-tune smaller models](https://aws.amazon.com/cn/blogs/machine-learning/use-llama-3-1-405b-to-generate-synthetic-data-for-fine-tuning-tasks/)
@@ -1358,10 +1360,14 @@
 - [Top 2022 AWS data protection service and cryptography tool](https://aws.amazon.com/blogs/security/top-2022-aws-data-protection-service-and-cryptography-tool-launches/)
 
 ### Security For AI and AI For Security
-  - [Security Agent Workshop](https://workshop-eval.gcr.aws.dev/events/aiforsecurity-workshop-20260918)
+  - [AWS Continuum - Security Agent Workshop](https://workshop-eval.gcr.aws.dev/events/aiforsecurity-workshop-20260918)
     - [Security Agent Workshop 总结](security/secure-development/security-agent/AWS-Security-Agent-实验总结.md)
   - [Break It to Secure It: A Hands-on Agent Governance Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/bf8d9c7e-b59e-4093-bacd-0a473f5ef137/en-US)
-
+  - [ARTEX - Autonomous penetration testing with Self-hosted multi-agent offensive security](https://github.com/BaaRai/ARTEX)
+    - It explores, it doesn't chat. Goal decomposition, intent dispatch, worker execution and write-back form a closed loop that keeps advancing until the goal is proven.
+    - Findings with evidence. A recording MITM proxy and a browser extension capture real traffic; findings, evidence quotes and retests are tied to the exact request/response.
+    - Autonomy with brakes. Human-in-the-loop approvals, argv-prefix rules, scope/deny gates, token and turn budgets, a target noise governor, and prompt-injection framing on tool output.
+  - [CyberStrikeAI](https://github.com/aipentest/cyberstrikeai)
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/data-protection/kms/Share-CMK-across-multiple-AWS-accounts.md)
 - [Using-SM-Key-Algorithm-in-China](security/data-protection/kms/Using-SM-Key-Algorithm-in-China.md)
