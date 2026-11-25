@@ -837,6 +837,9 @@
   - [Refactor existed code]
     - [Understand Anything](https://github.com/Egonex-AI/Understand-Anything)
     - [AI-Ready-Repo Engine — Making Any Codebase Agent-Ready AND Human-Signable](https://github.com/xg-gh-25/SwarmAI/blob/main/docs/AI-Ready-Repo-Engine-Design.md)
+  - [Software Factory]
+    - [CodeKB - Code understanding for the world of autonomous software factories](https://github.com/awslabs/codekb)
+    - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
 
 ### Agent Harness Provider
   - [Kiro]
@@ -856,7 +859,6 @@
     - [Kiro 使用效能看板（kiro-usage-dashboard）](https://github.com/szipan/kiro-usage-dashboard)
   - [Kiro Crew](https://kiro.dev/crew/) ([GitHub](https://github.com/kirodotdev/kirocrew))
     - [KiroCrew introduction](https://kiro.dev/blog/introducing-kiro-crew/)
-    - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
     - [Frontier engineering](https://kiro.dev/topics/frontier-engineering/)
     - [Frontier engineering teams - for manager](https://kiro.dev/topics/frontier-teams/)
   - [Claude Code]
