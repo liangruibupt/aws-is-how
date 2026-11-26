@@ -83,6 +83,7 @@
     - [Governance](#governance)
     - [BI](#bi)
     - [Open Table Formats - Delta Lake, Hudi, Iceberg](#open-table-formats---delta-lake-hudi-iceberg)
+    - [Data Agent](#data-agent)
   - [IOT](#iot)
     - [IoT Core](#iot-core)
     - [IoT Timeseries](#iot-timeseries)
@@ -136,7 +137,7 @@
     - [VMware migration](#vmware-migration)
   - [Modernization](#modernization)
     - [Database Modernization](#database-modernization)
-    - [AWS Transform](#aws-transform)
+    - [Code Transformation](#code-transformation)
     - [Journey to Adopt Cloud-Native Architecture](#journey-to-adopt-cloud-native-architecture)
   - [Storage](#storage)
     - [S3 cross region or cross cloud OSS](#s3-cross-region-or-cross-cloud-oss)
@@ -214,8 +215,9 @@
     - [物流和供应链](#物流和供应链)
   - [FSI](#fsi)
     - [Banking \& Online Banking](#banking--online-banking)
-    - [撮合](#撮合)
+    - [Quant Trading](#quant-trading)
     - [Payment](#payment)
+    - [Insurance](#insurance)
   - [Hospitality](#hospitality)
 
 ## Learning and Support Resources
@@ -671,6 +673,7 @@
     - [swift-chat mobile app for GenAI](https://github.com/aws-samples/swift-chat)
     - [Super Agent on AgentCore](https://github.com/vorale/super-agent)
     - [AgentX]
+    - [The Agent–User Interaction (AG-UI) Protocol](https://docs.ag-ui.com/introduction)
   - [Amazon Bedrock Agents]
     - [基于MCP构建端到端的AI-Agent应用工作坊 - Bendrock Agents, Strands Agents, AgentCore](https://catalog.us-east-1.prod.workshops.aws/workshops/d674f40f-d636-4654-9322-04dafc7cc63e/zh-CN/0-introduction)
       - [Amazon Bedrock Agent Samples](https://github.com/awslabs/amazon-bedrock-agent-samples)
@@ -770,6 +773,7 @@
         - [bedrock-agentcore-samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples/)
       - [Deep Dive](ai-ml/chatgpt/agent/bedrock_agentcore/deepdive/amazon-bedrock-agentcore-deepdive.md)
         - Above Deep Dive based on [Diving Deep into Bedrock AgentCore](https://catalog.workshops.aws/agentcore-deep-dive/zh-CN)
+        - [Global Deep Dive workshop](https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/11-harness)
     - [Migrate to AgentCore]
       - [将 Dify 工作流 运行至 Amazon Bedrock AgentCore 的实践与验证](https://aws.amazon.com/cn/blogs/china/amazon-bedrock-agentcore-practice-validation/)
       - [Migrate agentic workloads to Amazon Bedrock AgentCore](https://aws.amazon.com/blogs/machine-learning/migrate-agentic-workloads-to-amazon-bedrock-agentcore/)
@@ -801,7 +805,6 @@
       - [企业智能体之旅：为什么评估（Evaluation）是一切的起点](https://aws.amazon.com/cn/blogs/china/part-1-enterprise-intelligent-why-evaluation/?p=bl_ar_l=1)
       - [企业智能体之旅: 评估企业级智能体：从原型验证到生产就绪](https://aws.amazon.com/cn/blogs/china/part-2-enterprise-intelligent-validation/?p=bl_ar_l=1)
       - [企业智能体之旅: 如何在亚马逊云科技上构建企业级智能体](https://aws.amazon.com/cn/blogs/china/part-3-how-to-build-enterprise-intelligent/?p=bl_ar_l=2)
-      - [Agent 优化端到端全流程](https://d3qnw1rhjyi9ke.cloudfront.net/)(f7TmsWkmyqkjp5Brtt5V)
     - [AgentCore in Practice]
       - [使用Amazon Bedrock + 自建ECS Docker Sandbox实现Agent 程序化工具调用Programmatic Tool Calling](https://aws.amazon.com/cn/blogs/china/programmatic-tool-calling-agent-using-bedrock-and-ecs-docker-sandbox/)
       - [深入 AgentCore：从 Playwright 到Agent，玩转 Browser Tool 网页自动化](https://mp.weixin.qq.com/s/fF3Zwf8APdTXEE9pVhBqvg)
@@ -814,7 +817,7 @@
       - [https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/](https://aws.amazon.com/blogs/machine-learning/manage-agents-tools-and-skills-at-scale-with-aws-agent-registry/)
       - [AWS Agent Registry Hub](https://registry.aws.dev/hub)
     - [AgentCore in China Region]
-      - [Evaluation and Optimization](https://github.com/dawei008/agentgate-strands)
+      - [Evaluation and Optimization Alternative Solution](https://github.com/dawei008/agentgate-strands)
       - [Memeory](https://gitlab.aws.dev/mlil/strandsagent-mem0-aurorapg)
 
 ### Agent database
@@ -838,7 +841,7 @@
     - [Understand Anything](https://github.com/Egonex-AI/Understand-Anything)
     - [AI-Ready-Repo Engine — Making Any Codebase Agent-Ready AND Human-Signable](https://github.com/xg-gh-25/SwarmAI/blob/main/docs/AI-Ready-Repo-Engine-Design.md)
   - [Software Factory]
-    - [CodeKB - Code understanding for the world of autonomous software factories](https://github.com/awslabs/codekb)
+    - [CodeKB - Code understanding for the world of autonomous software factories for brownfield projects](https://github.com/awslabs/codekb)
     - [How we built a software factory with Kiro Crew to merge 1000 PRs in a week](https://kiro.dev/blog/software-factory-1000-prs/)
 
 ### Agent Harness Provider
@@ -1004,6 +1007,7 @@
     - [PD Prefill and Decode 分离的推理加速](https://mp.weixin.qq.com/s/sQdO0z4hnptJs2_zSCn1Rg?scene=334)
     - [GPU infra as Skills: Claude Code Skills for deploying LLMs on AWS GPU](https://github.com/yuhuiaws/ML-study/tree/main/%E7%94%9F%E6%88%90%E5%BC%8FAI/Claude-code-Skills)
     - [kimi-k3-sglang](https://github.com/whn09/kimi-k3-sglang)
+    - [基于SGLang的大模型推理实践——从benchmark方法论到部署方案选型与调优](https://aws.amazon.com/cn/blogs/china/based-on-sglang-large-model-inference-practice/)
 - [Network of EC2]
   - [Python code attach EC2 EIP](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/ec2-example-elastic-ip-addresses.html)
   - [EC2 network performance](EC2/networking/EC2_Networking_performance.md)
@@ -1315,6 +1319,10 @@
     - [自建iceberg上的数据迁移至S3 tables里的工具](https://github.com/aws-samples/apache-iceberg-tables-migration-tool/)
 - [Delta Lake]
   - [Glue and Hudi](https://mp.weixin.qq.com/s/9z4rmokVJJpc14qosXLU8g)
+
+### Data Agent
+- [Volcengine Data Agent](https://docs.volcengine.com/docs/data-agent?lang=zh)
+- [Frontier and Center: Why your data agents need a “wind tunnel”](https://cloud.google.com/blog/products/data-analytics/a-data-simulator-to-test-agents)
   
 ## IOT
 ### IoT Core
@@ -1370,6 +1378,8 @@
     - Findings with evidence. A recording MITM proxy and a browser extension capture real traffic; findings, evidence quotes and retests are tied to the exact request/response.
     - Autonomy with brakes. Human-in-the-loop approvals, argv-prefix rules, scope/deny gates, token and turn budgets, a target noise governor, and prompt-injection framing on tool output.
   - [CyberStrikeAI](https://github.com/aipentest/cyberstrikeai)
+  - [Security Radar](https://github.com/aws-samples/sample-security-radar)
+    - The trigger for AWS Security Agent and AWS Continuum: a security headline from the outside world → the exact line in your code → a validated patch delivered as a pull / merge request — and, until that patch ships, a virtual patch at the edge with AWS WAF and Route 53 Resolver DNS Firewall.
 ### Encryption - KMS
 - [Share-CMK-across-multiple-AWS-accounts](security/data-protection/kms/Share-CMK-across-multiple-AWS-accounts.md)
 - [Using-SM-Key-Algorithm-in-China](security/data-protection/kms/Using-SM-Key-Algorithm-in-China.md)
@@ -1480,6 +1490,7 @@
 - [测当前环境到各region的延迟](https://www.cloudping.info/)
 - [测全球主要城市到指定ip的延迟](https://tools.ipip.net/traceroute.php)
 - [Check the ip](https://checkip.amazonaws.com/)
+- [打造全球网络质量测试和监测系统 - CloudPerf](https://github.com/tansoft/cloudperf)
   
 ### VPC
 本地笔记按类型整理在 [vpc](vpc/README.md)：private-access / connectivity / observability。
@@ -1741,9 +1752,11 @@
 ## Modernization
 ### Database Modernization
   - [RDS to DynamoDB migration assistant agent](https://github.com/aws-samples/sample-ai-assisted-rds-to-dynamodb-migration)
-### AWS Transform
-  - [Accelerating .NET and SQL Server Modernization using Agentic AI](https://catalog.workshops.aws/atx-sql-server-mod)
-    - [Workshop execution record]
+### Code Transformation
+  - [Accelerating .NET and SQL Server Modernization using AWS Transform](https://catalog.workshops.aws/atx-sql-server-mod)
+    - [AWS Transform Workshop execution record](modernization/aws-transform)
+  - [Anthropic Claude: Migrating our Messages API to Rust](https://www.anthropic.com/research/migrating-api-to-rust)
+    - 把生产 API 本身当作验证器：在线影子比对时只运行一次模型，再把模型输出回放给 Rust 版本，并在不读取用户内容的前提下，用检查点和差异“指纹”定位、归类不一致之处，交由智能体在内循环（沙箱快速复现）、外循环（影子流量验证）和记忆循环（规则、测试、lint）中修复
 
 ### Journey to Adopt Cloud-Native Architecture
 - [#1 – Preparing your Applications for Hypergrowth](https://aws.amazon.com/blogs/architecture/journey-to-adopt-cloud-native-architecture-series-1-preparing-your-applications-for-hypergrowth/)
@@ -2463,14 +2476,15 @@ aws ssm get-parameters-by-path --path /aws/service/global-infrastructure/regions
 ### Banking & Online Banking
 - [Claude for Financial Services 中文全解](https://mp.weixin.qq.com/s/w-4hoSO-j0Uy_uw2KcwkEw)
 - [Agentic Fraud Detection on AWS](https://catalog.us-east-1.prod.workshops.aws/workshops/027b661c-4083-431d-8357-147bee42e867/en-US)
-### 撮合
+### Quant Trading
 - [Aeron – the global technology standard for high-throughput, low-latency, fault-tolerant trading systems](https://aeron.io/)
   - [standby Cluster improved availability, disaster recovery, and load management](https://aeron.io/premium-docs/aeron-cluster-standby/standby-overview.html)
-
 ### Payment
 - [Agents that transact: Introducing Amazon Bedrock AgentCore payments, built with Coinbase and Stripe](https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/)
   - [基于Amazon Bedrock AgentCore与 x402 的Agentic Payment 方案](https://aws.amazon.com/cn/blogs/china/ai-agent-based-on-amazon-bedrock-agentcore-x402-agentic-payment-solution/)
 - [Zero-ETL 在支付业务离线数据上的实践](https://aws.amazon.com/cn/blogs/china/zero-etl-practice-on-offline-payment-business-data/)
+### Insurance
+- [Documents to Decisions: Agentic Underwriting with Amazon Bedrock event](https://catalog.workshops.aws/workshops/0eb7cf8e-2946-4be3-a1b8-5c6d82037ba3/en-US)
 
 ## Hospitality
 - [travel concierge agent](https://github.com/awslabs/amazon-bedrock-agentcore-samples/tree/main/05-blueprints/travel-concierge-agent)
